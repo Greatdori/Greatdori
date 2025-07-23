@@ -682,7 +682,7 @@ extension DoriAPI.Event {
         }
     }
     
-    public enum EventType: String {
+    public enum EventType: String, CaseIterable {
         case story
         case challenge
         case versus

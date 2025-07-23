@@ -433,7 +433,7 @@ extension DoriAPI.Gacha {
         }
     }
     
-    public enum GachaType: String {
+    public enum GachaType: String, CaseIterable {
         case free
         case permanent
         case miracle

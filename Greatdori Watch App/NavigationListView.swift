@@ -17,7 +17,7 @@ struct NavigationListView: View {
                         Text("主页")
                     } icon: {
                         Image(_internalSystemName: "home.fill")
-                            .foregroundStyle(.highlight)
+                            .foregroundStyle(.accent)
                     }
                 }
             }
@@ -27,7 +27,15 @@ struct NavigationListView: View {
                         Text("角色")
                     } icon: {
                         Image(systemName: "person.fill")
-                            .foregroundStyle(.highlight)
+                            .foregroundStyle(.accent)
+                    }
+                }
+                NavigationLink(value: NavigationPage.card) {
+                    Label {
+                        Text("卡牌")
+                    } icon: {
+                        Image(systemName: "person.text.rectangle.fill")
+                            .foregroundStyle(.accent)
                     }
                 }
             } header: {

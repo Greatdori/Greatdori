@@ -129,7 +129,7 @@ public class DoriAPI {
     }
     
     /// Attribute of cards
-    public enum Attribute: String {
+    public enum Attribute: String, CaseIterable {
         case pure
         case cool
         case happy

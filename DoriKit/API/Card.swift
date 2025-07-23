@@ -429,7 +429,7 @@ extension DoriAPI.Card {
         }
     }
     
-    public enum CardType: String {
+    public enum CardType: String, CaseIterable {
         case initial
         case permanent
         case event
@@ -485,6 +485,10 @@ extension DoriAPI.Card {
         public var performance: Int
         public var technique: Int
         public var visual: Int
+        
+        public var total: Int {
+            performance + technique + visual
+        }
     }
     public enum StatKey: Hashable {
         case level(Int)
@@ -505,5 +509,14 @@ extension DoriAPI.Card.Card {
     @inlinable
     public init?(preview: DoriAPI.Card.PreviewCard) async {
         await self.init(id: preview.id)
+    }
+}
+
+extension DoriAPI.Card.CardStat {
+    func forMaximumLevel() -> DoriAPI.Card.Stat? {
+        let keys = self.keys
+            .filter { if case .level = $0 { true } else { false } }
+            .sorted { if case let .level(lhs) = $0, case let .level(rhs) = $1 { lhs > rhs } else { false } }
+        return keys.first != nil ? self[keys.first!]?[0] : nil
     }
 }

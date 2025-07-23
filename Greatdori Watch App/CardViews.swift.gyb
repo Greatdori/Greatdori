@@ -113,8 +113,8 @@ struct CardCardView: View {
     
     var body: some View {
         ZStack {
-            if rarity >= 4 {
-                if cardType != .birthday {
+            if rarity >= 4 || cardType == .others {
+                if cardType != .birthday && cardType != .others {
                     HStack(spacing: 0) {
                         WebImage(url: normalBackgroundImageURL) { image in
                             image
@@ -123,6 +123,8 @@ struct CardCardView: View {
                                 .fill(Color.gray.opacity(0.15))
                         }
                         .resizable()
+                        .interpolation(.high)
+                        .antialiased(true)
                         .scaledToFill()
                         .frame(width: (screenBounds.width - 5) / 2)
                         .clipped()
@@ -133,6 +135,8 @@ struct CardCardView: View {
                                 .fill(Color.gray.opacity(0.15))
                         }
                         .resizable()
+                        .interpolation(.high)
+                        .antialiased(true)
                         .scaledToFill()
                         .frame(width: (screenBounds.width - 5) / 2)
                         .clipped()
@@ -145,6 +149,8 @@ struct CardCardView: View {
                             .fill(Color.gray.opacity(0.15))
                     }
                     .resizable()
+                    .interpolation(.high)
+                    .antialiased(true)
                     .cornerRadius(2)
                 }
             } else {
@@ -155,6 +161,8 @@ struct CardCardView: View {
                         .fill(Color.gray.opacity(0.15))
                 }
                 .resizable()
+                .interpolation(.high)
+                .antialiased(true)
                 .cornerRadius(2)
             }
             if rarity != 1 {
@@ -168,10 +176,14 @@ struct CardCardView: View {
                 HStack {
                     WebImage(url: bandIconImageURL)
                         .resizable()
+                        .interpolation(.high)
+                        .antialiased(true)
                         .frame(width: 25, height: 25)
                     Spacer()
                     WebImage(url: attribute.iconImageURL)
                         .resizable()
+                        .interpolation(.high)
+                        .antialiased(true)
                         .frame(width: 23, height: 23)
                 }
                 Spacer()
@@ -218,7 +230,7 @@ struct ThumbCardCardView: View {
     
     var body: some View {
         HStack {
-            if rarity >= 4 {
+            if rarity >= 4 || cardType == .others {
                 ZStack {
                     WebImage(url: thumbTrainedImageURL!) { image in
                         image
@@ -227,6 +239,8 @@ struct ThumbCardCardView: View {
                             .fill(Color.gray.opacity(0.15))
                     }
                     .resizable()
+                    .interpolation(.high)
+                    .antialiased(true)
                     .scaledToFill()
                     .clipped()
                     upperLayer(trained: true)
@@ -241,6 +255,8 @@ struct ThumbCardCardView: View {
                             .fill(Color.gray.opacity(0.15))
                     }
                     .resizable()
+                    .interpolation(.high)
+                    .antialiased(true)
                     .cornerRadius(2)
                     upperLayer(trained: false)
                 }
@@ -268,10 +284,14 @@ struct ThumbCardCardView: View {
             HStack {
                 WebImage(url: bandIconImageURL)
                     .resizable()
+                    .interpolation(.high)
+                    .antialiased(true)
                     .frame(width: 15, height: 15)
                 Spacer()
                 WebImage(url: attribute.iconImageURL)
                     .resizable()
+                    .interpolation(.high)
+                    .antialiased(true)
                     .frame(width: 12, height: 12)
             }
             Spacer()
@@ -316,5 +336,55 @@ struct ThumbCostumeCardView: View {
             .frame(width: 50)
             Text(description.forPreferredLocale() ?? "")
         }
+    }
+}
+
+struct GachaCardView: View {
+    private var bannerImageURL: URL
+    private var title: DoriAPI.LocalizedData<String>
+    
+%{
+    gachaTypes = ["PreviewGacha", "Gacha"]
+}%
+    % for gachaType in gachaTypes:
+    init(_ gacha: DoriAPI.Gacha.${gachaType}) {
+        self.bannerImageURL = gacha.bannerImageURL
+        self.title = gacha.gachaName
+    }
+    % end
+    
+    var body: some View {
+        ZStack {
+            WebImage(url: bannerImageURL) { image in
+                image
+            } placeholder: {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.15))
+            }
+            .resizable()
+            .scaledToFill()
+            .frame(width: screenBounds.width - 5, height: 100)
+            .clipped()
+            .cornerRadius(10)
+            HStack {
+                Spacer()
+                VStack {
+                    Spacer()
+                    Text(title.forPreferredLocale() ?? "")
+                        .padding(.horizontal, 2)
+                        .background {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Material.ultraThin)
+                                .blur(radius: 5)
+                        }
+                }
+                .font(.system(size: 12))
+                .lineLimit(1)
+                .padding(.horizontal, 4)
+                Spacer()
+            }
+        }
+        .listRowBackground(Color.clear)
+        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }

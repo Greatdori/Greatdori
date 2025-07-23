@@ -46,12 +46,14 @@ struct HomeView: View {
             Section {
                 if let birthdays {
                     ForEach(birthdays) { character in
-                        HStack {
-                            WebImage(url: character.iconImageURL)
-                                .resizable()
-                                .clipShape(Circle())
-                                .frame(width: 30, height: 30)
-                            Text("\(character.birthday.components(in: .init(identifier: "Asia/Tokyo")!).month!)月\(character.birthday.components(in: .init(identifier: "Asia/Tokyo")!).day!)日")
+                        NavigationLink(destination: { CharacterDetailView(id: character.id) }) {
+                            HStack {
+                                WebImage(url: character.iconImageURL)
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width: 30, height: 30)
+                                Text("\(character.birthday.components(in: .init(identifier: "Asia/Tokyo")!).month!)月\(character.birthday.components(in: .init(identifier: "Asia/Tokyo")!).day!)日")
+                            }
                         }
                     }
                 } else {

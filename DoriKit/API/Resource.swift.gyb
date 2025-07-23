@@ -75,7 +75,7 @@ extension DoriAPI.Card.${property} {
     }
     @inlinable
     public var coverAfterTrainingImageURL: URL? {
-        if self.rarity >= 4 {
+        if self.rarity >= 4 || self.type == .others {
             .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/characters/resourceset/\(self.resourceSetName)_rip/card_after_training.png")!
         } else {
             nil
@@ -92,7 +92,7 @@ extension DoriAPI.Card.${property} {
     }
     @inlinable
     public var thumbAfterTrainingImageURL: URL? {
-        if self.rarity >= 4 {
+        if self.rarity >= 4 || self.type == .others {
             var ripID = String(Int(Double(self.id) / 50))
             while ripID.count < 5 {
                 ripID = "0" + ripID
@@ -119,6 +119,18 @@ extension DoriAPI.Costume.${property} {
     public var thumbImageURL: URL {
         let groupID = String(Int(Double(self.id) / 50))
         return .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale()!.rawValue)/thumb/costume/group\(groupID)_rip/\(self.assetBundleName).png")!
+    }
+}
+% end
+
+%{
+    properties = ["PreviewGacha", "Gacha"]
+}%
+% for property in properties:
+extension DoriAPI.Gacha.${property} {
+    @inlinable
+    public var bannerImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.gachaName.availableLocale(prefer: .jp)!.rawValue)/homebanner_rip/\(self.bannerAssetBundleName).png")!
     }
 }
 % end

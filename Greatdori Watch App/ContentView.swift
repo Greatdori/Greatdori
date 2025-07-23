@@ -19,6 +19,8 @@ struct ContentView: View {
                     HomeView()
                 case .character:
                     CharacterListView()
+                case .card:
+                    CardListView()
                 case nil:
                     EmptyView()
                 }
@@ -30,4 +32,5 @@ struct ContentView: View {
 enum NavigationPage {
     case home
     case character
+    case card
 }
