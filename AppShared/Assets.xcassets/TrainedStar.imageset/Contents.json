@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "star_trained.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -1,0 +1,124 @@
+//
+//  Resource.swift
+//  Greatdori
+//
+//  Created by Mark Chan on 7/21/25.
+//
+
+import SwiftUI
+import Foundation
+
+extension DoriAPI.Attribute {
+    @inlinable
+    public var iconImageURL: URL {
+        .init(string: "https://bestdori.com/res/icon/\(self.rawValue).svg")!
+    }
+}
+
+%{
+    properties = ["PreviewEvent", "Event"]
+}%
+% for property in properties:
+extension DoriAPI.Event.${property} {
+    @inlinable
+    public var bannerImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.eventName.availableLocale()!.rawValue)/event/\(self.assetBundleName)/images_rip/banner.png")!
+    }
+}
+% end
+
+extension DoriAPI.Band.Band {
+    @inlinable
+    public var logoImageURL: URL {
+        var id = String(self.id)
+        while id.count < 3 {
+            id = "0" + id
+        }
+        return .init(string: "https://bestdori.com/assets/\(self.bandName.availableLocale()!.rawValue)/band/logo/\(id)_rip/logoL.png")!
+    }
+    
+    @inlinable
+    public var iconImageURL: URL {
+        .init(string: "https://bestdori.com/res/icon/band_\(self.id).svg")!
+    }
+}
+
+%{
+    properties = ["PreviewCharacter", "BirthdayCharacter", "Character"]
+}%
+% for property in properties:
+extension DoriAPI.Character.${property} {
+    @inlinable
+    public var keyVisualImageURL: URL {
+        var id = String(self.id)
+        while id.count < 3 {
+            id = "0" + id
+        }
+        return .init(string: "https://bestdori.com/assets/\(self.characterName.availableLocale()!.rawValue)/ui/character_kv_image/\(id)_rip/image.png")!
+    }
+    
+    @inlinable
+    public var iconImageURL: URL {
+        .init(string: "https://bestdori.com/res/icon/chara_icon_\(self.id).png")!
+    }
+}
+% end
+
+%{
+    properties = ["PreviewCard", "Card"]
+}%
+% for property in properties:
+extension DoriAPI.Card.${property} {
+    @inlinable
+    public var coverNormalImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/characters/resourceset/\(self.resourceSetName)_rip/card_normal.png")!
+    }
+    @inlinable
+    public var coverAfterTrainingImageURL: URL? {
+        if self.rarity >= 4 {
+            .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/characters/resourceset/\(self.resourceSetName)_rip/card_after_training.png")!
+        } else {
+            nil
+        }
+    }
+    
+    @inlinable
+    public var thumbNormalImageURL: URL {
+        var ripID = String(Int(Double(self.id) / 50))
+        while ripID.count < 5 {
+            ripID = "0" + ripID
+        }
+        return .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/thumb/chara/card\(ripID)_rip/\(self.resourceSetName)_normal.png")!
+    }
+    @inlinable
+    public var thumbAfterTrainingImageURL: URL? {
+        if self.rarity >= 4 {
+            var ripID = String(Int(Double(self.id) / 50))
+            while ripID.count < 5 {
+                ripID = "0" + ripID
+            }
+            return .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/thumb/chara/card\(ripID)_rip/\(self.resourceSetName)_after_training.png")!
+        } else {
+            return nil
+        }
+    }
+    
+    @inlinable
+    public var gachaVoiceURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/sound/voice/gacha/limitedspin_rip/\(self.resourceSetName).mp3")!
+    }
+}
+% end
+
+%{
+    properties = ["PreviewCostume", "Costume"]
+}%
+% for property in properties:
+extension DoriAPI.Costume.${property} {
+    @inlinable
+    public var thumbImageURL: URL {
+        let groupID = String(Int(Double(self.id) / 50))
+        return .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale()!.rawValue)/thumb/costume/group\(groupID)_rip/\(self.assetBundleName).png")!
+    }
+}
+% end

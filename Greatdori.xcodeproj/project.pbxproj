@@ -1,0 +1,1112 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8C0C996B2E296A4600549B5C /* Greatdori Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8C0C99832E296A5500549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C997F2E296A5500549B5C /* ContentView.swift */; };
+		8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99802E296A5500549B5C /* GreatdoriApp.swift */; };
+		8C0C99892E296A5800549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99862E296A5800549B5C /* ContentView.swift */; };
+		8C0C998A2E296A5800549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99872E296A5800549B5C /* GreatdoriApp.swift */; };
+		8C0C998B2E296A5800549B5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C99852E296A5800549B5C /* Assets.xcassets */; };
+		8C0C99972E296A8C00549B5C /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
+		8C0C99982E296A8C00549B5C /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8C0C99A22E296B3E00549B5C /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
+		8C0C99A32E296B3E00549B5C /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8C0C99AE2E296F2D00549B5C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0C99AD2E296F2D00549B5C /* Alamofire */; };
+		8C0C99B12E296F3900549B5C /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0C99B02E296F3900549B5C /* SwiftyJSON */; };
+		8C0C99B32E29766B00549B5C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C99B22E29766B00549B5C /* Localizable.xcstrings */; };
+		8C923D782E3034AF003AFC0A /* HomeView.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift.gyb */; };
+		8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */; };
+		8C923D7D2E304882003AFC0A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */; };
+		8C923D802E30488E003AFC0A /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D7F2E30488E003AFC0A /* SDWebImageSVGCoder */; };
+		8C923D822E304899003AFC0A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D812E304899003AFC0A /* SDWebImageSwiftUI */; };
+		8C923D842E304899003AFC0A /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D832E304899003AFC0A /* SDWebImageSVGCoder */; };
+		8C923D872E304AF3003AFC0A /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D862E304AF1003AFC0A /* Date+.swift */; };
+		8C923D892E305237003AFC0A /* FrontendEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D882E305228003AFC0A /* FrontendEvent.swift */; };
+		8C923D8D2E3056CB003AFC0A /* CardViews.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D8C2E3056C8003AFC0A /* CardViews.swift.gyb */; };
+		8C923D8F2E305FF8003AFC0A /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D8E2E305FF6003AFC0A /* Screen.swift */; };
+		8C923D912E30663E003AFC0A /* CharacterListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D902E30663A003AFC0A /* CharacterListView.swift */; };
+		8C923D932E307088003AFC0A /* CharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D922E307084003AFC0A /* CharacterDetailView.swift */; };
+		8C923D952E307227003AFC0A /* TaskGroup.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D942E30721F003AFC0A /* TaskGroup.swift.gyb */; };
+		8C923D972E30A1BC003AFC0A /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D962E30A1B8003AFC0A /* LocalizedStrings.swift */; };
+		8C923D992E30AF36003AFC0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C99852E296A5800549B5C /* Assets.xcassets */; };
+		8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13F742E2FDC4700673E15 /* NavigationListView.swift */; };
+		8CD13FAE2E2FE2BF00673E15 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA12E2FE2BF00673E15 /* Band.swift */; };
+		8CD13FAF2E2FE2BF00673E15 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA22E2FE2BF00673E15 /* Card.swift */; };
+		8CD13FB02E2FE2BF00673E15 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA32E2FE2BF00673E15 /* Character.swift */; };
+		8CD13FB12E2FE2BF00673E15 /* Costume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA42E2FE2BF00673E15 /* Costume.swift */; };
+		8CD13FB22E2FE2BF00673E15 /* Degree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA52E2FE2BF00673E15 /* Degree.swift */; };
+		8CD13FB32E2FE2BF00673E15 /* DoriAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA62E2FE2BF00673E15 /* DoriAPI.swift */; };
+		8CD13FB42E2FE2BF00673E15 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA72E2FE2BF00673E15 /* Event.swift */; };
+		8CD13FB52E2FE2BF00673E15 /* Gacha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA82E2FE2BF00673E15 /* Gacha.swift */; };
+		8CD13FB62E2FE2BF00673E15 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA92E2FE2BF00673E15 /* News.swift */; };
+		8CD13FB72E2FE2BF00673E15 /* Resource.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FAA2E2FE2BF00673E15 /* Resource.swift.gyb */; };
+		8CD13FB82E2FE2BF00673E15 /* Skill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FAB2E2FE2BF00673E15 /* Skill.swift */; };
+		8CD13FB92E2FE2BF00673E15 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FAC2E2FE2BF00673E15 /* Song.swift */; };
+		8CD13FBD2E2FE2BF00673E15 /* DoriFrontend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FBA2E2FE2BF00673E15 /* DoriFrontend.swift */; };
+		8CD13FC12E2FE2BF00673E15 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FBF2E2FE2BF00673E15 /* NetworkRequest.swift */; };
+		8CD13FC52E2FE2BF00673E15 /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FC22E2FE2BF00673E15 /* Color+.swift */; };
+		8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FC32E2FE2BF00673E15 /* Logger.swift */; };
+		8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FCA2E2FEFCC00673E15 /* Date+.swift */; };
+		8CD13FE72E300D2300673E15 /* FrontendNews.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		8C923D8A2E30559D003AFC0A /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.gyb";
+			fileType = pattern.proxy;
+			inputFiles = (
+				"$(SRCROOT)/BuildTool/gyb.py",
+			);
+			isEditable = 1;
+			name = "Convert GYB Source";
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
+			);
+			runOncePerArchitecture = 0;
+			script = "$SRCROOT/BuildTool/gyb.py --line-directive '#sourceLocation(file: \"%(file)s\", line: %(line)d)' -o \"$DERIVED_FILE_DIR/$INPUT_FILE_BASE\" \"$INPUT_FILE_PATH\"\n";
+		};
+		8C923D8B2E3055A4003AFC0A /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.gyb";
+			fileType = pattern.proxy;
+			inputFiles = (
+				"$(SRCROOT)/BuildTool/gyb.py",
+			);
+			isEditable = 1;
+			name = "Convert GYB Source";
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
+			);
+			runOncePerArchitecture = 0;
+			script = "$SRCROOT/BuildTool/gyb.py --line-directive '#sourceLocation(file: \"%(file)s\", line: %(line)d)' -o \"$DERIVED_FILE_DIR/$INPUT_FILE_BASE\" \"$INPUT_FILE_PATH\"\n";
+		};
+		8CD13FE62E300BEC00673E15 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.gyb";
+			fileType = pattern.proxy;
+			inputFiles = (
+				"$(SRCROOT)/BuildTool/gyb.py",
+			);
+			isEditable = 1;
+			name = "Convert GYB Source";
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
+			);
+			runOncePerArchitecture = 0;
+			script = "$SRCROOT/BuildTool/gyb.py --line-directive '#sourceLocation(file: \"%(file)s\", line: %(line)d)' -o \"$DERIVED_FILE_DIR/$INPUT_FILE_BASE\" \"$INPUT_FILE_PATH\"\n";
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXContainerItemProxy section */
+		8C0C996C2E296A4600549B5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C0C99692E296A4600549B5C;
+			remoteInfo = "Greatdori Watch App";
+		};
+		8C0C99952E296A8C00549B5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
+			remoteInfo = DoriKit;
+		};
+		8C0C99A42E296B3E00549B5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
+			remoteInfo = DoriKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8C0C997A2E296A4700549B5C /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				8C0C996B2E296A4600549B5C /* Greatdori Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C0C999C2E296A8C00549B5C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8C0C99982E296A8C00549B5C /* DoriKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C0C99A62E296B3E00549B5C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8C0C99A32E296B3E00549B5C /* DoriKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8C0C995D2E296A4400549B5C /* Greatdori.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Greatdori.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Greatdori Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C0C997F2E296A5500549B5C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8C0C99802E296A5500549B5C /* GreatdoriApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatdoriApp.swift; sourceTree = "<group>"; };
+		8C0C99852E296A5800549B5C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8C0C99862E296A5800549B5C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8C0C99872E296A5800549B5C /* GreatdoriApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatdoriApp.swift; sourceTree = "<group>"; };
+		8C0C99912E296A8C00549B5C /* DoriKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DoriKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C0C99B22E29766B00549B5C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		8C0C99C22E2E664900549B5C /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
+		8C923D772E3034AD003AFC0A /* HomeView.swift.gyb */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift.gyb; sourceTree = "<group>"; };
+		8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendCharacter.swift; sourceTree = "<group>"; };
+		8C923D862E304AF1003AFC0A /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		8C923D882E305228003AFC0A /* FrontendEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendEvent.swift; sourceTree = "<group>"; };
+		8C923D8C2E3056C8003AFC0A /* CardViews.swift.gyb */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = CardViews.swift.gyb; sourceTree = "<group>"; };
+		8C923D8E2E305FF6003AFC0A /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
+		8C923D902E30663A003AFC0A /* CharacterListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterListView.swift; sourceTree = "<group>"; };
+		8C923D922E307084003AFC0A /* CharacterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailView.swift; sourceTree = "<group>"; };
+		8C923D942E30721F003AFC0A /* TaskGroup.swift.gyb */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = TaskGroup.swift.gyb; sourceTree = "<group>"; };
+		8C923D962E30A1B8003AFC0A /* LocalizedStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
+		8CD13F742E2FDC4700673E15 /* NavigationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationListView.swift; sourceTree = "<group>"; };
+		8CD13FA12E2FE2BF00673E15 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
+		8CD13FA22E2FE2BF00673E15 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		8CD13FA32E2FE2BF00673E15 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		8CD13FA42E2FE2BF00673E15 /* Costume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Costume.swift; sourceTree = "<group>"; };
+		8CD13FA52E2FE2BF00673E15 /* Degree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Degree.swift; sourceTree = "<group>"; };
+		8CD13FA62E2FE2BF00673E15 /* DoriAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriAPI.swift; sourceTree = "<group>"; };
+		8CD13FA72E2FE2BF00673E15 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		8CD13FA82E2FE2BF00673E15 /* Gacha.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gacha.swift; sourceTree = "<group>"; };
+		8CD13FA92E2FE2BF00673E15 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
+		8CD13FAA2E2FE2BF00673E15 /* Resource.swift.gyb */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Resource.swift.gyb; sourceTree = "<group>"; };
+		8CD13FAB2E2FE2BF00673E15 /* Skill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Skill.swift; sourceTree = "<group>"; };
+		8CD13FAC2E2FE2BF00673E15 /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		8CD13FBA2E2FE2BF00673E15 /* DoriFrontend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriFrontend.swift; sourceTree = "<group>"; };
+		8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = FrontendNews.swift.gyb; sourceTree = "<group>"; };
+		8CD13FBF2E2FE2BF00673E15 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
+		8CD13FC22E2FE2BF00673E15 /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
+		8CD13FC32E2FE2BF00673E15 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		8CD13FCA2E2FEFCC00673E15 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		8CD13FE42E300AE700673E15 /* gyb.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = gyb.py; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8C0C995A2E296A4400549B5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C923D842E304899003AFC0A /* SDWebImageSVGCoder in Frameworks */,
+				8C923D822E304899003AFC0A /* SDWebImageSwiftUI in Frameworks */,
+				8C0C99972E296A8C00549B5C /* DoriKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C0C99672E296A4600549B5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C923D802E30488E003AFC0A /* SDWebImageSVGCoder in Frameworks */,
+				8C923D7D2E304882003AFC0A /* SDWebImageSwiftUI in Frameworks */,
+				8C0C99A22E296B3E00549B5C /* DoriKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C0C998E2E296A8C00549B5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C0C99B12E296F3900549B5C /* SwiftyJSON in Frameworks */,
+				8C0C99AE2E296F2D00549B5C /* Alamofire in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8C0C99542E296A4400549B5C = {
+			isa = PBXGroup;
+			children = (
+				8C818D722E2E671A00D0DD69 /* README.md */,
+				8C0C99C22E2E664900549B5C /* LICENSE.txt */,
+				8CD13FE32E300ACE00673E15 /* BuildTool */,
+				8C923D982E30AF1E003AFC0A /* AppShared */,
+				8C0C99812E296A5500549B5C /* Greatdori */,
+				8C0C99882E296A5800549B5C /* Greatdori Watch App */,
+				8C0C999E2E296A9000549B5C /* DoriKit */,
+				8C0C99A12E296B3E00549B5C /* Frameworks */,
+				8C0C995E2E296A4400549B5C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8C0C995E2E296A4400549B5C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8C0C995D2E296A4400549B5C /* Greatdori.app */,
+				8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */,
+				8C0C99912E296A8C00549B5C /* DoriKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8C0C99812E296A5500549B5C /* Greatdori */ = {
+			isa = PBXGroup;
+			children = (
+				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
+				8C0C997F2E296A5500549B5C /* ContentView.swift */,
+			);
+			path = Greatdori;
+			sourceTree = "<group>";
+		};
+		8C0C99882E296A5800549B5C /* Greatdori Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				8C923D852E304AE5003AFC0A /* Extensions */,
+				8C0C99872E296A5800549B5C /* GreatdoriApp.swift */,
+				8C923D8C2E3056C8003AFC0A /* CardViews.swift.gyb */,
+				8C0C99862E296A5800549B5C /* ContentView.swift */,
+				8CD13F742E2FDC4700673E15 /* NavigationListView.swift */,
+				8C923D772E3034AD003AFC0A /* HomeView.swift.gyb */,
+				8C923D902E30663A003AFC0A /* CharacterListView.swift */,
+				8C923D922E307084003AFC0A /* CharacterDetailView.swift */,
+			);
+			path = "Greatdori Watch App";
+			sourceTree = "<group>";
+		};
+		8C0C999E2E296A9000549B5C /* DoriKit */ = {
+			isa = PBXGroup;
+			children = (
+				8C0C99B22E29766B00549B5C /* Localizable.xcstrings */,
+				8CD13FC42E2FE2BF00673E15 /* Internal */,
+				8CD13FC02E2FE2BF00673E15 /* Networking */,
+				8CD13FAD2E2FE2BF00673E15 /* API */,
+				8CD13FBC2E2FE2BF00673E15 /* Frontend */,
+			);
+			path = DoriKit;
+			sourceTree = "<group>";
+		};
+		8C0C99A12E296B3E00549B5C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8C923D852E304AE5003AFC0A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8C923D862E304AF1003AFC0A /* Date+.swift */,
+				8C923D8E2E305FF6003AFC0A /* Screen.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		8C923D982E30AF1E003AFC0A /* AppShared */ = {
+			isa = PBXGroup;
+			children = (
+				8C0C99852E296A5800549B5C /* Assets.xcassets */,
+			);
+			path = AppShared;
+			sourceTree = "<group>";
+		};
+		8CD13FAD2E2FE2BF00673E15 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				8CD13FA62E2FE2BF00673E15 /* DoriAPI.swift */,
+				8CD13FA12E2FE2BF00673E15 /* Band.swift */,
+				8CD13FA22E2FE2BF00673E15 /* Card.swift */,
+				8CD13FA32E2FE2BF00673E15 /* Character.swift */,
+				8CD13FA42E2FE2BF00673E15 /* Costume.swift */,
+				8CD13FA52E2FE2BF00673E15 /* Degree.swift */,
+				8CD13FA72E2FE2BF00673E15 /* Event.swift */,
+				8CD13FA82E2FE2BF00673E15 /* Gacha.swift */,
+				8CD13FA92E2FE2BF00673E15 /* News.swift */,
+				8CD13FAB2E2FE2BF00673E15 /* Skill.swift */,
+				8CD13FAC2E2FE2BF00673E15 /* Song.swift */,
+				8CD13FAA2E2FE2BF00673E15 /* Resource.swift.gyb */,
+				8C923D962E30A1B8003AFC0A /* LocalizedStrings.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		8CD13FBC2E2FE2BF00673E15 /* Frontend */ = {
+			isa = PBXGroup;
+			children = (
+				8CD13FC72E2FE3B200673E15 /* Protocols */,
+				8CD13FBA2E2FE2BF00673E15 /* DoriFrontend.swift */,
+				8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */,
+				8C923D882E305228003AFC0A /* FrontendEvent.swift */,
+				8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */,
+			);
+			path = Frontend;
+			sourceTree = "<group>";
+		};
+		8CD13FC02E2FE2BF00673E15 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				8CD13FBF2E2FE2BF00673E15 /* NetworkRequest.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		8CD13FC42E2FE2BF00673E15 /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				8CD13FCA2E2FEFCC00673E15 /* Date+.swift */,
+				8CD13FC22E2FE2BF00673E15 /* Color+.swift */,
+				8CD13FC32E2FE2BF00673E15 /* Logger.swift */,
+				8C923D942E30721F003AFC0A /* TaskGroup.swift.gyb */,
+			);
+			path = Internal;
+			sourceTree = "<group>";
+		};
+		8CD13FC72E2FE3B200673E15 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		8CD13FE32E300ACE00673E15 /* BuildTool */ = {
+			isa = PBXGroup;
+			children = (
+				8CD13FE42E300AE700673E15 /* gyb.py */,
+			);
+			path = BuildTool;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8C0C998C2E296A8C00549B5C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8C0C995C2E296A4400549B5C /* Greatdori */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C0C997B2E296A4700549B5C /* Build configuration list for PBXNativeTarget "Greatdori" */;
+			buildPhases = (
+				8C0C99592E296A4400549B5C /* Sources */,
+				8C0C995A2E296A4400549B5C /* Frameworks */,
+				8C0C995B2E296A4400549B5C /* Resources */,
+				8C0C997A2E296A4700549B5C /* Embed Watch Content */,
+				8C0C999C2E296A8C00549B5C /* Embed Frameworks */,
+			);
+			buildRules = (
+				8C923D8B2E3055A4003AFC0A /* PBXBuildRule */,
+			);
+			dependencies = (
+				8C0C996D2E296A4600549B5C /* PBXTargetDependency */,
+				8C0C99962E296A8C00549B5C /* PBXTargetDependency */,
+			);
+			name = Greatdori;
+			packageProductDependencies = (
+				8C923D812E304899003AFC0A /* SDWebImageSwiftUI */,
+				8C923D832E304899003AFC0A /* SDWebImageSVGCoder */,
+			);
+			productName = Greatdori;
+			productReference = 8C0C995D2E296A4400549B5C /* Greatdori.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8C0C99692E296A4600549B5C /* Greatdori Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C0C99772E296A4700549B5C /* Build configuration list for PBXNativeTarget "Greatdori Watch App" */;
+			buildPhases = (
+				8C0C99662E296A4600549B5C /* Sources */,
+				8C0C99672E296A4600549B5C /* Frameworks */,
+				8C0C99682E296A4600549B5C /* Resources */,
+				8C0C99A62E296B3E00549B5C /* Embed Frameworks */,
+			);
+			buildRules = (
+				8C923D8A2E30559D003AFC0A /* PBXBuildRule */,
+			);
+			dependencies = (
+				8C0C99A52E296B3E00549B5C /* PBXTargetDependency */,
+			);
+			name = "Greatdori Watch App";
+			packageProductDependencies = (
+				8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */,
+				8C923D7F2E30488E003AFC0A /* SDWebImageSVGCoder */,
+			);
+			productName = "Greatdori Watch App";
+			productReference = 8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8C0C99902E296A8C00549B5C /* DoriKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C0C99992E296A8C00549B5C /* Build configuration list for PBXNativeTarget "DoriKit" */;
+			buildPhases = (
+				8C0C998C2E296A8C00549B5C /* Headers */,
+				8C0C998D2E296A8C00549B5C /* Sources */,
+				8C0C998E2E296A8C00549B5C /* Frameworks */,
+				8C0C998F2E296A8C00549B5C /* Resources */,
+			);
+			buildRules = (
+				8CD13FE62E300BEC00673E15 /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = DoriKit;
+			packageProductDependencies = (
+				8C0C99AD2E296F2D00549B5C /* Alamofire */,
+				8C0C99B02E296F3900549B5C /* SwiftyJSON */,
+			);
+			productName = DoriKit;
+			productReference = 8C0C99912E296A8C00549B5C /* DoriKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8C0C99552E296A4400549B5C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					8C0C995C2E296A4400549B5C = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					8C0C99692E296A4600549B5C = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					8C0C99902E296A8C00549B5C = {
+						CreatedOnToolsVersion = 26.0;
+					};
+				};
+			};
+			buildConfigurationList = 8C0C99582E296A4400549B5C /* Build configuration list for PBXProject "Greatdori" */;
+			developmentRegion = "zh-Hans";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = 8C0C99542E296A4400549B5C;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8C0C99AC2E296F2D00549B5C /* XCRemoteSwiftPackageReference "Alamofire" */,
+				8C0C99AF2E296F3900549B5C /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				8C923D7B2E304882003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				8C923D7E2E30488E003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 8C0C995E2E296A4400549B5C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8C0C995C2E296A4400549B5C /* Greatdori */,
+				8C0C99692E296A4600549B5C /* Greatdori Watch App */,
+				8C0C99902E296A8C00549B5C /* DoriKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8C0C995B2E296A4400549B5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C923D992E30AF36003AFC0A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C0C99682E296A4600549B5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C0C998B2E296A5800549B5C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C0C998F2E296A8C00549B5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C0C99B32E29766B00549B5C /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8C0C99592E296A4400549B5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C0C99832E296A5500549B5C /* ContentView.swift in Sources */,
+				8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C0C99662E296A4600549B5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C923D932E307088003AFC0A /* CharacterDetailView.swift in Sources */,
+				8C923D8F2E305FF8003AFC0A /* Screen.swift in Sources */,
+				8C0C99892E296A5800549B5C /* ContentView.swift in Sources */,
+				8C923D782E3034AF003AFC0A /* HomeView.swift.gyb in Sources */,
+				8C923D872E304AF3003AFC0A /* Date+.swift in Sources */,
+				8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */,
+				8C923D8D2E3056CB003AFC0A /* CardViews.swift.gyb in Sources */,
+				8C923D912E30663E003AFC0A /* CharacterListView.swift in Sources */,
+				8C0C998A2E296A5800549B5C /* GreatdoriApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C0C998D2E296A8C00549B5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CD13FAE2E2FE2BF00673E15 /* Band.swift in Sources */,
+				8CD13FAF2E2FE2BF00673E15 /* Card.swift in Sources */,
+				8CD13FBD2E2FE2BF00673E15 /* DoriFrontend.swift in Sources */,
+				8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */,
+				8C923D892E305237003AFC0A /* FrontendEvent.swift in Sources */,
+				8CD13FB02E2FE2BF00673E15 /* Character.swift in Sources */,
+				8CD13FB12E2FE2BF00673E15 /* Costume.swift in Sources */,
+				8CD13FB22E2FE2BF00673E15 /* Degree.swift in Sources */,
+				8CD13FB32E2FE2BF00673E15 /* DoriAPI.swift in Sources */,
+				8CD13FC52E2FE2BF00673E15 /* Color+.swift in Sources */,
+				8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */,
+				8C923D952E307227003AFC0A /* TaskGroup.swift.gyb in Sources */,
+				8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */,
+				8CD13FB42E2FE2BF00673E15 /* Event.swift in Sources */,
+				8CD13FB52E2FE2BF00673E15 /* Gacha.swift in Sources */,
+				8CD13FB62E2FE2BF00673E15 /* News.swift in Sources */,
+				8CD13FB72E2FE2BF00673E15 /* Resource.swift.gyb in Sources */,
+				8CD13FB82E2FE2BF00673E15 /* Skill.swift in Sources */,
+				8CD13FB92E2FE2BF00673E15 /* Song.swift in Sources */,
+				8CD13FC12E2FE2BF00673E15 /* NetworkRequest.swift in Sources */,
+				8C923D972E30A1BC003AFC0A /* LocalizedStrings.swift in Sources */,
+				8CD13FE72E300D2300673E15 /* FrontendNews.swift.gyb in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8C0C996D2E296A4600549B5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C0C99692E296A4600549B5C /* Greatdori Watch App */;
+			targetProxy = 8C0C996C2E296A4600549B5C /* PBXContainerItemProxy */;
+		};
+		8C0C99962E296A8C00549B5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
+			targetProxy = 8C0C99952E296A8C00549B5C /* PBXContainerItemProxy */;
+		};
+		8C0C99A52E296B3E00549B5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
+			targetProxy = 8C0C99A42E296B3E00549B5C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		8C0C99752E296A4700549B5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		8C0C99762E296A4700549B5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		8C0C99782E296A4700549B5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.memz233.Greatdori;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		8C0C99792E296A4700549B5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.memz233.Greatdori;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		8C0C997C2E296A4700549B5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8C0C997D2E296A4700549B5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8C0C999A2E296A8C00549B5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx watchos watchsimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4,7";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Debug;
+		};
+		8C0C999B2E296A8C00549B5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx watchos watchsimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4,7";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8C0C99582E296A4400549B5C /* Build configuration list for PBXProject "Greatdori" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C0C99752E296A4700549B5C /* Debug */,
+				8C0C99762E296A4700549B5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C0C99772E296A4700549B5C /* Build configuration list for PBXNativeTarget "Greatdori Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C0C99782E296A4700549B5C /* Debug */,
+				8C0C99792E296A4700549B5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C0C997B2E296A4700549B5C /* Build configuration list for PBXNativeTarget "Greatdori" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C0C997C2E296A4700549B5C /* Debug */,
+				8C0C997D2E296A4700549B5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C0C99992E296A8C00549B5C /* Build configuration list for PBXNativeTarget "DoriKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C0C999A2E296A8C00549B5C /* Debug */,
+				8C0C999B2E296A8C00549B5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8C0C99AC2E296F2D00549B5C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		8C0C99AF2E296F3900549B5C /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
+		8C923D7B2E304882003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
+		8C923D7E2E30488E003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSVGCoder";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8C0C99AD2E296F2D00549B5C /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C0C99AC2E296F2D00549B5C /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		8C0C99B02E296F3900549B5C /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C0C99AF2E296F3900549B5C /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C923D7B2E304882003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		8C923D7F2E30488E003AFC0A /* SDWebImageSVGCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C923D7E2E30488E003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */;
+			productName = SDWebImageSVGCoder;
+		};
+		8C923D812E304899003AFC0A /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C923D7B2E304882003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		8C923D832E304899003AFC0A /* SDWebImageSVGCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C923D7E2E30488E003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */;
+			productName = SDWebImageSVGCoder;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 8C0C99552E296A4400549B5C /* Project object */;
+}

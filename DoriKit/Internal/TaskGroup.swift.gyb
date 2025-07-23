@@ -1,0 +1,46 @@
+//
+//  TaskGroup.swift
+//  Greatdori
+//
+//  Created by Mark Chan on 7/23/25.
+//
+
+import Foundation
+
+%{
+    from itertools import repeat
+    
+    typeNames = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+}%
+
+% for i in range(len(typeNames)):
+%     typeAnnotation = ", ".join(typeNames[0:(i + 1)])
+%     parameters = ", ".join(map((lambda n: f"_ task{n}: @escaping () async -> {n}"), typeNames[0:(i + 1)]))
+internal func withTasksResult<${typeAnnotation}>(${parameters}) async -> (${typeAnnotation}) {
+    await withTaskGroup { (group: inout TaskGroup<(String, Any)>) in
+        % for t in typeNames[0:(i + 1)]:
+        group.addTask {
+            ("${t}", await task${t}())
+        }
+        % end
+        var result: (${", ".join(map((lambda n: f"{n}?"), typeNames[0:(i + 1)]))}) = (${", ".join(repeat("nil", i + 1))})
+        for await (id, r) in group {
+            % for t in typeNames[0:(i + 1)]:
+            if id == "${t}" {
+                % if i != 0:
+                result.${typeNames.index(t)} = (r as! (${t}))
+                % else:
+                result = (r as! (${t}))
+                % end
+                continue
+            }
+            % end
+        }
+        % if i != 0:
+        return (${", ".join(map((lambda n: f"result.{n}!"), range(i + 1)))})
+        % else:
+        return result!
+        % end
+    }
+}
+% end
