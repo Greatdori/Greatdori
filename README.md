@@ -44,7 +44,9 @@ this kind of files are GYB templetes. GYB is a useful tool from the swiftlang pr
 which enables you to generate repeated source code from less code.
 
 <details><summary>Usage of GYB</summary>
+
 ```
+
 usage: gyb [-h] [-D NAME=VALUE] [-o TARGET] [--test] [--verbose-test] [--dump]
            [--line-directive LINE_DIRECTIVE]
            [file]
@@ -126,5 +128,7 @@ options:
         y is greater than seven!
 
           - The End. -
+
 ```
+
 </details>
