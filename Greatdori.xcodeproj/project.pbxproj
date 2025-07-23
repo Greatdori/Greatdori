@@ -197,6 +197,7 @@
 		8C923D9C2E313B47003AFC0A /* FrontendCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendCard.swift; sourceTree = "<group>"; };
 		8C923D9E2E313C09003AFC0A /* Filters.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		8C923DA02E315E05003AFC0A /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
+		8C923DA22E31664B003AFC0A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		8CD13F742E2FDC4700673E15 /* NavigationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationListView.swift; sourceTree = "<group>"; };
 		8CD13FA12E2FE2BF00673E15 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
 		8CD13FA22E2FE2BF00673E15 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -255,6 +256,7 @@
 		8C0C99542E296A4400549B5C = {
 			isa = PBXGroup;
 			children = (
+				8C923DA22E31664B003AFC0A /* Package.swift */,
 				8C818D722E2E671A00D0DD69 /* README.md */,
 				8C0C99C22E2E664900549B5C /* LICENSE.txt */,
 				8CD13FE32E300ACE00673E15 /* BuildTool */,
