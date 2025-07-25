@@ -46,6 +46,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.event) {
+                    Label {
+                        Text("活动")
+                    } icon: {
+                        Image(systemName: "star.hexagon.fill")
+                            .foregroundStyle(.accent)
+                    }
+                }
             } header: {
                 Text("信息")
             }

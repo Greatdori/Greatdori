@@ -39,6 +39,7 @@
 		8C923D9D2E313B4A003AFC0A /* FrontendCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D9C2E313B47003AFC0A /* FrontendCard.swift */; };
 		8C923D9F2E313C0B003AFC0A /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D9E2E313C09003AFC0A /* Filters.swift */; };
 		8C923DA12E315E09003AFC0A /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923DA02E315E05003AFC0A /* CardListView.swift */; };
+		8C94743F2E342F79003A90B4 /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C94743E2E342F76003A90B4 /* EventListView.swift */; };
 		8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */; };
 		8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD02E32B5B6004023F7 /* Constructor.swift */; };
 		8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */; };
@@ -208,6 +209,7 @@
 		8C923D9E2E313C09003AFC0A /* Filters.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		8C923DA02E315E05003AFC0A /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
 		8C923DA22E31664B003AFC0A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		8C94743E2E342F76003A90B4 /* EventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListView.swift; sourceTree = "<group>"; };
 		8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		8CBC1BD02E32B5B6004023F7 /* Constructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
 		8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCaches.swift; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 				8C923DA02E315E05003AFC0A /* CardListView.swift */,
 				8CBC1BD42E3303E9004023F7 /* CardDetailView.swift */,
 				8CBC1BE02E340AD4004023F7 /* CostumeListView.swift */,
+				8C94743E2E342F76003A90B4 /* EventListView.swift */,
 			);
 			path = "Greatdori Watch App";
 			sourceTree = "<group>";
@@ -623,6 +626,7 @@
 				8CBC1BD72E3317DF004023F7 /* AudioPlaying.swift in Sources */,
 				8C923D912E30663E003AFC0A /* CharacterListView.swift in Sources */,
 				8C0C998A2E296A5800549B5C /* GreatdoriApp.swift in Sources */,
+				8C94743F2E342F79003A90B4 /* EventListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

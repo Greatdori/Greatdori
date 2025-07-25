@@ -39,13 +39,13 @@ extension Array where Element: DoriFrontend.Searchable {
             tokenLoop: for token in tokens {
                 // We always do early exit for performance
                 for string in item._searchStrings {
-                    if string.contains(token) {
+                    if string.lowercased().contains(token) {
                         continue tokenLoop
                     }
                 }
                 for localizedString in item._searchLocalizedStrings {
                     for locale in DoriAPI.Locale.allCases {
-                        if localizedString.forLocale(locale)?.contains(token) == true {
+                        if localizedString.forLocale(locale)?.lowercased().contains(token) == true {
                             continue tokenLoop
                         }
                     }
@@ -201,5 +201,25 @@ extension DoriAPI.Costume.PreviewCostume: DoriFrontend.Searchable {
             }
         }
         return result
+    }
+}
+extension DoriAPI.Event.PreviewEvent: DoriFrontend.Searchable {
+    public var _searchStrings: [String] {
+        [self.eventType.localizedString]
+    }
+    public var _searchLocalizedStrings: [DoriAPI.LocalizedData<String>] {
+        [self.eventName]
+    }
+    public var _searchLocales: [DoriAPI.Locale] {
+        var result = [DoriAPI.Locale]()
+        for locale in DoriAPI.Locale.allCases {
+            if self.startAt.availableInLocale(locale) {
+                result.append(locale)
+            }
+        }
+        return result
+    }
+    public var _searchAttributes: [DoriAPI.Attribute] {
+        self.attributes.map { $0.attribute }
     }
 }
