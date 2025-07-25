@@ -25,6 +25,9 @@ let package = Package(
             resources: [
                 .process("Localizable.xcstrings")
             ],
+            swiftSettings: [
+                .enableUpcomingFeature("SymbolLinkageMarkers")
+            ],
             plugins: [
                 .plugin(name: "Gyb", package: "swift-gyb")
             ]
