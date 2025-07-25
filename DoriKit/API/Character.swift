@@ -10,9 +10,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about character in Bandori.
     public class Character {
         private init() {}
         
+        /// Get all characters in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested characters, nil if failed to fetch data.
         public static func all() async -> [PreviewCharacter]? {
             // Response example:
             // {
@@ -66,6 +72,11 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get all characters with birthday information in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested information, nil if failed to fetch data.
         public static func allBirthday() async -> [BirthdayCharacter]? {
             // Response example:
             // {
@@ -115,6 +126,9 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get detail of a character in Bandori.
+        /// - Parameter id: ID of target character.
+        /// - Returns: Detail data of requested character, nil if failed to fetch.
         public static func detail(of id: Int) async -> Character? {
             // Response example:
             // {
@@ -346,12 +360,22 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Character {
+    /// Represent simplified data of a character.
     public struct PreviewCharacter: Identifiable {
+        /// A unique ID of character.
         public var id: Int
+        /// Type of character.
         public var characterType: CharacterType
+        /// Localized name of character.
         public var characterName: DoriAPI.LocalizedData<String>
+        /// Localized nickname of character.
+        ///
+        /// Only few characters are associateed with a nickname,
+        /// mainly in *RAISE A SUILEN*, such as Chiyu has a nickname *CHU²*.
         public var nickname: DoriAPI.LocalizedData<String>
+        /// ID of related band to this character.
         public var bandID: Int?
+        /// Member color of character.
         public var color: Color? // String(JSON) -> Color(Swift)
         
         internal init(
@@ -371,25 +395,49 @@ extension DoriAPI.Character {
         }
     }
     
+    /// Represent birthday information of a character.
     public struct BirthdayCharacter: Identifiable {
+        /// A unique ID of character.
         public var id: Int
+        /// Localized name of character.
         public var characterName: DoriAPI.LocalizedData<String>
+        /// Localized nickname of character.
+        ///
+        /// Only few characters are associateed with a nickname,
+        /// mainly in *RAISE A SUILEN*, such as Chiyu has a nickname *CHU²*.
         public var nickname: DoriAPI.LocalizedData<String>
+        /// Birthday of character.
         public var birthday: Date // String(JSON) -> Date(Swift)
     }
     
+    /// Represent detailed data of a character.
     public struct Character: Identifiable {
+        /// A unique ID of character.
         public var id: Int
+        /// Type of character.
         public var characterType: CharacterType
+        /// Localized name of character.
         public var characterName: DoriAPI.LocalizedData<String>
+        /// Localized first name of character.
         public var firstName: DoriAPI.LocalizedData<String>
+        /// Localized last name of character.
         public var lastName: DoriAPI.LocalizedData<String>
+        /// Localized nickname of character.
+        ///
+        /// Only few characters are associateed with a nickname,
+        /// mainly in *RAISE A SUILEN*, such as Chiyu has a nickname *CHU²*.
         public var nickname: DoriAPI.LocalizedData<String>
+        /// ID of related band to this character.
         public var bandID: Int?
+        /// Member color of character.
         public var color: Color? // String(JSON) -> Color(Swift)
+        /// Name of super deformed resource bundle, used for combination of resource URLs.
         public var sdAssetBundleName: String
+        /// ID of default costume of character.
         public var defaultCostumeID: Int?
+        /// Localized ruby of character's name.
         public var ruby: DoriAPI.LocalizedData<String>
+        /// Profile of character
         public var profile: Profile?
         
         internal init(
@@ -439,20 +487,34 @@ extension DoriAPI.Character {
             self.ruby = ruby
         }
         
+        /// Represent profile of a character.
         public struct Profile {
+            /// Localized name of character's voice actor.
             public var characterVoice: DoriAPI.LocalizedData<String>
+            /// Localized favorite food of character.
             public var favoriteFood: DoriAPI.LocalizedData<String>
+            /// Localized hated food of character.
             public var hatedFood: DoriAPI.LocalizedData<String>
+            /// Localized hobby of character.
             public var hobby: DoriAPI.LocalizedData<String>
+            /// Localized self-introduction of character.
             public var selfIntroduction: DoriAPI.LocalizedData<String>
+            /// Localized school name of character.
             public var school: DoriAPI.LocalizedData<String>
+            /// Localized class in school which the character in.
             public var schoolClass: DoriAPI.LocalizedData<String> // named "schoolCls" in JSON, we use "schoolClass" to make it clear
+            /// Localized school year which the character in.
             public var schoolYear: DoriAPI.LocalizedData<String>
+            /// The part of character works in band.
             public var part: Part
+            /// Birthday of character.
             public var birthday: Date // String(JSON) -> Date(Swift)
+            /// Constellation of character.
             public var constellation: DoriAPI.Constellation
+            /// Height of character, in *centimeter*.
             public var height: Int
             
+            /// Represent a part in bands.
             public enum Part: String {
                 case vocal
                 case keyboard
@@ -467,6 +529,13 @@ extension DoriAPI.Character {
         }
     }
     
+    /// Represent type of character.
+    ///
+    /// ``unique`` means this character is in a *main band*,
+    /// all other characters are ``common``.
+    /// *Misaki* is an exception which is associated ``another``.
+    ///
+    /// - SeeAlso: Learn more about *main band* in ``DoriAPI/Band/main()``.
     public enum CharacterType: String {
         case unique
         case common

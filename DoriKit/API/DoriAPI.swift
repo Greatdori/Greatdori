@@ -40,6 +40,12 @@ public class DoriAPI {
     
     /// Represent data which differently in different locale.
     ///
+    /// Data in different locales is optional
+    /// because some data isn't available in all locales.
+    /// There's no guarantee that there's always at least
+    /// one locale's data is available in a bunch of localized data.
+    /// That is, a `LocalizedData` may has all properties `nil`.
+    ///
     /// Generally, if data is not available in a locale,
     /// you can use the `jp`'s as fallback.
     /// However, not all data availables in `jp`,
@@ -92,6 +98,13 @@ public class DoriAPI {
         public func availableInPreferredLocale() -> Bool {
             forPreferredLocale(allowsFallback: false) != nil
         }
+        /// Check if the available locale of data.
+        ///
+        /// This function checks if data available in preferred locale first,
+        /// if not provided or not available, it checks from jp to kr respectively.
+        ///
+        /// - Parameter locale: preferred first locale.
+        /// - Returns: first available locale of data, nil if none.
         @inlinable
         public func availableLocale(prefer locale: Locale? = nil) -> Locale? {
             if availableInLocale(locale ?? preferredLocale) {
@@ -115,6 +128,8 @@ public class DoriAPI {
         }
     }
     
+    /// Represent a constellation
+    @frozen
     public enum Constellation: String {
         case aries
         case taurus
@@ -143,6 +158,14 @@ extension DoriAPI.LocalizedData: Equatable where T: Equatable {}
 extension DoriAPI.LocalizedData: Hashable where T: Hashable {}
 
 extension DoriAPI.LocalizedData {
+    /// Returns localized data containing the results of mapping the given closure
+    /// over each locales.
+    ///
+    /// - Parameter transform: A mapping closure. `transform` accepts an
+    ///   element of this localized data as its parameter and returns a transformed
+    ///   value of the same or of a different type.
+    /// - Returns: Localized data containing the transformed elements of this
+    ///   sequence.
     @inlinable
     public func map<R, E>(_ transform: (T?) throws(E) -> R?) throws(E) -> DoriAPI.LocalizedData<R> {
         var result = DoriAPI.LocalizedData<R>(jp: nil, en: nil, tw: nil, cn: nil, kr: nil)

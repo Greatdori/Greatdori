@@ -26,7 +26,7 @@ let package = Package(
                 .process("Localizable.xcstrings")
             ],
             swiftSettings: [
-                .enableUpcomingFeature("SymbolLinkageMarkers")
+                .unsafeFlags(["-enable-experimental-feature", "SymbolLinkageMarkers"])
             ],
             plugins: [
                 .plugin(name: "Gyb", package: "swift-gyb")

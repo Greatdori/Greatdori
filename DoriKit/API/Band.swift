@@ -10,9 +10,18 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about band in Bandori.
     public class Band {
         private init() {}
         
+        /// Get all main bands in Bandori.
+        ///
+        /// *Main bands* means bands that have their own chapters in the game,
+        /// such as *Poppin'Party*, *Roselia*, *MyGO!!!!!*, etc.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested bands, nil if failed to fetch data.
         public static func main() async -> [Band]? {
             // Response example:
             // {
@@ -47,6 +56,17 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get all bands in Bandori.
+        ///
+        /// *All bands* contains much more bands in addition to *main bands*,
+        /// all temporary bands with different names are assigned a unique ID
+        /// and become single items in the list.
+        ///
+        /// Generally, each songs in the *Other* category is associated with a band which is not *main*.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested bands, nil if failed to fetch data.
         public static func all() async -> [Band]? {
             // Response example:
             // {
@@ -84,8 +104,11 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Band {
+    /// Represent a band.
     public struct Band: Identifiable, Hashable {
+        /// A unique ID of band.
         public var id: Int
+        /// Localized name of band.
         public var bandName: DoriAPI.LocalizedData<String>
     }
 }

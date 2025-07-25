@@ -10,9 +10,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about card in Bandori.
     public class Card {
         private init() {}
         
+        /// Get all cards in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested cards, nil if failed to fetch data.
         public static func all() async -> [PreviewCard]? {
             // Response example:
             // {
@@ -119,6 +125,9 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get detail of a card in Bandori.
+        /// - Parameter id: ID of target card.
+        /// - Returns: Detail data of requested card, nil if failed to fetch.
         public static func detail(of id: Int) async -> Card? {
             // Response example:
             // {
@@ -389,46 +398,95 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Card {
+    /// Represent simplified data of a card.
     public struct PreviewCard: Identifiable {
+        /// A unique ID of card.
         public var id: Int
+        /// ID of related character to this card.
         public var characterID: Int
+        /// Rarity of card, 1...5.
         public var rarity: Int
+        /// Attribute of card.
         public var attribute: DoriAPI.Attribute
+        /// The maximum level of card.
         public var levelLimit: Int
+        /// Name of resource set, used for combination of resource URLs.
         public var resourceSetName: String
+        /// Localized title of card.
+        ///
+        /// The same *prefix* can be associated to different cards with different characters,
+        /// so it's called `prefix` instead of *title*.
         public var prefix: DoriAPI.LocalizedData<String>
+        /// Localized release date of card.
         public var releasedAt: DoriAPI.LocalizedData<Date>
+        /// ID of skill associated to this card.
         public var skillID: Int
+        /// Type of card.
         public var type: CardType
+        /// Stats of card.
         public var stat: CardStat
     }
     
+    /// Represent detailed data of a card.
     public struct Card: Identifiable {
+        /// A unique ID of card.
         public var id: Int
+        /// ID of related character to this card.
         public var characterID: Int
+        /// Rarity of card, 1...5.
         public var rarity: Int
+        /// Attribute of card.
         public var attribute: DoriAPI.Attribute
+        /// The maximum level of card.
         public var levelLimit: Int
+        /// Name of resource set, used for combination of resource URLs.
         public var resourceSetName: String
+        /// Name of super deformed resource set, used for combination of resource URLs.
         public var sdResourceName: String
+        /// Episodes of card.
+        ///
+        /// A card may have no episodes.
         public var episodes: [CardEpisode]
+        /// ID of associated costume to this card.
         public var costumeID: Int
+        /// A localized text which shows when players get this card from gacha.
         public var gachaText: DoriAPI.LocalizedData<String>
+        /// Localized title of card.
+        ///
+        /// The same *prefix* can be associated to different cards with different characters,
+        /// so it's called `prefix` instead of *title*.
         public var prefix: DoriAPI.LocalizedData<String>
+        /// Localized release date of card.
         public var releasedAt: DoriAPI.LocalizedData<Date>
+        /// Localized skill name.
         public var skillName: DoriAPI.LocalizedData<String>
+        /// ID of skill associated to this card.
         public var skillID: Int
+        /// Localized source of this card.
         public var source: DoriAPI.LocalizedData<Set<CardSource>>
+        /// Type of card.
         public var type: CardType
+        /// Stats of card.
         public var stat: CardStat
         
+        /// Represent source of a card.
         public enum CardSource: Hashable {
-            case gacha([Int: Double]) // [gachaID: probability]
-            case event([Int: Int]) // [eventID: point]
+            /// Information about a card can be got from gacha.
+            ///
+            /// This case is associated an `[Int: Double]` dictionary,
+            /// which represents `[gachaID: probability]`.
+            case gacha([Int: Double])
+            /// Information about a card can be got from events.
+            ///
+            /// This case is associated an `[Int: Int]` dictionary,
+            /// which represents `[eventID: point]`.
+            case event([Int: Int])
+            /// Information about a card can be got from login campaigns.
             case login(ids: [Int])
         }
     }
     
+    /// Represent type of a card.
     public enum CardType: String, CaseIterable {
         case initial
         case permanent
@@ -442,6 +500,7 @@ extension DoriAPI.Card {
         case others
     }
     
+    /// Represent a episode associated to a card.
     public struct CardEpisode: Identifiable {
         public var id: Int
         public var episodeType: EpisodeType
@@ -480,6 +539,18 @@ extension DoriAPI.Card {
         }
     }
     
+    /// Stats of a card.
+    ///
+    /// Accessing to value of this dictionary directly is not preferred
+    /// because it's storing low-level data and is unsafe.
+    ///
+    /// - SeeAlso:
+    ///     - ``Swift/Dictionary/minimumLevel``
+    ///     - ``Swift/Dictionary/maximumLevel``
+    ///     - ``Swift/Dictionary/forMinimumLevel()``
+    ///     - ``Swift/Dictionary/forMaximumLevel()``
+    ///     - ``Swift/Dictionary/calculated(level:rarity:masterRank:viewedStoryCount:trained:)``
+    ///     - ``Swift/Dictionary/maximumValue(rarity:)``
     public typealias CardStat = [StatKey: [Stat]]
     public struct Stat {
         public var performance: Int
@@ -493,11 +564,26 @@ extension DoriAPI.Card {
             self.visual = visual
         }
         
+        /// The total value of this stat.
+        ///
+        /// A total value is an addition of 3 values.
         @inlinable
         public var total: Int {
             performance + technique + visual
         }
     }
+    /// A key used for indexing stats of card.
+    ///
+    /// Accessing to value of ``CardStat`` by this key directly
+    /// is not preferred because it's storing low-level data and is unsafe.
+    ///
+    /// - SeeAlso:
+    ///     - ``Swift/Dictionary/minimumLevel``
+    ///     - ``Swift/Dictionary/maximumLevel``
+    ///     - ``Swift/Dictionary/forMinimumLevel()``
+    ///     - ``Swift/Dictionary/forMaximumLevel()``
+    ///     - ``Swift/Dictionary/calculated(level:rarity:masterRank:viewedStoryCount:trained:)``
+    ///     - ``Swift/Dictionary/maximumValue(rarity:)``
     public enum StatKey: Hashable {
         case level(Int)
         case episodes
@@ -561,6 +647,7 @@ extension DoriAPI.Card.Stat: AdditiveArithmetic {
     }
 }
 extension DoriAPI.Card.CardStat {
+    /// The minimum level of a card.
     @inlinable
     public var minimumLevel: Int? {
         self.keys
@@ -568,6 +655,7 @@ extension DoriAPI.Card.CardStat {
             .sorted { $0 < $1 }
             .first
     }
+    /// The maximum level of a card.
     @inlinable
     public var maximumLevel: Int? {
         self.keys
@@ -576,17 +664,43 @@ extension DoriAPI.Card.CardStat {
             .first
     }
     
+    /// Calculate a card stat where the card has minimum level.
     @inlinable
     public func forMinimumLevel() -> DoriAPI.Card.Stat? {
         guard let level = minimumLevel else { return nil }
         return self[.level(level)]![0]
     }
+    /// Calculate a card stat where the card has maximum level.
     @inlinable
     public func forMaximumLevel() -> DoriAPI.Card.Stat? {
         guard let level = maximumLevel else { return nil }
         return self[.level(level)]![0]
     }
     
+    /// Calculate a card stat by given statements.
+    /// - Parameters:
+    ///   - level: Level that the card has,
+    ///   should between ``minimumLevel`` and ``maximumLevel``.
+    ///
+    ///   - rarity: Rarity of the card.
+    ///   The rarity is a must for calculating stat,
+    ///   ``DoriAPI/Card/CardStat`` itself doesn't store rarity
+    ///   so you have to pass it as an argument when calculating.
+    ///
+    ///   - masterRank: Master Rank of the card, should between 0 to 4.
+    ///
+    ///   - viewedStoryCount: The count of view stories.
+    ///
+    ///   Some cards have no associated story.
+    ///   If so and you still passed a value greater than 0,
+    ///   this function still calculates card stat as none story have been viewed.
+    ///
+    ///   - trained: Whether the card trained or not.
+    ///
+    ///   Some cards can not be trained.
+    ///   If so and you still passed `true`,
+    ///   this function still calculates card stat as it's not be trained.
+    /// - Returns: Calculated stat, nil if failed to calculate.
     @inlinable
     public func calculated(
         level: Int,
@@ -617,6 +731,19 @@ extension DoriAPI.Card.CardStat {
         return result
     }
     
+    /// Calculate a card stat where the card has all arguments maximum.
+    ///
+    /// Comparing with ``Swift/Dictionary/forMaximumLevel()``,
+    /// it calculates stat where card has maximum level, without any other arguments,
+    /// such as *Master Rank* and *trained*. This function considers all arguments
+    /// to be maximum so the total result is higher
+    /// than ``Swift/Dictionary/forMaximumLevel()``.
+    ///
+    /// - Parameter rarity: Rarity of the card.
+    ///   The rarity is a must for calculating stat,
+    ///   ``DoriAPI/Card/CardStat`` itself doesn't store rarity
+    ///   so you have to pass it as an argument when calculating.
+    /// - Returns: Calculated stat, nil if failed to calculate.
     @inlinable
     public func maximumValue(rarity: Int) -> DoriAPI.Card.Stat? {
         guard let maximumLevel else { return nil }
