@@ -92,10 +92,67 @@ extension DoriFrontend {
                 }
             }
         }
+        
+        public static func extendedInformation(of id: Int) async -> ExtendedCard? {
+            let groupResult = await withTasksResult {
+                await DoriAPI.Card.detail(of: id)
+            } _: {
+                await DoriAPI.Character.all()
+            } _: {
+                await DoriAPI.Band.main()
+            } _: {
+                await DoriAPI.Skill.all()
+            } _: {
+                await DoriAPI.Costume.all()
+            } _: {
+                await DoriAPI.Event.all()
+            } _: {
+                await DoriAPI.Gacha.all()
+            }
+            guard let card = groupResult.0 else { return nil }
+            guard let characters = groupResult.1 else { return nil }
+            guard let bands = groupResult.2 else { return nil }
+            guard let skills = groupResult.3 else { return nil }
+            guard let costumes = groupResult.4 else { return nil }
+            guard let events = groupResult.5 else { return nil }
+            guard let gacha = groupResult.6 else { return nil }
+            
+            let character = characters.first { $0.id == card.characterID }!
+            var resultGacha = [DoriAPI.Gacha.PreviewGacha]()
+            if let source = card.source.forPreferredLocale() {
+                for src in source {
+                    guard case .gacha(let info) = src else { continue }
+                    resultGacha = gacha.filter { info.keys.contains($0.id) }
+                }
+            }
+            
+            return .init(
+                id: id,
+                card: card,
+                character: character,
+                band: bands.first { character.bandID == $0.id }!,
+                skill: skills.first { $0.id == card.skillID }!,
+                costume: costumes.first { $0.id == card.costumeID }!,
+                events: events.filter { event in resultGacha.contains { $0.publishedAt.forPreferredLocale() == event.startAt.forPreferredLocale() } },
+                gacha: resultGacha
+            )
+        }
     }
 }
 
 extension DoriFrontend.Card {
     public typealias PreviewCard = DoriAPI.Card.PreviewCard
     public typealias CardWithBand = (card: PreviewCard, band: DoriAPI.Band.Band)
+    public typealias Card = DoriAPI.Card.Card
+    
+    public struct ExtendedCard: Identifiable {
+        public var id: Int
+        public var card: Card
+        public var character: DoriAPI.Character.PreviewCharacter
+        public var band: DoriAPI.Band.Band
+        public var skill: DoriAPI.Skill.Skill
+        public var costume: DoriAPI.Costume.PreviewCostume
+        public var events: [DoriAPI.Event.PreviewEvent]
+        public var gacha: [DoriAPI.Gacha.PreviewGacha]
+    }
 }

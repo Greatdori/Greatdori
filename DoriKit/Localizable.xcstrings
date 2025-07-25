@@ -1,6 +1,96 @@
 {
   "sourceLanguage" : "zh-Hans",
   "strings" : {
+    "BAND_NAME_AFTERGLOW" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afterglow"
+          }
+        }
+      }
+    },
+    "BAND_NAME_HHW" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hello, Happy World！"
+          }
+        }
+      }
+    },
+    "BAND_NAME_MORFONICA" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morfonica"
+          }
+        }
+      }
+    },
+    "BAND_NAME_MYGO" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MyGO!!!!!"
+          }
+        }
+      }
+    },
+    "BAND_NAME_OTHERS" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他"
+          }
+        }
+      }
+    },
+    "BAND_NAME_POPIPA" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poppin'Party"
+          }
+        }
+      }
+    },
+    "BAND_NAME_PP" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pastel＊Palettes"
+          }
+        }
+      }
+    },
+    "BAND_NAME_RAS" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RAISE A SUILEN"
+          }
+        }
+      }
+    },
+    "BAND_NAME_ROSELIA" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roselia"
+          }
+        }
+      }
+    },
     "btnShowContent" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -129,6 +219,446 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "挑战LIVE"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "户山 香澄"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "花园 多惠"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "牛込 里美"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_4" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "山吹 沙绫"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "市谷 有咲"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_6" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "美竹 兰"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_7" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "青叶 摩卡"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_8" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上原 绯玛丽"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_9" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "宇田川 巴"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_10" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "羽泽 鸫"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_11" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "弦卷 心"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_12" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "濑田 薰"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_13" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "北泽 育美"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_14" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "松原 花音"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_15" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "米歇尔"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_16" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "丸山 彩"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_17" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "冰川 日菜"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_18" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "白鹭 千圣"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_19" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大和 麻弥"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_20" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "若宫 伊芙"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_21" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "凑 友希那"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_22" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "冰川 纱夜"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_23" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今井 莉莎"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_24" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "宇田川 亚子"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_25" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "白金 燐子"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_26" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仓田 真白"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_27" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "桐谷 透子"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_28" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "广町 七深"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_29" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "二叶 筑紫"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_30" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "八潮 瑠唯"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_31" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "和奏 瑞依"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_32" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "朝日 六花"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_33" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "佐藤 益木"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_34" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "鳰原 令王那"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_35" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "珠手 知由"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_36" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高松 灯"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_37" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "千早 爱音"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_38" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要 乐奈"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_39" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "长崎 爽世"
+          }
+        }
+      }
+    },
+    "CHARACTER_NAME_ID_40" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "椎名 立希"
           }
         }
       }
@@ -556,6 +1086,196 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "胜利"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_ATTRIBUTE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "属性"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_BAND" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "乐团"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_CARD_TYPE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "种类"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_CHARACTER" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "角色"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_EVENT_TYPE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "种类"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_GACHA_TYPE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "种类"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_RARITY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稀有度"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_RELEASED" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有/无"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_SERVER" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "服务器"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_SKILL" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "技能"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_SORT" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "排序"
+          }
+        }
+      }
+    },
+    "FILTER_KEY_TIMELINE_STATUS" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "状态"
+          }
+        }
+      }
+    },
+    "FILTER_RELEASED_NO" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "否"
+          }
+        }
+      }
+    },
+    "FILTER_RELEASED_YES" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是"
+          }
+        }
+      }
+    },
+    "FILTER_SKILL_ANY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "任意"
+          }
+        }
+      }
+    },
+    "FILTER_SORT_KEYWORD_ID" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ID"
+          }
+        }
+      }
+    },
+    "FILTER_SORT_KEYWORD_MAXIMUM_STAT" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大综合力"
+          }
+        }
+      }
+    },
+    "FILTER_SORT_KEYWORD_RARITY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稀有度"
+          }
+        }
+      }
+    },
+    "FILTER_SORT_KEYWORD_RELEASE_DATE_IN_%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发布时间 (%@)"
           }
         }
       }
@@ -1626,6 +2346,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "开始于"
+          }
+        }
+      }
+    },
+    "TIMELINE_STATUS_ENDED" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完结"
+          }
+        }
+      }
+    },
+    "TIMELINE_STATUS_ONGOING" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "进行中"
+          }
+        }
+      }
+    },
+    "TIMELINE_STATUS_UPCOMING" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "即将开始"
           }
         }
       }

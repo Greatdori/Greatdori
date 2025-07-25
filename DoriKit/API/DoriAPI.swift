@@ -44,13 +44,15 @@ public class DoriAPI {
     /// you can use the `jp`'s as fallback.
     /// However, not all data availables in `jp`,
     /// such as events related to Bilibili are only available in China.
-    public struct LocalizedData<T> {
+    @_eagerMove
+    public struct LocalizedData<T>: _DestructorSafeContainer {
         public var jp: T?
         public var en: T?
         public var tw: T?
         public var cn: T?
         public var kr: T?
         
+        @usableFromInline
         internal init(jp: T?, en: T?, tw: T?, cn: T?, kr: T?) {
             self.jp = jp
             self.en = en
@@ -139,3 +141,14 @@ public class DoriAPI {
 
 extension DoriAPI.LocalizedData: Equatable where T: Equatable {}
 extension DoriAPI.LocalizedData: Hashable where T: Hashable {}
+
+extension DoriAPI.LocalizedData {
+    @inlinable
+    public func map<R, E>(_ transform: (T?) throws(E) -> R?) throws(E) -> DoriAPI.LocalizedData<R> {
+        var result = DoriAPI.LocalizedData<R>(jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
+        for locale in DoriAPI.Locale.allCases {
+            result._set(try transform(self.forLocale(locale)), forLocale: locale)
+        }
+        return result
+    }
+}

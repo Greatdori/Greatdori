@@ -5,6 +5,7 @@
 //  Created by Mark Chan on 7/23/25.
 //
 
+import os
 import Foundation
 
 extension DoriFrontend {
@@ -49,6 +50,20 @@ extension DoriFrontend {
             self.timelineStatus = timelineStatus
             self.sort = sort
         }
+        
+        public var isFiltered: Bool {
+            band.count != Band.allCases.count
+            || attribute.count != Attribute.allCases.count
+            || rarity.count != 5
+            || character.count != Character.allCases.count
+            || server.count != Server.allCases.count
+            || released.count != 2
+            || cardType.count != CardType.allCases.count
+            || eventType.count != EventType.allCases.count
+            || gachaType.count != GachaType.allCases.count
+            || skill != nil
+            || timelineStatus.count != TimelineStatus.allCases.count
+        }
     }
 }
 
@@ -71,6 +86,21 @@ extension DoriFrontend.Filter {
         case morfonica = 21
         case mygo = 45
         case others = -1
+        
+        @inline(never)
+        internal var name: String {
+            switch self {
+            case .poppinParty: String(localized: "BAND_NAME_POPIPA", bundle: #bundle)
+            case .afterglow: String(localized: "BAND_NAME_AFTERGLOW", bundle: #bundle)
+            case .helloHappyWorld: String(localized: "BAND_NAME_HHW", bundle: #bundle)
+            case .pastelPalettes: String(localized: "BAND_NAME_PP", bundle: #bundle)
+            case .roselia: String(localized: "BAND_NAME_ROSELIA", bundle: #bundle)
+            case .raiseASuilen: String(localized: "BAND_NAME_RAS", bundle: #bundle)
+            case .morfonica: String(localized: "BAND_NAME_MORFONICA", bundle: #bundle)
+            case .mygo: String(localized: "BAND_NAME_MYGO", bundle: #bundle)
+            case .others: String(localized: "BAND_NAME_OTHERS", bundle: #bundle)
+            }
+        }
     }
     public enum Character: Int, CaseIterable {
         // Poppin'Party
@@ -128,14 +158,29 @@ extension DoriFrontend.Filter {
         case rana
         case soyo
         case taki
+        
+        @inline(never)
+        internal var name: String {
+            NSLocalizedString("CHARACTER_NAME_ID_" + String(self.rawValue), bundle: #bundle, comment: "")
+        }
     }
+    @frozen
     public enum TimelineStatus: CaseIterable {
         case ended
         case ongoing
         case upcoming
+        
+        @inline(never)
+        internal var localizedString: String {
+            switch self {
+            case .ended: String(localized: "TIMELINE_STATUS_ENDED", bundle: #bundle)
+            case .ongoing: String(localized: "TIMELINE_STATUS_ONGOING", bundle: #bundle)
+            case .upcoming: String(localized: "TIMELINE_STATUS_UPCOMING", bundle: #bundle)
+            }
+        }
     }
     
-    public struct Sort {
+    public struct Sort: Equatable, Hashable {
         public var direction: Direction
         public var keyword: Keyword
         
@@ -144,15 +189,38 @@ extension DoriFrontend.Filter {
             self.keyword = keyword
         }
         
-        public enum Direction {
+        @frozen
+        public enum Direction: Equatable, Hashable {
             case ascending
             case descending
         }
-        public enum Keyword {
+        public enum Keyword: CaseIterable, Equatable, Hashable {
             case releaseDate(in: DoriAPI.Locale)
             case rarity
             case maximumStat
             case id
+            
+            public static let allCases: [Self] = [
+                .releaseDate(in: .jp),
+                .releaseDate(in: .en),
+                .releaseDate(in: .tw),
+                .releaseDate(in: .cn),
+                .releaseDate(in: .kr),
+                .rarity,
+                .maximumStat,
+                .id
+            ]
+            
+            @inline(never)
+            internal var localizedString: String {
+                switch self {
+                case .releaseDate(let locale):
+                    String(localized: "FILTER_SORT_KEYWORD_RELEASE_DATE_IN_\(locale.rawValue.uppercased())", bundle: #bundle)
+                case .rarity: String(localized: "FILTER_SORT_KEYWORD_RARITY", bundle: #bundle)
+                case .maximumStat: String(localized: "FILTER_SORT_KEYWORD_MAXIMUM_STAT", bundle: #bundle)
+                case .id: String(localized: "FILTER_SORT_KEYWORD_ID", bundle: #bundle)
+                }
+            }
         }
         
         internal func compare<T: Comparable>(_ lhs: T, _ rhs: T) -> Bool {
@@ -162,4 +230,335 @@ extension DoriFrontend.Filter {
             }
         }
     }
+    
+    public enum Key: Int, CaseIterable {
+        case band
+        case attribute
+        case rarity
+        case character
+        case server
+        case released
+        case cardType
+        case eventType
+        case gachaType
+        case skill
+        case timelineStatus
+        case sort
+    }
 }
+
+extension DoriFrontend.Filter.Key: Identifiable {
+    public var id: Int { self.rawValue }
+}
+extension Set<DoriFrontend.Filter.Key> {
+    @inlinable
+    public func sorted() -> [DoriFrontend.Filter.Key] {
+        self.sorted { $0.rawValue < $1.rawValue }
+    }
+}
+extension Array<DoriFrontend.Filter.Key> {
+    @inlinable
+    public func sorted() -> [DoriFrontend.Filter.Key] {
+        self.sorted { $0.rawValue < $1.rawValue }
+    }
+}
+extension DoriFrontend.Filter.Key {
+    @inline(never)
+    public var localizedString: String {
+        switch self {
+        case .band: String(localized: "FILTER_KEY_BAND", bundle: #bundle)
+        case .attribute: String(localized: "FILTER_KEY_ATTRIBUTE", bundle: #bundle)
+        case .rarity: String(localized: "FILTER_KEY_RARITY", bundle: #bundle)
+        case .character: String(localized: "FILTER_KEY_CHARACTER", bundle: #bundle)
+        case .server: String(localized: "FILTER_KEY_SERVER", bundle: #bundle)
+        case .released: String(localized: "FILTER_KEY_RELEASED", bundle: #bundle)
+        case .cardType: String(localized: "FILTER_KEY_CARD_TYPE", bundle: #bundle)
+        case .eventType: String(localized: "FILTER_KEY_EVENT_TYPE", bundle: #bundle)
+        case .gachaType: String(localized: "FILTER_KEY_GACHA_TYPE", bundle: #bundle)
+        case .skill: String(localized: "FILTER_KEY_SKILL", bundle: #bundle)
+        case .timelineStatus: String(localized: "FILTER_KEY_TIMELINE_STATUS", bundle: #bundle)
+        case .sort: String(localized: "FILTER_KEY_SORT", bundle: #bundle)
+        }
+    }
+}
+
+extension DoriFrontend.Filter.Key: Comparable {
+    @inlinable
+    public static func < (lhs: DoriFrontend.Filter.Key, rhs: DoriFrontend.Filter.Key) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
+}
+extension DoriFrontend.Filter: MutableCollection {
+    public typealias Element = AnyHashable
+    
+    @inlinable
+    public var startIndex: Key { .band }
+    @inlinable
+    public var endIndex: Key { .sort }
+    @inlinable
+    public func index(after i: Key) -> Key {
+        .init(rawValue: i.rawValue + 1)!
+    }
+    
+    public subscript(position: Key) -> AnyHashable {
+        get {
+            switch position {
+            case .band: self.band
+            case .attribute: self.attribute
+            case .rarity: self.rarity
+            case .character: self.character
+            case .server: self.server
+            case .released: self.released
+            case .cardType: self.cardType
+            case .eventType: self.eventType
+            case .gachaType: self.gachaType
+            case .skill: self.skill
+            case .timelineStatus: self.timelineStatus
+            case .sort: self.sort
+            }
+        }
+        set {
+            self.updateValue(newValue, forKey: position)
+        }
+    }
+    
+    public mutating func updateValue(_ value: AnyHashable, forKey key: Key) {
+        let expectedValueType = type(of: self[key])
+        let valueType = type(of: value)
+        if valueType != expectedValueType {
+            logger.critical("Failed to update value of filter, expected \(expectedValueType), but got \(valueType)")
+            return
+        }
+        switch key {
+        case .band:
+            self.band = value as! Set<Band>
+        case .attribute:
+            self.attribute = value as! Set<Attribute>
+        case .rarity:
+            self.rarity = value as! Set<Rarity>
+        case .character:
+            self.character = value as! Set<Character>
+        case .server:
+            self.server = value as! Set<Server>
+        case .released:
+            self.released = value as! Set<Bool>
+        case .cardType:
+            self.cardType = value as! Set<CardType>
+        case .eventType:
+            self.eventType = value as! Set<EventType>
+        case .gachaType:
+            self.gachaType = value as! Set<GachaType>
+        case .skill:
+            self.skill = value as! Skill?
+        case .timelineStatus:
+            self.timelineStatus = value as! Set<TimelineStatus>
+        case .sort:
+            if let sort = value as? Sort {
+                self.sort = sort
+            } else {
+                self.sort.keyword = value as! Sort.Keyword
+            }
+        }
+    }
+}
+
+extension DoriFrontend.Filter {
+    @_typeEraser(_AnySelectable)
+    public protocol _Selectable: Hashable {
+        var selectorText: String { get }
+        var selectorImageURL: URL? { get }
+    }
+    public struct _AnySelectable: _Selectable, Equatable, Hashable {
+        private let _selectorText: String
+        private let _selectorImageURL: URL?
+        
+        public let value: AnyHashable
+        
+        public init<T: _Selectable>(erasing value: T) {
+            self._selectorText = value.selectorText
+            self._selectorImageURL = value.selectorImageURL
+            self.value = value
+        }
+        public init<T: _Selectable>(_ value: T) {
+            self.init(erasing: value)
+        }
+        
+        public var selectorText: String { _selectorText }
+        public var selectorImageURL: URL? { _selectorImageURL }
+    }
+}
+extension DoriFrontend.Filter._Selectable {
+    public var selectorImageURL: URL? { nil }
+    
+    public func isEqual(to selectable: any DoriFrontend.Filter._Selectable) -> Bool {
+        self.selectorText == selectable.selectorText
+    }
+}
+extension DoriFrontend.Filter.Band: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.name
+    }
+    public var selectorImageURL: URL? {
+        .init(string: "https://bestdori.com/res/icon/band_\(self.rawValue).svg")!
+    }
+}
+extension DoriFrontend.Filter.Attribute: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.rawValue.uppercased()
+    }
+    public var selectorImageURL: URL? {
+        .init(string: "https://bestdori.com/res/icon/\(self.rawValue).svg")!
+    }
+}
+extension DoriFrontend.Filter.Rarity: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        String(self)
+    }
+    public var selectorImageURL: URL? {
+        .init(string: "https://bestdori.com/res/icon/star_\(self).png")!
+    }
+}
+extension DoriFrontend.Filter.Character: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.name
+    }
+    public var selectorImageURL: URL? {
+        .init(string: "https://bestdori.com/res/icon/chara_icon_\(self.rawValue).png")!
+    }
+}
+extension DoriFrontend.Filter.Server: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.rawValue.uppercased()
+    }
+    public var selectorImageURL: URL? {
+        self.iconImageURL
+    }
+}
+extension Bool: DoriFrontend.Filter._Selectable {
+    @inline(never)
+    public var selectorText: String {
+        self ? String(localized: "FILTER_RELEASED_YES", bundle: #bundle) : String(localized: "FILTER_RELEASED_NO", bundle: #bundle)
+    }
+}
+extension DoriFrontend.Filter.CardType: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.localizedString
+    }
+}
+extension DoriFrontend.Filter.EventType: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.localizedString
+    }
+}
+extension DoriFrontend.Filter.GachaType: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.localizedString
+    }
+}
+extension DoriFrontend.Filter.Skill: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.maximumDescription.forPreferredLocale() ?? ""
+    }
+}
+extension Optional<DoriFrontend.Filter.Skill>: DoriFrontend.Filter._Selectable {
+    @inline(never)
+    public var selectorText: String {
+        if let skill = self {
+            skill.maximumDescription.forPreferredLocale() ?? ""
+        } else {
+            String(localized: "FILTER_SKILL_ANY", bundle: #bundle)
+        }
+    }
+}
+extension DoriFrontend.Filter.TimelineStatus: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.localizedString
+    }
+}
+extension DoriFrontend.Filter.Sort.Keyword: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.localizedString
+    }
+}
+extension DoriFrontend.Filter.Sort: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.keyword.localizedString
+    }
+}
+extension DoriFrontend.Filter.Key {
+    public var selector: (type: SelectionType, items: [SelectorItem<DoriFrontend.Filter._AnySelectable>]) {
+        switch self {
+        case .band:
+            (.multiple, DoriFrontend.Filter.Band.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .attribute:
+            (.multiple, DoriFrontend.Filter.Attribute.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .rarity:
+            (.multiple, (1...5).map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .character:
+            (.multiple, DoriFrontend.Filter.Character.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .server:
+            (.multiple, DoriFrontend.Filter.Server.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .released:
+            (.multiple, [true, false].map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .cardType:
+            (.multiple, DoriFrontend.Filter.CardType.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .eventType:
+            (.multiple, DoriFrontend.Filter.EventType.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .gachaType:
+            (.multiple, DoriFrontend.Filter.GachaType.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .skill:
+            (.single, InMemoryCache.allSkills.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .timelineStatus:
+            (.multiple, DoriFrontend.Filter.TimelineStatus.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .sort:
+            (.single, DoriFrontend.Filter.Sort.Keyword.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        }
+    }
+    
+    public struct SelectorItem<T: DoriFrontend.Filter._Selectable> {
+        public let item: T
+        
+        internal init(_ item: T) {
+            self.item = item
+        }
+        
+        public var text: String {
+            item.selectorText
+        }
+        public var imageURL: URL? {
+            item.selectorImageURL
+        }
+    }
+    
+    @frozen
+    public enum SelectionType {
+        case single
+        case multiple
+    }
+}
+extension DoriFrontend.Filter.Key.SelectorItem: Equatable where T: Equatable {}
+extension DoriFrontend.Filter.Key.SelectorItem: Hashable where T: Hashable {}

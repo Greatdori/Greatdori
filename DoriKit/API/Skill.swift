@@ -62,13 +62,7 @@ extension DoriAPI {
                         if let type = Skill.ActivationEffect.ActivateEffectType(rawValue: k) {
                             effects.updateValue(
                                 .init(
-                                    activateEffectValue: .init(
-                                        jp: v["activateEffectValue"][0].int,
-                                        en: v["activateEffectValue"][1].int,
-                                        tw: v["activateEffectValue"][2].int,
-                                        cn: v["activateEffectValue"][3].int,
-                                        kr: v["activateEffectValue"][4].int
-                                    ),
+                                    activateEffectValue: v["activateEffectValue"].map { $0.1.intValue },
                                     activateEffectValueType: .init(rawValue: v["activateEffectValueType"].stringValue) ?? .rate,
                                     activateCondition: .init(rawValue: v["activateCondition"].stringValue) ?? .good,
                                     activateConditionLife: v["activateConditionLife"].int
@@ -76,6 +70,16 @@ extension DoriAPI {
                                 forKey: type
                             )
                         }
+                    }
+                    var onceEffect: Skill.OnceEffect?
+                    if value["onceEffect"].exists() {
+                        onceEffect = .init(
+                            onceEffectType: .init(rawValue: value["onceEffect"]["onceEffectType"].stringValue) ?? .life,
+                            onceEffectValueType: .init(rawValue: value["onceEffect"]["onceEffectValueType"].stringValue) ?? .realValue,
+                            onceEffectConditionLifeType: .init(rawValue: value["onceEffect"]["onceEffectConditionLifeType"].stringValue) ?? .underLife,
+                            onceEffectConditionLife: value["onceEffect"]["onceEffectConditionLife"].intValue,
+                            onceEffectValue: value["onceEffect"]["onceEffectValue"].map { $0.1.intValue }
+                        )
                     }
                     result.append(.init(
                         id: Int(key) ?? 0,
@@ -99,7 +103,8 @@ extension DoriAPI {
                             unificationActivateConditionType: .init(rawValue: value["activationEffect"]["unificationActivateConditionType"].stringValue),
                             unificationActivateConditionBandID: value["activationEffect"]["unificationActivateConditionBandId"].int,
                             activateEffectTypes: effects
-                        )
+                        ),
+                        onceEffect: onceEffect
                     ))
                 }
                 return result.sorted { $0.id < $1.id }
@@ -110,14 +115,15 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Skill {
-    public struct Skill: Identifiable {
+    public struct Skill: Identifiable, Equatable, Hashable {
         public var id: Int
         public var simpleDescription: DoriAPI.LocalizedData<String>
         public var description: DoriAPI.LocalizedData<String> // Uses `{Int}` for string interpolation
         public var duration: [Double]
         public var activationEffect: ActivationEffect
+        public var onceEffect: OnceEffect?
         
-        public struct ActivationEffect {
+        public struct ActivationEffect: Equatable, Hashable {
             public var unificationActivateEffectValue: Int?
             public var unificationActivateConditionType: ActivateConditionType?
             public var unificationActivateConditionBandID: Int?
@@ -155,14 +161,14 @@ extension DoriAPI.Skill {
                 case damage
                 case neverDie = "never_die"
             }
-            public struct ActivateEffect {
-                public var activateEffectValue: DoriAPI.LocalizedData<Int>
+            public struct ActivateEffect: Equatable, Hashable {
+                public var activateEffectValue: [Int]
                 public var activateEffectValueType: ValueType
                 public var activateCondition: ActivateCondition
                 public var activateConditionLife: Int?
                 
                 internal init(
-                    activateEffectValue: DoriAPI.LocalizedData<Int>,
+                    activateEffectValue: [Int],
                     activateEffectValueType: ValueType,
                     activateCondition: ActivateCondition,
                     activateConditionLife: Int?
@@ -184,5 +190,49 @@ extension DoriAPI.Skill {
                 }
             }
         }
+        public struct OnceEffect: Equatable, Hashable {
+            public var onceEffectType: OnceEffectType
+            public var onceEffectValueType: ValueType
+            public var onceEffectConditionLifeType: ConditionLifeType
+            public var onceEffectConditionLife: Int
+            public var onceEffectValue: [Int]
+            
+            public enum OnceEffectType: String {
+                case life
+            }
+            public enum ValueType: String {
+                case realValue = "real_value"
+            }
+            public enum ConditionLifeType: String {
+                case underLife = "under_life"
+            }
+        }
+    }
+}
+
+extension DoriAPI.Skill.Skill {
+    public func replacedDescription(with replacement: (String, String?)) -> DoriAPI.LocalizedData<String> {
+        let description = self.description
+        return description.map { desc in
+            guard var desc, desc.contains("{0}") else { return desc }
+            if desc.contains("{1}") {
+                if let r = replacement.1 {
+                    desc.replace("{0}", with: r)
+                }
+                desc.replace("{1}", with: replacement.0)
+            } else {
+                desc.replace("{0}", with: replacement.0)
+            }
+            return desc
+        }
+    }
+    
+    public var maximumDescription: DoriAPI.LocalizedData<String> {
+        self.replacedDescription(
+            with: (
+                String(self.duration.last ?? 0),
+                self.onceEffect?.onceEffectValue.last?.description
+            )
+        )
     }
 }

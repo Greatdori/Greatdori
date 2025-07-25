@@ -113,8 +113,8 @@ struct CardCardView: View {
     
     var body: some View {
         ZStack {
-            if rarity >= 4 || cardType == .others {
-                if cardType != .birthday && cardType != .others {
+            if let trainedBackgroundImageURL {
+                if ![.others, .campaign, .birthday].contains(cardType) {
                     HStack(spacing: 0) {
                         WebImage(url: normalBackgroundImageURL) { image in
                             image
@@ -128,7 +128,7 @@ struct CardCardView: View {
                         .scaledToFill()
                         .frame(width: (screenBounds.width - 5) / 2)
                         .clipped()
-                        WebImage(url: trainedBackgroundImageURL!) { image in
+                        WebImage(url: trainedBackgroundImageURL) { image in
                             image
                         } placeholder: {
                             RoundedRectangle(cornerRadius: 10)
@@ -142,7 +142,7 @@ struct CardCardView: View {
                         .clipped()
                     }
                 } else {
-                    WebImage(url: trainedBackgroundImageURL!) { image in
+                    WebImage(url: trainedBackgroundImageURL) { image in
                         image
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
@@ -230,9 +230,9 @@ struct ThumbCardCardView: View {
     
     var body: some View {
         HStack {
-            if rarity >= 4 || cardType == .others {
+            if let thumbTrainedImageURL {
                 ZStack {
-                    WebImage(url: thumbTrainedImageURL!) { image in
+                    WebImage(url: thumbTrainedImageURL) { image in
                         image
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)

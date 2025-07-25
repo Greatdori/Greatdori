@@ -8,6 +8,13 @@
 import SwiftUI
 import Foundation
 
+extension DoriAPI.Locale {
+    @inlinable
+    public var iconImageURL: URL {
+        .init(string: "https://bestdori.com/res/icon/\(self.rawValue).svg")!
+    }
+}
+
 extension DoriAPI.Attribute {
     @inlinable
     public var iconImageURL: URL {
@@ -75,7 +82,7 @@ extension DoriAPI.Card.${property} {
     }
     @inlinable
     public var coverAfterTrainingImageURL: URL? {
-        if self.rarity >= 4 || self.type == .others {
+        if self.rarity >= 4 || (self.rarity >= 3 && [.others, .campaign, .birthday].contains(self.type)) {
             .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/characters/resourceset/\(self.resourceSetName)_rip/card_after_training.png")!
         } else {
             nil
@@ -92,7 +99,7 @@ extension DoriAPI.Card.${property} {
     }
     @inlinable
     public var thumbAfterTrainingImageURL: URL? {
-        if self.rarity >= 4 || self.type == .others {
+        if self.rarity >= 4 || (self.rarity >= 3 && [.others, .campaign, .birthday].contains(self.type)) {
             var ripID = String(Int(Double(self.id) / 50))
             while ripID.count < 5 {
                 ripID = "0" + ripID

@@ -50,3 +50,17 @@ extension DoriAPI.Character.Character.Profile.Part {
         }
     }
 }
+
+extension DoriAPI.Event.EventType {
+    @inline(never)
+    public var localizedString: String {
+        NSLocalizedString("event" + self.rawValue, bundle: #bundle, comment: "")
+    }
+}
+
+extension DoriAPI.Gacha.GachaType {
+    @inline(never)
+    public var localizedString: String {
+        NSLocalizedString("gacha" + self.rawValue, bundle: #bundle, comment: "")
+    }
+}

@@ -39,6 +39,12 @@
 		8C923D9D2E313B4A003AFC0A /* FrontendCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D9C2E313B47003AFC0A /* FrontendCard.swift */; };
 		8C923D9F2E313C0B003AFC0A /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D9E2E313C09003AFC0A /* Filters.swift */; };
 		8C923DA12E315E09003AFC0A /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923DA02E315E05003AFC0A /* CardListView.swift */; };
+		8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */; };
+		8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD02E32B5B6004023F7 /* Constructor.swift */; };
+		8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */; };
+		8CBC1BD52E3303EB004023F7 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD42E3303E9004023F7 /* CardDetailView.swift */; };
+		8CBC1BD72E3317DF004023F7 /* AudioPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD62E3317DD004023F7 /* AudioPlaying.swift */; };
+		8CBC1BD92E333461004023F7 /* FoldableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD82E33345C004023F7 /* FoldableList.swift */; };
 		8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13F742E2FDC4700673E15 /* NavigationListView.swift */; };
 		8CD13FAE2E2FE2BF00673E15 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA12E2FE2BF00673E15 /* Band.swift */; };
 		8CD13FAF2E2FE2BF00673E15 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA22E2FE2BF00673E15 /* Card.swift */; };
@@ -198,6 +204,12 @@
 		8C923D9E2E313C09003AFC0A /* Filters.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		8C923DA02E315E05003AFC0A /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
 		8C923DA22E31664B003AFC0A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
+		8CBC1BD02E32B5B6004023F7 /* Constructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
+		8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCaches.swift; sourceTree = "<group>"; };
+		8CBC1BD42E3303E9004023F7 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
+		8CBC1BD62E3317DD004023F7 /* AudioPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaying.swift; sourceTree = "<group>"; };
+		8CBC1BD82E33345C004023F7 /* FoldableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldableList.swift; sourceTree = "<group>"; };
 		8CD13F742E2FDC4700673E15 /* NavigationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationListView.swift; sourceTree = "<group>"; };
 		8CD13FA12E2FE2BF00673E15 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
 		8CD13FA22E2FE2BF00673E15 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -294,12 +306,15 @@
 				8C923D852E304AE5003AFC0A /* Extensions */,
 				8C0C99872E296A5800549B5C /* GreatdoriApp.swift */,
 				8C923D8C2E3056C8003AFC0A /* CardViews.swift.gyb */,
+				8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */,
+				8CBC1BD82E33345C004023F7 /* FoldableList.swift */,
 				8C0C99862E296A5800549B5C /* ContentView.swift */,
 				8CD13F742E2FDC4700673E15 /* NavigationListView.swift */,
 				8C923D772E3034AD003AFC0A /* HomeView.swift.gyb */,
 				8C923D902E30663A003AFC0A /* CharacterListView.swift */,
 				8C923D922E307084003AFC0A /* CharacterDetailView.swift */,
 				8C923DA02E315E05003AFC0A /* CardListView.swift */,
+				8CBC1BD42E3303E9004023F7 /* CardDetailView.swift */,
 			);
 			path = "Greatdori Watch App";
 			sourceTree = "<group>";
@@ -308,6 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				8C0C99B22E29766B00549B5C /* Localizable.xcstrings */,
+				8CBC1BD02E32B5B6004023F7 /* Constructor.swift */,
 				8CD13FC42E2FE2BF00673E15 /* Internal */,
 				8CD13FC02E2FE2BF00673E15 /* Networking */,
 				8CD13FAD2E2FE2BF00673E15 /* API */,
@@ -328,6 +344,7 @@
 			children = (
 				8C923D862E304AF1003AFC0A /* Date+.swift */,
 				8C923D8E2E305FF6003AFC0A /* Screen.swift */,
+				8CBC1BD62E3317DD004023F7 /* AudioPlaying.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -387,6 +404,7 @@
 			children = (
 				8CD13FCA2E2FEFCC00673E15 /* Date+.swift */,
 				8CD13FC22E2FE2BF00673E15 /* Color+.swift */,
+				8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */,
 				8CD13FC32E2FE2BF00673E15 /* Logger.swift */,
 				8C923D942E30721F003AFC0A /* TaskGroup.swift.gyb */,
 			);
@@ -577,14 +595,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */,
 				8C923D932E307088003AFC0A /* CharacterDetailView.swift in Sources */,
 				8C923D8F2E305FF8003AFC0A /* Screen.swift in Sources */,
+				8CBC1BD52E3303EB004023F7 /* CardDetailView.swift in Sources */,
 				8C923DA12E315E09003AFC0A /* CardListView.swift in Sources */,
 				8C0C99892E296A5800549B5C /* ContentView.swift in Sources */,
+				8CBC1BD92E333461004023F7 /* FoldableList.swift in Sources */,
 				8C923D782E3034AF003AFC0A /* HomeView.swift.gyb in Sources */,
 				8C923D872E304AF3003AFC0A /* Date+.swift in Sources */,
 				8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */,
 				8C923D8D2E3056CB003AFC0A /* CardViews.swift.gyb in Sources */,
+				8CBC1BD72E3317DF004023F7 /* AudioPlaying.swift in Sources */,
 				8C923D912E30663E003AFC0A /* CharacterListView.swift in Sources */,
 				8C0C998A2E296A5800549B5C /* GreatdoriApp.swift in Sources */,
 			);
@@ -604,10 +626,12 @@
 				8C923D9D2E313B4A003AFC0A /* FrontendCard.swift in Sources */,
 				8CD13FB22E2FE2BF00673E15 /* Degree.swift in Sources */,
 				8CD13FB32E2FE2BF00673E15 /* DoriAPI.swift in Sources */,
+				8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */,
 				8CD13FC52E2FE2BF00673E15 /* Color+.swift in Sources */,
 				8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */,
 				8C923D952E307227003AFC0A /* TaskGroup.swift.gyb in Sources */,
 				8C923D9B2E3138E3003AFC0A /* Post.swift in Sources */,
+				8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */,
 				8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */,
 				8CD13FB42E2FE2BF00673E15 /* Event.swift in Sources */,
 				8CD13FB52E2FE2BF00673E15 /* Gacha.swift in Sources */,
@@ -941,6 +965,7 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
@@ -992,6 +1017,7 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;

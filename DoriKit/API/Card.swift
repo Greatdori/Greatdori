@@ -486,6 +486,14 @@ extension DoriAPI.Card {
         public var technique: Int
         public var visual: Int
         
+        @usableFromInline
+        init(performance: Int, technique: Int, visual: Int) {
+            self.performance = performance
+            self.technique = technique
+            self.visual = visual
+        }
+        
+        @inlinable
         public var total: Int {
             performance + technique + visual
         }
@@ -512,11 +520,112 @@ extension DoriAPI.Card.Card {
     }
 }
 
+extension DoriAPI.Card.Stat: AdditiveArithmetic {
+    public static let zero: Self = .init(performance: 0, technique: 0, visual: 0)
+    
+    @_transparent
+    public static func +(lhs: Self, rhs: Self) -> Self {
+        .init(
+            performance: lhs.performance + rhs.performance,
+            technique: lhs.technique + rhs.technique,
+            visual: lhs.visual + rhs.visual
+        )
+    }
+    @_transparent
+    public static func +=(a: inout Self, b: Self) {
+        a = a + b
+    }
+    @_transparent
+    public static func -(lhs: Self, rhs: Self) -> Self {
+        .init(
+            performance: lhs.performance - rhs.performance,
+            technique: lhs.technique - rhs.technique,
+            visual: lhs.visual - rhs.visual
+        )
+    }
+    @_transparent
+    public static func -=(a: inout Self, b: Self) {
+        a = a - b
+    }
+    @_transparent
+    public static func *(lhs: Self, rhs: Int) -> Self {
+        .init(
+            performance: lhs.performance * rhs,
+            technique: lhs.technique * rhs,
+            visual: lhs.visual * rhs
+        )
+    }
+    @_transparent
+    public static func *=(a: inout Self, b: Int) {
+        a = a * b
+    }
+}
 extension DoriAPI.Card.CardStat {
-    func forMaximumLevel() -> DoriAPI.Card.Stat? {
-        let keys = self.keys
-            .filter { if case .level = $0 { true } else { false } }
-            .sorted { if case let .level(lhs) = $0, case let .level(rhs) = $1 { lhs > rhs } else { false } }
-        return keys.first != nil ? self[keys.first!]?[0] : nil
+    @inlinable
+    public var minimumLevel: Int? {
+        self.keys
+            .compactMap { if case let .level(level) = $0 { level } else { nil } }
+            .sorted { $0 < $1 }
+            .first
+    }
+    @inlinable
+    public var maximumLevel: Int? {
+        self.keys
+            .compactMap { if case let .level(level) = $0 { level } else { nil } }
+            .sorted { $0 > $1 }
+            .first
+    }
+    
+    @inlinable
+    public func forMinimumLevel() -> DoriAPI.Card.Stat? {
+        guard let level = minimumLevel else { return nil }
+        return self[.level(level)]![0]
+    }
+    @inlinable
+    public func forMaximumLevel() -> DoriAPI.Card.Stat? {
+        guard let level = maximumLevel else { return nil }
+        return self[.level(level)]![0]
+    }
+    
+    @inlinable
+    public func calculated(
+        level: Int,
+        rarity: Int,
+        masterRank: Int,
+        viewedStoryCount: Int,
+        trained: Bool
+    ) -> DoriAPI.Card.Stat? {
+        guard let minimumLevel, let maximumLevel else { return nil }
+        guard minimumLevel...maximumLevel ~= level else { return nil }
+        guard 1...5 ~= rarity else { return nil }
+        guard 0...4 ~= masterRank else { return nil }
+        guard 0...2 ~= viewedStoryCount else { return nil }
+        
+        guard var result = self[.level(level)]?[0] else { return nil }
+        let episodeCount = self[.episodes]?.count ?? 0
+        result += DoriAPI.Card.Stat(performance: 50, technique: 50, visual: 50) * rarity
+        if viewedStoryCount >= 1, episodeCount >= 1 {
+            result += self[.episodes]![0]
+        }
+        if viewedStoryCount >= 2, episodeCount >= 2 {
+            result += self[.episodes]![1]
+        }
+        if let training = self[.training]?[0], trained {
+            result += training
+        }
+        
+        return result
+    }
+    
+    @inlinable
+    public func maximumValue(rarity: Int) -> DoriAPI.Card.Stat? {
+        guard let maximumLevel else { return nil }
+        return calculated(
+            level: maximumLevel,
+            rarity: rarity,
+            masterRank: 4,
+            viewedStoryCount: 2,
+            trained: true
+        )
     }
 }

@@ -13,16 +13,12 @@ struct CharacterDetailView: View {
     var id: Int
     @State var information: DoriFrontend.Character.ExtendedCharacter?
     @State var randomCard: DoriAPI.Card.PreviewCard?
-    @State var isCardsExpanded = false
-    @State var isCostumesExpanded = false
-    @State var isEventsExpanded = false
-    @State var isGachaExpanded = false
     var body: some View {
         List {
             if let information {
                 if let randomCard, let band = information.band {
                     Section {
-                        NavigationLink(destination: {  }) {
+                        NavigationLink(destination: { CardDetailView(id: randomCard.id) }) {
                             CardCardView(randomCard, band: band)
                         }
                         .listRowBackground(Color.clear)
@@ -181,14 +177,9 @@ struct CharacterDetailView: View {
                 .listRowBackground(Color.clear)
                 if !information.cards.isEmpty, let band = information.band {
                     Section {
-                        ForEach(information.cards.reversed()) { card in
-                            if isCardsExpanded || card.id == information.cards.last?.id {
+                        FoldableList(information.cards.reversed()) { card in
+                            NavigationLink(destination: { CardDetailView(id: card.id) }) {
                                 ThumbCardCardView(card, band: band)
-                            }
-                        }
-                        if information.cards.count > 1 {
-                            Button(isCardsExpanded ? "收起" : "显示所有", systemImage: isCardsExpanded ? "rectangle.compress.vertical" : "rectangle.expand.vertical") {
-                                isCardsExpanded.toggle()
                             }
                         }
                     } header: {
@@ -197,15 +188,8 @@ struct CharacterDetailView: View {
                 }
                 if !information.costumes.isEmpty {
                     Section {
-                        ForEach(information.costumes.reversed()) { costume in
-                            if isCostumesExpanded || costume.id == information.costumes.last?.id {
-                                ThumbCostumeCardView(costume)
-                            }
-                        }
-                        if information.costumes.count > 1 {
-                            Button(isCostumesExpanded ? "收起" : "显示所有", systemImage: isCostumesExpanded ? "rectangle.compress.vertical" : "rectangle.expand.vertical") {
-                                isCostumesExpanded.toggle()
-                            }
+                        FoldableList(information.costumes.reversed()) { costume in
+                            ThumbCostumeCardView(costume)
                         }
                     } header: {
                         Text("服装")
@@ -213,15 +197,8 @@ struct CharacterDetailView: View {
                 }
                 if !information.events.isEmpty {
                     Section {
-                        ForEach(information.events.reversed()) { event in
-                            if isEventsExpanded || event.id == information.events.last?.id {
-                                EventCardView(event, inLocale: nil)
-                            }
-                        }
-                        if information.events.count > 1 {
-                            Button(isEventsExpanded ? "收起" : "显示所有", systemImage: isEventsExpanded ? "rectangle.compress.vertical" : "rectangle.expand.vertical") {
-                                isEventsExpanded.toggle()
-                            }
+                        FoldableList(information.events.reversed()) { event in
+                            EventCardView(event, inLocale: nil)
                         }
                     } header: {
                         Text("活动")
@@ -229,15 +206,8 @@ struct CharacterDetailView: View {
                 }
                 if !information.gacha.isEmpty {
                     Section {
-                        ForEach(information.gacha.reversed()) { gacha in
-                            if isGachaExpanded || gacha.id == information.gacha.last?.id {
-                                GachaCardView(gacha)
-                            }
-                        }
-                        if information.gacha.count > 1 {
-                            Button(isGachaExpanded ? "收起" : "显示所有", systemImage: isGachaExpanded ? "rectangle.compress.vertical" : "rectangle.expand.vertical") {
-                                isGachaExpanded.toggle()
-                            }
+                        FoldableList(information.gacha.reversed()) { gacha in
+                            GachaCardView(gacha)
                         }
                     } header: {
                         Text("招募")
@@ -251,10 +221,6 @@ struct CharacterDetailView: View {
                 }
             }
         }
-        .animation(.default, value: isCardsExpanded)
-        .animation(.default, value: isCostumesExpanded)
-        .animation(.default, value: isEventsExpanded)
-        .animation(.default, value: isGachaExpanded)
         .navigationTitle(information?.character.characterName.forPreferredLocale() ?? String(localized: "正在载入角色..."))
         .task {
             information = await DoriFrontend.Character.extendedInformation(of: id)
