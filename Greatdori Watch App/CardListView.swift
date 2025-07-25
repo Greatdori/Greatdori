@@ -12,6 +12,8 @@ struct CardListView: View {
     @State var filter = DoriFrontend.Filter()
     @State var cards: [DoriFrontend.Card.CardWithBand]?
     @State var isFilterSettingsPresented = false
+    @State var isSearchPresented = false
+    @State var searchInput = ""
     var body: some View {
         List {
             if let cards {
@@ -47,6 +49,13 @@ struct CardListView: View {
                 .sort
             ])
         }
+        .sheet(isPresented: $isSearchPresented) {
+            if let cards {
+                SearchView(items: cards.map { $0.card }, text: $searchInput) { result in
+                    
+                }
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
@@ -55,6 +64,13 @@ struct CardListView: View {
                     Image(systemName: "line.3.horizontal.decrease")
                 })
                 .tint(filter.isFiltered ? .accent : nil)
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    isSearchPresented = true
+                }, label: {
+                    Image(systemName: "magnifyingglass")
+                })
             }
         }
         .task {

@@ -45,6 +45,8 @@
 		8CBC1BD52E3303EB004023F7 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD42E3303E9004023F7 /* CardDetailView.swift */; };
 		8CBC1BD72E3317DF004023F7 /* AudioPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD62E3317DD004023F7 /* AudioPlaying.swift */; };
 		8CBC1BD92E333461004023F7 /* FoldableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD82E33345C004023F7 /* FoldableList.swift */; };
+		8CBC1BDB2E334246004023F7 /* Searching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BDA2E334233004023F7 /* Searching.swift */; };
+		8CBC1BDD2E336556004023F7 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BDC2E33654D004023F7 /* SearchView.swift */; };
 		8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13F742E2FDC4700673E15 /* NavigationListView.swift */; };
 		8CD13FAE2E2FE2BF00673E15 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA12E2FE2BF00673E15 /* Band.swift */; };
 		8CD13FAF2E2FE2BF00673E15 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA22E2FE2BF00673E15 /* Card.swift */; };
@@ -210,6 +212,8 @@
 		8CBC1BD42E3303E9004023F7 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 		8CBC1BD62E3317DD004023F7 /* AudioPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaying.swift; sourceTree = "<group>"; };
 		8CBC1BD82E33345C004023F7 /* FoldableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldableList.swift; sourceTree = "<group>"; };
+		8CBC1BDA2E334233004023F7 /* Searching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searching.swift; sourceTree = "<group>"; };
+		8CBC1BDC2E33654D004023F7 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		8CD13F742E2FDC4700673E15 /* NavigationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationListView.swift; sourceTree = "<group>"; };
 		8CD13FA12E2FE2BF00673E15 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
 		8CD13FA22E2FE2BF00673E15 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -307,6 +311,7 @@
 				8C0C99872E296A5800549B5C /* GreatdoriApp.swift */,
 				8C923D8C2E3056C8003AFC0A /* CardViews.swift.gyb */,
 				8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */,
+				8CBC1BDC2E33654D004023F7 /* SearchView.swift */,
 				8CBC1BD82E33345C004023F7 /* FoldableList.swift */,
 				8C0C99862E296A5800549B5C /* ContentView.swift */,
 				8CD13F742E2FDC4700673E15 /* NavigationListView.swift */,
@@ -383,6 +388,7 @@
 			children = (
 				8CD13FBA2E2FE2BF00673E15 /* DoriFrontend.swift */,
 				8C923D9E2E313C09003AFC0A /* Filters.swift */,
+				8CBC1BDA2E334233004023F7 /* Searching.swift */,
 				8C923D9C2E313B47003AFC0A /* FrontendCard.swift */,
 				8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */,
 				8C923D882E305228003AFC0A /* FrontendEvent.swift */,
@@ -605,6 +611,7 @@
 				8C923D782E3034AF003AFC0A /* HomeView.swift.gyb in Sources */,
 				8C923D872E304AF3003AFC0A /* Date+.swift in Sources */,
 				8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */,
+				8CBC1BDD2E336556004023F7 /* SearchView.swift in Sources */,
 				8C923D8D2E3056CB003AFC0A /* CardViews.swift.gyb in Sources */,
 				8CBC1BD72E3317DF004023F7 /* AudioPlaying.swift in Sources */,
 				8C923D912E30663E003AFC0A /* CharacterListView.swift in Sources */,
@@ -634,6 +641,7 @@
 				8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */,
 				8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */,
 				8CD13FB42E2FE2BF00673E15 /* Event.swift in Sources */,
+				8CBC1BDB2E334246004023F7 /* Searching.swift in Sources */,
 				8CD13FB52E2FE2BF00673E15 /* Gacha.swift in Sources */,
 				8CD13FB62E2FE2BF00673E15 /* News.swift in Sources */,
 				8CD13FB72E2FE2BF00673E15 /* Resource.swift.gyb in Sources */,
