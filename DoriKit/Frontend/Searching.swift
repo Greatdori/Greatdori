@@ -165,7 +165,7 @@ extension Array where Element: DoriFrontend.Searchable {
         }
         result.remove(atOffsets: removes)
         
-        return self
+        return result
     }
 }
 
@@ -187,5 +187,19 @@ extension DoriAPI.Card.PreviewCard: DoriFrontend.Searchable {
     }
     public var _searchAttributes: [DoriAPI.Attribute] {
         [self.attribute]
+    }
+}
+extension DoriAPI.Costume.PreviewCostume: DoriFrontend.Searchable {
+    public var _searchLocalizedStrings: [DoriAPI.LocalizedData<String>] {
+        [self.description]
+    }
+    public var _searchLocales: [DoriAPI.Locale] {
+        var result = [DoriAPI.Locale]()
+        for locale in DoriAPI.Locale.allCases {
+            if self.publishedAt.availableInLocale(locale) {
+                result.append(locale)
+            }
+        }
+        return result
     }
 }

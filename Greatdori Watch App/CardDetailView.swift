@@ -256,7 +256,9 @@ struct CardDetailView: View {
                         Text("数据")
                     }
                     Section {
-                        ThumbCostumeCardView(information.costume)
+                        NavigationLink(destination: { CostumeLive2DViewer(id: information.costume.id).ignoresSafeArea() }) {
+                            ThumbCostumeCardView(information.costume)
+                        }
                     } header: {
                         Text("服装")
                     }

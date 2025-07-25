@@ -47,6 +47,8 @@
 		8CBC1BD92E333461004023F7 /* FoldableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD82E33345C004023F7 /* FoldableList.swift */; };
 		8CBC1BDB2E334246004023F7 /* Searching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BDA2E334233004023F7 /* Searching.swift */; };
 		8CBC1BDD2E336556004023F7 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BDC2E33654D004023F7 /* SearchView.swift */; };
+		8CBC1BDF2E3408AB004023F7 /* FrontendCostume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BDE2E3408A7004023F7 /* FrontendCostume.swift */; };
+		8CBC1BE12E340AD8004023F7 /* CostumeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BE02E340AD4004023F7 /* CostumeListView.swift */; };
 		8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13F742E2FDC4700673E15 /* NavigationListView.swift */; };
 		8CD13FAE2E2FE2BF00673E15 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA12E2FE2BF00673E15 /* Band.swift */; };
 		8CD13FAF2E2FE2BF00673E15 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA22E2FE2BF00673E15 /* Card.swift */; };
@@ -214,6 +216,8 @@
 		8CBC1BD82E33345C004023F7 /* FoldableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldableList.swift; sourceTree = "<group>"; };
 		8CBC1BDA2E334233004023F7 /* Searching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searching.swift; sourceTree = "<group>"; };
 		8CBC1BDC2E33654D004023F7 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		8CBC1BDE2E3408A7004023F7 /* FrontendCostume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendCostume.swift; sourceTree = "<group>"; };
+		8CBC1BE02E340AD4004023F7 /* CostumeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostumeListView.swift; sourceTree = "<group>"; };
 		8CD13F742E2FDC4700673E15 /* NavigationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationListView.swift; sourceTree = "<group>"; };
 		8CD13FA12E2FE2BF00673E15 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
 		8CD13FA22E2FE2BF00673E15 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -320,6 +324,7 @@
 				8C923D922E307084003AFC0A /* CharacterDetailView.swift */,
 				8C923DA02E315E05003AFC0A /* CardListView.swift */,
 				8CBC1BD42E3303E9004023F7 /* CardDetailView.swift */,
+				8CBC1BE02E340AD4004023F7 /* CostumeListView.swift */,
 			);
 			path = "Greatdori Watch App";
 			sourceTree = "<group>";
@@ -391,6 +396,7 @@
 				8CBC1BDA2E334233004023F7 /* Searching.swift */,
 				8C923D9C2E313B47003AFC0A /* FrontendCard.swift */,
 				8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */,
+				8CBC1BDE2E3408A7004023F7 /* FrontendCostume.swift */,
 				8C923D882E305228003AFC0A /* FrontendEvent.swift */,
 				8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */,
 			);
@@ -608,6 +614,7 @@
 				8C923DA12E315E09003AFC0A /* CardListView.swift in Sources */,
 				8C0C99892E296A5800549B5C /* ContentView.swift in Sources */,
 				8CBC1BD92E333461004023F7 /* FoldableList.swift in Sources */,
+				8CBC1BE12E340AD8004023F7 /* CostumeListView.swift in Sources */,
 				8C923D782E3034AF003AFC0A /* HomeView.swift.gyb in Sources */,
 				8C923D872E304AF3003AFC0A /* Date+.swift in Sources */,
 				8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */,
@@ -635,6 +642,7 @@
 				8CD13FB32E2FE2BF00673E15 /* DoriAPI.swift in Sources */,
 				8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */,
 				8CD13FC52E2FE2BF00673E15 /* Color+.swift in Sources */,
+				8CBC1BDF2E3408AB004023F7 /* FrontendCostume.swift in Sources */,
 				8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */,
 				8C923D952E307227003AFC0A /* TaskGroup.swift.gyb in Sources */,
 				8C923D9B2E3138E3003AFC0A /* Post.swift in Sources */,

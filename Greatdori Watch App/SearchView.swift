@@ -20,9 +20,7 @@ struct SearchView<T: DoriFrontend.Searchable>: View {
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
                     .onSubmit {
-                        let _startTime = CFAbsoluteTimeGetCurrent()
                         completion(items.search(for: text))
-                        print(CFAbsoluteTimeGetCurrent() - _startTime)
                     }
             }
         }

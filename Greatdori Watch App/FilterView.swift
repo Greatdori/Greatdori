@@ -10,8 +10,30 @@ import SwiftUI
 import DoriKit
 
 struct FilterView: View {
-    @Binding var filter: DoriFrontend.Filter
-    var includingKeys: Set<DoriFrontend.Filter.Key>
+    @Binding private var filter: DoriFrontend.Filter
+    private var includingKeys: Set<DoriFrontend.Filter.Key>
+    private var searchView: AnyView?
+    
+    init(
+        filter: Binding<DoriFrontend.Filter>,
+        includingKeys: Set<DoriFrontend.Filter.Key>
+    ) {
+        self._filter = filter
+        self.includingKeys = includingKeys
+    }
+    init<V: View>(
+        filter: Binding<DoriFrontend.Filter>,
+        includingKeys: Set<DoriFrontend.Filter.Key>,
+        @ViewBuilder searchView: () -> V
+    ) {
+        self._filter = filter
+        self.includingKeys = includingKeys
+        self.searchView = AnyView(searchView())
+    }
+    
+    @Environment(\.dismiss) private var dismiss
+    @State private var isSearchPresented = false
+    
     var body: some View {
         NavigationStack {
             List {
@@ -27,6 +49,24 @@ struct FilterView: View {
             }
             .navigationTitle("过滤")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $isSearchPresented) {
+                dismiss()
+            } content: {
+                if let searchView {
+                    searchView
+                }
+            }
+            .toolbar {
+                if searchView != nil {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: {
+                            isSearchPresented = true
+                        }, label: {
+                            Image(systemName: "magnifyingglass")
+                        })
+                    }
+                }
+            }
         }
     }
     

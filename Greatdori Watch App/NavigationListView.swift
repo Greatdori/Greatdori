@@ -38,6 +38,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.costume) {
+                    Label {
+                        Text("服装")
+                    } icon: {
+                        Image(systemName: "tshirt.fill")
+                            .foregroundStyle(.accent)
+                    }
+                }
             } header: {
                 Text("信息")
             }

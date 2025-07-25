@@ -86,7 +86,7 @@ extension DoriFrontend {
             }
             return sortedCards.compactMap { card in
                 if let band = bands.first(where: { $0.id == characters.first { $0.id == card.characterID }?.bandID }) {
-                    (card: card, band: band)
+                    .init(card: card, band: band)
                 } else {
                     nil
                 }
@@ -142,9 +142,12 @@ extension DoriFrontend {
 
 extension DoriFrontend.Card {
     public typealias PreviewCard = DoriAPI.Card.PreviewCard
-    public typealias CardWithBand = (card: PreviewCard, band: DoriAPI.Band.Band)
     public typealias Card = DoriAPI.Card.Card
     
+    public struct CardWithBand {
+        public var card: PreviewCard
+        public var band: DoriAPI.Band.Band
+    }
     public struct ExtendedCard: Identifiable {
         public var id: Int
         public var card: Card
@@ -154,5 +157,23 @@ extension DoriFrontend.Card {
         public var costume: DoriAPI.Costume.PreviewCostume
         public var events: [DoriAPI.Event.PreviewEvent]
         public var gacha: [DoriAPI.Gacha.PreviewGacha]
+    }
+}
+extension DoriFrontend.Card.CardWithBand: DoriFrontend.Searchable {
+    public var id: Int { self.card.id }
+    public var _searchLocalizedStrings: [DoriAPI.LocalizedData<String>] {
+        self.card._searchLocalizedStrings
+    }
+    public var _searchIntegers: [Int] {
+        self.card._searchIntegers
+    }
+    public var _searchLocales: [DoriAPI.Locale] {
+        self.card._searchLocales
+    }
+    public var _searchBands: [DoriAPI.Band.Band] {
+        [self.band]
+    }
+    public var _searchAttributes: [DoriAPI.Attribute] {
+        self.card._searchAttributes
     }
 }

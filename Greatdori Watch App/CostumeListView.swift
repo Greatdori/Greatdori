@@ -1,26 +1,26 @@
 //
-//  CardListView.swift
+//  CostumeListView.swift
 //  Greatdori
 //
-//  Created by Mark Chan on 7/24/25.
+//  Created by Mark Chan on 7/26/25.
 //
 
 import SwiftUI
 import DoriKit
 
-struct CardListView: View {
+struct CostumeListView: View {
     @State var filter = DoriFrontend.Filter()
-    @State var cards: [DoriFrontend.Card.CardWithBand]?
+    @State var costumes: [DoriFrontend.Costume.PreviewCostume]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
     @State var searchInput = ""
-    @State var searchedCards: [DoriFrontend.Card.CardWithBand]?
+    @State var searchedCostumes: [DoriFrontend.Costume.PreviewCostume]?
     var body: some View {
         List {
-            if let cards = searchedCards ?? cards {
-                ForEach(cards) { card in
-                    NavigationLink(destination: { CardDetailView(id: card.card.id) }) {
-                        ThumbCardCardView(card.card, band: card.band)
+            if let costumes = searchedCostumes ?? costumes {
+                ForEach(costumes) { costume in
+                    NavigationLink(destination: { CostumeLive2DViewer(id: costume.id).ignoresSafeArea() }) {
+                        ThumbCostumeCardView(costume)
                     }
                 }
             } else {
@@ -31,27 +31,23 @@ struct CardListView: View {
                 }
             }
         }
-        .navigationTitle("卡牌")
+        .navigationTitle("服装")
         .sheet(isPresented: $isFilterSettingsPresented) {
             Task {
-                cards = nil
-                await getCards()
+                costumes = nil
+                await getCostumes()
             }
         } content: {
             FilterView(filter: $filter, includingKeys: [
                 .band,
-                .attribute,
-                .rarity,
                 .character,
                 .server,
                 .released,
-                .cardType,
-                .skill,
                 .sort
             ]) {
-                if let cards {
-                    SearchView(items: cards, text: $searchInput) { result in
-                        searchedCards = result
+                if let costumes {
+                    SearchView(items: costumes, text: $searchInput) { result in
+                        searchedCostumes = result
                     }
                 }
             }
@@ -67,11 +63,19 @@ struct CardListView: View {
             }
         }
         .task {
-            await getCards()
+            await getCostumes()
         }
     }
     
-    func getCards() async {
-        cards = await DoriFrontend.Card.list(filter: filter)
+    func getCostumes() async {
+        costumes = await DoriFrontend.Costume.list(filter: filter)
     }
+}
+
+struct CostumeLive2DViewer: _UIViewRepresentable {
+    var id: Int
+    func makeUIView(context: Context) -> some NSObject {
+        DoriFrontend.Costume.live2dViewer(for: id)
+    }
+    func updateUIView(_ uiView: UIViewType, context: Context) {}
 }

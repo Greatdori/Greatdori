@@ -189,7 +189,9 @@ struct CharacterDetailView: View {
                 if !information.costumes.isEmpty {
                     Section {
                         FoldableList(information.costumes.reversed()) { costume in
-                            ThumbCostumeCardView(costume)
+                            NavigationLink(destination: { CostumeLive2DViewer(id: costume.id).ignoresSafeArea() }) {
+                                ThumbCostumeCardView(costume)
+                            }
                         }
                     } header: {
                         Text("服装")
