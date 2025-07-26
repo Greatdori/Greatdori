@@ -32,11 +32,25 @@ Then add the dependency to targets you're going to use it:
 > Greatdori project is on a **really early stage** of development,
 > DO NOT depend on it in any production environment.
 
+## Building
+Xcode 26.0 (currently beta) is required for building this project.
+
+Open `Greatdori.xcodeproj`, then select a scheme you want to build.
+
 ## Contributing to Greatdori
 Contributions to Greatdori are welcomed and encouraged!
 Fork the project, make changes and open your pull requests!
 
-Or if you're experiencing some bugs, filing an issue for it is also welcomed.
+If you're experiencing some bugs, or have any suggestion to Greatdori,
+filing an issue for it is also welcomed.
+
+### `Greatdori.xcodeproj` & `Package.swift`
+`Greatdori.xcodeproj` is the main project file of Greatdori,
+we suggest you to open this project file in Xcode to make changes to Greatdori.
+
+`Package.swift` makes it easier to embed DoriKit in other projects,
+and should not be used for editing code of Greatdori,
+because `xcodeproj` file maintains structures of all files in this project.
 
 ### About GYB Source Files
 You may note that some source files have suffix `.swift.gyb` instead of `.swift`,
@@ -132,3 +146,6 @@ options:
 ```
 
 </details>
+
+## License
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE.txt) file for details.
