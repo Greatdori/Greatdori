@@ -215,6 +215,7 @@
 		8C9474402E345BE9003A90B4 /* Misc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
 		8C9474422E348D1A003A90B4 /* FrontendMisc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendMisc.swift; sourceTree = "<group>"; };
 		8C9474442E34DE85003A90B4 /* .editorconfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = .editorconfig; sourceTree = "<group>"; };
+		8C9474452E34DF5F003A90B4 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
 		8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		8CBC1BD02E32B5B6004023F7 /* Constructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
 		8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCaches.swift; sourceTree = "<group>"; };
@@ -287,6 +288,7 @@
 				8C818D722E2E671A00D0DD69 /* README.md */,
 				8C0C99C22E2E664900549B5C /* LICENSE.txt */,
 				8C9474442E34DE85003A90B4 /* .editorconfig */,
+				8C9474452E34DF5F003A90B4 /* .gitattributes */,
 				8CD13FE32E300ACE00673E15 /* BuildTool */,
 				8C923D982E30AF1E003AFC0A /* AppShared */,
 				8C0C99812E296A5500549B5C /* Greatdori */,
