@@ -14,7 +14,7 @@ and provide native experience to Bestdori.
 Add the following dependency to your `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/swiftlang/swift-markdown.git", branch: "main"),
+.package(url: "https://github.com/WindowsMEMZ/Greatdori.git", branch: "main"),
 ```
 
 Then add the dependency to targets you're going to use it:
