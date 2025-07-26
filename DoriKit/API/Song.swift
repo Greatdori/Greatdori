@@ -78,7 +78,7 @@ extension DoriAPI {
                         ),
                         difficulty: value["difficulty"].map {
                             (key: DifficultyType(rawValue: Int($0.0) ?? 0) ?? .easy,
-                             value: Difficulty(
+                             value: PreviewSong.Difficulty(
                                 playLevel: $0.1["playLevel"].intValue,
                                 publishedAt: $0.1["publishedAt"].null == nil ? .init(
                                     jp: $0.1["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
@@ -88,7 +88,7 @@ extension DoriAPI {
                                     kr: $0.1["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][4].stringValue.dropLast(3))!)) : nil
                                 ) : nil
                              ))
-                        }.reduce(into: [DifficultyType: Difficulty]()) {
+                        }.reduce(into: [DifficultyType: PreviewSong.Difficulty]()) {
                             $0.updateValue($1.value, forKey: $1.key)
                         },
                         musicVideos: value["musicVideos"].exists() ? value["musicVideos"].map {
@@ -114,6 +114,284 @@ extension DoriAPI {
                     ))
                 }
                 return result.sorted { $0.id < $1.id }
+            }
+            return nil
+        }
+        
+        public static func detail(of id: Int) async -> Song? {
+            // Response example:
+            // {
+            //     "bgmId": "bgm580",
+            //     "bgmFile": "580_refrain",
+            //     "tag": "normal",
+            //     "bandId": 45,
+            //     "achievements": [
+            //         {
+            //             "musicId": 580,
+            //             "achievementType": "combo_easy",
+            //             "rewardType": "coin",
+            //             "quantity": 5000
+            //         },
+            //         ...
+            //     ],
+            //     "jacketImage": [
+            //         "580_refrain"
+            //     ],
+            //     "seq": 809,
+            //     "musicTitle": [
+            //         "輪符雨",
+            //         "Refrain",
+            //         "輪符雨",
+            //         "輪符雨",
+            //         null
+            //     ],
+            //     "ruby": [
+            //         "りふれいん",
+            //         ...
+            //     ],
+            //     "phonetic": [
+            //         "リフレイン",
+            //         ...
+            //     ],
+            //     "lyricist": [
+            //         "藤原優樹(SUPA LOVE)",
+            //         ...
+            //     ],
+            //     "composer": [
+            //         "木下龍平(SUPA LOVE)",
+            //         ...
+            //     ],
+            //     "arranger": [
+            //         "木下龍平(SUPA LOVE)",
+            //         ...
+            //     ],
+            //     "howToGet": [
+            //         "楽曲プレゼントを受け取る",
+            //         ...
+            //     ],
+            //     "publishedAt": [
+            //         "1708408800000",
+            //         ...
+            //     ],
+            //     "closedAt": [
+            //         "4121982000000",
+            //         ...
+            //     ],
+            //     "description": [
+            //         "「雨粒に混ざる色」楽曲",
+            //         ...
+            //     ],
+            //     "difficulty": {
+            //         "0": {
+            //             "playLevel": 7,
+            //             "multiLiveScoreMap": {
+            //                 "2001": {
+            //                     "musicId": 580,
+            //                     "musicDifficulty": "easy",
+            //                     "multiLiveDifficultyId": 2001,
+            //                     "scoreS": 3240000,
+            //                     "scoreA": 2160000,
+            //                     "scoreB": 1080000,
+            //                     "scoreC": 180000,
+            //                     "multiLiveDifficultyType": "daredemo",
+            //                     "scoreSS": 4320000,
+            //                     "scoreSSS": 0
+            //                 },
+            //                 ...
+            //             },
+            //             "notesQuantity": 1000,
+            //             "scoreC": 36000,
+            //             "scoreB": 216000,
+            //             "scoreA": 432000,
+            //             "scoreS": 648000,
+            //             "scoreSS": 864000
+            //         },
+            //         ...
+            //     },
+            //     "length": 90.456,
+            //     "notes": {
+            //         "0": 107,
+            //         "1": 201,
+            //         "2": 369,
+            //         "3": 588
+            //     },
+            //     "bpm": {
+            //         "0": [
+            //             {
+            //                 "bpm": 154,
+            //                 "start": 0,
+            //                 "end": 90.456
+            //             }
+            //         ],
+            //         ...
+            //     }
+            // }
+            let request = await requestJSON("https://bestdori.com/api/songs/\(id).json")
+            if case let .success(respJSON) = request {
+                // We break up expressions because of:
+                // The compiler is unable to type-check this expression in reasonable time;
+                // try breaking up the expression into distinct sub-expressions 😇
+                let notes = respJSON["notes"].map {
+                    (key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
+                     value: $0.1.intValue)
+                }.reduce(into: [DifficultyType: Int]()) { $0.updateValue($1.value, forKey: $1.key) }
+                
+                let bpm = respJSON["bpm"].map {
+                    (key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
+                     value: $0.1.map {
+                        Song.BPM(bpm: $0.1["bpm"].intValue, start: $0.1["start"].doubleValue, end: $0.1["end"].doubleValue)
+                    })
+                }.reduce(into: [DifficultyType: [Song.BPM]]()) { $0.updateValue($1.value, forKey: $1.key) }
+                
+                return .init(
+                    id: id,
+                    bgmID: respJSON["bgmId"].stringValue,
+                    bgmFile: respJSON["bgmFile"].stringValue,
+                    tag: .init(rawValue: respJSON["tag"].stringValue) ?? .normal,
+                    bandID: respJSON["bandId"].intValue,
+                    achievements: respJSON["achievements"].map {
+                        .init(
+                            musicID: $0.1["musicId"].intValue,
+                            achievementType: .init(rawValue: $0.1["achievementType"].stringValue) ?? .comboEasy,
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["quantity"].intValue
+                            )
+                        )
+                    },
+                    jacketImage: respJSON["jacketImage"].map { $0.1.stringValue },
+                    seq: respJSON["seq"].intValue,
+                    musicTitle: .init(
+                        jp: respJSON["musicTitle"][0].string,
+                        en: respJSON["musicTitle"][1].string,
+                        tw: respJSON["musicTitle"][2].string,
+                        cn: respJSON["musicTitle"][3].string,
+                        kr: respJSON["musicTitle"][4].string
+                    ),
+                    ruby: .init(
+                        jp: respJSON["ruby"][0].string,
+                        en: respJSON["ruby"][1].string,
+                        tw: respJSON["ruby"][2].string,
+                        cn: respJSON["ruby"][3].string,
+                        kr: respJSON["ruby"][4].string
+                    ),
+                    phonetic: .init(
+                        jp: respJSON["phonetic"][0].string,
+                        en: respJSON["phonetic"][1].string,
+                        tw: respJSON["phonetic"][2].string,
+                        cn: respJSON["phonetic"][3].string,
+                        kr: respJSON["phonetic"][4].string
+                    ),
+                    lyricist: .init(
+                        jp: respJSON["lyricist"][0].string,
+                        en: respJSON["lyricist"][1].string,
+                        tw: respJSON["lyricist"][2].string,
+                        cn: respJSON["lyricist"][3].string,
+                        kr: respJSON["lyricist"][4].string
+                    ),
+                    composer: .init(
+                        jp: respJSON["composer"][0].string,
+                        en: respJSON["composer"][1].string,
+                        tw: respJSON["composer"][2].string,
+                        cn: respJSON["composer"][3].string,
+                        kr: respJSON["composer"][4].string
+                    ),
+                    arranger: .init(
+                        jp: respJSON["arranger"][0].string,
+                        en: respJSON["arranger"][1].string,
+                        tw: respJSON["arranger"][2].string,
+                        cn: respJSON["arranger"][3].string,
+                        kr: respJSON["arranger"][4].string
+                    ),
+                    howToGet: .init(
+                        jp: respJSON["howToGet"][0].string,
+                        en: respJSON["howToGet"][1].string,
+                        tw: respJSON["howToGet"][2].string,
+                        cn: respJSON["howToGet"][3].string,
+                        kr: respJSON["howToGet"][4].string
+                    ),
+                    publishedAt: .init(
+                        jp: respJSON["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                        en: respJSON["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                        tw: respJSON["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                        cn: respJSON["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                        kr: respJSON["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                    ),
+                    closedAt: .init(
+                        jp: respJSON["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][0].stringValue.dropLast(3))!)) : nil,
+                        en: respJSON["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][1].stringValue.dropLast(3))!)) : nil,
+                        tw: respJSON["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][2].stringValue.dropLast(3))!)) : nil,
+                        cn: respJSON["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][3].stringValue.dropLast(3))!)) : nil,
+                        kr: respJSON["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                    ),
+                    description: .init(
+                        jp: respJSON["description"][0].string,
+                        en: respJSON["description"][1].string,
+                        tw: respJSON["description"][2].string,
+                        cn: respJSON["description"][3].string,
+                        kr: respJSON["description"][4].string
+                    ),
+                    difficulty: respJSON["difficulty"].map {
+                        var publishedAt: DoriAPI.LocalizedData<Date>?
+                        if $0.1["publishedAt"].exists() {
+                            publishedAt = .init(
+                                jp: $0.1["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: $0.1["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: $0.1["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: $0.1["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: $0.1["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                            )
+                        }
+                        return (
+                            key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
+                            value: DoriAPI.Song.Song.Difficulty(
+                                playLevel: $0.1["playLevel"].intValue,
+                                publishedAt: publishedAt,
+                                notesQuantity: $0.1["notesQuantity"].intValue,
+                                scoreC: $0.1["scoreC"].intValue,
+                                scoreB: $0.1["scoreB"].intValue,
+                                scoreA: $0.1["scoreA"].intValue,
+                                scoreS: $0.1["scoreS"].intValue,
+                                scoreSS: $0.1["scoreSS"].intValue,
+                                multiLiveScoreMap: $0.1["multiLiveScoreMap"].map {
+                                    (
+                                        key: Int($0.0)!,
+                                        value: DoriAPI.Song.Song.Difficulty.MultiLiveScore(
+                                            musicID: $0.1["musicId"].intValue,
+                                            musicDifficulty: $0.1["musicDifficulty"].stringValue,
+                                            multiLiveDifficultyID: $0.1["multiLiveDifficultyID"].intValue,
+                                            scoreS: $0.1["scoreS"].intValue,
+                                            scoreA: $0.1["scoreA"].intValue,
+                                            scoreB: $0.1["scoreB"].intValue,
+                                            scoreC: $0.1["scoreC"].intValue,
+                                            scoreSS: $0.1["scoreSS"].intValue,
+                                            scoreSSS: $0.1["scoreSSS"].intValue,
+                                            multiLiveDifficultyType: .init(rawValue: $0.1["multiLiveDifficultyType"].stringValue) ?? .daredemo
+                                        )
+                                    )
+                                }.reduce(into: [Int: Song.Difficulty.MultiLiveScore]()) { $0.updateValue($1.value, forKey: $1.key) }
+                            )
+                        )
+                    }.reduce(into: [DifficultyType: Song.Difficulty]()) { $0.updateValue($1.value, forKey: $1.key) },
+                    length: respJSON["length"].doubleValue,
+                    notes: notes,
+                    bpm: bpm,
+                    musicVideos: respJSON["musicVideos"].exists() ? respJSON["musicVideos"].map {
+                        (key: $0.0,
+                         value: MusicVideoMetadata(
+                            startAt: .init(
+                                jp: $0.1["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: $0.1["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: $0.1["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: $0.1["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: $0.1["startAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][4].stringValue.dropLast(3))!)) : nil
+                            )
+                         ))
+                    }.reduce(into: [String: MusicVideoMetadata]()) {
+                        $0.updateValue($1.value, forKey: $1.key)
+                    } : nil
+                )
             }
             return nil
         }
@@ -153,6 +431,178 @@ extension DoriAPI.Song {
             self.difficulty = difficulty
             self.musicVideos = musicVideos
         }
+        
+        public struct Difficulty {
+            public var playLevel: Int
+            public var publishedAt: DoriAPI.LocalizedData<Date>? // String(JSON) -> Date(Swift)
+            
+            internal init(playLevel: Int, publishedAt: DoriAPI.LocalizedData<Date>?) {
+                self.playLevel = playLevel
+                self.publishedAt = publishedAt
+            }
+        }
+    }
+    
+    public struct Song: Identifiable {
+        public var id: Int
+        public var bgmID: String
+        public var bgmFile: String
+        public var tag: SongTag
+        public var bandID: Int
+        public var achievements: [Achievement]
+        public var jacketImage: [String]
+        public var seq: Int
+        public var musicTitle: DoriAPI.LocalizedData<String>
+        public var ruby: DoriAPI.LocalizedData<String>
+        public var phonetic: DoriAPI.LocalizedData<String>
+        public var lyricist: DoriAPI.LocalizedData<String>
+        public var composer: DoriAPI.LocalizedData<String>
+        public var arranger: DoriAPI.LocalizedData<String>
+        public var howToGet: DoriAPI.LocalizedData<String>
+        public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        public var closedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        public var description: DoriAPI.LocalizedData<String>
+        public var difficulty: [DifficultyType: Difficulty] // {Index: {Difficulty}...}(JSON) -> ~(Swift)
+        public var length: Double
+        public var notes: [DifficultyType: Int]
+        public var bpm: [DifficultyType: [BPM]]
+        public var musicVideos: [String: MusicVideoMetadata]? // ["music_video_{Int}": ~]
+        
+        internal init(
+            id: Int,
+            bgmID: String,
+            bgmFile: String,
+            tag: SongTag,
+            bandID: Int,
+            achievements: [Achievement],
+            jacketImage: [String],
+            seq: Int,
+            musicTitle: DoriAPI.LocalizedData<String>,
+            ruby: DoriAPI.LocalizedData<String>,
+            phonetic: DoriAPI.LocalizedData<String>,
+            lyricist: DoriAPI.LocalizedData<String>,
+            composer: DoriAPI.LocalizedData<String>,
+            arranger: DoriAPI.LocalizedData<String>,
+            howToGet: DoriAPI.LocalizedData<String>,
+            publishedAt: DoriAPI.LocalizedData<Date>,
+            closedAt: DoriAPI.LocalizedData<Date>,
+            description: DoriAPI.LocalizedData<String>,
+            difficulty: [DifficultyType : Difficulty],
+            length: Double,
+            notes: [DifficultyType : Int],
+            bpm: [DifficultyType : [BPM]],
+            musicVideos: [String : MusicVideoMetadata]?
+        ) {
+            self.id = id
+            self.bgmID = bgmID
+            self.bgmFile = bgmFile
+            self.tag = tag
+            self.bandID = bandID
+            self.achievements = achievements
+            self.jacketImage = jacketImage
+            self.seq = seq
+            self.musicTitle = musicTitle
+            self.ruby = ruby
+            self.phonetic = phonetic
+            self.lyricist = lyricist
+            self.composer = composer
+            self.arranger = arranger
+            self.howToGet = howToGet
+            self.publishedAt = publishedAt
+            self.closedAt = closedAt
+            self.description = description
+            self.difficulty = difficulty
+            self.length = length
+            self.notes = notes
+            self.bpm = bpm
+            self.musicVideos = musicVideos
+        }
+        
+        public struct Achievement {
+            public var musicID: Int
+            public var achievementType: AchievementType
+            public var reward: DoriAPI.Item
+            
+            public enum AchievementType: String {
+                case comboEasy = "combo_easy"
+                case comboNormal = "combo_normal"
+                case comboHard = "combo_hard"
+                case comboExpert = "combo_expert"
+                case comboSpecial = "combo_special"
+                
+                case fullComboEasy = "fullCombo_easy"
+                case fullComboNormal = "fullCombo_normal"
+                case fullComboHard = "fullCombo_hard"
+                case fullComboExpert = "fullCombo_expert"
+                case fullComboSpecial = "fullCombo_special"
+                
+                case scoreRankA = "score_rank_a"
+                case scoreRankB = "score_rank_b"
+                case scoreRankC = "score_rank_c"
+                case scoreRankS = "score_rank_s"
+                case scoreRankSS = "score_rank_ss"
+            }
+        }
+        
+        public struct Difficulty {
+            public var playLevel: Int
+            public var publishedAt: DoriAPI.LocalizedData<Date>? // String(JSON) -> Date(Swift)
+            public var notesQuantity: Int
+            public var scoreC: Int
+            public var scoreB: Int
+            public var scoreA: Int
+            public var scoreS: Int
+            public var scoreSS: Int
+            public var multiLiveScoreMap: [Int: MultiLiveScore]
+            
+            internal init(
+                playLevel: Int,
+                publishedAt: DoriAPI.LocalizedData<Date>?,
+                notesQuantity: Int,
+                scoreC: Int,
+                scoreB: Int,
+                scoreA: Int,
+                scoreS: Int,
+                scoreSS: Int,
+                multiLiveScoreMap: [Int : MultiLiveScore]
+            ) {
+                self.playLevel = playLevel
+                self.publishedAt = publishedAt
+                self.notesQuantity = notesQuantity
+                self.scoreC = scoreC
+                self.scoreB = scoreB
+                self.scoreA = scoreA
+                self.scoreS = scoreS
+                self.scoreSS = scoreSS
+                self.multiLiveScoreMap = multiLiveScoreMap
+            }
+            
+            public struct MultiLiveScore {
+                public var musicID: Int
+                public var musicDifficulty: String
+                public var multiLiveDifficultyID: Int
+                public var scoreS: Int
+                public var scoreA: Int
+                public var scoreB: Int
+                public var scoreC: Int
+                public var scoreSS: Int
+                public var scoreSSS: Int
+                public var multiLiveDifficultyType: DifficultyType
+                
+                public enum DifficultyType: String {
+                    case daredemo
+                    case standard
+                    case grand
+                    case legend
+                }
+            }
+        }
+        
+        public struct BPM {
+            public var bpm: Int
+            public var start: Double
+            public var end: Double
+        }
     }
     
     public enum SongTag: String {
@@ -167,15 +617,6 @@ extension DoriAPI.Song {
         case hard
         case expert
         case special
-    }
-    public struct Difficulty {
-        public var playLevel: Int
-        public var publishedAt: DoriAPI.LocalizedData<Date>? // String(JSON) -> Date(Swift)
-        
-        internal init(playLevel: Int, publishedAt: DoriAPI.LocalizedData<Date>?) {
-            self.playLevel = playLevel
-            self.publishedAt = publishedAt
-        }
     }
     
     public struct MusicVideoMetadata {

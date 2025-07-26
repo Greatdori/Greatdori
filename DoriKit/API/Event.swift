@@ -286,41 +286,51 @@ extension DoriAPI {
                     jp: respJSON["pointRewards"][0].map {
                         Event.PointReward(
                             point: Int($0.1["point"].stringValue) ?? 0,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     },
                     en: respJSON["pointRewards"][1].map {
                         Event.PointReward(
                             point: Int($0.1["point"].stringValue) ?? 0,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     },
                     tw: respJSON["pointRewards"][2].map {
                         Event.PointReward(
                             point: Int($0.1["point"].stringValue) ?? 0,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     },
                     cn: respJSON["pointRewards"][3].map {
                         Event.PointReward(
                             point: Int($0.1["point"].stringValue) ?? 0,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     },
                     kr: respJSON["pointRewards"][4].map {
                         Event.PointReward(
                             point: Int($0.1["point"].stringValue) ?? 0,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     }
                 )
@@ -328,41 +338,51 @@ extension DoriAPI {
                     jp: respJSON["rankingRewards"][0].map {
                         Event.RankingReward(
                             rankRange: $0.1["fromRank"].intValue...$0.1["toRank"].intValue,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     },
                     en: respJSON["rankingRewards"][1].map {
                         Event.RankingReward(
                             rankRange: $0.1["fromRank"].intValue...$0.1["toRank"].intValue,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     },
                     tw: respJSON["rankingRewards"][2].map {
                         Event.RankingReward(
                             rankRange: $0.1["fromRank"].intValue...$0.1["toRank"].intValue,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     },
                     cn: respJSON["rankingRewards"][3].map {
                         Event.RankingReward(
                             rankRange: $0.1["fromRank"].intValue...$0.1["toRank"].intValue,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     },
                     kr: respJSON["rankingRewards"][4].map {
                         Event.RankingReward(
                             rankRange: $0.1["fromRank"].intValue...$0.1["toRank"].intValue,
-                            rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                            rewardID: $0.1["rewardId"].int,
-                            rewardQuantity: $0.1["rewardQuantity"].intValue
+                            reward: .init(
+                                itemID: $0.1["rewardId"].int,
+                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                quantity: $0.1["rewardQuantity"].intValue
+                            )
                         )
                     },
                 )
@@ -480,10 +500,10 @@ extension DoriAPI {
                             backgroundImage: $0.1["backgroundImage"].stringValue,
                             releasePt: Int($0.1["releasePt"].stringValue) ?? 0,
                             rewards: $0.1["rewards"].map {
-                                Event.Story.Reward(
-                                    rewardType: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                                    rewardID: $0.1["rewardId"].int,
-                                    rewardQuantity: $0.1["rewardQuantity"].intValue
+                                .init(
+                                    itemID: $0.1["rewardId"].int,
+                                    type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                    quantity: $0.1["rewardQuantity"].intValue
                                 )
                             },
                             caption: .init(
@@ -621,40 +641,11 @@ extension DoriAPI.Event {
         
         public struct PointReward {
             public var point: Int
-            public var rewardType: RewardType
-            public var rewardID: Int?
-            public var rewardQuantity: Int
-            
-            internal init(point: Int, rewardType: RewardType, rewardID: Int?, rewardQuantity: Int) {
-                self.point = point
-                self.rewardType = rewardType
-                self.rewardID = rewardID
-                self.rewardQuantity = rewardQuantity
-            }
+            public var reward: DoriAPI.Item
         }
         public struct RankingReward {
             public var rankRange: ClosedRange<Int> // keys{fromRank, toRank}(JSON) -> ClosedRange(Swift)
-            public var rewardType: RewardType
-            public var rewardID: Int?
-            public var rewardQuantity: Int
-            
-            internal init(rankRange: ClosedRange<Int>, rewardType: RewardType, rewardID: Int?, rewardQuantity: Int) {
-                self.rankRange = rankRange
-                self.rewardType = rewardType
-                self.rewardID = rewardID
-                self.rewardQuantity = rewardQuantity
-            }
-        }
-        public enum RewardType: String {
-            case item
-            case star
-            case coin
-            case practiceTicket = "practice_ticket"
-            case stamp
-            case voiceStamp = "voice_stamp"
-            case situation
-            case costume3DMakingItem = "costume_3d_making_item"
-            case degree
+            public var reward: DoriAPI.Item
         }
         
         public struct Story {
@@ -662,23 +653,11 @@ extension DoriAPI.Event {
             public var coverImage: String
             public var backgroundImage: String
             public var releasePt: Int
-            public var rewards: [Reward]
+            public var rewards: [DoriAPI.Item]
             public var caption: DoriAPI.LocalizedData<String>
             public var title: DoriAPI.LocalizedData<String>
             public var synopsis: DoriAPI.LocalizedData<String>
             public var releaseConditions: DoriAPI.LocalizedData<String>
-            
-            public struct Reward {
-                public var rewardType: RewardType
-                public var rewardID: Int?
-                public var rewardQuantity: Int
-                
-                internal init(rewardType: RewardType, rewardID: Int?, rewardQuantity: Int) {
-                    self.rewardType = rewardType
-                    self.rewardID = rewardID
-                    self.rewardQuantity = rewardQuantity
-                }
-            }
         }
     }
     

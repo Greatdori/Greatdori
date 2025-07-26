@@ -28,13 +28,7 @@ extension DoriFrontend {
         }
         
         public static func list(filter: Filter = .init()) async -> [PreviewEvent]? {
-            let groupResult = await withTasksResult {
-                await DoriAPI.Event.all()
-            } _: {
-                await DoriAPI.Character.all()
-            }
-            guard let events = groupResult.0 else { return nil }
-            guard let characters = groupResult.1 else { return nil }
+            guard let events = await DoriAPI.Event.all() else { return nil }
             
             let filteredEvents = events.filter { event in
                 filter.attribute.contains { attribute in
@@ -79,9 +73,47 @@ extension DoriFrontend {
             }
             return sortedEvents
         }
+        
+        public static func extendedInformation(of id: Int) async -> ExtendedEvent? {
+            let groupResult = await withTasksResult {
+                await DoriAPI.Event.detail(of: id)
+            } _: {
+                await DoriAPI.Card.all()
+            } _: {
+                await DoriAPI.Gacha.all()
+            } _: {
+                await DoriAPI.Song.all()
+            } _: {
+                await DoriAPI.Degree.all()
+            }
+            guard let event = groupResult.0 else { return nil }
+            guard let cards = groupResult.1 else { return nil }
+            guard let gacha = groupResult.2 else { return nil }
+            guard let songs = groupResult.3 else { return nil }
+            guard let degrees = groupResult.4 else { return nil }
+            
+            return .init(
+                id: id,
+                event: event,
+                cards: cards.filter { event.rewardCards.contains($0.id) },
+                gacha: gacha.filter { event.startAt.forPreferredLocale() == $0.publishedAt.forPreferredLocale() },
+                songs: songs.filter { event.startAt.forPreferredLocale() == $0.publishedAt.forPreferredLocale() },
+                degrees: degrees.filter { $0.baseImageName.forPreferredLocale() == "degree_event\(event.id)_point" }
+            )
+        }
     }
 }
 
 extension DoriFrontend.Event {
     public typealias PreviewEvent = DoriAPI.Event.PreviewEvent
+    public typealias Event = DoriAPI.Event.Event
+    
+    public struct ExtendedEvent: Identifiable {
+        public var id: Int
+        public var event: Event
+        public var cards: [DoriAPI.Card.PreviewCard]
+        public var gacha: [DoriAPI.Gacha.PreviewGacha]
+        public var songs: [DoriAPI.Song.PreviewSong]
+        public var degrees: [DoriAPI.Degree.Degree]
+    }
 }
