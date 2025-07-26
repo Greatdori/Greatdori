@@ -440,6 +440,11 @@ extension DoriAPI.Song {
                 self.playLevel = playLevel
                 self.publishedAt = publishedAt
             }
+            
+            public init(_ full: Song.Difficulty) {
+                self.playLevel = full.playLevel
+                self.publishedAt = full.publishedAt
+            }
         }
     }
     
@@ -611,6 +616,7 @@ extension DoriAPI.Song {
         case tieUp = "tie_up"
     }
     
+    @frozen
     public enum DifficultyType: Int {
         case easy = 0
         case normal

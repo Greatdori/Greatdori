@@ -137,7 +137,37 @@ extension DoriAPI.Costume.${property} {
 extension DoriAPI.Gacha.${property} {
     @inlinable
     public var bannerImageURL: URL {
-        .init(string: "https://bestdori.com/assets/\(self.gachaName.availableLocale(prefer: .jp)!.rawValue)/homebanner_rip/\(self.bannerAssetBundleName).png")!
+        if !bannerAssetBundleName.isEmpty {
+            .init(string: "https://bestdori.com/assets/\(self.gachaName.availableLocale(prefer: .jp)!.rawValue)/homebanner_rip/\(self.bannerAssetBundleName).png")!
+        } else {
+            .init(string: "https://bestdori.com/assets/\(self.gachaName.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/logo.png")!
+        }
+    }
+}
+% end
+
+extension DoriAPI.Song.DifficultyType {
+    @inlinable
+    public var color: Color {
+        switch self {
+        case .easy: .init(red: 142 / 255, green: 180 / 255, blue: 253 / 255)
+        case .normal: .init(red: 166 / 255, green: 246 / 255, blue: 146 / 255)
+        case .hard: .init(red: 251 / 255, green: 223 / 255, blue: 140 / 255)
+        case .expert: .init(red: 255 / 255, green: 137 / 255, blue: 139 / 255)
+        case .special: .init(red: 143 / 255, green: 131 / 255, blue: 203 / 255)
+        }
+    }
+}
+
+%{
+    properties = ["PreviewSong", "Song"]
+}%
+% for property in properties:
+extension DoriAPI.Song.${property} {
+    @inlinable
+    public var jacketImageURL: URL {
+        let jacketID = Int(round(Double(self.id) / 10) * 10 + 10) // e.g.: 715 -> 720
+        return .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale()!.rawValue)/musicjacket/musicjacket\(jacketID)_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket\(jacketID)-\(self.jacketImage[0])-jacket.png")!
     }
 }
 % end

@@ -44,7 +44,7 @@ extension DoriFrontend {
                 }
             }.filter { event in
                 for timelineStatus in filter.timelineStatus {
-                    return switch timelineStatus {
+                    let result = switch timelineStatus {
                     case .ended:
                         (event.endAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 4107477600)) < .now
                     case .ongoing:
@@ -52,6 +52,9 @@ extension DoriFrontend {
                         && (event.endAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)) > .now
                     case .upcoming:
                         (event.startAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)) > .now
+                    }
+                    if result {
+                        return true
                     }
                 }
                 return false
@@ -78,6 +81,10 @@ extension DoriFrontend {
             let groupResult = await withTasksResult {
                 await DoriAPI.Event.detail(of: id)
             } _: {
+                await DoriAPI.Band.all()
+            } _: {
+                await DoriAPI.Character.all()
+            } _: {
                 await DoriAPI.Card.all()
             } _: {
                 await DoriAPI.Gacha.all()
@@ -87,15 +94,21 @@ extension DoriFrontend {
                 await DoriAPI.Degree.all()
             }
             guard let event = groupResult.0 else { return nil }
-            guard let cards = groupResult.1 else { return nil }
-            guard let gacha = groupResult.2 else { return nil }
-            guard let songs = groupResult.3 else { return nil }
-            guard let degrees = groupResult.4 else { return nil }
+            guard let bands = groupResult.1 else { return nil }
+            guard let characters = groupResult.2 else { return nil }
+            guard let cards = groupResult.3 else { return nil }
+            guard let gacha = groupResult.4 else { return nil }
+            guard let songs = groupResult.5 else { return nil }
+            guard let degrees = groupResult.6 else { return nil }
+            
+            let resultCharacters = characters.filter { character in event.characters.contains { $0.characterID == character.id } }
             
             return .init(
                 id: id,
                 event: event,
-                cards: cards.filter { event.rewardCards.contains($0.id) },
+                bands: bands.filter { band in resultCharacters.contains { $0.bandID == band.id } },
+                characters: resultCharacters,
+                cards: cards.filter { card in event.rewardCards.contains(card.id) || event.members.contains { $0.situationID == card.id } },
                 gacha: gacha.filter { event.startAt.forPreferredLocale() == $0.publishedAt.forPreferredLocale() },
                 songs: songs.filter { event.startAt.forPreferredLocale() == $0.publishedAt.forPreferredLocale() },
                 degrees: degrees.filter { $0.baseImageName.forPreferredLocale() == "degree_event\(event.id)_point" }
@@ -111,6 +124,8 @@ extension DoriFrontend.Event {
     public struct ExtendedEvent: Identifiable {
         public var id: Int
         public var event: Event
+        public var bands: [DoriAPI.Band.Band]
+        public var characters: [DoriAPI.Character.PreviewCharacter]
         public var cards: [DoriAPI.Card.PreviewCard]
         public var gacha: [DoriAPI.Gacha.PreviewGacha]
         public var songs: [DoriAPI.Song.PreviewSong]

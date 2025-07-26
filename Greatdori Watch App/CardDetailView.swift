@@ -265,7 +265,11 @@ struct CardDetailView: View {
                     if !information.events.isEmpty {
                         Section {
                             FoldableList(information.events.reversed()) { event in
-                                EventCardView(event, inLocale: nil)
+                                NavigationLink(destination: { EventDetailView(id: event.id) }) {
+                                    EventCardView(event, inLocale: nil)
+                                }
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                             }
                         } header: {
                             Text("活动")

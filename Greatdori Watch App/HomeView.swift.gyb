@@ -72,7 +72,7 @@ struct HomeView: View {
     locales = ["jp", "en", "cn", "tw", "kr"]
 }%
                     % for locale in locales:
-                    NavigationLink(destination: {  }) {
+                    NavigationLink(destination: { EventDetailView(id: latestEvents.${locale}!.id) }) {
                         if latestEvents.${locale}!.startAt.${locale} != nil {
                             EventCardView(latestEvents.${locale}!, inLocale: .${locale}, showsCountdown: true)
                         } else {

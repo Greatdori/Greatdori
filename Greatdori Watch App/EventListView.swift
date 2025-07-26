@@ -19,7 +19,7 @@ struct EventListView: View {
         List {
             if let events = searchedEvents ?? events {
                 ForEach(events) { event in
-                    NavigationLink(destination: {  }) {
+                    NavigationLink(destination: { EventDetailView(id: event.id) }) {
                         EventCardView(event, inLocale: nil)
                     }
                     .listRowBackground(Color.clear)
@@ -33,7 +33,7 @@ struct EventListView: View {
                 }
             }
         }
-        .navigationTitle("卡牌")
+        .navigationTitle("活动")
         .sheet(isPresented: $isFilterSettingsPresented) {
             Task {
                 events = nil
