@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Greatdori",
-    platforms: [.iOS(.v17), .macOS(.v14), .visionOS(.v1), .watchOS(.v10)],
+    platforms: [.iOS(.v17), .macCatalyst(.v17), .macOS(.v14), .visionOS(.v1), .watchOS(.v10)],
     products: [
         .library(name: "DoriKit", targets: ["DoriKit"])
     ],
