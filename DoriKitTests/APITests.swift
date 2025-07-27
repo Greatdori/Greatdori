@@ -50,6 +50,14 @@ struct APITests {
             #expect(band.bandName.availableLocale() != nil)
         }
         
+        let respJSON = try #require(await retryableRequestJSON("https://bestdori.com/api/bands/all.1.json"))
+        try #require(respJSON.dictionary!.count == bands.count)
+        for (index, (key, value)) in respJSON.sorted().enumerated() {
+            let band = bands[index]
+            #expect(Int(key)! == band.id)
+            #expect(findExtraKeys(in: value, comparedTo: band).isEmpty)
+        }
+        
         bands = try #require(await DoriAPI.Band.main())
         #expect(!bands.isEmpty)
         for band in bands {
