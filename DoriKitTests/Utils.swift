@@ -11,7 +11,7 @@ import SwiftyJSON
 
 func retryableRequestJSON(_ url: String, maxCount: Int = 5) async -> JSON? {
     for _ in 0..<maxCount {
-        let request = await requestJSON("https://bestdori.com/api/cards/all.5.json")
+        let request = await requestJSON(url)
         if case let .success(respJSON) = request {
             return respJSON
         }
