@@ -26,7 +26,7 @@ struct HomeView: View {
                             HomeBirthdayView()
                         }
                         .padding()
-                        .background(Color(.systemGroupedBackground))
+//                        .background(groupedContentBackgroundColor())
                         
                     } else {
 //                        ScrollView {
@@ -84,7 +84,7 @@ struct HomeNewsView: View {
                         
                         if i != 4 {
                             Rectangle()
-                                .frame(height: 6)
+                                .frame(height: 1)
                                 .opacity(0)
                         }
                     }
@@ -93,6 +93,8 @@ struct HomeNewsView: View {
                 }
             }
         })
+//        .listRowBackground(Color.clear)
+        .buttonStyle(.plain)
         .foregroundStyle(.primary)
         .task {
             DoriCache.withCache(id: "Home_News") {
@@ -257,29 +259,3 @@ struct HomeView: View {
 */
 
 
-struct CustomGroupBox<Content: View>: View {
-    @Environment(\.colorScheme) var colorScheme
-    let content: () -> Content
-    
-    init(@ViewBuilder content: @escaping () -> Content) {
-        self.content = content
-    }
-    
-    var body: some View {
-        #if os(iOS)
-        ZStack {
-            RoundedRectangle(cornerRadius: 15)
-//                .foregroundStyle(colorScheme == .dark ? Color(red: 44/255, green: 44/255, blue: 46/255) : Color(red: 1, green: 1, blue: 1))
-                .foregroundStyle(Color(.secondarySystemGroupedBackground))
-            content()
-                .padding()
-        }
-        #elseif os(macOS)
-        GroupBox {
-            content()
-                .padding()
-        }
-        #endif
-        
-    }
-}

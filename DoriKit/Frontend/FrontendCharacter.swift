@@ -13,16 +13,85 @@ extension DoriFrontend {
         
         public static func recentBirthdayCharacters() async -> [BirthdayCharacter]? {
             guard let allBirthday = await DoriAPI.Character.allBirthday() else { return nil }
-            return allBirthday.filter {
-                abs(
-                    $0.birthday.componentsRewritten(
-                        year: Date.now.components.year,
-                        hour: Date.now.components.hour,
-                        minute: Date.now.components.minute,
-                        second: Date.now.components.second
-                    ).timeIntervalSince1970 - Date.now.timeIntervalSince1970
-                ) < 60*60*24*11
+            
+            //JST TODAY
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
+            var components = calendar.dateComponents([.month, .day], from: Date())
+            components.year = 2000
+            components.hour = 0
+            components.minute = 0
+            components.second = 0
+            let today = calendar.date(from: components)! //JST TODAY
+
+            //Get IDs by Interval
+            var birthdayInterval: [TimeInterval] = []
+            
+            var pastMaxInterval: TimeInterval = -315360000000
+            var lastBirthdayID: Int = -1
+            
+            var veryFirstBirthdayInYearInterval: TimeInterval = 315360000000
+            var veryFirstBirthdayInYearID: Int = -1
+            
+            var futureMinInterval: TimeInterval = 315360000000
+            var nextBirthdayID: Int = -1
+            
+            var veryLastBirthdayInYearInterval: TimeInterval = -315360000000
+            var veryLastBirthdayInYearID: Int = -1
+            
+            var todaysBirthdayID: [Int] = []
+            
+            for i in 0..<allBirthday.count {
+                birthdayInterval.append(allBirthday[i].birthday.timeIntervalSince(today))
+                if birthdayInterval[i] > 0 { //FUTURE
+                    if birthdayInterval[i] < futureMinInterval {
+                        futureMinInterval = birthdayInterval[i]
+                        nextBirthdayID = i
+                    }
+                    if birthdayInterval[i] > veryLastBirthdayInYearInterval {
+                        veryLastBirthdayInYearInterval = birthdayInterval[i]
+                        veryLastBirthdayInYearID = i
+                    }
+                } else if birthdayInterval[i] < 0 { //PAST
+                    if birthdayInterval[i] > pastMaxInterval {
+                        pastMaxInterval = birthdayInterval[i]
+                        lastBirthdayID = i
+                    }
+                    if birthdayInterval[i] < veryFirstBirthdayInYearInterval {
+                        veryFirstBirthdayInYearInterval = birthdayInterval[i]
+                        veryFirstBirthdayInYearID = i
+                    }
+                } else { //TODAY
+                    todaysBirthdayID.append(i)
+                }
             }
+            
+            //Infer Character by ID
+            var finalist: [BirthdayCharacter] = []
+            if todaysBirthdayID.count > 0 { //Today's Someone's Birthday
+                for i in 0..<todaysBirthdayID.count {
+                    finalist.append(allBirthday[todaysBirthdayID[i]])
+                }
+            } else { //Today's not someone's birthday
+                if nextBirthdayID != -1 {
+                    finalist.append(allBirthday[nextBirthdayID])
+                } else {
+                    finalist.append(allBirthday[veryFirstBirthdayInYearID])
+                }
+                if lastBirthdayID != -1 {
+                    finalist.append(allBirthday[lastBirthdayID])
+                } else {
+                    finalist.append(allBirthday[veryLastBirthdayInYearID])
+                }
+            }
+            
+            //Sayo & Hina Confirmation
+            if (finalist.contains(where: { $0.id == 17}) && !finalist.contains(where: { $0.id == 22})) { //✓HINA,×SAYO
+                finalist.insert(allBirthday[21], at: 1)
+            }
+            //(There's no situation which there's Sayo but no Hina, since Sayo has an ID after Hina which will make Hina being registered first.)
+            
+            return finalist
         }
         
         public static func categorizedCharacters() async -> CategorizedCharacters? {
