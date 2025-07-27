@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8C0C996B2E296A4600549B5C /* Greatdori Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8C0C996B2E296A4600549B5C /* Greatdori Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8C0C99832E296A5500549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C997F2E296A5500549B5C /* ContentView.swift */; };
 		8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99802E296A5500549B5C /* GreatdoriApp.swift */; };
 		8C0C99892E296A5800549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99862E296A5800549B5C /* ContentView.swift */; };
@@ -78,6 +78,8 @@
 		8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FC32E2FE2BF00673E15 /* Logger.swift */; };
 		8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FCA2E2FEFCC00673E15 /* Date+.swift */; };
 		8CD13FE72E300D2300673E15 /* FrontendNews.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */; };
+		E9E3C0582E35C7740059BCE8 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E3C0572E35C7710059BCE8 /* HomeView.swift */; };
+		E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -267,6 +269,8 @@
 		8CD13FC32E2FE2BF00673E15 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		8CD13FCA2E2FEFCC00673E15 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		8CD13FE42E300AE700673E15 /* gyb.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = gyb.py; sourceTree = "<group>"; };
+		E9E3C0572E35C7710059BCE8 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -343,8 +347,10 @@
 		8C0C99812E296A5500549B5C /* Greatdori */ = {
 			isa = PBXGroup;
 			children = (
+				E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */,
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				8C0C997F2E296A5500549B5C /* ContentView.swift */,
+				E9E3C0572E35C7710059BCE8 /* HomeView.swift */,
 			);
 			path = Greatdori;
 			sourceTree = "<group>";
@@ -660,6 +666,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */,
 				8C923D992E30AF36003AFC0A /* Assets.xcassets in Resources */,
 				8C94744D2E35DA49003A90B4 /* AppIcon.icon in Resources */,
 			);
@@ -696,6 +703,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9E3C0582E35C7740059BCE8 /* HomeView.swift in Sources */,
 				8C0C99832E296A5500549B5C /* ContentView.swift in Sources */,
 				8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */,
 			);
@@ -779,6 +787,7 @@
 /* Begin PBXTargetDependency section */
 		8C0C996D2E296A4600549B5C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 8C0C99692E296A4600549B5C /* Greatdori Watch App */;
 			targetProxy = 8C0C996C2E296A4600549B5C /* PBXContainerItemProxy */;
 		};

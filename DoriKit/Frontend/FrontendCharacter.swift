@@ -16,9 +16,12 @@ extension DoriFrontend {
             return allBirthday.filter {
                 abs(
                     $0.birthday.componentsRewritten(
-                        year: Date.now.components.year
+                        year: Date.now.components.year,
+                        hour: Date.now.components.hour,
+                        minute: Date.now.components.minute,
+                        second: Date.now.components.second
                     ).timeIntervalSince1970 - Date.now.timeIntervalSince1970
-                ) < 60*60*24*7
+                ) < 60*60*24*11
             }
         }
         

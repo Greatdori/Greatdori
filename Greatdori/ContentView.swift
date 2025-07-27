@@ -7,14 +7,91 @@
 
 import SwiftUI
 
+
+enum AppSection: Hashable {
+  case home, community, leaderboard, info, tools
+}
+
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+  @State private var selection: AppSection? = .home
+  @Environment(\.horizontalSizeClass) var sizeClass
+  @Environment(\.scenePhase) var scenePhase
+  @Environment(\.platform) var platform // 自定义 platform 判断（见下方拓展）
+  
+  var body: some View {
+    if platform == .mac || sizeClass == .regular {
+      NavigationSplitView {
+        List(selection: $selection) {
+          Label("App.home", systemImage: "house").tag(AppSection.home)
+          Label("App.community", systemImage: "at").tag(AppSection.community)
+          Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
+          Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
+          Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
         }
-        .padding()
+        .navigationTitle("Greatdori")
+      } detail: {
+        detailView(for: selection)
+      }
+    } else {
+      TabView(selection: $selection) {
+        detailView(for: .home)
+          .tabItem { Label("App.home", systemImage: "house") }
+          .tag(AppSection.home)
+        
+        detailView(for: .community)
+          .tabItem { Label("App.community", systemImage: "at") }
+          .tag(AppSection.community)
+        
+        detailView(for: .leaderboard)
+          .tabItem { Label("App.leaderboard", systemImage: "chart.bar") }
+          .tag(AppSection.leaderboard)
+        
+        detailView(for: .info)
+          .tabItem { Label("App.info", systemImage: "rectangle.stack") }
+          .tag(AppSection.info)
+        
+        detailView(for: .tools)
+          .tabItem { Label("App.tools", systemImage: "slider.horizontal.3") }
+          .tag(AppSection.tools)
+      }
     }
+  }
+  
+  @ViewBuilder
+  func detailView(for section: AppSection?) -> some View {
+    switch section {
+    case .home: HomeView()
+    case .community: HomeView()
+    case .leaderboard: HomeView()
+    case .info: HomeView()
+    case .tools: HomeView()
+    case nil: EmptyView()
+    }
+  }
+}
+
+enum Platform {
+  case iOS, mac, tv, watch, unknown
+}
+
+struct PlatformKey: EnvironmentKey {
+  static let defaultValue: Platform = {
+#if os(iOS)
+    return .iOS
+#elseif os(macOS)
+    return .mac
+#elseif os(tvOS)
+    return .tv
+#elseif os(watchOS)
+    return .watch
+#else
+    return .unknown
+#endif
+  }()
+}
+
+extension EnvironmentValues {
+  var platform: Platform {
+    self[PlatformKey.self]
+  }
 }
