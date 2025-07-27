@@ -44,8 +44,9 @@
 		8C9474432E348D1F003A90B4 /* FrontendMisc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474422E348D1A003A90B4 /* FrontendMisc.swift */; };
 		8C9474472E34E1AF003A90B4 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474462E34E1AB003A90B4 /* EventDetailView.swift */; };
 		8C94744A2E35AB84003A90B4 /* DoriCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474492E35AB7F003A90B4 /* DoriCache.swift */; };
-		8C94744C2E35DA49003A90B4 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8C94744B2E35DA49003A90B4 /* AppIcon.icon */; };
 		8C94744D2E35DA49003A90B4 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8C94744B2E35DA49003A90B4 /* AppIcon.icon */; };
+		8C9474562E35DE1C003A90B4 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
+		8C94745E2E35DE6C003A90B4 /* DoriKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C94745C2E35DE6C003A90B4 /* DoriKitTests.swift */; };
 		8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */; };
 		8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD02E32B5B6004023F7 /* Constructor.swift */; };
 		8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */; };
@@ -150,6 +151,13 @@
 			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
 			remoteInfo = DoriKit;
 		};
+		8C9474572E35DE1C003A90B4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
+			remoteInfo = DoriKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -223,6 +231,8 @@
 		8C9474462E34E1AB003A90B4 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
 		8C9474492E35AB7F003A90B4 /* DoriCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriCache.swift; sourceTree = "<group>"; };
 		8C94744B2E35DA49003A90B4 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = AppIcon.icon; path = Artwork/AppIcon.icon; sourceTree = SOURCE_ROOT; };
+		8C9474522E35DE1C003A90B4 /* DoriKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DoriKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C94745C2E35DE6C003A90B4 /* DoriKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriKitTests.swift; sourceTree = "<group>"; };
 		8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		8CBC1BD02E32B5B6004023F7 /* Constructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
 		8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCaches.swift; sourceTree = "<group>"; };
@@ -285,6 +295,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C94744F2E35DE1C003A90B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C9474562E35DE1C003A90B4 /* DoriKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -301,6 +319,7 @@
 				8C0C99812E296A5500549B5C /* Greatdori */,
 				8C0C99882E296A5800549B5C /* Greatdori Watch App */,
 				8C0C999E2E296A9000549B5C /* DoriKit */,
+				8C94745D2E35DE6C003A90B4 /* DoriKitTests */,
 				8C0C99A12E296B3E00549B5C /* Frameworks */,
 				8C0C995E2E296A4400549B5C /* Products */,
 			);
@@ -312,6 +331,7 @@
 				8C0C995D2E296A4400549B5C /* Greatdori.app */,
 				8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */,
 				8C0C99912E296A8C00549B5C /* DoriKit.framework */,
+				8C9474522E35DE1C003A90B4 /* DoriKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -394,6 +414,14 @@
 				8C9474492E35AB7F003A90B4 /* DoriCache.swift */,
 			);
 			path = Cache;
+			sourceTree = "<group>";
+		};
+		8C94745D2E35DE6C003A90B4 /* DoriKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				8C94745C2E35DE6C003A90B4 /* DoriKitTests.swift */,
+			);
+			path = DoriKitTests;
 			sourceTree = "<group>";
 		};
 		8CD13FAD2E2FE2BF00673E15 /* API */ = {
@@ -548,6 +576,26 @@
 			productReference = 8C0C99912E296A8C00549B5C /* DoriKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		8C9474512E35DE1C003A90B4 /* DoriKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C9474592E35DE1C003A90B4 /* Build configuration list for PBXNativeTarget "DoriKitTests" */;
+			buildPhases = (
+				8C94744E2E35DE1C003A90B4 /* Sources */,
+				8C94744F2E35DE1C003A90B4 /* Frameworks */,
+				8C9474502E35DE1C003A90B4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8C9474582E35DE1C003A90B4 /* PBXTargetDependency */,
+			);
+			name = DoriKitTests;
+			packageProductDependencies = (
+			);
+			productName = DoriKitTests;
+			productReference = 8C9474522E35DE1C003A90B4 /* DoriKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -565,6 +613,9 @@
 						CreatedOnToolsVersion = 26.0;
 					};
 					8C0C99902E296A8C00549B5C = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					8C9474512E35DE1C003A90B4 = {
 						CreatedOnToolsVersion = 26.0;
 					};
 				};
@@ -593,6 +644,7 @@
 				8C0C995C2E296A4400549B5C /* Greatdori */,
 				8C0C99692E296A4600549B5C /* Greatdori Watch App */,
 				8C0C99902E296A8C00549B5C /* DoriKit */,
+				8C9474512E35DE1C003A90B4 /* DoriKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -612,7 +664,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C0C998B2E296A5800549B5C /* Assets.xcassets in Resources */,
-				8C94744C2E35DA49003A90B4 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -621,6 +672,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C0C99B32E29766B00549B5C /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C9474502E35DE1C003A90B4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -700,6 +758,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C94744E2E35DE1C003A90B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C94745E2E35DE6C003A90B4 /* DoriKitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -721,6 +787,11 @@
 			isa = PBXTargetDependency;
 			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
 			targetProxy = 8C0C99A42E296B3E00549B5C /* PBXContainerItemProxy */;
+		};
+		8C9474582E35DE1C003A90B4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
+			targetProxy = 8C9474572E35DE1C003A90B4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -852,7 +923,7 @@
 		8C0C99782E296A4700549B5C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -887,7 +958,7 @@
 		8C0C99792E296A4700549B5C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1113,6 +1184,58 @@
 			};
 			name = Release;
 		};
+		8C94745A2E35DE1C003A90B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit.Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx watchos watchsimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4,7";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Debug;
+		};
+		8C94745B2E35DE1C003A90B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit.Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx watchos watchsimulator xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4,7";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1148,6 +1271,15 @@
 			buildConfigurations = (
 				8C0C999A2E296A8C00549B5C /* Debug */,
 				8C0C999B2E296A8C00549B5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C9474592E35DE1C003A90B4 /* Build configuration list for PBXNativeTarget "DoriKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C94745A2E35DE1C003A90B4 /* Debug */,
+				8C94745B2E35DE1C003A90B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
