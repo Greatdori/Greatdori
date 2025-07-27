@@ -9,40 +9,16 @@ import Foundation
 internal import Alamofire
 internal import SwiftyJSON
 
-internal func requestJSON(_ convertible: URLConvertible, method: HTTPMethod = .get, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, headers: HTTPHeaders? = nil, interceptor: RequestInterceptor? = nil, requestModifier: Session.RequestModifier? = nil, callback: @escaping ((JSON, Bool) -> Void)) {
-    AF.request(convertible).responseData { response in
-        let data = response.data
-        if data != nil {
-            do {
-                let json = try JSON(data: data!)
-                callback(json, true)
-            } catch {
-                callback(JSON(), false)
-            }
-        } else {
-            callback(JSON(), false)
-        }
-    }
-}
-internal func requestString(_ convertible: URLConvertible, method: HTTPMethod = .get, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, headers: HTTPHeaders? = nil, interceptor: RequestInterceptor? = nil, requestModifier: Session.RequestModifier? = nil, callback: @escaping ((String, Bool) -> Void)) {
-    AF.request(convertible).responseData { response in
-        let data = response.data
-        if data != nil {
-            let str = String(data: data!, encoding: .utf8)
-            if str != nil {
-                callback(str!, true)
-            } else {
-                callback("", false)
-            }
-        } else {
-            callback("", false)
-        }
-    }
-}
+private let headers: HTTPHeaders = [
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept-Language": "en-US,en;q=0.9",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15"
+]
 
-internal func requestJSON(_ convertible: URLConvertible, method: HTTPMethod = .get, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, headers: HTTPHeaders? = nil, interceptor: RequestInterceptor? = nil, requestModifier: Session.RequestModifier? = nil) async -> Result<JSON, Void> {
+internal func requestJSON(_ convertible: URLConvertible, method: HTTPMethod = .get, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, interceptor: RequestInterceptor? = nil, requestModifier: Session.RequestModifier? = nil) async -> Result<JSON, Void> {
     await withCheckedContinuation { continuation in
-        AF.request(convertible).responseData { response in
+        AF.request(convertible, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor, requestModifier: requestModifier).responseData { response in
             let data = response.data
             if data != nil {
                 do {
@@ -57,9 +33,9 @@ internal func requestJSON(_ convertible: URLConvertible, method: HTTPMethod = .g
         }
     }
 }
-internal func requestString(_ convertible: URLConvertible, method: HTTPMethod = .get, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, headers: HTTPHeaders? = nil, interceptor: RequestInterceptor? = nil, requestModifier: Session.RequestModifier? = nil) async -> Result<String, Void> {
+internal func requestString(_ convertible: URLConvertible, method: HTTPMethod = .get, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, interceptor: RequestInterceptor? = nil, requestModifier: Session.RequestModifier? = nil) async -> Result<String, Void> {
     await withCheckedContinuation { continuation in
-        AF.request(convertible).responseData { response in
+        AF.request(convertible, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor, requestModifier: requestModifier).responseData { response in
             let data = response.data
             if data != nil {
                 let str = String(data: data!, encoding: .utf8)
