@@ -6,10 +6,11 @@
 //
 
 import os
+import CryptoKit
 import Foundation
 
 extension DoriFrontend {
-    public struct Filter {
+    public struct Filter: Codable {
         public var band: Set<Band> = .init(Band.allCases)
         public var attribute: Set<Attribute> = .init(Attribute.allCases)
         public var rarity: Set<Rarity> = [1, 2, 3, 4, 5]
@@ -64,6 +65,23 @@ extension DoriFrontend {
             || skill != nil
             || timelineStatus.count != TimelineStatus.allCases.count
         }
+        
+        public var identity: String {
+            // We skips `skill` in identity encoding because it's too dynamic.
+            let desc = """
+            \(band.sorted { $0.rawValue < $1.rawValue })\
+            \(attribute.sorted { $0.rawValue < $1.rawValue })\
+            \(rarity.sorted { $0 < $1 })\
+            \(character.sorted { $0.rawValue < $1.rawValue })\
+            \(server.sorted { $0.rawValue < $1.rawValue })\
+            \(released.sorted { $1 })\
+            \(cardType.sorted { $0.rawValue < $1.rawValue })\
+            \(eventType.sorted { $0.rawValue < $1.rawValue })\
+            \(gachaType.sorted { $0.rawValue < $1.rawValue })\
+            \(timelineStatus.sorted { $0.rawValue < $1.rawValue })
+            """
+            return String(SHA256.hash(data: desc.data(using: .utf8)!).map { $0.description }.joined().prefix(8))
+        }
     }
 }
 
@@ -76,7 +94,7 @@ extension DoriFrontend.Filter {
     public typealias GachaType = DoriAPI.Gacha.GachaType
     public typealias Skill = DoriAPI.Skill.Skill
     
-    public enum Band: Int, CaseIterable {
+    public enum Band: Int, CaseIterable, Codable {
         case poppinParty = 1
         case afterglow
         case helloHappyWorld
@@ -102,7 +120,7 @@ extension DoriFrontend.Filter {
             }
         }
     }
-    public enum Character: Int, CaseIterable {
+    public enum Character: Int, CaseIterable, Codable {
         // Poppin'Party
         case kasumi = 1
         case tae
@@ -165,7 +183,7 @@ extension DoriFrontend.Filter {
         }
     }
     @frozen
-    public enum TimelineStatus: CaseIterable {
+    public enum TimelineStatus: Int, CaseIterable, Codable {
         case ended
         case ongoing
         case upcoming
@@ -180,7 +198,7 @@ extension DoriFrontend.Filter {
         }
     }
     
-    public struct Sort: Equatable, Hashable {
+    public struct Sort: Equatable, Hashable, Codable {
         public var direction: Direction
         public var keyword: Keyword
         
@@ -190,11 +208,11 @@ extension DoriFrontend.Filter {
         }
         
         @frozen
-        public enum Direction: Equatable, Hashable {
+        public enum Direction: Equatable, Hashable, Codable {
             case ascending
             case descending
         }
-        public enum Keyword: CaseIterable, Equatable, Hashable {
+        public enum Keyword: CaseIterable, Equatable, Hashable, Codable {
             case releaseDate(in: DoriAPI.Locale)
             case rarity
             case maximumStat

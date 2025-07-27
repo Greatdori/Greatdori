@@ -72,6 +72,10 @@ struct CardListView: View {
     }
     
     func getCards() async {
-        cards = await DoriFrontend.Card.list(filter: filter)
+        DoriCache.withCache(id: "CardList_\(filter.identity)") {
+            await DoriFrontend.Card.list(filter: filter)
+        }.onUpdate {
+            cards = $0
+        }
     }
 }

@@ -30,7 +30,7 @@ public class DoriAPI {
     
     /// Represent a specific country or region which localized in BanG Dream.
     @frozen
-    public enum Locale: String, CaseIterable {
+    public enum Locale: String, CaseIterable, DoriCache.Cacheable {
         case jp
         case en
         case tw
@@ -130,7 +130,7 @@ public class DoriAPI {
     
     /// Represent a constellation
     @frozen
-    public enum Constellation: String {
+    public enum Constellation: String, DoriCache.Cacheable {
         case aries
         case taurus
         case gemini
@@ -146,7 +146,7 @@ public class DoriAPI {
     }
     
     /// Attribute of cards
-    public enum Attribute: String, CaseIterable {
+    public enum Attribute: String, CaseIterable, DoriCache.Cacheable {
         case pure
         case cool
         case happy
@@ -156,6 +156,7 @@ public class DoriAPI {
 
 extension DoriAPI.LocalizedData: Equatable where T: Equatable {}
 extension DoriAPI.LocalizedData: Hashable where T: Hashable {}
+extension DoriAPI.LocalizedData: DoriCache.Cacheable, Codable where T: DoriCache.Cacheable {}
 
 extension DoriAPI.LocalizedData {
     /// Returns localized data containing the results of mapping the given closure

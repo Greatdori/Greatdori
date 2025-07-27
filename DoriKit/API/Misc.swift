@@ -56,7 +56,7 @@ extension DoriAPI {
 // We declare extension of `DoriAPI` instead of `DoriAPI.Misc`
 // to make them can be found easier.
 extension DoriAPI {
-    public struct Item: Identifiable {
+    public struct Item: Identifiable, DoriCache.Cacheable {
         public var itemID: Int?
         public var type: ItemType
         public var quantity: Int
@@ -76,7 +76,7 @@ extension DoriAPI {
             }
         }
         
-        public enum ItemType: String {
+        public enum ItemType: String, DoriCache.Cacheable {
             case item
             case star
             case coin
@@ -96,7 +96,7 @@ extension DoriAPI {
 // These declerations are less used so we define it in
 // extension of `DoriAPI.Misc`
 extension DoriAPI.Misc {
-    public struct ItemText {
+    public struct ItemText: DoriCache.Cacheable {
         public var name: DoriAPI.LocalizedData<String>
         public var type: ItemType?
         public var resourceID: Int
@@ -107,7 +107,7 @@ extension DoriAPI.Misc {
             self.resourceID = resourceID
         }
         
-        public enum ItemType: String {
+        public enum ItemType: String, DoriCache.Cacheable {
             case normal
             case practice
             case special

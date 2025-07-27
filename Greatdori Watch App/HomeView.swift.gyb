@@ -96,13 +96,25 @@ struct HomeView: View {
         }
         .navigationTitle("主页")
         .task {
-            news = await DoriFrontend.News.list()
+            DoriCache.withCache(id: "Home_News") {
+                await DoriFrontend.News.list()
+            }.onUpdate {
+                news = $0
+            }
         }
         .task {
-            birthdays = await DoriFrontend.Character.recentBirthdayCharacters()
+            DoriCache.withCache(id: "Home_Birthdays") {
+                await DoriFrontend.Character.recentBirthdayCharacters()
+            }.onUpdate {
+                birthdays = $0
+            }
         }
         .task {
-            latestEvents = await DoriFrontend.Event.localizedLatestEvent()
+            DoriCache.withCache(id: "Home_LatestEvents") {
+                await DoriFrontend.Event.localizedLatestEvent()
+            }.onUpdate {
+                latestEvents = $0
+            }
         }
     }
 }

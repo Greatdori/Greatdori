@@ -124,7 +124,7 @@ extension DoriAPI {
 }
     
 extension DoriAPI.Costume {
-    public struct PreviewCostume: Identifiable {
+    public struct PreviewCostume: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var characterID: Int
         public var assetBundleName: String
@@ -132,7 +132,7 @@ extension DoriAPI.Costume {
         public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
     }
     
-    public struct Costume: Identifiable {
+    public struct Costume: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var characterID: Int
         public var assetBundleName: String

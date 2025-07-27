@@ -139,6 +139,7 @@ struct FilterView: View {
                         })
                     }
                 }
+                .navigationTitle(key.localizedString)
             } label: {
                 VStack(alignment: .leading) {
                     Text(key.localizedString)
@@ -183,6 +184,25 @@ struct FilterView: View {
                                 }
                             }
                         })
+                    }
+                }
+                .navigationTitle(key.localizedString)
+                .toolbar {
+                    if let filterSet = filter[key] as? Set<AnyHashable> {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button(action: {
+                                if filterSet == Set(key.selector.items.map { $0.item.value }) {
+                                    // Currently selected all, we unselect all
+                                    var filterSet = filterSet
+                                    filterSet.removeAll()
+                                    filter[key] = filterSet
+                                } else {
+                                    filter[key] = Set(key.selector.items.map { $0.item.value })
+                                }
+                            }, label: {
+                                Image(systemName: filterSet == Set(key.selector.items.map { $0.item.value }) ? "checklist.checked" : (filterSet.isEmpty ? "checklist.unchecked" : "checklist"))
+                            })
+                        }
                     }
                 }
             } label: {

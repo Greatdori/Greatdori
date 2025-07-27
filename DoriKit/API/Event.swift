@@ -545,7 +545,7 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Event {
-    public struct PreviewEvent: Identifiable {
+    public struct PreviewEvent: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var eventType: EventType
         public var eventName: DoriAPI.LocalizedData<String>
@@ -561,7 +561,7 @@ extension DoriAPI.Event {
         public var rewardCards: [Int]
     }
     
-    public struct Event: Identifiable {
+    public struct Event: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var eventType: EventType
         public var eventName: DoriAPI.LocalizedData<String>
@@ -639,16 +639,16 @@ extension DoriAPI.Event {
             self.rewardCards = rewardCards
         }
         
-        public struct PointReward {
+        public struct PointReward: DoriCache.Cacheable {
             public var point: Int
             public var reward: DoriAPI.Item
         }
-        public struct RankingReward {
+        public struct RankingReward: DoriCache.Cacheable {
             public var rankRange: ClosedRange<Int> // keys{fromRank, toRank}(JSON) -> ClosedRange(Swift)
             public var reward: DoriAPI.Item
         }
         
-        public struct Story {
+        public struct Story: DoriCache.Cacheable {
             public var scenarioID: String
             public var coverImage: String
             public var backgroundImage: String
@@ -661,7 +661,7 @@ extension DoriAPI.Event {
         }
     }
     
-    public enum EventType: String, CaseIterable {
+    public enum EventType: String, CaseIterable, DoriCache.Cacheable {
         case story
         case challenge
         case versus
@@ -671,7 +671,7 @@ extension DoriAPI.Event {
         case medley
     }
     
-    public struct EventAttribute {
+    public struct EventAttribute: DoriCache.Cacheable {
         public var eventID: Int?
         public var attribute: DoriAPI.Attribute
         public var percent: Int
@@ -682,7 +682,7 @@ extension DoriAPI.Event {
             self.percent = percent
         }
     }
-    public struct EventCharacter {
+    public struct EventCharacter: DoriCache.Cacheable {
         public var eventID: Int?
         public var characterID: Int
         public var percent: Int
@@ -695,7 +695,7 @@ extension DoriAPI.Event {
             self.seq = seq
         }
     }
-    public struct EventMember {
+    public struct EventMember: DoriCache.Cacheable {
         public var eventID: Int?
         public var situationID: Int
         public var percent: Int
@@ -708,12 +708,12 @@ extension DoriAPI.Event {
             self.seq = seq
         }
     }
-    public struct EventLimitBreak {
+    public struct EventLimitBreak: DoriCache.Cacheable {
         public var rarity: Int
         public var rank: Int
         public var percent: Double
     }
-    public struct EventAttributeAndCharacterBonus {
+    public struct EventAttributeAndCharacterBonus: DoriCache.Cacheable {
         public var eventID: Int
         public var pointPercent: Int
         public var parameterPercent: Int

@@ -68,7 +68,11 @@ struct CostumeListView: View {
     }
     
     func getCostumes() async {
-        costumes = await DoriFrontend.Costume.list(filter: filter)
+        DoriCache.withCache(id: "CostumeList_\(filter.identity)") {
+            await DoriFrontend.Costume.list(filter: filter)
+        }.onUpdate {
+            costumes = $0
+        }
     }
 }
 

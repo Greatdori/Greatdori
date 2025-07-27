@@ -121,7 +121,7 @@ extension DoriFrontend.Event {
     public typealias PreviewEvent = DoriAPI.Event.PreviewEvent
     public typealias Event = DoriAPI.Event.Event
     
-    public struct ExtendedEvent: Identifiable {
+    public struct ExtendedEvent: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var event: Event
         public var bands: [DoriAPI.Band.Band]

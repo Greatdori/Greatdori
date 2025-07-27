@@ -201,7 +201,7 @@ extension DoriFrontend {
 }
 
 extension DoriFrontend.News {
-    public struct ListItem {
+    public struct ListItem: DoriCache.Cacheable {
         public var type: ItemType
         public var relatedID: Int
         public var title: String
@@ -209,7 +209,7 @@ extension DoriFrontend.News {
         public var timestamp: Date
         public var tags: [String]
         
-        public enum ItemType {
+        public enum ItemType: DoriCache.Cacheable {
             case article
             case song
             case loginCampaign

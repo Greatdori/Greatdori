@@ -335,7 +335,7 @@ extension DoriAPI {
 }
 
 extension DoriAPI.News {
-    public struct PreviewItem: Identifiable {
+    public struct PreviewItem: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var title: String
         public var authors: [String]
@@ -343,30 +343,30 @@ extension DoriAPI.News {
         public var tags: [String]
     }
     
-    public struct RecentItems {
+    public struct RecentItems: DoriCache.Cacheable {
         public var songs: [Song]
         public var events: [Event]
         public var gacha: [Gacha]
         public var loginBonuses: [LoginBonus]
         
-        public struct Song: Identifiable {
+        public struct Song: Identifiable, DoriCache.Cacheable {
             public var id: Int
             public var musicTitle: DoriAPI.LocalizedData<String>
             public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         }
-        public struct Event: Identifiable {
+        public struct Event: Identifiable, DoriCache.Cacheable {
             public var id: Int
             public var eventName: DoriAPI.LocalizedData<String>
             public var startAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
             public var endAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         }
-        public struct Gacha: Identifiable {
+        public struct Gacha: Identifiable, DoriCache.Cacheable {
             public var id: Int
             public var gachaName: DoriAPI.LocalizedData<String>
             public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
             public var closedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         }
-        public struct LoginBonus: Identifiable {
+        public struct LoginBonus: Identifiable, DoriCache.Cacheable {
             public var id: Int
             public var caption: DoriAPI.LocalizedData<String>
             public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
@@ -374,7 +374,7 @@ extension DoriAPI.News {
         }
     }
     
-    public struct Item: Identifiable {
+    public struct Item: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var title: String
         public var authors: [String]
@@ -382,11 +382,11 @@ extension DoriAPI.News {
         public var tags: [String]
         public var content: [Content]
         
-        public enum Content {
+        public enum Content: DoriCache.Cacheable {
             case content([ContentDataSection])
             case heading(String)
             
-            public enum ContentDataSection {
+            public enum ContentDataSection: DoriCache.Cacheable {
                 case localizedText(String)
                 case textLiteral(String)
                 case ul([[ContentDataSection]])

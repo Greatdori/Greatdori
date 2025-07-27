@@ -94,7 +94,7 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Degree {
-    public struct Degree: Identifiable {
+    public struct Degree: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var degreeType: DoriAPI.LocalizedData<DegreeType>
         public var iconImageName: DoriAPI.LocalizedData<String>
@@ -102,7 +102,7 @@ extension DoriAPI.Degree {
         public var rank: DoriAPI.LocalizedData<String>
         public var degreeName: DoriAPI.LocalizedData<String>
         
-        public enum DegreeType: String {
+        public enum DegreeType: String, DoriCache.Cacheable {
             case normal
             case scoreRanking = "score_ranking"
             case eventPoint = "event_point"

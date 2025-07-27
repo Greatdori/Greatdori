@@ -295,9 +295,13 @@ struct CardDetailView: View {
         }
         .navigationTitle(information?.card.prefix.forPreferredLocale() ?? "正在载入卡牌...")
         .task {
-            information = await DoriFrontend.Card.extendedInformation(of: id)
-            if let information {
-                statsCustomLevel = information.card.stat.maximumLevel ?? 1
+            DoriCache.withCache(id: "CardDetail_\(id)") {
+                await DoriFrontend.Card.extendedInformation(of: id)
+            }.onUpdate {
+                information = $0
+                if let information {
+                    statsCustomLevel = information.card.stat.maximumLevel ?? 1
+                }
             }
         }
     }

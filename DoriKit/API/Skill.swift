@@ -115,7 +115,7 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Skill {
-    public struct Skill: Identifiable, Equatable, Hashable {
+    public struct Skill: Identifiable, Equatable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var simpleDescription: DoriAPI.LocalizedData<String>
         public var description: DoriAPI.LocalizedData<String> // Uses `{Int}` for string interpolation
@@ -123,7 +123,7 @@ extension DoriAPI.Skill {
         public var activationEffect: ActivationEffect
         public var onceEffect: OnceEffect?
         
-        public struct ActivationEffect: Equatable, Hashable {
+        public struct ActivationEffect: Equatable, Hashable, DoriCache.Cacheable {
             public var unificationActivateEffectValue: Int?
             public var unificationActivateConditionType: ActivateConditionType?
             public var unificationActivateConditionBandID: Int?
@@ -141,7 +141,7 @@ extension DoriAPI.Skill {
                 self.activateEffectTypes = activateEffectTypes
             }
             
-            public enum ActivateConditionType: String {
+            public enum ActivateConditionType: String, DoriCache.Cacheable {
                 case pure = "PURE"
                 case cool = "COOL"
                 case happy = "HAPPY"
@@ -149,7 +149,7 @@ extension DoriAPI.Skill {
             }
             
             public typealias Effects = [ActivateEffectType: ActivateEffect]
-            public enum ActivateEffectType: String {
+            public enum ActivateEffectType: String, DoriCache.Cacheable {
                 case score
                 case judge
                 case scoreOverLife = "score_over_life"
@@ -161,7 +161,7 @@ extension DoriAPI.Skill {
                 case damage
                 case neverDie = "never_die"
             }
-            public struct ActivateEffect: Equatable, Hashable {
+            public struct ActivateEffect: Equatable, Hashable, DoriCache.Cacheable {
                 public var activateEffectValue: [Int]
                 public var activateEffectValueType: ValueType
                 public var activateCondition: ActivateCondition
@@ -179,31 +179,31 @@ extension DoriAPI.Skill {
                     self.activateConditionLife = activateConditionLife
                 }
                 
-                public enum ValueType: String {
+                public enum ValueType: String, DoriCache.Cacheable {
                     case rate
                     case realValue = "real_value"
                 }
-                public enum ActivateCondition: String {
+                public enum ActivateCondition: String, DoriCache.Cacheable {
                     case none
                     case good
                     case perfect
                 }
             }
         }
-        public struct OnceEffect: Equatable, Hashable {
+        public struct OnceEffect: Equatable, Hashable, DoriCache.Cacheable {
             public var onceEffectType: OnceEffectType
             public var onceEffectValueType: ValueType
             public var onceEffectConditionLifeType: ConditionLifeType
             public var onceEffectConditionLife: Int
             public var onceEffectValue: [Int]
             
-            public enum OnceEffectType: String {
+            public enum OnceEffectType: String, DoriCache.Cacheable {
                 case life
             }
-            public enum ValueType: String {
+            public enum ValueType: String, DoriCache.Cacheable {
                 case realValue = "real_value"
             }
-            public enum ConditionLifeType: String {
+            public enum ConditionLifeType: String, DoriCache.Cacheable {
                 case underLife = "under_life"
             }
         }

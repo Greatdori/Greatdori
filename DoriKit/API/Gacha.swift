@@ -322,7 +322,7 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Gacha {
-    public struct PreviewGacha: Identifiable {
+    public struct PreviewGacha: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var resourceName: String
         public var bannerAssetBundleName: String
@@ -333,7 +333,7 @@ extension DoriAPI.Gacha {
         public var newCards: [Int]
     }
     
-    public struct Gacha: Identifiable {
+    public struct Gacha: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var details: DoriAPI.LocalizedData<[Int: CardDetail]> // [CardID: CardDetail]
         public var rates: DoriAPI.LocalizedData<[Int: Rate]> // [CardRarity: Rate]
@@ -350,18 +350,18 @@ extension DoriAPI.Gacha {
         public var newCards: [Int]
         public var information: Information
         
-        public struct CardDetail {
+        public struct CardDetail: DoriCache.Cacheable {
             public var rarityIndex: Int
             public var weight: Int
             public var pickup: Bool
         }
         
-        public struct Rate {
+        public struct Rate: DoriCache.Cacheable {
             public var rate: Double
             public var weightTotal: Int
         }
         
-        public struct PaymentMethod {
+        public struct PaymentMethod: DoriCache.Cacheable {
             public var gachaID: Int
             public var paymentMethod: Method
             public var quantity: Int
@@ -406,7 +406,7 @@ extension DoriAPI.Gacha {
                 self.gachaBonusPoint = gachaBonusPoint
             }
             
-            public enum Method: String {
+            public enum Method: String, DoriCache.Cacheable {
                 case free
                 case freeStar = "free_star"
                 case paidStar = "paid_star"
@@ -415,7 +415,7 @@ extension DoriAPI.Gacha {
                 case overThe4StarTicket = "over_the_4_star_ticket"
                 case fixed5StarTicket = "fixed_5_star_ticket"
             }
-            public enum Behavior: String {
+            public enum Behavior: String, DoriCache.Cacheable {
                 case normal
                 case overThe3StarOnce = "over_the_3_star_once"
                 case overThe4StarOnce = "over_the_4_star_once"
@@ -425,7 +425,7 @@ extension DoriAPI.Gacha {
             }
         }
         
-        public struct Information {
+        public struct Information: DoriCache.Cacheable {
             public var description: DoriAPI.LocalizedData<String>
             public var term: DoriAPI.LocalizedData<String>
             public var newMemberInfo: DoriAPI.LocalizedData<String>
@@ -433,7 +433,7 @@ extension DoriAPI.Gacha {
         }
     }
     
-    public enum GachaType: String, CaseIterable {
+    public enum GachaType: String, CaseIterable, DoriCache.Cacheable {
         case free
         case permanent
         case miracle

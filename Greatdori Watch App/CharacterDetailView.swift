@@ -200,7 +200,9 @@ struct CharacterDetailView: View {
                 if !information.events.isEmpty {
                     Section {
                         FoldableList(information.events.reversed()) { event in
-                            EventCardView(event, inLocale: nil)
+                            NavigationLink(destination: { EventDetailView(id: event.id) }) {
+                                EventCardView(event, inLocale: nil)
+                            }
                         }
                     } header: {
                         Text("活动")

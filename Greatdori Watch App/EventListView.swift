@@ -71,6 +71,10 @@ struct EventListView: View {
     }
     
     func getEvents() async {
-        events = await DoriFrontend.Event.list(filter: filter)
+        DoriCache.withCache(id: "EventList_\(filter.identity)") {
+            await DoriFrontend.Event.list(filter: filter)
+        }.onUpdate {
+            events = $0
+        }
     }
 }

@@ -180,7 +180,11 @@ struct EventDetailView: View {
         }
         .navigationTitle(information?.event.eventName.forPreferredLocale() ?? "正在载入活动...")
         .task {
-            information = await DoriFrontend.Event.extendedInformation(of: id)
+            DoriCache.withCache(id: "EventDetail_\(id)") {
+                await DoriFrontend.Event.extendedInformation(of: id)
+            }.onUpdate {
+                information = $0
+            }
         }
     }
 }

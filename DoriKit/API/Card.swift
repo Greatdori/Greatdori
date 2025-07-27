@@ -399,7 +399,7 @@ extension DoriAPI {
 
 extension DoriAPI.Card {
     /// Represent simplified data of a card.
-    public struct PreviewCard: Identifiable {
+    public struct PreviewCard: Identifiable, DoriCache.Cacheable {
         /// A unique ID of card.
         public var id: Int
         /// ID of related character to this card.
@@ -428,7 +428,7 @@ extension DoriAPI.Card {
     }
     
     /// Represent detailed data of a card.
-    public struct Card: Identifiable {
+    public struct Card: Identifiable, DoriCache.Cacheable {
         /// A unique ID of card.
         public var id: Int
         /// ID of related character to this card.
@@ -470,7 +470,7 @@ extension DoriAPI.Card {
         public var stat: CardStat
         
         /// Represent source of a card.
-        public enum CardSource: Hashable {
+        public enum CardSource: Hashable, DoriCache.Cacheable {
             /// Information about a card can be got from gacha.
             ///
             /// This case is associated an `[Int: Double]` dictionary,
@@ -487,7 +487,7 @@ extension DoriAPI.Card {
     }
     
     /// Represent type of a card.
-    public enum CardType: String, CaseIterable {
+    public enum CardType: String, CaseIterable, DoriCache.Cacheable {
         case initial
         case permanent
         case event
@@ -501,7 +501,7 @@ extension DoriAPI.Card {
     }
     
     /// Represent a episode associated to a card.
-    public struct CardEpisode: Identifiable {
+    public struct CardEpisode: Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var episodeType: EpisodeType
         public var situationID: Int
@@ -515,11 +515,11 @@ extension DoriAPI.Card {
         public var title: DoriAPI.LocalizedData<String>
         public var characterID: Int
         
-        public enum EpisodeType: String {
+        public enum EpisodeType: String, DoriCache.Cacheable {
             case standard
             case memorial
         }
-        public struct Resource {
+        public struct Resource: DoriCache.Cacheable {
             public var resourceID: Int?
             public var resourceType: ResourceType
             public var quantity: Int
@@ -532,7 +532,7 @@ extension DoriAPI.Card {
                 self.lbBonus = lbBonus
             }
             
-            public enum ResourceType: String {
+            public enum ResourceType: String, DoriCache.Cacheable {
                 case item
                 case star
             }
@@ -552,7 +552,7 @@ extension DoriAPI.Card {
     ///     - ``Swift/Dictionary/calculated(level:rarity:masterRank:viewedStoryCount:trained:)``
     ///     - ``Swift/Dictionary/maximumValue(rarity:)``
     public typealias CardStat = [StatKey: [Stat]]
-    public struct Stat {
+    public struct Stat: DoriCache.Cacheable {
         public var performance: Int
         public var technique: Int
         public var visual: Int
@@ -584,7 +584,7 @@ extension DoriAPI.Card {
     ///     - ``Swift/Dictionary/forMaximumLevel()``
     ///     - ``Swift/Dictionary/calculated(level:rarity:masterRank:viewedStoryCount:trained:)``
     ///     - ``Swift/Dictionary/maximumValue(rarity:)``
-    public enum StatKey: Hashable {
+    public enum StatKey: Hashable, DoriCache.Cacheable {
         case level(Int)
         case episodes
         case training

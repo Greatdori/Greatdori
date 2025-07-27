@@ -66,7 +66,11 @@ struct CharacterListView: View {
         }
         .navigationTitle("角色")
         .task {
-            characters = await DoriFrontend.Character.categorizedCharacters()
+            DoriCache.withCache(id: "CharacterList") {
+                await DoriFrontend.Character.categorizedCharacters()
+            }.onUpdate {
+                characters = $0
+            }
         }
     }
 }
