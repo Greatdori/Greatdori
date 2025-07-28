@@ -40,17 +40,21 @@ extension DoriFrontend {
                 character.birthday == today
             }
             if !birthdaysToday.isEmpty {
-                return allBirthday.filter { character in birthdaysToday.contains(where: { $0.id == character.id }) }
+                return allBirthday
+                    .filter { character in birthdaysToday.contains(where: { $0.id == character.id }) }
+                    .sorted { $0.birthday > $1.birthday }
             }
             
             let sortedBirthdays = normalizedBirthdays.sorted { $0.birthday < $1.birthday }
-            let after = sortedBirthdays.first { $0.birthday >= today } ?? sortedBirthdays.last!
-            let before = sortedBirthdays.reversed().first { $0.birthday <= today } ?? sortedBirthdays.first!
+            let after = sortedBirthdays.first { $0.birthday >= today } ?? sortedBirthdays.first!
+            let before = sortedBirthdays.reversed().first { $0.birthday <= today } ?? sortedBirthdays.last!
             // Because more than 1 people may have the same birthday,
             // we have to filter them out again.
             let result = sortedBirthdays.filter { $0.birthday == after.birthday || $0.birthday == before.birthday }
             // And filter from source again because they've been normalized...
-            return allBirthday.filter { character in result.contains { $0.id == character.id } }
+            return allBirthday
+                .filter { character in result.contains { $0.id == character.id } }
+                .sorted { $0.birthday > $1.birthday }
         }
         
         public static func categorizedCharacters() async -> CategorizedCharacters? {
