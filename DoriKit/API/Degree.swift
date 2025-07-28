@@ -10,9 +10,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about degree in Bandori.
     public class Degree {
         private init() {}
         
+        /// Get all degrees in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested degrees, nil if failed to fetch data.
         public static func all() async -> [Degree]? {
             // Response example:
             // {
@@ -94,14 +100,22 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Degree {
+    /// Represent information of a degree.
     public struct Degree: Identifiable, DoriCache.Cacheable {
+        /// A unique ID of degree.
         public var id: Int
+        /// Localized type of degree.
         public var degreeType: DoriAPI.LocalizedData<DegreeType>
+        /// Localized icon image name, used for combination of resource URLs.
         public var iconImageName: DoriAPI.LocalizedData<String>
+        /// Localized base image name, used for combination of resource URLs.
         public var baseImageName: DoriAPI.LocalizedData<String>
+        /// Localized rank of degree.
         public var rank: DoriAPI.LocalizedData<String>
+        /// Localized name of degree.
         public var degreeName: DoriAPI.LocalizedData<String>
         
+        /// Represent type of degrees
         public enum DegreeType: String, DoriCache.Cacheable {
             case normal
             case scoreRanking = "score_ranking"

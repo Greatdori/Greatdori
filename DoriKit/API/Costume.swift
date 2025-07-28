@@ -10,9 +10,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about costume in Bandori.
     public class Costume {
         private init() {}
         
+        /// Get all costumes in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested costumes, nil if failed to fetch data.
         public static func all() async -> [PreviewCostume]? {
             // Response example:
             // {
@@ -62,6 +68,9 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get detail of a costume in Bandori.
+        /// - Parameter id: ID of target costume.
+        /// - Returns: Detail data of reqeusted costume, nil if failed to fetch.
         public static func detail(of id: Int) async -> Costume? {
             // Response example:
             // {
@@ -124,22 +133,37 @@ extension DoriAPI {
 }
     
 extension DoriAPI.Costume {
+    /// Represent simplified data of a costume.
     public struct PreviewCostume: Identifiable, DoriCache.Cacheable {
+        /// A unique ID of costume.
         public var id: Int
+        /// ID of related character to this costume.
         public var characterID: Int
+        /// Name of asset bundle, used for combination of resource URLs.
         public var assetBundleName: String
+        /// Localized description of costume.
         public var description: DoriAPI.LocalizedData<String>
+        /// Localized published date of costume.
         public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
     }
     
+    /// Represent detailed data of a costume.
     public struct Costume: Identifiable, DoriCache.Cacheable {
+        /// A unique ID of costume.
         public var id: Int
+        /// ID of related character to this costume.
         public var characterID: Int
+        /// Name of asset bundle, used for combination of resource URLs.
         public var assetBundleName: String
+        /// Name of super deformed resource bundle, used for combination of resource URLs.
         public var sdResourceName: String
+        /// Localized description of costume.
         public var description: DoriAPI.LocalizedData<String>
+        /// Localized "how to get" text of costume.
         public var howToGet: DoriAPI.LocalizedData<String>
+        /// Localized published date of costume.
         public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// IDs of related cards to this costume.
         public var cards: [Int]
     }
 }
