@@ -12,93 +12,45 @@ extension DoriFrontend {
         private init() {}
         
         public static func recentBirthdayCharacters(aroundDate date: Date = .now) async -> [BirthdayCharacter]? {
+            func normalize(_ date: Date) -> Date {
+                var calendar = Calendar(identifier: .gregorian)
+                calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
+                var components = calendar.dateComponents([.month, .day], from: date)
+                components.year = 2000
+                components.hour = 0
+                components.minute = 0
+                components.second = 0
+                return calendar.date(from: components)!.componentsRewritten(year: 2000, hour: 0, minute: 0, second: 0)
+            }
+            
             guard let allBirthday = await DoriAPI.Character.allBirthday() else { return nil }
             
-            // JST TODAY
-            var calendar = Calendar(identifier: .gregorian)
-            calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
-            var components = calendar.dateComponents([.month, .day], from: date)
-            components.year = 2000
-            components.hour = 0
-            components.minute = 0
-            components.second = 0
-            let today = calendar.date(from: components)!
-
-            // Get IDs by Interval
-            var birthdayInterval: [TimeInterval] = []
+            let today = normalize(date)
             
-            var pastMaxInterval: TimeInterval = -315360000000
-            var lastBirthdayID: Int = -1
-            
-            var veryFirstBirthdayInYearInterval: TimeInterval = 315360000000
-            var veryFirstBirthdayInYearID: Int = -1
-            
-            var futureMinInterval: TimeInterval = 315360000000
-            var nextBirthdayID: Int = -1
-            
-            var veryLastBirthdayInYearInterval: TimeInterval = -315360000000
-            var veryLastBirthdayInYearID: Int = -1
-            
-            var todaysBirthdayID: [Int] = []
-            
-            for i in 0..<allBirthday.count {
-                birthdayInterval.append(allBirthday[i].birthday.timeIntervalSince(today))
-                if birthdayInterval[i] > 0 {
-                    // FUTURE
-                    if birthdayInterval[i] < futureMinInterval {
-                        futureMinInterval = birthdayInterval[i]
-                        nextBirthdayID = i
-                    }
-                    if birthdayInterval[i] > veryLastBirthdayInYearInterval {
-                        veryLastBirthdayInYearInterval = birthdayInterval[i]
-                        veryLastBirthdayInYearID = i
-                    }
-                } else if birthdayInterval[i] < 0 {
-                    // PAST
-                    if birthdayInterval[i] > pastMaxInterval {
-                        pastMaxInterval = birthdayInterval[i]
-                        lastBirthdayID = i
-                    }
-                    if birthdayInterval[i] < veryFirstBirthdayInYearInterval {
-                        veryFirstBirthdayInYearInterval = birthdayInterval[i]
-                        veryFirstBirthdayInYearID = i
-                    }
-                } else {
-                    // TODAY
-                    todaysBirthdayID.append(i)
-                }
+            // Make all birthdays in the same year, hour, minute and second
+            let normalizedBirthdays = allBirthday.map { character in
+                var mutableCharacter = character
+                mutableCharacter.birthday = normalize(character.birthday)
+                return mutableCharacter
             }
             
-            // Infer Character by ID
-            var finalist: [BirthdayCharacter] = []
-            if todaysBirthdayID.count > 0 {
-                // Today's Someone's Birthday
-                for i in 0..<todaysBirthdayID.count {
-                    finalist.append(allBirthday[todaysBirthdayID[i]])
-                }
-            } else {
-                // Today's not someone's birthday
-                if nextBirthdayID != -1 {
-                    finalist.append(allBirthday[nextBirthdayID])
-                } else {
-                    finalist.append(allBirthday[veryFirstBirthdayInYearID])
-                }
-                if lastBirthdayID != -1 {
-                    finalist.append(allBirthday[lastBirthdayID])
-                } else {
-                    finalist.append(allBirthday[veryLastBirthdayInYearID])
-                }
+            // We check if there's any birthdays today so we can do early exit
+            // and emit time-costing sorting.
+            let birthdaysToday = normalizedBirthdays.filter { character in
+                character.birthday == today
+            }
+            if !birthdaysToday.isEmpty {
+                return allBirthday.filter { character in birthdaysToday.contains(where: { $0.id == character.id }) }
             }
             
-            // Sayo & Hina Confirmation
-            if (finalist.contains(where: { $0.id == 17}) && !finalist.contains(where: { $0.id == 22})) {
-                // ✓HINA, ×SAYO
-                finalist.insert(allBirthday[21], at: 1)
-            }
-            // (There's no situation which there's Sayo but no Hina,
-            // since Sayo has an ID after Hina which will make Hina being registered first.)
-            
-            return finalist
+            let sortedBirthdays = normalizedBirthdays.sorted { $0.birthday < $1.birthday }
+            let after = sortedBirthdays.first { $0.birthday >= today } ?? sortedBirthdays.last!
+            let before = sortedBirthdays.reversed().first { $0.birthday <= today } ?? sortedBirthdays.first!
+            // Because more than 1 people may have the same birthday,
+            // we have to filter them out again.
+            let result = sortedBirthdays.filter { $0.birthday == after.birthday || $0.birthday == before.birthday }
+            // And filter from source again because they've been normalized...
+            return allBirthday.filter { character in result.contains { $0.id == character.id } }
         }
         
         public static func categorizedCharacters() async -> CategorizedCharacters? {

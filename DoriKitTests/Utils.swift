@@ -5,6 +5,7 @@
 //  Created by Mark Chan on 7/27/25.
 //
 
+import Testing
 import Foundation
 import SwiftyJSON
 @testable import DoriKit
@@ -88,5 +89,19 @@ extension JSON {
                 lhs.0 < rhs.0
             }
         }
+    }
+}
+
+extension Comment {
+    init(_ array: [Any]...) {
+        var result = [String]()
+        for a in array {
+            result.append("[\n\(a.map { var r = ""; dump($0, to: &r); return r.components(separatedBy: "\n").map { "  \($0)" }.joined(separator: "\n") }.joined(separator: ",\n"))\n]")
+        }
+        self = "\(result.joined(separator: "\n\n"))"
+    }
+    @_disfavoredOverload
+    init(_ any: Any...) {
+        self = "\(any.map { var r = ""; dump($0, to: &r); return r }.joined(separator: "\n\n"))"
     }
 }

@@ -64,6 +64,7 @@ extension Date {
     }
     
     internal func componentsRewritten(
+        calendar: Calendar = .autoupdatingCurrent,
         year: Int? = nil,
         month: Int? = nil,
         day: Int? = nil,
