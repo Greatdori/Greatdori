@@ -10,9 +10,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about gacha in Bandori.
     public class Gacha {
         private init() {}
         
+        /// Get all gacha in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested gacha, nil if failed to fetch data.
         public static func all() async -> [PreviewGacha]? {
             // Response example:
             // {
@@ -80,6 +86,9 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get detail of gacha in Bandori.
+        /// - Parameter id: ID of target gacha.
+        /// - Returns: Detail data of requested gacha, nil if failed to fetch.
         public static func detail(of id: Int) async -> Gacha? {
             // Response example:
             // {
@@ -322,58 +331,117 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Gacha {
+    /// Represent simplified data of gacha.
     public struct PreviewGacha: Identifiable, DoriCache.Cacheable {
+        /// A unique ID of gacha.
         public var id: Int
+        /// Name of resource bundle, used for combination of resource URLs.
         public var resourceName: String
+        /// Name of banner resource bundle, used for combination of resource URLs.
         public var bannerAssetBundleName: String
+        /// Localized name of gacha.
         public var gachaName: DoriAPI.LocalizedData<String>
+        /// Localized published date of gacha.
         public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Localized closed date of gacha.
         public var closedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Type of gacha.
         public var type: GachaType
+        /// IDs of new cards in this gacha.
+        ///
+        /// *New cards* mean cards that never appears in gacha before this one.
         public var newCards: [Int]
     }
     
     public struct Gacha: Identifiable, DoriCache.Cacheable {
+        /// A unique ID of gacha.
         public var id: Int
-        public var details: DoriAPI.LocalizedData<[Int: CardDetail]> // [CardID: CardDetail]
-        public var rates: DoriAPI.LocalizedData<[Int: Rate]> // [CardRarity: Rate]
+        /// Localized details of gacha.
+        ///
+        /// Detailed data dictionary `[Int: CardDetail]` represents `[CardID: CardDetail]`.
+        ///
+        /// - SeeAlso:
+        ///     - ``CardDetail``
+        public var details: DoriAPI.LocalizedData<[Int: CardDetail]>
+        /// Localized rates for each rarities of gacha.
+        ///
+        /// Detailed data dictionary `[Int: Rate]` represents `[CardRarity: Rate]`.
+        ///
+        /// - SeeAlso:
+        ///     - ``Rate``
+        public var rates: DoriAPI.LocalizedData<[Int: Rate]>
+        /// Payment methods of gacha.
         public var paymentMethods: [PaymentMethod]
+        /// Name of resource bundle, used for combination of resource URLs.
         public var resourceName: String
+        /// Name of banner resource bundle, used for combination of resource URLs.
         public var bannerAssetBundleName: String
+        /// Localized name of gacha.
         public var gachaName: DoriAPI.LocalizedData<String>
+        /// Localized published date of gacha.
         public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Localized closed date of gacha.
         public var closedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Localized description of gacha.
         public var description: DoriAPI.LocalizedData<String>
+        /// Localized annotation text of gacha.
         public var annotation: DoriAPI.LocalizedData<String>
+        /// Localized period text of gacha.
         public var gachaPeriod: DoriAPI.LocalizedData<String>
+        /// Type of gacha.
         public var type: GachaType
+        /// IDs of new cards in this gacha.
+        ///
+        /// *New cards* mean cards that never appears in gacha before this one.
         public var newCards: [Int]
+        /// Information of gacha.
         public var information: Information
         
+        /// Represent detail of a card in gacha.
         public struct CardDetail: DoriCache.Cacheable {
+            /// Rarity of card.
             public var rarityIndex: Int
+            /// Weight of card.
             public var weight: Int
+            /// Whether the card is picked up in gacha.
             public var pickup: Bool
         }
         
+        /// Represent rate of a rarity in gacha.
         public struct Rate: DoriCache.Cacheable {
+            /// Rate.
             public var rate: Double
+            /// Total of weight for cards in this rate.
             public var weightTotal: Int
         }
         
+        /// Represent a payment method of gacha.
         public struct PaymentMethod: DoriCache.Cacheable {
+            /// ID of gacha about this payment method.
             public var gachaID: Int
+            /// Payment method type.
             public var paymentMethod: Method
+            /// Required quantity of item (unit price).
             public var quantity: Int
+            /// A unique id of payment method.
             public var paymentMethodID: Int
+            /// Count of costing item required by this payment method.
             public var count: Int
+            /// Behavior about payment method.
             public var behavior: Behavior
+            /// Whether gacha by this payment method picked up.
             public var pickup: Bool
+            /// Max spin limit of gacha by this payment method, nil if not limited.
             public var maxSpinLimit: Int?
+            /// Total quantity of costing item.
             public var costItemQuantity: Int
+            /// Appeal image file name.
             public var appealImageFileName: String?
+            /// Discount type of payment method.
             public var discountType: Int
+            /// Ticket ID when payment method is ticket.
             public var ticketID: Int?
+            /// Bonus point for gacha by this payment method.
             public var gachaBonusPoint: Int?
             
             internal init(
@@ -406,6 +474,7 @@ extension DoriAPI.Gacha {
                 self.gachaBonusPoint = gachaBonusPoint
             }
             
+            /// Represent a payment method.
             public enum Method: String, DoriCache.Cacheable {
                 case free
                 case freeStar = "free_star"
@@ -415,6 +484,7 @@ extension DoriAPI.Gacha {
                 case overThe4StarTicket = "over_the_4_star_ticket"
                 case fixed5StarTicket = "fixed_5_star_ticket"
             }
+            /// Represent behavior of a payment method.
             public enum Behavior: String, DoriCache.Cacheable {
                 case normal
                 case overThe3StarOnce = "over_the_3_star_once"
@@ -425,14 +495,20 @@ extension DoriAPI.Gacha {
             }
         }
         
+        /// Represent information of gacha.
         public struct Information: DoriCache.Cacheable {
+            /// Localized description of gacha.
             public var description: DoriAPI.LocalizedData<String>
+            /// Localized term of gacha.
             public var term: DoriAPI.LocalizedData<String>
+            /// Localized new member info of gacha.
             public var newMemberInfo: DoriAPI.LocalizedData<String>
+            /// Localized notice of gacha.
             public var notice: DoriAPI.LocalizedData<String>
         }
     }
     
+    /// Represent type of gacha.
     public enum GachaType: String, CaseIterable, DoriCache.Cacheable {
         case free
         case permanent
