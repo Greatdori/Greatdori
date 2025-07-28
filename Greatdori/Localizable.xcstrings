@@ -1,11 +1,28 @@
 {
   "sourceLanguage" : "zh-Hans",
   "strings" : {
-    "1" : {
+    "" : {
 
     },
-    "2" : {
-
+    "%@后开始%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@后开始%2$@"
+          }
+        }
+      }
+    },
+    "%@后结束%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@后结束%2$@"
+          }
+        }
+      }
     },
     "App.community" : {
       "localizations" : {
@@ -98,8 +115,46 @@
       },
       "shouldTranslate" : false
     },
+    "Home.birthday" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Birthday"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生日"
+          }
+        }
+      }
+    },
+    "Home.birthday.happy-birthday" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Happy Birthday🎉"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生日快乐🎉"
+          }
+        }
+      }
+    },
     "Home.news" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "News"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -107,6 +162,12 @@
           }
         }
       }
+    },
+    "已结束%@" : {
+
+    },
+    "未开始%@" : {
+
     }
   },
   "version" : "1.1"
