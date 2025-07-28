@@ -68,21 +68,18 @@ struct HomeView: View {
             }
             Section {
                 if let latestEvents {
-%{
-    locales = ["jp", "en", "cn", "tw", "kr"]
-}%
-                    % for locale in locales:
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.${locale}!.id) }) {
-                        if latestEvents.${locale}!.startAt.${locale} != nil {
-                            EventCardView(latestEvents.${locale}!, inLocale: .${locale}, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.${locale}!, inLocale: .${locale}, showsCountdown: true)
-                                .grayscale(1)
+                    ForEach(DoriAPI.Locale.allCases, id: \.rawValue) { locale in
+                        NavigationLink(destination: { EventDetailView(id: latestEvents.forLocale(locale)!.id) }) {
+                            if locale != .kr {
+                                EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
+                            } else {
+                                EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
+                                    .grayscale(1)
+                            }
                         }
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                     }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    % end
                 } else {
                     HStack {
                         Spacer()
