@@ -1,10 +1,7 @@
 {
   "sourceLanguage" : "zh-Hans",
   "strings" : {
-    "1" : {
-
-    },
-    "2" : {
+    "" : {
 
     },
     "App.community" : {
@@ -87,6 +84,46 @@
         }
       }
     },
+    "Events.countdown.end-at.%@ %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束于%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "Events.countdown.ended.%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已结束 %@"
+          }
+        }
+      }
+    },
+    "Events.countdown.start-at.%@ %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始于%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "Events.countdown.unstarted.%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未开始 %@"
+          }
+        }
+      }
+    },
     "Greatdori" : {
       "localizations" : {
         "zh-Hans" : {
@@ -98,8 +135,46 @@
       },
       "shouldTranslate" : false
     },
+    "Home.birthday" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Birthday"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生日"
+          }
+        }
+      }
+    },
+    "Home.birthday.happy-birthday" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Happy Birthday🎉"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生日快乐🎉"
+          }
+        }
+      }
+    },
     "Home.news" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "News"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
