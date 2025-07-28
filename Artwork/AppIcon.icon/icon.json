@@ -3,8 +3,8 @@
     {
       "value" : {
         "linear-gradient" : [
-          "display-p3:0.41211,0.50586,0.96777,1.00000",
-          "display-p3:0.23523,0.30957,0.59961,1.00000"
+          "display-p3:0.41176,0.50588,0.96863,1.00000",
+          "display-p3:0.23529,0.30980,0.60000,1.00000"
         ]
       }
     },
@@ -17,6 +17,20 @@
     {
       "layers" : [
         {
+          "fill-specializations" : [
+            {
+              "value" : "automatic"
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "linear-gradient" : [
+                  "display-p3:0.42310,0.52276,1.00000,1.00000",
+                  "display-p3:0.42310,0.52276,1.00000,1.00000"
+                ]
+              }
+            }
+          ],
           "image-name" : "AppIconStar.png",
           "name" : "AppIconStar"
         }
