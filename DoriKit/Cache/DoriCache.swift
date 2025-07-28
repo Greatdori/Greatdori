@@ -49,7 +49,12 @@ public class DoriCache {
             cachedResult = Result(fromCache: cachedData)
         }
         
-        let promise = Promise<Result?>(cachedResult)
+        let promise: Promise<Result?>
+        if let cachedResult {
+            promise = .init(cachedResult)
+        } else {
+            promise = .init()
+        }
         
         Task {
             let result = await invocation()

@@ -15,6 +15,7 @@ struct CardListView: View {
     @State var isSearchPresented = false
     @State var searchInput = ""
     @State var searchedCards: [DoriFrontend.Card.CardWithBand]?
+    @State var availability = true
     var body: some View {
         List {
             if let cards = searchedCards ?? cards {
@@ -24,10 +25,14 @@ struct CardListView: View {
                     }
                 }
             } else {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
+                if availability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入卡牌时出错", systemImage: "person.text.rectangle.fill", retryHandler: getCards)
                 }
             }
         }
@@ -72,10 +77,15 @@ struct CardListView: View {
     }
     
     func getCards() async {
+        availability = true
         DoriCache.withCache(id: "CardList_\(filter.identity)") {
             await DoriFrontend.Card.list(filter: filter)
         }.onUpdate {
-            cards = $0
+            if let cards = $0 {
+                self.cards = cards
+            } else {
+                availability = false
+            }
         }
     }
 }

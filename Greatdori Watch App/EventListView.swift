@@ -15,6 +15,7 @@ struct EventListView: View {
     @State var isSearchPresented = false
     @State var searchInput = ""
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
+    @State var availability = true
     var body: some View {
         List {
             if let events = searchedEvents ?? events {
@@ -26,10 +27,14 @@ struct EventListView: View {
                     .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
             } else {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
+                if availability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入活动时出错", systemImage: "star.hexagon.fill", retryHandler: getEvents)
                 }
             }
         }
@@ -71,10 +76,15 @@ struct EventListView: View {
     }
     
     func getEvents() async {
+        availability = true
         DoriCache.withCache(id: "EventList_\(filter.identity)") {
             await DoriFrontend.Event.list(filter: filter)
         }.onUpdate {
-            events = $0
+            if let events = $0 {
+                self.events = events
+            } else {
+                availability = false
+            }
         }
     }
 }

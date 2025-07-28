@@ -12,6 +12,7 @@ import SDWebImageSwiftUI
 struct EventDetailView: View {
     var id: Int
     @State var information: DoriFrontend.Event.ExtendedEvent?
+    @State var availability = true
     var body: some View {
         List {
             if let information {
@@ -171,19 +172,32 @@ struct EventDetailView: View {
                     }
                 }
             } else {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
+                if availability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入活动时出错", systemImage: "star.hexagon.fill", retryHandler: getInformation)
                 }
             }
         }
         .navigationTitle(information?.event.eventName.forPreferredLocale() ?? "正在载入活动...")
         .task {
-            DoriCache.withCache(id: "EventDetail_\(id)") {
-                await DoriFrontend.Event.extendedInformation(of: id)
-            }.onUpdate {
-                information = $0
+            await getInformation()
+        }
+    }
+    
+    func getInformation() async {
+        availability = true
+        DoriCache.withCache(id: "EventDetail_\(id)") {
+            await DoriFrontend.Event.extendedInformation(of: id)
+        }.onUpdate {
+            if let information = $0 {
+                self.information = information
+            } else {
+                availability = false
             }
         }
     }
