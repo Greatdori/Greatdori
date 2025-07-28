@@ -11,18 +11,18 @@ extension DoriFrontend {
     public class Character {
         private init() {}
         
-        public static func recentBirthdayCharacters() async -> [BirthdayCharacter]? {
+        public static func recentBirthdayCharacters(aroundDate date: Date = .now) async -> [BirthdayCharacter]? {
             guard let allBirthday = await DoriAPI.Character.allBirthday() else { return nil }
             
             // JST TODAY
             var calendar = Calendar(identifier: .gregorian)
             calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
-            var components = calendar.dateComponents([.month, .day], from: Date())
+            var components = calendar.dateComponents([.month, .day], from: date)
             components.year = 2000
             components.hour = 0
             components.minute = 0
             components.second = 0
-            let today = calendar.date(from: components)! // JST TODAY
+            let today = calendar.date(from: components)!
 
             // Get IDs by Interval
             var birthdayInterval: [TimeInterval] = []
