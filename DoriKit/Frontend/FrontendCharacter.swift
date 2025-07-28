@@ -14,7 +14,7 @@ extension DoriFrontend {
         public static func recentBirthdayCharacters() async -> [BirthdayCharacter]? {
             guard let allBirthday = await DoriAPI.Character.allBirthday() else { return nil }
             
-            //JST TODAY
+            // JST TODAY
             var calendar = Calendar(identifier: .gregorian)
             calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
             var components = calendar.dateComponents([.month, .day], from: Date())
@@ -22,9 +22,9 @@ extension DoriFrontend {
             components.hour = 0
             components.minute = 0
             components.second = 0
-            let today = calendar.date(from: components)! //JST TODAY
+            let today = calendar.date(from: components)! // JST TODAY
 
-            //Get IDs by Interval
+            // Get IDs by Interval
             var birthdayInterval: [TimeInterval] = []
             
             var pastMaxInterval: TimeInterval = -315360000000
@@ -43,7 +43,8 @@ extension DoriFrontend {
             
             for i in 0..<allBirthday.count {
                 birthdayInterval.append(allBirthday[i].birthday.timeIntervalSince(today))
-                if birthdayInterval[i] > 0 { //FUTURE
+                if birthdayInterval[i] > 0 {
+                    // FUTURE
                     if birthdayInterval[i] < futureMinInterval {
                         futureMinInterval = birthdayInterval[i]
                         nextBirthdayID = i
@@ -52,7 +53,8 @@ extension DoriFrontend {
                         veryLastBirthdayInYearInterval = birthdayInterval[i]
                         veryLastBirthdayInYearID = i
                     }
-                } else if birthdayInterval[i] < 0 { //PAST
+                } else if birthdayInterval[i] < 0 {
+                    // PAST
                     if birthdayInterval[i] > pastMaxInterval {
                         pastMaxInterval = birthdayInterval[i]
                         lastBirthdayID = i
@@ -61,18 +63,21 @@ extension DoriFrontend {
                         veryFirstBirthdayInYearInterval = birthdayInterval[i]
                         veryFirstBirthdayInYearID = i
                     }
-                } else { //TODAY
+                } else {
+                    // TODAY
                     todaysBirthdayID.append(i)
                 }
             }
             
-            //Infer Character by ID
+            // Infer Character by ID
             var finalist: [BirthdayCharacter] = []
-            if todaysBirthdayID.count > 0 { //Today's Someone's Birthday
+            if todaysBirthdayID.count > 0 {
+                // Today's Someone's Birthday
                 for i in 0..<todaysBirthdayID.count {
                     finalist.append(allBirthday[todaysBirthdayID[i]])
                 }
-            } else { //Today's not someone's birthday
+            } else {
+                // Today's not someone's birthday
                 if nextBirthdayID != -1 {
                     finalist.append(allBirthday[nextBirthdayID])
                 } else {
@@ -85,11 +90,13 @@ extension DoriFrontend {
                 }
             }
             
-            //Sayo & Hina Confirmation
-            if (finalist.contains(where: { $0.id == 17}) && !finalist.contains(where: { $0.id == 22})) { //✓HINA,×SAYO
+            // Sayo & Hina Confirmation
+            if (finalist.contains(where: { $0.id == 17}) && !finalist.contains(where: { $0.id == 22})) {
+                // ✓HINA, ×SAYO
                 finalist.insert(allBirthday[21], at: 1)
             }
-            //(There's no situation which there's Sayo but no Hina, since Sayo has an ID after Hina which will make Hina being registered first.)
+            // (There's no situation which there's Sayo but no Hina,
+            // since Sayo has an ID after Hina which will make Hina being registered first.)
             
             return finalist
         }

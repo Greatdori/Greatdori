@@ -85,7 +85,7 @@ extension DoriAPI {
                             )
                         } else if k == "episodes" {
                             stats.updateValue(
-                                v["episodes"].map {
+                                v.map {
                                     Stat(performance: $0.1["performance"].intValue,
                                          technique: $0.1["technique"].intValue,
                                          visual: $0.1["visual"].intValue)
@@ -289,7 +289,7 @@ extension DoriAPI {
                         )
                     } else if key == "episodes" {
                         stats.updateValue(
-                            value["episodes"].map {
+                            value.map {
                                 Stat(performance: $0.1["performance"].intValue,
                                      technique: $0.1["technique"].intValue,
                                      visual: $0.1["visual"].intValue)

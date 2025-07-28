@@ -19,11 +19,11 @@ func retryableRequestJSON(_ url: String, maxCount: Int = 5) async -> JSON? {
     return nil
 }
 
-func findExtraKeys<T: Decodable>(in json: JSON, comparedTo instance: T) -> [String] {
-    return findExtraKeys(in: json, comparedTo: Mirror(reflecting: instance), prefix: "", original: instance)
+func findExtraKeys<T: Decodable>(in json: JSON, comparedTo instance: T, exceptions: [String] = []) -> [String] {
+    return findExtraKeys(in: json, comparedTo: Mirror(reflecting: instance), prefix: "", original: instance, exceptions: exceptions)
 }
 
-private func findExtraKeys(in json: JSON, comparedTo mirror: Mirror, prefix: String, original: Any) -> [String] {
+private func findExtraKeys(in json: JSON, comparedTo mirror: Mirror, prefix: String, original: Any, exceptions: [String]) -> [String] {
     var structKeys = Set<String>()
     var childrenMap: [String: Mirror.Child] = [:]
     
@@ -37,7 +37,7 @@ private func findExtraKeys(in json: JSON, comparedTo mirror: Mirror, prefix: Str
     var extraKeys: [String] = []
     
     for (key, subJson) in json {
-        if !structKeys.map({ $0.lowercased() }).contains(key.lowercased()) {
+        if !structKeys.map({ $0.lowercased() }).contains(key.lowercased()) && !exceptions.map({ $0.lowercased() }).contains(key.lowercased()) {
             extraKeys.append(prefix + key)
         } else if let child = childrenMap[key] {
             let childValue = child.value
@@ -45,7 +45,7 @@ private func findExtraKeys(in json: JSON, comparedTo mirror: Mirror, prefix: Str
             
             if subJson.type == .dictionary {
                 if childMirror.displayStyle == .struct || childMirror.displayStyle == .class {
-                    let nestedExtras = findExtraKeys(in: subJson, comparedTo: childMirror, prefix: prefix + key + ".", original: childValue)
+                    let nestedExtras = findExtraKeys(in: subJson, comparedTo: childMirror, prefix: prefix + key + ".", original: childValue, exceptions: exceptions)
                     extraKeys.append(contentsOf: nestedExtras)
                 }
             } else if isEnum(type(of: childValue)) {

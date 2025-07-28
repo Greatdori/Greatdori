@@ -55,7 +55,9 @@
         "argument" : ""
       }
     ],
-    "performanceAntipatternCheckerEnabled" : true
+    "maximumTestRepetitions" : 3,
+    "performanceAntipatternCheckerEnabled" : true,
+    "testRepetitionMode" : "retryOnFailure"
   },
   "testTargets" : [
     {
