@@ -237,7 +237,7 @@ struct HomeBirthdayView: View {
                                 })
                                 Rectangle()
                                     .opacity(0)
-                                    .frame(width: 2)
+                                    .frame(width: 2, height: 2)
                             } else if (i != 0) && (birthdays[i].birthday == birthdays[i-1].birthday) && (!todaysHerBirthday(birthdays[i].birthday, debugDate)) {
                                 // If she is not the first person & the person in front have the same birthday & today's not her birthday.
                                 EmptyView()
@@ -258,7 +258,7 @@ struct HomeBirthdayView: View {
                                 .buttonStyle(.plain)
                                 Rectangle()
                                     .opacity(0)
-                                    .frame(width: 2)
+                                    .frame(width: 2, height: 2)
                             }
                         }
                     }
