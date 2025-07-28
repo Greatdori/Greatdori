@@ -10,9 +10,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about events in Bandori.
     public class Event {
         private init() {}
         
+        /// Get all events in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested events, nil if failed to fetch data.
         public static func all() async -> [PreviewEvent]? {
             // Response example:
             // {
@@ -130,6 +136,9 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get detail of an event in Bandori.
+        /// - Parameter id: ID of target event.
+        /// - Returns: Detail data of requested event, nil if failed to fetch.
         public static func detail(of id: Int) async -> Event? {
             // Response example:
             // {
@@ -545,46 +554,76 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Event {
+    /// Represent simplified data of an event.
     public struct PreviewEvent: Identifiable, DoriCache.Cacheable {
+        /// A unique ID of event.
         public var id: Int
+        /// Type of event.
         public var eventType: EventType
+        /// Localized name of event.
         public var eventName: DoriAPI.LocalizedData<String>
+        /// Name of resource bundle, used for combination of resource URLs.
         public var assetBundleName: String
+        /// Name of banner resource bundle, used for combination of resource URLs.
         public var bannerAssetBundleName: String
+        /// Localized start date of event.
         public var startAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Localized end date of event.
         public var endAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Attributes related to this event, with bonus percentage.
         public var attributes: [EventAttribute]
+        /// Characters related to this event, with bonus percentage.
         public var characters: [EventCharacter]
         public var eventAttributeAndCharacterBonus: EventAttributeAndCharacterBonus?
+        /// Members related to this event, with bonus percentage.
+        ///
+        /// A *member* related to event is a card with bonus during the event.
         public var members: [EventMember]
         public var limitBreaks: [EventLimitBreak]
+        /// IDs of cards that can be gotten by participating this event.
         public var rewardCards: [Int]
     }
     
+    /// Represent detailed data of an event.
     public struct Event: Identifiable, DoriCache.Cacheable {
+        /// A unique ID of event.
         public var id: Int
+        /// Type of event.
         public var eventType: EventType
+        /// Localized name of event.
         public var eventName: DoriAPI.LocalizedData<String>
+        /// Name of resource bundle, used for combination of resource URLs.
         public var assetBundleName: String
+        /// Name of banner resource bundle, used for combination of resource URLs.
         public var bannerAssetBundleName: String
+        /// Localized start date of event.
         public var startAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Localized end date of event.
         public var endAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         public var publicStartAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         public var publicEndAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         public var distributionStartAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         public var distributionEndAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Name of BGM resource bundle, used for combination of resource URLs.
         public var bgmAssetBundleName: String
+        /// Name of BGM file, used for combination of resource URLs.
         public var bgmFileName: String
         public var aggregateEndAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         public var exchangeEndAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         public var pointRewards: DoriAPI.LocalizedData<[PointReward]>
         public var rankingRewards: DoriAPI.LocalizedData<[RankingReward]>
+        /// Attributes related to this event, with bonus percentage.
         public var attributes: [EventAttribute]
+        /// Characters related to this event, with bonus percentage.
         public var characters: [EventCharacter]
         public var eventAttributeAndCharacterBonus: EventAttributeAndCharacterBonus?
+        /// Members related to this event, with bonus percentage.
+        ///
+        /// A *member* related to event is a card with bonus during the event.
         public var members: [EventMember]
         public var limitBreaks: [EventLimitBreak]
         public var stories: [Story]
+        /// IDs of cards that can be gotten by participating this event.
         public var rewardCards: [Int]
         
         internal init(
@@ -661,6 +700,7 @@ extension DoriAPI.Event {
         }
     }
     
+    /// Represent type of an event.
     public enum EventType: String, CaseIterable, DoriCache.Cacheable {
         case story
         case challenge
@@ -671,9 +711,13 @@ extension DoriAPI.Event {
         case medley
     }
     
+    /// Represent an attribute with bonus related to an event.
     public struct EventAttribute: DoriCache.Cacheable {
+        /// Related event ID.
         public var eventID: Int?
+        /// Attribute.
         public var attribute: DoriAPI.Attribute
+        /// Percentage of bonus.
         public var percent: Int
         
         internal init(eventID: Int?, attribute: DoriAPI.Attribute, percent: Int) {
@@ -682,9 +726,13 @@ extension DoriAPI.Event {
             self.percent = percent
         }
     }
+    /// Represent a character with bonus related to an event.
     public struct EventCharacter: DoriCache.Cacheable {
+        /// Related event ID.
         public var eventID: Int?
+        /// Character ID.
         public var characterID: Int
+        /// Percentage of bonus.
         public var percent: Int
         public var seq: Int?
         
@@ -695,9 +743,15 @@ extension DoriAPI.Event {
             self.seq = seq
         }
     }
+    /// Represent a member with bonus related to an event.
+    ///
+    /// A *member* related to event is a card with bonus during the event.
     public struct EventMember: DoriCache.Cacheable {
+        /// Related event ID.
         public var eventID: Int?
+        /// Card ID.
         public var situationID: Int
+        /// Percentage of bonus.
         public var percent: Int
         public var seq: Int?
         
