@@ -12,6 +12,10 @@ import SwiftUI
 import DoriKit
 import SDWebImageSwiftUI
 
+
+// MARK: **DON'T KNOW, DON'T TOUCH**
+
+// 785: SAFE
 struct EventCardView: View {
     private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
@@ -41,7 +45,7 @@ struct EventCardView: View {
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
     
     var body: some View {
-        ZStack {
+        VStack {
             WebImage(url: eventImageURL) { image in
                 image
             } placeholder: {
@@ -49,52 +53,29 @@ struct EventCardView: View {
                     .fill(Color.gray.opacity(0.15))
             }
             .resizable()
-            .scaledToFill()
-//            .frame(width: screenBounds.width - 5, height: 100)
-            .clipped()
+            .scaledToFit()
             .cornerRadius(10)
-            HStack {
-                Spacer()
-                VStack {
-                    Spacer()
-                    Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
-                        .padding(.horizontal, 2)
-                        .background {
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(Material.ultraThin)
-                                .blur(radius: 5)
+            
+            if showsCountdown { // MARK: Accually Title & Countdown
+                Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                    .bold()
+                    .font(.title3)
+                Group {
+                    if let startDate = locale != nil ? startAt.forLocale(locale!) : startAt.forPreferredLocale(),
+                       let endDate = locale != nil ? endAt.forLocale(locale!) : startAt.forPreferredLocale() {
+                        if startDate > .now {
+                            Text("Events.countdown.start-at.\(Text(startDate, style: .relative)) \(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
+                        } else if endDate > .now {
+                            Text("Events.countdown.end-at.\(Text(endDate, style: .relative)) \(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
+                        } else {
+                            Text("Events.countdown.ended.\(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
                         }
-                    if showsCountdown {
-                        Group {
-                            if let startDate = locale != nil ? startAt.forLocale(locale!) : startAt.forPreferredLocale(),
-                               let endDate = locale != nil ? endAt.forLocale(locale!) : startAt.forPreferredLocale() {
-                                if startDate > .now {
-                                    Text("\(Text(startDate, style: .relative))后开始\(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
-                                } else if endDate > .now {
-                                    Text("\(Text(endDate, style: .relative))后结束\(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
-                                } else {
-                                    Text("已结束\(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
-                                }
-                            } else {
-                                Text("未开始\(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
-                            }
-                        }
-                        .padding(.horizontal, 2)
-                        .background {
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(Material.ultraThin)
-                                .blur(radius: 5)
-                        }
+                    } else {
+                        Text("Events.countdown.unstarted.\(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
                     }
                 }
-                .font(.system(size: 12))
-                .lineLimit(1)
-                .padding(.horizontal, 4)
-                Spacer()
             }
         }
-        .listRowBackground(Color.clear)
-        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }
 

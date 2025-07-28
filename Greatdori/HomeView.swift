@@ -26,9 +26,23 @@ struct HomeView: View {
                             CustomGroupBox {
                                 HomeBirthdayView()
                             }
+                            Spacer()
                         }
                         VStack {
+                            CustomGroupBox {
+                                HomeEventsView(locale: .jp)
+                            }
+                            CustomGroupBox {
+                                HomeEventsView(locale: .cn)
+                            }
+                            CustomGroupBox {
+                                HomeEventsView(locale: .tw)
+                            }
+                            CustomGroupBox {
+                                HomeEventsView(locale: .en)
+                            }
                             
+                            Spacer()
                         }
                     }
                     .padding()
@@ -39,6 +53,9 @@ struct HomeView: View {
                         }
                         CustomGroupBox {
                             HomeBirthdayView()
+                        }
+                        CustomGroupBox {
+                            HomeEventsView()
                         }
                         NavigationLink(destination: {
                             DebugBirthdayView()
@@ -278,100 +295,25 @@ struct HomeBirthdayView: View {
 
 struct HomeEventsView: View {
     @State var latestEvents: DoriAPI.LocalizedData<DoriFrontend.Event.PreviewEvent>?
+    var locale: DoriAPI.Locale = .jp
     var dateFormatter = DateFormatter()
-    init() {
+    init(locale: DoriAPI.Locale = .jp) {
+        self.locale = locale
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
     }
     
     var body: some View {
-        NavigationLink(destination: {
-            
-        }, label: {
+        NavigationStack {
             if let latestEvents {
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
                 NavigationLink(destination: {
                     
                 }, label: {
-                    if latestEvents.jp!.startAt.jp != nil {
-                        EventCardView(latestEvents.jp!, inLocale: .jp, showsCountdown: true)
-                    } else {
-                        EventCardView(latestEvents.jp!, inLocale: .jp, showsCountdown: true)
-                            .grayscale(1)
-                    }
+                    EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
                 })
-                
-                /*
-                 
-                if let latestEvents {
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.jp!.id) }) {
-                        if latestEvents.jp!.startAt.jp != nil {
-                            EventCardView(latestEvents.jp!, inLocale: .jp, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.jp!, inLocale: .jp, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.en!.id) }) {
-                        if latestEvents.en!.startAt.en != nil {
-                            EventCardView(latestEvents.en!, inLocale: .en, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.en!, inLocale: .en, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.cn!.id) }) {
-                        if latestEvents.cn!.startAt.cn != nil {
-                            EventCardView(latestEvents.cn!, inLocale: .cn, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.cn!, inLocale: .cn, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.tw!.id) }) {
-                        if latestEvents.tw!.startAt.tw != nil {
-                            EventCardView(latestEvents.tw!, inLocale: .tw, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.tw!, inLocale: .tw, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.kr!.id) }) {
-                        if latestEvents.kr!.startAt.kr != nil {
-                            EventCardView(latestEvents.kr!, inLocale: .kr, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.kr!, inLocale: .kr, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 86)
-                } else {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                }
-                 */
-                
+                .buttonStyle(.plain)
             }
-        })
-        .buttonStyle(.plain)
+        }
         .foregroundStyle(.primary)
         .task {
             DoriCache.withCache(id: "Home_LatestEvents") {

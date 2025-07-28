@@ -100,27 +100,23 @@ extension EnvironmentValues {
 struct CustomGroupBox<Content: View>: View {
     @Environment(\.colorScheme) var colorScheme
     let content: () -> Content
-    
     init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content
     }
-    
     var body: some View {
 #if os(iOS)
-        ZStack {
-            RoundedRectangle(cornerRadius: 15)
-            //                .foregroundStyle(colorScheme == .dark ? Color(red: 44/255, green: 44/255, blue: 46/255) : Color(red: 1, green: 1, blue: 1))
-                .foregroundStyle(Color(.secondarySystemGroupedBackground))
-            content()
-                .padding()
-        }
+        content()
+            .padding()
+            .background {
+                RoundedRectangle(cornerRadius: 15)
+                    .foregroundStyle(Color(.secondarySystemGroupedBackground))
+            }
 #elseif os(macOS)
         GroupBox {
             content()
                 .padding()
         }
 #endif
-        
     }
 }
 

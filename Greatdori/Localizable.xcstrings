@@ -4,26 +4,6 @@
     "" : {
 
     },
-    "%@后开始%@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@后开始%2$@"
-          }
-        }
-      }
-    },
-    "%@后结束%@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@后结束%2$@"
-          }
-        }
-      }
-    },
     "App.community" : {
       "localizations" : {
         "en" : {
@@ -104,6 +84,46 @@
         }
       }
     },
+    "Events.countdown.end-at.%@ %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束于%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "Events.countdown.ended.%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已结束 %@"
+          }
+        }
+      }
+    },
+    "Events.countdown.start-at.%@ %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始于%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "Events.countdown.unstarted.%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未开始 %@"
+          }
+        }
+      }
+    },
     "Greatdori" : {
       "localizations" : {
         "zh-Hans" : {
@@ -162,12 +182,6 @@
           }
         }
       }
-    },
-    "已结束%@" : {
-
-    },
-    "未开始%@" : {
-
     }
   },
   "version" : "1.1"
