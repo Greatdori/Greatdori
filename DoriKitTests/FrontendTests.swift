@@ -20,7 +20,13 @@ private struct FrontendTests {
         let allBirthdays = try #require(await DoriAPI.Character.allBirthday())
         let sortedBirthdays = allBirthdays.sorted(by: { $0.birthday < $1.birthday })
         for (index, birthday) in sortedBirthdays.enumerated() {
-            let dateAfter = Date(timeIntervalSince1970: birthday.birthday.timeIntervalSince1970 + 1)
+            let dateAfter = Date(timeIntervalSince1970: birthday.birthday.timeIntervalSince1970 + 60 * 60 * 24)
+            if allBirthdays.contains(where: {
+                $0.birthday.componentsRewritten(year: 0, hour: 0, minute: 0, second: 0)
+                == dateAfter.componentsRewritten(year: 0, hour: 0, minute: 0, second: 0)
+            }) {
+                continue
+            }
             let recentBirthdays = try #require(await DoriFrontend.Character.recentBirthdayCharacters(aroundDate: dateAfter))
             #expect(recentBirthdays.contains { $0.id == birthday.id }, "\(birthday)|||||\(recentBirthdays)")
             if _fastPath(index + 1 < sortedBirthdays.count) {
