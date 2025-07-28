@@ -147,5 +147,8 @@ options:
 
 </details>
 
+### Testing
+You have to run testing by `DoriKitTests` scheme in Greatdori.xcodeproj (instead of Package.swift).
+
 ## License
 This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE.txt) file for details.
