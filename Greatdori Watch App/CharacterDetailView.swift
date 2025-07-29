@@ -13,6 +13,7 @@ struct CharacterDetailView: View {
     var id: Int
     @State var information: DoriFrontend.Character.ExtendedCharacter?
     @State var randomCard: DoriAPI.Card.PreviewCard?
+    @State var availability = true
     var body: some View {
         List {
             if let information {
@@ -218,18 +219,33 @@ struct CharacterDetailView: View {
                     }
                 }
             } else {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
+                if availability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入角色时出错", systemImage: "person.fill", retryHandler: getInformation)
                 }
             }
         }
         .navigationTitle(information?.character.characterName.forPreferredLocale() ?? String(localized: "正在载入角色..."))
         .task {
-            information = await DoriFrontend.Character.extendedInformation(of: id)
-            if let information {
+            await getInformation()
+        }
+    }
+    
+    func getInformation() async {
+        availability = true
+        DoriCache.withCache(id: "CharacterDetail_\(id)") {
+            await DoriFrontend.Character.extendedInformation(of: id)
+        }.onUpdate {
+            if let information = $0 {
+                self.information = information
                 randomCard = information.randomCard()
+            } else {
+                availability = false
             }
         }
     }

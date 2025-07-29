@@ -48,72 +48,75 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/songs/all.5.json")
             if case let .success(respJSON) = request {
-                var result = [PreviewSong]()
-                for (key, value) in respJSON {
-                    result.append(.init(
-                        id: Int(key) ?? 0,
-                        tag: .init(rawValue: value["tag"].stringValue) ?? .normal,
-                        bandID: value["bandId"].intValue,
-                        jacketImage: value["jacketImage"].map { $0.1.stringValue },
-                        musicTitle: .init(
-                            jp: value["musicTitle"][0].string,
-                            en: value["musicTitle"][1].string,
-                            tw: value["musicTitle"][2].string,
-                            cn: value["musicTitle"][3].string,
-                            kr: value["musicTitle"][4].string
-                        ),
-                        publishedAt: .init(
-                            jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
-                        ),
-                        closedAt: .init(
-                            jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
-                        ),
-                        difficulty: value["difficulty"].map {
-                            (key: DifficultyType(rawValue: Int($0.0) ?? 0) ?? .easy,
-                             value: PreviewSong.Difficulty(
-                                playLevel: $0.1["playLevel"].intValue,
-                                publishedAt: $0.1["publishedAt"].null == nil ? .init(
-                                    jp: $0.1["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                                    en: $0.1["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                                    tw: $0.1["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                                    cn: $0.1["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                                    kr: $0.1["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][4].stringValue.dropLast(3))!)) : nil
-                                ) : nil
-                             ))
-                        }.reduce(into: [DifficultyType: PreviewSong.Difficulty]()) {
-                            $0.updateValue($1.value, forKey: $1.key)
-                        },
-                        musicVideos: value["musicVideos"].exists() ? value["musicVideos"].map {
-                            (key: $0.0,
-                             value: MusicVideoMetadata(
-                                startAt: .init(
-                                    jp: $0.1["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][0].stringValue.dropLast(3))!)) : nil,
-                                    en: $0.1["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][1].stringValue.dropLast(3))!)) : nil,
-                                    tw: $0.1["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][2].stringValue.dropLast(3))!)) : nil,
-                                    cn: $0.1["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][3].stringValue.dropLast(3))!)) : nil,
-                                    kr: $0.1["startAt"][4].string != nil ? Date(
-                                        timeIntervalSince1970: Double(
-                                            Int(
-                                                $0.1["startAt"][4].stringValue.dropLast(3)
-                                            )!
-                                        )
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [PreviewSong]()
+                    for (key, value) in respJSON {
+                        result.append(.init(
+                            id: Int(key) ?? 0,
+                            tag: .init(rawValue: value["tag"].stringValue) ?? .normal,
+                            bandID: value["bandId"].intValue,
+                            jacketImage: value["jacketImage"].map { $0.1.stringValue },
+                            musicTitle: .init(
+                                jp: value["musicTitle"][0].string,
+                                en: value["musicTitle"][1].string,
+                                tw: value["musicTitle"][2].string,
+                                cn: value["musicTitle"][3].string,
+                                kr: value["musicTitle"][4].string
+                            ),
+                            publishedAt: .init(
+                                jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                            ),
+                            closedAt: .init(
+                                jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                            ),
+                            difficulty: value["difficulty"].map {
+                                (key: DifficultyType(rawValue: Int($0.0) ?? 0) ?? .easy,
+                                 value: PreviewSong.Difficulty(
+                                    playLevel: $0.1["playLevel"].intValue,
+                                    publishedAt: $0.1["publishedAt"].null == nil ? .init(
+                                        jp: $0.1["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                        en: $0.1["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                        tw: $0.1["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                        cn: $0.1["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                        kr: $0.1["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][4].stringValue.dropLast(3))!)) : nil
                                     ) : nil
-                                )
-                             ))
-                        }.reduce(into: [String: MusicVideoMetadata]()) {
-                            $0.updateValue($1.value, forKey: $1.key)
-                        } : nil
-                    ))
+                                 ))
+                            }.reduce(into: [DifficultyType: PreviewSong.Difficulty]()) {
+                                $0.updateValue($1.value, forKey: $1.key)
+                            },
+                            musicVideos: value["musicVideos"].exists() ? value["musicVideos"].map {
+                                (key: $0.0,
+                                 value: MusicVideoMetadata(
+                                    startAt: .init(
+                                        jp: $0.1["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][0].stringValue.dropLast(3))!)) : nil,
+                                        en: $0.1["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][1].stringValue.dropLast(3))!)) : nil,
+                                        tw: $0.1["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][2].stringValue.dropLast(3))!)) : nil,
+                                        cn: $0.1["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][3].stringValue.dropLast(3))!)) : nil,
+                                        kr: $0.1["startAt"][4].string != nil ? Date(
+                                            timeIntervalSince1970: Double(
+                                                Int(
+                                                    $0.1["startAt"][4].stringValue.dropLast(3)
+                                                )!
+                                            )
+                                        ) : nil
+                                    )
+                                 ))
+                            }.reduce(into: [String: MusicVideoMetadata]()) {
+                                $0.updateValue($1.value, forKey: $1.key)
+                            } : nil
+                        ))
+                    }
+                    return result.sorted { $0.id < $1.id }
                 }
-                return result.sorted { $0.id < $1.id }
+                return await task.value
             }
             return nil
         }
@@ -228,170 +231,173 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/songs/\(id).json")
             if case let .success(respJSON) = request {
-                // We break up expressions because of:
-                // The compiler is unable to type-check this expression in reasonable time;
-                // try breaking up the expression into distinct sub-expressions 😇
-                let notes = respJSON["notes"].map {
-                    (key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
-                     value: $0.1.intValue)
-                }.reduce(into: [DifficultyType: Int]()) { $0.updateValue($1.value, forKey: $1.key) }
-                
-                let bpm = respJSON["bpm"].map {
-                    (key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
-                     value: $0.1.map {
-                        Song.BPM(bpm: $0.1["bpm"].intValue, start: $0.1["start"].doubleValue, end: $0.1["end"].doubleValue)
-                    })
-                }.reduce(into: [DifficultyType: [Song.BPM]]()) { $0.updateValue($1.value, forKey: $1.key) }
-                
-                return .init(
-                    id: id,
-                    bgmID: respJSON["bgmId"].stringValue,
-                    bgmFile: respJSON["bgmFile"].stringValue,
-                    tag: .init(rawValue: respJSON["tag"].stringValue) ?? .normal,
-                    bandID: respJSON["bandId"].intValue,
-                    achievements: respJSON["achievements"].map {
-                        .init(
-                            musicID: $0.1["musicId"].intValue,
-                            achievementType: .init(rawValue: $0.1["achievementType"].stringValue) ?? .comboEasy,
-                            reward: .init(
-                                itemID: $0.1["rewardId"].int,
-                                type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
-                                quantity: $0.1["quantity"].intValue
+                let task = Task.detached(priority: .userInitiated) {
+                    // We break up expressions because of:
+                    // The compiler is unable to type-check this expression in reasonable time;
+                    // try breaking up the expression into distinct sub-expressions 😇
+                    let notes = respJSON["notes"].map {
+                        (key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
+                         value: $0.1.intValue)
+                    }.reduce(into: [DifficultyType: Int]()) { $0.updateValue($1.value, forKey: $1.key) }
+                    
+                    let bpm = respJSON["bpm"].map {
+                        (key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
+                         value: $0.1.map {
+                            Song.BPM(bpm: $0.1["bpm"].intValue, start: $0.1["start"].doubleValue, end: $0.1["end"].doubleValue)
+                        })
+                    }.reduce(into: [DifficultyType: [Song.BPM]]()) { $0.updateValue($1.value, forKey: $1.key) }
+                    
+                    return Song(
+                        id: id,
+                        bgmID: respJSON["bgmId"].stringValue,
+                        bgmFile: respJSON["bgmFile"].stringValue,
+                        tag: .init(rawValue: respJSON["tag"].stringValue) ?? .normal,
+                        bandID: respJSON["bandId"].intValue,
+                        achievements: respJSON["achievements"].map {
+                            .init(
+                                musicID: $0.1["musicId"].intValue,
+                                achievementType: .init(rawValue: $0.1["achievementType"].stringValue) ?? .comboEasy,
+                                reward: .init(
+                                    itemID: $0.1["rewardId"].int,
+                                    type: .init(rawValue: $0.1["rewardType"].stringValue) ?? .item,
+                                    quantity: $0.1["quantity"].intValue
+                                )
                             )
-                        )
-                    },
-                    jacketImage: respJSON["jacketImage"].map { $0.1.stringValue },
-                    seq: respJSON["seq"].intValue,
-                    musicTitle: .init(
-                        jp: respJSON["musicTitle"][0].string,
-                        en: respJSON["musicTitle"][1].string,
-                        tw: respJSON["musicTitle"][2].string,
-                        cn: respJSON["musicTitle"][3].string,
-                        kr: respJSON["musicTitle"][4].string
-                    ),
-                    ruby: .init(
-                        jp: respJSON["ruby"][0].string,
-                        en: respJSON["ruby"][1].string,
-                        tw: respJSON["ruby"][2].string,
-                        cn: respJSON["ruby"][3].string,
-                        kr: respJSON["ruby"][4].string
-                    ),
-                    phonetic: .init(
-                        jp: respJSON["phonetic"][0].string,
-                        en: respJSON["phonetic"][1].string,
-                        tw: respJSON["phonetic"][2].string,
-                        cn: respJSON["phonetic"][3].string,
-                        kr: respJSON["phonetic"][4].string
-                    ),
-                    lyricist: .init(
-                        jp: respJSON["lyricist"][0].string,
-                        en: respJSON["lyricist"][1].string,
-                        tw: respJSON["lyricist"][2].string,
-                        cn: respJSON["lyricist"][3].string,
-                        kr: respJSON["lyricist"][4].string
-                    ),
-                    composer: .init(
-                        jp: respJSON["composer"][0].string,
-                        en: respJSON["composer"][1].string,
-                        tw: respJSON["composer"][2].string,
-                        cn: respJSON["composer"][3].string,
-                        kr: respJSON["composer"][4].string
-                    ),
-                    arranger: .init(
-                        jp: respJSON["arranger"][0].string,
-                        en: respJSON["arranger"][1].string,
-                        tw: respJSON["arranger"][2].string,
-                        cn: respJSON["arranger"][3].string,
-                        kr: respJSON["arranger"][4].string
-                    ),
-                    howToGet: .init(
-                        jp: respJSON["howToGet"][0].string,
-                        en: respJSON["howToGet"][1].string,
-                        tw: respJSON["howToGet"][2].string,
-                        cn: respJSON["howToGet"][3].string,
-                        kr: respJSON["howToGet"][4].string
-                    ),
-                    publishedAt: .init(
-                        jp: respJSON["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                        en: respJSON["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                        tw: respJSON["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                        cn: respJSON["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                        kr: respJSON["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][4].stringValue.dropLast(3))!)) : nil
-                    ),
-                    closedAt: .init(
-                        jp: respJSON["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                        en: respJSON["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                        tw: respJSON["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                        cn: respJSON["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                        kr: respJSON["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][4].stringValue.dropLast(3))!)) : nil
-                    ),
-                    description: .init(
-                        jp: respJSON["description"][0].string,
-                        en: respJSON["description"][1].string,
-                        tw: respJSON["description"][2].string,
-                        cn: respJSON["description"][3].string,
-                        kr: respJSON["description"][4].string
-                    ),
-                    difficulty: respJSON["difficulty"].map {
-                        var publishedAt: DoriAPI.LocalizedData<Date>?
-                        if $0.1["publishedAt"].exists() {
-                            publishedAt = .init(
-                                jp: $0.1["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: $0.1["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: $0.1["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: $0.1["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: $0.1["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][4].stringValue.dropLast(3))!)) : nil
-                            )
-                        }
-                        return (
-                            key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
-                            value: DoriAPI.Song.Song.Difficulty(
-                                playLevel: $0.1["playLevel"].intValue,
-                                publishedAt: publishedAt,
-                                notesQuantity: $0.1["notesQuantity"].intValue,
-                                scoreC: $0.1["scoreC"].intValue,
-                                scoreB: $0.1["scoreB"].intValue,
-                                scoreA: $0.1["scoreA"].intValue,
-                                scoreS: $0.1["scoreS"].intValue,
-                                scoreSS: $0.1["scoreSS"].intValue,
-                                multiLiveScoreMap: $0.1["multiLiveScoreMap"].map {
-                                    (
-                                        key: Int($0.0)!,
-                                        value: DoriAPI.Song.Song.Difficulty.MultiLiveScore(
-                                            musicID: $0.1["musicId"].intValue,
-                                            musicDifficulty: $0.1["musicDifficulty"].stringValue,
-                                            multiLiveDifficultyID: $0.1["multiLiveDifficultyID"].intValue,
-                                            scoreS: $0.1["scoreS"].intValue,
-                                            scoreA: $0.1["scoreA"].intValue,
-                                            scoreB: $0.1["scoreB"].intValue,
-                                            scoreC: $0.1["scoreC"].intValue,
-                                            scoreSS: $0.1["scoreSS"].intValue,
-                                            scoreSSS: $0.1["scoreSSS"].intValue,
-                                            multiLiveDifficultyType: .init(rawValue: $0.1["multiLiveDifficultyType"].stringValue) ?? .daredemo
+                        },
+                        jacketImage: respJSON["jacketImage"].map { $0.1.stringValue },
+                        seq: respJSON["seq"].intValue,
+                        musicTitle: .init(
+                            jp: respJSON["musicTitle"][0].string,
+                            en: respJSON["musicTitle"][1].string,
+                            tw: respJSON["musicTitle"][2].string,
+                            cn: respJSON["musicTitle"][3].string,
+                            kr: respJSON["musicTitle"][4].string
+                        ),
+                        ruby: .init(
+                            jp: respJSON["ruby"][0].string,
+                            en: respJSON["ruby"][1].string,
+                            tw: respJSON["ruby"][2].string,
+                            cn: respJSON["ruby"][3].string,
+                            kr: respJSON["ruby"][4].string
+                        ),
+                        phonetic: .init(
+                            jp: respJSON["phonetic"][0].string,
+                            en: respJSON["phonetic"][1].string,
+                            tw: respJSON["phonetic"][2].string,
+                            cn: respJSON["phonetic"][3].string,
+                            kr: respJSON["phonetic"][4].string
+                        ),
+                        lyricist: .init(
+                            jp: respJSON["lyricist"][0].string,
+                            en: respJSON["lyricist"][1].string,
+                            tw: respJSON["lyricist"][2].string,
+                            cn: respJSON["lyricist"][3].string,
+                            kr: respJSON["lyricist"][4].string
+                        ),
+                        composer: .init(
+                            jp: respJSON["composer"][0].string,
+                            en: respJSON["composer"][1].string,
+                            tw: respJSON["composer"][2].string,
+                            cn: respJSON["composer"][3].string,
+                            kr: respJSON["composer"][4].string
+                        ),
+                        arranger: .init(
+                            jp: respJSON["arranger"][0].string,
+                            en: respJSON["arranger"][1].string,
+                            tw: respJSON["arranger"][2].string,
+                            cn: respJSON["arranger"][3].string,
+                            kr: respJSON["arranger"][4].string
+                        ),
+                        howToGet: .init(
+                            jp: respJSON["howToGet"][0].string,
+                            en: respJSON["howToGet"][1].string,
+                            tw: respJSON["howToGet"][2].string,
+                            cn: respJSON["howToGet"][3].string,
+                            kr: respJSON["howToGet"][4].string
+                        ),
+                        publishedAt: .init(
+                            jp: respJSON["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                            en: respJSON["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                            tw: respJSON["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                            cn: respJSON["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                            kr: respJSON["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                        ),
+                        closedAt: .init(
+                            jp: respJSON["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][0].stringValue.dropLast(3))!)) : nil,
+                            en: respJSON["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][1].stringValue.dropLast(3))!)) : nil,
+                            tw: respJSON["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][2].stringValue.dropLast(3))!)) : nil,
+                            cn: respJSON["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][3].stringValue.dropLast(3))!)) : nil,
+                            kr: respJSON["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                        ),
+                        description: .init(
+                            jp: respJSON["description"][0].string,
+                            en: respJSON["description"][1].string,
+                            tw: respJSON["description"][2].string,
+                            cn: respJSON["description"][3].string,
+                            kr: respJSON["description"][4].string
+                        ),
+                        difficulty: respJSON["difficulty"].map {
+                            var publishedAt: DoriAPI.LocalizedData<Date>?
+                            if $0.1["publishedAt"].exists() {
+                                publishedAt = .init(
+                                    jp: $0.1["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                    en: $0.1["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                    tw: $0.1["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                    cn: $0.1["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                    kr: $0.1["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                                )
+                            }
+                            return (
+                                key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
+                                value: DoriAPI.Song.Song.Difficulty(
+                                    playLevel: $0.1["playLevel"].intValue,
+                                    publishedAt: publishedAt,
+                                    notesQuantity: $0.1["notesQuantity"].intValue,
+                                    scoreC: $0.1["scoreC"].intValue,
+                                    scoreB: $0.1["scoreB"].intValue,
+                                    scoreA: $0.1["scoreA"].intValue,
+                                    scoreS: $0.1["scoreS"].intValue,
+                                    scoreSS: $0.1["scoreSS"].intValue,
+                                    multiLiveScoreMap: $0.1["multiLiveScoreMap"].map {
+                                        (
+                                            key: Int($0.0)!,
+                                            value: DoriAPI.Song.Song.Difficulty.MultiLiveScore(
+                                                musicID: $0.1["musicId"].intValue,
+                                                musicDifficulty: $0.1["musicDifficulty"].stringValue,
+                                                multiLiveDifficultyID: $0.1["multiLiveDifficultyID"].intValue,
+                                                scoreS: $0.1["scoreS"].intValue,
+                                                scoreA: $0.1["scoreA"].intValue,
+                                                scoreB: $0.1["scoreB"].intValue,
+                                                scoreC: $0.1["scoreC"].intValue,
+                                                scoreSS: $0.1["scoreSS"].intValue,
+                                                scoreSSS: $0.1["scoreSSS"].intValue,
+                                                multiLiveDifficultyType: .init(rawValue: $0.1["multiLiveDifficultyType"].stringValue) ?? .daredemo
+                                            )
                                         )
-                                    )
-                                }.reduce(into: [Int: Song.Difficulty.MultiLiveScore]()) { $0.updateValue($1.value, forKey: $1.key) }
+                                    }.reduce(into: [Int: Song.Difficulty.MultiLiveScore]()) { $0.updateValue($1.value, forKey: $1.key) }
+                                )
                             )
-                        )
-                    }.reduce(into: [DifficultyType: Song.Difficulty]()) { $0.updateValue($1.value, forKey: $1.key) },
-                    length: respJSON["length"].doubleValue,
-                    notes: notes,
-                    bpm: bpm,
-                    musicVideos: respJSON["musicVideos"].exists() ? respJSON["musicVideos"].map {
-                        (key: $0.0,
-                         value: MusicVideoMetadata(
-                            startAt: .init(
-                                jp: $0.1["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: $0.1["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: $0.1["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: $0.1["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: $0.1["startAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][4].stringValue.dropLast(3))!)) : nil
-                            )
-                         ))
-                    }.reduce(into: [String: MusicVideoMetadata]()) {
-                        $0.updateValue($1.value, forKey: $1.key)
-                    } : nil
-                )
+                        }.reduce(into: [DifficultyType: Song.Difficulty]()) { $0.updateValue($1.value, forKey: $1.key) },
+                        length: respJSON["length"].doubleValue,
+                        notes: notes,
+                        bpm: bpm,
+                        musicVideos: respJSON["musicVideos"].exists() ? respJSON["musicVideos"].map {
+                            (key: $0.0,
+                             value: MusicVideoMetadata(
+                                startAt: .init(
+                                    jp: $0.1["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][0].stringValue.dropLast(3))!)) : nil,
+                                    en: $0.1["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][1].stringValue.dropLast(3))!)) : nil,
+                                    tw: $0.1["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][2].stringValue.dropLast(3))!)) : nil,
+                                    cn: $0.1["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][3].stringValue.dropLast(3))!)) : nil,
+                                    kr: $0.1["startAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][4].stringValue.dropLast(3))!)) : nil
+                                )
+                             ))
+                        }.reduce(into: [String: MusicVideoMetadata]()) {
+                            $0.updateValue($1.value, forKey: $1.key)
+                        } : nil
+                    )
+                }
+                return await task.value
             }
             return nil
         }

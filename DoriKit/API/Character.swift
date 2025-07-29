@@ -42,32 +42,35 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/characters/all.2.json")
             if case let .success(respJSON) = request {
-                var characters = [PreviewCharacter]()
-                for (key, value) in respJSON {
-                    characters.append(
-                        .init(
-                            id: Int(key) ?? 0,
-                            characterType: .init(rawValue: value["characterType"].stringValue) ?? .common,
-                            characterName: .init(
-                                jp: value["characterName"][0].string,
-                                en: value["characterName"][1].string,
-                                tw: value["characterName"][2].string,
-                                cn: value["characterName"][3].string,
-                                kr: value["characterName"][4].string
-                            ),
-                            nickname: .init(
-                                jp: value["nickname"][0].string,
-                                en: value["nickname"][1].string,
-                                tw: value["nickname"][2].string,
-                                cn: value["nickname"][3].string,
-                                kr: value["nickname"][4].string
-                            ),
-                            bandID: value["bandId"].int,
-                            color: .init(hex: value["colorCode"].stringValue)
+                let task = Task.detached(priority: .userInitiated) {
+                    var characters = [PreviewCharacter]()
+                    for (key, value) in respJSON {
+                        characters.append(
+                            .init(
+                                id: Int(key) ?? 0,
+                                characterType: .init(rawValue: value["characterType"].stringValue) ?? .common,
+                                characterName: .init(
+                                    jp: value["characterName"][0].string,
+                                    en: value["characterName"][1].string,
+                                    tw: value["characterName"][2].string,
+                                    cn: value["characterName"][3].string,
+                                    kr: value["characterName"][4].string
+                                ),
+                                nickname: .init(
+                                    jp: value["nickname"][0].string,
+                                    en: value["nickname"][1].string,
+                                    tw: value["nickname"][2].string,
+                                    cn: value["nickname"][3].string,
+                                    kr: value["nickname"][4].string
+                                ),
+                                bandID: value["bandId"].int,
+                                color: .init(hex: value["colorCode"].stringValue)
+                            )
                         )
-                    )
+                    }
+                    return characters.sorted { $0.id < $1.id }
                 }
-                return characters.sorted { $0.id < $1.id }
+                return await task.value
             }
             return nil
         }
@@ -100,28 +103,31 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/characters/main.birthday.json")
             if case let .success(respJSON) = request {
-                var result = [BirthdayCharacter]()
-                for (key, value) in respJSON {
-                    result.append(.init(
-                        id: Int(key) ?? 0,
-                        characterName: .init(
-                            jp: value["characterName"][0].string,
-                            en: value["characterName"][1].string,
-                            tw: value["characterName"][2].string,
-                            cn: value["characterName"][3].string,
-                            kr: value["characterName"][4].string
-                        ),
-                        nickname: .init(
-                            jp: value["nickname"][0].string,
-                            en: value["nickname"][1].string,
-                            tw: value["nickname"][2].string,
-                            cn: value["nickname"][3].string,
-                            kr: value["nickname"][4].string
-                        ),
-                        birthday: .init(timeIntervalSince1970: Double(Int64(value["profile"]["birthday"].stringValue.dropLast(3)) ?? 0))
-                    ))
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [BirthdayCharacter]()
+                    for (key, value) in respJSON {
+                        result.append(.init(
+                            id: Int(key) ?? 0,
+                            characterName: .init(
+                                jp: value["characterName"][0].string,
+                                en: value["characterName"][1].string,
+                                tw: value["characterName"][2].string,
+                                cn: value["characterName"][3].string,
+                                kr: value["characterName"][4].string
+                            ),
+                            nickname: .init(
+                                jp: value["nickname"][0].string,
+                                en: value["nickname"][1].string,
+                                tw: value["nickname"][2].string,
+                                cn: value["nickname"][3].string,
+                                kr: value["nickname"][4].string
+                            ),
+                            birthday: .init(timeIntervalSince1970: Double(Int64(value["profile"]["birthday"].stringValue.dropLast(3)) ?? 0))
+                        ))
+                    }
+                    return result.sorted { $0.id < $1.id }
                 }
-                return result.sorted { $0.id < $1.id }
+                return await task.value
             }
             return nil
         }
@@ -202,157 +208,161 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/characters/\(id).json")
             if case let .success(respJSON) = request {
-                if let characterType = CharacterType(rawValue: respJSON["characterType"].stringValue) {
-                    switch characterType {
-                    case .unique:
-                        return .init(
-                            id: id,
-                            characterType: characterType,
-                            characterName: .init(
-                                jp: respJSON["characterName"][0].string,
-                                en: respJSON["characterName"][1].string,
-                                tw: respJSON["characterName"][2].string,
-                                cn: respJSON["characterName"][3].string,
-                                kr: respJSON["characterName"][4].string
-                            ),
-                            firstName: .init(
-                                jp: respJSON["firstName"][0].string,
-                                en: respJSON["firstName"][1].string,
-                                tw: respJSON["firstName"][2].string,
-                                cn: respJSON["firstName"][3].string,
-                                kr: respJSON["firstName"][4].string
-                            ),
-                            lastName: .init(
-                                jp: respJSON["lastName"][0].string,
-                                en: respJSON["lastName"][1].string,
-                                tw: respJSON["lastName"][2].string,
-                                cn: respJSON["lastName"][3].string,
-                                kr: respJSON["lastName"][4].string
-                            ),
-                            nickname: .init(
-                                jp: respJSON["nickname"][0].string,
-                                en: respJSON["nickname"][1].string,
-                                tw: respJSON["nickname"][2].string,
-                                cn: respJSON["nickname"][3].string,
-                                kr: respJSON["nickname"][4].string
-                            ),
-                            bandID: respJSON["bandId"].intValue,
-                            color: .init(hex: respJSON["colorCode"].stringValue),
-                            sdAssetBundleName: respJSON["sdAssetBundleName"].stringValue,
-                            defaultCostumeID: respJSON["defaultCostumeId"].intValue,
-                            ruby: .init(
-                                jp: respJSON["ruby"][0].string,
-                                en: respJSON["ruby"][1].string,
-                                tw: respJSON["ruby"][2].string,
-                                cn: respJSON["ruby"][3].string,
-                                kr: respJSON["ruby"][4].string
-                            ),
-                            profile: .init(
-                                characterVoice: .init(
-                                    jp: respJSON["profile"]["characterVoice"][0].string,
-                                    en: respJSON["profile"]["characterVoice"][1].string,
-                                    tw: respJSON["profile"]["characterVoice"][2].string,
-                                    cn: respJSON["profile"]["characterVoice"][3].string,
-                                    kr: respJSON["profile"]["characterVoice"][4].string
+                let task = Task.detached(priority: .userInitiated) { () async -> Character? in
+                    if let characterType = CharacterType(rawValue: respJSON["characterType"].stringValue) {
+                        switch characterType {
+                        case .unique:
+                            return Character(
+                                id: id,
+                                characterType: characterType,
+                                characterName: .init(
+                                    jp: respJSON["characterName"][0].string,
+                                    en: respJSON["characterName"][1].string,
+                                    tw: respJSON["characterName"][2].string,
+                                    cn: respJSON["characterName"][3].string,
+                                    kr: respJSON["characterName"][4].string
                                 ),
-                                favoriteFood: .init(
-                                    jp: respJSON["profile"]["favoriteFood"][0].string,
-                                    en: respJSON["profile"]["favoriteFood"][1].string,
-                                    tw: respJSON["profile"]["favoriteFood"][2].string,
-                                    cn: respJSON["profile"]["favoriteFood"][3].string,
-                                    kr: respJSON["profile"]["favoriteFood"][4].string
+                                firstName: .init(
+                                    jp: respJSON["firstName"][0].string,
+                                    en: respJSON["firstName"][1].string,
+                                    tw: respJSON["firstName"][2].string,
+                                    cn: respJSON["firstName"][3].string,
+                                    kr: respJSON["firstName"][4].string
                                 ),
-                                hatedFood: .init(
-                                    jp: respJSON["profile"]["hatedFood"][0].string,
-                                    en: respJSON["profile"]["hatedFood"][1].string,
-                                    tw: respJSON["profile"]["hatedFood"][2].string,
-                                    cn: respJSON["profile"]["hatedFood"][3].string,
-                                    kr: respJSON["profile"]["hatedFood"][4].string
+                                lastName: .init(
+                                    jp: respJSON["lastName"][0].string,
+                                    en: respJSON["lastName"][1].string,
+                                    tw: respJSON["lastName"][2].string,
+                                    cn: respJSON["lastName"][3].string,
+                                    kr: respJSON["lastName"][4].string
                                 ),
-                                hobby: .init(
-                                    jp: respJSON["profile"]["hobby"][0].string,
-                                    en: respJSON["profile"]["hobby"][1].string,
-                                    tw: respJSON["profile"]["hobby"][2].string,
-                                    cn: respJSON["profile"]["hobby"][3].string,
-                                    kr: respJSON["profile"]["hobby"][4].string
+                                nickname: .init(
+                                    jp: respJSON["nickname"][0].string,
+                                    en: respJSON["nickname"][1].string,
+                                    tw: respJSON["nickname"][2].string,
+                                    cn: respJSON["nickname"][3].string,
+                                    kr: respJSON["nickname"][4].string
                                 ),
-                                selfIntroduction: .init(
-                                    jp: respJSON["profile"]["selfIntroduction"][0].string,
-                                    en: respJSON["profile"]["selfIntroduction"][1].string,
-                                    tw: respJSON["profile"]["selfIntroduction"][2].string,
-                                    cn: respJSON["profile"]["selfIntroduction"][3].string,
-                                    kr: respJSON["profile"]["selfIntroduction"][4].string
+                                bandID: respJSON["bandId"].intValue,
+                                color: .init(hex: respJSON["colorCode"].stringValue),
+                                sdAssetBundleName: respJSON["sdAssetBundleName"].stringValue,
+                                defaultCostumeID: respJSON["defaultCostumeId"].intValue,
+                                ruby: .init(
+                                    jp: respJSON["ruby"][0].string,
+                                    en: respJSON["ruby"][1].string,
+                                    tw: respJSON["ruby"][2].string,
+                                    cn: respJSON["ruby"][3].string,
+                                    kr: respJSON["ruby"][4].string
                                 ),
-                                school: .init(
-                                    jp: respJSON["profile"]["school"][0].string,
-                                    en: respJSON["profile"]["school"][1].string,
-                                    tw: respJSON["profile"]["school"][2].string,
-                                    cn: respJSON["profile"]["school"][3].string,
-                                    kr: respJSON["profile"]["school"][4].string
-                                ),
-                                schoolClass: .init(
-                                    jp: respJSON["profile"]["schoolCls"][0].string,
-                                    en: respJSON["profile"]["schoolCls"][1].string,
-                                    tw: respJSON["profile"]["schoolCls"][2].string,
-                                    cn: respJSON["profile"]["schoolCls"][3].string,
-                                    kr: respJSON["profile"]["schoolCls"][4].string
-                                ),
-                                schoolYear: .init(
-                                    jp: respJSON["profile"]["schoolYear"][0].string,
-                                    en: respJSON["profile"]["schoolYear"][1].string,
-                                    tw: respJSON["profile"]["schoolYear"][2].string,
-                                    cn: respJSON["profile"]["schoolYear"][3].string,
-                                    kr: respJSON["profile"]["schoolYear"][4].string
-                                ),
-                                part: .init(rawValue: respJSON["profile"]["part"].stringValue) ?? .keyboard,
-                                birthday: .init(timeIntervalSince1970: Double(Int64(respJSON["profile"]["birthday"].stringValue.dropLast(3)) ?? 0)),
-                                constellation: .init(rawValue: respJSON["profile"]["constellation"].stringValue) ?? .aries,
-                                height: respJSON["profile"]["height"].intValue
+                                profile: .init(
+                                    characterVoice: .init(
+                                        jp: respJSON["profile"]["characterVoice"][0].string,
+                                        en: respJSON["profile"]["characterVoice"][1].string,
+                                        tw: respJSON["profile"]["characterVoice"][2].string,
+                                        cn: respJSON["profile"]["characterVoice"][3].string,
+                                        kr: respJSON["profile"]["characterVoice"][4].string
+                                    ),
+                                    favoriteFood: .init(
+                                        jp: respJSON["profile"]["favoriteFood"][0].string,
+                                        en: respJSON["profile"]["favoriteFood"][1].string,
+                                        tw: respJSON["profile"]["favoriteFood"][2].string,
+                                        cn: respJSON["profile"]["favoriteFood"][3].string,
+                                        kr: respJSON["profile"]["favoriteFood"][4].string
+                                    ),
+                                    hatedFood: .init(
+                                        jp: respJSON["profile"]["hatedFood"][0].string,
+                                        en: respJSON["profile"]["hatedFood"][1].string,
+                                        tw: respJSON["profile"]["hatedFood"][2].string,
+                                        cn: respJSON["profile"]["hatedFood"][3].string,
+                                        kr: respJSON["profile"]["hatedFood"][4].string
+                                    ),
+                                    hobby: .init(
+                                        jp: respJSON["profile"]["hobby"][0].string,
+                                        en: respJSON["profile"]["hobby"][1].string,
+                                        tw: respJSON["profile"]["hobby"][2].string,
+                                        cn: respJSON["profile"]["hobby"][3].string,
+                                        kr: respJSON["profile"]["hobby"][4].string
+                                    ),
+                                    selfIntroduction: .init(
+                                        jp: respJSON["profile"]["selfIntroduction"][0].string,
+                                        en: respJSON["profile"]["selfIntroduction"][1].string,
+                                        tw: respJSON["profile"]["selfIntroduction"][2].string,
+                                        cn: respJSON["profile"]["selfIntroduction"][3].string,
+                                        kr: respJSON["profile"]["selfIntroduction"][4].string
+                                    ),
+                                    school: .init(
+                                        jp: respJSON["profile"]["school"][0].string,
+                                        en: respJSON["profile"]["school"][1].string,
+                                        tw: respJSON["profile"]["school"][2].string,
+                                        cn: respJSON["profile"]["school"][3].string,
+                                        kr: respJSON["profile"]["school"][4].string
+                                    ),
+                                    schoolClass: .init(
+                                        jp: respJSON["profile"]["schoolCls"][0].string,
+                                        en: respJSON["profile"]["schoolCls"][1].string,
+                                        tw: respJSON["profile"]["schoolCls"][2].string,
+                                        cn: respJSON["profile"]["schoolCls"][3].string,
+                                        kr: respJSON["profile"]["schoolCls"][4].string
+                                    ),
+                                    schoolYear: .init(
+                                        jp: respJSON["profile"]["schoolYear"][0].string,
+                                        en: respJSON["profile"]["schoolYear"][1].string,
+                                        tw: respJSON["profile"]["schoolYear"][2].string,
+                                        cn: respJSON["profile"]["schoolYear"][3].string,
+                                        kr: respJSON["profile"]["schoolYear"][4].string
+                                    ),
+                                    part: .init(rawValue: respJSON["profile"]["part"].stringValue) ?? .keyboard,
+                                    birthday: .init(timeIntervalSince1970: Double(Int64(respJSON["profile"]["birthday"].stringValue.dropLast(3)) ?? 0)),
+                                    constellation: .init(rawValue: respJSON["profile"]["constellation"].stringValue) ?? .aries,
+                                    height: respJSON["profile"]["height"].intValue
+                                )
                             )
-                        )
-                    case .common, .another:
-                        return .init(
-                            id: id,
-                            characterType: characterType,
-                            characterName: .init(
-                                jp: respJSON["characterName"][0].string,
-                                en: respJSON["characterName"][1].string,
-                                tw: respJSON["characterName"][2].string,
-                                cn: respJSON["characterName"][3].string,
-                                kr: respJSON["characterName"][4].string
-                            ),
-                            firstName: .init(
-                                jp: respJSON["firstName"][0].string,
-                                en: respJSON["firstName"][1].string,
-                                tw: respJSON["firstName"][2].string,
-                                cn: respJSON["firstName"][3].string,
-                                kr: respJSON["firstName"][4].string
-                            ),
-                            lastName: .init(
-                                jp: respJSON["lastName"][0].string,
-                                en: respJSON["lastName"][1].string,
-                                tw: respJSON["lastName"][2].string,
-                                cn: respJSON["lastName"][3].string,
-                                kr: respJSON["lastName"][4].string
-                            ),
-                            nickname: .init(
-                                jp: respJSON["nickname"][0].string,
-                                en: respJSON["nickname"][1].string,
-                                tw: respJSON["nickname"][2].string,
-                                cn: respJSON["nickname"][3].string,
-                                kr: respJSON["nickname"][4].string
-                            ),
-                            sdAssetBundleName: respJSON["sdAssetBundleName"].stringValue,
-                            ruby: .init(
-                                jp: respJSON["ruby"][0].string,
-                                en: respJSON["ruby"][1].string,
-                                tw: respJSON["ruby"][2].string,
-                                cn: respJSON["ruby"][3].string,
-                                kr: respJSON["ruby"][4].string
+                        case .common, .another:
+                            return Character(
+                                id: id,
+                                characterType: characterType,
+                                characterName: .init(
+                                    jp: respJSON["characterName"][0].string,
+                                    en: respJSON["characterName"][1].string,
+                                    tw: respJSON["characterName"][2].string,
+                                    cn: respJSON["characterName"][3].string,
+                                    kr: respJSON["characterName"][4].string
+                                ),
+                                firstName: .init(
+                                    jp: respJSON["firstName"][0].string,
+                                    en: respJSON["firstName"][1].string,
+                                    tw: respJSON["firstName"][2].string,
+                                    cn: respJSON["firstName"][3].string,
+                                    kr: respJSON["firstName"][4].string
+                                ),
+                                lastName: .init(
+                                    jp: respJSON["lastName"][0].string,
+                                    en: respJSON["lastName"][1].string,
+                                    tw: respJSON["lastName"][2].string,
+                                    cn: respJSON["lastName"][3].string,
+                                    kr: respJSON["lastName"][4].string
+                                ),
+                                nickname: .init(
+                                    jp: respJSON["nickname"][0].string,
+                                    en: respJSON["nickname"][1].string,
+                                    tw: respJSON["nickname"][2].string,
+                                    cn: respJSON["nickname"][3].string,
+                                    kr: respJSON["nickname"][4].string
+                                ),
+                                sdAssetBundleName: respJSON["sdAssetBundleName"].stringValue,
+                                ruby: .init(
+                                    jp: respJSON["ruby"][0].string,
+                                    en: respJSON["ruby"][1].string,
+                                    tw: respJSON["ruby"][2].string,
+                                    cn: respJSON["ruby"][3].string,
+                                    kr: respJSON["ruby"][4].string
+                                )
                             )
-                        )
+                        }
                     }
+                    return nil
                 }
+                return await task.value
             }
             return nil
         }

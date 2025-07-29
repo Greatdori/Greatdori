@@ -17,6 +17,7 @@ struct CardDetailView: View {
     @State var statsCustomMasterRank = 4
     @State var statsCustomViewedStoryCount = 2
     @State var statsCustomTrained = true
+    @State var availability = true
     var body: some View {
         List {
             if let information {
@@ -286,22 +287,33 @@ struct CardDetailView: View {
                     }
                 }
             } else {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
+                if availability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入卡牌时出错", systemImage: "person.text.rectangle.fill", retryHandler: getInformation)
                 }
             }
         }
         .navigationTitle(information?.card.prefix.forPreferredLocale() ?? "正在载入卡牌...")
         .task {
-            DoriCache.withCache(id: "CardDetail_\(id)") {
-                await DoriFrontend.Card.extendedInformation(of: id)
-            }.onUpdate {
-                information = $0
-                if let information {
-                    statsCustomLevel = information.card.stat.maximumLevel ?? 1
-                }
+            await getInformation()
+        }
+    }
+    
+    func getInformation() async {
+        availability = true
+        DoriCache.withCache(id: "CardDetail_\(id)") {
+            await DoriFrontend.Card.extendedInformation(of: id)
+        }.onUpdate {
+            if let information = $0 {
+                self.information = information
+                statsCustomLevel = information.card.stat.maximumLevel ?? 1
+            } else {
+                availability = false
             }
         }
     }

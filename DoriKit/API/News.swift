@@ -31,17 +31,20 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/news/all.5.json")
             if case let .success(respJSON) = request {
-                var result = [PreviewItem]()
-                for (key, value) in respJSON {
-                    result.append(.init(
-                        id: Int(key) ?? 0,
-                        title: value["title"].stringValue,
-                        authors: value["authors"].arrayValue.map { $0.stringValue },
-                        timestamp: Date(timeIntervalSince1970: Double(Int64(value["timestamp"].stringValue.dropLast(3)) ?? 0)),
-                        tags: value["tags"].arrayValue.map { $0.stringValue }
-                    ))
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [PreviewItem]()
+                    for (key, value) in respJSON {
+                        result.append(.init(
+                            id: Int(key) ?? 0,
+                            title: value["title"].stringValue,
+                            authors: value["authors"].arrayValue.map { $0.stringValue },
+                            timestamp: Date(timeIntervalSince1970: Double(Int64(value["timestamp"].stringValue.dropLast(3)) ?? 0)),
+                            tags: value["tags"].arrayValue.map { $0.stringValue }
+                        ))
+                    }
+                    return result.sorted { $0.id < $1.id }
                 }
-                return result.sorted { $0.id < $1.id }
+                return await task.value
             }
             return nil
         }
@@ -119,113 +122,116 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/news/dynamic/recent.json")
             if case let .success(respJSON) = request {
-                var songs = [RecentItems.Song]()
-                for (key, value) in respJSON["songs"] {
-                    songs.append(.init(
-                        id: Int(key) ?? 0,
-                        musicTitle: .init(
-                            jp: value["musicTitle"][0].string,
-                            en: value["musicTitle"][1].string,
-                            tw: value["musicTitle"][2].string,
-                            cn: value["musicTitle"][3].string,
-                            kr: value["musicTitle"][4].string
-                        ),
-                        publishedAt: .init(
-                            jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
-                        )
-                    ))
+                let task = Task.detached(priority: .userInitiated) {
+                    var songs = [RecentItems.Song]()
+                    for (key, value) in respJSON["songs"] {
+                        songs.append(.init(
+                            id: Int(key) ?? 0,
+                            musicTitle: .init(
+                                jp: value["musicTitle"][0].string,
+                                en: value["musicTitle"][1].string,
+                                tw: value["musicTitle"][2].string,
+                                cn: value["musicTitle"][3].string,
+                                kr: value["musicTitle"][4].string
+                            ),
+                            publishedAt: .init(
+                                jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                            )
+                        ))
+                    }
+                    var events = [RecentItems.Event]()
+                    for (key, value) in respJSON["events"] {
+                        events.append(.init(
+                            id: Int(key) ?? 0,
+                            eventName: .init(
+                                jp: value["eventName"][0].string,
+                                en: value["eventName"][1].string,
+                                tw: value["eventName"][2].string,
+                                cn: value["eventName"][3].string,
+                                kr: value["eventName"][4].string
+                            ),
+                            startAt: .init(
+                                jp: value["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["startAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][4].stringValue.dropLast(3))!)) : nil
+                            ),
+                            endAt: .init(
+                                jp: value["endAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["endAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["endAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["endAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["endAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][4].stringValue.dropLast(3))!)) : nil
+                            )
+                        ))
+                    }
+                    var gacha = [RecentItems.Gacha]()
+                    for (key, value) in respJSON["gacha"] {
+                        gacha.append(.init(
+                            id: Int(key) ?? 0,
+                            gachaName: .init(
+                                jp: value["gachaName"][0].string,
+                                en: value["gachaName"][1].string,
+                                tw: value["gachaName"][2].string,
+                                cn: value["gachaName"][3].string,
+                                kr: value["gachaName"][4].string
+                            ),
+                            publishedAt: .init(
+                                jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                            ),
+                            closedAt: .init(
+                                jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                            )
+                        ))
+                    }
+                    var loginBonuses = [RecentItems.LoginBonus]()
+                    for (key, value) in respJSON["loginBonuses"] {
+                        loginBonuses.append(.init(
+                            id: Int(key) ?? 0,
+                            caption: .init(
+                                jp: value["caption"][0].string,
+                                en: value["caption"][1].string,
+                                tw: value["caption"][2].string,
+                                cn: value["caption"][3].string,
+                                kr: value["caption"][4].string
+                            ),
+                            publishedAt: .init(
+                                jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                            ),
+                            closedAt: .init(
+                                jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                            )
+                        ))
+                    }
+                    return RecentItems(
+                        songs: songs.sorted { $0.id < $1.id },
+                        events: events.sorted { $0.id < $1.id },
+                        gacha: gacha.sorted { $0.id < $1.id },
+                        loginBonuses: loginBonuses.sorted { $0.id < $1.id }
+                    )
                 }
-                var events = [RecentItems.Event]()
-                for (key, value) in respJSON["events"] {
-                    events.append(.init(
-                        id: Int(key) ?? 0,
-                        eventName: .init(
-                            jp: value["eventName"][0].string,
-                            en: value["eventName"][1].string,
-                            tw: value["eventName"][2].string,
-                            cn: value["eventName"][3].string,
-                            kr: value["eventName"][4].string
-                        ),
-                        startAt: .init(
-                            jp: value["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["startAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][4].stringValue.dropLast(3))!)) : nil
-                        ),
-                        endAt: .init(
-                            jp: value["endAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["endAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["endAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["endAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["endAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][4].stringValue.dropLast(3))!)) : nil
-                        )
-                    ))
-                }
-                var gacha = [RecentItems.Gacha]()
-                for (key, value) in respJSON["gacha"] {
-                    gacha.append(.init(
-                        id: Int(key) ?? 0,
-                        gachaName: .init(
-                            jp: value["gachaName"][0].string,
-                            en: value["gachaName"][1].string,
-                            tw: value["gachaName"][2].string,
-                            cn: value["gachaName"][3].string,
-                            kr: value["gachaName"][4].string
-                        ),
-                        publishedAt: .init(
-                            jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
-                        ),
-                        closedAt: .init(
-                            jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
-                        )
-                    ))
-                }
-                var loginBonuses = [RecentItems.LoginBonus]()
-                for (key, value) in respJSON["loginBonuses"] {
-                    loginBonuses.append(.init(
-                        id: Int(key) ?? 0,
-                        caption: .init(
-                            jp: value["caption"][0].string,
-                            en: value["caption"][1].string,
-                            tw: value["caption"][2].string,
-                            cn: value["caption"][3].string,
-                            kr: value["caption"][4].string
-                        ),
-                        publishedAt: .init(
-                            jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
-                        ),
-                        closedAt: .init(
-                            jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
-                        )
-                    ))
-                }
-                return .init(
-                    songs: songs.sorted { $0.id < $1.id },
-                    events: events.sorted { $0.id < $1.id },
-                    gacha: gacha.sorted { $0.id < $1.id },
-                    loginBonuses: loginBonuses.sorted { $0.id < $1.id }
-                )
+                return await task.value
             }
             return nil
         }
@@ -271,63 +277,66 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/news/\(id).json")
             if case let .success(respJSON) = request {
-                var content = [Item.Content]()
-                for c in respJSON["content"] {
-                    let type = c.1["type"].stringValue
-                    switch type {
-                    case "content":
-                        func resolveContentSections(_ content: JSON) -> [Item.Content.ContentDataSection] {
-                            var sections = [Item.Content.ContentDataSection]()
-                            for section in content {
-                                let type = section.1["type"].stringValue
-                                switch type {
-                                case "text":
-                                    if let localized = section.1["data"]["t"].string {
-                                        sections.append(.localizedText(localized))
-                                    } else if section.1["class"].stringValue == "literal",
-                                              let literal = section.1["data"].string {
-                                        sections.append(.textLiteral(literal))
-                                    } else {
-                                        logger.error("Failed to resolve text section. Text is neither localized key nor a string literal")
+                let task = Task.detached(priority: .userInitiated) {
+                    var content = [Item.Content]()
+                    for c in respJSON["content"] {
+                        let type = c.1["type"].stringValue
+                        switch type {
+                        case "content":
+                            func resolveContentSections(_ content: JSON) -> [Item.Content.ContentDataSection] {
+                                var sections = [Item.Content.ContentDataSection]()
+                                for section in content {
+                                    let type = section.1["type"].stringValue
+                                    switch type {
+                                    case "text":
+                                        if let localized = section.1["data"]["t"].string {
+                                            sections.append(.localizedText(localized))
+                                        } else if section.1["class"].stringValue == "literal",
+                                                  let literal = section.1["data"].string {
+                                            sections.append(.textLiteral(literal))
+                                        } else {
+                                            logger.error("Failed to resolve text section. Text is neither localized key nor a string literal")
+                                        }
+                                    case "ul":
+                                        var result = [[Item.Content.ContentDataSection]]()
+                                        for data in section.1["data"] {
+                                            result.append(resolveContentSections(data.1))
+                                        }
+                                        sections.append(.ul(result))
+                                    case "link":
+                                        sections.append(.link(
+                                            target: section.1["target"].stringValue,
+                                            data: section.1["data"].string ?? String(section.1["data"].intValue),
+                                            rich: section.1["rich"].bool ?? false
+                                        ))
+                                    case "br":
+                                        sections.append(.br)
+                                    case "date":
+                                        sections.append(.date(Date(timeIntervalSince1970: Double(Int64(section.1["data"].stringValue.dropLast(3)) ?? 0))))
+                                    default:
+                                        logger.error("Failed to determine type of 2-content. Expected 'text', 'ul', 'link', 'br', or 'date', but got '\(type)'")
                                     }
-                                case "ul":
-                                    var result = [[Item.Content.ContentDataSection]]()
-                                    for data in section.1["data"] {
-                                        result.append(resolveContentSections(data.1))
-                                    }
-                                    sections.append(.ul(result))
-                                case "link":
-                                    sections.append(.link(
-                                        target: section.1["target"].stringValue,
-                                        data: section.1["data"].string ?? String(section.1["data"].intValue),
-                                        rich: section.1["rich"].bool ?? false
-                                    ))
-                                case "br":
-                                    sections.append(.br)
-                                case "date":
-                                    sections.append(.date(Date(timeIntervalSince1970: Double(Int64(section.1["data"].stringValue.dropLast(3)) ?? 0))))
-                                default:
-                                    logger.error("Failed to determine type of 2-content. Expected 'text', 'ul', 'link', 'br', or 'date', but got '\(type)'")
                                 }
+                                return sections
                             }
-                            return sections
+                            
+                            content.append(.content(resolveContentSections(c.1["data"])))
+                        case "heading":
+                            content.append(.heading(c.1["data"]["t"].stringValue))
+                        default:
+                            logger.error("Failed to determine type of 1-content. Expected 'content' or 'heading', but got '\(type)'")
                         }
-                        
-                        content.append(.content(resolveContentSections(c.1["data"])))
-                    case "heading":
-                        content.append(.heading(c.1["data"]["t"].stringValue))
-                    default:
-                        logger.error("Failed to determine type of 1-content. Expected 'content' or 'heading', but got '\(type)'")
                     }
+                    return Item(
+                        id: id,
+                        title: respJSON["title"].stringValue,
+                        authors: respJSON["authors"].arrayValue.map { $0.stringValue },
+                        timestamp: Date(timeIntervalSince1970: Double(Int64(respJSON["timestamp"].stringValue.dropLast(3)) ?? 0)),
+                        tags: respJSON["tags"].arrayValue.map { $0.stringValue },
+                        content: content
+                    )
                 }
-                return .init(
-                    id: id,
-                    title: respJSON["title"].stringValue,
-                    authors: respJSON["authors"].arrayValue.map { $0.stringValue },
-                    timestamp: Date(timeIntervalSince1970: Double(Int64(respJSON["timestamp"].stringValue.dropLast(3)) ?? 0)),
-                    tags: respJSON["tags"].arrayValue.map { $0.stringValue },
-                    content: content
-                )
+                return await task.value
             }
             return nil
         }

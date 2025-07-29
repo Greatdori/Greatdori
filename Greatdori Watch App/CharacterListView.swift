@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 
 struct CharacterListView: View {
     @State var characters: DoriFrontend.Character.CategorizedCharacters?
+    @State var availability = true
     var body: some View {
         List {
             if let characters {
@@ -57,19 +58,32 @@ struct CharacterListView: View {
                     }
                 }
             } else {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
+                if availability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入角色时出错", systemImage: "person.fill", retryHandler: getCharacters)
                 }
             }
         }
         .navigationTitle("角色")
         .task {
-            DoriCache.withCache(id: "CharacterList") {
-                await DoriFrontend.Character.categorizedCharacters()
-            }.onUpdate {
-                characters = $0
+            await getCharacters()
+        }
+    }
+    
+    func getCharacters() async {
+        availability = true
+        DoriCache.withCache(id: "CharacterList") {
+            await DoriFrontend.Character.categorizedCharacters()
+        }.onUpdate {
+            if let characters = $0 {
+                self.characters = characters
+            } else {
+                availability = false
             }
         }
     }

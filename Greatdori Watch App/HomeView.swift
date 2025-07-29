@@ -13,6 +13,7 @@ struct HomeView: View {
     @State var news: [DoriFrontend.News.ListItem]?
     @State var birthdays: [DoriFrontend.Character.BirthdayCharacter]?
     @State var latestEvents: DoriAPI.LocalizedData<DoriFrontend.Event.PreviewEvent>?
+    @State var availability = [true, true, true]
     var body: some View {
         Form {
             Section {
@@ -34,10 +35,14 @@ struct HomeView: View {
                         }
                     }
                 } else {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
+                    if availability[0] {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else {
+                        UnavailableView("载入资讯时出错", systemImage: "newspaper.fill", retryHandler: getNews)
                     }
                 }
             } header: {
@@ -57,10 +62,14 @@ struct HomeView: View {
                         }
                     }
                 } else {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
+                    if availability[1] {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else {
+                        UnavailableView("载入生日时出错", systemImage: "birthday.cake.fill", retryHandler: getBirthdays)
                     }
                 }
             } header: {
@@ -81,10 +90,14 @@ struct HomeView: View {
                         .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                     }
                 } else {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
+                    if availability[2] {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else {
+                        UnavailableView("载入活动时出错", systemImage: "star.hexagon.fill", retryHandler: getEvents)
                     }
                 }
             } header: {
@@ -93,24 +106,49 @@ struct HomeView: View {
         }
         .navigationTitle("主页")
         .task {
-            DoriCache.withCache(id: "Home_News") {
-                await DoriFrontend.News.list()
-            }.onUpdate {
-                news = $0
-            }
+            await getNews()
         }
         .task {
-            DoriCache.withCache(id: "Home_Birthdays") {
-                await DoriFrontend.Character.recentBirthdayCharacters()
-            }.onUpdate {
-                birthdays = $0
-            }
+            await getBirthdays()
         }
         .task {
-            DoriCache.withCache(id: "Home_LatestEvents") {
-                await DoriFrontend.Event.localizedLatestEvent()
-            }.onUpdate {
-                latestEvents = $0
+            await getEvents()
+        }
+    }
+    
+    func getNews() async {
+        availability[0] = true
+        DoriCache.withCache(id: "Home_News") {
+            await DoriFrontend.News.list()
+        }.onUpdate {
+            if let news = $0 {
+                self.news = news
+            } else {
+                availability[0] = false
+            }
+        }
+    }
+    func getBirthdays() async {
+        availability[1] = true
+        DoriCache.withCache(id: "Home_Birthdays") {
+            await DoriFrontend.Character.recentBirthdayCharacters()
+        }.onUpdate {
+            if let birthdays = $0 {
+                self.birthdays = birthdays
+            } else {
+                availability[1] = false
+            }
+        }
+    }
+    func getEvents() async {
+        availability[2] = true
+        DoriCache.withCache(id: "Home_LatestEvents") {
+            await DoriFrontend.Event.localizedLatestEvent()
+        }.onUpdate {
+            if let latestEvents = $0 {
+                self.latestEvents = latestEvents
+            } else {
+                availability[2] = false
             }
         }
     }

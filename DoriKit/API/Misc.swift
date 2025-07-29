@@ -29,24 +29,27 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/misc/itemtexts.2.json")
             if case let .success(respJSON) = request {
-                var result = [String: ItemText]()
-                for (key, value) in respJSON {
-                    result.updateValue(
-                        .init(
-                            name: .init(
-                                jp: value["name"][0].string,
-                                en: value["name"][1].string,
-                                tw: value["name"][2].string,
-                                cn: value["name"][3].string,
-                                kr: value["name"][4].string
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [String: ItemText]()
+                    for (key, value) in respJSON {
+                        result.updateValue(
+                            .init(
+                                name: .init(
+                                    jp: value["name"][0].string,
+                                    en: value["name"][1].string,
+                                    tw: value["name"][2].string,
+                                    cn: value["name"][3].string,
+                                    kr: value["name"][4].string
+                                ),
+                                type: .init(rawValue: value["type"].stringValue) ?? .normal,
+                                resourceID: value["resourceId"].intValue
                             ),
-                            type: .init(rawValue: value["type"].stringValue) ?? .normal,
-                            resourceID: value["resourceId"].intValue
-                        ),
-                        forKey: key
-                    )
+                            forKey: key
+                        )
+                    }
+                    return result
                 }
-                return result
+                return await task.value
             }
             return nil
         }

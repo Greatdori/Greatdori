@@ -70,57 +70,60 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/cards/all.5.json")
             if case let .success(respJSON) = request {
-                var result = [PreviewCard]()
-                for (key, value) in respJSON {
-                    var stats = CardStat()
-                    for (k, v) in value["stat"] {
-                        if let level = Int(k) {
-                            stats.updateValue(
-                                [.init(
-                                    performance: v["performance"].intValue,
-                                    technique: v["technique"].intValue,
-                                    visual: v["visual"].intValue
-                                )],
-                                forKey: .level(level)
-                            )
-                        } else if k == "episodes" {
-                            stats.updateValue(
-                                v.map {
-                                    Stat(performance: $0.1["performance"].intValue,
-                                         technique: $0.1["technique"].intValue,
-                                         visual: $0.1["visual"].intValue)
-                                },
-                                forKey: .episodes
-                            )
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [PreviewCard]()
+                    for (key, value) in respJSON {
+                        var stats = CardStat()
+                        for (k, v) in value["stat"] {
+                            if let level = Int(k) {
+                                stats.updateValue(
+                                    [.init(
+                                        performance: v["performance"].intValue,
+                                        technique: v["technique"].intValue,
+                                        visual: v["visual"].intValue
+                                    )],
+                                    forKey: .level(level)
+                                )
+                            } else if k == "episodes" {
+                                stats.updateValue(
+                                    v.map {
+                                        Stat(performance: $0.1["performance"].intValue,
+                                             technique: $0.1["technique"].intValue,
+                                             visual: $0.1["visual"].intValue)
+                                    },
+                                    forKey: .episodes
+                                )
+                            }
                         }
+                        result.append(.init(
+                            id: Int(key) ?? 0,
+                            characterID: value["characterId"].intValue,
+                            rarity: value["rarity"].intValue,
+                            attribute: .init(rawValue: value["attribute"].stringValue) ?? .pure,
+                            levelLimit: value["levelLimit"].intValue,
+                            resourceSetName: value["resourceSetName"].stringValue,
+                            prefix: .init(
+                                jp: value["prefix"][0].string,
+                                en: value["prefix"][1].string,
+                                tw: value["prefix"][2].string,
+                                cn: value["prefix"][3].string,
+                                kr: value["prefix"][4].string
+                            ),
+                            releasedAt: .init(
+                                jp: value["releasedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["releasedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["releasedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["releasedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["releasedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][4].stringValue.dropLast(3))!)) : nil
+                            ),
+                            skillID: value["skillId"].intValue,
+                            type: .init(rawValue: value["type"].stringValue) ?? .others,
+                            stat: stats
+                        ))
                     }
-                    result.append(.init(
-                        id: Int(key) ?? 0,
-                        characterID: value["characterId"].intValue,
-                        rarity: value["rarity"].intValue,
-                        attribute: .init(rawValue: value["attribute"].stringValue) ?? .pure,
-                        levelLimit: value["levelLimit"].intValue,
-                        resourceSetName: value["resourceSetName"].stringValue,
-                        prefix: .init(
-                            jp: value["prefix"][0].string,
-                            en: value["prefix"][1].string,
-                            tw: value["prefix"][2].string,
-                            cn: value["prefix"][3].string,
-                            kr: value["prefix"][4].string
-                        ),
-                        releasedAt: .init(
-                            jp: value["releasedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["releasedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["releasedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["releasedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["releasedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][4].stringValue.dropLast(3))!)) : nil
-                        ),
-                        skillID: value["skillId"].intValue,
-                        type: .init(rawValue: value["type"].stringValue) ?? .others,
-                        stat: stats
-                    ))
+                    return result.sorted { $0.id < $1.id }
                 }
-                return result.sorted { $0.id < $1.id }
+                return await task.value
             }
             return nil
         }
@@ -239,158 +242,161 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/cards/\(id).json")
             if case let .success(respJSON) = request {
-                var episodes = [CardEpisode]()
-                for episode in respJSON["episodes"]["entries"] {
-                    episodes.append(.init(
-                        id: episode.1["episodeId"].intValue,
-                        episodeType: .init(rawValue: episode.1["episodeType"].stringValue) ?? .standard,
-                        situationID: episode.1["situationId"].intValue,
-                        scenarioID: episode.1["scenarioId"].stringValue,
-                        appendPerformance: episode.1["appendPerformance"].intValue,
-                        appendTechnique: episode.1["appendTechnique"].intValue,
-                        appendVisual: episode.1["appendVisual"].intValue,
-                        releaseLevel: episode.1["releaseLevel"].intValue,
-                        costs: episode.1["costs"]["entries"].map {
-                            CardEpisode.Resource(
-                                resourceID: $0.1["resourceId"].int,
-                                resourceType: .init(rawValue: $0.1["resourceType"].stringValue) ?? .item,
-                                quantity: $0.1["quantity"].intValue,
-                                lbBonus: $0.1["lbBonus"].intValue
-                            )
-                        },
-                        rewards: episode.1["costs"]["rewards"].map {
-                            CardEpisode.Resource(
-                                resourceID: $0.1["resourceId"].int,
-                                resourceType: .init(rawValue: $0.1["resourceType"].stringValue) ?? .item,
-                                quantity: $0.1["quantity"].intValue,
-                                lbBonus: $0.1["lbBonus"].intValue
-                            )
-                        },
-                        title: .init(
-                            jp: episode.1["title"][0].string,
-                            en: episode.1["title"][1].string,
-                            tw: episode.1["title"][2].string,
-                            cn: episode.1["title"][3].string,
-                            kr: episode.1["title"][4].string
-                        ),
-                        characterID: episode.1["characterId"].intValue
-                    ))
-                }
-                var stats = CardStat()
-                for (key, value) in respJSON["stat"] {
-                    if let level = Int(key) {
-                        stats.updateValue(
-                            [.init(
-                                performance: value["performance"].intValue,
-                                technique: value["technique"].intValue,
-                                visual: value["visual"].intValue
-                            )],
-                            forKey: .level(level)
-                        )
-                    } else if key == "episodes" {
-                        stats.updateValue(
-                            value.map {
-                                Stat(performance: $0.1["performance"].intValue,
-                                     technique: $0.1["technique"].intValue,
-                                     visual: $0.1["visual"].intValue)
+                let task = Task.detached(priority: .userInitiated) {
+                    var episodes = [CardEpisode]()
+                    for episode in respJSON["episodes"]["entries"] {
+                        episodes.append(.init(
+                            id: episode.1["episodeId"].intValue,
+                            episodeType: .init(rawValue: episode.1["episodeType"].stringValue) ?? .standard,
+                            situationID: episode.1["situationId"].intValue,
+                            scenarioID: episode.1["scenarioId"].stringValue,
+                            appendPerformance: episode.1["appendPerformance"].intValue,
+                            appendTechnique: episode.1["appendTechnique"].intValue,
+                            appendVisual: episode.1["appendVisual"].intValue,
+                            releaseLevel: episode.1["releaseLevel"].intValue,
+                            costs: episode.1["costs"]["entries"].map {
+                                CardEpisode.Resource(
+                                    resourceID: $0.1["resourceId"].int,
+                                    resourceType: .init(rawValue: $0.1["resourceType"].stringValue) ?? .item,
+                                    quantity: $0.1["quantity"].intValue,
+                                    lbBonus: $0.1["lbBonus"].intValue
+                                )
                             },
-                            forKey: .episodes
-                        )
-                    } else if key == "training" {
-                        stats.updateValue(
-                            [.init(
-                                performance: value["performance"].intValue,
-                                technique: value["technique"].intValue,
-                                visual: value["visual"].intValue
-                            )],
-                            forKey: .training
-                        )
+                            rewards: episode.1["costs"]["rewards"].map {
+                                CardEpisode.Resource(
+                                    resourceID: $0.1["resourceId"].int,
+                                    resourceType: .init(rawValue: $0.1["resourceType"].stringValue) ?? .item,
+                                    quantity: $0.1["quantity"].intValue,
+                                    lbBonus: $0.1["lbBonus"].intValue
+                                )
+                            },
+                            title: .init(
+                                jp: episode.1["title"][0].string,
+                                en: episode.1["title"][1].string,
+                                tw: episode.1["title"][2].string,
+                                cn: episode.1["title"][3].string,
+                                kr: episode.1["title"][4].string
+                            ),
+                            characterID: episode.1["characterId"].intValue
+                        ))
                     }
-                }
-                
-                func cardSource(atLocalizedIndex index: Int) -> Set<Card.CardSource>? {
-                    let array = respJSON["source"][index].compactMap {
-                        switch $0.0 {
-                        case "gacha":
-                            Card.CardSource.gacha(
-                                $0.1.map {
-                                    (key: Int($0.0) ?? 0, value: $0.1["probability"].doubleValue)
-                                }.reduce(into: [Int: Double]()) {
-                                    $0.updateValue(
-                                        $1.value,
-                                        forKey: $1.key
-                                    )
-                                }
+                    var stats = CardStat()
+                    for (key, value) in respJSON["stat"] {
+                        if let level = Int(key) {
+                            stats.updateValue(
+                                [.init(
+                                    performance: value["performance"].intValue,
+                                    technique: value["technique"].intValue,
+                                    visual: value["visual"].intValue
+                                )],
+                                forKey: .level(level)
                             )
-                        case "event":
-                            Card.CardSource.event(
-                                $0.1.map {
-                                    (key: Int($0.0) ?? 0, value: $0.1["point"].intValue)
-                                }.reduce(into: [Int: Int]()) {
-                                    $0.updateValue(
-                                        $1.value,
-                                        forKey: $1.key
-                                    )
-                                }
+                        } else if key == "episodes" {
+                            stats.updateValue(
+                                value.map {
+                                    Stat(performance: $0.1["performance"].intValue,
+                                         technique: $0.1["technique"].intValue,
+                                         visual: $0.1["visual"].intValue)
+                                },
+                                forKey: .episodes
                             )
-                        case "login":
-                            Card.CardSource.login(ids: $0.1.map { Int($0.0) ?? 0 })
-                        default:
-                            nil
+                        } else if key == "training" {
+                            stats.updateValue(
+                                [.init(
+                                    performance: value["performance"].intValue,
+                                    technique: value["technique"].intValue,
+                                    visual: value["visual"].intValue
+                                )],
+                                forKey: .training
+                            )
                         }
                     }
-                    guard !array.isEmpty else { return nil }
-                    return .init(array)
+                    
+                    func cardSource(atLocalizedIndex index: Int) -> Set<Card.CardSource>? {
+                        let array = respJSON["source"][index].compactMap {
+                            switch $0.0 {
+                            case "gacha":
+                                Card.CardSource.gacha(
+                                    $0.1.map {
+                                        (key: Int($0.0) ?? 0, value: $0.1["probability"].doubleValue)
+                                    }.reduce(into: [Int: Double]()) {
+                                        $0.updateValue(
+                                            $1.value,
+                                            forKey: $1.key
+                                        )
+                                    }
+                                )
+                            case "event":
+                                Card.CardSource.event(
+                                    $0.1.map {
+                                        (key: Int($0.0) ?? 0, value: $0.1["point"].intValue)
+                                    }.reduce(into: [Int: Int]()) {
+                                        $0.updateValue(
+                                            $1.value,
+                                            forKey: $1.key
+                                        )
+                                    }
+                                )
+                            case "login":
+                                Card.CardSource.login(ids: $0.1.map { Int($0.0) ?? 0 })
+                            default:
+                                nil
+                            }
+                        }
+                        guard !array.isEmpty else { return nil }
+                        return .init(array)
+                    }
+                    return Card(
+                        id: id,
+                        characterID: respJSON["characterId"].intValue,
+                        rarity: respJSON["rarity"].intValue,
+                        attribute: .init(rawValue: respJSON["attribute"].stringValue) ?? .pure,
+                        levelLimit: respJSON["levelLimit"].intValue,
+                        resourceSetName: respJSON["resourceSetName"].stringValue,
+                        sdResourceName: respJSON["sdResourceName"].stringValue,
+                        episodes: episodes,
+                        costumeID: respJSON["costumeId"].intValue,
+                        gachaText: .init(
+                            jp: respJSON["gachaText"][0].string,
+                            en: respJSON["gachaText"][1].string,
+                            tw: respJSON["gachaText"][2].string,
+                            cn: respJSON["gachaText"][3].string,
+                            kr: respJSON["gachaText"][4].string
+                        ),
+                        prefix: .init(
+                            jp: respJSON["prefix"][0].string,
+                            en: respJSON["prefix"][1].string,
+                            tw: respJSON["prefix"][2].string,
+                            cn: respJSON["prefix"][3].string,
+                            kr: respJSON["prefix"][4].string
+                        ),
+                        releasedAt: .init(
+                            jp: respJSON["releasedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][0].stringValue.dropLast(3))!)) : nil,
+                            en: respJSON["releasedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][1].stringValue.dropLast(3))!)) : nil,
+                            tw: respJSON["releasedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][2].stringValue.dropLast(3))!)) : nil,
+                            cn: respJSON["releasedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][3].stringValue.dropLast(3))!)) : nil,
+                            kr: respJSON["releasedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][4].stringValue.dropLast(3))!)) : nil
+                        ),
+                        skillName: .init(
+                            jp: respJSON["skillName"][0].string,
+                            en: respJSON["skillName"][1].string,
+                            tw: respJSON["skillName"][2].string,
+                            cn: respJSON["skillName"][3].string,
+                            kr: respJSON["skillName"][4].string
+                        ),
+                        skillID: respJSON["skillId"].intValue,
+                        source: .init(
+                            jp: cardSource(atLocalizedIndex: 0),
+                            en: cardSource(atLocalizedIndex: 1),
+                            tw: cardSource(atLocalizedIndex: 2),
+                            cn: cardSource(atLocalizedIndex: 3),
+                            kr: cardSource(atLocalizedIndex: 4)
+                        ),
+                        type: .init(rawValue: respJSON["type"].stringValue) ?? .others,
+                        stat: stats
+                    )
                 }
-                return .init(
-                    id: id,
-                    characterID: respJSON["characterId"].intValue,
-                    rarity: respJSON["rarity"].intValue,
-                    attribute: .init(rawValue: respJSON["attribute"].stringValue) ?? .pure,
-                    levelLimit: respJSON["levelLimit"].intValue,
-                    resourceSetName: respJSON["resourceSetName"].stringValue,
-                    sdResourceName: respJSON["sdResourceName"].stringValue,
-                    episodes: episodes,
-                    costumeID: respJSON["costumeId"].intValue,
-                    gachaText: .init(
-                        jp: respJSON["gachaText"][0].string,
-                        en: respJSON["gachaText"][1].string,
-                        tw: respJSON["gachaText"][2].string,
-                        cn: respJSON["gachaText"][3].string,
-                        kr: respJSON["gachaText"][4].string
-                    ),
-                    prefix: .init(
-                        jp: respJSON["prefix"][0].string,
-                        en: respJSON["prefix"][1].string,
-                        tw: respJSON["prefix"][2].string,
-                        cn: respJSON["prefix"][3].string,
-                        kr: respJSON["prefix"][4].string
-                    ),
-                    releasedAt: .init(
-                        jp: respJSON["releasedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][0].stringValue.dropLast(3))!)) : nil,
-                        en: respJSON["releasedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][1].stringValue.dropLast(3))!)) : nil,
-                        tw: respJSON["releasedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][2].stringValue.dropLast(3))!)) : nil,
-                        cn: respJSON["releasedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][3].stringValue.dropLast(3))!)) : nil,
-                        kr: respJSON["releasedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][4].stringValue.dropLast(3))!)) : nil
-                    ),
-                    skillName: .init(
-                        jp: respJSON["skillName"][0].string,
-                        en: respJSON["skillName"][1].string,
-                        tw: respJSON["skillName"][2].string,
-                        cn: respJSON["skillName"][3].string,
-                        kr: respJSON["skillName"][4].string
-                    ),
-                    skillID: respJSON["skillId"].intValue,
-                    source: .init(
-                        jp: cardSource(atLocalizedIndex: 0),
-                        en: cardSource(atLocalizedIndex: 1),
-                        tw: cardSource(atLocalizedIndex: 2),
-                        cn: cardSource(atLocalizedIndex: 3),
-                        kr: cardSource(atLocalizedIndex: 4)
-                    ),
-                    type: .init(rawValue: respJSON["type"].stringValue) ?? .others,
-                    stat: stats
-                )
+                return await task.value
             }
             return nil
         }

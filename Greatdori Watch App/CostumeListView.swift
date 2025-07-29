@@ -15,6 +15,7 @@ struct CostumeListView: View {
     @State var isSearchPresented = false
     @State var searchInput = ""
     @State var searchedCostumes: [DoriFrontend.Costume.PreviewCostume]?
+    @State var availability = true
     var body: some View {
         List {
             if let costumes = searchedCostumes ?? costumes {
@@ -24,10 +25,14 @@ struct CostumeListView: View {
                     }
                 }
             } else {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
+                if availability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入服装时出错", systemImage: "tshirt.fill", retryHandler: getCostumes)
                 }
             }
         }
@@ -68,10 +73,15 @@ struct CostumeListView: View {
     }
     
     func getCostumes() async {
+        availability = true
         DoriCache.withCache(id: "CostumeList_\(filter.identity)") {
             await DoriFrontend.Costume.list(filter: filter)
         }.onUpdate {
-            costumes = $0
+            if let costumes = $0 {
+                self.costumes = costumes
+            } else {
+                availability = false
+            }
         }
     }
 }
