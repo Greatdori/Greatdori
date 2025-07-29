@@ -84,6 +84,9 @@ struct HomeView: View {
         .background(
             GeometryReader { geometry in
                 Color.clear
+                    .onAppear {
+                        pageWidth = geometry.size.width
+                    }
                     .onChange(of: geometry.size.width) {
                         pageWidth = geometry.size.width
                     }
