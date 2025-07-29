@@ -27,7 +27,9 @@ struct ContentView: View {
                     Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
                     Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
                     Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
+                    #if os(iOS)
                     Label("App.settings", systemImage: "gear").tag(AppSection.settings)
+                    #endif
                 }
                 .navigationTitle("Greatdori")
             } detail: {

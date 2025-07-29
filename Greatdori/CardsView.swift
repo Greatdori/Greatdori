@@ -51,8 +51,10 @@ struct EventCardView: View {
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.gray.opacity(0.15))
+                    .aspectRatio(3.0, contentMode: .fit)
             }
             .resizable()
+            .antialiased(true)
             .scaledToFit()
             .cornerRadius(10)
             

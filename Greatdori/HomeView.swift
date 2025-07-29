@@ -10,6 +10,7 @@ import DoriKit
 import SDWebImageSwiftUI
 
 let debug = false
+let loadingAnimationDuration = 0.1
 
 struct HomeView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
@@ -110,20 +111,23 @@ struct HomeNewsView: View {
             HStack {
                 VStack(alignment: .leading) {
                     HStack {
-                        Text("Home.news")
-                            .font(.title2)
-                            .bold()
-                        Spacer()
-                        if news == nil {
-                            ProgressView()
+                        if let news {
+                            Text("Home.news")
+                                .font(.title2)
+                                .bold()
+                        } else {
+                            Text("Home.news")
+                                .font(.title2)
+                                .bold()
+                                .redacted(reason: .placeholder)
                         }
+                        Spacer()
                     }
                     Rectangle()
                         .frame(height: 2)
                         .opacity(0)
                     if let news {
                         ForEach(0..<news.prefix(5).count, id: \.self) { i in
-                            
                             VStack(alignment: .leading) {
                                 Text(news[i].title)
                                     .foregroundStyle(.primary)
@@ -139,11 +143,32 @@ struct HomeNewsView: View {
                                     .opacity(0)
                             }
                         }
+                    } else {
+                        ForEach(0..<5, id: \.self) { i in
+                            VStack(alignment: .leading) {
+                                Text(verbatim: "Lorem ipsum dolor sit amet consectetur adipiscing elit.")
+                                    .lineLimit(1)
+                                    .foregroundStyle(.primary)
+                                    .bold()
+                                    .redacted(reason: .placeholder)
+                                Text(verbatim: "2000/01/01 12:00")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .redacted(reason: .placeholder)
+                            }
+                            
+                            if i != 4 {
+                                Rectangle()
+                                    .frame(height: 1)
+                                    .opacity(0)
+                            }
+                        }
                     }
                 }
                 Spacer()
             }
         })
+        .animation(.easeInOut(duration: loadingAnimationDuration))
         .buttonStyle(.plain)
         .foregroundStyle(.primary)
         .task {
@@ -175,10 +200,15 @@ struct HomeBirthdayView: View {
                         Text("Home.birthday.happy-birthday")
                             .font(.title2)
                             .bold()
+                    } else if birthdays != nil {
+                        Text("Home.birthday")
+                            .font(.title2)
+                            .bold()
                     } else {
                         Text("Home.birthday")
                             .font(.title2)
                             .bold()
+                            .redacted(reason: .placeholder)
                     }
                     Spacer()
                     
@@ -195,10 +225,6 @@ struct HomeBirthdayView: View {
                         }, label: {
                             Text(verbatim: "[DEBUG REFRESH DATE]")
                         })
-                    }
-                    
-                    if birthdays == nil {
-                        ProgressView()
                     }
                 }
                 if let birthdays {
@@ -275,10 +301,22 @@ struct HomeBirthdayView: View {
                             }
                         }
                     }
+                } else {
+                    HStack {
+                        Text("Lorem ipsum")
+                            .redacted(reason: .placeholder)
+                        Rectangle()
+                            .opacity(0)
+                            .frame(width: 2, height: 2)
+                        Text("dolor sit")
+                            .redacted(reason: .placeholder)
+                        Spacer()
+                    }
                 }
             }
             Spacer()
         }
+        .animation(.easeInOut(duration: loadingAnimationDuration))
         .buttonStyle(.plain)
         .foregroundStyle(.primary)
         .task {
@@ -308,6 +346,8 @@ struct HomeBirthdayView: View {
 
 struct HomeEventsView: View {
     @State var latestEvents: DoriAPI.LocalizedData<DoriFrontend.Event.PreviewEvent>?
+    @State var imageOpacity: Double = 0
+    @State var placeholderOpacity: Double = 1
     var locale: DoriAPI.Locale = .jp
     var dateFormatter = DateFormatter()
     init(locale: DoriAPI.Locale = .jp) {
@@ -317,23 +357,51 @@ struct HomeEventsView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            if let latestEvents {
-                NavigationLink(destination: {
-                    
-                }, label: {
-                    EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
-                })
-                .buttonStyle(.plain)
+//        NavigationStack {
+        ZStack {
+            Group {
+                if let latestEvents {
+                    NavigationLink(destination: {
+                        
+                    }, label: {
+                        EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
+                    })
+                    .buttonStyle(.plain)
+                }
             }
+                .opacity(imageOpacity)
+            Group {
+                if latestEvents == nil {
+                    VStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.15))
+                            .aspectRatio(3.0, contentMode: .fit)
+                        Text("Lorem ipsum dolor sit amet consectetur")
+                            .bold()
+                            .font(.title3)
+                            .redacted(reason: .placeholder)
+                        Text("Lorem ipsum dolor")
+                            .redacted(reason: .placeholder)
+                    }
+                }
+            }
+            .opacity(placeholderOpacity)
         }
+//
         .foregroundStyle(.primary)
+//        .animation(.easeInOut(duration: 0.1))
         .task {
-            DoriCache.withCache(id: "Home_LatestEvents") {
-                await DoriFrontend.Event.localizedLatestEvent()
-            } .onUpdate {
-                latestEvents = $0
-            }
+//            withAnimation {
+                DoriCache.withCache(id: "Home_LatestEvents") {
+                    await DoriFrontend.Event.localizedLatestEvent()
+                } .onUpdate {
+                    latestEvents = $0
+                    withAnimation(.easeInOut(duration: loadingAnimationDuration), {
+                        placeholderOpacity = 0
+                        imageOpacity = 1
+                    })
+                }
+//            }
         }
     }
 }
