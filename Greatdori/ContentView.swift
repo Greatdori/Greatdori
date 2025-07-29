@@ -9,30 +9,31 @@ import SwiftUI
 
 
 enum AppSection: Hashable {
-  case home, community, leaderboard, info, tools
+  case home, community, leaderboard, info, tools, settings
 }
 
 struct ContentView: View {
-  @State private var selection: AppSection? = .home
-  @Environment(\.horizontalSizeClass) var sizeClass
-  @Environment(\.scenePhase) var scenePhase
-  @Environment(\.platform) var platform // 自定义 platform 判断（见下方拓展）
-  
-  var body: some View {
-    if platform == .mac || sizeClass == .regular {
-      NavigationSplitView {
-        List(selection: $selection) {
-          Label("App.home", systemImage: "house").tag(AppSection.home)
-          Label("App.community", systemImage: "at").tag(AppSection.community)
-          Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
-          Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
-          Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
-        }
-        .navigationTitle("Greatdori")
-      } detail: {
-        detailView(for: selection)
-      }
-    } else {
+    @State private var selection: AppSection? = .home
+    @Environment(\.horizontalSizeClass) var sizeClass
+    @Environment(\.scenePhase) var scenePhase
+    @Environment(\.platform) var platform // 自定义 platform 判断（见下方拓展）
+    
+    var body: some View {
+        if platform == .mac || sizeClass == .regular {
+            NavigationSplitView {
+                List(selection: $selection) {
+                    Label("App.home", systemImage: "house").tag(AppSection.home)
+                    Label("App.community", systemImage: "at").tag(AppSection.community)
+                    Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
+                    Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
+                    Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
+                    Label("App.settings", systemImage: "gear").tag(AppSection.settings)
+                }
+                .navigationTitle("Greatdori")
+            } detail: {
+                detailView(for: selection)
+            }
+        } else {
       TabView(selection: $selection) {
         detailView(for: .home)
           .tabItem { Label("App.home", systemImage: "house") }
@@ -65,6 +66,7 @@ struct ContentView: View {
     case .leaderboard: HomeView()
     case .info: HomeView()
     case .tools: HomeView()
+    case .settings: SettingsView()
     case nil: EmptyView()
     }
   }
@@ -126,4 +128,21 @@ func groupedContentBackgroundColor() -> Color {
 #elseif os(macOS)
     return Color(NSColor.windowBackgroundColor)
 #endif
+}
+
+struct DismissButton<L: View>: View {
+    var action: () -> Void
+    var label: () -> L
+    var doDismiss: Bool = true
+    @Environment(\.dismiss) var dismiss
+    var body: some View {
+        Button(action: {
+            action()
+            if doDismiss {
+                dismiss()
+            }
+        }, label: {
+            label()
+        })
+    }
 }

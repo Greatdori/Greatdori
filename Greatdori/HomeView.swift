@@ -12,51 +12,46 @@ import SDWebImageSwiftUI
 let debug = false
 
 struct HomeView: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
+//    @Environment(\.scenePhase) var scenePhase
+    @Environment(\.platform) var platform
     @Environment(\.colorScheme) var colorScheme
     @State var pageWidth: CGFloat = 600
+    @State var showSettingsSheet = false
+//    var homeEventsOrder: [DoriAPI.Locale] = [.jp, .cn, .tw, .en]
+    @AppStorage("homeEventServer1") var homeEventServer1 = "jp"
+    @AppStorage("homeEventServer2") var homeEventServer2 = "cn"
+    @AppStorage("homeEventServer3") var homeEventServer3 = "tw"
+    @AppStorage("homeEventServer4") var homeEventServer4 = "en"
+    let homeEventRegionDict: [String: DoriAPI.Locale] = ["jp": .jp, "cn": .cn, "tw": .tw, "en": .en, "kr": .kr]
     var body: some View {
         NavigationStack {
             ScrollView {
                 if pageWidth > 675 {
                     HStack {
                         VStack {
-                            CustomGroupBox {
-                                HomeNewsView()
-                            }
-                            CustomGroupBox {
-                                HomeBirthdayView()
-                            }
+                            CustomGroupBox { HomeNewsView() }
+                            CustomGroupBox { HomeBirthdayView() }
+                            CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer4] ?? .jp) }
                             Spacer()
                         }
                         VStack {
-                            CustomGroupBox {
-                                HomeEventsView(locale: .jp)
-                            }
-                            CustomGroupBox {
-                                HomeEventsView(locale: .cn)
-                            }
-                            CustomGroupBox {
-                                HomeEventsView(locale: .tw)
-                            }
-                            CustomGroupBox {
-                                HomeEventsView(locale: .en)
-                            }
-                            
+                            CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer1] ?? .jp) }
+                            CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer2] ?? .jp) }
+                            CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer3] ?? .jp) }
                             Spacer()
                         }
                     }
                     .padding()
                 } else {
                     VStack {
-                        CustomGroupBox {
-                            HomeNewsView()
-                        }
-                        CustomGroupBox {
-                            HomeBirthdayView()
-                        }
-                        CustomGroupBox {
-                            HomeEventsView()
-                        }
+                        CustomGroupBox { HomeNewsView() }
+                        CustomGroupBox { HomeBirthdayView() }
+                        CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer1] ?? .jp) }
+                        CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer2] ?? .jp) }
+                        CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer3] ?? .jp) }
+                        CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer4] ?? .jp) }
+                        
                         NavigationLink(destination: {
                             DebugBirthdayView()
                         }, label: {
@@ -66,21 +61,36 @@ struct HomeView: View {
                     }
                     .padding()
                 }
-                //                        .background(groupedContentBackgroundColor())
+                
             }
-            .background(
-                GeometryReader { geometry in
-                    Color.clear
-                        .onChange(of: geometry.size.width) {
-                            pageWidth = geometry.size.width
-                        }
-                }
-            )
+            
+            .background(groupedContentBackgroundColor())
             .navigationTitle("App.home")
+            .toolbar {
+                if platform != .mac && sizeClass == .compact {
+                    ToolbarItem(placement: .automatic, content: {
+                        Button(action: {
+                            showSettingsSheet = true
+                        }, label: {
+                            Image(systemName: "gear")
+                        })
+                    })
+                }
+            }
+            .sheet(isPresented: $showSettingsSheet, content: {
+               SettingsView()
+            })
         }
+        .background(
+            GeometryReader { geometry in
+                Color.clear
+                    .onChange(of: geometry.size.width) {
+                        pageWidth = geometry.size.width
+                    }
+            }
+        )
     }
 }
-
 
 struct HomeNewsView: View {
     @State var news: [DoriFrontend.News.ListItem]?
@@ -328,108 +338,5 @@ struct HomeEventsView: View {
 
 
 
-/*
-struct HomeView: View {
-    @State var news: [DoriFrontend.News.ListItem]?
-    @State var birthdays: [DoriFrontend.Character.BirthdayCharacter]?
-    @State var latestEvents: DoriAPI.LocalizedData<DoriFrontend.Event.PreviewEvent>?
-    var body: some View {
-        Form {
-
-            Section {
-                if let latestEvents {
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.jp!.id) }) {
-                        if latestEvents.jp!.startAt.jp != nil {
-                            EventCardView(latestEvents.jp!, inLocale: .jp, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.jp!, inLocale: .jp, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.en!.id) }) {
-                        if latestEvents.en!.startAt.en != nil {
-                            EventCardView(latestEvents.en!, inLocale: .en, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.en!, inLocale: .en, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.cn!.id) }) {
-                        if latestEvents.cn!.startAt.cn != nil {
-                            EventCardView(latestEvents.cn!, inLocale: .cn, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.cn!, inLocale: .cn, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.tw!.id) }) {
-                        if latestEvents.tw!.startAt.tw != nil {
-                            EventCardView(latestEvents.tw!, inLocale: .tw, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.tw!, inLocale: .tw, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 75)
-                    NavigationLink(destination: { EventDetailView(id: latestEvents.kr!.id) }) {
-                        if latestEvents.kr!.startAt.kr != nil {
-                            EventCardView(latestEvents.kr!, inLocale: .kr, showsCountdown: true)
-                        } else {
-                            EventCardView(latestEvents.kr!, inLocale: .kr, showsCountdown: true)
-                                .grayscale(1)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/HomeView.swift.gyb", line: 86)
-                } else {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                }
-            } header: {
-                Text("活动")
-            }
-        }
-        .navigationTitle("主页")
-        .task {
-            DoriCache.withCache(id: "Home_News") {
-                await DoriFrontend.News.list()
-            }.onUpdate {
-                news = $0
-            }
-        }
-        .task {
-            DoriCache.withCache(id: "Home_Birthdays") {
-                await DoriFrontend.Character.recentBirthdayCharacters()
-            }.onUpdate {
-                birthdays = $0
-            }
-        }
-        .task {
-            DoriCache.withCache(id: "Home_LatestEvents") {
-                await DoriFrontend.Event.localizedLatestEvent()
-            }.onUpdate {
-                latestEvents = $0
-            }
-        }
-    }
-}
-
-*/
 
 

@@ -68,6 +68,22 @@
         }
       }
     },
+    "App.settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
     "App.tools" : {
       "localizations" : {
         "en" : {
@@ -179,6 +195,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "资讯"
+          }
+        }
+      }
+    },
+    "Home.servers.selection.cn" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CN"
+          }
+        }
+      }
+    },
+    "Home.servers.selection.en" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EN"
+          }
+        }
+      }
+    },
+    "Home.servers.selection.jp" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JP"
+          }
+        }
+      }
+    },
+    "Home.servers.selection.tw" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TW"
+          }
+        }
+      }
+    },
+    "Home.servers.slot.%lld" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动卡片 #%lld"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
+    "Settings.home-edit" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "首页排布"
+          }
+        }
+      }
+    },
+    "Settings.home-edit.footer" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "单列显示下，活动卡片从上到下按照#1到#4排列；双列显示下，右侧列表从上到下按照卡片#1到卡片#3排列，左侧列表为卡片#4。"
           }
         }
       }
