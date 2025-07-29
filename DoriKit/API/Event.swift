@@ -556,6 +556,118 @@ extension DoriAPI {
             }
             return nil
         }
+        
+        /// Get top 10 data of an event in Bandori.
+        /// - Parameters:
+        ///   - id: ID of the event.
+        ///   - locale: Locale for event data.
+        ///   - interval: Interval of each data, the default value is 0.
+        /// - Returns: Top 10 data of requested event, nil if failed to fetch.
+        public static func topData(of id: Int, in locale: Locale, interval: TimeInterval = 0) async -> TopData? {
+            // Response example:
+            // {
+            //     "points": [
+            //         {
+            //             "time": 1753600364600,
+            //             "uid": 1000000001,
+            //             "value": 175490
+            //         },
+            //         ...
+            //     ],
+            //     "users": [
+            //         {
+            //             "uid": 1000000001,
+            //             "name": "工作人员一号",
+            //             "introduction": "觉悟～fighting",
+            //             "rank": 130,
+            //             "sid": 2095,
+            //             "strained": 1,
+            //             "degrees": [
+            //                 20061,
+            //                 20077
+            //             ]
+            //         },
+            //         ...
+            //     ]
+            // }
+            let serverID = switch locale {
+            case .jp: 0
+            case .en: 1
+            case .tw: 2
+            case .cn: 3
+            case .kr: 4
+            }
+            let request = await requestJSON("https://bestdori.com/api/eventtop/data?server=\(serverID)&event=\(id)&mid=0&interval=\(interval)")
+            if case let .success(respJSON) = request {
+                let task = Task.detached(priority: .userInitiated) {
+                    return TopData(
+                        points: respJSON["points"].map {
+                            .init(
+                                time: Date(timeIntervalSince1970: $0.1["time"].doubleValue / 1000),
+                                uid: $0.1["uid"].intValue,
+                                value: $0.1["value"].intValue
+                            )
+                        },
+                        users: respJSON["users"].map {
+                            .init(
+                                uid: $0.1["uid"].intValue,
+                                name: $0.1["name"].stringValue,
+                                introduction: $0.1["introduction"].stringValue,
+                                rank: $0.1["rank"].intValue,
+                                sid: $0.1["sid"].intValue,
+                                strained: $0.1["strained"].intValue != 0,
+                                degrees: $0.1["degrees"].map { $0.1.intValue }
+                            )
+                        }
+                    )
+                }
+                return await task.value
+            }
+            return nil
+        }
+        
+        /// Get cutoff data of event tracker.
+        /// - Parameters:
+        ///   - id: ID of event.
+        ///   - locale: Locale for event data.
+        ///   - tier: Tier. Possible values are 20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000 and 30000.
+        /// - Returns: Cutoff data of requested event, nil if failed to fetch.
+        public static func trackerData(of id: Int, in locale: Locale, tier: Int) async -> TrackerData? {
+            // Response example:
+            // {
+            //     "result": true, // We emit this field in Swift API and return nil if it's false.
+            //     "cutoffs": [
+            //         {
+            //             "time": 1753600511000,
+            //             "ep": 51280
+            //         },
+            //         ...
+            //     }
+            // }
+            let serverID = switch locale {
+            case .jp: 0
+            case .en: 1
+            case .tw: 2
+            case .cn: 3
+            case .kr: 4
+            }
+            let request = await requestJSON("https://bestdori.com/api/tracker/data?server=\(serverID)&event=\(id)&tier=\(tier)")
+            if case let .success(respJSON) = request {
+                let task = Task.detached(priority: .userInitiated) { () async -> TrackerData? in
+                    guard respJSON["result"].boolValue else { return nil }
+                    return TrackerData(
+                        cutoffs: respJSON["cutoffs"].map {
+                            .init(
+                                time: Date(timeIntervalSince1970: $0.1["time"].doubleValue / 1000),
+                                ep: $0.1["ep"].intValue
+                            )
+                        }
+                    )
+                }
+                return await task.value
+            }
+            return nil
+        }
     }
 }
 
@@ -703,6 +815,37 @@ extension DoriAPI.Event {
             public var title: DoriAPI.LocalizedData<String>
             public var synopsis: DoriAPI.LocalizedData<String>
             public var releaseConditions: DoriAPI.LocalizedData<String>
+        }
+    }
+    
+    /// Represent top 10 data of an event.
+    public struct TopData: DoriCache.Cacheable {
+        public var points: [Point]
+        public var users: [User]
+        
+        public struct Point: DoriCache.Cacheable {
+            public var time: Date
+            public var uid: Int
+            public var value: Int
+        }
+        public struct User: DoriCache.Cacheable {
+            public var uid: Int
+            public var name: String
+            public var introduction: String
+            public var rank: Int
+            public var sid: Int
+            public var strained: Bool // Int(JSON) -> Bool(Swift)
+            public var degrees: [Int]
+        }
+    }
+    
+    /// Represent cutoff data of an event.
+    public struct TrackerData: DoriCache.Cacheable {
+        public var cutoffs: [Cutoff]
+        
+        public struct Cutoff: DoriCache.Cacheable {
+            public var time: Date
+            public var ep: Int
         }
     }
     
