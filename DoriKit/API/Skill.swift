@@ -55,59 +55,62 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/skills/all.10.json")
             if case let .success(respJSON) = request {
-                var result = [Skill]()
-                for (key, value) in respJSON {
-                    var effects = Skill.ActivationEffect.Effects()
-                    for (k, v) in value["activationEffect"]["activateEffectTypes"] {
-                        if let type = Skill.ActivationEffect.ActivateEffectType(rawValue: k) {
-                            effects.updateValue(
-                                .init(
-                                    activateEffectValue: v["activateEffectValue"].map { $0.1.intValue },
-                                    activateEffectValueType: .init(rawValue: v["activateEffectValueType"].stringValue) ?? .rate,
-                                    activateCondition: .init(rawValue: v["activateCondition"].stringValue) ?? .good,
-                                    activateConditionLife: v["activateConditionLife"].int
-                                ),
-                                forKey: type
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [Skill]()
+                    for (key, value) in respJSON {
+                        var effects = Skill.ActivationEffect.Effects()
+                        for (k, v) in value["activationEffect"]["activateEffectTypes"] {
+                            if let type = Skill.ActivationEffect.ActivateEffectType(rawValue: k) {
+                                effects.updateValue(
+                                    .init(
+                                        activateEffectValue: v["activateEffectValue"].map { $0.1.intValue },
+                                        activateEffectValueType: .init(rawValue: v["activateEffectValueType"].stringValue) ?? .rate,
+                                        activateCondition: .init(rawValue: v["activateCondition"].stringValue) ?? .good,
+                                        activateConditionLife: v["activateConditionLife"].int
+                                    ),
+                                    forKey: type
+                                )
+                            }
+                        }
+                        var onceEffect: Skill.OnceEffect?
+                        if value["onceEffect"].exists() {
+                            onceEffect = .init(
+                                onceEffectType: .init(rawValue: value["onceEffect"]["onceEffectType"].stringValue) ?? .life,
+                                onceEffectValueType: .init(rawValue: value["onceEffect"]["onceEffectValueType"].stringValue) ?? .realValue,
+                                onceEffectConditionLifeType: .init(rawValue: value["onceEffect"]["onceEffectConditionLifeType"].stringValue) ?? .underLife,
+                                onceEffectConditionLife: value["onceEffect"]["onceEffectConditionLife"].intValue,
+                                onceEffectValue: value["onceEffect"]["onceEffectValue"].map { $0.1.intValue }
                             )
                         }
+                        result.append(.init(
+                            id: Int(key) ?? 0,
+                            simpleDescription: .init(
+                                jp: value["simpleDescription"][0].string,
+                                en: value["simpleDescription"][1].string,
+                                tw: value["simpleDescription"][2].string,
+                                cn: value["simpleDescription"][3].string,
+                                kr: value["simpleDescription"][4].string
+                            ),
+                            description: .init(
+                                jp: value["description"][0].string,
+                                en: value["description"][1].string,
+                                tw: value["description"][2].string,
+                                cn: value["description"][3].string,
+                                kr: value["description"][4].string
+                            ),
+                            duration: value["duration"].map { $0.1.doubleValue },
+                            activationEffect: .init(
+                                unificationActivateEffectValue: value["activationEffect"]["unificationActivateEffectValue"].int,
+                                unificationActivateConditionType: .init(rawValue: value["activationEffect"]["unificationActivateConditionType"].stringValue),
+                                unificationActivateConditionBandID: value["activationEffect"]["unificationActivateConditionBandId"].int,
+                                activateEffectTypes: effects
+                            ),
+                            onceEffect: onceEffect
+                        ))
                     }
-                    var onceEffect: Skill.OnceEffect?
-                    if value["onceEffect"].exists() {
-                        onceEffect = .init(
-                            onceEffectType: .init(rawValue: value["onceEffect"]["onceEffectType"].stringValue) ?? .life,
-                            onceEffectValueType: .init(rawValue: value["onceEffect"]["onceEffectValueType"].stringValue) ?? .realValue,
-                            onceEffectConditionLifeType: .init(rawValue: value["onceEffect"]["onceEffectConditionLifeType"].stringValue) ?? .underLife,
-                            onceEffectConditionLife: value["onceEffect"]["onceEffectConditionLife"].intValue,
-                            onceEffectValue: value["onceEffect"]["onceEffectValue"].map { $0.1.intValue }
-                        )
-                    }
-                    result.append(.init(
-                        id: Int(key) ?? 0,
-                        simpleDescription: .init(
-                            jp: value["simpleDescription"][0].string,
-                            en: value["simpleDescription"][1].string,
-                            tw: value["simpleDescription"][2].string,
-                            cn: value["simpleDescription"][3].string,
-                            kr: value["simpleDescription"][4].string
-                        ),
-                        description: .init(
-                            jp: value["description"][0].string,
-                            en: value["description"][1].string,
-                            tw: value["description"][2].string,
-                            cn: value["description"][3].string,
-                            kr: value["description"][4].string
-                        ),
-                        duration: value["duration"].map { $0.1.doubleValue },
-                        activationEffect: .init(
-                            unificationActivateEffectValue: value["activationEffect"]["unificationActivateEffectValue"].int,
-                            unificationActivateConditionType: .init(rawValue: value["activationEffect"]["unificationActivateConditionType"].stringValue),
-                            unificationActivateConditionBandID: value["activationEffect"]["unificationActivateConditionBandId"].int,
-                            activateEffectTypes: effects
-                        ),
-                        onceEffect: onceEffect
-                    ))
+                    return result.sorted { $0.id < $1.id }
                 }
-                return result.sorted { $0.id < $1.id }
+                return await task.value
             }
             return nil
         }

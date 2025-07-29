@@ -50,38 +50,41 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/gacha/all.5.json")
             if case let .success(respJSON) = request {
-                var result = [PreviewGacha]()
-                for (key, value) in respJSON {
-                    result.append(.init(
-                        id: Int(key) ?? 0,
-                        resourceName: value["resourceName"].stringValue,
-                        bannerAssetBundleName: value["bannerAssetBundleName"].stringValue,
-                        gachaName: .init(
-                            jp: value["gachaName"][0].string,
-                            en: value["gachaName"][1].string,
-                            tw: value["gachaName"][2].string,
-                            cn: value["gachaName"][3].string,
-                            kr: value["gachaName"][4].string
-                        ),
-                        publishedAt: .init(
-                            jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
-                        ),
-                        closedAt: .init(
-                            jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
-                        ),
-                        type: .init(rawValue: value["type"].stringValue) ?? .permanent,
-                        newCards: value["newCards"].map { $0.1.intValue }
-                    ))
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [PreviewGacha]()
+                    for (key, value) in respJSON {
+                        result.append(.init(
+                            id: Int(key) ?? 0,
+                            resourceName: value["resourceName"].stringValue,
+                            bannerAssetBundleName: value["bannerAssetBundleName"].stringValue,
+                            gachaName: .init(
+                                jp: value["gachaName"][0].string,
+                                en: value["gachaName"][1].string,
+                                tw: value["gachaName"][2].string,
+                                cn: value["gachaName"][3].string,
+                                kr: value["gachaName"][4].string
+                            ),
+                            publishedAt: .init(
+                                jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                            ),
+                            closedAt: .init(
+                                jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
+                                en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
+                                tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
+                                cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
+                                kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                            ),
+                            type: .init(rawValue: value["type"].stringValue) ?? .permanent,
+                            newCards: value["newCards"].map { $0.1.intValue }
+                        ))
+                    }
+                    return result.sorted { $0.id < $1.id }
                 }
-                return result.sorted { $0.id < $1.id }
+                return await task.value
             }
             return nil
         }
@@ -185,145 +188,148 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/gacha/\(id).json")
             if case let .success(respJSON) = request {
-                func details(atLocalizedIndex index: Int) -> [Int: Gacha.CardDetail]? {
-                    guard respJSON["details"][index].null == nil else {
-                        return nil
+                let task = Task.detached(priority: .userInitiated) {
+                    func details(atLocalizedIndex index: Int) -> [Int: Gacha.CardDetail]? {
+                        guard respJSON["details"][index].null == nil else {
+                            return nil
+                        }
+                        return respJSON["details"][index].map {
+                            (key: Int($0.0) ?? 0,
+                             value: Gacha.CardDetail(
+                                rarityIndex: $0.1["rarityIndex"].intValue,
+                                weight: $0.1["weight"].intValue,
+                                pickup: $0.1["pickup"].boolValue
+                             ))
+                        }.reduce(into: [Int: Gacha.CardDetail]()) {
+                            $0.updateValue($1.value, forKey: $1.key)
+                        }
                     }
-                    return respJSON["details"][index].map {
-                        (key: Int($0.0) ?? 0,
-                         value: Gacha.CardDetail(
-                            rarityIndex: $0.1["rarityIndex"].intValue,
-                            weight: $0.1["weight"].intValue,
-                            pickup: $0.1["pickup"].boolValue
-                         ))
-                    }.reduce(into: [Int: Gacha.CardDetail]()) {
-                        $0.updateValue($1.value, forKey: $1.key)
+                    func rates(atLocalizedIndex index: Int) -> [Int: Gacha.Rate]? {
+                        guard respJSON["rates"][index].null == nil else {
+                            return nil
+                        }
+                        return respJSON["rates"][index].map {
+                            (key: Int($0.0) ?? 0,
+                             value: Gacha.Rate(
+                                rate: $0.1["rate"].doubleValue,
+                                weightTotal: $0.1["weightTotal"].intValue
+                             ))
+                        }.reduce(into: [Int: Gacha.Rate]()) {
+                            $0.updateValue($1.value, forKey: $1.key)
+                        }
                     }
-                }
-                func rates(atLocalizedIndex index: Int) -> [Int: Gacha.Rate]? {
-                    guard respJSON["rates"][index].null == nil else {
-                        return nil
-                    }
-                    return respJSON["rates"][index].map {
-                        (key: Int($0.0) ?? 0,
-                         value: Gacha.Rate(
-                            rate: $0.1["rate"].doubleValue,
-                            weightTotal: $0.1["weightTotal"].intValue
-                         ))
-                    }.reduce(into: [Int: Gacha.Rate]()) {
-                        $0.updateValue($1.value, forKey: $1.key)
-                    }
-                }
-                return .init(
-                    id: id,
-                    details: .init(
-                        jp: details(atLocalizedIndex: 0),
-                        en: details(atLocalizedIndex: 1),
-                        tw: details(atLocalizedIndex: 2),
-                        cn: details(atLocalizedIndex: 3),
-                        kr: details(atLocalizedIndex: 4)
-                    ),
-                    rates: .init(
-                        jp: rates(atLocalizedIndex: 0),
-                        en: rates(atLocalizedIndex: 1),
-                        tw: rates(atLocalizedIndex: 2),
-                        cn: rates(atLocalizedIndex: 3),
-                        kr: rates(atLocalizedIndex: 4)
-                    ),
-                    paymentMethods: respJSON["paymentMethods"].map {
-                        Gacha.PaymentMethod(
-                            gachaID: $0.1["gachaId"].intValue,
-                            paymentMethod: .init(rawValue: $0.1["paymentMethod"].stringValue) ?? .freeStar,
-                            quantity: $0.1["quantity"].intValue,
-                            paymentMethodID: $0.1["paymentMethodId"].intValue,
-                            count: $0.1["count"].intValue,
-                            behavior: .init(rawValue: $0.1["behavior"].stringValue) ?? .normal,
-                            pickup: $0.1["pickup"].boolValue,
-                            maxSpinLimit: $0.1["maxSpinLimit"].int,
-                            costItemQuantity: $0.1["costItemQuantity"].intValue,
-                            appealImageFileName: $0.1["appealImageFileName"].string,
-                            discountType: $0.1["discountType"].intValue,
-                            ticketID: $0.1["ticketId"].int,
-                            gachaBonusPoint: $0.1["gachaBonusPoint"].int
-                        )
-                    },
-                    resourceName: respJSON["resourceName"].stringValue,
-                    bannerAssetBundleName: respJSON["bannerAssetBundleName"].stringValue,
-                    gachaName: .init(
-                        jp: respJSON["gachaName"][0].string,
-                        en: respJSON["gachaName"][1].string,
-                        tw: respJSON["gachaName"][2].string,
-                        cn: respJSON["gachaName"][3].string,
-                        kr: respJSON["gachaName"][4].string
-                    ),
-                    publishedAt: .init(
-                        jp: respJSON["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                        en: respJSON["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                        tw: respJSON["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                        cn: respJSON["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                        kr: respJSON["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][4].stringValue.dropLast(3))!)) : nil
-                    ),
-                    closedAt: .init(
-                        jp: respJSON["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                        en: respJSON["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                        tw: respJSON["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                        cn: respJSON["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                        kr: respJSON["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][4].stringValue.dropLast(3))!)) : nil
-                    ),
-                    description: .init(
-                        jp: respJSON["description"][0].string,
-                        en: respJSON["description"][1].string,
-                        tw: respJSON["description"][2].string,
-                        cn: respJSON["description"][3].string,
-                        kr: respJSON["description"][4].string
-                    ),
-                    annotation: .init(
-                        jp: respJSON["annotation"][0].string,
-                        en: respJSON["annotation"][1].string,
-                        tw: respJSON["annotation"][2].string,
-                        cn: respJSON["annotation"][3].string,
-                        kr: respJSON["annotation"][4].string
-                    ),
-                    gachaPeriod: .init(
-                        jp: respJSON["gachaPeriod"][0].string,
-                        en: respJSON["gachaPeriod"][1].string,
-                        tw: respJSON["gachaPeriod"][2].string,
-                        cn: respJSON["gachaPeriod"][3].string,
-                        kr: respJSON["gachaPeriod"][4].string
-                    ),
-                    type: .init(rawValue: respJSON["type"].stringValue) ?? .permanent,
-                    newCards: respJSON["newCards"].map { $0.1.intValue },
-                    information: .init(
+                    return Gacha(
+                        id: id,
+                        details: .init(
+                            jp: details(atLocalizedIndex: 0),
+                            en: details(atLocalizedIndex: 1),
+                            tw: details(atLocalizedIndex: 2),
+                            cn: details(atLocalizedIndex: 3),
+                            kr: details(atLocalizedIndex: 4)
+                        ),
+                        rates: .init(
+                            jp: rates(atLocalizedIndex: 0),
+                            en: rates(atLocalizedIndex: 1),
+                            tw: rates(atLocalizedIndex: 2),
+                            cn: rates(atLocalizedIndex: 3),
+                            kr: rates(atLocalizedIndex: 4)
+                        ),
+                        paymentMethods: respJSON["paymentMethods"].map {
+                            Gacha.PaymentMethod(
+                                gachaID: $0.1["gachaId"].intValue,
+                                paymentMethod: .init(rawValue: $0.1["paymentMethod"].stringValue) ?? .freeStar,
+                                quantity: $0.1["quantity"].intValue,
+                                paymentMethodID: $0.1["paymentMethodId"].intValue,
+                                count: $0.1["count"].intValue,
+                                behavior: .init(rawValue: $0.1["behavior"].stringValue) ?? .normal,
+                                pickup: $0.1["pickup"].boolValue,
+                                maxSpinLimit: $0.1["maxSpinLimit"].int,
+                                costItemQuantity: $0.1["costItemQuantity"].intValue,
+                                appealImageFileName: $0.1["appealImageFileName"].string,
+                                discountType: $0.1["discountType"].intValue,
+                                ticketID: $0.1["ticketId"].int,
+                                gachaBonusPoint: $0.1["gachaBonusPoint"].int
+                            )
+                        },
+                        resourceName: respJSON["resourceName"].stringValue,
+                        bannerAssetBundleName: respJSON["bannerAssetBundleName"].stringValue,
+                        gachaName: .init(
+                            jp: respJSON["gachaName"][0].string,
+                            en: respJSON["gachaName"][1].string,
+                            tw: respJSON["gachaName"][2].string,
+                            cn: respJSON["gachaName"][3].string,
+                            kr: respJSON["gachaName"][4].string
+                        ),
+                        publishedAt: .init(
+                            jp: respJSON["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
+                            en: respJSON["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
+                            tw: respJSON["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
+                            cn: respJSON["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
+                            kr: respJSON["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                        ),
+                        closedAt: .init(
+                            jp: respJSON["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][0].stringValue.dropLast(3))!)) : nil,
+                            en: respJSON["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][1].stringValue.dropLast(3))!)) : nil,
+                            tw: respJSON["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][2].stringValue.dropLast(3))!)) : nil,
+                            cn: respJSON["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][3].stringValue.dropLast(3))!)) : nil,
+                            kr: respJSON["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                        ),
                         description: .init(
-                            jp: respJSON["information"]["description"][0].string,
-                            en: respJSON["information"]["description"][1].string,
-                            tw: respJSON["information"]["description"][2].string,
-                            cn: respJSON["information"]["description"][3].string,
-                            kr: respJSON["information"]["description"][4].string
+                            jp: respJSON["description"][0].string,
+                            en: respJSON["description"][1].string,
+                            tw: respJSON["description"][2].string,
+                            cn: respJSON["description"][3].string,
+                            kr: respJSON["description"][4].string
                         ),
-                        term: .init(
-                            jp: respJSON["information"]["term"][0].string,
-                            en: respJSON["information"]["term"][1].string,
-                            tw: respJSON["information"]["term"][2].string,
-                            cn: respJSON["information"]["term"][3].string,
-                            kr: respJSON["information"]["term"][4].string
+                        annotation: .init(
+                            jp: respJSON["annotation"][0].string,
+                            en: respJSON["annotation"][1].string,
+                            tw: respJSON["annotation"][2].string,
+                            cn: respJSON["annotation"][3].string,
+                            kr: respJSON["annotation"][4].string
                         ),
-                        newMemberInfo: .init(
-                            jp: respJSON["information"]["newMemberInfo"][0].string,
-                            en: respJSON["information"]["newMemberInfo"][1].string,
-                            tw: respJSON["information"]["newMemberInfo"][2].string,
-                            cn: respJSON["information"]["newMemberInfo"][3].string,
-                            kr: respJSON["information"]["newMemberInfo"][4].string
+                        gachaPeriod: .init(
+                            jp: respJSON["gachaPeriod"][0].string,
+                            en: respJSON["gachaPeriod"][1].string,
+                            tw: respJSON["gachaPeriod"][2].string,
+                            cn: respJSON["gachaPeriod"][3].string,
+                            kr: respJSON["gachaPeriod"][4].string
                         ),
-                        notice: .init(
-                            jp: respJSON["information"]["notice"][0].string,
-                            en: respJSON["information"]["notice"][1].string,
-                            tw: respJSON["information"]["notice"][2].string,
-                            cn: respJSON["information"]["notice"][3].string,
-                            kr: respJSON["information"]["notice"][4].string
+                        type: .init(rawValue: respJSON["type"].stringValue) ?? .permanent,
+                        newCards: respJSON["newCards"].map { $0.1.intValue },
+                        information: .init(
+                            description: .init(
+                                jp: respJSON["information"]["description"][0].string,
+                                en: respJSON["information"]["description"][1].string,
+                                tw: respJSON["information"]["description"][2].string,
+                                cn: respJSON["information"]["description"][3].string,
+                                kr: respJSON["information"]["description"][4].string
+                            ),
+                            term: .init(
+                                jp: respJSON["information"]["term"][0].string,
+                                en: respJSON["information"]["term"][1].string,
+                                tw: respJSON["information"]["term"][2].string,
+                                cn: respJSON["information"]["term"][3].string,
+                                kr: respJSON["information"]["term"][4].string
+                            ),
+                            newMemberInfo: .init(
+                                jp: respJSON["information"]["newMemberInfo"][0].string,
+                                en: respJSON["information"]["newMemberInfo"][1].string,
+                                tw: respJSON["information"]["newMemberInfo"][2].string,
+                                cn: respJSON["information"]["newMemberInfo"][3].string,
+                                kr: respJSON["information"]["newMemberInfo"][4].string
+                            ),
+                            notice: .init(
+                                jp: respJSON["information"]["notice"][0].string,
+                                en: respJSON["information"]["notice"][1].string,
+                                tw: respJSON["information"]["notice"][2].string,
+                                cn: respJSON["information"]["notice"][3].string,
+                                kr: respJSON["information"]["notice"][4].string
+                            )
                         )
                     )
-                )
+                }
+                return await task.value
             }
             return nil
         }

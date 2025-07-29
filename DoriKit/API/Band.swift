@@ -38,20 +38,23 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/bands/main.1.json")
             if case let .success(respJSON) = request {
-                var result = [Band]()
-                for (key, value) in respJSON {
-                    result.append(.init(
-                        id: Int(key) ?? 0,
-                        bandName: .init(
-                            jp: value["bandName"][0].string,
-                            en: value["bandName"][1].string,
-                            tw: value["bandName"][2].string,
-                            cn: value["bandName"][3].string,
-                            kr: value["bandName"][4].string
-                        )
-                    ))
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [Band]()
+                    for (key, value) in respJSON {
+                        result.append(.init(
+                            id: Int(key) ?? 0,
+                            bandName: .init(
+                                jp: value["bandName"][0].string,
+                                en: value["bandName"][1].string,
+                                tw: value["bandName"][2].string,
+                                cn: value["bandName"][3].string,
+                                kr: value["bandName"][4].string
+                            )
+                        ))
+                    }
+                    return result.sorted { $0.id < $1.id }
                 }
-                return result.sorted { $0.id < $1.id }
+                return await task.value
             }
             return nil
         }
@@ -83,20 +86,23 @@ extension DoriAPI {
             // }
             let request = await requestJSON("https://bestdori.com/api/bands/all.1.json")
             if case let .success(respJSON) = request {
-                var result = [Band]()
-                for (key, value) in respJSON {
-                    result.append(.init(
-                        id: Int(key) ?? 0,
-                        bandName: .init(
-                            jp: value["bandName"][0].string,
-                            en: value["bandName"][1].string,
-                            tw: value["bandName"][2].string,
-                            cn: value["bandName"][3].string,
-                            kr: value["bandName"][4].string
-                        )
-                    ))
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [Band]()
+                    for (key, value) in respJSON {
+                        result.append(.init(
+                            id: Int(key) ?? 0,
+                            bandName: .init(
+                                jp: value["bandName"][0].string,
+                                en: value["bandName"][1].string,
+                                tw: value["bandName"][2].string,
+                                cn: value["bandName"][3].string,
+                                kr: value["bandName"][4].string
+                            )
+                        ))
+                    }
+                    return result.sorted { $0.id < $1.id }
                 }
-                return result.sorted { $0.id < $1.id }
+                return await task.value
             }
             return nil
         }
