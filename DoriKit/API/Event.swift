@@ -626,6 +626,39 @@ extension DoriAPI {
             return nil
         }
         
+        public static func trackerRates() async -> [TrackerRate]? {
+            // Response example:
+            // [{
+            //     "type": "story",
+            //     "server": 0,
+            //     "tier": 100,
+            //     "rate": 0.1864557607881584
+            // },...]
+            let request = await requestJSON("https://bestdori.com/api/tracker/rates.json")
+            if case let .success(respJSON) = request {
+                let task = Task.detached(priority: .userInitiated) {
+                    return respJSON.map {
+                        let locale = switch $0.1["server"].intValue {
+                        case 0: Locale.jp
+                        case 1: Locale.en
+                        case 2: Locale.tw
+                        case 3: Locale.cn
+                        case 4: Locale.kr
+                        default: Locale.jp
+                        }
+                        return TrackerRate(
+                            type: .init(rawValue: $0.1["type"].stringValue) ?? .story,
+                            server: locale,
+                            tier: $0.1["tier"].intValue,
+                            rate: $0.1["rate"].doubleValue
+                        )
+                    }
+                }
+                return await task.value
+            }
+            return nil
+        }
+        
         /// Get cutoff data of event tracker.
         /// - Parameters:
         ///   - id: ID of event.
@@ -839,6 +872,12 @@ extension DoriAPI.Event {
         }
     }
     
+    public struct TrackerRate: DoriCache.Cacheable {
+        public var type: EventType
+        public var server: DoriAPI.Locale
+        public var tier: Int
+        public var rate: Double
+    }
     /// Represent cutoff data of an event.
     public struct TrackerData: DoriCache.Cacheable {
         public var cutoffs: [Cutoff]
