@@ -111,7 +111,7 @@ struct HomeNewsView: View {
             HStack {
                 VStack(alignment: .leading) {
                     HStack {
-                        if let news {
+                        if news != nil {
                             Text("Home.news")
                                 .font(.title2)
                                 .bold()
@@ -357,54 +357,44 @@ struct HomeEventsView: View {
     }
     
     var body: some View {
-//        NavigationStack {
-        ZStack {
-            Group {
-                if let latestEvents {
-                    NavigationLink(destination: {
-                        
-                    }, label: {
-                        EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
-                    })
-                    .buttonStyle(.plain)
+        Group {
+            if let latestEvents {
+                NavigationLink(destination: {
+                    
+                }, label: {
+                    EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
+                })
+                .buttonStyle(.plain)
+            } else {
+                VStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.gray.opacity(0.15))
+                        .aspectRatio(3.0, contentMode: .fit)
+                    Text("Lorem ipsum dolor sit amet consectetur")
+                        .bold()
+                        .font(.title3)
+                        .redacted(reason: .placeholder)
+                    Text("Lorem ipsum dolor")
+                        .redacted(reason: .placeholder)
                 }
             }
-                .opacity(imageOpacity)
-            Group {
-                if latestEvents == nil {
-                    VStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.15))
-                            .aspectRatio(3.0, contentMode: .fit)
-                        Text("Lorem ipsum dolor sit amet consectetur")
-                            .bold()
-                            .font(.title3)
-                            .redacted(reason: .placeholder)
-                        Text("Lorem ipsum dolor")
-                            .redacted(reason: .placeholder)
-                    }
-                }
-            }
-            .opacity(placeholderOpacity)
         }
-//
         .foregroundStyle(.primary)
-//        .animation(.easeInOut(duration: 0.1))
+        .animation(.easeInOut(duration: loadingAnimationDuration))
         .task {
-//            withAnimation {
-                DoriCache.withCache(id: "Home_LatestEvents") {
-                    await DoriFrontend.Event.localizedLatestEvent()
-                } .onUpdate {
-                    latestEvents = $0
-                    withAnimation(.easeInOut(duration: loadingAnimationDuration), {
-                        placeholderOpacity = 0
-                        imageOpacity = 1
-                    })
-                }
-//            }
+            //            withAnimation {
+            DoriCache.withCache(id: "Home_LatestEvents") {
+                await DoriFrontend.Event.localizedLatestEvent()
+            } .onUpdate {
+                latestEvents = $0
+            }
+            //            }
         }
+        
     }
+        
 }
+
 
 
 
