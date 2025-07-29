@@ -37,8 +37,6 @@ struct EventCardView: View {
                 image
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
-                    .frame()
-                    .resizable()
                     .fill(Color.gray.opacity(0.15))
             }
             .resizable()
