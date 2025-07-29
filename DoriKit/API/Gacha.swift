@@ -359,6 +359,7 @@ extension DoriAPI.Gacha {
         public var newCards: [Int]
     }
     
+    /// Represent detailed data of gacha.
     public struct Gacha: Identifiable, DoriCache.Cacheable {
         /// A unique ID of gacha.
         public var id: Int

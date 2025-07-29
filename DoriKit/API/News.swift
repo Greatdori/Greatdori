@@ -10,9 +10,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about news in Bandori.
     public class News {
         private init() {}
         
+        /// Get all news about Bestdori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested news, nil if failed to fetch data.
         public static func all() async -> [PreviewItem]? {
             // Response example:
             // {
@@ -49,6 +55,11 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get recent news in different categories.
+        ///
+        /// The results in each categories have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested news, nil if failed to fetch data.
         public static func recent() async -> RecentItems? {
             // Response example:
             // {
@@ -236,6 +247,9 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get detail of news in Bestdori.
+        /// - Parameter id: ID of target news.
+        /// - Returns: Detail data of requested news, nil if failed to fetch.
         public static func detail(of id: Int) async -> Item? {
             // Response example:
             // {
@@ -344,14 +358,21 @@ extension DoriAPI {
 }
 
 extension DoriAPI.News {
+    /// Represent simplified data of news.
     public struct PreviewItem: Identifiable, DoriCache.Cacheable {
+        /// A unique ID of news.
         public var id: Int
+        /// Title of news.
         public var title: String
+        /// Authors of news.
         public var authors: [String]
+        /// Publishing timestamp of news.
         public var timestamp: Date // String(JSON) -> Date(Swift)
+        /// Tags of news.
         public var tags: [String]
     }
     
+    /// Represent recent news items in different categories.
     public struct RecentItems: DoriCache.Cacheable {
         public var songs: [Song]
         public var events: [Event]
@@ -383,11 +404,17 @@ extension DoriAPI.News {
         }
     }
     
+    /// Represent detailed data of news item.
     public struct Item: Identifiable, DoriCache.Cacheable {
+        /// A unique ID of news.
         public var id: Int
+        /// Title of news.
         public var title: String
+        /// Authors of news.
         public var authors: [String]
+        /// Publishing timestamp of news.
         public var timestamp: Date // String(JSON) -> Date(Swift)
+        /// Tags of news.
         public var tags: [String]
         public var content: [Content]
         
