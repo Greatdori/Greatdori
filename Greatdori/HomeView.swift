@@ -168,7 +168,7 @@ struct HomeNewsView: View {
                 Spacer()
             }
         })
-        .animation(.easeInOut(duration: loadingAnimationDuration))
+        .animation(.easeInOut(duration: loadingAnimationDuration), value: news?.count)
         .buttonStyle(.plain)
         .foregroundStyle(.primary)
         .task {
@@ -316,7 +316,7 @@ struct HomeBirthdayView: View {
             }
             Spacer()
         }
-        .animation(.easeInOut(duration: loadingAnimationDuration))
+        .animation(.easeInOut(duration: loadingAnimationDuration), value: birthdays?.count)
         .buttonStyle(.plain)
         .foregroundStyle(.primary)
         .task {
