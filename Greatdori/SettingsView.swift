@@ -32,8 +32,8 @@ struct SettingsView: View {
                 #endif
             }
             .formStyle(.grouped)
+            .navigationTitle("Settings")
         }
-        .navigationTitle("Settings")
     }
 }
 
