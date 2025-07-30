@@ -10,6 +10,8 @@ import DoriKit
 import SDWebImageSwiftUI
 
 let loadingAnimationDuration = 0.1
+let localeFromStringDict: [String: DoriAPI.Locale] = ["jp": .jp, "cn": .cn, "tw": .tw, "en": .en, "kr": .kr]
+let localeToStringDict: [DoriAPI.Locale: String] = [.jp: "JP", .en: "EN", .tw: "TW", .cn: "CN", .kr: "KR"]
 
 struct HomeView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
@@ -21,7 +23,6 @@ struct HomeView: View {
     @AppStorage("homeEventServer2") var homeEventServer2 = "cn"
     @AppStorage("homeEventServer3") var homeEventServer3 = "tw"
     @AppStorage("homeEventServer4") var homeEventServer4 = "en"
-    let homeEventRegionDict: [String: DoriAPI.Locale] = ["jp": .jp, "cn": .cn, "tw": .tw, "en": .en, "kr": .kr]
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -30,13 +31,13 @@ struct HomeView: View {
                         VStack {
                             CustomGroupBox { HomeNewsView() }
                             CustomGroupBox { HomeBirthdayView() }
-                            CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer4] ?? .jp) }
+                            CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp) }
                             Spacer()
                         }
                         VStack {
-                            CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer1] ?? .jp) }
-                            CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer2] ?? .jp) }
-                            CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer3] ?? .jp) }
+                            CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer1] ?? .jp) }
+                            CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer2] ?? .jp) }
+                            CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer3] ?? .jp) }
                             Spacer()
                         }
                     }
@@ -45,10 +46,10 @@ struct HomeView: View {
                     VStack {
                         CustomGroupBox { HomeNewsView() }
                         CustomGroupBox { HomeBirthdayView() }
-                        CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer1] ?? .jp) }
-                        CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer2] ?? .jp) }
-                        CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer3] ?? .jp) }
-                        CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer4] ?? .jp) }
+                        CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer1] ?? .jp) }
+                        CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer2] ?? .jp) }
+                        CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer3] ?? .jp) }
+                        CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp) }
                     }
                     .padding()
                 }

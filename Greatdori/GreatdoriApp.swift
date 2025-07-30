@@ -12,11 +12,11 @@ import SDWebImageSVGCoder
 
 @main
 struct GreatdoriApp: App {
-    #if os(macOS)
-    @NSApplicationDelegateAdaptor var appDelegate: AppDelegate
-    #else
-    @UIApplicationDelegateAdaptor var appDelegate: AppDelegate
-    #endif
+//    #if os(macOS)
+//    @NSApplicationDelegateAdaptor var appDelegate: AppDelegate
+//    #else
+//    @UIApplicationDelegateAdaptor var appDelegate: AppDelegate
+//    #endif
     var body: some Scene {
         WindowGroup {
             ContentView()

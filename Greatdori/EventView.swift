@@ -9,7 +9,7 @@ import SwiftUI
 import DoriKit
 import SDWebImageSwiftUI
 
-let localeLabelDict: [DoriAPI.Locale: String] = [.jp: "JP", .en: "EN", .tw: "TW", .cn: "CN", .kr: "KR"]
+
 
 struct EventDetailView: View {
     var id: Int

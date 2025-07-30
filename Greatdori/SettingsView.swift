@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
-
+import DoriKit
 
 struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section("Settings.server") {
+                    SettingsServerView()
+                }
                 Section(content: {
                     SettingsHomeView()
                 }, header: {
@@ -34,6 +37,63 @@ struct SettingsView: View {
     }
 }
 
+struct SettingsServerView: View {
+    @State var primaryLocale = "jp"
+    @State var secondaryLocale = "en"
+    @State var server: String = "jp"
+    var body: some View {
+        Group {
+            Picker(selection: $primaryLocale, content: {
+                Text("Home.servers.selection.jp")
+                    .tag("jp")
+                    .disabled(secondaryLocale == "jp")
+                Text("Home.servers.selection.en")
+                    .tag("en")
+                    .disabled(secondaryLocale == "en")
+                Text("Home.servers.selection.cn")
+                    .tag("cn")
+                    .disabled(secondaryLocale == "cn")
+                Text("Home.servers.selection.tw")
+                    .tag("tw")
+                    .disabled(secondaryLocale == "tw")
+                Text("Home.servers.selection.kr")
+                    .tag("kr")
+                    .disabled(secondaryLocale == "kr")
+            }, label: {
+                Text("Settings.servers.primaryLocale")
+            })
+            .onChange(of: primaryLocale, {
+                DoriAPI.preferredLocale = localeFromStringDict[primaryLocale] ?? .jp
+            })
+            Picker(selection: $secondaryLocale, content: {
+                Text("Home.servers.selection.jp")
+                    .tag("jp")
+                    .disabled(primaryLocale == "jp")
+                Text("Home.servers.selection.en")
+                    .tag("en")
+                    .disabled(primaryLocale == "en")
+                Text("Home.servers.selection.cn")
+                    .tag("cn")
+                    .disabled(primaryLocale == "cn")
+                Text("Home.servers.selection.tw")
+                    .tag("tw")
+                    .disabled(primaryLocale == "tw")
+                Text("Home.servers.selection.kr")
+                    .tag("kr")
+                    .disabled(primaryLocale == "kr")
+            }, label: {
+                Text("Settings.servers.secondaryLocale")
+            })
+            .onChange(of: secondaryLocale, {
+                DoriAPI.secondaryLocale = localeFromStringDict[secondaryLocale] ?? .en
+            })
+        }
+        .onAppear {
+            primaryLocale = localeToStringDict[DoriAPI.preferredLocale]?.lowercased() ?? "jp"
+            secondaryLocale = localeToStringDict[DoriAPI.secondaryLocale]?.lowercased() ?? "en"
+        }
+    }
+}
 
 struct SettingsHomeView: View {
     var body: some View {
@@ -71,7 +131,8 @@ struct SettingsHomeView: View {
 
 struct SettingsDebugView: View {
     @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false
-    @AppStorage("IsFirstLaunch") var isFirstLaunch = true
+    @AppStorage("isFirstLaunch") var isFirstLaunch = true
+    @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
     var body: some View {
         Toggle(isOn: $debugShowHomeBirthdayDatePicker, label: {
             Text(verbatim: "debugShowHomeBirthdayDatePicker")
@@ -79,6 +140,10 @@ struct SettingsDebugView: View {
         })
         Toggle(isOn: $isFirstLaunch, label: {
             Text(verbatim: "isFirstLaunch")
+                .fontDesign(.monospaced)
+        })
+        Toggle(isOn: $isFirstLaunchResettable, label: {
+            Text(verbatim: "isFirstLaunchResettable")
                 .fontDesign(.monospaced)
         })
         NavigationLink(destination: {

@@ -9,10 +9,11 @@
             "value" : ""
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "%@" : {
-
+      "shouldTranslate" : false
     },
     "App.community" : {
       "localizations" : {
@@ -126,6 +127,22 @@
         }
       }
     },
+    "Done" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
+          }
+        }
+      }
+    },
     "Event.countdown" : {
       "localizations" : {
         "en" : {
@@ -144,6 +161,12 @@
     },
     "Event.title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -154,6 +177,12 @@
     },
     "Event.type" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -164,6 +193,12 @@
     },
     "Event.unavailable" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event Information Unavailable"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -174,6 +209,12 @@
     },
     "Event.unavailable.description" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please try check your Internet connection and try again later."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -184,6 +225,12 @@
     },
     "Events.countdown.end-at.%@ %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ends in %1$@ %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -194,6 +241,12 @@
     },
     "Events.countdown.ended.%@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ended %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -204,6 +257,12 @@
     },
     "Events.countdown.start-at.%@ %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts in %1$@ %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -214,6 +273,12 @@
     },
     "Events.countdown.unstarted.%@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not Started %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -254,7 +319,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Happy Birthday🎉"
+            "value" : "Happy Birthday 🎉"
           }
         },
         "zh-Hans" : {
@@ -283,6 +348,12 @@
     },
     "Home.servers.selection.cn" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CN"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -293,6 +364,12 @@
     },
     "Home.servers.selection.en" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EN"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -303,6 +380,12 @@
     },
     "Home.servers.selection.jp" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JP"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -311,8 +394,30 @@
         }
       }
     },
+    "Home.servers.selection.kr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KR"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KR"
+          }
+        }
+      }
+    },
     "Home.servers.selection.tw" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TW"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -323,6 +428,12 @@
     },
     "Home.servers.slot.%lld" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event Card #%lld"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -333,6 +444,12 @@
     },
     "Settings" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -343,6 +460,12 @@
     },
     "Settings.debug" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -353,6 +476,12 @@
     },
     "Settings.home-edit" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home Arrangement"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -363,10 +492,144 @@
     },
     "Settings.home-edit.footer" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event cards are arranged from #1 to #4 in single-column view, and from #1 to #3 at the right side, #4 at the left side in double-column view."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "单列显示下，活动卡片从上到下按照#1到#4排列；双列显示下，右侧列表从上到下按照卡片#1到卡片#3排列，左侧列表为卡片#4。"
+          }
+        }
+      }
+    },
+    "Settings.server" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Region"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "地区"
+          }
+        }
+      }
+    },
+    "Settings.servers.primaryLocale" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primary Server"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主服务器"
+          }
+        }
+      }
+    },
+    "Settings.servers.secondaryLocale" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secondary Server"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "副服务器"
+          }
+        }
+      }
+    },
+    "Welcome.footnote" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can change these in Settings at all time."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你可以随时在“设置”内更改此设定。"
+          }
+        }
+      }
+    },
+    "Welcome.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greatdori! is a third-party wiki running on Apple platforms. Lets set up your settings first:"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greatdori!是一款运行于Apple平台的第三方Wiki客户端。让我们先设定好你的设置："
+          }
+        }
+      }
+    },
+    "Welcome.primaryLocale" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primary Server"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主服务器"
+          }
+        }
+      }
+    },
+    "Welcome.secondaryLocale" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secondary Server"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次服务器"
+          }
+        }
+      }
+    },
+    "Welcome.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to Greatdori!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "欢迎使用Greatdori!"
           }
         }
       }
