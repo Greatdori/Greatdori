@@ -51,6 +51,7 @@
 		8C9474632E360CF2003A90B4 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474622E360CEB003A90B4 /* Utils.swift */; };
 		8C9474652E367022003A90B4 /* FrontendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474642E36701E003A90B4 /* FrontendTests.swift */; };
 		8C9474672E37ADD8003A90B4 /* UnavailableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474662E37ADD5003A90B4 /* UnavailableView.swift */; };
+		8C9474692E39CA1F003A90B4 /* EventTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474682E39CA19003A90B4 /* EventTrackerView.swift */; };
 		8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */; };
 		8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD02E32B5B6004023F7 /* Constructor.swift */; };
 		8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */; };
@@ -246,6 +247,7 @@
 		8C9474622E360CEB003A90B4 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		8C9474642E36701E003A90B4 /* FrontendTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendTests.swift; sourceTree = "<group>"; };
 		8C9474662E37ADD5003A90B4 /* UnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableView.swift; sourceTree = "<group>"; };
+		8C9474682E39CA19003A90B4 /* EventTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTrackerView.swift; sourceTree = "<group>"; };
 		8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		8CBC1BD02E32B5B6004023F7 /* Constructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
 		8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCaches.swift; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 				8CBC1BE02E340AD4004023F7 /* CostumeListView.swift */,
 				8C94743E2E342F76003A90B4 /* EventListView.swift */,
 				8C9474462E34E1AB003A90B4 /* EventDetailView.swift */,
+				8C9474682E39CA19003A90B4 /* EventTrackerView.swift */,
 			);
 			path = "Greatdori Watch App";
 			sourceTree = "<group>";
@@ -745,6 +748,7 @@
 				8CBC1BDD2E336556004023F7 /* SearchView.swift in Sources */,
 				8C923D8D2E3056CB003AFC0A /* CardViews.swift.gyb in Sources */,
 				8CBC1BD72E3317DF004023F7 /* AudioPlaying.swift in Sources */,
+				8C9474692E39CA1F003A90B4 /* EventTrackerView.swift in Sources */,
 				8C9474472E34E1AF003A90B4 /* EventDetailView.swift in Sources */,
 				8C923D912E30663E003AFC0A /* CharacterListView.swift in Sources */,
 				8C0C998A2E296A5800549B5C /* GreatdoriApp.swift in Sources */,

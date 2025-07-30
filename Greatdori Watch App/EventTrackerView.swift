@@ -1,0 +1,188 @@
+//
+//  EventTrackerView.swift
+//  Greatdori
+//
+//  Created by Mark Chan on 7/30/25.
+//
+
+import Charts
+import SwiftUI
+import DoriKit
+
+struct EventTrackerView: View {
+    @State var eventList: [DoriFrontend.Event.PreviewEvent]?
+    @State var selectedEvent: DoriFrontend.Event.PreviewEvent?
+    @State var tier = 1000
+    @State var trackerData: DoriFrontend.Event.TrackerData?
+    var body: some View {
+        Form {
+            if let eventList {
+                Section {
+                    Picker("活动", selection: $selectedEvent) {
+                        Text("选择一项").tag(Optional<DoriFrontend.Event.PreviewEvent>.none)
+                        ForEach(eventList) { event in
+                            Text(event.eventName.forPreferredLocale() ?? "").tag(event)
+                        }
+                    }
+                    .onChange(of: selectedEvent) {
+                        Task {
+                            await updateTrackerData()
+                        }
+                        UserDefaults.standard.set(selectedEvent?.id, forKey: "EventTrackerSelectedEventID")
+                    }
+                    Picker("排名", selection: $tier) {
+                        ForEach([10, 20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000], id: \.self) { t in
+                            Text(verbatim: "T\(t)").tag(t)
+                        }
+                    }
+                    .onChange(of: tier) {
+                        Task {
+                            await updateTrackerData()
+                        }
+                    }
+                }
+                if let trackerData {
+                    Section {
+                        VStack(alignment: .leading) {
+                            Chart {
+                                ForEach(trackerData.cutoffs, id: \.time) { cutoff in
+                                    if let ep = cutoff.ep {
+                                        AreaMark(
+                                            x: .value("Date", cutoff.time),
+                                            y: .value("Ep", ep)
+                                        )
+                                        .foregroundStyle(.blue.opacity(0.7))
+                                        LineMark(
+                                            x: .value("Date", cutoff.time),
+                                            y: .value("Ep", ep)
+                                        )
+                                        .foregroundStyle(by: .value("Type", String(localized: "目前分数线")))
+                                    }
+                                }
+                                ForEach(trackerData.predictions, id: \.time) { prediction in
+                                    if let ep = prediction.ep {
+                                        LineMark(
+                                            x: .value("Date", prediction.time),
+                                            y: .value("Ep", ep)
+                                        )
+                                        .lineStyle(.init(lineWidth: 2, dash: [5, 3]))
+                                        .foregroundStyle(by: .value("Type", String(localized: "预测最终分数线")))
+                                    }
+                                }
+                            }
+                            .chartForegroundStyleScale([
+                                String(localized: "目前分数线"): .blue,
+                                String(localized: "预测最终分数线"): .blue
+                            ])
+                            .chartLegend(.hidden)
+                            .chartScrollableAxes(.horizontal)
+                            .chartXVisibleDomain(length: 60 * 60 * 24 * 3)
+                            .chartXAxis {
+                                AxisMarks(values: .stride(by: .day)) { value in
+                                    AxisGridLine()
+                                    AxisTick()
+                                    AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+                                }
+                            }
+                            .chartYAxis {
+                                AxisMarks(position: .leading, values: .stride(by: stride(of: trackerData))) { value in
+                                    AxisGridLine()
+                                    AxisTick()
+                                    AxisValueLabel {
+                                        if let number = value.as(Double.self) {
+                                            Text(formatNumber(number))
+                                        }
+                                    }
+                                }
+                            }
+                            .frame(height: 150)
+                            HStack {
+                                Rectangle()
+                                    .fill(Color.blue.opacity(0.7))
+                                    .strokeBorder(Color.blue, lineWidth: 2)
+                                    .frame(width: 20, height: 10)
+                                Text("目前分数线")
+                                    .font(.system(size: 8))
+                                Rectangle()
+                                    .stroke(style: .init(lineWidth: 2, dash: [5, 3]))
+                                    .fill(Color.blue)
+                                    .frame(width: 20, height: 10)
+                                Text("预测最终分数线")
+                                    .font(.system(size: 8))
+                            }
+                        }
+                    }
+                }
+            } else {
+                HStack {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
+                }
+            }
+        }
+        .navigationTitle("活动Pt&排名追踪器")
+        .task {
+            await getEvents()
+        }
+    }
+    
+    func getEvents() async {
+        DoriCache.withCache(id: "EventList") {
+            await DoriFrontend.Event.list()
+        }.onUpdate {
+            if let events = $0 {
+                self.eventList = events
+                let storedEventID = UserDefaults.standard.integer(forKey: "EventTrackerSelectedEventID")
+                if storedEventID > 0, let event = events.first(where: { $0.id == storedEventID }) {
+                    self.selectedEvent = event
+                } else {
+                    self.selectedEvent = events.last
+                }
+                Task {
+                    await updateTrackerData()
+                }
+            }
+        }
+    }
+    func updateTrackerData() async {
+        if let event = selectedEvent {
+            trackerData = await DoriFrontend.Event.trackerData(for: event, in: DoriAPI.preferredLocale, tier: tier, smooth: true)
+        }
+    }
+    
+    func stride(of trackerData: DoriFrontend.Event.TrackerData) -> Double {
+        let cutoffs = trackerData.cutoffs
+        let predictions = trackerData.predictions
+        var maxValue = 0.0
+        for cutoff in cutoffs where Double(cutoff.ep ?? 0) > maxValue {
+            maxValue = Double(cutoff.ep ?? 0)
+        }
+        for prediction in predictions where Double(prediction.ep ?? 0) > maxValue {
+            maxValue = Double(prediction.ep ?? 0)
+        }
+        switch maxValue {
+        case 1_000_000_000...:
+            return 1_000_000_000
+        case 1_000_000...:
+            return 1_000_000
+        case 1_000...:
+            return 1_000
+        default:
+            return 100
+        }
+    }
+}
+
+private func formatNumber(_ number: Double) -> String {
+    switch number {
+    case 1_000_000_000...:
+        return String(format: "%.0fB", number / 1_000_000_000)
+    case 1_000_000...:
+        return String(format: "%.0fM", number / 1_000_000)
+    case 1_000...:
+        return String(format: "%.0fK", number / 1_000)
+    default:
+        return String(format: "%.0f", number)
+    }
+}

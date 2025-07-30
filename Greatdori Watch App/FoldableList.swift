@@ -30,6 +30,7 @@ struct FoldableList<T, C: View>: View {
             })
         }
     }
+    @_disfavoredOverload
     init(
         _ items: [T],
         isExpanded: Binding<Bool>,
@@ -76,6 +77,7 @@ struct FoldableList<T, C: View>: View {
             })
         }
     }
+    @_disfavoredOverload
     init(
         _ items: [T],
         isExpanded: Binding<Bool>,
@@ -107,6 +109,7 @@ struct FoldableList<T, C: View>: View {
             })
         }
     }
+    @_disfavoredOverload
     init(
         _ items: [T],
         @ViewBuilder content: @escaping (T) -> C
@@ -153,6 +156,7 @@ struct FoldableList<T, C: View>: View {
             })
         }
     }
+    @_disfavoredOverload
     init(
         _ items: [T],
         isEqual comparison: @escaping (T, T) -> Bool,

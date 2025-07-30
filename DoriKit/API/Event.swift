@@ -706,7 +706,7 @@ extension DoriAPI {
 
 extension DoriAPI.Event {
     /// Represent simplified data of an event.
-    public struct PreviewEvent: Identifiable, DoriCache.Cacheable {
+    public struct PreviewEvent: Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of event.
         public var id: Int
         /// Type of event.
@@ -900,7 +900,7 @@ extension DoriAPI.Event {
     }
     
     /// Represent an attribute with bonus related to an event.
-    public struct EventAttribute: DoriCache.Cacheable {
+    public struct EventAttribute: Hashable, DoriCache.Cacheable {
         /// Related event ID.
         public var eventID: Int?
         /// Attribute.
@@ -915,7 +915,7 @@ extension DoriAPI.Event {
         }
     }
     /// Represent a character with bonus related to an event.
-    public struct EventCharacter: DoriCache.Cacheable {
+    public struct EventCharacter: Hashable, DoriCache.Cacheable {
         /// Related event ID.
         public var eventID: Int?
         /// Character ID.
@@ -934,7 +934,7 @@ extension DoriAPI.Event {
     /// Represent a member with bonus related to an event.
     ///
     /// A *member* related to event is a card with bonus during the event.
-    public struct EventMember: DoriCache.Cacheable {
+    public struct EventMember: Hashable, DoriCache.Cacheable {
         /// Related event ID.
         public var eventID: Int?
         /// Card ID.
@@ -950,12 +950,12 @@ extension DoriAPI.Event {
             self.seq = seq
         }
     }
-    public struct EventLimitBreak: DoriCache.Cacheable {
+    public struct EventLimitBreak: Hashable, DoriCache.Cacheable {
         public var rarity: Int
         public var rank: Int
         public var percent: Double
     }
-    public struct EventAttributeAndCharacterBonus: DoriCache.Cacheable {
+    public struct EventAttributeAndCharacterBonus: Hashable, DoriCache.Cacheable {
         public var eventID: Int
         public var pointPercent: Int
         public var parameterPercent: Int

@@ -57,6 +57,18 @@ struct NavigationListView: View {
             } header: {
                 Text("信息")
             }
+            Section {
+                NavigationLink(value: NavigationPage.eventTracker) {
+                    Label {
+                        Text("活动Pt&排名追踪器")
+                    } icon: {
+                        Image(systemName: "chart.xyaxis.line")
+                            .foregroundStyle(.accent)
+                    }
+                }
+            } header: {
+                Text("工具")
+            }
         }
         .navigationTitle("Greatdori!")
     }

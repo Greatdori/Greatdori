@@ -146,7 +146,7 @@ public class DoriAPI {
     }
     
     /// Attribute of cards
-    public enum Attribute: String, CaseIterable, DoriCache.Cacheable {
+    public enum Attribute: String, CaseIterable, Hashable, DoriCache.Cacheable {
         case pure
         case cool
         case happy

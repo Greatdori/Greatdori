@@ -286,7 +286,7 @@ extension DoriFrontend {
                 smooth: smooth
             ) else { return nil }
             let cutoffs = raw.actual.map { TrackerData.DataPoint(time: $0.x, ep: Int($0.y), epph: $0.xn != nil ? Int($0.xn!) : nil) }
-            let predictions = raw.predicted.map { TrackerData.DataPoint(time: $0.x, ep: Int($0.y), epph: $0.xn != nil ? Int($0.xn!) : nil) }
+            let predictions = raw.predicted.map { TrackerData.DataPoint(time: $0.x, ep: $0.y.isFinite ? Int($0.y) : nil, epph: $0.xn != nil ? Int($0.xn!) : nil) }
             return .init(cutoffs: cutoffs, predictions: predictions)
         }
     }
@@ -313,7 +313,7 @@ extension DoriFrontend.Event {
         
         public struct DataPoint: DoriCache.Cacheable {
             public var time: Date
-            public var ep: Int
+            public var ep: Int?
             public var epph: Int?
         }
     }
