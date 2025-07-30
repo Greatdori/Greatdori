@@ -10,7 +10,6 @@ import SwiftUI
 
 struct SettingsView: View {
     var body: some View {
-        #if os(iOS)
         NavigationStack {
             Form {
                 Section(content: {
@@ -29,12 +28,9 @@ struct SettingsView: View {
                 })
                 #endif
             }
+            .formStyle(.grouped)
         }
         .navigationTitle("Settings")
-        #else
-        
-//        .windowResizeBehavior(.enabled)
-        #endif
     }
 }
 
