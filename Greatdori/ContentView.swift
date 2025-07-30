@@ -170,6 +170,8 @@ struct DismissButton<L: View>: View {
 
 
 struct WelcomeView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) var dismiss
     @State var primaryLocale = "jp"
     @State var secondaryLocale = "en"
     @Binding var showWelcomeScreen: Bool
@@ -261,7 +263,7 @@ struct WelcomeView: View {
                 showWelcomeScreen = false
             }, label: {
                 ZStack {
-                    if #available(iOS 26, *) {
+                    if #available(iOS 26.0, *) {
                         Capsule()
                         .frame(height: 50)
                         .glassEffect(.identity)
@@ -270,8 +272,9 @@ struct WelcomeView: View {
                             .frame(height: 20)
                     }
                     Text("Done")
-                        .foregroundStyle(.primary)
-                        .colorInvert()
+                        .bold()
+                        .foregroundStyle(colorScheme == .dark ? .black : .white)
+//                        .colorInvert()
                 }
             })
             #endif
@@ -285,6 +288,7 @@ struct WelcomeView: View {
             ToolbarItem(placement: .confirmationAction, content: {
                 Button(action: {
                     //ANIMATION?
+//                    dismiss()
                     showWelcomeScreen = false
                 }, label: {
                     Text("Done")

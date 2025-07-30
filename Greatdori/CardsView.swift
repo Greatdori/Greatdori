@@ -48,14 +48,15 @@ struct EventCardView: View {
         VStack {
             WebImage(url: eventImageURL) { image in
                 image
+                    .resizable()
+                    .antialiased(true)
+                    .scaledToFit()
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.gray.opacity(0.15))
                     .aspectRatio(3.0, contentMode: .fit)
             }
-            .resizable()
-            .antialiased(true)
-            .scaledToFit()
+             
             .cornerRadius(10)
             
             if showsCountdown { // MARK: Accually Title & Countdown

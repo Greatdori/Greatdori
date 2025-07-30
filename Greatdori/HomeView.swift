@@ -359,6 +359,7 @@ struct HomeEventsView: View {
                 }
             }
             .opacity(imageOpacity)
+            .zIndex(2)
             Group {
                 if latestEvents == nil {
                     VStack {
@@ -375,6 +376,7 @@ struct HomeEventsView: View {
                 }
             }
             .opacity(placeholderOpacity)
+            .zIndex(1)
         }
         .foregroundStyle(.primary)
         .task {
@@ -383,7 +385,7 @@ struct HomeEventsView: View {
             } .onUpdate {
                 latestEvents = $0
                 withAnimation(.easeInOut(duration: loadingAnimationDuration), {
-                    placeholderOpacity = 0
+//                    placeholderOpacity = 0
                     imageOpacity = 1
                 })
             }

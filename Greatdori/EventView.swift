@@ -269,13 +269,14 @@ struct MultilingualText: View {
                     //Text("\(targetValue) (\(localeLabelDict[localeValue]!))")
                 }
             }
-            
         }, label: {
             VStack(alignment: .trailing) {
-                Text(source.forPreferredLocale() ?? "Error")
-                if let secondaryText = source.forSecondaryLocale(), secondaryText != source.forPreferredLocale() {
-                    Text(secondaryText)
-                        .foregroundStyle(.secondary)
+                Text(source.forPreferredLocale(allowsFallback: false) ?? source.forSecondaryLocale(allowsFallback: false) ?? source.jp ?? "")
+                if let secondaryText = source.forSecondaryLocale(allowsFallback: false)/*, secondaryText != source.forPreferredLocale()*/ {
+                    if secondaryText != (source.forPreferredLocale(allowsFallback: false) ?? source.forSecondaryLocale(allowsFallback: false) ?? source.jp ?? "") {
+                        Text(secondaryText)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
         })
