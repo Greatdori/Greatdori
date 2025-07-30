@@ -27,6 +27,19 @@ public class DoriAPI {
             UserDefaults.standard.set(newValue.rawValue, forKey: "_DoriKit_DoriAPIPreferredLocale")
         }
     }
+    @usableFromInline
+    internal static var _secondaryLocale = Locale(rawValue: UserDefaults.standard.string(forKey: "_DoriKit_DoriAPISecondaryLocale") ?? "jp") ?? .jp
+    /// The secondary preferred locale.
+    @inlinable
+    public static var secondaryLocale: Locale {
+        get {
+            _secondaryLocale
+        }
+        set {
+            _secondaryLocale = newValue
+            UserDefaults.standard.set(newValue.rawValue, forKey: "_DoriKit_DoriAPISecondaryLocale")
+        }
+    }
     
     /// Represent a specific country or region which localized in BanG Dream.
     @frozen
@@ -88,15 +101,30 @@ public class DoriAPI {
             forLocale(locale) != nil
         }
         /// Get localized data for preferred locale.
+        /// - Parameter allowsFallback: Whether to allow fallback to other locales
+        /// if data isn't available in preferred locale.
         /// - Returns: localized data for preferred locale, nil if not available.
         public func forPreferredLocale(allowsFallback: Bool = true) -> T? {
             forLocale(preferredLocale) ?? (allowsFallback ? (forLocale(.jp) ?? forLocale(.en) ?? forLocale(.tw) ?? forLocale(.cn) ?? forLocale(.kr) ?? logger.warning("Failed to lookup any candidate of \(T.self) for preferred locale", evaluate: nil)) : nil)
+        }
+        /// Get localized data for secondary locale.
+        /// - Parameter allowsFallback: Whether to allow fallback to other locales
+        /// if data isn't available in secondary locale.
+        /// - Returns: localized data for secondary locale, nil if not available.
+        public func forSecondaryLocale(allowsFallback: Bool = true) -> T? {
+            forLocale(secondaryLocale) ?? (allowsFallback ? (forLocale(.jp) ?? forLocale(.en) ?? forLocale(.tw) ?? forLocale(.cn) ?? forLocale(.kr) ?? logger.warning("Failed to lookup any candidate of \(T.self) for secondary locale", evaluate: nil)) : nil)
         }
         /// Check if the data available in preferred locale.
         /// - Returns: if the data available.
         @inlinable
         public func availableInPreferredLocale() -> Bool {
             forPreferredLocale(allowsFallback: false) != nil
+        }
+        /// Check if the data available in secondary locale.
+        /// - Returns: if the data available.
+        @inlinable
+        public func availableInSecondaryLocale() -> Bool {
+            forSecondaryLocale(allowsFallback: false) != nil
         }
         /// Check if the available locale of data.
         ///
