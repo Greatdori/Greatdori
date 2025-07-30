@@ -626,6 +626,8 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get rates information of event tracker.
+        /// - Returns: Rates information of event tracker.
         public static func trackerRates() async -> [TrackerRate]? {
             // Response example:
             // [{
@@ -696,6 +698,58 @@ extension DoriAPI {
                             )
                         }
                     )
+                }
+                return await task.value
+            }
+            return nil
+        }
+        
+        /// Get all events with stories in Bandori.
+        /// - Returns: Requested events with stories, nil if failed to fetch.
+        public static func allStories() async -> [EventStory]? {
+            let request = await requestJSON("https://bestdori.com/api/events/all.stories.json")
+            if case let .success(respJSON) = request {
+                let task = Task.detached(priority: .userInitiated) {
+                    var result = [EventStory]()
+                    for (key, value) in respJSON {
+                        result.append(.init(
+                            id: Int(key) ?? 0,
+                            eventName: .init(
+                                jp: value["eventName"][0].string,
+                                en: value["eventName"][1].string,
+                                tw: value["eventName"][2].string,
+                                cn: value["eventName"][3].string,
+                                kr: value["eventName"][4].string
+                            ),
+                            stories: value["stories"].map {
+                                .init(
+                                    scenarioID: $0.1["scenarioId"].stringValue,
+                                    caption: .init(
+                                        jp: $0.1["caption"][0].string,
+                                        en: $0.1["caption"][1].string,
+                                        tw: $0.1["caption"][2].string,
+                                        cn: $0.1["caption"][3].string,
+                                        kr: $0.1["caption"][4].string
+                                    ),
+                                    title: .init(
+                                        jp: $0.1["title"][0].string,
+                                        en: $0.1["title"][1].string,
+                                        tw: $0.1["title"][2].string,
+                                        cn: $0.1["title"][3].string,
+                                        kr: $0.1["title"][4].string
+                                    ),
+                                    synopsis: .init(
+                                        jp: $0.1["synopsis"][0].string,
+                                        en: $0.1["synopsis"][1].string,
+                                        tw: $0.1["synopsis"][2].string,
+                                        cn: $0.1["synopsis"][3].string,
+                                        kr: $0.1["synopsis"][4].string
+                                    )
+                                )
+                            }
+                        ))
+                    }
+                    return result.sorted { $0.id < $1.id }
                 }
                 return await task.value
             }
@@ -959,6 +1013,12 @@ extension DoriAPI.Event {
         public var eventID: Int
         public var pointPercent: Int
         public var parameterPercent: Int
+    }
+    
+    public struct EventStory: Identifiable, DoriCache.Cacheable {
+        public var id: Int
+        public var eventName: DoriAPI.LocalizedData<String>
+        public var stories: [DoriAPI.Story]
     }
 }
 
