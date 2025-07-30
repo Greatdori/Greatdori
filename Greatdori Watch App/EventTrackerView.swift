@@ -11,15 +11,16 @@ import DoriKit
 
 struct EventTrackerView: View {
     @State var eventList: [DoriFrontend.Event.PreviewEvent]?
+    @State var eventListAvailability = true
     @State var selectedEvent: DoriFrontend.Event.PreviewEvent?
     @State var tier = 1000
     @State var trackerData: DoriFrontend.Event.TrackerData?
+    @State var trackerAvailability = true
     var body: some View {
         Form {
             if let eventList {
                 Section {
                     Picker("活动", selection: $selectedEvent) {
-                        Text("选择一项").tag(Optional<DoriFrontend.Event.PreviewEvent>.none)
                         ForEach(eventList) { event in
                             Text(event.eventName.forPreferredLocale() ?? "").tag(event)
                         }
@@ -29,6 +30,13 @@ struct EventTrackerView: View {
                             await updateTrackerData()
                         }
                         UserDefaults.standard.set(selectedEvent?.id, forKey: "EventTrackerSelectedEventID")
+                    }
+                    if let selectedEvent {
+                        NavigationLink(destination: { EventDetailView(id: selectedEvent.id) }) {
+                            EventCardView(selectedEvent, inLocale: nil)
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                     }
                     Picker("排名", selection: $tier) {
                         ForEach([10, 20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000], id: \.self) { t in
@@ -41,8 +49,57 @@ struct EventTrackerView: View {
                         }
                     }
                 }
-                if let trackerData {
+                if let selectedEvent, let trackerData {
                     Section {
+                        Group {
+                            if let startDate = selectedEvent.startAt.forPreferredLocale(),
+                               let endDate = selectedEvent.endAt.forPreferredLocale() {
+                                VStack(alignment: .leading) {
+                                    Text("状态")
+                                        .font(.system(size: 16, weight: .medium))
+                                    Group {
+                                        if startDate > .now {
+                                            Text("未开始")
+                                        } else if endDate > .now {
+                                            Text("\(Int((Date.now.timeIntervalSince1970 - startDate.timeIntervalSince1970) / (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) * 100))% 完成率")
+                                            Text("\(Text(endDate, style: .relative))后结束")
+                                        } else {
+                                            Text("已完结")
+                                        }
+                                    }
+                                    .font(.system(size: 14))
+                                    .opacity(0.6)
+                                }
+                            }
+                            if let latestCutoff = trackerData.cutoffs.last?.ep {
+                                VStack(alignment: .leading) {
+                                    Text("最新分数线")
+                                        .font(.system(size: 16, weight: .medium))
+                                    Text(String(latestCutoff))
+                                        .font(.system(size: 14))
+                                        .opacity(0.6)
+                                }
+                            }
+                            if let latestPrediction = trackerData.predictions.last?.ep {
+                                VStack(alignment: .leading) {
+                                    Text("最新预测")
+                                        .font(.system(size: 16, weight: .medium))
+                                    Text(String(latestPrediction))
+                                        .font(.system(size: 14))
+                                        .opacity(0.6)
+                                }
+                            }
+                            if let latestUpdateTime = trackerData.cutoffs.last?.time {
+                                VStack(alignment: .leading) {
+                                    Text("更新时间")
+                                        .font(.system(size: 16, weight: .medium))
+                                    Text("\(Text(latestUpdateTime, style: .relative))前")
+                                        .font(.system(size: 14))
+                                        .opacity(0.6)
+                                }
+                            }
+                        }
+                        .listRowBackground(Color.clear)
                         VStack(alignment: .leading) {
                             Chart {
                                 ForEach(trackerData.cutoffs, id: \.time) { cutoff in
@@ -112,12 +169,30 @@ struct EventTrackerView: View {
                             }
                         }
                     }
+                } else {
+                    if trackerAvailability {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else {
+                        HStack {
+                            Spacer()
+                            Text("不可用")
+                            Spacer()
+                        }
+                    }
                 }
             } else {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
+                if eventListAvailability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入活动时出错", systemImage: "star.hexagon.fill", retryHandler: getEvents)
                 }
             }
         }
@@ -128,6 +203,7 @@ struct EventTrackerView: View {
     }
     
     func getEvents() async {
+        eventListAvailability = true
         DoriCache.withCache(id: "EventList") {
             await DoriFrontend.Event.list()
         }.onUpdate {
@@ -142,12 +218,20 @@ struct EventTrackerView: View {
                 Task {
                     await updateTrackerData()
                 }
+            } else {
+                eventListAvailability = false
             }
         }
     }
     func updateTrackerData() async {
         if let event = selectedEvent {
-            trackerData = await DoriFrontend.Event.trackerData(for: event, in: DoriAPI.preferredLocale, tier: tier, smooth: true)
+            trackerData = nil
+            trackerAvailability = true
+            if let trackerData = await DoriFrontend.Event.trackerData(for: event, in: DoriAPI.preferredLocale, tier: tier, smooth: true) {
+                self.trackerData = trackerData
+            } else {
+                trackerAvailability = false
+            }
         }
     }
     
