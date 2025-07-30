@@ -9,7 +9,6 @@ import SwiftUI
 import DoriKit
 import SDWebImageSwiftUI
 
-let debug = false
 let loadingAnimationDuration = 0.1
 
 struct HomeView: View {
@@ -50,13 +49,6 @@ struct HomeView: View {
                         CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer2] ?? .jp) }
                         CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer3] ?? .jp) }
                         CustomGroupBox { HomeEventsView(locale: homeEventRegionDict[homeEventServer4] ?? .jp) }
-                        
-                        NavigationLink(destination: {
-                            DebugBirthdayView()
-                        }, label: {
-                            Text(verbatim: "DebugBirthdayView()")
-                                .fontDesign(.monospaced)
-                        })
                     }
                     .padding()
                 }
@@ -181,6 +173,7 @@ struct HomeNewsView: View {
 
 struct HomeBirthdayView: View {
     @State var birthdays: [DoriFrontend.Character.BirthdayCharacter]?
+    @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false
     var formatter = DateFormatter()
     var calendar = Calendar(identifier: .gregorian)
     @State var debugDate: Date = Date.now
@@ -209,8 +202,7 @@ struct HomeBirthdayView: View {
                             .redacted(reason: .placeholder)
                     }
                     Spacer()
-                    
-                    if debug {
+                    if debugShowHomeBirthdayDatePicker {
                         DatePicker("", selection: $debugDate)
                         Button(action: {
                             Task {
@@ -301,12 +293,12 @@ struct HomeBirthdayView: View {
                     }
                 } else {
                     HStack {
-                        Text("Lorem ipsum")
+                        Text(verbatim: "Lorem ipsum")
                             .redacted(reason: .placeholder)
                         Rectangle()
                             .opacity(0)
                             .frame(width: 2, height: 2)
-                        Text("dolor sit")
+                        Text(verbatim: "dolor sit")
                             .redacted(reason: .placeholder)
                         Spacer()
                     }
@@ -358,7 +350,7 @@ struct HomeEventsView: View {
             Group {
                 if let latestEvents {
                     NavigationLink(destination: {
-                        
+                        EventDetailView(id: latestEvents.forLocale(locale)!.id)
                     }, label: {
                         EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
                     })
@@ -372,11 +364,11 @@ struct HomeEventsView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color.gray.opacity(0.15))
                             .aspectRatio(3.0, contentMode: .fit)
-                        Text("Lorem ipsum dolor sit amet consectetur")
+                        Text(verbatim: "Lorem ipsum dolor sit amet consectetur")
                             .bold()
                             .font(.title3)
                             .redacted(reason: .placeholder)
-                        Text("Lorem ipsum dolor")
+                        Text(verbatim: "Lorem ipsum dolor")
                             .redacted(reason: .placeholder)
                     }
                 }

@@ -2,6 +2,16 @@
   "sourceLanguage" : "zh-Hans",
   "strings" : {
     "" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
+    },
+    "%@" : {
 
     },
     "App.community" : {
@@ -48,6 +58,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "信息"
+          }
+        }
+      }
+    },
+    "App.info.characters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Characters"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "角色"
           }
         }
       }
@@ -100,8 +126,61 @@
         }
       }
     },
-    "dolor sit" : {
-
+    "Event.countdown" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Countdown"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "倒计时"
+          }
+        }
+      }
+    },
+    "Event.title" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标题"
+          }
+        }
+      }
+    },
+    "Event.type" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "类型"
+          }
+        }
+      }
+    },
+    "Event.unavailable" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动信息不可用"
+          }
+        }
+      }
+    },
+    "Event.unavailable.description" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请尝试检查你的互联网连接并稍后重试。"
+          }
+        }
+      }
     },
     "Events.countdown.end-at.%@ %@" : {
       "localizations" : {
@@ -252,21 +331,22 @@
         }
       }
     },
-    "Lorem ipsum" : {
-
-    },
-    "Lorem ipsum dolor" : {
-
-    },
-    "Lorem ipsum dolor sit amet consectetur" : {
-
-    },
     "Settings" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "设置"
+          }
+        }
+      }
+    },
+    "Settings.debug" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调试"
           }
         }
       }

@@ -7,23 +7,44 @@
 
 import SwiftUI
 
+
 struct SettingsView: View {
     var body: some View {
+        #if os(iOS)
         NavigationStack {
-            List {
+            Form {
                 Section(content: {
-                    HomeEditEventsPicker(id: 1)
-                    HomeEditEventsPicker(id: 2)
-                    HomeEditEventsPicker(id: 3)
-                    HomeEditEventsPicker(id: 4)
+                    SettingsHomeView()
                 }, header: {
                     Text("Settings.home-edit")
                 }, footer: {
                     Text("Settings.home-edit.footer")
                 })
+                
+                #if DEBUG
+                Section(content: {
+                    SettingsDebugView()
+                }, header: {
+                    Text("Settings.debug")
+                })
+                #endif
             }
         }
         .navigationTitle("Settings")
+        #else
+        
+//        .windowResizeBehavior(.enabled)
+        #endif
+    }
+}
+
+
+struct SettingsHomeView: View {
+    var body: some View {
+        HomeEditEventsPicker(id: 1)
+        HomeEditEventsPicker(id: 2)
+        HomeEditEventsPicker(id: 3)
+        HomeEditEventsPicker(id: 4)
     }
     
     struct HomeEditEventsPicker: View {
@@ -49,5 +70,26 @@ struct SettingsView: View {
                 Text("Home.servers.slot.\(id)")
             })
         }
+    }
+}
+
+struct SettingsDebugView: View {
+    @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false
+    @AppStorage("IsFirstLaunch") var isFirstLaunch = true
+    var body: some View {
+        Toggle(isOn: $debugShowHomeBirthdayDatePicker, label: {
+            Text(verbatim: "debugShowHomeBirthdayDatePicker")
+                .fontDesign(.monospaced)
+        })
+        Toggle(isOn: $isFirstLaunch, label: {
+            Text(verbatim: "isFirstLaunch")
+                .fontDesign(.monospaced)
+        })
+        NavigationLink(destination: {
+            DebugBirthdayView()
+        }, label: {
+            Text(verbatim: "DebugBirthdayView")
+                .fontDesign(.monospaced)
+        })
     }
 }

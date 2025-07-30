@@ -25,11 +25,14 @@ struct ContentView: View {
                     Label("App.home", systemImage: "house").tag(AppSection.home)
                     Label("App.community", systemImage: "at").tag(AppSection.community)
                     Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
-                    Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
+                    Section("App.info", content: {
+                        Label("App.info.characters", systemImage: "person.2").tag(AppSection.info)
+                    })
+//                    Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
                     Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
-                    #if os(iOS)
+//                    #if os(iOS)
                     Label("App.settings", systemImage: "gear").tag(AppSection.settings)
-                    #endif
+//                    #endif
                 }
                 .navigationTitle("Greatdori")
             } detail: {
