@@ -261,7 +261,9 @@ struct EventDetailView: View {
 struct MultilingualText: View {
     let source: DoriAPI.LocalizedData<String>
 //    let locale: Locale
+    @State var isHovering = false
     var body: some View {
+        #if !os(macOS)
         Menu(content: {
             ForEach([DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr], id: \.self) { localeValue in
                 if let targetValue = source.forLocale(localeValue) {
@@ -280,8 +282,33 @@ struct MultilingualText: View {
                 }
             }
         })
-        .menuStyle(.borderlessButton)
+        .menuStyle(.button)
+        .buttonStyle(.borderless)
         .menuIndicator(.hidden)
         .foregroundStyle(.primary)
+        #else
+        VStack(alignment: .trailing) {
+            Text(source.forPreferredLocale(allowsFallback: false) ?? source.forSecondaryLocale(allowsFallback: false) ?? source.jp ?? "")
+            if let secondaryText = source.forSecondaryLocale(allowsFallback: false)/*, secondaryText != source.forPreferredLocale()*/ {
+                if secondaryText != (source.forPreferredLocale(allowsFallback: false) ?? source.forSecondaryLocale(allowsFallback: false) ?? source.jp ?? "") {
+                    Text(secondaryText)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .onHover { isHovering in
+            self.isHovering = isHovering
+        }
+        .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+            VStack(alignment: .trailing) {
+                ForEach([DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr], id: \.self) { localeValue in
+                    if let targetValue = source.forLocale(localeValue) {
+                        Text("\(targetValue)")
+                    }
+                }
+            }
+            .padding()
+        }
+        #endif
     }
 }
