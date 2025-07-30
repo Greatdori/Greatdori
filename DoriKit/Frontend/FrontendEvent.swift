@@ -114,6 +114,181 @@ extension DoriFrontend {
                 degrees: degrees.filter { $0.baseImageName.forPreferredLocale() == "degree_event\(event.id)_point" }
             )
         }
+        
+        @inlinable
+        public static func trackerData(
+            for event: PreviewEvent,
+            in locale: DoriAPI.Locale,
+            tier: Int,
+            smooth: Bool = true
+        ) async -> TrackerData? {
+            guard let startAt = event.startAt.forLocale(locale) else { return nil }
+            guard let endAt = event.endAt.forLocale(locale) else { return nil }
+            return await _trackerData(
+                of: event.id,
+                eventType: event.eventType,
+                eventStartDate: startAt,
+                eventEndDate: endAt,
+                in: locale,
+                tier: tier,
+                smooth: smooth
+            )
+        }
+        @inlinable
+        public static func trackerData(
+            for event: Event,
+            in locale: DoriAPI.Locale,
+            tier: Int,
+            smooth: Bool = true
+        ) async -> TrackerData? {
+            guard let startAt = event.startAt.forLocale(locale) else { return nil }
+            guard let endAt = event.endAt.forLocale(locale) else { return nil }
+            return await _trackerData(
+                of: event.id,
+                eventType: event.eventType,
+                eventStartDate: startAt,
+                eventEndDate: endAt,
+                in: locale,
+                tier: tier,
+                smooth: smooth
+            )
+        }
+        public static func _trackerData(
+            of id: Int,
+            eventType: DoriAPI.Event.EventType,
+            eventStartDate: Date,
+            eventEndDate: Date,
+            in locale: DoriAPI.Locale,
+            tier: Int,
+            smooth: Bool
+        ) async -> TrackerData? {
+            struct TrackerDataPoint {
+                let time: TimeInterval // epoch milliseconds
+                let ep: Double
+            }
+            struct ChartPoint {
+                var x: Date
+                var y: Double
+                var epph: Double? = nil
+                var xn: Double? = nil
+            }
+            func withPrediction(
+                _ trackerData: [TrackerDataPoint],
+                start: TimeInterval,
+                end: TimeInterval,
+                rate: Double,
+                smooth: Bool
+            ) -> (actual: [ChartPoint], predicted: [ChartPoint])? {
+                func regression(_ e: [(Double, Double)]) -> (a: Double, b: Double, r2: Double) {
+                    var t = 0, a = 0.0, n = 0.0, i = e.count
+                    while t < i {
+                        a += e[t].0
+                        n += e[t].1
+                        t += 1
+                    }
+                    a /= Double(i)
+                    n /= Double(i)
+                    var r = 0.0, s = 0.0, o = 0.0, l = 0.0
+                    t = 0
+                    while t < i {
+                        o += (e[t].0 - a) * (e[t].1 - n)
+                        l += (e[t].0 - a) * (e[t].0 - a)
+                        r += (e[t].0 - a) * (e[t].0 - a)
+                        s += (e[t].1 - n) * (e[t].1 - n)
+                        t += 1
+                    }
+                    r = sqrt(r / Double(i))
+                    s = sqrt(s / Double(i))
+                    let d = o / l, u = n - d * a, c = d * r / s
+                    return (u, d, c * c)
+                }
+                
+                var actual: [ChartPoint] = []
+                var predicted: [ChartPoint] = []
+                actual.append(ChartPoint(x: Date(timeIntervalSince1970: TimeInterval(start / 1000)), y: 0))
+                predicted.append(ChartPoint(x: Date(timeIntervalSince1970: TimeInterval(start / 1000)), y: Double.infinity))
+                var regressionData: [(Double, Double)] = []
+                for point in trackerData {
+                    let time = point.time
+                    let normTime = Double(time - start) / Double(end - start)
+                    let last = actual.last!
+                    let epph = last.x.timeIntervalSince1970 == TimeInterval(time / 1000) ? nil :
+                    Double(point.ep - last.y) / ((Double(time - last.x.timeIntervalSince1970 * 1000)) / 3600000)
+                    actual.append(ChartPoint(
+                        x: Date(timeIntervalSince1970: TimeInterval(time / 1000)),
+                        y: point.ep,
+                        epph: epph
+                    ))
+                    if rate > 0 {
+                        if time - start >= 432_00000 {
+                            regressionData.append((normTime, point.ep))
+                        }
+                        var predictedPoint = ChartPoint(
+                            x: Date(timeIntervalSince1970: TimeInterval(time / 1000)),
+                            y: Double.infinity,
+                            xn: normTime
+                        )
+                        if time - start >= 864_00000,
+                           end - time >= 864_00000,
+                           regressionData.count >= 5 {
+                            let reg = regression(regressionData)
+                            predictedPoint.y = reg.a + reg.b + reg.b * rate
+                        }
+                        if end - time < 864_00000,
+                           let lastPredicted = predicted.last {
+                            predictedPoint.y = lastPredicted.y
+                        }
+                        predicted.append(predictedPoint)
+                    }
+                }
+                if rate > 0, smooth {
+                    var smoothed: [ChartPoint] = []
+                    for (i, pt) in predicted.enumerated() {
+                        if pt.y == Double.infinity {
+                            smoothed.append(pt)
+                        } else {
+                            var a = 0.0, b = 0.0
+                            for j in 0...i {
+                                let p = predicted[j]
+                                if p.y != Double.infinity, let xn = p.xn {
+                                    let weight = xn * xn
+                                    a += p.y * weight
+                                    b += weight
+                                }
+                            }
+                            smoothed.append(ChartPoint(x: pt.x, y: a / b))
+                        }
+                    }
+                    predicted = smoothed
+                }
+                if let lastPred = predicted.last,
+                   lastPred.x.timeIntervalSince1970 < TimeInterval(end / 1000),
+                   lastPred.y != Double.infinity {
+                    predicted.append(ChartPoint(x: Date(timeIntervalSince1970: TimeInterval(end / 1000)), y: lastPred.y))
+                }
+                return (actual, predicted)
+            }
+            
+            let groupResult = await withTasksResult {
+                await DoriAPI.Event.trackerRates()
+            } _: {
+                await DoriAPI.Event.trackerData(of: id, in: locale, tier: tier)
+            }
+            guard let rates = groupResult.0 else { return nil }
+            guard let trackerData = groupResult.1 else { return nil }
+            
+            guard let rate = rates.first(where: { $0.type == eventType && $0.server == locale && $0.tier == tier }) else { return nil }
+            guard let raw = withPrediction(
+                trackerData.cutoffs.map { TrackerDataPoint(time: $0.time.timeIntervalSince1970 * 1000, ep: Double($0.ep)) },
+                start: eventStartDate.timeIntervalSince1970 * 1000,
+                end: eventEndDate.timeIntervalSince1970 * 1000,
+                rate: rate.rate,
+                smooth: smooth
+            ) else { return nil }
+            let cutoffs = raw.actual.map { TrackerData.DataPoint(time: $0.x, ep: Int($0.y), epph: $0.xn != nil ? Int($0.xn!) : nil) }
+            let predictions = raw.predicted.map { TrackerData.DataPoint(time: $0.x, ep: Int($0.y), epph: $0.xn != nil ? Int($0.xn!) : nil) }
+            return .init(cutoffs: cutoffs, predictions: predictions)
+        }
     }
 }
 
@@ -130,5 +305,16 @@ extension DoriFrontend.Event {
         public var gacha: [DoriAPI.Gacha.PreviewGacha]
         public var songs: [DoriAPI.Song.PreviewSong]
         public var degrees: [DoriAPI.Degree.Degree]
+    }
+    
+    public struct TrackerData: DoriCache.Cacheable {
+        public var cutoffs: [DataPoint]
+        public var predictions: [DataPoint]
+        
+        public struct DataPoint: DoriCache.Cacheable {
+            public var time: Date
+            public var ep: Int
+            public var epph: Int?
+        }
     }
 }
