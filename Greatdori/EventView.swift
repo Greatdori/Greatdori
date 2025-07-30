@@ -27,6 +27,7 @@ struct EventDetailView: View {
                                 .frame(height: 2)
                             WebImage(url: information.event.bannerImageURL)
                                 .resizable()
+                                .aspectRatio(3.0, contentMode: .fit)
                                 .frame(maxWidth: 420, maxHeight: 140)
                             Rectangle()
                                 .opacity(0)
