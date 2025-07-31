@@ -215,13 +215,13 @@
               "mac" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Please try to check your Internet connection and try again later. Click anywhere to retry now."
+                  "value" : "Please try to check your Internet connection and try again later. Click to retry now."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Please try to check your Internet connection and try again later. Tap anywhere to retry now."
+                  "value" : "Please try to check your Internet connection and try again later. Tap to retry now."
                 }
               }
             }
