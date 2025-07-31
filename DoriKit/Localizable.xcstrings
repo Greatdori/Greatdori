@@ -970,6 +970,16 @@
         }
       }
     },
+    "EVENT_%@_IN_%@_WILL_END_TODAY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@活动“%1$@”将在今天结束！"
+          }
+        }
+      }
+    },
     "EVENT_%@_IN_%@_WILL_START_AFTER_%lld_DAYS" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1322,6 +1332,16 @@
         }
       }
     },
+    "GACHA_%@_IN_%@_WILL_END_TODAY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@转蛋“%1$@”将在今天结束！"
+          }
+        }
+      }
+    },
     "GACHA_%@_IN_%@_WILL_START_AFTER_%lld_DAYS" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1623,6 +1643,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%2$@登录奖励“%1$@”将在%3$lld天后结束！"
+          }
+        }
+      }
+    },
+    "LOGIN_CAMPAIGN_%@_IN_%@_WILL_END_TODAY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@登录奖励“%1$@”将在今天结束！"
           }
         }
       }
