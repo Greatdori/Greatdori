@@ -47,10 +47,14 @@ public class DoriCache {
         var cachedResult: Result?
         if let cachedData = try? Data(contentsOf: cacheURL) {
             cachedResult = Result(fromCache: cachedData)
-        } else if let preCache = preCachedData(byID: id) {
-            if let typed = preCache as? Result {
-                cachedResult = typed
+        } else {
+            #if DORIKIT_ENABLE_PRECACHE
+            if let preCache = preCachedData(byID: id) {
+                if let typed = preCache as? Result {
+                    cachedResult = typed
+                }
             }
+            #endif
         }
         
         let promise: Promise<Result?>
