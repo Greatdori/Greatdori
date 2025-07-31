@@ -245,16 +245,9 @@ struct EventTrackerView: View {
         for prediction in predictions where Double(prediction.ep ?? 0) > maxValue {
             maxValue = Double(prediction.ep ?? 0)
         }
-        switch maxValue {
-        case 1_000_000_000...:
-            return 1_000_000_000
-        case 1_000_000...:
-            return 1_000_000
-        case 1_000...:
-            return 1_000
-        default:
-            return 100
-        }
+        let count = String(Int(maxValue)).count
+        let result = "1" + String(repeating: "0", count: count - 1)
+        return Double(result)!
     }
 }
 

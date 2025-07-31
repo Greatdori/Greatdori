@@ -219,29 +219,27 @@ extension DoriFrontend {
                         y: point.ep,
                         epph: epph
                     ))
-                    if rate > 0 {
-                        if time - start >= 432_00000 {
-                            regressionData.append((normTime, point.ep))
-                        }
-                        var predictedPoint = ChartPoint(
-                            x: Date(timeIntervalSince1970: TimeInterval(time / 1000)),
-                            y: Double.infinity,
-                            xn: normTime
-                        )
-                        if time - start >= 864_00000,
-                           end - time >= 864_00000,
-                           regressionData.count >= 5 {
-                            let reg = regression(regressionData)
-                            predictedPoint.y = reg.a + reg.b + reg.b * rate
-                        }
-                        if end - time < 864_00000,
-                           let lastPredicted = predicted.last {
-                            predictedPoint.y = lastPredicted.y
-                        }
-                        predicted.append(predictedPoint)
+                    if time - start >= 432_00000 {
+                        regressionData.append((normTime, point.ep))
                     }
+                    var predictedPoint = ChartPoint(
+                        x: Date(timeIntervalSince1970: TimeInterval(time / 1000)),
+                        y: Double.infinity,
+                        xn: normTime
+                    )
+                    if time - start >= 864_00000,
+                       end - time >= 864_00000,
+                       regressionData.count >= 5 {
+                        let reg = regression(regressionData)
+                        predictedPoint.y = reg.a + reg.b + reg.b * rate
+                    }
+                    if end - time < 864_00000,
+                       let lastPredicted = predicted.last {
+                        predictedPoint.y = lastPredicted.y
+                    }
+                    predicted.append(predictedPoint)
                 }
-                if rate > 0, smooth {
+                if smooth {
                     var smoothed: [ChartPoint] = []
                     for (i, pt) in predicted.enumerated() {
                         if pt.y == Double.infinity {
