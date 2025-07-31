@@ -215,13 +215,13 @@
               "mac" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Please try to check your Internet connection and try again later. Click to retry."
+                  "value" : "Please try to check your Internet connection and try again later. Click anywhere to retry now."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Please try to check your Internet connection and try again later. Tap to retry."
+                  "value" : "Please try to check your Internet connection and try again later. Tap anywhere to retry now."
                 }
               }
             }
@@ -233,13 +233,13 @@
               "mac" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "请尝试检查你的互联网连接并稍后重试。点击以重试。"
+                  "value" : "请尝试检查你的互联网连接并稍后重试。点击任意处立即重试。"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "请尝试检查你的互联网连接并稍后重试。轻点以重试。"
+                  "value" : "请尝试检查你的互联网连接并稍后重试。轻点任意处立即重试。"
                 }
               }
             }
