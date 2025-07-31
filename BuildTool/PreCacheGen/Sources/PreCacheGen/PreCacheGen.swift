@@ -18,8 +18,8 @@ struct PreCacheGen {
             print("error: CODESIGNING_FOLDER_PATH is unavailable", to: &stderr)
             exit(EXIT_FAILURE)
         }
-        guard let targetPlatform = ProcessInfo.processInfo.environment["TARGET_DEVICE_PLATFORM_NAME"] else {
-            print("error: TARGET_DEVICE_PLATFORM_NAME is unavailable", to: &stderr)
+        guard let targetPlatform = ProcessInfo.processInfo.environment["SWIFT_PLATFORM_TARGET_PREFIX"] else {
+            print("error: SWIFT_PLATFORM_TARGET_PREFIX is unavailable", to: &stderr)
             exit(EXIT_FAILURE)
         }
         
@@ -34,8 +34,8 @@ struct PreCacheGen {
         print("Fetching categorized characters...", to: &stderr)
         let categorizedCharacters = await retryUntilNonNil(perform: DoriFrontend.Character.categorizedCharacters)
         var characterDetails = [Int: DoriAPI.Character.Character]()
-        for character in characters {
-            print("Fetching character detail for \(character.characterName.jp ?? "\(character.id)")...", to: &stderr)
+        for (index, character) in characters.enumerated() {
+            print("Fetching character detail for \(character.characterName.jp ?? "\(character.id)")... [\(index + 1)/\(characters.count)]", to: &stderr)
             let detail = await retryUntilNonNil { await DoriAPI.Character.detail(of: character.id) }
             characterDetails.updateValue(detail, forKey: character.id)
         }
