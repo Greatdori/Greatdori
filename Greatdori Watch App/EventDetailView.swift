@@ -38,7 +38,9 @@ struct EventDetailView: View {
                             .opacity(0.6)
                     }
                     if let startDate = information.event.startAt.forPreferredLocale(),
-                       let endDate = information.event.endAt.forPreferredLocale() {
+                       let endDate = information.event.endAt.forPreferredLocale(),
+                       let aggregateEndDate = information.event.aggregateEndAt.forPreferredLocale(),
+                       let distributionStartDate = information.event.distributionStartAt.forPreferredLocale() {
                         VStack(alignment: .leading) {
                             Text("倒计时")
                                 .font(.system(size: 16, weight: .medium))
@@ -47,6 +49,10 @@ struct EventDetailView: View {
                                     Text("\(Text(startDate, style: .relative))后开始")
                                 } else if endDate > .now {
                                     Text("\(Text(endDate, style: .relative))后结束")
+                                } else if aggregateEndDate > .now {
+                                    Text("结果公布于\(Text(endDate, style: .relative))后")
+                                } else if distributionStartDate > .now {
+                                    Text("奖励颁发于\(Text(endDate, style: .relative))后")
                                 } else {
                                     Text("已完结")
                                 }
