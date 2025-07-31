@@ -212,13 +212,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Please try to check your Internet connection and try again later."
+            "value" : "Please try to check your Internet connection and try again later. Tap to retry."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请尝试检查你的互联网连接并稍后重试。"
+            "value" : "请尝试检查你的互联网连接并稍后重试。轻点以重试。"
           }
         }
       }
