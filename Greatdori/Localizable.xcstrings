@@ -519,7 +519,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Event cards are arranged from #1 to #4 in single-column view, and from #1 to #3 at the right side, #4 at the left side in double-column view."
+            "value" : "Event cards are arranged from #1 to #4 in single-column view; and from #1 to #3 at the right side, #4 at the left side in double-column view."
           }
         },
         "zh-Hans" : {
