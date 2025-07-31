@@ -12,8 +12,15 @@
       },
       "shouldTranslate" : false
     },
-    "%@" : {
-      "shouldTranslate" : false
+    "%@%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@"
+          }
+        }
+      }
     },
     "App.community" : {
       "localizations" : {
@@ -159,6 +166,38 @@
         }
       }
     },
+    "Event.end-date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End Date"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束日期"
+          }
+        }
+      }
+    },
+    "Event.start-date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Date"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始日期"
+          }
+        }
+      }
+    },
     "Event.title" : {
       "localizations" : {
         "en" : {
@@ -268,7 +307,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ended %@"
+            "value" : "Completed %@"
           }
         },
         "zh-Hans" : {
@@ -327,7 +366,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Birthday"
+            "value" : "Birthdays"
           }
         },
         "zh-Hans" : {

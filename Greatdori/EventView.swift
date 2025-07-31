@@ -14,7 +14,8 @@ import SDWebImageSwiftUI
 struct EventDetailView: View {
     var id: Int
     @State var information: DoriFrontend.Event.ExtendedEvent?
-    @State var infoIsAvailable = true // 785: ?
+    @State var infoIsAvailable = true
+    var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
         NavigationStack {
             if let information {
@@ -49,12 +50,37 @@ struct EventDetailView: View {
                                 }
                                 Divider()
                                 HStack {
-                                    
                                     Text("Event.countdown")
                                         .bold()
                                     Spacer()
-                                    Text(information.event.eventType.localizedString)
+//                                    Text(information.event)
+                                    //TODO: MultilingualTextForCountdown
                                 }
+                                Divider()
+                                HStack {
+                                    Text("Event.start-date")
+                                        .bold()
+                                    Spacer()
+                                    MultilingualText(source: information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                }
+                                Divider()
+                                HStack {
+                                    Text("Event.end-date")
+                                        .bold()
+                                    Spacer()
+                                    MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                }
+//                                Divider()
+//                                HStack {
+//                                    Text("Event.end-date")
+//                                        .bold()
+//                                    Spacer()
+//                                    WebImage(url: information.event.attributes)
+//                                        .resizable()
+//                                        .frame(width: 20, height: 20)
+//                                    Text("+\(attribute.percent)%")
+//                                }
+                                
                             }
                         }
                         .frame(maxWidth: 600)
@@ -74,7 +100,9 @@ struct EventDetailView: View {
                 }
             }
         }
-        .navigationTitle(information?.event.eventName.forPreferredLocale() ?? "#\(id)")
+        .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "#\(id)"))
+//        .navigationTitle(.lineLimit(nil))
+//        .toolbarTitleDisplayMode(.inline)
         .task {
             await getInformation()
         }
@@ -267,54 +295,301 @@ struct EventDetailView: View {
 struct MultilingualText: View {
     let source: DoriAPI.LocalizedData<String>
 //    let locale: Locale
+    var showLocaleKey: Bool = false
     @State var isHovering = false
+    @State var allLocaleTexts: [String] = []
+    @State var primaryDisplayString = ""
+    
+    init(source: DoriAPI.LocalizedData<String>, showLocaleKey: Bool = false/*, isHovering: Bool = false, allLocaleTexts: [String], primaryDisplayString: String = ""*/) {
+        self.source = source
+        self.showLocaleKey = showLocaleKey
+//        self.isHovering = isHovering
+//        self.allLocaleTexts = allLocaleTexts
+//        self.primaryDisplayString = primaryDisplayString
+    }
     var body: some View {
-        #if !os(macOS)
-        Menu(content: {
-            ForEach([DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr], id: \.self) { localeValue in
-                if let targetValue = source.forLocale(localeValue) {
-                    Text("\(targetValue)")
-                    //Text("\(targetValue) (\(localeLabelDict[localeValue]!))")
+        Group {
+#if !os(macOS)
+            Menu(content: {
+                ForEach(allLocaleTexts, id: \.self) { localeValue in
+                    Text(localeValue)
                 }
-            }
-        }, label: {
+            }, label: {
+                VStack(alignment: .trailing) {
+                    if let sourceInPrimaryLocale = source.forPreferredLocale(allowsFallback: false) {
+                        Text("\(sourceInPrimaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.preferredLocale] ?? "?"))" : "")")
+                            .onAppear {
+                                primaryDisplayString = sourceInPrimaryLocale
+                            }
+                    } else if let sourceInSecondaryLocale = source.forSecondaryLocale(allowsFallback: false) {
+                        Text("\(sourceInSecondaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                            .onAppear {
+                                primaryDisplayString = sourceInSecondaryLocale
+                            }
+                    } else if let sourceInJP = source.jp {
+                        Text("\(sourceInJP)\(showLocaleKey ? " (JP)" : "")")
+                            .onAppear {
+                                primaryDisplayString = sourceInJP
+                            }
+                    } else {
+                        Text("")
+                    }
+                    if let secondarySourceInSecondaryLang = source.forSecondaryLocale(allowsFallback: false) {
+                        if secondarySourceInSecondaryLang != primaryDisplayString {
+                            Text("\(secondarySourceInSecondaryLang)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else if let secondarySourceInJP = source.jp {
+                        if secondarySourceInJP != primaryDisplayString {
+                            Text("\(secondarySourceInJP)\(showLocaleKey ? " (JP)" : "")")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            })
+            .menuStyle(.button)
+            .buttonStyle(.borderless)
+            .menuIndicator(.hidden)
+            .foregroundStyle(.primary)
+#else
             VStack(alignment: .trailing) {
-                Text(source.forPreferredLocale(allowsFallback: false) ?? source.forSecondaryLocale(allowsFallback: false) ?? source.jp ?? "")
-                if let secondaryText = source.forSecondaryLocale(allowsFallback: false)/*, secondaryText != source.forPreferredLocale()*/ {
-                    if secondaryText != (source.forPreferredLocale(allowsFallback: false) ?? source.forSecondaryLocale(allowsFallback: false) ?? source.jp ?? "") {
-                        Text(secondaryText)
+                if let sourceInPrimaryLocale = source.forPreferredLocale(allowsFallback: false) {
+                    Text("\(sourceInPrimaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.preferredLocale] ?? "?"))" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInPrimaryLocale
+                        }
+                } else if let sourceInSecondaryLocale = source.forSecondaryLocale(allowsFallback: false) {
+                    Text("\(sourceInSecondaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInSecondaryLocale
+                        }
+                } else if let sourceInJP = source.jp {
+                    Text("\(sourceInJP)\(showLocaleKey ? " (JP)" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInJP
+                        }
+                } else {
+                    Text("")
+                }
+                if let secondarySourceInSecondaryLang = source.forSecondaryLocale(allowsFallback: false) {
+                    if secondarySourceInSecondaryLang != primaryDisplayString {
+                        Text("\(secondarySourceInSecondaryLang)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                            .foregroundStyle(.secondary)
+                    }
+                } else if let secondarySourceInJP = source.jp {
+                    if secondarySourceInJP != primaryDisplayString {
+                        Text("\(secondarySourceInJP)\(showLocaleKey ? " (JP)" : "")")
                             .foregroundStyle(.secondary)
                     }
                 }
             }
-        })
-        .menuStyle(.button)
-        .buttonStyle(.borderless)
-        .menuIndicator(.hidden)
-        .foregroundStyle(.primary)
-        #else
-        VStack(alignment: .trailing) {
-            Text(source.forPreferredLocale(allowsFallback: false) ?? source.forSecondaryLocale(allowsFallback: false) ?? source.jp ?? "")
-            if let secondaryText = source.forSecondaryLocale(allowsFallback: false)/*, secondaryText != source.forPreferredLocale()*/ {
-                if secondaryText != (source.forPreferredLocale(allowsFallback: false) ?? source.forSecondaryLocale(allowsFallback: false) ?? source.jp ?? "") {
-                    Text(secondaryText)
-                        .foregroundStyle(.secondary)
-                }
+            .onHover { isHovering in
+                self.isHovering = isHovering
             }
+            .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+                VStack(alignment: .trailing) {
+                    ForEach(allLocaleTexts, id: \.self) { localeValue in
+                        Text(localeValue)
+                    }
+                }
+                .padding()
+            }
+#endif
         }
-        .onHover { isHovering in
-            self.isHovering = isHovering
-        }
-        .popover(isPresented: $isHovering, arrowEdge: .bottom) {
-            VStack(alignment: .trailing) {
-                ForEach([DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr], id: \.self) { localeValue in
-                    if let targetValue = source.forLocale(localeValue) {
-                        Text("\(targetValue)")
+        .onAppear {
+//            ForEach([DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr], id: \.self) { localeValue in
+//                if let targetValue = source.forLocale(localeValue) {
+//                    Text("\(targetValue)")
+//                    //Text("\(targetValue) (\(localeLabelDict[localeValue]!))")
+//                }
+//            }
+            for lang in [DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr] {
+                if let pendingString = source.forLocale(lang) {
+                    if !allLocaleTexts.contains(pendingString) {
+                        allLocaleTexts.append("\(pendingString)\(showLocaleKey ? " (\(localeToStringDict[lang] ?? "?"))" : "")")
                     }
                 }
             }
-            .padding()
         }
-        #endif
     }
 }
+
+
+// COUNTDOWN ONLY
+struct MultilingualTextForCountdown: View {
+    let source: DoriAPI.LocalizedData<String>
+    var showLocaleKey: Bool = false
+    @State var isHovering = false
+    @State var primaryDisplayString = ""
+    
+    init(source: DoriAPI.LocalizedData<String>, showLocaleKey: Bool = false/*, isHovering: Bool = false, allLocaleTexts: [String], primaryDisplayString: String = ""*/) {
+        self.source = source
+        self.showLocaleKey = showLocaleKey
+        //        self.isHovering = isHovering
+        //        self.allLocaleTexts = allLocaleTexts
+        //        self.primaryDisplayString = primaryDisplayString
+    }
+    var body: some View {
+        Group {
+#if !os(macOS)
+            Menu(content: {
+                ForEach(DoriAPI.Locale.allCases, id: \.self) { localeValue in
+//                    Text(localeValue)
+                    //CountdownText
+                }
+            }, label: {
+                VStack(alignment: .trailing) {
+                    if let sourceInPrimaryLocale = source.forPreferredLocale(allowsFallback: false) {
+                        Text("\(sourceInPrimaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.preferredLocale] ?? "?"))" : "")")
+                            .onAppear {
+                                primaryDisplayString = sourceInPrimaryLocale
+                            }
+                    } else if let sourceInSecondaryLocale = source.forSecondaryLocale(allowsFallback: false) {
+                        Text("\(sourceInSecondaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                            .onAppear {
+                                primaryDisplayString = sourceInSecondaryLocale
+                            }
+                    } else if let sourceInJP = source.jp {
+                        Text("\(sourceInJP)\(showLocaleKey ? " (JP)" : "")")
+                            .onAppear {
+                                primaryDisplayString = sourceInJP
+                            }
+                    } else {
+                        Text("")
+                    }
+                    if let secondarySourceInSecondaryLang = source.forSecondaryLocale(allowsFallback: false) {
+                        if secondarySourceInSecondaryLang != primaryDisplayString {
+                            Text("\(secondarySourceInSecondaryLang)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                                .foregroundStyle(.secondary)
+                        }
+                    } else if let secondarySourceInJP = source.jp {
+                        if secondarySourceInJP != primaryDisplayString {
+                            Text("\(secondarySourceInJP)\(showLocaleKey ? " (JP)" : "")")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            })
+            .menuStyle(.button)
+            .buttonStyle(.borderless)
+            .menuIndicator(.hidden)
+            .foregroundStyle(.primary)
+#else //TODO: REPLACEMENT!
+            VStack(alignment: .trailing) {
+                if let sourceInPrimaryLocale = source.forPreferredLocale(allowsFallback: false) {
+                    Text("\(sourceInPrimaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.preferredLocale] ?? "?"))" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInPrimaryLocale
+                        }
+                } else if let sourceInSecondaryLocale = source.forSecondaryLocale(allowsFallback: false) {
+                    Text("\(sourceInSecondaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInSecondaryLocale
+                        }
+                } else if let sourceInJP = source.jp {
+                    Text("\(sourceInJP)\(showLocaleKey ? " (JP)" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInJP
+                        }
+                } else {
+                    Text("")
+                }
+                if let secondarySourceInSecondaryLang = source.forSecondaryLocale(allowsFallback: false) {
+                    if secondarySourceInSecondaryLang != primaryDisplayString {
+                        Text("\(secondarySourceInSecondaryLang)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                            .foregroundStyle(.secondary)
+                    }
+                } else if let secondarySourceInJP = source.jp {
+                    if secondarySourceInJP != primaryDisplayString {
+                        Text("\(secondarySourceInJP)\(showLocaleKey ? " (JP)" : "")")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .onHover { isHovering in
+                self.isHovering = isHovering
+            }
+            .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+                VStack(alignment: .trailing) {
+                    ForEach(allLocaleTexts, id: \.self) { localeValue in
+                        Text(localeValue)
+                    }
+                }
+                .padding()
+            }
+#endif
+        }
+//        .onAppear {
+//            //            ForEach([DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr], id: \.self) { localeValue in
+//            //                if let targetValue = source.forLocale(localeValue) {
+//            //                    Text("\(targetValue)")
+//            //                    //Text("\(targetValue) (\(localeLabelDict[localeValue]!))")
+//            //                }
+//            //            }
+//            for lang in [DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr] {
+//                if let pendingString = source.forLocale(lang) {
+//                    if !allLocaleTexts.contains(pendingString) {
+//                        allLocaleTexts.append("\(pendingString)\(showLocaleKey ? " (\(localeToStringDict[lang] ?? "?"))" : "")")
+//                    }
+//                }
+//            }
+//        }
+    }
+}
+
+
+struct CountdownText: View {
+    let event: DoriFrontend.Event.Event
+    let locale: DoriAPI.Locale
+    var body: some View {
+        Group {
+            if let startDate = event.startAt.forLocale(locale),
+               let endDate = event.endAt.forLocale(locale),
+               let aggregateEndDate = event.aggregateEndAt.forLocale(locale),
+               let distributionStartDate = event.distributionStartAt.forLocale(locale) {
+                Group {
+                    if startDate > .now {
+                        Text("Event.countdown.start-at.\(Text(startDate, style: .relative))")
+                    } else if endDate > .now {
+                        Text("Event.countdown.end-at.\(Text(endDate, style: .relative))")
+                    } else if aggregateEndDate > .now {
+                        //TODO: WHAT NAME?
+                        Text("Event.countdown.r\(Text(endDate, style: .relative))后")
+                    } else if distributionStartDate > .now {
+                        Text("奖励颁发于\(Text(endDate, style: .relative))后")
+                    } else {
+                        Text("已完结")
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/*
+ if let startDate = information.event.startAt.forPreferredLocale(),
+ let endDate = information.event.endAt.forPreferredLocale(),
+ let aggregateEndDate = information.event.aggregateEndAt.forPreferredLocale(),
+ let distributionStartDate = information.event.distributionStartAt.forPreferredLocale() {
+ VStack(alignment: .leading) {
+ Text("倒计时")
+ .font(.system(size: 16, weight: .medium))
+ Group {
+ if startDate > .now {
+ Text("\(Text(startDate, style: .relative))后开始")
+ } else if endDate > .now {
+ Text("\(Text(endDate, style: .relative))后结束")
+ } else if aggregateEndDate > .now {
+ Text("结果公布于\(Text(endDate, style: .relative))后")
+ } else if distributionStartDate > .now {
+ Text("奖励颁发于\(Text(endDate, style: .relative))后")
+ } else {
+ Text("已完结")
+ }
+ }
+ .font(.system(size: 14))
+ .opacity(0.6)
+ }
+ }
+ */
