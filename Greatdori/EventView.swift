@@ -71,11 +71,6 @@ struct EventDetailView: View {
                     }
                 } else {
                     ContentUnavailableView("Event.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Event.unavailable.description"))
-                    .onTapGesture {
-                        Task {
-                            await getInformation()
-                        }
-                    }
                 }
             }
         }
@@ -83,8 +78,13 @@ struct EventDetailView: View {
         .task {
             await getInformation()
         }
-        
-        
+        .onTapGesture {
+            if !infoIsAvailable {
+                Task {
+                      await getInformation()
+                }
+            }
+        }
     }
     
     func getInformation() async {
