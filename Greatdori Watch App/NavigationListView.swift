@@ -66,6 +66,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.storyViewer) {
+                    Label {
+                        Text("故事浏览器")
+                    } icon: {
+                        Image(systemName: "text.rectangle.page")
+                            .foregroundStyle(.accent)
+                    }
+                }
             } header: {
                 Text("工具")
             }

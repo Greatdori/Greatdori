@@ -405,7 +405,7 @@ extension DoriAPI {
 
 extension DoriAPI.Card {
     /// Represent simplified data of a card.
-    public struct PreviewCard: Identifiable, DoriCache.Cacheable {
+    public struct PreviewCard: Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of card.
         public var id: Int
         /// ID of related character to this card.
@@ -434,7 +434,7 @@ extension DoriAPI.Card {
     }
     
     /// Represent detailed data of a card.
-    public struct Card: Identifiable, DoriCache.Cacheable {
+    public struct Card: Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of card.
         public var id: Int
         /// ID of related character to this card.
@@ -493,7 +493,7 @@ extension DoriAPI.Card {
     }
     
     /// Represent type of a card.
-    public enum CardType: String, CaseIterable, DoriCache.Cacheable {
+    public enum CardType: String, CaseIterable, Hashable, DoriCache.Cacheable {
         case initial
         case permanent
         case event
@@ -507,7 +507,7 @@ extension DoriAPI.Card {
     }
     
     /// Represent a episode associated to a card.
-    public struct CardEpisode: Identifiable, DoriCache.Cacheable {
+    public struct CardEpisode: Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var episodeType: EpisodeType
         public var situationID: Int
@@ -521,11 +521,12 @@ extension DoriAPI.Card {
         public var title: DoriAPI.LocalizedData<String>
         public var characterID: Int
         
-        public enum EpisodeType: String, DoriCache.Cacheable {
+        @frozen
+        public enum EpisodeType: String, Hashable, DoriCache.Cacheable {
             case standard
             case memorial
         }
-        public struct Resource: DoriCache.Cacheable {
+        public struct Resource: Hashable, DoriCache.Cacheable {
             public var resourceID: Int?
             public var resourceType: ResourceType
             public var quantity: Int
@@ -538,7 +539,7 @@ extension DoriAPI.Card {
                 self.lbBonus = lbBonus
             }
             
-            public enum ResourceType: String, DoriCache.Cacheable {
+            public enum ResourceType: String, Hashable, DoriCache.Cacheable {
                 case item
                 case star
             }
@@ -558,7 +559,7 @@ extension DoriAPI.Card {
     ///     - ``Swift/Dictionary/calculated(level:rarity:masterRank:viewedStoryCount:trained:)``
     ///     - ``Swift/Dictionary/maximumValue(rarity:)``
     public typealias CardStat = [StatKey: [Stat]]
-    public struct Stat: DoriCache.Cacheable {
+    public struct Stat: Hashable, DoriCache.Cacheable {
         public var performance: Int
         public var technique: Int
         public var visual: Int

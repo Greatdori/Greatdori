@@ -100,3 +100,56 @@ extension DoriFrontend {
         }
     }
 }
+
+extension DoriAPI.Misc.StoryAsset {
+    public var transcript: [Transcript] {
+        var result = [Transcript]()
+        for snippet in self.snippets {
+            switch snippet.actionType {
+            case .talk:
+                let ref = self.talkData[snippet.referenceIndex]
+                result.append(.talk(.init(
+                    _characterID: ref.talkCharacters.count > 0 ? ref.talkCharacters[0].characterID : 0,
+                    characterName: ref.windowDisplayName,
+                    text: ref.body,
+                    voiceID: ref.voices.count > 0 ? ref.voices[0].voiceID : nil
+                )))
+            case .effect:
+                let ref = self.specialEffectData[snippet.referenceIndex]
+                if ref.effectType == .telop {
+                    result.append(.notation(ref.stringVal))
+                }
+            default: break
+            }
+        }
+        return result
+    }
+    
+    public enum Transcript: Hashable {
+        case talk(Talk)
+        case notation(String)
+        
+        public struct Talk: Hashable {
+            public var _characterID: Int
+            public var characterName: String
+            public var text: String
+            public var voiceID: String?
+            
+            internal init(_characterID: Int, characterName: String, text: String, voiceID: String?) {
+                self._characterID = _characterID
+                self.characterName = characterName
+                self.text = text
+                self.voiceID = voiceID
+            }
+            
+            @inlinable
+            public var characterIconImageURL: URL? {
+                if _characterID > 0 {
+                    .init(string: "https://bestdori.com/res/icon/chara_icon_\(_characterID).png")!
+                } else {
+                    nil
+                }
+            }
+        }
+    }
+}

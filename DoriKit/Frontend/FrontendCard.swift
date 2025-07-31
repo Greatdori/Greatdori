@@ -144,7 +144,7 @@ extension DoriFrontend.Card {
     public typealias PreviewCard = DoriAPI.Card.PreviewCard
     public typealias Card = DoriAPI.Card.Card
     
-    public struct CardWithBand: DoriCache.Cacheable {
+    public struct CardWithBand: Hashable, DoriCache.Cacheable {
         public var card: PreviewCard
         public var band: DoriAPI.Band.Band
     }

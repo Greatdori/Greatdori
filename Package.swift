@@ -7,7 +7,7 @@ let package = Package(
     name: "Greatdori",
     platforms: [.iOS(.v17), .macCatalyst(.v17), .macOS(.v14), .visionOS(.v1), .watchOS(.v10)],
     products: [
-        .library(name: "DoriKit", targets: ["DoriKit"])
+        .library(name: "DoriKit", type: .dynamic, targets: ["DoriKit"])
     ],
     dependencies: [
         .package(url: "https://github.com/Alamofire/Alamofire", from: "5.10.2"),

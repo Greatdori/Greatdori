@@ -20,6 +20,8 @@
 		8C0C99AE2E296F2D00549B5C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0C99AD2E296F2D00549B5C /* Alamofire */; };
 		8C0C99B12E296F3900549B5C /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0C99B02E296F3900549B5C /* SwiftyJSON */; };
 		8C0C99B32E29766B00549B5C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C99B22E29766B00549B5C /* Localizable.xcstrings */; };
+		8C3264042E3B760100081F4F /* PreCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264032E3B75FF00081F4F /* PreCache.swift */; };
+		8C7288DE2E3B4458002AF70F /* Selectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7288DD2E3B4451002AF70F /* Selectors.swift */; };
 		8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift */; };
 		8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */; };
 		8C923D7D2E304882003AFC0A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */; };
@@ -52,6 +54,7 @@
 		8C9474652E367022003A90B4 /* FrontendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474642E36701E003A90B4 /* FrontendTests.swift */; };
 		8C9474672E37ADD8003A90B4 /* UnavailableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474662E37ADD5003A90B4 /* UnavailableView.swift */; };
 		8C9474692E39CA1F003A90B4 /* EventTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474682E39CA19003A90B4 /* EventTrackerView.swift */; };
+		8C94746B2E3ADE27003A90B4 /* StoryViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C94746A2E3ADE21003A90B4 /* StoryViewerView.swift */; };
 		8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */; };
 		8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD02E32B5B6004023F7 /* Constructor.swift */; };
 		8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */; };
@@ -218,6 +221,9 @@
 		8C0C99912E296A8C00549B5C /* DoriKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DoriKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C0C99B22E29766B00549B5C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		8C0C99C22E2E664900549B5C /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		8C0CAF972E3B69B2002FF47F /* PreCacheGen */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PreCacheGen; sourceTree = "<group>"; };
+		8C3264032E3B75FF00081F4F /* PreCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreCache.swift; sourceTree = "<group>"; };
+		8C7288DD2E3B4451002AF70F /* Selectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectors.swift; sourceTree = "<group>"; };
 		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 		8C923D772E3034AD003AFC0A /* HomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendCharacter.swift; sourceTree = "<group>"; };
@@ -249,6 +255,7 @@
 		8C9474642E36701E003A90B4 /* FrontendTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendTests.swift; sourceTree = "<group>"; };
 		8C9474662E37ADD5003A90B4 /* UnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableView.swift; sourceTree = "<group>"; };
 		8C9474682E39CA19003A90B4 /* EventTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTrackerView.swift; sourceTree = "<group>"; };
+		8C94746A2E3ADE21003A90B4 /* StoryViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryViewerView.swift; sourceTree = "<group>"; };
 		8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		8CBC1BD02E32B5B6004023F7 /* Constructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
 		8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCaches.swift; sourceTree = "<group>"; };
@@ -381,6 +388,7 @@
 				8C923D8C2E3056C8003AFC0A /* CardViews.swift.gyb */,
 				8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */,
 				8CBC1BDC2E33654D004023F7 /* SearchView.swift */,
+				8C7288DD2E3B4451002AF70F /* Selectors.swift */,
 				8CBC1BD82E33345C004023F7 /* FoldableList.swift */,
 				8C9474662E37ADD5003A90B4 /* UnavailableView.swift */,
 				8C0C99862E296A5800549B5C /* ContentView.swift */,
@@ -394,6 +402,7 @@
 				8C94743E2E342F76003A90B4 /* EventListView.swift */,
 				8C9474462E34E1AB003A90B4 /* EventDetailView.swift */,
 				8C9474682E39CA19003A90B4 /* EventTrackerView.swift */,
+				8C94746A2E3ADE21003A90B4 /* StoryViewerView.swift */,
 			);
 			path = "Greatdori Watch App";
 			sourceTree = "<group>";
@@ -442,6 +451,7 @@
 			isa = PBXGroup;
 			children = (
 				8C9474492E35AB7F003A90B4 /* DoriCache.swift */,
+				8C3264032E3B75FF00081F4F /* PreCache.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -519,6 +529,7 @@
 			isa = PBXGroup;
 			children = (
 				8CD13FE42E300AE700673E15 /* gyb.py */,
+				8C0CAF972E3B69B2002FF47F /* PreCacheGen */,
 			);
 			path = BuildTool;
 			sourceTree = "<group>";
@@ -594,6 +605,7 @@
 				8C0C998D2E296A8C00549B5C /* Sources */,
 				8C0C998E2E296A8C00549B5C /* Frameworks */,
 				8C0C998F2E296A8C00549B5C /* Resources */,
+				8C7288DF2E3B5CC7002AF70F /* Generate Pre-Cache */,
 			);
 			buildRules = (
 				8CD13FE62E300BEC00673E15 /* PBXBuildRule */,
@@ -719,6 +731,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		8C7288DF2E3B5CC7002AF70F /* Generate Pre-Cache */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Pre-Cache";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "TIMESTAMP_FILE=\"$BUILT_PRODUCTS_DIR/LastPreCacheGenerationDate.txt\"\nCURRENT_DATE=$(date +%s)\nTHRESHOLD=86400\nNEED_RUN=false\nif [ ! -f \"$TIMESTAMP_FILE\" ] || ! grep -qE '^[0-9]+$' \"$TIMESTAMP_FILE\"; then\n    NEED_RUN=true\nelse\n    LAST_DATE=$(cat \"$TIMESTAMP_FILE\")\n    DIFF=$((CURRENT_DATE - LAST_DATE))\n    if [ \"$DIFF\" -ge \"$THRESHOLD\" ]; then\n        NEED_RUN=true\n    fi\nfi\nif $NEED_RUN; then\n    xcrun --sdk macosx swift run --package-path $SRCROOT/BuildTool/PreCacheGen/ -c release PreCacheGen\n    EXIT_STATUS=$?\n    if [ $EXIT_STATUS -eq 0 ]; then\n        echo \"$CURRENT_DATE\" > \"$TIMESTAMP_FILE\"\n    fi\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		8C0C99592E296A4400549B5C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -738,8 +772,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C7288DE2E3B4458002AF70F /* Selectors.swift in Sources */,
 				8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */,
 				8C923D932E307088003AFC0A /* CharacterDetailView.swift in Sources */,
+				8C94746B2E3ADE27003A90B4 /* StoryViewerView.swift in Sources */,
 				8C923D8F2E305FF8003AFC0A /* Screen.swift in Sources */,
 				8CBC1BD52E3303EB004023F7 /* CardDetailView.swift in Sources */,
 				8C923DA12E315E09003AFC0A /* CardListView.swift in Sources */,
@@ -785,6 +821,7 @@
 				8C923D952E307227003AFC0A /* TaskGroup.swift.gyb in Sources */,
 				8C923D9B2E3138E3003AFC0A /* Post.swift in Sources */,
 				8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */,
+				8C3264042E3B760100081F4F /* PreCache.swift in Sources */,
 				8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */,
 				8CD13FB42E2FE2BF00673E15 /* Event.swift in Sources */,
 				8CBC1BDB2E334246004023F7 /* Searching.swift in Sources */,
@@ -1141,6 +1178,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1193,6 +1231,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

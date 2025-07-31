@@ -127,7 +127,8 @@ extension DoriAPI {
                                 kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
                             ),
                             stories: value["stories"].map {
-                                .init(
+                                (id: Int($0.0) ?? 0,
+                                 value: DoriAPI.Story(
                                     scenarioID: $0.1["scenarioId"].stringValue,
                                     caption: .init(
                                         jp: $0.1["caption"][0].string,
@@ -149,9 +150,10 @@ extension DoriAPI {
                                         tw: $0.1["synopsis"][2].string,
                                         cn: $0.1["synopsis"][3].string,
                                         kr: $0.1["synopsis"][4].string
-                                    )
-                                )
-                            }
+                                    ),
+                                    voiceAssetBundleName: $0.1["voiceAssetBundleName"].stringValue
+                                 ))
+                            }.sorted { $0.id < $1.id }.map { $0.value }
                         ))
                     }
                     return result.sorted { $0.id < $1.id }
@@ -211,7 +213,7 @@ extension DoriAPI {
         }
         
         public static func actionSets() async -> [ActionSet]? {
-            let request = await requestJSON("https://bestdori.com/api/misc/areas.1.json")
+            let request = await requestJSON("https://bestdori.com/api/misc/actionsets.5.json")
             if case let .success(respJSON) = request {
                 let task = Task.detached(priority: .userInitiated) {
                     var result = [ActionSet]()
@@ -262,10 +264,14 @@ extension DoriAPI {
             }
             return nil
         }
-        public static func actionSetStoryAsset(actionSetID: Int, scenarioID: String, locale: DoriAPI.Locale) async -> StoryAsset? {
-            let request = await requestJSON("https://bestdori.com/assets/\(locale.rawValue)/scenario/actionset/group\(Int(floor(Double(actionSetID / 256))))_rip/Scenario\(scenarioID).asset")
-            if case let .success(respJSON) = request {
-                return await _parseStoryAsset(respJSON)
+        public static func actionSetStoryAsset(actionSetID: Int, locale: DoriAPI.Locale) async -> StoryAsset? {
+            let _request = await requestJSON("https://bestdori.com/assets/\(locale.rawValue)/actionset/group\(Int(floor(Double(actionSetID / 128))))_rip/ActionSet\(actionSetID).asset")
+            if case let .success(respJSON) = _request {
+                let id = respJSON["Base"]["details"][0]["reactionTypeBelongId"].stringValue
+                let request = await requestJSON("https://bestdori.com/assets/\(locale.rawValue)/scenario/actionset/group\(Int(floor(Double(actionSetID / 256))))_rip/Scenario\(id).asset")
+                if case let .success(respJSON) = request {
+                    return await _parseStoryAsset(respJSON)
+                }
             }
             return nil
         }
@@ -293,7 +299,7 @@ extension DoriAPI {
                     firstBackgroundBundleName: base["firstBackgroundBundleName"].stringValue,
                     snippets: base["snippets"].map {
                         .init(
-                            actionType: $0.1["actionType"].intValue,
+                            actionType: .init(rawValue: $0.1["actionType"].intValue) ?? .none,
                             progressType: $0.1["progressType"].intValue,
                             referenceIndex: $0.1["referenceIndex"].intValue,
                             delay: $0.1["delay"].doubleValue,
@@ -352,7 +358,7 @@ extension DoriAPI {
                     },
                     specialEffectData: base["specialEffectData"].map {
                         .init(
-                            effectType: $0.1["effectType"].intValue,
+                            effectType: .init(rawValue: $0.1["effectType"].intValue) ?? .none,
                             stringVal: $0.1["stringVal"].stringValue,
                             stringValSub: $0.1["stringValSub"].stringValue,
                             duration: $0.1["duration"].doubleValue,
@@ -416,11 +422,12 @@ extension DoriAPI {
         }
     }
     
-    public struct Story: Identifiable, DoriCache.Cacheable {
+    public struct Story: Identifiable, Hashable, DoriCache.Cacheable {
         public var scenarioID: String
         public var caption: LocalizedData<String>
         public var title: LocalizedData<String>
         public var synopsis: LocalizedData<String>
+        public var voiceAssetBundleName: String?
         
         public var id: String { scenarioID }
     }
@@ -460,7 +467,7 @@ extension DoriAPI.Misc {
         }
     }
     
-    public struct BandStory: Identifiable, DoriCache.Cacheable {
+    public struct BandStory: Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var bandID: Int
         public var chapterNumber: Int
@@ -512,11 +519,22 @@ extension DoriAPI.Misc {
             public var costumeType: String
         }
         public struct Snippet: DoriCache.Cacheable {
-            public var actionType: Int
+            public var actionType: ActionType
             public var progressType: Int
             public var referenceIndex: Int
             public var delay: Double
             public var isWaitForSkipMode: Bool // Int(JSON) -> Bool(Swift)
+            
+            public enum ActionType: Int, DoriCache.Cacheable {
+                case none
+                case talk
+                case layout
+                case input
+                case motion
+                case selectable
+                case effect
+                case sound
+            }
         }
         public struct TalkData: DoriCache.Cacheable {
             public var talkCharacters: [TalkCharacter]
@@ -565,11 +583,32 @@ extension DoriAPI.Misc {
             public var moveSpeedType: Int
         }
         public struct SpecialEffectData: DoriCache.Cacheable {
-            public var effectType: Int
+            public var effectType: EffectType
             public var stringVal: String
             public var stringValSub: String
             public var duration: Double
             public var animationTriggerName: String
+            
+            public enum EffectType: Int, DoriCache.Cacheable {
+                case none
+                case blackIn
+                case blackOut
+                case whiteIn
+                case whiteOut
+                case shakeScreen
+                case shakeWindow
+                case changeBackground
+                case telop
+                case flashbackIn
+                case flashbackOut
+                case changeCardStill
+                case ambientColorNormal
+                case ambientColorEvening
+                case ambientColorNight
+                case playScenarioEffect
+                case stopScenarioEffect
+                case changeBackgroundStill
+            }
         }
         public struct SoundData: DoriCache.Cacheable {
             public var playMode: Int

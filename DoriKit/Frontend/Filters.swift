@@ -178,7 +178,7 @@ extension DoriFrontend.Filter {
         case taki
         
         @inline(never)
-        internal var name: String {
+        public var name: String {
             NSLocalizedString("CHARACTER_NAME_ID_" + String(self.rawValue), bundle: #bundle, comment: "")
         }
     }
