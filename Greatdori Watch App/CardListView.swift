@@ -21,7 +21,7 @@ struct CardListView: View {
             if let cards = searchedCards ?? cards {
                 ForEach(cards) { card in
                     NavigationLink(destination: { CardDetailView(id: card.card.id) }) {
-                        ThumbCardCardView(card.card, band: card.band)
+                        ThumbCardCardView(card.card)
                     }
                 }
             } else {

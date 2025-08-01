@@ -305,7 +305,7 @@ extension StoryViewerView {
                     }
                 if let selectedCard {
                     NavigationLink(destination: { CardDetailView(id: selectedCard.card.id) }) {
-                        CardCardView(selectedCard.card, band: selectedCard.band)
+                        CardCardView(selectedCard.card)
                     }
                     .listRowBackground(Color.clear)
                     .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))

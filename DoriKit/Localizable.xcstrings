@@ -1352,6 +1352,126 @@
         }
       }
     },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_FIXED_5_STAR_ONCE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必中一★5"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_ONCE_A_DAY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每日一次"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_ONCE_A_DAY_OVER_THE_3_STAR_ONCE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每日一次，必中一★3+"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_OVER_THE_3_STAR_ONCE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必中一★3+"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_OVER_THE_4_STAR_ONCE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必中一★4+"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_FIXED_5_STAR_TICKET" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "★５确认招募券"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_FREE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_FREE_STAR" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "星石 (免费)"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_NORMAL_TICKET" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "星石招募券"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_OVER_THE_3_STAR_TICKET" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "★3以上稀有度必出招募券"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_OVER_THE_4_STAR_TICKET" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "★4以上稀有度必出招募券"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_PAID_STAR" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "星石 (付费)"
+          }
+        }
+      }
+    },
     "gachabirthday" : {
       "extractionState" : "manual",
       "localizations" : {

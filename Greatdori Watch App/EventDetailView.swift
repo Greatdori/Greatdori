@@ -124,14 +124,12 @@ struct EventDetailView: View {
                         Text("卡牌")
                             .font(.system(size: 16, weight: .medium))
                         ForEach(information.cards) { card in
-                            if let character = information.characters.first(where: { $0.id == card.characterID }),
-                               let band = information.bands.first(where: { $0.id == character.bandID }),
-                               // if the card is contained in `members`, it is a card that has bonus in this event.
-                               // if not, it should be shown in rewards section (the next one).
-                               let percent = information.event.members.first(where: { $0.situationID == card.id })?.percent {
+                            // if the card is contained in `members`, it is a card that has bonus in this event.
+                            // if not, it should be shown in rewards section (the next one).
+                            if let percent = information.event.members.first(where: { $0.situationID == card.id })?.percent {
                                 HStack {
                                     NavigationLink(destination: { CardDetailView(id: card.id) }) {
-                                        CardIconView(card, band: band)
+                                        CardIconView(card)
                                     }
                                     .buttonStyle(.borderless)
                                     Text("+\(percent)%")
@@ -146,14 +144,11 @@ struct EventDetailView: View {
                             .font(.system(size: 16, weight: .medium))
                         HStack {
                             ForEach(information.cards) { card in
-                                if let character = information.characters.first(where: { $0.id == card.characterID }),
-                                   let band = information.bands.first(where: { $0.id == character.bandID }) {
-                                    if information.event.rewardCards.contains(card.id) {
-                                        NavigationLink(destination: { CardDetailView(id: card.id) }) {
-                                            CardIconView(card, band: band)
-                                        }
-                                        .buttonStyle(.borderless)
+                                if information.event.rewardCards.contains(card.id) {
+                                    NavigationLink(destination: { CardDetailView(id: card.id) }) {
+                                        CardIconView(card)
                                     }
+                                    .buttonStyle(.borderless)
                                 }
                             }
                         }
@@ -163,7 +158,11 @@ struct EventDetailView: View {
                 if !information.gacha.isEmpty {
                     Section {
                         FoldableList(information.gacha.reversed()) { gacha in
-                            GachaCardView(gacha)
+                            NavigationLink(destination: { GachaDetailView(id: gacha.id) }) {
+                                GachaCardView(gacha)
+                            }
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                         }
                     } header: {
                         Text("招募")

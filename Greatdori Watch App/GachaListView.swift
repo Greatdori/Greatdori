@@ -20,7 +20,7 @@ struct GachaListView: View {
         List {
             if let gacha = searchedGacha ?? gacha {
                 ForEach(gacha) { gacha in
-                    NavigationLink(destination: {  }) {
+                    NavigationLink(destination: { GachaDetailView(id: gacha.id) }) {
                         GachaCardView(gacha)
                     }
                     .listRowBackground(Color.clear)

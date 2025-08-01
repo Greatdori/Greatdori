@@ -22,7 +22,7 @@ struct CardDetailView: View {
         List {
             if let information {
                 Section {
-                    CardCardView(information.card, band: information.band)
+                    CardCardView(information.card)
                         .listRowBackground(Color.clear)
                         .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                     if let text = information.card.gachaText.forPreferredLocale() {
@@ -279,7 +279,11 @@ struct CardDetailView: View {
                     if !information.gacha.isEmpty {
                         Section {
                             FoldableList(information.gacha.reversed()) { gacha in
-                                GachaCardView(gacha)
+                                NavigationLink(destination: { GachaDetailView(id: gacha.id) }) {
+                                    GachaCardView(gacha)
+                                }
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                             }
                         } header: {
                             Text("招募")

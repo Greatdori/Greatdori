@@ -423,7 +423,7 @@ extension DoriAPI.Gacha {
         }
         
         /// Represent a payment method of gacha.
-        public struct PaymentMethod: DoriCache.Cacheable {
+        public struct PaymentMethod: Hashable, DoriCache.Cacheable {
             /// ID of gacha about this payment method.
             public var gachaID: Int
             /// Payment method type.
@@ -482,7 +482,7 @@ extension DoriAPI.Gacha {
             }
             
             /// Represent a payment method.
-            public enum Method: String, DoriCache.Cacheable {
+            public enum Method: String, Hashable, DoriCache.Cacheable {
                 case free
                 case freeStar = "free_star"
                 case paidStar = "paid_star"
@@ -492,7 +492,7 @@ extension DoriAPI.Gacha {
                 case fixed5StarTicket = "fixed_5_star_ticket"
             }
             /// Represent behavior of a payment method.
-            public enum Behavior: String, DoriCache.Cacheable {
+            public enum Behavior: String, Hashable, DoriCache.Cacheable {
                 case normal
                 case overThe3StarOnce = "over_the_3_star_once"
                 case overThe4StarOnce = "over_the_4_star_once"

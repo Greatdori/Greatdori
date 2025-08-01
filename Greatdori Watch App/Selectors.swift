@@ -47,7 +47,7 @@ struct CardSelector: View {
                                 UserDefaults.standard.set(card.id, forKey: "SelectorSelectedCardID")
                                 isSelectorPresented = false
                             }, label: {
-                                ThumbCardCardView(card.card, band: card.band)
+                                ThumbCardCardView(card.card)
                             })
                         }
                     }
