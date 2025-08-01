@@ -21,6 +21,7 @@ struct EventDetailView: View {
                         .resizable()
                         .scaledToFit()
                         .listRowBackground(Color.clear)
+                        .listRowInsets(.init())
                 }
                 Section {
                     VStack(alignment: .leading) {

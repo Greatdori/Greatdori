@@ -166,7 +166,7 @@ extension DoriAPI.Song.DifficultyType {
 extension DoriAPI.Song.${property} {
     @inlinable
     public var jacketImageURL: URL {
-        let jacketID = Int(round(Double(self.id) / 10) * 10 + 10) // e.g.: 715 -> 720
+        let jacketID = Int(ceil(Double(self.id) / 10) * 10)
         return .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale()!.rawValue)/musicjacket/musicjacket\(jacketID)_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket\(jacketID)-\(self.jacketImage[0])-jacket.png")!
     }
 }
