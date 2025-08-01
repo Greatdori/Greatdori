@@ -166,6 +166,49 @@
         }
       }
     },
+    "Event.countdown.completed.%@" : {
+
+    },
+    "Event.countdown.end-at.%@.%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Event.countdown.end-at.%1$@.%2$@"
+          }
+        }
+      }
+    },
+    "Event.countdown.results-in.%@.%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Event.countdown.results-in.%1$@.%2$@"
+          }
+        }
+      }
+    },
+    "Event.countdown.rewards-in.%@.%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Event.countdown.rewards-in.%1$@.%2$@"
+          }
+        }
+      }
+    },
+    "Event.countdown.start-at.%@.%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Event.countdown.start-at.%1$@.%2$@"
+          }
+        }
+      }
+    },
     "Event.end-date" : {
       "localizations" : {
         "en" : {
