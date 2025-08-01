@@ -537,7 +537,7 @@ struct MultilingualTextForCountdown: View {
     }
 }
 
-
+// This View does not check for Locale availablity.
 struct CountdownText: View {
     let event: DoriFrontend.Event.Event
     let locale: DoriAPI.Locale
@@ -547,20 +547,17 @@ struct CountdownText: View {
                let endDate = event.endAt.forLocale(locale),
                let aggregateEndDate = event.aggregateEndAt.forLocale(locale),
                let distributionStartDate = event.distributionStartAt.forLocale(locale) {
-                Group {
                     if startDate > .now {
                         Text("Event.countdown.start-at.\(Text(startDate, style: .relative))")
                     } else if endDate > .now {
                         Text("Event.countdown.end-at.\(Text(endDate, style: .relative))")
                     } else if aggregateEndDate > .now {
-                        //TODO: WHAT NAME?
-                        Text("Event.countdown.r\(Text(endDate, style: .relative))后")
+                        Text("Event.countdown.result-in.\(Text(endDate, style: .relative))")
                     } else if distributionStartDate > .now {
-                        Text("奖励颁发于\(Text(endDate, style: .relative))后")
+                        Text("Event.countdown.rewards-in.\(Text(endDate, style: .relative))")
                     } else {
-                        Text("已完结")
+                        Text("Event.countdown.completed")
                     }
-                }
             }
         }
     }
