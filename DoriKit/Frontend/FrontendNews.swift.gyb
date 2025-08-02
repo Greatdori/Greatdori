@@ -128,21 +128,39 @@ extension DoriFrontend {
                                     Date(timeIntervalSince1970: Date.now.timeIntervalSince1970 - 86400)
                                 }
                                 let interval = endDate.interval(to: comparing).day!
-                                unsortedResult.append(.init(
-                                    type: .${itemTypesOfSubcategory[subcategory]},
-                                    relatedID: item.id,
-                                    title: String(
-                                        localized: "${localizationKeyOfSubcategory[subcategory]}_\(item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!)_IN_\(locale.rawValue.uppercased())_WILL_END_AFTER_\(interval)_DAYS",
-                                        bundle: #bundle
-                                    ),
-                                    author: "Bestdori! Update Bot",
-                                    timestamp: comparing.componentsRewritten(
-                                        hour: endDate.components.hour,
-                                        minute: endDate.components.minute,
-                                        second: endDate.components.second
-                                    ),
-                                    tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"]
-                                ))
+                                if interval != 0 {
+                                    unsortedResult.append(.init(
+                                        type: .${itemTypesOfSubcategory[subcategory]},
+                                        relatedID: item.id,
+                                        title: String(
+                                            localized: "${localizationKeyOfSubcategory[subcategory]}_\(item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!)_IN_\(locale.rawValue.uppercased())_WILL_END_AFTER_\(interval)_DAYS",
+                                            bundle: #bundle
+                                        ),
+                                        author: "Bestdori! Update Bot",
+                                        timestamp: comparing.componentsRewritten(
+                                            hour: endDate.components.hour,
+                                            minute: endDate.components.minute,
+                                            second: endDate.components.second
+                                        ),
+                                        tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"]
+                                    ))
+                                } else {
+                                    unsortedResult.append(.init(
+                                        type: .${itemTypesOfSubcategory[subcategory]},
+                                        relatedID: item.id,
+                                        title: String(
+                                            localized: "${localizationKeyOfSubcategory[subcategory]}_\(item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!)_IN_\(locale.rawValue.uppercased())_WILL_END_TODAY",
+                                            bundle: #bundle
+                                        ),
+                                        author: "Bestdori! Update Bot",
+                                        timestamp: comparing.componentsRewritten(
+                                            hour: endDate.components.hour,
+                                            minute: endDate.components.minute,
+                                            second: endDate.components.second
+                                        ),
+                                        tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"]
+                                    ))
+                                }
                             }
                         }
                         % else:

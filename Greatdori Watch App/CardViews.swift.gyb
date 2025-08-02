@@ -101,13 +101,13 @@ struct CardCardView: View {
     cardTypes = ["PreviewCard", "Card"]
 }%
     % for cardType in cardTypes:
-    init(_ card: DoriAPI.Card.${cardType}, band: DoriAPI.Band.Band) {
+    init(_ card: DoriAPI.Card.${cardType}) {
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = band.iconImageURL
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
     }
     % end
     
@@ -217,13 +217,13 @@ struct ThumbCardCardView: View {
     cardTypes = ["PreviewCard", "Card"]
 }%
     % for cardType in cardTypes:
-    init(_ card: DoriAPI.Card.${cardType}, band: DoriAPI.Band.Band) {
+    init(_ card: DoriAPI.Card.${cardType}) {
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = band.iconImageURL
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
         self.prefix = card.prefix
     }
     % end
@@ -320,13 +320,13 @@ struct CardIconView: View {
     cardTypes = ["PreviewCard", "Card"]
 }%
     % for cardType in cardTypes:
-    init(_ card: DoriAPI.Card.${cardType}, band: DoriAPI.Band.Band) {
+    init(_ card: DoriAPI.Card.${cardType}) {
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = band.iconImageURL
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
     }
     % end
     

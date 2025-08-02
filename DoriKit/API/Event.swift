@@ -114,6 +114,11 @@ extension DoriAPI {
                                 pointPercent: value["eventAttributeAndCharacterBonus"]["pointPercent"].intValue,
                                 parameterPercent: value["eventAttributeAndCharacterBonus"]["parameterPercent"].intValue
                             ) : nil,
+                            eventCharacterParameterBonus: value["eventCharacterParameterBonus"]["performance"].int != nil ? .init(
+                                performance: value["eventCharacterParameterBonus"]["performance"].intValue,
+                                technique: value["eventCharacterParameterBonus"]["technique"].intValue,
+                                visual: value["eventCharacterParameterBonus"]["visual"].intValue
+                            ) : nil,
                             members: value["members"].map {
                                 EventMember(
                                     eventID: $0.1["eventId"].int,
@@ -780,6 +785,7 @@ extension DoriAPI.Event {
         /// Characters related to this event, with bonus percentage.
         public var characters: [EventCharacter]
         public var eventAttributeAndCharacterBonus: EventAttributeAndCharacterBonus?
+        public var eventCharacterParameterBonus: DoriAPI.Card.Stat?
         /// Members related to this event, with bonus percentage.
         ///
         /// A *member* related to event is a card with bonus during the event.

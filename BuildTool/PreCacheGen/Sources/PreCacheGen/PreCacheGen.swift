@@ -77,7 +77,10 @@ func retryUntilNonNil<T>(maxRetry: Int = 5, perform: () async -> T?) async -> T 
             return result
         }
     }
-    fatalError("Failed to fetch")
+    var stderr = StandardError()
+    print("error: Failed to fetch: \(T.self)", to: &stderr)
+    print("note: Switch to 'Without Pre-Cache' schemes to disable pre-cache for DoriKit", to: &stderr)
+    exit(EXIT_FAILURE)
 }
 
 struct StandardError: TextOutputStream, Sendable {

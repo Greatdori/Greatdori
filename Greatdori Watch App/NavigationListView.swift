@@ -54,6 +54,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.gacha) {
+                    Label {
+                        Text("招募")
+                    } icon: {
+                        Image(systemName: "line.horizontal.star.fill.line.horizontal")
+                            .foregroundStyle(.accent)
+                    }
+                }
             } header: {
                 Text("信息")
             }

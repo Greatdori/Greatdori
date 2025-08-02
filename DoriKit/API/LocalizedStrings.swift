@@ -64,3 +64,30 @@ extension DoriAPI.Gacha.GachaType {
         NSLocalizedString("gacha" + self.rawValue, bundle: #bundle, comment: "")
     }
 }
+extension DoriAPI.Gacha.Gacha.PaymentMethod.Method {
+    @inline(never)
+    public var localizedString: String {
+        switch self {
+        case .free: String(localized: "GACHA_PAYMENT_METHOD_METHOD_FREE", bundle: #bundle)
+        case .freeStar: String(localized: "GACHA_PAYMENT_METHOD_METHOD_FREE_STAR", bundle: #bundle)
+        case .paidStar: String(localized: "GACHA_PAYMENT_METHOD_METHOD_PAID_STAR", bundle: #bundle)
+        case .normalTicket: String(localized: "GACHA_PAYMENT_METHOD_METHOD_NORMAL_TICKET", bundle: #bundle)
+        case .overThe3StarTicket: String(localized: "GACHA_PAYMENT_METHOD_METHOD_OVER_THE_3_STAR_TICKET", bundle: #bundle)
+        case .overThe4StarTicket: String(localized: "GACHA_PAYMENT_METHOD_METHOD_OVER_THE_4_STAR_TICKET", bundle: #bundle)
+        case .fixed5StarTicket: String(localized: "GACHA_PAYMENT_METHOD_METHOD_FIXED_5_STAR_TICKET", bundle: #bundle)
+        }
+    }
+}
+extension DoriAPI.Gacha.Gacha.PaymentMethod.Behavior {
+    @inline(never)
+    public var localizedString: String {
+        switch self {
+        case .normal: String()
+        case .overThe3StarOnce: String(localized: "GACHA_PAYMENT_METHOD_BEHAVIOR_OVER_THE_3_STAR_ONCE", bundle: #bundle)
+        case .overThe4StarOnce: String(localized: "GACHA_PAYMENT_METHOD_BEHAVIOR_OVER_THE_4_STAR_ONCE", bundle: #bundle)
+        case .onceADay: String(localized: "GACHA_PAYMENT_METHOD_BEHAVIOR_ONCE_A_DAY", bundle: #bundle)
+        case .onceADayOverThe3StarOnce: String(localized: "GACHA_PAYMENT_METHOD_BEHAVIOR_ONCE_A_DAY_OVER_THE_3_STAR_ONCE", bundle: #bundle)
+        case .fixed5StarOnce: String(localized: "GACHA_PAYMENT_METHOD_BEHAVIOR_FIXED_5_STAR_ONCE", bundle: #bundle)
+        }
+    }
+}

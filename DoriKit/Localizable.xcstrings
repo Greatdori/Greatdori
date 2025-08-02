@@ -970,6 +970,16 @@
         }
       }
     },
+    "EVENT_%@_IN_%@_WILL_END_TODAY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@活动“%1$@”将在今天结束！"
+          }
+        }
+      }
+    },
     "EVENT_%@_IN_%@_WILL_START_AFTER_%lld_DAYS" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1322,12 +1332,142 @@
         }
       }
     },
+    "GACHA_%@_IN_%@_WILL_END_TODAY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@转蛋“%1$@”将在今天结束！"
+          }
+        }
+      }
+    },
     "GACHA_%@_IN_%@_WILL_START_AFTER_%lld_DAYS" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%2$@转蛋“%1$@”将在%3$lld天后开放！"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_FIXED_5_STAR_ONCE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必中一★5"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_ONCE_A_DAY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每日一次"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_ONCE_A_DAY_OVER_THE_3_STAR_ONCE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每日一次，必中一★3+"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_OVER_THE_3_STAR_ONCE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必中一★3+"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_BEHAVIOR_OVER_THE_4_STAR_ONCE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必中一★4+"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_FIXED_5_STAR_TICKET" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "★５确认招募券"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_FREE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_FREE_STAR" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "星石 (免费)"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_NORMAL_TICKET" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "星石招募券"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_OVER_THE_3_STAR_TICKET" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "★3以上稀有度必出招募券"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_OVER_THE_4_STAR_TICKET" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "★4以上稀有度必出招募券"
+          }
+        }
+      }
+    },
+    "GACHA_PAYMENT_METHOD_METHOD_PAID_STAR" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "星石 (付费)"
           }
         }
       }
@@ -1623,6 +1763,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%2$@登录奖励“%1$@”将在%3$lld天后结束！"
+          }
+        }
+      }
+    },
+    "LOGIN_CAMPAIGN_%@_IN_%@_WILL_END_TODAY" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@登录奖励“%1$@”将在今天结束！"
           }
         }
       }

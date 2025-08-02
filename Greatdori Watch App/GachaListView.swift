@@ -1,28 +1,30 @@
 //
-//  CardListView.swift
+//  GachaListView.swift
 //  Greatdori
 //
-//  Created by Mark Chan on 7/24/25.
+//  Created by Mark Chan on 8/1/25.
 //
 
 import SwiftUI
 import DoriKit
 
-struct CardListView: View {
+struct GachaListView: View {
     @State var filter = DoriFrontend.Filter()
-    @State var cards: [DoriFrontend.Card.CardWithBand]?
+    @State var gacha: [DoriFrontend.Gacha.PreviewGacha]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
     @State var searchInput = ""
-    @State var searchedCards: [DoriFrontend.Card.CardWithBand]?
+    @State var searchedGacha: [DoriFrontend.Gacha.PreviewGacha]?
     @State var availability = true
     var body: some View {
         List {
-            if let cards = searchedCards ?? cards {
-                ForEach(cards) { card in
-                    NavigationLink(destination: { CardDetailView(id: card.card.id) }) {
-                        ThumbCardCardView(card.card)
+            if let gacha = searchedGacha ?? gacha {
+                ForEach(gacha) { gacha in
+                    NavigationLink(destination: { GachaDetailView(id: gacha.id) }) {
+                        GachaCardView(gacha)
                     }
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
             } else {
                 if availability {
@@ -32,31 +34,28 @@ struct CardListView: View {
                         Spacer()
                     }
                 } else {
-                    UnavailableView("载入卡牌时出错", systemImage: "person.text.rectangle.fill", retryHandler: getCards)
+                    UnavailableView("载入招募时出错", systemImage: "line.horizontal.star.fill.line.horizontal", retryHandler: getGacha)
                 }
             }
         }
-        .navigationTitle("卡牌")
+        .navigationTitle("招募")
         .sheet(isPresented: $isFilterSettingsPresented) {
             Task {
-                cards = nil
-                await getCards()
+                gacha = nil
+                await getGacha()
             }
         } content: {
             FilterView(filter: $filter, includingKeys: [
-                .band,
                 .attribute,
-                .rarity,
                 .character,
                 .server,
-                .released,
-                .cardType,
-                .skill,
+                .timelineStatus,
+                .gachaType,
                 .sort
             ]) {
-                if let cards {
-                    SearchView(items: cards, text: $searchInput) { result in
-                        searchedCards = result
+                if let gacha {
+                    SearchView(items: gacha, text: $searchInput) { result in
+                        searchedGacha = result
                     }
                 }
             }
@@ -72,17 +71,17 @@ struct CardListView: View {
             }
         }
         .task {
-            await getCards()
+            await getGacha()
         }
     }
     
-    func getCards() async {
+    func getGacha() async {
         availability = true
-        DoriCache.withCache(id: "CardList_\(filter.identity)") {
-            await DoriFrontend.Card.list(filter: filter)
+        DoriCache.withCache(id: "GachaList_\(filter.identity)") {
+            await DoriFrontend.Gacha.list(filter: filter)
         }.onUpdate {
-            if let cards = $0 {
-                self.cards = cards
+            if let gacha = $0 {
+                self.gacha = gacha
             } else {
                 availability = false
             }

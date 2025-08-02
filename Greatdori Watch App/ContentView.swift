@@ -25,6 +25,8 @@ struct ContentView: View {
                     CostumeListView()
                 case .event:
                     EventListView()
+                case .gacha:
+                    GachaListView()
                 case .eventTracker:
                     EventTrackerView()
                 case .storyViewer:
@@ -43,6 +45,7 @@ enum NavigationPage {
     case card
     case costume
     case event
+    case gacha
     case eventTracker
     case storyViewer
 }

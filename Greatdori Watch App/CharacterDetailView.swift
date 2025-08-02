@@ -17,10 +17,10 @@ struct CharacterDetailView: View {
     var body: some View {
         List {
             if let information {
-                if let randomCard, let band = information.band {
+                if let randomCard {
                     Section {
                         NavigationLink(destination: { CardDetailView(id: randomCard.id) }) {
-                            CardCardView(randomCard, band: band)
+                            CardCardView(randomCard)
                         }
                         .listRowBackground(Color.clear)
                         .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -176,11 +176,11 @@ struct CharacterDetailView: View {
                     }
                 }
                 .listRowBackground(Color.clear)
-                if !information.cards.isEmpty, let band = information.band {
+                if !information.cards.isEmpty {
                     Section {
                         FoldableList(information.cards.reversed()) { card in
                             NavigationLink(destination: { CardDetailView(id: card.id) }) {
-                                ThumbCardCardView(card, band: band)
+                                ThumbCardCardView(card)
                             }
                         }
                     } header: {
@@ -204,6 +204,8 @@ struct CharacterDetailView: View {
                             NavigationLink(destination: { EventDetailView(id: event.id) }) {
                                 EventCardView(event, inLocale: nil)
                             }
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                         }
                     } header: {
                         Text("活动")
@@ -212,7 +214,11 @@ struct CharacterDetailView: View {
                 if !information.gacha.isEmpty {
                     Section {
                         FoldableList(information.gacha.reversed()) { gacha in
-                            GachaCardView(gacha)
+                            NavigationLink(destination: { GachaDetailView(id: gacha.id) }) {
+                                GachaCardView(gacha)
+                            }
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                         }
                     } header: {
                         Text("招募")

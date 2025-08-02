@@ -15,28 +15,37 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8C0C99902E296A8C00549B5C"
-               BuildableName = "DoriKit.framework"
-               BlueprintName = "DoriKit"
+               BlueprintIdentifier = "8C0C99692E296A4600549B5C"
+               BuildableName = "Greatdori Watch App.app"
+               BlueprintName = "Greatdori Watch App"
+               ReferencedContainer = "container:Greatdori.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8C0C995C2E296A4400549B5C"
+               BuildableName = "Greatdori.app"
+               BlueprintName = "Greatdori"
                ReferencedContainer = "container:Greatdori.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "DebWithoutPreCache"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:DoriKitTests/DoriKitTests.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-      </TestPlans>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "DebWithoutPreCache"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -45,28 +54,39 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "8C0C99692E296A4600549B5C"
+            BuildableName = "Greatdori Watch App.app"
+            BlueprintName = "Greatdori Watch App"
+            ReferencedContainer = "container:Greatdori.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release"
+      buildConfiguration = "RelWithoutPreCache"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8C0C99902E296A8C00549B5C"
-            BuildableName = "DoriKit.framework"
-            BlueprintName = "DoriKit"
+            BlueprintIdentifier = "8C0C99692E296A4600549B5C"
+            BuildableName = "Greatdori Watch App.app"
+            BlueprintName = "Greatdori Watch App"
             ReferencedContainer = "container:Greatdori.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Debug">
+      buildConfiguration = "DebWithoutPreCache">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "RelWithoutPreCache"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
