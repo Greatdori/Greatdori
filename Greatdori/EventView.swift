@@ -250,6 +250,16 @@ struct MultilingualText: View {
         //        self.isHovering = isHovering
         //        self.allLocaleTexts = allLocaleTexts
         //        self.primaryDisplayString = primaryDisplayString
+        
+        var __allLocaleTexts: [String] = []
+        for lang in DoriAPI.Locale.allCases {
+            if let pendingString = source.forLocale(lang) {
+                if !__allLocaleTexts.contains(pendingString) {
+                    __allLocaleTexts.append("\(pendingString)\(showLocaleKey ? " (\(localeToStringDict[lang] ?? "?"))" : "")")
+                }
+            }
+        }
+        self._allLocaleTexts = .init(initialValue: __allLocaleTexts)
     }
     var body: some View {
         Group {
@@ -274,24 +284,13 @@ struct MultilingualText: View {
                 }
                 .popover(isPresented: $isHovering, arrowEdge: .bottom) {
                     VStack(alignment: .trailing) {
-                        ForEach(DoriAPI.Locale.allCases, id: \.self) { localeValue in
-                            if let displayingText = source.forLocale(localeValue) {
-                                Text(displayingText)
-                            }
+                        ForEach(allLocaleTexts, id: \.self) { text in
+                            Text(text)
                         }
                     }
                     .padding()
                 }
 #endif
-        }
-        .onAppear {
-            for lang in DoriAPI.Locale.allCases {
-                if let pendingString = source.forLocale(lang) {
-                    if !allLocaleTexts.contains(pendingString) {
-                        allLocaleTexts.append("\(pendingString)\(showLocaleKey ? " (\(localeToStringDict[lang] ?? "?"))" : "")")
-                    }
-                }
-            }
         }
     }
     struct MultilingualTextInternalLabel: View {

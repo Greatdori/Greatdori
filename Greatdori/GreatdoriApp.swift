@@ -55,7 +55,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     @Environment(\.locale) var locale
     @AppStorage("IsFirstLaunch") var isFirstLaunch = true
     
-    func applicationDidFinishLaunching(_ application: UIApplication) {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+    ) -> Bool {
         SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
         
 //        if isFirstLaunch {
@@ -69,6 +72,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 //            }
 //            isFirstLaunch = false
 //        }
+        
+        return true
     }
 }
 #endif
