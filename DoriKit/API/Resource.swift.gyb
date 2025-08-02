@@ -33,6 +33,12 @@ extension DoriAPI.Event.${property} {
     }
 }
 % end
+extension DoriAPI.Event.EventCharacter {
+    @inlinable
+    public var iconImageURL: URL {
+        .init(string: "https://bestdori.com/res/icon/chara_icon_\(self.characterID).png")!
+    }
+}
 
 extension DoriAPI.Band.Band {
     @inlinable
