@@ -35,52 +35,57 @@ struct EventDetailView: View {
                                 .frame(height: 2)
                             
                             Group {
-                                HStack {
+                                ListItemView(title: {
                                     Text("Event.title")
                                         .bold()
-                                    Spacer()
+                                }, value: {
                                     MultilingualText(source: information.event.eventName)
-                                }
+                                })
                                 Divider()
-                                HStack {
+                                ListItemView(title: {
                                     Text("Event.type")
                                         .bold()
-                                    Spacer()
+                                }, value: {
                                     Text(information.event.eventType.localizedString)
-                                }
+                                })
                                 Divider()
-                                HStack {
+                                ListItemView(title: {
                                     Text("Event.countdown")
                                         .bold()
-                                    Spacer()
-                                    //                                    Text(information.event)
-                                    //TODO: MultilingualTextForCountdown
-                                }
+                                }, value: {
+                                    MultilingualTextForCountdown(source: information.event)
+                                })
                                 Divider()
-                                HStack {
+                                ListItemView(title: {
                                     Text("Event.start-date")
                                         .bold()
-                                    Spacer()
+                                }, value: {
                                     MultilingualText(source: information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                                }
+                                })
                                 Divider()
-                                HStack {
-                                    Text("Event.end-date")
+                                    ListItemView(title: {
+                                        Text("Event.end-date")
+                                            .bold()
+                                    }, value: {
+                                        MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                    })
+                                Divider()
+                                ListItemView(title: {
+                                    Text("Event.attribute")
                                         .bold()
-                                    Spacer()
-                                    MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                                }
-                                //                                Divider()
-                                //                                HStack {
-                                //                                    Text("Event.end-date")
-                                //                                        .bold()
-                                //                                    Spacer()
-                                //                                    WebImage(url: information.event.attributes)
-                                //                                        .resizable()
-                                //                                        .frame(width: 20, height: 20)
-                                //                                    Text("+\(attribute.percent)%")
-                                //                                }
-                                
+                                }, value: {
+                                    ForEach(information.event.attributes, id: \.attribute.rawValue) { attribute in
+                                        VStack(alignment: .trailing) {
+                                            HStack {
+                                                WebImage(url: attribute.attribute.iconImageURL)
+                                                    .resizable()
+                                                    .frame(width: 20, height: 20)
+                                                Text(verbatim: "+\(attribute.percent)%")
+                                            }
+                                        }
+                                    }
+                                })
+                                Divider()
                             }
                         }
                         .frame(maxWidth: 600)
@@ -132,67 +137,6 @@ struct EventDetailView: View {
 
 
 /*
- VStack(alignment: .leading) {
- Text("标题")
- .font(.system(size: 16, weight: .medium))
- Text(information.event.eventName.forPreferredLocale() ?? "")
- .font(.system(size: 14))
- .opacity(0.6)
- }
- VStack(alignment: .leading) {
- Text("种类")
- .font(.system(size: 16, weight: .medium))
- Text(information.event.eventType.localizedString)
- .font(.system(size: 14))
- .opacity(0.6)
- }
- 
- if let startDate = information.event.startAt.forPreferredLocale(),
- let endDate = information.event.endAt.forPreferredLocale() {
- VStack(alignment: .leading) {
- Text("倒计时")
- .font(.system(size: 16, weight: .medium))
- Group {
- if startDate > .now {
- Text("\(Text(startDate, style: .relative))后开始")
- } else if endDate > .now {
- Text("\(Text(endDate, style: .relative))后结束")
- } else {
- Text("已完结")
- }
- }
- .font(.system(size: 14))
- .opacity(0.6)
- }
- }
- if let date = information.event.startAt.forPreferredLocale() {
- VStack(alignment: .leading) {
- Text("开始日期")
- .font(.system(size: 16, weight: .medium))
- Text({
- let df = DateFormatter()
- df.dateStyle = .medium
- df.timeStyle = .short
- return df.string(from: date)
- }())
- .font(.system(size: 14))
- .opacity(0.6)
- }
- }
- if let date = information.event.endAt.forPreferredLocale() {
- VStack(alignment: .leading) {
- Text("结束日期")
- .font(.system(size: 16, weight: .medium))
- Text({
- let df = DateFormatter()
- df.dateStyle = .medium
- df.timeStyle = .short
- return df.string(from: date)
- }())
- .font(.system(size: 14))
- .opacity(0.6)
- }
- }
  VStack(alignment: .leading) {
  Text("属性")
  .font(.system(size: 16, weight: .medium))
@@ -312,7 +256,9 @@ struct MultilingualText: View {
 #if !os(macOS)
             Menu(content: {
                 ForEach(allLocaleTexts, id: \.self) { localeValue in
-                    Text(localeValue)
+                    Button(action: {}, label: {
+                        Text(localeValue)
+                    })
                 }
             }, label: {
                 MultilingualTextInternalLabel(source: source, showLocaleKey: showLocaleKey)
@@ -328,8 +274,10 @@ struct MultilingualText: View {
                 }
                 .popover(isPresented: $isHovering, arrowEdge: .bottom) {
                     VStack(alignment: .trailing) {
-                        ForEach(allLocaleTexts, id: \.self) { localeValue in
-                            Text(localeValue)
+                        ForEach(DoriAPI.Locale.allCases, id: \.self) { localeValue in
+                            if let displayingText = source.forLocale(localeValue) {
+                                Text(displayingText)
+                            }
                         }
                     }
                     .padding()
@@ -337,12 +285,6 @@ struct MultilingualText: View {
 #endif
         }
         .onAppear {
-            //            ForEach([DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr], id: \.self) { localeValue in
-            //                if let targetValue = source.forLocale(localeValue) {
-            //                    Text("\(targetValue)")
-            //                    //Text("\(targetValue) (\(localeLabelDict[localeValue]!))")
-            //                }
-            //            }
             for lang in [DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr] {
                 if let pendingString = source.forLocale(lang) {
                     if !allLocaleTexts.contains(pendingString) {
@@ -387,8 +329,6 @@ struct MultilingualText: View {
     }
 }
 
-
-// COUNTDOWN ONLY
 struct MultilingualTextForCountdown: View {
     let source: DoriAPI.Event.Event
     @State var isHovering = false
@@ -404,25 +344,29 @@ struct MultilingualTextForCountdown: View {
         Group {
 #if !os(macOS)
             Menu(content: {
-                ForEach(allAvailableLocales, id: \.self) { localeValue in
-                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: localeValue)
+                VStack(alignment: .trailing) {
+                    ForEach(allAvailableLocales, id: \.self) { localeValue in
+                        Button(action: {}, label: {
+                            MultilingualTextForCountdownInternalNumbersView(event: source, locale: localeValue)
+                        })
+                    }
                 }
             }, label: {
-                MultilingualTextForCountdownInternalLabel(source: source)
+                MultilingualTextForCountdownInternalLabel(source: source, allAvailableLocales: allAvailableLocales)
             })
             .menuStyle(.button)
             .buttonStyle(.borderless)
             .menuIndicator(.hidden)
             .foregroundStyle(.primary)
 #else
-            MultilingualTextForCountdownInternalLabel(source: source, showLocaleKey: showLocaleKey)
+            MultilingualTextForCountdownInternalLabel(source: source, allAvailableLocales: allAvailableLocales)
                 .onHover { isHovering in
                     self.isHovering = isHovering
                 }
                 .popover(isPresented: $isHovering, arrowEdge: .bottom) {
                     VStack(alignment: .trailing) {
-                        ForEach(allLocaleTexts, id: \.self) { localeValue in
-                            Text(localeValue)
+                        ForEach(allAvailableLocales, id: \.self) { localeValue in
+                            MultilingualTextForCountdownInternalNumbersView(event: source, locale: localeValue)
                         }
                     }
                     .padding()
@@ -439,7 +383,7 @@ struct MultilingualTextForCountdown: View {
     }
     struct MultilingualTextForCountdownInternalLabel: View {
         let source: DoriAPI.Event.Event
-        let allAvailableLocales: [DoriAPI.Locale] = []
+        let allAvailableLocales: [DoriAPI.Locale]
         @State var primaryDisplayingLocale: DoriAPI.Locale? = nil
         var body: some View {
             VStack(alignment: .trailing) {
@@ -451,26 +395,21 @@ struct MultilingualTextForCountdown: View {
                 } else if allAvailableLocales.contains(DoriAPI.secondaryLocale) {
                     MultilingualTextForCountdownInternalNumbersView(event: source, locale: DoriAPI.secondaryLocale)
                         .onAppear {
-                            primaryDisplayingLocale = DoriAPI.preferredLocale
+                            primaryDisplayingLocale = DoriAPI.secondaryLocale
                         }
-                } else if allAvailableLocales.contains(DoriAPI.Locale.jp) {
-                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: DoriAPI.secondaryLocale)
+                } else if allAvailableLocales.contains(.jp) {
+                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: .jp)
                         .onAppear {
-                            primaryDisplayingLocale = DoriAPI.preferredLocale
+                            primaryDisplayingLocale = .jp
                         }
                 }
+                
                 if allAvailableLocales.contains(DoriAPI.secondaryLocale), DoriAPI.secondaryLocale != primaryDisplayingLocale {
                     MultilingualTextForCountdownInternalNumbersView(event: source, locale: DoriAPI.secondaryLocale)
                         .foregroundStyle(.secondary)
-                        .onAppear {
-                            primaryDisplayingLocale = DoriAPI.preferredLocale
-                        }
-                } else if allAvailableLocales.contains(DoriAPI.Locale.jp), .jp != primaryDisplayingLocale {
-                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: DoriAPI.secondaryLocale)
+                } else if allAvailableLocales.contains(.jp), .jp != primaryDisplayingLocale {
+                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: .jp)
                         .foregroundStyle(.secondary)
-                        .onAppear {
-                            primaryDisplayingLocale = DoriAPI.preferredLocale
-                        }
                 }
             }
         }
@@ -502,30 +441,21 @@ struct MultilingualTextForCountdown: View {
 }
 
 
+struct ListItemView<Content1: View, Content2: View>: View {
+    let title: Content1
+    let value: Content2
+    
+    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2) {
+        self.title = title()
+        self.value = value()
+    }
+    
+    var body: some View {
+        HStack {
+            title
+            Spacer()
+            value
+        }
+    }
+}
 
-/*
- if let startDate = information.event.startAt.forPreferredLocale(),
- let endDate = information.event.endAt.forPreferredLocale(),
- let aggregateEndDate = information.event.aggregateEndAt.forPreferredLocale(),
- let distributionStartDate = information.event.distributionStartAt.forPreferredLocale() {
- VStack(alignment: .leading) {
- Text("倒计时")
- .font(.system(size: 16, weight: .medium))
- Group {
- if startDate > .now {
- Text("\(Text(startDate, style: .relative))后开始")
- } else if endDate > .now {
- Text("\(Text(endDate, style: .relative))后结束")
- } else if aggregateEndDate > .now {
- Text("结果公布于\(Text(endDate, style: .relative))后")
- } else if distributionStartDate > .now {
- Text("奖励颁发于\(Text(endDate, style: .relative))后")
- } else {
- Text("已完结")
- }
- }
- .font(.system(size: 14))
- .opacity(0.6)
- }
- }
- */

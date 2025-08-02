@@ -20,7 +20,8 @@
             "value" : "%1$@%2$@"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "App.community" : {
       "localizations" : {
@@ -150,6 +151,22 @@
         }
       }
     },
+    "Event.attribute" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attribute"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "属性"
+          }
+        }
+      }
+    },
     "Event.countdown" : {
       "localizations" : {
         "en" : {
@@ -167,44 +184,81 @@
       }
     },
     "Event.countdown.completed.%@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completed (%@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完结 (%@)"
+          }
+        }
+      }
     },
     "Event.countdown.end-at.%@.%@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ends in %1$@ (%2$@)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Event.countdown.end-at.%1$@.%2$@"
+            "state" : "translated",
+            "value" : "结束于%1$@ (%2$@)"
           }
         }
       }
     },
     "Event.countdown.results-in.%@.%@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Results in %1$@ (%2$@)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Event.countdown.results-in.%1$@.%2$@"
+            "state" : "translated",
+            "value" : "结果公布于%1$@ (%2$@)"
           }
         }
       }
     },
     "Event.countdown.rewards-in.%@.%@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rewards in %1$@ (%2$@)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Event.countdown.rewards-in.%1$@.%2$@"
+            "state" : "translated",
+            "value" : "奖励颁发于%1$@ (%2$@)"
           }
         }
       }
     },
     "Event.countdown.start-at.%@.%@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts in %1$@ (%2$@)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Event.countdown.start-at.%1$@.%2$@"
+            "state" : "translated",
+            "value" : "开始于%1$@ (%2$@)"
           }
         }
       }
