@@ -15,6 +15,8 @@ struct EventDetailView: View {
     var id: Int
     @State var information: DoriFrontend.Event.ExtendedEvent?
     @State var infoIsAvailable = true
+    var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
+    var eventCharacterPercentageArray: [Int] = []
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
         NavigationStack {
@@ -86,10 +88,42 @@ struct EventDetailView: View {
                                     }
                                 })
                                 Divider()
+                                ListItemView(title: {
+                                    Text("Event.character")
+                                }, value: {
+                                    VStack(alignment: .trailing) {
+                                        ForEach(eventCharacterPercentageArray, id: \.self) { percentage in
+                                            HStack {
+                                                Spacer()
+                                                ForEach(eventCharacterPercentageDict[percentage], id: \.self) { char in
+                                                    WebImage(url: char.iconImageURL)
+                                                        .resizable()
+                                                        .frame(width: 20, height: 20)
+//                                                    information.event.characters
+//                                                    if let percent = information.event.characters.first(where: { $0.characterID == character.id })?.percent {
+//                                                        Text("+\(percent)%")
+//                                                    }
+                                                }
+                                                Text("+\(percentage)%")
+                                                //
+                                            }
+                                        }
+                                    }
+                                })
                             }
                         }
                         .frame(maxWidth: 600)
                         .padding()
+                        .onAppear {
+                            var eventCharacters = information.event.characters
+                            for char in eventCharacters {
+                                eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
+                            }
+                            for (key, value) in eventCharacterPercentageDict {
+                                eventCharacterPercentageArray.append(key)
+                            }
+                            eventCharacterPercentageArray.sort()
+                        }
                         Spacer()
                     }
                 }
