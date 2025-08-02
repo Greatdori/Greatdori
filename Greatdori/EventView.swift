@@ -15,8 +15,8 @@ struct EventDetailView: View {
     var id: Int
     @State var information: DoriFrontend.Event.ExtendedEvent?
     @State var infoIsAvailable = true
-    var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
-    var eventCharacterPercentageArray: [Int] = []
+    @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
+    @State var eventCharacterPercentageArray: [Int] = []
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
         NavigationStack {
@@ -95,7 +95,7 @@ struct EventDetailView: View {
                                         ForEach(eventCharacterPercentageArray, id: \.self) { percentage in
                                             HStack {
                                                 Spacer()
-                                                ForEach(eventCharacterPercentageDict[percentage], id: \.self) { char in
+                                                ForEach(eventCharacterPercentageDict[percentage]!) { char in
                                                     WebImage(url: char.iconImageURL)
                                                         .resizable()
                                                         .frame(width: 20, height: 20)
