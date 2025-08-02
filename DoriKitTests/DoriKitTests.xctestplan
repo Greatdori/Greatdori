@@ -50,6 +50,15 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:Greatdori.xcodeproj",
+          "identifier" : "8C0C99902E296A8C00549B5C",
+          "name" : "DoriKit"
+        }
+      ]
+    },
     "commandLineArgumentEntries" : [
       {
         "argument" : ""
