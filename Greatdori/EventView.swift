@@ -16,7 +16,6 @@ struct EventDetailView: View {
     @State var information: DoriFrontend.Event.ExtendedEvent?
     @State var infoIsAvailable = true
     @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
-    @State var eventCharacterPercentageArray: [Int] = []
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
         NavigationStack {
@@ -92,7 +91,8 @@ struct EventDetailView: View {
                                     Text("Event.character")
                                 }, value: {
                                     VStack(alignment: .trailing) {
-                                        ForEach(eventCharacterPercentageArray, id: \.self) { percentage in
+                                          let keys = eventCharacterPercentageDict.keys.sorted()
+                                        ForEach(keys, id: \.self) { percentage in
                                             HStack {
                                                 Spacer()
                                                 ForEach(eventCharacterPercentageDict[percentage]!) { char in
@@ -119,10 +119,6 @@ struct EventDetailView: View {
                             for char in eventCharacters {
                                 eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
                             }
-                            for (key, value) in eventCharacterPercentageDict {
-                                eventCharacterPercentageArray.append(key)
-                            }
-                            eventCharacterPercentageArray.sort()
                         }
                         Spacer()
                     }
