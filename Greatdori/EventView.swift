@@ -285,7 +285,7 @@ struct MultilingualText: View {
 #endif
         }
         .onAppear {
-            for lang in [DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr] {
+            for lang in DoriAPI.Locale.allCases {
                 if let pendingString = source.forLocale(lang) {
                     if !allLocaleTexts.contains(pendingString) {
                         allLocaleTexts.append("\(pendingString)\(showLocaleKey ? " (\(localeToStringDict[lang] ?? "?"))" : "")")
