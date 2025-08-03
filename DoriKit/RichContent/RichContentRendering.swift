@@ -31,7 +31,11 @@ extension RichContent {
             return Text(attributedString)
         }
         func emojiText(from emoji: Emoji) -> Text {
+            #if !os(macOS)
             Text("\(Image(uiImage: emoji.image.resized(to: environment.emojiFrame)).resizable())")
+            #else
+            Text("\(Image(nsImage: emoji.image.resized(to: environment.emojiFrame)).resizable())")
+            #endif
         }
         
         return switch self {

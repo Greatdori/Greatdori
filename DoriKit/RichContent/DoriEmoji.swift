@@ -85,6 +85,7 @@ extension RichContent.Emoji: Equatable {
     }
 }
 
+#if !os(macOS)
 extension UIImage {
     func resized(to newSize: CGSize) -> UIImage {
         let widthRatio = newSize.width / size.width
@@ -100,3 +101,25 @@ extension UIImage {
         return UIGraphicsGetImageFromCurrentImageContext()!
     }
 }
+#else
+extension NSImage {
+    func resized(to newSize: CGSize) -> NSImage {
+        let widthRatio  = newSize.width / size.width
+        let heightRatio = newSize.height / size.height
+        let scaleFactor = min(widthRatio, heightRatio)
+        let newSize = CGSize(
+            width: size.width * scaleFactor,
+            height: size.height * scaleFactor
+        )
+        let newImage = NSImage(size: newSize)
+        newImage.lockFocus()
+        defer { newImage.unlockFocus() }
+        let rect = CGRect(origin: .zero, size: newSize)
+        draw(in: rect,
+             from: .zero,
+             operation: .copy,
+             fraction: 1.0)
+        return newImage
+    }
+}
+#endif
