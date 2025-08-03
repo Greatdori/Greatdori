@@ -80,41 +80,80 @@ struct EventDetailView: View {
                                             HStack {
                                                 WebImage(url: attribute.attribute.iconImageURL)
                                                     .resizable()
-                                                    .frame(width: 20, height: 20)
+                                                    .frame(width: 30, height: 30)
                                                 Text(verbatim: "+\(attribute.percent)%")
                                             }
                                         }
                                     }
                                 })
                                 Divider()
+                                // Please ignore Errors here: idk why
                                 ListItemView(title: {
                                     Text("Event.character")
+                                        .bold()
                                 }, value: {
                                     VStack(alignment: .trailing) {
                                           let keys = eventCharacterPercentageDict.keys.sorted()
                                         ForEach(keys, id: \.self) { percentage in
                                             HStack {
                                                 Spacer()
-                                                ForEach(eventCharacterPercentageDict[percentage]!) { char in
-                                                    WebImage(url: char.iconImageURL)
-                                                        .resizable()
-                                                        .frame(width: 20, height: 20)
-//                                                    information.event.characters
-//                                                    if let percent = information.event.characters.first(where: { $0.characterID == character.id })?.percent {
-//                                                        Text("+\(percent)%")
-//                                                    }
+                                                ForEach(eventCharacterPercentageDict[percentage]!, id: \.self) { char in
+                                                    NavigationLink(destination: {
+                                                        
+                                                    }, label: {
+                                                        WebImage(url: char.iconImageURL)
+                                                            .resizable()
+                                                            .frame(width: 30, height: 30)
+                                                    })
+                                                    .buttonStyle(.plain)
                                                 }
                                                 Text("+\(percentage)%")
                                                 //
                                             }
                                         }
                                     }
+                                }/*, shouldTitleBeOnTop: true*/)
+                                Divider()
+                                if let paramters = information.event.eventCharacterParameterBonus, paramters.total > 0 {
+                                    ListItemView(title: {
+                                        Text("Event.parameter")
+                                            .bold()
+                                    }, value: {
+                                        VStack(alignment: .trailing) {
+                                            if paramters.performance > 0 {
+                                                HStack {
+                                                    Text("Event.parameter.performance")
+                                                    Text("+\(paramters.performance)%")
+                                                }
+                                            }
+                                            if paramters.technique > 0 {
+                                                HStack {
+                                                    Text("Event.parameter.technique")
+                                                    Text("+\(paramters.technique)%")
+                                                }
+                                            }
+                                            if paramters.visual > 0 {
+                                                HStack {
+                                                    Text("Event.parameter.visual")
+                                                    Text("+\(paramters.visual)%")
+                                                }
+                                            }
+                                        }
+                                    })
+                                    Divider()
+                                }
+                                ListItemView(title: {
+                                    Text("Event.id")
+                                        .bold()
+                                }, value: {
+                                    Text("\(id)")
                                 })
                             }
                         }
                         .frame(maxWidth: 600)
                         .padding()
                         .onAppear {
+                            eventCharacterPercentageDict = [:]
                             var eventCharacters = information.event.characters
                             for char in eventCharacters {
                                 eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
@@ -136,6 +175,12 @@ struct EventDetailView: View {
             }
         }
         .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "#\(id)"))
+        .wrapIf({ if #available(iOS 26, *) { true } else { false } }()) { content in
+            if #available(iOS 26, *) {
+                content
+                    .navigationSubtitle("#\(id)")
+            }
+        }
         //        .navigationTitle(.lineLimit(nil))
         //        .toolbarTitleDisplayMode(.inline)
         .task {
@@ -473,15 +518,24 @@ struct MultilingualTextForCountdown: View {
 struct ListItemView<Content1: View, Content2: View>: View {
     let title: Content1
     let value: Content2
+    let shouldTitleBeOnTop: Bool
     
-    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2) {
+    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, shouldTitleBeOnTop: Bool = false) {
         self.title = title()
         self.value = value()
+        self.shouldTitleBeOnTop = shouldTitleBeOnTop
     }
     
     var body: some View {
         HStack {
-            title
+            if shouldTitleBeOnTop {
+                VStack {
+                    title
+                    Spacer()
+                }
+            } else {
+                title
+            }
             Spacer()
             value
         }

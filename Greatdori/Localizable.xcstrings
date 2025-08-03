@@ -12,6 +12,9 @@
       },
       "shouldTranslate" : false
     },
+    "#%lld" : {
+      "shouldTranslate" : false
+    },
     "%@%@" : {
       "localizations" : {
         "zh-Hans" : {
@@ -21,6 +24,12 @@
           }
         }
       },
+      "shouldTranslate" : false
+    },
+    "%lld" : {
+      "shouldTranslate" : false
+    },
+    "+%lld%%" : {
       "shouldTranslate" : false
     },
     "App.community" : {
@@ -167,6 +176,22 @@
         }
       }
     },
+    "Event.character" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Character"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "角色"
+          }
+        }
+      }
+    },
     "Event.countdown" : {
       "localizations" : {
         "en" : {
@@ -275,6 +300,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "结束日期"
+          }
+        }
+      }
+    },
+    "Event.id" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ID"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ID"
+          }
+        }
+      }
+    },
+    "Event.parameter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parameter"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "参数"
+          }
+        }
+      }
+    },
+    "Event.parameter.performance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Performance"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "演出"
+          }
+        }
+      }
+    },
+    "Event.parameter.technique" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Technique"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "技巧"
+          }
+        }
+      }
+    },
+    "Event.parameter.visual" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visual"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "形象"
           }
         }
       }

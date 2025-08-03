@@ -77,3 +77,76 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 }
 #endif
+
+
+public extension View {
+    /// Wraps a view into a specific container when `condition` is `true`.
+    ///
+    /// Use this modifier to conditionally wrap a view into a container.
+    /// ```swift
+    /// struct MyView: View {
+    ///     @State private var navigatable = false
+    ///     var body: some View {
+    ///         List {
+    ///             Button("Switch Navigatability") {
+    ///                 navigatable.toggle()
+    ///             }
+    ///             NavigationLink("Navigate", destination: { /* some view... */ })
+    ///         }
+    ///         .wrapIf(navigatable) { content in
+    ///             NavigationStack { content }
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Note: When the condition changes, SwiftUI redraws the whole contained view.
+    ///
+    /// - Parameters:
+    ///   - condition: Whether to wrap the view into the specific container.
+    ///   - container: Wrapping container which makes sence when `condition` is `true`.
+    /// - Returns: A view that wrapped into the specific container when `condition` is `true`.
+    @ViewBuilder
+    func wrapIf(_ condition: Bool, @ViewBuilder in container: (Self) -> some View) -> some View {
+        if condition {
+            container(self)
+        } else {
+            self
+        }
+    }
+    
+    /// Wraps a view into a specific container when `condition` is `true`,
+    /// and wraps it into the other container when `condition` is `false`.
+    ///
+    /// ```swift
+    /// struct MyView: View {
+    ///     @State private var appearance = false
+    ///     var body: some View {
+    ///         Button("Switch Appearance") {
+    ///             appearance.toggle()
+    ///         }
+    ///         .wrapIf(appearance) { content in
+    ///             VStack { content }
+    ///         } else: { content in
+    ///             List { content }
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Note: When the condition changes, SwiftUI redraws the whole contained view.
+    ///
+    /// - Parameters:
+    ///   - condition: Whether to wrap the view into the `true` container or the `false` container.
+    ///   - container: Wrapping container which makes sence when `condition` is `true`.
+    ///   - elseContainer: Wrapping container which makes sence when `condition` is `false`.
+    /// - Returns: A view that wrapped into the `true` container when `condition` is `true`, vice versa.
+    @ViewBuilder
+    func wrapIf(_ condition: Bool, @ViewBuilder in container: (Self) -> some View, @ViewBuilder else elseContainer: (Self) -> some View) -> some View {
+        if condition {
+            container(self)
+        } else {
+            elseContainer(self)
+        }
+    }
+}
