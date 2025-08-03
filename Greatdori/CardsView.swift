@@ -67,14 +67,14 @@ struct EventCardView: View {
                     if let startDate = locale != nil ? startAt.forLocale(locale!) : startAt.forPreferredLocale(),
                        let endDate = locale != nil ? endAt.forLocale(locale!) : startAt.forPreferredLocale() {
                         if startDate > .now {
-                            Text("Events.countdown.start-at.\(Text(startDate, style: .relative)) \(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
+                            Text("Events.countdown.start-at.\(Text(startDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
                         } else if endDate > .now {
-                            Text("Events.countdown.end-at.\(Text(endDate, style: .relative)) \(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
+                            Text("Events.countdown.end-at.\(Text(endDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
                         } else {
-                            Text("Events.countdown.ended.\(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
+                            Text("Events.countdown.ended.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
                         }
                     } else {
-                        Text("Events.countdown.unstarted.\(locale != nil ? " (\(locale!.rawValue.uppercased()))" : "")")
+                        Text("Events.countdown.unstarted.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
                     }
                 }
             }

@@ -15,8 +15,6 @@ struct EventDetailView: View {
     var id: Int
     @State var information: DoriFrontend.Event.ExtendedEvent?
     @State var infoIsAvailable = true
-    @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
-    var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
         NavigationStack {
             if let information {
@@ -24,141 +22,10 @@ struct EventDetailView: View {
                     HStack {
                         Spacer()
                         VStack {
-                            Rectangle()
-                                .opacity(0)
-                                .frame(height: 2)
-                            WebImage(url: information.event.bannerImageURL)
-                                .resizable()
-                                .aspectRatio(3.0, contentMode: .fit)
-                                .frame(maxWidth: 420, maxHeight: 140)
-                            Rectangle()
-                                .opacity(0)
-                                .frame(height: 2)
-                            
-                            Group {
-                                ListItemView(title: {
-                                    Text("Event.title")
-                                        .bold()
-                                }, value: {
-                                    MultilingualText(source: information.event.eventName)
-                                })
-                                Divider()
-                                ListItemView(title: {
-                                    Text("Event.type")
-                                        .bold()
-                                }, value: {
-                                    Text(information.event.eventType.localizedString)
-                                })
-                                Divider()
-                                ListItemView(title: {
-                                    Text("Event.countdown")
-                                        .bold()
-                                }, value: {
-                                    MultilingualTextForCountdown(source: information.event)
-                                })
-                                Divider()
-                                ListItemView(title: {
-                                    Text("Event.start-date")
-                                        .bold()
-                                }, value: {
-                                    MultilingualText(source: information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                                })
-                                Divider()
-                                    ListItemView(title: {
-                                        Text("Event.end-date")
-                                            .bold()
-                                    }, value: {
-                                        MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                                    })
-                                Divider()
-                                ListItemView(title: {
-                                    Text("Event.attribute")
-                                        .bold()
-                                }, value: {
-                                    ForEach(information.event.attributes, id: \.attribute.rawValue) { attribute in
-                                        VStack(alignment: .trailing) {
-                                            HStack {
-                                                WebImage(url: attribute.attribute.iconImageURL)
-                                                    .resizable()
-                                                    .frame(width: 30, height: 30)
-                                                Text(verbatim: "+\(attribute.percent)%")
-                                            }
-                                        }
-                                    }
-                                })
-                                Divider()
-                                // Please ignore Errors here: idk why
-                                ListItemView(title: {
-                                    Text("Event.character")
-                                        .bold()
-                                }, value: {
-                                    VStack(alignment: .trailing) {
-                                          let keys = eventCharacterPercentageDict.keys.sorted()
-                                        ForEach(keys, id: \.self) { percentage in
-                                            HStack {
-                                                Spacer()
-                                                ForEach(eventCharacterPercentageDict[percentage]!, id: \.self) { char in
-                                                    NavigationLink(destination: {
-                                                        
-                                                    }, label: {
-                                                        WebImage(url: char.iconImageURL)
-                                                            .resizable()
-                                                            .frame(width: 30, height: 30)
-                                                    })
-                                                    .buttonStyle(.plain)
-                                                }
-                                                Text("+\(percentage)%")
-                                                //
-                                            }
-                                        }
-                                    }
-                                }/*, shouldTitleBeOnTop: true*/)
-                                Divider()
-                                if let paramters = information.event.eventCharacterParameterBonus, paramters.total > 0 {
-                                    ListItemView(title: {
-                                        Text("Event.parameter")
-                                            .bold()
-                                    }, value: {
-                                        VStack(alignment: .trailing) {
-                                            if paramters.performance > 0 {
-                                                HStack {
-                                                    Text("Event.parameter.performance")
-                                                    Text("+\(paramters.performance)%")
-                                                }
-                                            }
-                                            if paramters.technique > 0 {
-                                                HStack {
-                                                    Text("Event.parameter.technique")
-                                                    Text("+\(paramters.technique)%")
-                                                }
-                                            }
-                                            if paramters.visual > 0 {
-                                                HStack {
-                                                    Text("Event.parameter.visual")
-                                                    Text("+\(paramters.visual)%")
-                                                }
-                                            }
-                                        }
-                                    })
-                                    Divider()
-                                }
-                                ListItemView(title: {
-                                    Text("Event.id")
-                                        .bold()
-                                }, value: {
-                                    Text("\(id)")
-                                })
-                            }
+                            EventDetailOverviewView(information: information)
+                            .frame(maxWidth: 600)
                         }
-                        .frame(maxWidth: 600)
                         .padding()
-                        .onAppear {
-                            eventCharacterPercentageDict = [:]
-                            var eventCharacters = information.event.characters
-                            for char in eventCharacters {
-                                eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
-                            }
-                        }
                         Spacer()
                     }
                 }
@@ -177,8 +44,10 @@ struct EventDetailView: View {
         .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "#\(id)"))
         .wrapIf({ if #available(iOS 26, *) { true } else { false } }()) { content in
             if #available(iOS 26, *) {
-                content
-                    .navigationSubtitle("#\(id)")
+//                if information?.event.eventName.forPreferredLocale() != nil {
+                    content
+                    .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(id)" : "")
+//                }
             }
         }
         //        .navigationTitle(.lineLimit(nil))
@@ -209,39 +78,236 @@ struct EventDetailView: View {
     }
 }
 
+struct EventDetailOverviewView: View {
+    let information: DoriFrontend.Event.ExtendedEvent
+    @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
+    var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
+    var body: some View {
+        Group {
+            Rectangle()
+                .opacity(0)
+                .frame(height: 2)
+            WebImage(url: information.event.bannerImageURL)
+                .resizable()
+                .aspectRatio(3.0, contentMode: .fit)
+                .frame(maxWidth: 420, maxHeight: 140)
+            Rectangle()
+                .opacity(0)
+                .frame(height: 2)
+            
+            Group {
+                ListItemView(title: {
+                    Text("Event.title")
+                        .bold()
+                }, value: {
+                    MultilingualText(source: information.event.eventName)
+                })
+                Divider()
+                ListItemView(title: {
+                    Text("Event.type")
+                        .bold()
+                }, value: {
+                    Text(information.event.eventType.localizedString)
+                })
+                Divider()
+                ListItemView(title: {
+                    Text("Event.countdown")
+                        .bold()
+                }, value: {
+                    MultilingualTextForCountdown(source: information.event)
+                })
+                Divider()
+                ListItemView(title: {
+                    Text("Event.start-date")
+                        .bold()
+                }, value: {
+                    MultilingualText(source: information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                })
+                Divider()
+                ListItemView(title: {
+                    Text("Event.end-date")
+                        .bold()
+                }, value: {
+                    MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                })
+                Divider()
+                ListItemView(title: {
+                    Text("Event.attribute")
+                        .bold()
+                }, value: {
+                    ForEach(information.event.attributes, id: \.attribute.rawValue) { attribute in
+                        VStack(alignment: .trailing) {
+                            HStack {
+                                WebImage(url: attribute.attribute.iconImageURL)
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                Text(verbatim: "+\(attribute.percent)%")
+                            }
+                        }
+                    }
+                })
+                Divider()
+                // Please ignore Errors here: idk why
+                ListItemView(title: {
+                    Text("Event.character")
+                        .bold()
+                }, value: {
+                    VStack(alignment: .trailing) {
+                        let keys = eventCharacterPercentageDict.keys.sorted()
+                        ForEach(keys, id: \.self) { percentage in
+                            HStack {
+                                Spacer()
+                                ForEach(eventCharacterPercentageDict[percentage]!, id: \.self) { char in
+                                    NavigationLink(destination: {
+                                        
+                                    }, label: {
+                                        WebImage(url: char.iconImageURL)
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                    })
+                                    .buttonStyle(.plain)
+                                }
+                                Text("+\(percentage)%")
+                                //
+                            }
+                        }
+                    }
+                }/*, shouldTitleBeOnTop: true*/)
+                Divider()
+                if let paramters = information.event.eventCharacterParameterBonus, paramters.total > 0 {
+                    ListItemView(title: {
+                        Text("Event.parameter")
+                            .bold()
+                    }, value: {
+                        VStack(alignment: .trailing) {
+                            if paramters.performance > 0 {
+                                HStack {
+                                    Text("Event.parameter.performance")
+                                    Text("+\(paramters.performance)%")
+                                }
+                            }
+                            if paramters.technique > 0 {
+                                HStack {
+                                    Text("Event.parameter.technique")
+                                    Text("+\(paramters.technique)%")
+                                }
+                            }
+                            if paramters.visual > 0 {
+                                HStack {
+                                    Text("Event.parameter.visual")
+                                    Text("+\(paramters.visual)%")
+                                }
+                            }
+                        }
+                    })
+                    Divider()
+                }
+                ListItemView(title: {
+                    Text("Event.card")
+                }, value: {
+                    ForEach(information.cards) { card in
+                        // if the card is contained in `members`, it is a card that has bonus in this event.
+                        // if not, it should be shown in rewards section (the next one).
+                        if let percent = information.event.members.first(where: { $0.situationID == card.id })?.percent {
+                            HStack {
+                                NavigationLink(destination: {
+                                    
+                                }, label: {
+//                                    CardIconView(card)
+                                    Text("1")
+                                })
+                                .buttonStyle(.plain)
+                                Text("+\(percent)%")
+                                    .font(.system(size: 14))
+                                    .opacity(0.6)
+                            }
+                        }
+                    }
+                })
+                /*
+                VStack(alignment: .leading) {
+                    Text("卡牌")
+                        .font(.system(size: 16, weight: .medium))
+                    ForEach(information.cards) { card in
+                        // if the card is contained in `members`, it is a card that has bonus in this event.
+                        // if not, it should be shown in rewards section (the next one).
+                        if let percent = information.event.members.first(where: { $0.situationID == card.id })?.percent {
+                            HStack {
+                                NavigationLink(destination: { CardDetailView(id: card.id) }) {
+                                    CardIconView(card)
+                                }
+                                .buttonStyle(.borderless)
+                                Text("+\(percent)%")
+                                    .font(.system(size: 14))
+                                    .opacity(0.6)
+                            }
+                        }
+                    }
+                }
+                VStack(alignment: .leading) {
+                    Text("奖励")
+                        .font(.system(size: 16, weight: .medium))
+                    HStack {
+                        ForEach(information.cards) { card in
+                            if information.event.rewardCards.contains(card.id) {
+                                NavigationLink(destination: { CardDetailView(id: card.id) }) {
+                                    CardIconView(card)
+                                }
+                                .buttonStyle(.borderless)
+                            }
+                        }
+                    }
+                }
+                 */
+//                ListItemView(title: {
+//                    Text("Event.card")
+//                }, value: {
+//                    HStack {
+//                        ForEach(information.cards) { card in
+//                            if let character = information.characters.first(where: { $0.id == card.characterID }),
+//                               let band = information.bands.first(where: { $0.id == band.id }),
+//                               // If the card is contained in `members`, it is a card that has bonus in this event.
+//                               // If not, it should be shown in rewards section (the next one).
+//                                let percent = information.event.members.first(where: { $0.situationID == card.id })?.percent {
+//                                
+//                                NavigationLink(destination: {
+//                                    
+//                                }, label: {
+//                                    CardIconView(card, band: band)
+//                                })
+//                                .buttonStyle(.plain)
+//                                                                        
+//                                                                        
+//                                    Text("+\(percent)%")
+//                                        .font(.system(size: 14))
+//                                        .opacity(0.6)
+//                                    Text(information.cards.count)
+//                                
+//                            }
+//                        }
+//                    }
+//                })
+//                Divider()
+                ListItemView(title: {
+                    Text("Event.id")
+                        .bold()
+                }, value: {
+                    Text("\(information.id)")
+                })
+            }
+        }
+        .onAppear {
+            eventCharacterPercentageDict = [:]
+            var eventCharacters = information.event.characters
+            for char in eventCharacters {
+                eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
+            }
+        }
+    }
+}
 
 
 /*
- VStack(alignment: .leading) {
- Text("属性")
- .font(.system(size: 16, weight: .medium))
- ForEach(information.event.attributes, id: \.attribute.rawValue) { attribute in
- HStack {
- WebImage(url: attribute.attribute.iconImageURL)
- .resizable()
- .frame(width: 20, height: 20)
- Text("+\(attribute.percent)%")
- .font(.system(size: 14))
- .opacity(0.6)
- }
- }
- }
- VStack(alignment: .leading) {
- Text("角色")
- .font(.system(size: 16, weight: .medium))
- ForEach(information.characters) { character in
- HStack {
- WebImage(url: character.iconImageURL)
- .resizable()
- .frame(width: 20, height: 20)
- if let percent = information.event.characters.first(where: { $0.characterID == character.id })?.percent {
- Text("+\(percent)%")
- .font(.system(size: 14))
- .opacity(0.6)
- }
- }
- }
- }
  VStack(alignment: .leading) {
  Text("卡牌")
  .font(.system(size: 16, weight: .medium))

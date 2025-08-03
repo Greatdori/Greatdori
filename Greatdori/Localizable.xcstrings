@@ -488,7 +488,7 @@
         }
       }
     },
-    "Events.countdown.end-at.%@ %@" : {
+    "Events.countdown.end-at.%@.%@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -520,7 +520,7 @@
         }
       }
     },
-    "Events.countdown.start-at.%@ %@" : {
+    "Events.countdown.start-at.%@.%@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
