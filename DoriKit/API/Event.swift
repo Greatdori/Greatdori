@@ -496,6 +496,11 @@ extension DoriAPI {
                             pointPercent: respJSON["eventAttributeAndCharacterBonus"]["pointPercent"].intValue,
                             parameterPercent: respJSON["eventAttributeAndCharacterBonus"]["parameterPercent"].intValue
                         ) : nil,
+                        eventCharacterParameterBonus: respJSON["eventCharacterParameterBonus"]["performance"].int != nil ? .init(
+                            performance: respJSON["eventCharacterParameterBonus"]["performance"].intValue,
+                            technique: respJSON["eventCharacterParameterBonus"]["technique"].intValue,
+                            visual: respJSON["eventCharacterParameterBonus"]["visual"].intValue
+                        ) : nil,
                         members: respJSON["members"].map {
                             EventMember(
                                 eventID: $0.1["eventId"].int,
@@ -828,6 +833,7 @@ extension DoriAPI.Event {
         /// Characters related to this event, with bonus percentage.
         public var characters: [EventCharacter]
         public var eventAttributeAndCharacterBonus: EventAttributeAndCharacterBonus?
+        public var eventCharacterParameterBonus: DoriAPI.Card.Stat?
         /// Members related to this event, with bonus percentage.
         ///
         /// A *member* related to event is a card with bonus during the event.
@@ -858,6 +864,7 @@ extension DoriAPI.Event {
             attributes: [EventAttribute],
             characters: [EventCharacter],
             eventAttributeAndCharacterBonus: EventAttributeAndCharacterBonus?,
+            eventCharacterParameterBonus: DoriAPI.Card.Stat?,
             members: [EventMember],
             limitBreaks: [EventLimitBreak],
             stories: [Story],
@@ -883,6 +890,7 @@ extension DoriAPI.Event {
             self.attributes = attributes
             self.characters = characters
             self.eventAttributeAndCharacterBonus = eventAttributeAndCharacterBonus
+            self.eventCharacterParameterBonus = eventCharacterParameterBonus
             self.members = members
             self.limitBreaks = limitBreaks
             self.stories = stories
