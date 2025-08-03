@@ -161,6 +161,8 @@ extension DoriAPI.Gacha.Gacha.PaymentMethod.Method {
         case .overThe3StarTicket: URL(string: "https://bestdori.com/assets/\(DoriAPI.preferredLocale.rawValue)/thumb/common_rip/gachaTicket2.png")
         case .overThe4StarTicket: URL(string: "https://bestdori.com/assets/\(DoriAPI.preferredLocale.rawValue)/thumb/common_rip/gachaTicket5.png")
         case .fixed5StarTicket: URL(string: "https://bestdori.com/assets/\(DoriAPI.preferredLocale.rawValue)/thumb/common_rip/gachaTicket4.png")
+        @unknown default:
+            fatalError()
         }
     }
 }

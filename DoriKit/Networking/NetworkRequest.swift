@@ -9,9 +9,23 @@ import Foundation
 internal import Alamofire
 internal import SwiftyJSON
 
-internal func requestJSON(_ convertible: URLConvertible, method: HTTPMethod = .get, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, interceptor: RequestInterceptor? = nil, requestModifier: Session.RequestModifier? = nil) async -> Result<JSON, Void> {
+internal func requestJSON(
+    _ convertible: URLConvertible,
+    method: HTTPMethod = .get,
+    parameters: Parameters? = nil,
+    encoding: ParameterEncoding = URLEncoding.default,
+    interceptor: RequestInterceptor? = nil,
+    requestModifier: Session.RequestModifier? = nil
+) async -> Result<JSON, Void> {
     await withCheckedContinuation { continuation in
-        AF.request(convertible, method: method, parameters: parameters, encoding: encoding, interceptor: interceptor, requestModifier: requestModifier).responseData { response in
+        AF.request(
+            convertible,
+            method: method,
+            parameters: parameters,
+            encoding: encoding,
+            interceptor: interceptor,
+            requestModifier: requestModifier
+        ).responseData { response in
             let data = response.data
             if data != nil {
                 do {
@@ -26,15 +40,29 @@ internal func requestJSON(_ convertible: URLConvertible, method: HTTPMethod = .g
         }
     }
 }
-internal func requestString(_ convertible: URLConvertible, method: HTTPMethod = .get, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, interceptor: RequestInterceptor? = nil, requestModifier: Session.RequestModifier? = nil) async -> Result<String, Void> {
+internal func requestJSON<Parameters: Encodable & Sendable>(
+    _ convertible: URLConvertible,
+    method: HTTPMethod = .get,
+    parameters: Parameters? = nil,
+    encoder: any ParameterEncoder = URLEncodedFormParameterEncoder.default,
+    interceptor: RequestInterceptor? = nil,
+    requestModifier: Session.RequestModifier? = nil
+) async -> Result<JSON, Void> {
     await withCheckedContinuation { continuation in
-        AF.request(convertible, method: method, parameters: parameters, encoding: encoding, interceptor: interceptor, requestModifier: requestModifier).responseData { response in
+        AF.request(
+            convertible,
+            method: method,
+            parameters: parameters,
+            encoder: encoder,
+            interceptor: interceptor,
+            requestModifier: requestModifier
+        ).responseData { response in
             let data = response.data
             if data != nil {
-                let str = String(data: data!, encoding: .utf8)
-                if str != nil {
-                    continuation.resume(returning: .success(str!))
-                } else {
+                do {
+                    let json = try JSON(data: data!)
+                    continuation.resume(returning: .success(json))
+                } catch {
                     continuation.resume(returning: .failure(()))
                 }
             } else {

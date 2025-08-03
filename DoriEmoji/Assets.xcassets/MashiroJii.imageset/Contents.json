@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "MashiroJii.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -22,6 +22,18 @@ struct NavigationListView: View {
                 }
             }
             Section {
+                NavigationLink(value: NavigationPage.post) {
+                    Label {
+                        Text("帖子")
+                    } icon: {
+                        Image(systemName: "richtext.page.fill")
+                            .foregroundStyle(.accent)
+                    }
+                }
+            } header: {
+                Text("社区")
+            }
+            Section {
                 NavigationLink(value: NavigationPage.character) {
                     Label {
                         Text("角色")

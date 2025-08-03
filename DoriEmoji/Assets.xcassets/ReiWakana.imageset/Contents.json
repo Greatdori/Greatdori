@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ReiWakana.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

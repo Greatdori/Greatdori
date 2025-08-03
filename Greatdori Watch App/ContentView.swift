@@ -17,6 +17,8 @@ struct ContentView: View {
                 switch navigation {
                 case .home:
                     HomeView()
+                case .post:
+                    CommunityPostsView()
                 case .character:
                     CharacterListView()
                 case .card:
@@ -41,6 +43,7 @@ struct ContentView: View {
 
 enum NavigationPage {
     case home
+    case post
     case character
     case card
     case costume

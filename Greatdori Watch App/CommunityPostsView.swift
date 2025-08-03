@@ -1,0 +1,73 @@
+//
+//  CommunityPostsView.swift
+//  Greatdori
+//
+//  Created by Mark Chan on 8/3/25.
+//
+
+import SwiftUI
+import DoriKit
+
+struct CommunityPostsView: View {
+    @State var posts: DoriAPI.Post.PagedPosts?
+    @State var availability = true
+    @State var pageOffset = 0
+    @State var isLoadingMore = false
+    var body: some View {
+        Form {
+            if let posts {
+                ForEach(Array(posts.content.enumerated()), id: \.element.id) { (index, post) in
+                    VStack(alignment: .leading) {
+                        Text(post.title)
+                            .font(.headline)
+                        RichContentView(post.content)
+                            .richEmojiFrame(width: 15, height: 15)
+                            .font(.system(size: 14))
+                    }
+                    .onAppear {
+                        if !isLoadingMore {
+                            continueLoadPosts()
+                        }
+                    }
+                }
+                if isLoadingMore {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                }
+            } else {
+                if availability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入帖子时出错", systemImage: "richtext.page.fill", retryHandler: getPosts)
+                }
+            }
+        }
+        .navigationTitle("帖子")
+        .task {
+            await getPosts()
+        }
+    }
+    
+    func getPosts() async {
+        posts = await DoriAPI.Post.communityPosts(offset: pageOffset)
+    }
+    func continueLoadPosts() {
+        if let posts, posts.hasMore {
+            pageOffset = posts.nextOffset
+            Task {
+                isLoadingMore = true
+                if let newPosts = await DoriAPI.Post.communityPosts(offset: pageOffset) {
+                    self.posts!.content += newPosts.content
+                }
+                isLoadingMore = false
+            }
+        }
+    }
+}

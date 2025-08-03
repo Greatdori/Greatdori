@@ -1,6 +1,22 @@
 {
   "sourceLanguage" : "zh-Hans",
   "strings" : {
+    "\n" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@"
+          }
+        }
+      }
+    },
     "BAND_NAME_AFTERGLOW" : {
       "localizations" : {
         "zh-Hans" : {
