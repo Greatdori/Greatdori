@@ -394,7 +394,7 @@ struct CardIconView: View {
             }
             
             //Icons
-            VStack {
+            VStack(spacing: 0) {
                 HStack {
                     WebImage(url: bandIconImageURL)
                         .resizable()
@@ -410,9 +410,9 @@ struct CardIconView: View {
                 }
                 .border(Color.blue.opacity(0.5), width: 1)
                 
-                Spacer()
+                Spacer(minLength: 0)
                 HStack {
-                    VStack(alignment: .leading, spacing: 0) {
+                    VStack(alignment: .leading, spacing: -2) {
                         ForEach(1...rarity, id: \.self) { _ in
                             Image((thumbTrainedImageURL != nil && showTrainedVersion) ? .trainedStar : .star)
                                 .resizable()
