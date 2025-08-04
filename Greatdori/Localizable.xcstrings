@@ -32,9 +32,6 @@
     "+%lld%%" : {
       "shouldTranslate" : false
     },
-    "1" : {
-
-    },
     "App.community" : {
       "localizations" : {
         "en" : {
@@ -147,6 +144,54 @@
         }
       }
     },
+    "Debug.pre-cache-unavailable-alert.dismiss" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(DO NOT IGNORE THIS MESSAGE)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（请不要忽视此消息）"
+          }
+        }
+      }
+    },
+    "Debug.pre-cache-unavailable-alert.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datas may not be returned as expected. Do not release this version publicly."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数据可能不会按照预期返回。请不要正式发行此版本。"
+          }
+        }
+      }
+    },
+    "Debug.pre-cache-unavailable-alert.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG][CRITICAL] Pre-cache Not Available"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG][CRITICAL] Pre-cache未启用"
+          }
+        }
+      }
+    },
     "Done" : {
       "localizations" : {
         "en" : {
@@ -180,7 +225,20 @@
       }
     },
     "Event.card" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡片"
+          }
+        }
+      }
     },
     "Event.character" : {
       "localizations" : {
@@ -389,6 +447,9 @@
           }
         }
       }
+    },
+    "Event.rewards" : {
+
     },
     "Event.start-date" : {
       "localizations" : {
@@ -741,6 +802,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "调试"
+          }
+        }
+      }
+    },
+    "Settings.debug.pre-cache-unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[CRITICAL] Pre-cache not available. Datas may not be returned as expected. Do not release this version publicly."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[CRITICAL] Pre-cache未被启用。数据可能不会按照预期返回。请不要正式发行此版本。"
           }
         }
       }

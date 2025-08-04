@@ -146,6 +146,11 @@ struct SettingsDebugView: View {
             Text(verbatim: "isFirstLaunchResettable")
                 .fontDesign(.monospaced)
         })
+        #if !DORIKIT_ENABLE_PRECACHE
+        Text("Settings.debug.pre-cache-unavailable")
+            .foregroundStyle(.red)
+            .fontDesign(.monospaced)
+        #endif
         NavigationLink(destination: {
             DebugBirthdayView()
         }, label: {

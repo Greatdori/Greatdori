@@ -10,7 +10,6 @@ import DoriKit
 import SDWebImageSwiftUI
 
 
-
 struct EventDetailView: View {
     var id: Int
     @State var information: DoriFrontend.Event.ExtendedEvent?
@@ -81,9 +80,13 @@ struct EventDetailView: View {
 struct EventDetailOverviewView: View {
     let information: DoriFrontend.Event.ExtendedEvent
     @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
+    @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
+    @State var cardsPercentage: Int = -100
+    @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
         Group {
+            //MARK: Title Image
             Rectangle()
                 .opacity(0)
                 .frame(height: 2)
@@ -96,6 +99,7 @@ struct EventDetailOverviewView: View {
                 .frame(height: 2)
             
             Group {
+                //MARK: Title
                 ListItemView(title: {
                     Text("Event.title")
                         .bold()
@@ -103,6 +107,7 @@ struct EventDetailOverviewView: View {
                     MultilingualText(source: information.event.eventName)
                 })
                 Divider()
+                //MARK: Type
                 ListItemView(title: {
                     Text("Event.type")
                         .bold()
@@ -110,6 +115,7 @@ struct EventDetailOverviewView: View {
                     Text(information.event.eventType.localizedString)
                 })
                 Divider()
+                //MARK: Countdown
                 ListItemView(title: {
                     Text("Event.countdown")
                         .bold()
@@ -117,6 +123,7 @@ struct EventDetailOverviewView: View {
                     MultilingualTextForCountdown(source: information.event)
                 })
                 Divider()
+                //MARK: Start Date
                 ListItemView(title: {
                     Text("Event.start-date")
                         .bold()
@@ -124,6 +131,7 @@ struct EventDetailOverviewView: View {
                     MultilingualText(source: information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                 })
                 Divider()
+                //MARK: End Date
                 ListItemView(title: {
                     Text("Event.end-date")
                         .bold()
@@ -131,6 +139,7 @@ struct EventDetailOverviewView: View {
                     MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                 })
                 Divider()
+                //MARK: Attribute
                 ListItemView(title: {
                     Text("Event.attribute")
                         .bold()
@@ -140,14 +149,14 @@ struct EventDetailOverviewView: View {
                             HStack {
                                 WebImage(url: attribute.attribute.iconImageURL)
                                     .resizable()
-                                    .frame(width: 30, height: 30)
+                                    .frame(width: imageButtonSize, height: imageButtonSize)
                                 Text(verbatim: "+\(attribute.percent)%")
                             }
                         }
                     }
                 })
                 Divider()
-                // Please ignore Errors here: idk why
+                //MARK: Character
                 ListItemView(title: {
                     Text("Event.character")
                         .bold()
@@ -163,7 +172,7 @@ struct EventDetailOverviewView: View {
                                     }, label: {
                                         WebImage(url: char.iconImageURL)
                                             .resizable()
-                                            .frame(width: 30, height: 30)
+                                            .frame(width: imageButtonSize, height: imageButtonSize)
                                     })
                                     .buttonStyle(.plain)
                                 }
@@ -172,8 +181,9 @@ struct EventDetailOverviewView: View {
                             }
                         }
                     }
-                }/*, shouldTitleBeOnTop: true*/)
+                })
                 Divider()
+                //MARK: Parameter
                 if let paramters = information.event.eventCharacterParameterBonus, paramters.total > 0 {
                     ListItemView(title: {
                         Text("Event.parameter")
@@ -202,92 +212,48 @@ struct EventDetailOverviewView: View {
                     })
                     Divider()
                 }
-                ListItemView(title: {
-                    Text("Event.card")
-                }, value: {
-                    ForEach(information.cards) { card in
-                        // if the card is contained in `members`, it is a card that has bonus in this event.
-                        // if not, it should be shown in rewards section (the next one).
-                        if let percent = information.event.members.first(where: { $0.situationID == card.id })?.percent {
-                            HStack {
+                //MARK: Card
+                if !cardsArray.isEmpty {
+                    ListItemView(title: {
+                        Text("Event.card")
+                            .bold()
+                    }, value: {
+                        HStack {
+                            ForEach(cardsArray) { card in
                                 NavigationLink(destination: {
                                     
                                 }, label: {
-//                                    CardIconView(card)
-                                    Text("1")
+                                    CardIconView(card)
                                 })
                                 .buttonStyle(.plain)
-                                Text("+\(percent)%")
-                                    .font(.system(size: 14))
-                                    .opacity(0.6)
+                                
                             }
+                            Text("+\(cardsPercentage)%")
                         }
-                    }
-                })
-                /*
-                VStack(alignment: .leading) {
-                    Text("卡牌")
-                        .font(.system(size: 16, weight: .medium))
-                    ForEach(information.cards) { card in
-                        // if the card is contained in `members`, it is a card that has bonus in this event.
-                        // if not, it should be shown in rewards section (the next one).
-                        if let percent = information.event.members.first(where: { $0.situationID == card.id })?.percent {
-                            HStack {
-                                NavigationLink(destination: { CardDetailView(id: card.id) }) {
-                                    CardIconView(card)
-                                }
-                                .buttonStyle(.borderless)
-                                Text("+\(percent)%")
-                                    .font(.system(size: 14))
-                                    .opacity(0.6)
-                            }
-                        }
-                    }
+                    })
+                    Divider()
                 }
-                VStack(alignment: .leading) {
-                    Text("奖励")
-                        .font(.system(size: 16, weight: .medium))
-                    HStack {
-                        ForEach(information.cards) { card in
-                            if information.event.rewardCards.contains(card.id) {
-                                NavigationLink(destination: { CardDetailView(id: card.id) }) {
-                                    CardIconView(card)
-                                }
-                                .buttonStyle(.borderless)
-                            }
+                
+                if !rewardsArray.isEmpty {
+                    ListItemView(title: {
+                        Text("Event.rewards")
+                            .bold()
+                    }, value: {
+                        ForEach(rewardsArray) { card in
+                            NavigationLink(destination: {
+                                
+                            }, label: {
+                                CardIconView(card)
+                                    
+                            })
+                            .buttonStyle(.plain)
+                            
                         }
-                    }
+                    })
+                    Divider()
                 }
-                 */
-//                ListItemView(title: {
-//                    Text("Event.card")
-//                }, value: {
-//                    HStack {
-//                        ForEach(information.cards) { card in
-//                            if let character = information.characters.first(where: { $0.id == card.characterID }),
-//                               let band = information.bands.first(where: { $0.id == band.id }),
-//                               // If the card is contained in `members`, it is a card that has bonus in this event.
-//                               // If not, it should be shown in rewards section (the next one).
-//                                let percent = information.event.members.first(where: { $0.situationID == card.id })?.percent {
-//                                
-//                                NavigationLink(destination: {
-//                                    
-//                                }, label: {
-//                                    CardIconView(card, band: band)
-//                                })
-//                                .buttonStyle(.plain)
-//                                                                        
-//                                                                        
-//                                    Text("+\(percent)%")
-//                                        .font(.system(size: 14))
-//                                        .opacity(0.6)
-//                                    Text(information.cards.count)
-//                                
-//                            }
-//                        }
-//                    }
-//                })
-//                Divider()
+                
+                //MARK: ID
                 ListItemView(title: {
                     Text("Event.id")
                         .bold()
@@ -302,6 +268,17 @@ struct EventDetailOverviewView: View {
             for char in eventCharacters {
                 eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
             }
+            for card in information.cards {
+                if information.event.rewardCards.contains(card.id) {
+                    rewardsArray.append(card)
+                } else {
+                    cardsArray.append(card)
+                    if cardsPercentage == -100 {
+                        cardsPercentage = information.event.members.first(where: { $0.situationID == card.id })?.percent ?? -200
+                    }
+                }
+            }
+            
         }
     }
 }
@@ -580,31 +557,135 @@ struct MultilingualTextForCountdown: View {
     }
 }
 
+/*
+ struct ListItemView<Content1: View, Content2: View>: View {
+ let title: Content1
+ let value: Content2
+ //    let shouldTitleBeOnTop: Bool
+ @State var pageWidth: CGFloat = 600
+ 
+ init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2/*, shouldTitleBeOnTop: Bool = false*/) {
+ self.title = title()
+ self.value = value()
+ //        self.shouldTitleBeOnTop = shouldTitleBeOnTop
+ }
+ 
+ var body: some View {
+ Group {
+ 
+ HStack {
+ //                if shouldTitleBeOnTop {
+ //                    VStack {
+ //                        title
+ //                        Spacer()
+ //                    }
+ //                } else {
+ title
+ //                }
+ Spacer()
+ value
+ }
+ }
+ .background(
+ GeometryReader { geometry in
+ Color.clear
+ .onAppear {
+ pageWidth = geometry.size.width
+ }
+ .onChange(of: geometry.size.width) {
+ pageWidth = geometry.size.width
+ }
+ }
+ )
+ }
+ }
+ */
 
 struct ListItemView<Content1: View, Content2: View>: View {
     let title: Content1
     let value: Content2
-    let shouldTitleBeOnTop: Bool
+    @State private var totalAvailableWidth: CGFloat = 0
+    @State private var titleAvailableWidth: CGFloat = 0
+    @State private var valueAvailableWidth: CGFloat = 0
     
-    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, shouldTitleBeOnTop: Bool = false) {
+    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2) {
         self.title = title()
         self.value = value()
-        self.shouldTitleBeOnTop = shouldTitleBeOnTop
     }
     
     var body: some View {
-        HStack {
-            if shouldTitleBeOnTop {
-                VStack {
+        Group {
+            if valueAvailableWidth < (totalAvailableWidth - titleAvailableWidth - 5) { // HStack (SHORT)
+                HStack {
                     title
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear
+                                    .onAppear {
+                                        titleAvailableWidth = geometry.size.width
+                                    }
+                                    .onChange(of: geometry.size.width) {
+                                        titleAvailableWidth = geometry.size.width
+                                    }
+                            }
+                        )
                     Spacer()
+                    value
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear
+                                    .onAppear {
+                                        valueAvailableWidth = geometry.size.width
+                                    }
+                                    .onChange(of: geometry.size.width) {
+                                        valueAvailableWidth = geometry.size.width
+                                    }
+                            }
+                        )
+                    
                 }
-            } else {
-                title
+            } else { // VStack (LONG)
+                VStack(alignment: .leading) {
+                    title
+                        .background(
+                            GeometryReader { geometry in
+                                Color.clear
+                                    .onAppear {
+                                        titleAvailableWidth = geometry.size.width
+                                    }
+                                    .onChange(of: geometry.size.width) {
+                                        titleAvailableWidth = geometry.size.width
+                                    }
+                            }
+                        )
+                    HStack {
+                        Spacer()
+                        value
+                            .background(
+                                GeometryReader { geometry in
+                                    Color.clear
+                                        .onAppear {
+                                            valueAvailableWidth = geometry.size.width
+                                        }
+                                        .onChange(of: geometry.size.width) {
+                                            valueAvailableWidth = geometry.size.width
+                                        }
+                                }
+                            )
+                    }
+                }
             }
-            Spacer()
-            value
         }
+        .background(
+            GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        totalAvailableWidth = geometry.size.width
+                    }
+                    .onChange(of: geometry.size.width) {
+                        totalAvailableWidth = geometry.size.width
+                    }
+            }
+        )
     }
 }
-

@@ -13,9 +13,9 @@ import DoriKit
 import SDWebImageSwiftUI
 
 
-// MARK: **DON'T KNOW, DON'T TOUCH**
+// **DON'T KNOW, DON'T TOUCH**
 
-// 785: SAFE
+// MARK: EventCardView [✓]
 struct EventCardView: View {
     private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
@@ -56,10 +56,10 @@ struct EventCardView: View {
                     .fill(Color.gray.opacity(0.15))
                     .aspectRatio(3.0, contentMode: .fit)
             }
-             
+            .interpolation(.high)
             .cornerRadius(10)
             
-            if showsCountdown { // MARK: Accually Title & Countdown
+            if showsCountdown { // Accually Title & Countdown
                 Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
                     .bold()
                     .font(.title3)
@@ -82,6 +82,7 @@ struct EventCardView: View {
     }
 }
 
+//MARK: CardCardView
 struct CardCardView: View {
     private var normalBackgroundImageURL: URL
     private var trainedBackgroundImageURL: URL?
@@ -203,6 +204,8 @@ struct CardCardView: View {
         .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }
+
+//MARK: ThumbCardCardView
 struct ThumbCardCardView: View {
     private var thumbNormalImageURL: URL
     private var thumbTrainedImageURL: URL?
@@ -243,6 +246,7 @@ struct ThumbCardCardView: View {
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color.gray.opacity(0.15))
+                            .aspectRatio(1, contentMode: .fit)
                     }
                     .resizable()
                     .interpolation(.high)
@@ -259,6 +263,7 @@ struct ThumbCardCardView: View {
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color.gray.opacity(0.15))
+                            .aspectRatio(1, contentMode: .fit)
                     }
                     .resizable()
                     .interpolation(.high)
@@ -314,6 +319,9 @@ struct ThumbCardCardView: View {
         }
     }
 }
+
+
+//MARK: CardIconView [...]
 struct CardIconView: View {
     private var thumbNormalImageURL: URL
     private var thumbTrainedImageURL: URL?
@@ -321,98 +329,110 @@ struct CardIconView: View {
     private var attribute: DoriAPI.Attribute
     private var rarity: Int
     private var bandIconImageURL: URL
+    private var showTrainedVersion: Bool = false
+    private var sideLength: CGFloat = 72
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
-    init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band) {
+    init(_ card: DoriAPI.Card.PreviewCard, showTrainedVersion: Bool = false, sideLength: CGFloat = 72) {
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = band.iconImageURL
+#if DORIKIT_ENABLE_PRECACHE
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+#else
+        self.bandIconImageURL = nil
+#endif
+        self.showTrainedVersion = showTrainedVersion
+        self.sideLength = sideLength
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
-    init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band) {
+    init(_ card: DoriAPI.Card.Card, showTrainedVersion: Bool = false, sideLength: CGFloat = 72) {
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = band.iconImageURL
+#if DORIKIT_ENABLE_PRECACHE
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+#else
+        self.bandIconImageURL = nil
+#endif
+        self.showTrainedVersion = showTrainedVersion
+        self.sideLength = sideLength
     }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 332)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 332)
     
     var body: some View {
-        if let thumbTrainedImageURL {
-            ZStack {
-                WebImage(url: thumbTrainedImageURL) { image in
-                    image
-                } placeholder: {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.15))
-                }
-                .resizable()
-                .interpolation(.high)
-                .antialiased(true)
-                .scaledToFill()
-                .clipped()
-                upperLayer(trained: true)
+        ZStack(alignment: .center) {
+            // Cover
+            WebImage(url: (thumbTrainedImageURL != nil && showTrainedVersion) ? thumbTrainedImageURL : thumbNormalImageURL) { image in
+                image
+            } placeholder: {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.15))
+                    .aspectRatio(1, contentMode: .fit)
             }
-            .frame(width: 50, height: 50)
-        } else {
-            ZStack {
-                WebImage(url: thumbNormalImageURL) { image in
-                    image
-                } placeholder: {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.15))
-                }
-                .resizable()
-                .interpolation(.high)
-                .antialiased(true)
-                .cornerRadius(2)
-                upperLayer(trained: false)
-            }
-            .frame(width: 50, height: 50)
-        }
-    }
-    
-    @ViewBuilder
-    private func upperLayer(trained: Bool) -> some View {
-        if rarity != 1 {
-            Image("CardThumbBorder\(rarity)")
-                .resizable()
-        } else {
-            Image("CardThumbBorder\(rarity)\(attribute.rawValue.prefix(1).uppercased() + attribute.rawValue.dropFirst())")
-                .resizable()
-        }
-        VStack {
-            HStack {
-                WebImage(url: bandIconImageURL)
+            .resizable()
+            .interpolation(.high)
+            .antialiased(true)
+            //.scaledToFill()
+            //.cornerRadius(2)
+            .clipped()
+            .frame(width: 67/72*sideLength, height: 67/72*sideLength)
+            
+            // Frame
+            if rarity != 1 {
+                Image("CardThumbBorder\(rarity)")
                     .resizable()
-                    .interpolation(.high)
-                    .antialiased(true)
-                    .frame(width: 15, height: 15)
+                    .frame(width: sideLength, height: sideLength)
+            } else {
+                Image("CardThumbBorder\(rarity)\(attribute.rawValue.prefix(1).uppercased() + attribute.rawValue.dropFirst())")
+                    .resizable()
+                    .frame(width: sideLength, height: sideLength)
+            }
+            
+            //Icons
+            VStack {
+                HStack {
+                    WebImage(url: bandIconImageURL)
+                        .resizable()
+                        .interpolation(.high)
+                        .antialiased(true)
+                        .frame(width: 20/72*sideLength, height: 20/72*sideLength, alignment: .topLeading)
+                    Spacer()
+                    WebImage(url: attribute.iconImageURL)
+                        .resizable()
+                        .interpolation(.high)
+                        .antialiased(true)
+                        .frame(width: 18/72*sideLength, height: 18/72*sideLength, alignment: .topTrailing)
+                }
+                .border(Color.blue.opacity(0.5), width: 1)
+                
                 Spacer()
-                WebImage(url: attribute.iconImageURL)
-                    .resizable()
-                    .interpolation(.high)
-                    .antialiased(true)
-                    .frame(width: 12, height: 12)
-            }
-            Spacer()
-            HStack {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(1...rarity, id: \.self) { _ in
-                        Image(trained ? .trainedStar : .star)
-                            .resizable()
-                            .frame(width: 6, height: 6)
+                HStack {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(1...rarity, id: \.self) { _ in
+                            Image((thumbTrainedImageURL != nil && showTrainedVersion) ? .trainedStar : .star)
+                                .resizable()
+                                .frame(width: 12/72*sideLength, height: 12/72*sideLength)
+                        }
                     }
+                    Spacer()
                 }
-                Spacer()
             }
+            .frame(width: sideLength, height: sideLength)
+            .border(Color.yellow.opacity(0.5), width: 1)
         }
+        .frame(width: sideLength, height: sideLength)
+        .border(Color.red.opacity(0.5), width: 1)
     }
+//    
+//    @ViewBuilder
+//    private func upperLayer(trained: Bool) -> some View {
+//        
+//    }
 }
 
 struct ThumbCostumeCardView: View {

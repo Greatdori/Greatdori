@@ -10,6 +10,13 @@ import DoriKit
 import SDWebImage
 import SDWebImageSVGCoder
 
+#if os(macOS)
+let imageButtonSize: CGFloat = 30
+#else
+let imageButtonSize: CGFloat = 35
+#endif
+
+
 @main
 struct GreatdoriApp: App {
     #if os(macOS)

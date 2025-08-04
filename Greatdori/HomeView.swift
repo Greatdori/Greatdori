@@ -246,7 +246,7 @@ struct HomeBirthdayView: View {
                                             WebImage(url: birthdays[i+1].iconImageURL)
                                                 .resizable()
                                                 .clipShape(Circle())
-                                                .frame(width: 30, height: 30)
+                                                .frame(width: imageButtonSize, height: imageButtonSize)
 #endif
                                             Text(birthdays[i+1].characterName.forPreferredLocale() ?? "")
                                         }
@@ -255,12 +255,12 @@ struct HomeBirthdayView: View {
                                     WebImage(url: birthdays[i].iconImageURL)
                                         .resizable()
                                         .clipShape(Circle())
-                                        .frame(width: 30, height: 30)
+                                        .frame(width: imageButtonSize, height: imageButtonSize)
                                         .zIndex(2)
                                     WebImage(url: birthdays[i+1].iconImageURL)
                                         .resizable()
                                         .clipShape(Circle())
-                                        .frame(width: 30, height: 30)
+                                        .frame(width: imageButtonSize, height: imageButtonSize)
                                         .padding(.leading, -15)
                                         .zIndex(1)
                                     Text(formatter.string(from: birthdays[i].birthday))
@@ -278,7 +278,7 @@ struct HomeBirthdayView: View {
                                     WebImage(url: birthdays[i].iconImageURL)
                                         .resizable()
                                         .clipShape(Circle())
-                                        .frame(width: 30, height: 30)
+                                        .frame(width: imageButtonSize, height: imageButtonSize)
                                     if todaysHerBirthday(birthdays[i].birthday, debugDate) {
                                         Text(birthdays[i].characterName.forPreferredLocale() ?? "")
                                     } else {
@@ -352,6 +352,7 @@ struct HomeEventsView: View {
                 if let latestEvents {
                     NavigationLink(destination: {
                         EventDetailView(id: latestEvents.forLocale(locale)!.id)
+//                        EventDetailView(id: 1)
                     }, label: {
                         EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
                     })

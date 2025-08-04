@@ -21,6 +21,7 @@ struct ContentView: View {
     @AppStorage("isFirstLaunch") var isFirstLaunch = true
     @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
     @State var showWelcomeScreen = false
+    @State var showPreCacheAlert = false
     
     var body: some View {
         Group {
@@ -71,11 +72,22 @@ struct ContentView: View {
             if isFirstLaunch {
                 showWelcomeScreen = true
                 isFirstLaunch = !isFirstLaunchResettable
-                
             }
+#if !DORIKIT_ENABLE_PRECACHE
+            showPreCacheAlert = true
+#endif
         }
         .sheet(isPresented: $showWelcomeScreen, content: {
             WelcomeView(showWelcomeScreen: $showWelcomeScreen)
+        })
+        .alert("Debug.pre-cache-unavailable-alert.title", isPresented: $showPreCacheAlert, actions: {
+            Button(role: .destructive, action: {}, label: {
+                Text("Debug.pre-cache-unavailable-alert.dismiss")
+            })
+        }, message: {
+            VStack {
+                Text("Debug.pre-cache-unavailable-alert.message")
+            }
         })
     }
     
