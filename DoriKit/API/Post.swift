@@ -92,7 +92,7 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Post {
-    public struct Post: Identifiable {
+    public struct Post: Identifiable, Sendable {
         public var id: Int
         public var categoryName: Category
         public var categoryID: String
@@ -100,7 +100,7 @@ extension DoriAPI.Post {
         public var content: RichContentGroup
         public var storyMetadata: StoryMetadata?
         
-        public struct StoryMetadata {
+        public struct StoryMetadata: Sendable {
             public var storyType: Int
             public var summary: String
             public var rating: AgeRating
@@ -115,24 +115,24 @@ extension DoriAPI.Post {
             public var tags: [Tag]
             public var storyParent: StoryParent?
             
-            public enum AgeRating: Int {
+            public enum AgeRating: Int, Sendable {
                 case general
                 case teenAndUp
                 case mature
                 case explicit
             }
-            public struct Author {
+            public struct Author: Sendable {
                 public var username: String
                 public var nickname: String
                 public var titles: [Title]
                 
-                public struct Title: Identifiable {
+                public struct Title: Sendable, Identifiable {
                     public var id: Int
                     public var type: String
                     public var server: DoriAPI.Locale // Int(JSON) -> Locale(Swift)
                 }
             }
-            public enum Tag {
+            public enum Tag: Sendable {
                 case text(String)
                 case character(Int) // String(JSON) -> Int(Swift) CharacterID
                 case card(Int) // String(JSON) -> Int(Swift) CardID
@@ -161,7 +161,7 @@ extension DoriAPI.Post {
                     }
                 }
             }
-            public struct StoryParent: Identifiable {
+            public struct StoryParent: Sendable, Identifiable {
                 public var id: Int
                 public var title: String
                 public var summary: String
@@ -174,17 +174,17 @@ extension DoriAPI.Post {
         }
     }
     
-    public struct PagedPosts: PagedContent {
+    public struct PagedPosts: PagedContent, Sendable {
         public var total: Int
         public var currentOffset: Int
         public var content: [Post]
     }
     
-    public enum Category: String {
+    public enum Category: String, Sendable {
         case selfPost = "SELF_POST"
     }
     
-    public struct ListRequest: Encodable {
+    public struct ListRequest: Encodable, Sendable {
         public var following: Bool
         public var categoryName: String
         public var categoryId: String

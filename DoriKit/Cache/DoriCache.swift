@@ -16,10 +16,10 @@ public class DoriCache {
         var dataForCache: Data { get }
     }
     
-    public class Promise<Result> {
-        private var _onUpdate: ((Result) -> Void)?
-        private var initialValue: Result?
-        private var isValueFirstUpdated: Bool = false
+    public final class Promise<Result> {
+        nonisolated(unsafe) private var _onUpdate: ((Result) -> Void)?
+        nonisolated(unsafe) private var initialValue: Result?
+        nonisolated(unsafe) private var isValueFirstUpdated: Bool = false
         
         internal init(_ initialValue: Result? = nil) {
             self.initialValue = initialValue
@@ -38,33 +38,32 @@ public class DoriCache {
         }
     }
     
-    public static func withCache<Result: Cacheable>(
+    public static func withCache<Result: Sendable & Cacheable>(
         id: String,
-        invocation: @escaping () async -> Result?
+        invocation: sending @escaping () async -> Result?
     ) -> Promise<Result?> {
         let cacheURL = URL(filePath: NSHomeDirectory() + "/Library/Caches/DoriKit_\(Result.self)_\(id).cache")
         
-        var cachedResult: Result?
-        if let cachedData = try? Data(contentsOf: cacheURL) {
-            cachedResult = Result(fromCache: cachedData)
-        } else {
-            #if DORIKIT_ENABLE_PRECACHE
-            if let preCache = preCachedData(byID: id) {
-                if let typed = preCache as? Result {
-                    cachedResult = typed
+        let promise: Promise<Result?> = .init()
+        
+        Task.detached(priority: .userInitiated) {
+            var cachedResult: Result?
+            if let cachedData = try? Data(contentsOf: cacheURL) {
+                cachedResult = Result(fromCache: cachedData)
+            } else {
+                #if DORIKIT_ENABLE_PRECACHE
+                if let preCache = preCachedData(byID: id) {
+                    if let typed = preCache as? Result {
+                        cachedResult = typed
+                    }
                 }
+                #endif
             }
-            #endif
-        }
-        
-        let promise: Promise<Result?>
-        if let cachedResult {
-            promise = .init(cachedResult)
-        } else {
-            promise = .init()
-        }
-        
-        Task {
+            
+            if let cachedResult {
+                promise.updateValue(cachedResult)
+            }
+            
             let result = await invocation()
             
             // If result is nil but there's data in cache,
@@ -87,6 +86,8 @@ public class DoriCache {
         return promise
     }
 }
+
+extension DoriCache.Promise: Sendable where Result: Sendable {}
 
 extension DoriCache.Cacheable {
     public init?(fromCache cache: Data) {

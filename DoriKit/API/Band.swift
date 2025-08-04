@@ -111,7 +111,7 @@ extension DoriAPI {
 
 extension DoriAPI.Band {
     /// Represent a band.
-    public struct Band: Identifiable, Hashable, DoriCache.Cacheable {
+    public struct Band: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of band.
         public var id: Int
         /// Localized name of band.

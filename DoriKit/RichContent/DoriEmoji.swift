@@ -16,6 +16,7 @@ import UIKit
 internal let _doriEmojiBundle = Bundle(path: #bundle.path(forResource: "DoriEmoji", ofType: "bundle")!)!
 
 extension RichContent {
+    @frozen
     public struct Emoji {
         public static var all: [Emoji] {
             let namesFile = _doriEmojiBundle.url(forResource: "emoji_names", withExtension: "plist")!

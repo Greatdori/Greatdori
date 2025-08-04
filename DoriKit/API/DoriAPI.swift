@@ -15,12 +15,13 @@ public class DoriAPI {
     private init() {}
     
     @usableFromInline
+    nonisolated(unsafe)
     internal static var _preferredLocale = Locale(rawValue: UserDefaults.standard.string(forKey: "_DoriKit_DoriAPIPreferredLocale") ?? "jp") ?? .jp
     /// The preferred locale.
     @inlinable
     public static var preferredLocale: Locale {
-        get {
-            _preferredLocale
+        _read {
+            yield _preferredLocale
         }
         set {
             _preferredLocale = newValue
@@ -28,12 +29,13 @@ public class DoriAPI {
         }
     }
     @usableFromInline
+    nonisolated(unsafe)
     internal static var _secondaryLocale = Locale(rawValue: UserDefaults.standard.string(forKey: "_DoriKit_DoriAPISecondaryLocale") ?? "jp") ?? .jp
     /// The secondary preferred locale.
     @inlinable
     public static var secondaryLocale: Locale {
-        get {
-            _secondaryLocale
+        _read {
+            yield _secondaryLocale
         }
         set {
             _secondaryLocale = newValue
@@ -174,7 +176,7 @@ public class DoriAPI {
     }
     
     /// Attribute of cards
-    public enum Attribute: String, CaseIterable, Hashable, DoriCache.Cacheable {
+    public enum Attribute: String, Sendable, CaseIterable, Hashable, DoriCache.Cacheable {
         case pure
         case cool
         case happy
@@ -195,6 +197,7 @@ extension DoriAPI.Locale {
     }
 }
 
+extension DoriAPI.LocalizedData: Sendable where T: Sendable {}
 extension DoriAPI.LocalizedData: Equatable where T: Equatable {}
 extension DoriAPI.LocalizedData: Hashable where T: Hashable {}
 extension DoriAPI.LocalizedData: DoriCache.Cacheable, Codable where T: DoriCache.Cacheable {}

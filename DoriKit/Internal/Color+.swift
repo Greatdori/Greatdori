@@ -16,7 +16,7 @@ extension Color {
         guard cleanedHex.count == 6 else { return nil }
         
         var rgbValue: UInt64 = 0
-        Scanner(string: cleanedHex).scanHexInt64(&rgbValue)
+        unsafe Scanner(string: cleanedHex).scanHexInt64(&rgbValue)
         
         let r = Double((rgbValue & 0xFF0000) >> 16) / 255
         let g = Double((rgbValue & 0x00FF00) >> 8) / 255

@@ -338,7 +338,7 @@ extension DoriAPI {
 
 extension DoriAPI.Gacha {
     /// Represent simplified data of gacha.
-    public struct PreviewGacha: Identifiable, DoriCache.Cacheable {
+    public struct PreviewGacha: Sendable, Identifiable, DoriCache.Cacheable {
         /// A unique ID of gacha.
         public var id: Int
         /// Name of resource bundle, used for combination of resource URLs.
@@ -360,7 +360,7 @@ extension DoriAPI.Gacha {
     }
     
     /// Represent detailed data of gacha.
-    public struct Gacha: Identifiable, DoriCache.Cacheable {
+    public struct Gacha: Sendable, Identifiable, DoriCache.Cacheable {
         /// A unique ID of gacha.
         public var id: Int
         /// Localized details of gacha.
@@ -405,7 +405,7 @@ extension DoriAPI.Gacha {
         public var information: Information
         
         /// Represent detail of a card in gacha.
-        public struct CardDetail: DoriCache.Cacheable {
+        public struct CardDetail: Sendable, DoriCache.Cacheable {
             /// Rarity of card.
             public var rarityIndex: Int
             /// Weight of card.
@@ -415,7 +415,7 @@ extension DoriAPI.Gacha {
         }
         
         /// Represent rate of a rarity in gacha.
-        public struct Rate: DoriCache.Cacheable {
+        public struct Rate: Sendable, DoriCache.Cacheable {
             /// Rate.
             public var rate: Double
             /// Total of weight for cards in this rate.
@@ -423,7 +423,7 @@ extension DoriAPI.Gacha {
         }
         
         /// Represent a payment method of gacha.
-        public struct PaymentMethod: Hashable, DoriCache.Cacheable {
+        public struct PaymentMethod: Sendable, Hashable, DoriCache.Cacheable {
             /// ID of gacha about this payment method.
             public var gachaID: Int
             /// Payment method type.
@@ -482,7 +482,7 @@ extension DoriAPI.Gacha {
             }
             
             /// Represent a payment method.
-            public enum Method: String, Hashable, DoriCache.Cacheable {
+            public enum Method: String, Sendable, Hashable, DoriCache.Cacheable {
                 case free
                 case freeStar = "free_star"
                 case paidStar = "paid_star"
@@ -492,7 +492,7 @@ extension DoriAPI.Gacha {
                 case fixed5StarTicket = "fixed_5_star_ticket"
             }
             /// Represent behavior of a payment method.
-            public enum Behavior: String, Hashable, DoriCache.Cacheable {
+            public enum Behavior: String, Sendable, Hashable, DoriCache.Cacheable {
                 case normal
                 case overThe3StarOnce = "over_the_3_star_once"
                 case overThe4StarOnce = "over_the_4_star_once"
@@ -503,7 +503,7 @@ extension DoriAPI.Gacha {
         }
         
         /// Represent information of gacha.
-        public struct Information: DoriCache.Cacheable {
+        public struct Information: Sendable, DoriCache.Cacheable {
             /// Localized description of gacha.
             public var description: DoriAPI.LocalizedData<String>
             /// Localized term of gacha.
@@ -516,7 +516,7 @@ extension DoriAPI.Gacha {
     }
     
     /// Represent type of gacha.
-    public enum GachaType: String, CaseIterable, DoriCache.Cacheable {
+    public enum GachaType: String, Sendable, CaseIterable, DoriCache.Cacheable {
         case free
         case permanent
         case miracle

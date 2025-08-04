@@ -69,6 +69,7 @@ extension DoriFrontend {
         }
         
         #if !os(watchOS)
+        @MainActor
         public static func live2dViewer(for id: Int) -> WKWebView {
             let webView = WKWebView()
             webView.load(.init(url: URL(string: "https://bestdori.com/tool/live2d/costume/\(id)")!))

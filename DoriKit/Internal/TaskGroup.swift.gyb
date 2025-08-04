@@ -15,9 +15,9 @@ import Foundation
 
 % for i in range(len(typeNames)):
 %     typeAnnotation = ", ".join(typeNames[0:(i + 1)])
-%     parameters = ", ".join(map((lambda n: f"_ task{n}: @escaping () async -> {n}"), typeNames[0:(i + 1)]))
-internal func withTasksResult<${typeAnnotation}>(${parameters}) async -> (${typeAnnotation}) {
-    await withTaskGroup { (group: inout TaskGroup<(String, Any)>) in
+%     parameters = ", ".join(map((lambda n: f"_ task{n}: @Sendable @escaping () async -> {n}"), typeNames[0:(i + 1)]))
+internal func withTasksResult<${": Sendable, ".join(typeNames[0:(i + 1)])}: Sendable>(${parameters}) async -> (${typeAnnotation}) {
+    await withTaskGroup { (group: inout TaskGroup<(String, any Sendable)>) in
         % for t in typeNames[0:(i + 1)]:
         group.addTask {
             ("${t}", await task${t}())

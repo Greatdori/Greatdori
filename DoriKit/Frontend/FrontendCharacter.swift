@@ -132,7 +132,7 @@ extension DoriFrontend.Character {
     public typealias CategorizedCharacters = [DoriAPI.Band.Band?: [PreviewCharacter]]
     public typealias Character = DoriAPI.Character.Character
     
-    public struct ExtendedCharacter: Identifiable, DoriCache.Cacheable {
+    public struct ExtendedCharacter: Sendable, Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var character: Character
         public var band: DoriAPI.Band.Band?

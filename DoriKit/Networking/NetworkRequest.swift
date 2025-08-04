@@ -80,3 +80,7 @@ internal enum Result<Success, Failure> {
     case success(Success)
     case failure(Failure)
 }
+
+extension Result: Sendable where Success: Sendable, Failure: Sendable {}
+
+extension JSON: @retroactive @unchecked Sendable {}

@@ -125,11 +125,11 @@ extension DoriAPI.Misc.StoryAsset {
         return result
     }
     
-    public enum Transcript: Hashable {
+    public enum Transcript: Sendable, Hashable {
         case talk(Talk)
         case notation(String)
         
-        public struct Talk: Hashable {
+        public struct Talk: Sendable, Hashable {
             public var _characterID: Int
             public var characterName: String
             public var text: String

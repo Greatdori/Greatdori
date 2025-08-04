@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FoldableList<T, C: View>: View {
+struct FoldableList<T: Sendable, C: View>: View {
     private var items: [T]
     @State private var _builtinExpanded: Bool?
     @Binding private var isExpanded: Bool
