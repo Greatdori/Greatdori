@@ -492,7 +492,8 @@ struct MultilingualTextForCountdown: View {
 #endif
         }
         .onAppear {
-            for lang in [DoriAPI.Locale.jp, DoriAPI.Locale.en, DoriAPI.Locale.tw, DoriAPI.Locale.cn, DoriAPI.Locale.kr] {
+            allAvailableLocales = []
+            for lang in DoriAPI.Locale.allCases {
                 if source.startAt.availableInLocale(lang) {
                     allAvailableLocales.append(lang)
                 }
