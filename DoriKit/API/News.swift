@@ -359,7 +359,7 @@ extension DoriAPI {
 
 extension DoriAPI.News {
     /// Represent simplified data of news.
-    public struct PreviewItem: Identifiable, DoriCache.Cacheable {
+    public struct PreviewItem: Sendable, Identifiable, DoriCache.Cacheable {
         /// A unique ID of news.
         public var id: Int
         /// Title of news.
@@ -373,30 +373,30 @@ extension DoriAPI.News {
     }
     
     /// Represent recent news items in different categories.
-    public struct RecentItems: DoriCache.Cacheable {
+    public struct RecentItems: Sendable, DoriCache.Cacheable {
         public var songs: [Song]
         public var events: [Event]
         public var gacha: [Gacha]
         public var loginBonuses: [LoginBonus]
         
-        public struct Song: Identifiable, DoriCache.Cacheable {
+        public struct Song: Sendable, Identifiable, DoriCache.Cacheable {
             public var id: Int
             public var musicTitle: DoriAPI.LocalizedData<String>
             public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         }
-        public struct Event: Identifiable, DoriCache.Cacheable {
+        public struct Event: Sendable, Identifiable, DoriCache.Cacheable {
             public var id: Int
             public var eventName: DoriAPI.LocalizedData<String>
             public var startAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
             public var endAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         }
-        public struct Gacha: Identifiable, DoriCache.Cacheable {
+        public struct Gacha: Sendable, Identifiable, DoriCache.Cacheable {
             public var id: Int
             public var gachaName: DoriAPI.LocalizedData<String>
             public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
             public var closedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         }
-        public struct LoginBonus: Identifiable, DoriCache.Cacheable {
+        public struct LoginBonus: Sendable, Identifiable, DoriCache.Cacheable {
             public var id: Int
             public var caption: DoriAPI.LocalizedData<String>
             public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
@@ -405,7 +405,7 @@ extension DoriAPI.News {
     }
     
     /// Represent detailed data of news item.
-    public struct Item: Identifiable, DoriCache.Cacheable {
+    public struct Item: Sendable, Identifiable, DoriCache.Cacheable {
         /// A unique ID of news.
         public var id: Int
         /// Title of news.
@@ -418,11 +418,11 @@ extension DoriAPI.News {
         public var tags: [String]
         public var content: [Content]
         
-        public enum Content: DoriCache.Cacheable {
+        public enum Content: Sendable, DoriCache.Cacheable {
             case content([ContentDataSection])
             case heading(String)
             
-            public enum ContentDataSection: DoriCache.Cacheable {
+            public enum ContentDataSection: Sendable, DoriCache.Cacheable {
                 case localizedText(String)
                 case textLiteral(String)
                 case ul([[ContentDataSection]])

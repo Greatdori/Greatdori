@@ -10,7 +10,7 @@ import CryptoKit
 import Foundation
 
 extension DoriFrontend {
-    public struct Filter: Codable {
+    public struct Filter: Sendable, Codable {
         public var band: Set<Band> = .init(Band.allCases)
         public var attribute: Set<Attribute> = .init(Attribute.allCases)
         public var rarity: Set<Rarity> = [1, 2, 3, 4, 5]
@@ -94,7 +94,7 @@ extension DoriFrontend.Filter {
     public typealias GachaType = DoriAPI.Gacha.GachaType
     public typealias Skill = DoriAPI.Skill.Skill
     
-    public enum Band: Int, CaseIterable, Codable {
+    public enum Band: Int, Sendable, CaseIterable, Codable {
         case poppinParty = 1
         case afterglow
         case helloHappyWorld
@@ -120,7 +120,7 @@ extension DoriFrontend.Filter {
             }
         }
     }
-    public enum Character: Int, CaseIterable, Codable {
+    public enum Character: Int, Sendable, CaseIterable, Codable {
         // Poppin'Party
         case kasumi = 1
         case tae
@@ -198,7 +198,7 @@ extension DoriFrontend.Filter {
         }
     }
     
-    public struct Sort: Equatable, Hashable, Codable {
+    public struct Sort: Sendable, Equatable, Hashable, Codable {
         public var direction: Direction
         public var keyword: Keyword
         
@@ -212,7 +212,7 @@ extension DoriFrontend.Filter {
             case ascending
             case descending
         }
-        public enum Keyword: CaseIterable, Equatable, Hashable, Codable {
+        public enum Keyword: CaseIterable, Sendable, Equatable, Hashable, Codable {
             case releaseDate(in: DoriAPI.Locale)
             case rarity
             case maximumStat

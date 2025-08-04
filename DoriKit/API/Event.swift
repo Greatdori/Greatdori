@@ -770,7 +770,7 @@ extension DoriAPI {
 
 extension DoriAPI.Event {
     /// Represent simplified data of an event.
-    public struct PreviewEvent: Identifiable, Hashable, DoriCache.Cacheable {
+    public struct PreviewEvent: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of event.
         public var id: Int
         /// Type of event.
@@ -801,7 +801,7 @@ extension DoriAPI.Event {
     }
     
     /// Represent detailed data of an event.
-    public struct Event: Identifiable, DoriCache.Cacheable {
+    public struct Event: Sendable, Identifiable, DoriCache.Cacheable {
         /// A unique ID of event.
         public var id: Int
         /// Type of event.
@@ -897,16 +897,16 @@ extension DoriAPI.Event {
             self.rewardCards = rewardCards
         }
         
-        public struct PointReward: DoriCache.Cacheable {
+        public struct PointReward: Sendable, DoriCache.Cacheable {
             public var point: Int
             public var reward: DoriAPI.Item
         }
-        public struct RankingReward: DoriCache.Cacheable {
+        public struct RankingReward: Sendable, DoriCache.Cacheable {
             public var rankRange: ClosedRange<Int> // keys{fromRank, toRank}(JSON) -> ClosedRange(Swift)
             public var reward: DoriAPI.Item
         }
         
-        public struct Story: DoriCache.Cacheable {
+        public struct Story: Sendable, DoriCache.Cacheable {
             public var scenarioID: String
             public var coverImage: String
             public var backgroundImage: String
@@ -920,16 +920,16 @@ extension DoriAPI.Event {
     }
     
     /// Represent top 10 data of an event.
-    public struct TopData: DoriCache.Cacheable {
+    public struct TopData: Sendable, DoriCache.Cacheable {
         public var points: [Point]
         public var users: [User]
         
-        public struct Point: DoriCache.Cacheable {
+        public struct Point: Sendable, DoriCache.Cacheable {
             public var time: Date
             public var uid: Int
             public var value: Int
         }
-        public struct User: DoriCache.Cacheable {
+        public struct User: Sendable, DoriCache.Cacheable {
             public var uid: Int
             public var name: String
             public var introduction: String
@@ -940,24 +940,24 @@ extension DoriAPI.Event {
         }
     }
     
-    public struct TrackerRate: DoriCache.Cacheable {
+    public struct TrackerRate: Sendable, DoriCache.Cacheable {
         public var type: EventType
         public var server: DoriAPI.Locale
         public var tier: Int
         public var rate: Double
     }
     /// Represent cutoff data of an event.
-    public struct TrackerData: DoriCache.Cacheable {
+    public struct TrackerData: Sendable, DoriCache.Cacheable {
         public var cutoffs: [Cutoff]
         
-        public struct Cutoff: DoriCache.Cacheable {
+        public struct Cutoff: Sendable, DoriCache.Cacheable {
             public var time: Date
             public var ep: Int
         }
     }
     
     /// Represent type of an event.
-    public enum EventType: String, CaseIterable, DoriCache.Cacheable {
+    public enum EventType: String, Sendable, CaseIterable, DoriCache.Cacheable {
         case story
         case challenge
         case versus
@@ -968,7 +968,7 @@ extension DoriAPI.Event {
     }
     
     /// Represent an attribute with bonus related to an event.
-    public struct EventAttribute: Hashable, DoriCache.Cacheable {
+    public struct EventAttribute: Sendable, Hashable, DoriCache.Cacheable {
         /// Related event ID.
         public var eventID: Int?
         /// Attribute.
@@ -983,7 +983,7 @@ extension DoriAPI.Event {
         }
     }
     /// Represent a character with bonus related to an event.
-    public struct EventCharacter: Hashable, DoriCache.Cacheable {
+    public struct EventCharacter: Sendable, Hashable, DoriCache.Cacheable {
         /// Related event ID.
         public var eventID: Int?
         /// Character ID.
@@ -1002,7 +1002,7 @@ extension DoriAPI.Event {
     /// Represent a member with bonus related to an event.
     ///
     /// A *member* related to event is a card with bonus during the event.
-    public struct EventMember: Hashable, DoriCache.Cacheable {
+    public struct EventMember: Sendable, Hashable, DoriCache.Cacheable {
         /// Related event ID.
         public var eventID: Int?
         /// Card ID.
@@ -1018,18 +1018,18 @@ extension DoriAPI.Event {
             self.seq = seq
         }
     }
-    public struct EventLimitBreak: Hashable, DoriCache.Cacheable {
+    public struct EventLimitBreak: Sendable, Hashable, DoriCache.Cacheable {
         public var rarity: Int
         public var rank: Int
         public var percent: Double
     }
-    public struct EventAttributeAndCharacterBonus: Hashable, DoriCache.Cacheable {
+    public struct EventAttributeAndCharacterBonus: Sendable, Hashable, DoriCache.Cacheable {
         public var eventID: Int
         public var pointPercent: Int
         public var parameterPercent: Int
     }
     
-    public struct EventStory: Identifiable, DoriCache.Cacheable {
+    public struct EventStory: Sendable, Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var eventName: DoriAPI.LocalizedData<String>
         public var stories: [DoriAPI.Story]

@@ -264,7 +264,7 @@ struct GachaDetailView: View {
     }
 }
 
-extension Array<DoriFrontend.Card.PreviewCard>: @retroactive Identifiable {
+extension Array<DoriFrontend.Card.PreviewCard>: @retroactive @preconcurrency Identifiable {
     public var id: String {
         self.reduce(into: "") { partialResult, card in
             partialResult += String(card.id)

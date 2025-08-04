@@ -10,6 +10,7 @@ import Foundation
 internal class InMemoryCache {
     private init() {}
     
+    nonisolated(unsafe)
     internal static var allSkills = [DoriAPI.Skill.Skill]()
     
     internal static func updateAll() async {

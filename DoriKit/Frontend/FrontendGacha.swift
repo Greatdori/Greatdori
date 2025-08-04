@@ -134,7 +134,7 @@ extension DoriFrontend.Gacha {
     public typealias PreviewGacha = DoriAPI.Gacha.PreviewGacha
     public typealias Gacha = DoriAPI.Gacha.Gacha
     
-    public struct ExtendedGacha: Identifiable, DoriCache.Cacheable {
+    public struct ExtendedGacha: Sendable, Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var gacha: Gacha
         public var events: [DoriAPI.Event.PreviewEvent]

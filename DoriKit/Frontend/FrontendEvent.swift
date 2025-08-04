@@ -294,7 +294,7 @@ extension DoriFrontend.Event {
     public typealias PreviewEvent = DoriAPI.Event.PreviewEvent
     public typealias Event = DoriAPI.Event.Event
     
-    public struct ExtendedEvent: Identifiable, DoriCache.Cacheable {
+    public struct ExtendedEvent: Sendable, Identifiable, DoriCache.Cacheable {
         public var id: Int
         public var event: Event
         public var bands: [DoriAPI.Band.Band]
@@ -305,11 +305,11 @@ extension DoriFrontend.Event {
         public var degrees: [DoriAPI.Degree.Degree]
     }
     
-    public struct TrackerData: DoriCache.Cacheable {
+    public struct TrackerData: Sendable, DoriCache.Cacheable {
         public var cutoffs: [DataPoint]
         public var predictions: [DataPoint]
         
-        public struct DataPoint: DoriCache.Cacheable {
+        public struct DataPoint: Sendable, DoriCache.Cacheable {
             public var time: Date
             public var ep: Int?
             public var epph: Int?
