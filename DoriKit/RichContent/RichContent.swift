@@ -19,6 +19,11 @@ public enum RichContent: Sendable, Equatable, DoriCache.Cacheable {
     
     internal init?(parsing json: JSON) {
         if let type = json["type"].string {
+            // We use `br` as a tag for unavailable conditions.
+            // However, this is not a good way in both semantic and performance.
+            // Let's follow progress of experimental feature `ThenStatements` at
+            // https://github.com/swiftlang/swift/blob/573607ff369dbc9d0299aa549b2ec33d87d45e6a/include/swift/Basic/Features.def#L409
+            // Once it's available for production compiler, we can use it for better code.
             self = switch type {
             case "br": .br
             case "text": .text(json["data"].stringValue)

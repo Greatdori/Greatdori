@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+private import Builtin
 
 extension DoriAPI.Locale {
     @inlinable
@@ -152,7 +153,6 @@ extension DoriAPI.Gacha.${property} {
 }
 % end
 extension DoriAPI.Gacha.Gacha.PaymentMethod.Method {
-    @inlinable
     public var iconImageURL: URL? {
         switch self {
         case .free: nil
@@ -162,7 +162,7 @@ extension DoriAPI.Gacha.Gacha.PaymentMethod.Method {
         case .overThe4StarTicket: URL(string: "https://bestdori.com/assets/\(DoriAPI.preferredLocale.rawValue)/thumb/common_rip/gachaTicket5.png")
         case .fixed5StarTicket: URL(string: "https://bestdori.com/assets/\(DoriAPI.preferredLocale.rawValue)/thumb/common_rip/gachaTicket4.png")
         @unknown default:
-            fatalError()
+            Builtin.unreachable()
         }
     }
 }

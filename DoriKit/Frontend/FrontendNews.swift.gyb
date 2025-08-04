@@ -6,6 +6,7 @@
 //
 
 import Foundation
+private import Builtin
 
 extension DoriFrontend {
     public class News {
@@ -48,7 +49,7 @@ extension DoriFrontend {
                     unsortedResult.filter { $0.tags.contains("Article") }
                 case .patchNote:
                     unsortedResult.filter { $0.tags.contains("Patch Note") }
-                default: fatalError("Unreachable")
+                default: Builtin.unreachable()
                 }
                 return unsortedResult.sorted { $0.timestamp > $1.timestamp }
             }
