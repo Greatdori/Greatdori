@@ -19,6 +19,8 @@ struct ContentView: View {
                     HomeView()
                 case .post:
                     CommunityPostsView()
+                case .story:
+                    CommunityStoriesView()
                 case .character:
                     CharacterListView()
                 case .card:
@@ -44,6 +46,7 @@ struct ContentView: View {
 enum NavigationPage {
     case home
     case post
+    case story
     case character
     case card
     case costume
