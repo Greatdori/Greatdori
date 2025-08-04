@@ -28,11 +28,13 @@ internal func requestJSON(
         ).responseData { response in
             let data = response.data
             if data != nil {
-                do {
-                    let json = try JSON(data: data!)
-                    continuation.resume(returning: .success(json))
-                } catch {
-                    continuation.resume(returning: .failure(()))
+                Task.detached(priority: .userInitiated) {
+                    do {
+                        let json = try JSON(data: data!)
+                        continuation.resume(returning: .success(json))
+                    } catch {
+                        continuation.resume(returning: .failure(()))
+                    }
                 }
             } else {
                 continuation.resume(returning: .failure(()))
@@ -59,11 +61,13 @@ internal func requestJSON<Parameters: Encodable & Sendable>(
         ).responseData { response in
             let data = response.data
             if data != nil {
-                do {
-                    let json = try JSON(data: data!)
-                    continuation.resume(returning: .success(json))
-                } catch {
-                    continuation.resume(returning: .failure(()))
+                Task.detached(priority: .userInitiated) {
+                    do {
+                        let json = try JSON(data: data!)
+                        continuation.resume(returning: .success(json))
+                    } catch {
+                        continuation.resume(returning: .failure(()))
+                    }
                 }
             } else {
                 continuation.resume(returning: .failure(()))
