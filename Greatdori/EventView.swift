@@ -175,6 +175,21 @@ struct EventDetailOverviewView: View {
                                             .frame(width: imageButtonSize, height: imageButtonSize)
                                     })
                                     .buttonStyle(.plain)
+//                                    .contextMenu {
+//                                        NavigationLink(destination: {
+//                                            
+//                                        }, label: {
+//                                            HStack {
+//#if os(iOS)
+//                                                WebImage(url: char.iconImageURL)
+//                                                    .resizable()
+//                                                    .frame(width: imageButtonSize, height: imageButtonSize)
+//#endif
+////                                                Text(birthdays[i+1].characterName.forPreferredLocale() ?? "")
+//                                            }
+//                                        })
+//
+//                                    }
                                 }
                                 Text("+\(percentage)%")
                                 //
@@ -284,6 +299,27 @@ struct EventDetailOverviewView: View {
     }
 }
 
+struct CardIconWithPreviewView: View {
+    @State var isHovering: Bool = false
+    let previewCard: DoriAPI.Card.PreviewCard
+    var body: some View {
+        CardIconView(previewCard)
+//            .onHover { isHovering in
+//                self.isHovering = isHovering
+//            }
+//            .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+//                VStack(alignment: .trailing) {
+////                    ForEach(allAvailableLocales, id: \.self) { localeValue in
+////                        MultilingualTextForCountdownInternalNumbersView(event: source, locale: localeValue)
+////                    }
+//                }
+//                .padding()
+//            }
+//            .contextMenu {
+//                
+//            }
+    }
+}
 
 /*
  VStack(alignment: .leading) {
