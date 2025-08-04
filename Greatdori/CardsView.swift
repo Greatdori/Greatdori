@@ -321,7 +321,7 @@ struct ThumbCardCardView: View {
 }
 
 
-//MARK: CardIconView [...]
+//MARK: CardIconView [✓]
 struct CardIconView: View {
     private var thumbNormalImageURL: URL
     private var thumbTrainedImageURL: URL?
@@ -407,8 +407,8 @@ struct CardIconView: View {
                         .interpolation(.high)
                         .antialiased(true)
                         .frame(width: 18/72*sideLength, height: 18/72*sideLength, alignment: .topTrailing)
+                        .offset(x: -1)
                 }
-                .border(Color.blue.opacity(0.5), width: 1)
                 
                 Spacer(minLength: 0)
                 HStack {
@@ -423,10 +423,8 @@ struct CardIconView: View {
                 }
             }
             .frame(width: sideLength, height: sideLength)
-            .border(Color.yellow.opacity(0.5), width: 1)
         }
         .frame(width: sideLength, height: sideLength)
-        .border(Color.red.opacity(0.5), width: 1)
     }
 //    
 //    @ViewBuilder

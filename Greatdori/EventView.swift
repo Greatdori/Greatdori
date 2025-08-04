@@ -233,7 +233,7 @@ struct EventDetailOverviewView: View {
                     })
                     Divider()
                 }
-                
+                //MARK: Rewards
                 if !rewardsArray.isEmpty {
                     ListItemView(title: {
                         Text("Event.rewards")
@@ -244,7 +244,6 @@ struct EventDetailOverviewView: View {
                                 
                             }, label: {
                                 CardIconView(card)
-                                    
                             })
                             .buttonStyle(.plain)
                             
@@ -264,6 +263,8 @@ struct EventDetailOverviewView: View {
         }
         .onAppear {
             eventCharacterPercentageDict = [:]
+            rewardsArray = []
+            cardsArray = []
             var eventCharacters = information.event.characters
             for char in eventCharacters {
                 eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
