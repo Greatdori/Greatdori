@@ -842,7 +842,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/libexec/PlistBuddy -c \"Delete :CFBundleExecutable\" \"$CODESIGNING_FOLDER_PATH/Info.plist\"\nexit 0\n";
+			shellScript = "/usr/libexec/PlistBuddy -c \"Delete :CFBundleExecutable\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Info.plist\"\nexit 0\n";
 		};
 		8C7288DF2E3B5CC7002AF70F /* Generate Pre-Cache */ = {
 			isa = PBXShellScriptBuildPhase;

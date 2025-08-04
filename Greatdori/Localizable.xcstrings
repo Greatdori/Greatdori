@@ -32,6 +32,9 @@
     "+%lld%%" : {
       "shouldTranslate" : false
     },
+    "1" : {
+
+    },
     "App.community" : {
       "localizations" : {
         "en" : {
@@ -175,6 +178,9 @@
           }
         }
       }
+    },
+    "Event.card" : {
+
     },
     "Event.character" : {
       "localizations" : {
