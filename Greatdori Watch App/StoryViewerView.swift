@@ -532,6 +532,7 @@ extension StoryViewerView {
         }
         
         func getStories() async {
+            #if DORIKIT_ENABLE_PRECACHE
             storyAvailability = true
             DoriCache.withCache(id: "AfterLiveStories") {
                 await DoriAPI.Misc.afterLiveTalks()
@@ -550,6 +551,9 @@ extension StoryViewerView {
                     storyAvailability = false
                 }
             }
+            #else
+            storyAvailability = false
+            #endif
         }
     }
 }

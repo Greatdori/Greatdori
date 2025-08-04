@@ -95,7 +95,7 @@ struct CardCardView: View {
     private var cardType: DoriAPI.Card.CardType
     private var attribute: DoriAPI.Attribute
     private var rarity: Int
-    private var bandIconImageURL: URL
+    private var bandIconImageURL: URL?
     
 %{
     cardTypes = ["PreviewCard", "Card"]
@@ -107,7 +107,11 @@ struct CardCardView: View {
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
+        #if DORIKIT_ENABLE_PRECACHE
         self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+        #else
+        self.bandIconImageURL = nil
+        #endif
     }
     % end
     
@@ -210,7 +214,7 @@ struct ThumbCardCardView: View {
     private var cardType: DoriAPI.Card.CardType
     private var attribute: DoriAPI.Attribute
     private var rarity: Int
-    private var bandIconImageURL: URL
+    private var bandIconImageURL: URL?
     private var prefix: DoriAPI.LocalizedData<String>
     
 %{
@@ -223,7 +227,11 @@ struct ThumbCardCardView: View {
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
+        #if DORIKIT_ENABLE_PRECACHE
         self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+        #else
+        self.bandIconImageURL = nil
+        #endif
         self.prefix = card.prefix
     }
     % end
@@ -314,7 +322,7 @@ struct CardIconView: View {
     private var cardType: DoriAPI.Card.CardType
     private var attribute: DoriAPI.Attribute
     private var rarity: Int
-    private var bandIconImageURL: URL
+    private var bandIconImageURL: URL?
     
 %{
     cardTypes = ["PreviewCard", "Card"]
@@ -326,7 +334,11 @@ struct CardIconView: View {
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
+        #if DORIKIT_ENABLE_PRECACHE
         self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+        #else
+        self.bandIconImageURL = nil
+        #endif
     }
     % end
     
