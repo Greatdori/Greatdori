@@ -256,6 +256,7 @@
 		8C3264072E3C723F00081F4F /* GachaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaListView.swift; sourceTree = "<group>"; };
 		8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaDetailView.swift; sourceTree = "<group>"; };
 		8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStoriesView.swift; sourceTree = "<group>"; };
+		8C6C0EC42E41252400D1FB0A /* Package@5.9.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package@5.9.swift"; sourceTree = "<group>"; };
 		8C7288DD2E3B4451002AF70F /* Selectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectors.swift; sourceTree = "<group>"; };
 		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 		8C923D772E3034AD003AFC0A /* HomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -372,6 +373,7 @@
 			isa = PBXGroup;
 			children = (
 				8C923DA22E31664B003AFC0A /* Package.swift */,
+				8C6C0EC42E41252400D1FB0A /* Package@5.9.swift */,
 				8C818D722E2E671A00D0DD69 /* README.md */,
 				8C0C99C22E2E664900549B5C /* LICENSE.txt */,
 				8C9474442E34DE85003A90B4 /* .editorconfig */,
