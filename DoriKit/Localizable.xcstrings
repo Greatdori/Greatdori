@@ -2,10 +2,10 @@
   "sourceLanguage" : "zh-Hans",
   "strings" : {
     "\n" : {
-
+      "shouldTranslate" : false
     },
     "%@" : {
-
+      "shouldTranslate" : false
     },
     "%@%@" : {
       "localizations" : {
@@ -15,7 +15,8 @@
             "value" : "%1$@%2$@"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "BAND_NAME_AFTERGLOW" : {
       "localizations" : {
@@ -776,6 +777,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "COMBO"
+          }
+        }
+      }
+    },
+    "COMMUNITY_STORY_AGE_RATING_EXPLICIT" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成人"
+          }
+        }
+      }
+    },
+    "COMMUNITY_STORY_AGE_RATING_GENERAL" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "普通"
+          }
+        }
+      }
+    },
+    "COMMUNITY_STORY_AGE_RATING_MATURE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成熟"
+          }
+        }
+      }
+    },
+    "COMMUNITY_STORY_AGE_RATING_TEEN_AND_UP" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "青少年及以上"
           }
         }
       }

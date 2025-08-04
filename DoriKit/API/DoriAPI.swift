@@ -182,6 +182,19 @@ public class DoriAPI {
     }
 }
 
+extension DoriAPI.Locale {
+    internal init?(rawIntValue value: Int) {
+        switch value {
+        case 0: self = .jp
+        case 1: self = .en
+        case 2: self = .tw
+        case 3: self = .cn
+        case 4: self = .kr
+        default: return nil
+        }
+    }
+}
+
 extension DoriAPI.LocalizedData: Equatable where T: Equatable {}
 extension DoriAPI.LocalizedData: Hashable where T: Hashable {}
 extension DoriAPI.LocalizedData: DoriCache.Cacheable, Codable where T: DoriCache.Cacheable {}

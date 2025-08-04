@@ -41,6 +41,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.story) {
+                    Label {
+                        Text("故事")
+                    } icon: {
+                        Image(systemName: "book.pages.fill")
+                            .foregroundStyle(.accent)
+                    }
+                }
             } header: {
                 Text("社区")
             }

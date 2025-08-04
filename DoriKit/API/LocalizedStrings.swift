@@ -91,3 +91,15 @@ extension DoriAPI.Gacha.Gacha.PaymentMethod.Behavior {
         }
     }
 }
+
+extension DoriAPI.Post.Post.StoryMetadata.AgeRating {
+    @inline(never)
+    public var localizedString: String {
+        switch self {
+        case .general: String(localized: "COMMUNITY_STORY_AGE_RATING_GENERAL", bundle: #bundle)
+        case .teenAndUp: String(localized: "COMMUNITY_STORY_AGE_RATING_TEEN_AND_UP", bundle: #bundle)
+        case .mature: String(localized: "COMMUNITY_STORY_AGE_RATING_MATURE", bundle: #bundle)
+        case .explicit: String(localized: "COMMUNITY_STORY_AGE_RATING_EXPLICIT", bundle: #bundle)
+        }
+    }
+}
