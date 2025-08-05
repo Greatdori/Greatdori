@@ -27,7 +27,7 @@ extension DoriCache {
         let result = try! decoder.decode(PreCache.self, from: Data(contentsOf: #bundle.url(forResource: "PreCache", withExtension: "cache")!))
         return result
         #else
-        .init(bands: [], mainBands: [], characters: [], birthdayCharacters: [], categorizedCharacters: [], characterDetails: [:])
+        .init(bands: [], mainBands: [], characters: [], birthdayCharacters: [], categorizedCharacters: [:], characterDetails: [:])
         #endif
     }()
     
