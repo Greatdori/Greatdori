@@ -347,11 +347,7 @@ struct CardIconView: View {
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-#if DORIKIT_ENABLE_PRECACHE
-        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache!.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
-#else
-        self.bandIconImageURL = nil
-#endif
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
         self.showTrainedVersion = showTrainedVersion
         self.sideLength = sideLength
         self.showNavigationHints = showNavigationHints
@@ -364,11 +360,7 @@ struct CardIconView: View {
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-#if DORIKIT_ENABLE_PRECACHE
-        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache!.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
-#else
-        self.bandIconImageURL = nil
-#endif
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
         self.showTrainedVersion = showTrainedVersion
         self.sideLength = sideLength
         self.showNavigationHints = showNavigationHints

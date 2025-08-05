@@ -21,13 +21,13 @@ extension DoriCache {
     }
     
     @inline(never)
-    public static let preCache: PreCache? = {
+    public static let preCache: PreCache = {
         #if DORIKIT_ENABLE_PRECACHE
         let decoder = PropertyListDecoder()
         let result = try! decoder.decode(PreCache.self, from: Data(contentsOf: #bundle.url(forResource: "PreCache", withExtension: "cache")!))
         return result
         #else
-        nil
+        .init(bands: [], mainBands: [], characters: [], birthdayCharacters: [], categorizedCharacters: [], characterDetails: [:])
         #endif
     }()
     
@@ -42,11 +42,11 @@ extension DoriCache {
     
     internal static func preCachedData(byID id: String) -> Any? {
         switch id {
-        case "CharacterList": preCache?.categorizedCharacters
-        case "Home_Birthdays": preCache?.birthdayCharacters
+        case "CharacterList": preCache.categorizedCharacters
+        case "Home_Birthdays": preCache.birthdayCharacters
         case let x where x.hasPrefix("CharacterDetail_"):
             if let characterID = Int(String(x.dropFirst("CharacterDetail_".count))) {
-                preCache?.characterDetails[characterID]
+                preCache.characterDetails[characterID]
             } else {
                 nil
             }
