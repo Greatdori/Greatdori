@@ -12,10 +12,8 @@
 		8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99802E296A5500549B5C /* GreatdoriApp.swift */; };
 		8C0C99892E296A5800549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99862E296A5800549B5C /* ContentView.swift */; };
 		8C0C998A2E296A5800549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99872E296A5800549B5C /* GreatdoriApp.swift */; };
-		8C0C99972E296A8C00549B5C /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; platformFilters = (ios, macos, ); };
-		8C0C99982E296A8C00549B5C /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; platformFilters = (ios, macos, ); settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8C0C99A22E296B3E00549B5C /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
-		8C0C99A32E296B3E00549B5C /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8C0C99972E296A8C00549B5C /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
+		8C0C99982E296A8C00549B5C /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8C0C99AE2E296F2D00549B5C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0C99AD2E296F2D00549B5C /* Alamofire */; };
 		8C0C99B12E296F3900549B5C /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0C99B02E296F3900549B5C /* SwiftyJSON */; };
 		8C0C99B32E29766B00549B5C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C99B22E29766B00549B5C /* Localizable.xcstrings */; };
@@ -37,7 +35,6 @@
 		8C6C0ECD2E422F9000D1FB0A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */; };
 		8C6C0EDA2E422F9100D1FB0A /* Greatdori Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8C6C0EE22E422FEC00D1FB0A /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
-		8C6C0EE32E422FEC00D1FB0A /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8C6C0EED2E42301000D1FB0A /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE72E42301000D1FB0A /* AppIntents.swift */; };
 		8C6C0EEE2E42301000D1FB0A /* CardWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE92E42301000D1FB0A /* CardWidgets.swift */; };
 		8C6C0EEF2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EEA2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift */; };
@@ -48,9 +45,10 @@
 		8C6C0F002E42462A00D1FB0A /* OptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EFE2E42462A00D1FB0A /* OptionsData.swift */; };
 		8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C0F012E42533900D1FB0A /* Assets.xcassets */; };
 		8C6C0F032E42533900D1FB0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C0F012E42533900D1FB0A /* Assets.xcassets */; };
-		8C6C0F042E42535600D1FB0A /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8C94744B2E35DA49003A90B4 /* AppIcon.icon */; };
 		8C6C0F0B2E425AF500D1FB0A /* NewsWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0F0A2E425AF100D1FB0A /* NewsWidgets.swift */; };
 		8C6C0F0D2E42655000D1FB0A /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0F0C2E42654E00D1FB0A /* Date+.swift */; };
+		8C6C0F0E2E42700B00D1FB0A /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
+		8C6C0F0F2E42700B00D1FB0A /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8C7288DE2E3B4458002AF70F /* Selectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7288DD2E3B4451002AF70F /* Selectors.swift */; };
 		8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift */; };
 		8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */; };
@@ -247,17 +245,6 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8C0C99A62E296B3E00549B5C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				8C0C99A32E296B3E00549B5C /* DoriKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8C6C0EE12E422F9100D1FB0A /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -269,13 +256,13 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8C6C0EE62E422FEC00D1FB0A /* Embed Frameworks */ = {
+		8C6C0F102E42700B00D1FB0A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8C6C0EE32E422FEC00D1FB0A /* DoriKit.framework in Embed Frameworks */,
+				8C6C0F0F2E42700B00D1FB0A /* DoriKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -408,9 +395,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C6C0F0E2E42700B00D1FB0A /* DoriKit.framework in Frameworks */,
 				8C923D802E30488E003AFC0A /* SDWebImageSVGCoder in Frameworks */,
 				8C923D7D2E304882003AFC0A /* SDWebImageSwiftUI in Frameworks */,
-				8C0C99A22E296B3E00549B5C /* DoriKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -798,7 +785,7 @@
 				8C0C99662E296A4600549B5C /* Sources */,
 				8C0C99672E296A4600549B5C /* Frameworks */,
 				8C0C99682E296A4600549B5C /* Resources */,
-				8C0C99A62E296B3E00549B5C /* Embed Frameworks */,
+				8C6C0F102E42700B00D1FB0A /* Embed Frameworks */,
 			);
 			buildRules = (
 				8C923D8A2E30559D003AFC0A /* PBXBuildRule */,
@@ -865,7 +852,6 @@
 				8C6C0EC52E422F8F00D1FB0A /* Sources */,
 				8C6C0EC62E422F8F00D1FB0A /* Frameworks */,
 				8C6C0EC72E422F8F00D1FB0A /* Resources */,
-				8C6C0EE62E422FEC00D1FB0A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -977,7 +963,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */,
-				8C6C0F042E42535600D1FB0A /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1189,10 +1174,6 @@
 		};
 		8C0C99962E296A8C00549B5C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			platformFilters = (
-				ios,
-				macos,
-			);
 			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
 			targetProxy = 8C0C99952E296A8C00549B5C /* PBXContainerItemProxy */;
 		};
@@ -1354,6 +1335,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
@@ -1388,6 +1370,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
@@ -1423,6 +1406,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CODE_SIGN_ENTITLEMENTS = Greatdori/Greatdori.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1470,6 +1454,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CODE_SIGN_ENTITLEMENTS = Greatdori/Greatdori.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1622,6 +1607,7 @@
 		8C2CCD3B2E3E058E0014189F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1653,6 +1639,7 @@
 		8C2CCD3C2E3E058E0014189F /* DebWithoutPreCache */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1684,6 +1671,7 @@
 		8C2CCD3D2E3E058E0014189F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1714,6 +1702,7 @@
 		8C2CCD3E2E3E058E0014189F /* RelWithoutPreCache */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1812,6 +1801,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CODE_SIGN_ENTITLEMENTS = Greatdori/Greatdori.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1858,6 +1848,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
@@ -2029,6 +2020,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CODE_SIGN_ENTITLEMENTS = Greatdori/Greatdori.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2076,6 +2068,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = WatchAppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
@@ -2189,6 +2182,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Greatdori Widgets/Greatdori Widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -2225,6 +2219,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Greatdori Widgets/Greatdori Widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -2262,6 +2257,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Greatdori Widgets/Greatdori Widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -2299,6 +2295,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Greatdori Widgets/Greatdori Widgets.entitlements";
 				CODE_SIGN_STYLE = Automatic;
