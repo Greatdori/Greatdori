@@ -12,5 +12,6 @@ import SwiftUI
 struct GreatdoriWidgetsBundle: WidgetBundle {
     var body: some Widget {
         CardWidgets()
+        NewsWidgets()
     }
 }

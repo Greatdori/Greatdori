@@ -44,11 +44,13 @@
 		8C6C0EF02E42301000D1FB0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE82E42301000D1FB0A /* Assets.xcassets */; };
 		8C6C0EF22E4230B800D1FB0A /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8C94744B2E35DA49003A90B4 /* AppIcon.icon */; };
 		8C6C0EF82E42352700D1FB0A /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE72E42301000D1FB0A /* AppIntents.swift */; platformFilter = ios; };
-		8C6C0EFF2E42462A00D1FB0A /* OptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EFE2E42462A00D1FB0A /* OptionsData.swift */; };
+		8C6C0EFF2E42462A00D1FB0A /* OptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EFE2E42462A00D1FB0A /* OptionsData.swift */; platformFilter = ios; };
 		8C6C0F002E42462A00D1FB0A /* OptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EFE2E42462A00D1FB0A /* OptionsData.swift */; };
 		8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C0F012E42533900D1FB0A /* Assets.xcassets */; };
 		8C6C0F032E42533900D1FB0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C0F012E42533900D1FB0A /* Assets.xcassets */; };
 		8C6C0F042E42535600D1FB0A /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8C94744B2E35DA49003A90B4 /* AppIcon.icon */; };
+		8C6C0F0B2E425AF500D1FB0A /* NewsWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0F0A2E425AF100D1FB0A /* NewsWidgets.swift */; };
+		8C6C0F0D2E42655000D1FB0A /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0F0C2E42654E00D1FB0A /* Date+.swift */; };
 		8C7288DE2E3B4458002AF70F /* Selectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7288DD2E3B4451002AF70F /* Selectors.swift */; };
 		8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift */; };
 		8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */; };
@@ -318,6 +320,8 @@
 		8C6C0EFA2E423CB900D1FB0A /* Greatdori Widgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Greatdori Widgets.entitlements"; sourceTree = "<group>"; };
 		8C6C0EFE2E42462A00D1FB0A /* OptionsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsData.swift; sourceTree = "<group>"; };
 		8C6C0F012E42533900D1FB0A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8C6C0F0A2E425AF100D1FB0A /* NewsWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsWidgets.swift; sourceTree = "<group>"; };
+		8C6C0F0C2E42654E00D1FB0A /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		8C7288DD2E3B4451002AF70F /* Selectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectors.swift; sourceTree = "<group>"; };
 		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 		8C923D772E3034AD003AFC0A /* HomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -555,7 +559,9 @@
 				8C6C0EFA2E423CB900D1FB0A /* Greatdori Widgets.entitlements */,
 				8C6C0EEB2E42301000D1FB0A /* Info.plist */,
 				8C6C0EEA2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift */,
+				8C6C0F0C2E42654E00D1FB0A /* Date+.swift */,
 				8C6C0EE92E42301000D1FB0A /* CardWidgets.swift */,
+				8C6C0F0A2E425AF100D1FB0A /* NewsWidgets.swift */,
 				8C6C0EE82E42301000D1FB0A /* Assets.xcassets */,
 			);
 			path = "Greatdori Widgets";
@@ -1156,7 +1162,9 @@
 				8C6C0EED2E42301000D1FB0A /* AppIntents.swift in Sources */,
 				8C6C0EEE2E42301000D1FB0A /* CardWidgets.swift in Sources */,
 				8C6C0F002E42462A00D1FB0A /* OptionsData.swift in Sources */,
+				8C6C0F0D2E42655000D1FB0A /* Date+.swift in Sources */,
 				8C6C0EEF2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift in Sources */,
+				8C6C0F0B2E425AF500D1FB0A /* NewsWidgets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
