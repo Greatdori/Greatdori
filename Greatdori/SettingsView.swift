@@ -9,6 +9,7 @@ import SwiftUI
 import DoriKit
 
 struct SettingsView: View {
+    @Environment(\.dismiss) var dismiss
     var body: some View {
         NavigationStack {
             Form {
@@ -33,6 +34,15 @@ struct SettingsView: View {
             }
             .formStyle(.grouped)
             .navigationTitle("Settings")
+            #if !os(macOS)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    DismissButton(action: dismiss.callAsFunction) {
+                        Image(systemName: "xmark")
+                    }
+                }
+            }
+            #endif
         }
     }
 }
