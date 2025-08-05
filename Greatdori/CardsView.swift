@@ -323,44 +323,55 @@ struct ThumbCardCardView: View {
 
 //MARK: CardIconView [✓]
 struct CardIconView: View {
+    private var inputtedPreviewCard: DoriAPI.Card.PreviewCard?
+    private var cardID: Int
     private var thumbNormalImageURL: URL
     private var thumbTrainedImageURL: URL?
     private var cardType: DoriAPI.Card.CardType
     private var attribute: DoriAPI.Attribute
     private var rarity: Int
-    private var bandIconImageURL: URL
+    private var bandIconImageURL: URL?
     private var showTrainedVersion: Bool = false
     private var sideLength: CGFloat = 72
+    private var showNavigationHints: Bool
+    @State var cardTitle: DoriAPI.LocalizedData<String>?
+    @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
-    init(_ card: DoriAPI.Card.PreviewCard, showTrainedVersion: Bool = false, sideLength: CGFloat = 72) {
+    init(_ card: DoriAPI.Card.PreviewCard, showTrainedVersion: Bool = false, sideLength: CGFloat = 72,
+         showNavigationHints: Bool = false) {
+        self.inputtedPreviewCard = card
+        self.cardID = card.id
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
 #if DORIKIT_ENABLE_PRECACHE
-        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache!.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
 #else
         self.bandIconImageURL = nil
 #endif
         self.showTrainedVersion = showTrainedVersion
         self.sideLength = sideLength
+        self.showNavigationHints = showNavigationHints
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
-    init(_ card: DoriAPI.Card.Card, showTrainedVersion: Bool = false, sideLength: CGFloat = 72) {
+    init(_ card: DoriAPI.Card.Card, showTrainedVersion: Bool = false, sideLength: CGFloat = 72, showNavigationHints: Bool = false) {
+        self.cardID = card.id
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
 #if DORIKIT_ENABLE_PRECACHE
-        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache!.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
 #else
         self.bandIconImageURL = nil
 #endif
         self.showTrainedVersion = showTrainedVersion
         self.sideLength = sideLength
+        self.showNavigationHints = showNavigationHints
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 332)
     
@@ -424,13 +435,51 @@ struct CardIconView: View {
             }
             .frame(width: sideLength, height: sideLength)
         }
+        .wrapIf(showNavigationHints, in: { content in
+            content
+                .contextMenu(menuItems: {
+                    VStack {
+                        Button(action: {}, label: {
+                            if let title = cardTitle?.forPreferredLocale() {
+                                Text(title)
+                            } else {
+                                Text("\(cardTitle)")
+//                                    .redacted(reason: .placeholder)
+                            }
+                        })
+                        //TODO: BUGGY
+                        Button(action: {}, label: {
+                            if let character = cardCharacterName?.forPreferredLocale() {
+                                Text(character)
+                            } else {
+                                Text("Lorem ipsum")
+                                    .redacted(reason: .placeholder)
+                            }
+                        })
+                    }
+                })
+        })
         .frame(width: sideLength, height: sideLength)
+        .onAppear {
+            Task {
+                let fullCard = await DoriAPI.Card.Card(id: cardID)
+                cardTitle = fullCard?.prefix
+                print(fullCard)
+                
+                if let cardCharacterID = fullCard?.characterID {
+                    DoriCache.withCache(id: "CharacterDetail_\(cardCharacterID)") {
+                        await DoriFrontend.Character.extendedInformation(of: cardCharacterID)
+                    } .onUpdate {
+                        if let information = $0 {
+                            self.cardCharacterName = information.character.characterName
+                        } else {
+                            cardCharacterName = nil
+                        }
+                    }
+                }
+            }
+        }
     }
-//    
-//    @ViewBuilder
-//    private func upperLayer(trained: Bool) -> some View {
-//        
-//    }
 }
 
 struct ThumbCostumeCardView: View {

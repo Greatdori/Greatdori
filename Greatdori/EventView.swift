@@ -80,6 +80,7 @@ struct EventDetailView: View {
 struct EventDetailOverviewView: View {
     let information: DoriFrontend.Event.ExtendedEvent
     @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
+    @State var eventCharacterNameDict: [Int: DoriAPI.LocalizedData<String>] = [:]
     @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
     @State var cardsPercentage: Int = -100
     @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
@@ -167,6 +168,7 @@ struct EventDetailOverviewView: View {
                             HStack {
                                 Spacer()
                                 ForEach(eventCharacterPercentageDict[percentage]!, id: \.self) { char in
+                                    #if os(macOS)
                                     NavigationLink(destination: {
                                         
                                     }, label: {
@@ -175,21 +177,26 @@ struct EventDetailOverviewView: View {
                                             .frame(width: imageButtonSize, height: imageButtonSize)
                                     })
                                     .buttonStyle(.plain)
-//                                    .contextMenu {
-//                                        NavigationLink(destination: {
-//                                            
-//                                        }, label: {
-//                                            HStack {
-//#if os(iOS)
-//                                                WebImage(url: char.iconImageURL)
-//                                                    .resizable()
-//                                                    .frame(width: imageButtonSize, height: imageButtonSize)
-//#endif
-////                                                Text(birthdays[i+1].characterName.forPreferredLocale() ?? "")
-//                                            }
-//                                        })
-//
-//                                    }
+                                    #else
+                                    Menu(content: {
+                                        NavigationLink(destination: {
+                                            
+                                        }, label: {
+                                            HStack {
+                                                WebImage(url: char.iconImageURL)
+                                                    .resizable()
+                                                    .frame(width: imageButtonSize, height: imageButtonSize)
+//                                                Text(char.name)
+                                                Text(eventCharacterNameDict[char.characterID]?.forPreferredLocale() ?? "Unknown")
+                                                Spacer()
+                                            }
+                                        })
+                                    }, label: {
+                                        WebImage(url: char.iconImageURL)
+                                            .resizable()
+                                            .frame(width: imageButtonSize, height: imageButtonSize)
+                                    })
+                                    #endif
                                 }
                                 Text("+\(percentage)%")
                                 //
@@ -238,7 +245,7 @@ struct EventDetailOverviewView: View {
                                 NavigationLink(destination: {
                                     
                                 }, label: {
-                                    CardIconView(card)
+                                    CardIconView(card, showNavigationHints: true)
                                 })
                                 .buttonStyle(.plain)
                                 
@@ -258,7 +265,7 @@ struct EventDetailOverviewView: View {
                             NavigationLink(destination: {
                                 
                             }, label: {
-                                CardIconView(card)
+                                CardIconView(card, showNavigationHints: true)
                             })
                             .buttonStyle(.plain)
                             
@@ -283,6 +290,14 @@ struct EventDetailOverviewView: View {
             var eventCharacters = information.event.characters
             for char in eventCharacters {
                 eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
+                Task {
+                    if let allCharacters = await DoriAPI.Character.all() {
+                        if let character = allCharacters.first(where: { $0.id == char.characterID }) {
+                            eventCharacterNameDict.updateValue(character.characterName, forKey: char.characterID)
+                        }
+                    }
+                    
+                }
             }
             for card in information.cards {
                 if information.event.rewardCards.contains(card.id) {

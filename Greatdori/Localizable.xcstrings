@@ -15,6 +15,9 @@
     "#%lld" : {
       "shouldTranslate" : false
     },
+    "%@" : {
+
+    },
     "%@%@" : {
       "localizations" : {
         "zh-Hans" : {
@@ -786,6 +789,9 @@
           }
         }
       }
+    },
+    "Lorem ipsum" : {
+
     },
     "Settings" : {
       "localizations" : {
