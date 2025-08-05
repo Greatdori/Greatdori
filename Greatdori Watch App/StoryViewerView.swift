@@ -532,7 +532,6 @@ extension StoryViewerView {
         }
         
         func getStories() async {
-            #if DORIKIT_ENABLE_PRECACHE
             storyAvailability = true
             DoriCache.withCache(id: "AfterLiveStories") {
                 await DoriAPI.Misc.afterLiveTalks()
@@ -540,7 +539,7 @@ extension StoryViewerView {
                 if let stories = $0 {
                     self.stories = stories.filter {
                         for id in filter.character.map({ $0.rawValue }) {
-                            let character = DoriCache.preCache.characterDetails[id]
+                            let character = DoriCache.preCache?.characterDetails[id]
                             if let character, $0.description.jp?.contains(character.firstName.jp ?? "") ?? false {
                                 return true
                             }
@@ -551,9 +550,6 @@ extension StoryViewerView {
                     storyAvailability = false
                 }
             }
-            #else
-            storyAvailability = false
-            #endif
         }
     }
 }

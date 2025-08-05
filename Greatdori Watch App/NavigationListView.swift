@@ -6,22 +6,23 @@
 //
 
 import SwiftUI
+import DoriKit
 
 struct NavigationListView: View {
     @Binding var navigation: NavigationPage?
     var body: some View {
         List(selection: $navigation) {
-            #if !DORIKIT_ENABLE_PRECACHE
-            Section {
-                Label {
-                    Text(verbatim: "Building without pre-cache, some features may unavailable. ")
-                    + Text(verbatim: "Do not ship!!!!!").underline()
-                } icon: {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.yellow)
+            if !DoriCache.preCacheAvailability {
+                Section {
+                    Label {
+                        Text(verbatim: "Building without pre-cache, some features may unavailable. ")
+                        + Text(verbatim: "Do not ship!!!!!").underline()
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.yellow)
+                    }
                 }
             }
-            #endif
             Section {
                 NavigationLink(value: NavigationPage.home) {
                     Label {
