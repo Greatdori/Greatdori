@@ -12,7 +12,6 @@
 		8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99802E296A5500549B5C /* GreatdoriApp.swift */; };
 		8C0C99892E296A5800549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99862E296A5800549B5C /* ContentView.swift */; };
 		8C0C998A2E296A5800549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99872E296A5800549B5C /* GreatdoriApp.swift */; };
-		8C0C998B2E296A5800549B5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C99852E296A5800549B5C /* Assets.xcassets */; };
 		8C0C99972E296A8C00549B5C /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; platformFilters = (ios, macos, ); };
 		8C0C99982E296A8C00549B5C /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; platformFilters = (ios, macos, ); settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8C0C99A22E296B3E00549B5C /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
@@ -34,6 +33,22 @@
 		8C3264082E3C724900081F4F /* GachaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264072E3C723F00081F4F /* GachaListView.swift */; };
 		8C32640A2E3CB4D000081F4F /* GachaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */; };
 		8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */; };
+		8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */; };
+		8C6C0ECD2E422F9000D1FB0A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */; };
+		8C6C0EDA2E422F9100D1FB0A /* Greatdori Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8C6C0EE22E422FEC00D1FB0A /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
+		8C6C0EE32E422FEC00D1FB0A /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8C6C0EED2E42301000D1FB0A /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE72E42301000D1FB0A /* AppIntents.swift */; };
+		8C6C0EEE2E42301000D1FB0A /* CardWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE92E42301000D1FB0A /* CardWidgets.swift */; };
+		8C6C0EEF2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EEA2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift */; };
+		8C6C0EF02E42301000D1FB0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE82E42301000D1FB0A /* Assets.xcassets */; };
+		8C6C0EF22E4230B800D1FB0A /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8C94744B2E35DA49003A90B4 /* AppIcon.icon */; };
+		8C6C0EF82E42352700D1FB0A /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE72E42301000D1FB0A /* AppIntents.swift */; platformFilter = ios; };
+		8C6C0EFF2E42462A00D1FB0A /* OptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EFE2E42462A00D1FB0A /* OptionsData.swift */; };
+		8C6C0F002E42462A00D1FB0A /* OptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EFE2E42462A00D1FB0A /* OptionsData.swift */; };
+		8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C0F012E42533900D1FB0A /* Assets.xcassets */; };
+		8C6C0F032E42533900D1FB0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C0F012E42533900D1FB0A /* Assets.xcassets */; };
+		8C6C0F042E42535600D1FB0A /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8C94744B2E35DA49003A90B4 /* AppIcon.icon */; };
 		8C7288DE2E3B4458002AF70F /* Selectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7288DD2E3B4451002AF70F /* Selectors.swift */; };
 		8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift */; };
 		8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */; };
@@ -49,7 +64,6 @@
 		8C923D932E307088003AFC0A /* CharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D922E307084003AFC0A /* CharacterDetailView.swift */; };
 		8C923D952E307227003AFC0A /* TaskGroup.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D942E30721F003AFC0A /* TaskGroup.swift.gyb */; };
 		8C923D972E30A1BC003AFC0A /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D962E30A1B8003AFC0A /* LocalizedStrings.swift */; };
-		8C923D992E30AF36003AFC0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C99852E296A5800549B5C /* Assets.xcassets */; };
 		8C923D9B2E3138E3003AFC0A /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D9A2E3138E1003AFC0A /* Post.swift */; };
 		8C923D9D2E313B4A003AFC0A /* FrontendCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D9C2E313B47003AFC0A /* FrontendCard.swift */; };
 		8C923D9F2E313C0B003AFC0A /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D9E2E313C09003AFC0A /* Filters.swift */; };
@@ -185,6 +199,20 @@
 			remoteGlobalIDString = 8C2CCD392E3E058E0014189F;
 			remoteInfo = DoriEmoji;
 		};
+		8C6C0ED82E422F9100D1FB0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C6C0EC82E422F8F00D1FB0A;
+			remoteInfo = "Greatdori WidgetsExtension";
+		};
+		8C6C0EE42E422FEC00D1FB0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
+			remoteInfo = DoriKit;
+		};
 		8C9474572E35DE1C003A90B4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
@@ -228,6 +256,28 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C6C0EE12E422F9100D1FB0A /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8C6C0EDA2E422F9100D1FB0A /* Greatdori Widgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C6C0EE62E422FEC00D1FB0A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8C6C0EE32E422FEC00D1FB0A /* DoriKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -235,7 +285,6 @@
 		8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Greatdori Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C0C997F2E296A5500549B5C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8C0C99802E296A5500549B5C /* GreatdoriApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatdoriApp.swift; sourceTree = "<group>"; };
-		8C0C99852E296A5800549B5C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8C0C99862E296A5800549B5C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8C0C99872E296A5800549B5C /* GreatdoriApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatdoriApp.swift; sourceTree = "<group>"; };
 		8C0C99912E296A8C00549B5C /* DoriKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DoriKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -257,6 +306,18 @@
 		8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaDetailView.swift; sourceTree = "<group>"; };
 		8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStoriesView.swift; sourceTree = "<group>"; };
 		8C6C0EC42E41252400D1FB0A /* Package@5.9.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package@5.9.swift"; sourceTree = "<group>"; };
+		8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Greatdori Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		8C6C0EE72E42301000D1FB0A /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
+		8C6C0EE82E42301000D1FB0A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8C6C0EE92E42301000D1FB0A /* CardWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardWidgets.swift; sourceTree = "<group>"; };
+		8C6C0EEA2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatdoriWidgetsBundle.swift; sourceTree = "<group>"; };
+		8C6C0EEB2E42301000D1FB0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8C6C0EF92E423C8E00D1FB0A /* Greatdori.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Greatdori.entitlements; sourceTree = "<group>"; };
+		8C6C0EFA2E423CB900D1FB0A /* Greatdori Widgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Greatdori Widgets.entitlements"; sourceTree = "<group>"; };
+		8C6C0EFE2E42462A00D1FB0A /* OptionsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsData.swift; sourceTree = "<group>"; };
+		8C6C0F012E42533900D1FB0A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8C7288DD2E3B4451002AF70F /* Selectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectors.swift; sourceTree = "<group>"; };
 		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 		8C923D772E3034AD003AFC0A /* HomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -358,6 +419,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C6C0EC62E422F8F00D1FB0A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C6C0EE22E422FEC00D1FB0A /* DoriKit.framework in Frameworks */,
+				8C6C0ECD2E422F9000D1FB0A /* SwiftUI.framework in Frameworks */,
+				8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C94744F2E35DE1C003A90B4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -382,6 +453,7 @@
 				8C923D982E30AF1E003AFC0A /* AppShared */,
 				8C0C99812E296A5500549B5C /* Greatdori */,
 				8C0C99882E296A5800549B5C /* Greatdori Watch App */,
+				8C6C0EEC2E42301000D1FB0A /* Greatdori Widgets */,
 				8C0C999E2E296A9000549B5C /* DoriKit */,
 				8C94745D2E35DE6C003A90B4 /* DoriKitTests */,
 				8C2CCD432E3E06910014189F /* DoriEmoji */,
@@ -398,6 +470,7 @@
 				8C0C99912E296A8C00549B5C /* DoriKit.framework */,
 				8C9474522E35DE1C003A90B4 /* DoriKitTests.xctest */,
 				8C2CCD3A2E3E058E0014189F /* DoriEmoji.bundle */,
+				8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -405,6 +478,7 @@
 		8C0C99812E296A5500549B5C /* Greatdori */ = {
 			isa = PBXGroup;
 			children = (
+				8C6C0EF92E423C8E00D1FB0A /* Greatdori.entitlements */,
 				E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */,
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				8C0C997F2E296A5500549B5C /* ContentView.swift */,
@@ -466,6 +540,8 @@
 		8C0C99A12E296B3E00549B5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */,
+				8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -490,6 +566,36 @@
 			path = DoriEmoji;
 			sourceTree = "<group>";
 		};
+		8C6C0EEC2E42301000D1FB0A /* Greatdori Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				8C6C0EFA2E423CB900D1FB0A /* Greatdori Widgets.entitlements */,
+				8C6C0EEB2E42301000D1FB0A /* Info.plist */,
+				8C6C0EEA2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift */,
+				8C6C0EE92E42301000D1FB0A /* CardWidgets.swift */,
+				8C6C0EE82E42301000D1FB0A /* Assets.xcassets */,
+			);
+			path = "Greatdori Widgets";
+			sourceTree = "<group>";
+		};
+		8C6C0EF62E4234D900D1FB0A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8C94744B2E35DA49003A90B4 /* AppIcon.icon */,
+				8C6C0F012E42533900D1FB0A /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8C6C0EF72E4234E400D1FB0A /* WidgetsCode */ = {
+			isa = PBXGroup;
+			children = (
+				8C6C0EFE2E42462A00D1FB0A /* OptionsData.swift */,
+				8C6C0EE72E42301000D1FB0A /* AppIntents.swift */,
+			);
+			path = WidgetsCode;
+			sourceTree = "<group>";
+		};
 		8C923D852E304AE5003AFC0A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -503,8 +609,8 @@
 		8C923D982E30AF1E003AFC0A /* AppShared */ = {
 			isa = PBXGroup;
 			children = (
-				8C94744B2E35DA49003A90B4 /* AppIcon.icon */,
-				8C0C99852E296A5800549B5C /* Assets.xcassets */,
+				8C6C0EF62E4234D900D1FB0A /* Resources */,
+				8C6C0EF72E4234E400D1FB0A /* WidgetsCode */,
 			);
 			path = AppShared;
 			sourceTree = "<group>";
@@ -620,6 +726,7 @@
 				8C0C995B2E296A4400549B5C /* Resources */,
 				8C0C997A2E296A4700549B5C /* Embed Watch Content */,
 				8C0C999C2E296A8C00549B5C /* Embed Frameworks */,
+				8C6C0EE12E422F9100D1FB0A /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 				8C923D8B2E3055A4003AFC0A /* PBXBuildRule */,
@@ -627,6 +734,7 @@
 			dependencies = (
 				8C0C996D2E296A4600549B5C /* PBXTargetDependency */,
 				8C0C99962E296A8C00549B5C /* PBXTargetDependency */,
+				8C6C0ED92E422F9100D1FB0A /* PBXTargetDependency */,
 			);
 			name = Greatdori;
 			packageProductDependencies = (
@@ -704,6 +812,27 @@
 			productReference = 8C2CCD3A2E3E058E0014189F /* DoriEmoji.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
+		8C6C0EC82E422F8F00D1FB0A /* Greatdori Widgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C6C0EDC2E422F9100D1FB0A /* Build configuration list for PBXNativeTarget "Greatdori Widgets" */;
+			buildPhases = (
+				8C6C0EC52E422F8F00D1FB0A /* Sources */,
+				8C6C0EC62E422F8F00D1FB0A /* Frameworks */,
+				8C6C0EC72E422F8F00D1FB0A /* Resources */,
+				8C6C0EE62E422FEC00D1FB0A /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8C6C0EE52E422FEC00D1FB0A /* PBXTargetDependency */,
+			);
+			name = "Greatdori Widgets";
+			packageProductDependencies = (
+			);
+			productName = "Greatdori WidgetsExtension";
+			productReference = 8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		8C9474512E35DE1C003A90B4 /* DoriKitTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C9474592E35DE1C003A90B4 /* Build configuration list for PBXNativeTarget "DoriKitTests" */;
@@ -747,6 +876,9 @@
 						CreatedOnToolsVersion = 26.0;
 						LastSwiftMigration = 2600;
 					};
+					8C6C0EC82E422F8F00D1FB0A = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					8C9474512E35DE1C003A90B4 = {
 						CreatedOnToolsVersion = 26.0;
 					};
@@ -775,6 +907,7 @@
 			targets = (
 				8C0C995C2E296A4400549B5C /* Greatdori */,
 				8C0C99692E296A4600549B5C /* Greatdori Watch App */,
+				8C6C0EC82E422F8F00D1FB0A /* Greatdori Widgets */,
 				8C0C99902E296A8C00549B5C /* DoriKit */,
 				8C9474512E35DE1C003A90B4 /* DoriKitTests */,
 				8C2CCD392E3E058E0014189F /* DoriEmoji */,
@@ -788,7 +921,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */,
-				8C923D992E30AF36003AFC0A /* Assets.xcassets in Resources */,
+				8C6C0F032E42533900D1FB0A /* Assets.xcassets in Resources */,
 				8C94744D2E35DA49003A90B4 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -797,7 +930,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C0C998B2E296A5800549B5C /* Assets.xcassets in Resources */,
+				8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */,
+				8C6C0F042E42535600D1FB0A /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -816,6 +950,15 @@
 			files = (
 				8C2CCD4B2E3E0C840014189F /* emoji_names.plist in Resources */,
 				8C2CCD452E3E06AA0014189F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C6C0EC72E422F8F00D1FB0A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C6C0EF02E42301000D1FB0A /* Assets.xcassets in Resources */,
+				8C6C0EF22E4230B800D1FB0A /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -881,7 +1024,9 @@
 				E9E3C0582E35C7740059BCE8 /* HomeView.swift in Sources */,
 				E975A7142E386FB900EFAE34 /* SettingsView.swift in Sources */,
 				8C0C99832E296A5500549B5C /* ContentView.swift in Sources */,
+				8C6C0EFF2E42462A00D1FB0A /* OptionsData.swift in Sources */,
 				8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */,
+				8C6C0EF82E42352700D1FB0A /* AppIntents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -964,6 +1109,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C6C0EC52E422F8F00D1FB0A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C6C0EED2E42301000D1FB0A /* AppIntents.swift in Sources */,
+				8C6C0EEE2E42301000D1FB0A /* CardWidgets.swift in Sources */,
+				8C6C0F002E42462A00D1FB0A /* OptionsData.swift in Sources */,
+				8C6C0EEF2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C94744E2E35DE1C003A90B4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1001,6 +1157,17 @@
 			isa = PBXTargetDependency;
 			target = 8C2CCD392E3E058E0014189F /* DoriEmoji */;
 			targetProxy = 8C2CCD412E3E06100014189F /* PBXContainerItemProxy */;
+		};
+		8C6C0ED92E422F9100D1FB0A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 8C6C0EC82E422F8F00D1FB0A /* Greatdori Widgets */;
+			targetProxy = 8C6C0ED82E422F9100D1FB0A /* PBXContainerItemProxy */;
+		};
+		8C6C0EE52E422FEC00D1FB0A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
+			targetProxy = 8C6C0EE42E422FEC00D1FB0A /* PBXContainerItemProxy */;
 		};
 		8C9474582E35DE1C003A90B4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1208,6 +1375,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Greatdori/Greatdori.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
@@ -1254,6 +1422,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Greatdori/Greatdori.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
@@ -1595,6 +1764,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Greatdori/Greatdori.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
@@ -1811,6 +1981,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Greatdori/Greatdori.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
@@ -1966,6 +2137,153 @@
 			};
 			name = RelWithoutPreCache;
 		};
+		8C6C0EDD2E422F9100D1FB0A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Greatdori Widgets/Greatdori Widgets.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori Widgets";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.Widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8C6C0EDE2E422F9100D1FB0A /* DebWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Greatdori Widgets/Greatdori Widgets.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori Widgets";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.Widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = DebWithoutPreCache;
+		};
+		8C6C0EDF2E422F9100D1FB0A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Greatdori Widgets/Greatdori Widgets.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori Widgets";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.Widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8C6C0EE02E422F9100D1FB0A /* RelWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Greatdori Widgets/Greatdori Widgets.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori Widgets";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.Widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = RelWithoutPreCache;
+		};
 		8C94745A2E35DE1C003A90B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2072,6 +2390,17 @@
 				8C2CCD3C2E3E058E0014189F /* DebWithoutPreCache */,
 				8C2CCD3D2E3E058E0014189F /* Release */,
 				8C2CCD3E2E3E058E0014189F /* RelWithoutPreCache */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C6C0EDC2E422F9100D1FB0A /* Build configuration list for PBXNativeTarget "Greatdori Widgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C6C0EDD2E422F9100D1FB0A /* Debug */,
+				8C6C0EDE2E422F9100D1FB0A /* DebWithoutPreCache */,
+				8C6C0EDF2E422F9100D1FB0A /* Release */,
+				8C6C0EE02E422F9100D1FB0A /* RelWithoutPreCache */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
