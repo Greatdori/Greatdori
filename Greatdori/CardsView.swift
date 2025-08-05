@@ -336,6 +336,7 @@ struct CardIconView: View {
     private var showNavigationHints: Bool
     @State var cardTitle: DoriAPI.LocalizedData<String>?
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
+    @State var cardNavigationDestinationID: Int?
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
     init(_ card: DoriAPI.Card.PreviewCard, showTrainedVersion: Bool = false, sideLength: CGFloat = 72,
@@ -429,24 +430,38 @@ struct CardIconView: View {
         }
         .wrapIf(showNavigationHints, in: { content in
             content
+            //TODO: Optimize for macOS
                 .contextMenu(menuItems: {
                     VStack {
-                        Button(action: {}, label: {
-                            if let title = cardTitle?.forPreferredLocale() {
-                                Text(title)
+                        Button(action: {
+                            //TODO: Navigation Destination Fix
+//                        NavigationLink(destination: {
+                            cardNavigationDestinationID = cardID
+                        }, label: {
+                            if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+//                                VStack(alignment: .leading) {
+                                Group {
+                                    Text(title)
+                                    //                                    Text(character)
+                                    Group {
+                                        Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(cardID)")
+                                    }
+                                    .font(.caption)
+                                }
+//                                }
                             } else {
-                                Text("\(cardTitle)")
-//                                    .redacted(reason: .placeholder)
+                                Group {
+                                    Text(verbatim: "Lorem ipsum dolor")
+                                        .foregroundStyle(.secondary)
+                                    Text(verbatim: "Lorem ipsum")
+                                        .foregroundStyle(.tertiary)
+                                }
+                                    .redacted(reason: .placeholder)
+                                    
                             }
                         })
-                        //TODO: BUGGY
-                        Button(action: {}, label: {
-                            if let character = cardCharacterName?.forPreferredLocale() {
-                                Text(character)
-                            } else {
-                                Text("Lorem ipsum")
-                                    .redacted(reason: .placeholder)
-                            }
+                        .navigationDestination(item: $cardNavigationDestinationID, destination: { _ in
+                            EmptyView()
                         })
                     }
                 })
@@ -456,7 +471,6 @@ struct CardIconView: View {
             Task {
                 let fullCard = await DoriAPI.Card.Card(id: cardID)
                 cardTitle = fullCard?.prefix
-                print(fullCard)
                 
                 if let cardCharacterID = fullCard?.characterID {
                     DoriCache.withCache(id: "CharacterDetail_\(cardCharacterID)") {

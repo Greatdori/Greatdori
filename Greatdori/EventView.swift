@@ -77,6 +77,7 @@ struct EventDetailView: View {
     }
 }
 
+//TODO: Optimize for iPhone
 struct EventDetailOverviewView: View {
     let information: DoriFrontend.Event.ExtendedEvent
     @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
@@ -287,7 +288,7 @@ struct EventDetailOverviewView: View {
             eventCharacterPercentageDict = [:]
             rewardsArray = []
             cardsArray = []
-            var eventCharacters = information.event.characters
+            let eventCharacters = information.event.characters
             for char in eventCharacters {
                 eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
                 Task {

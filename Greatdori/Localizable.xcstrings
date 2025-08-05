@@ -16,7 +16,7 @@
       "shouldTranslate" : false
     },
     "%@" : {
-
+      "shouldTranslate" : false
     },
     "%@%@" : {
       "localizations" : {
@@ -789,9 +789,6 @@
           }
         }
       }
-    },
-    "Lorem ipsum" : {
-
     },
     "Settings" : {
       "localizations" : {
