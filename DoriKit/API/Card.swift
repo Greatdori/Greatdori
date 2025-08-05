@@ -603,8 +603,9 @@ extension DoriAPI.Card.Card {
     public init?(id: Int) async {
         if let card = await DoriAPI.Card.detail(of: id) {
             self = card
+        } else {
+            return nil
         }
-        return nil
     }
     
     @inlinable

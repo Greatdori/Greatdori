@@ -179,8 +179,9 @@ extension DoriAPI.Costume.Costume {
     public init?(id: Int) async {
         if let costume = await DoriAPI.Costume.detail(of: id) {
             self = costume
+        } else {
+            return nil
         }
-        return nil
     }
     
     @inlinable

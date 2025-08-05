@@ -439,8 +439,9 @@ extension DoriAPI.News.Item {
     public init?(id: Int) async {
         if let item = await DoriAPI.News.detail(of: id) {
             self = item
+        } else {
+            return nil
         }
-        return nil
     }
     
     @inlinable

@@ -533,8 +533,9 @@ extension DoriAPI.Gacha.Gacha {
     public init?(id: Int) async {
         if let gacha = await DoriAPI.Gacha.detail(of: id) {
             self = gacha
+        } else {
+            return nil
         }
-        return nil
     }
     
     @inlinable

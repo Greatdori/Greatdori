@@ -558,8 +558,9 @@ extension DoriAPI.Character.Character {
     public init?(id: Int) async {
         if let character = await DoriAPI.Character.detail(of: id) {
             self = character
+        } else {
+            return nil
         }
-        return nil
     }
     
     @inlinable

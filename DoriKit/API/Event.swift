@@ -1041,8 +1041,9 @@ extension DoriAPI.Event.Event {
     public init?(id: Int) async {
         if let event = await DoriAPI.Event.detail(of: id) {
             self = event
+        } else {
+            return nil
         }
-        return nil
     }
     
     @inlinable
