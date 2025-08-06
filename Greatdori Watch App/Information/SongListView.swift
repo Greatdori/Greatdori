@@ -1,0 +1,87 @@
+//
+//  SongListView.swift
+//  Greatdori
+//
+//  Created by Mark Chan on 8/6/25.
+//
+
+import SwiftUI
+import DoriKit
+
+struct SongListView: View {
+    @State var filter = DoriFrontend.Filter()
+    @State var songs: [DoriFrontend.Song.PreviewSong]?
+    @State var isFilterSettingsPresented = false
+    @State var isSearchPresented = false
+    @State var searchInput = ""
+    @State var searchedSongs: [DoriFrontend.Song.PreviewSong]?
+    @State var availability = true
+    var body: some View {
+        List {
+            if let songs = searchedSongs ?? songs {
+                ForEach(songs) { song in
+                    NavigationLink(destination: {  }) {
+                        SongCardView(song)
+                    }
+                }
+            } else {
+                if availability {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else {
+                    UnavailableView("载入歌曲时出错", systemImage: "_song", retryHandler: getSongs)
+                }
+            }
+        }
+        .navigationTitle("歌曲")
+        .sheet(isPresented: $isFilterSettingsPresented) {
+            Task {
+                songs = nil
+                await getSongs()
+            }
+        } content: {
+            FilterView(filter: $filter, includingKeys: [
+                .songType,
+                .band,
+                .server,
+                .released,
+                .sort
+            ]) {
+                if let songs {
+                    SearchView(items: songs, text: $searchInput) { result in
+                        searchedSongs = result
+                    }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    isFilterSettingsPresented = true
+                }, label: {
+                    Image(systemName: "line.3.horizontal.decrease")
+                })
+                .tint(filter.isFiltered || !searchInput.isEmpty ? .accent : nil)
+            }
+        }
+        .task {
+            await getSongs()
+        }
+    }
+    
+    func getSongs() async {
+        availability = true
+        DoriCache.withCache(id: "SongList_\(filter.identity)") {
+            await DoriFrontend.Song.list(filter: filter)
+        }.onUpdate {
+            if let songs = $0 {
+                self.songs = songs
+            } else {
+                availability = false
+            }
+        }
+    }
+}

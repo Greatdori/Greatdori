@@ -94,6 +94,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.song) {
+                    Label {
+                        Text("歌曲")
+                    } icon: {
+                        Image(_internalSystemName: "music")
+                            .foregroundStyle(.accent)
+                    }
+                }
             } header: {
                 Text("信息")
             }

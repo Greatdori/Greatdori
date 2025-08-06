@@ -20,6 +20,7 @@ extension DoriFrontend {
         public var cardType: Set<CardType> = .init(CardType.allCases)
         public var eventType: Set<EventType> = .init(EventType.allCases)
         public var gachaType: Set<GachaType> = .init(GachaType.allCases)
+        public var songType: Set<SongType> = .init(SongType.allCases)
         public var skill: Skill? = nil
         public var timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases)
         public var sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))
@@ -34,6 +35,7 @@ extension DoriFrontend {
             cardType: Set<CardType> = .init(CardType.allCases),
             eventType: Set<EventType> = .init(EventType.allCases),
             gachaType: Set<GachaType> = .init(GachaType.allCases),
+            songType: Set<SongType> = .init(SongType.allCases),
             skill: Skill? = nil,
             timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases),
             sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))
@@ -47,6 +49,7 @@ extension DoriFrontend {
             self.cardType = cardType
             self.eventType = eventType
             self.gachaType = gachaType
+            self.songType = songType
             self.skill = skill
             self.timelineStatus = timelineStatus
             self.sort = sort
@@ -62,6 +65,7 @@ extension DoriFrontend {
             || cardType.count != CardType.allCases.count
             || eventType.count != EventType.allCases.count
             || gachaType.count != GachaType.allCases.count
+            || songType.count != SongType.allCases.count
             || skill != nil
             || timelineStatus.count != TimelineStatus.allCases.count
         }
@@ -78,6 +82,7 @@ extension DoriFrontend {
             \(cardType.sorted { $0.rawValue < $1.rawValue })\
             \(eventType.sorted { $0.rawValue < $1.rawValue })\
             \(gachaType.sorted { $0.rawValue < $1.rawValue })\
+            \(songType.sorted { $0.rawValue < $1.rawValue })\
             \(timelineStatus.sorted { $0.rawValue < $1.rawValue })
             """
             return String(SHA256.hash(data: desc.data(using: .utf8)!).map { $0.description }.joined().prefix(8))
@@ -92,6 +97,7 @@ extension DoriFrontend.Filter {
     public typealias CardType = DoriAPI.Card.CardType
     public typealias EventType = DoriAPI.Event.EventType
     public typealias GachaType = DoriAPI.Gacha.GachaType
+    public typealias SongType = DoriAPI.Song.SongTag
     public typealias Skill = DoriAPI.Skill.Skill
     
     public enum Band: Int, Sendable, CaseIterable, Codable {
@@ -259,6 +265,7 @@ extension DoriFrontend.Filter {
         case cardType
         case eventType
         case gachaType
+        case songType
         case skill
         case timelineStatus
         case sort
@@ -293,6 +300,7 @@ extension DoriFrontend.Filter.Key {
         case .cardType: String(localized: "FILTER_KEY_CARD_TYPE", bundle: #bundle)
         case .eventType: String(localized: "FILTER_KEY_EVENT_TYPE", bundle: #bundle)
         case .gachaType: String(localized: "FILTER_KEY_GACHA_TYPE", bundle: #bundle)
+        case .songType: String(localized: "FILTER_KEY_SONG_TYPE", bundle: #bundle)
         case .skill: String(localized: "FILTER_KEY_SKILL", bundle: #bundle)
         case .timelineStatus: String(localized: "FILTER_KEY_TIMELINE_STATUS", bundle: #bundle)
         case .sort: String(localized: "FILTER_KEY_SORT", bundle: #bundle)
@@ -330,6 +338,7 @@ extension DoriFrontend.Filter: MutableCollection {
             case .cardType: self.cardType
             case .eventType: self.eventType
             case .gachaType: self.gachaType
+            case .songType: self.songType
             case .skill: self.skill
             case .timelineStatus: self.timelineStatus
             case .sort: self.sort
@@ -366,6 +375,8 @@ extension DoriFrontend.Filter: MutableCollection {
             self.eventType = value as! Set<EventType>
         case .gachaType:
             self.gachaType = value as! Set<GachaType>
+        case .songType:
+            self.songType = value as! Set<SongType>
         case .skill:
             self.skill = value as! Skill?
         case .timelineStatus:
@@ -473,6 +484,11 @@ extension DoriFrontend.Filter.GachaType: DoriFrontend.Filter._Selectable {
         self.localizedString
     }
 }
+extension DoriFrontend.Filter.SongType: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.localizedString
+    }
+}
 extension DoriFrontend.Filter.Skill: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.maximumDescription.forPreferredLocale() ?? ""
@@ -540,6 +556,10 @@ extension DoriFrontend.Filter.Key {
             })
         case .gachaType:
             (.multiple, DoriFrontend.Filter.GachaType.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .songType:
+            (.multiple, DoriFrontend.Filter.SongType.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
         case .skill:

@@ -616,7 +616,7 @@ extension DoriAPI.Song {
         }
     }
     
-    public enum SongTag: String, Sendable, DoriCache.Cacheable {
+    public enum SongTag: String, CaseIterable, Sendable, DoriCache.Cacheable {
         case normal
         case anime
         case tieUp = "tie_up"

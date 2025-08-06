@@ -240,3 +240,20 @@ extension DoriAPI.Gacha.PreviewGacha: DoriFrontend.Searchable {
         return result
     }
 }
+extension DoriAPI.Song.PreviewSong: DoriFrontend.Searchable {
+    public var _searchStrings: [String] {
+        [self.tag.localizedString]
+    }
+    public var _searchLocalizedStrings: [DoriAPI.LocalizedData<String>] {
+        [self.musicTitle]
+    }
+    public var _searchLocales: [DoriAPI.Locale] {
+        var result = [DoriAPI.Locale]()
+        for locale in DoriAPI.Locale.allCases {
+            if self.publishedAt.availableInLocale(locale) {
+                result.append(locale)
+            }
+        }
+        return result
+    }
+}

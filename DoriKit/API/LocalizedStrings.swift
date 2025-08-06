@@ -103,3 +103,10 @@ extension DoriAPI.Post.Post.StoryMetadata.AgeRating {
         }
     }
 }
+
+extension DoriAPI.Song.SongTag {
+    @inline(never)
+    public var localizedString: String {
+        NSLocalizedString("tag" + self.rawValue, bundle: #bundle, comment: "")
+    }
+}

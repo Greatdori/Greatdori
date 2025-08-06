@@ -1257,6 +1257,16 @@
         }
       }
     },
+    "FILTER_KEY_SONG_TYPE" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "种类"
+          }
+        }
+      }
+    },
     "FILTER_KEY_SORT" : {
       "localizations" : {
         "zh-Hans" : {

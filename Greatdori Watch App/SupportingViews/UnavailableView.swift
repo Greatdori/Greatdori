@@ -31,7 +31,17 @@ struct UnavailableView: View {
         HStack {
             Spacer()
             VStack {
-                ContentUnavailableView(text, systemImage: systemImage)
+                if !systemImage.hasPrefix("_") {
+                    ContentUnavailableView(text, systemImage: systemImage)
+                } else {
+                    ContentUnavailableView {
+                        Label {
+                            Text(text)
+                        } icon: {
+                            Image(_internalSystemName: String(systemImage.dropFirst()))
+                        }
+                    }
+                }
                 Button("重试", systemImage: "arrow.clockwise", action: retryHandler)
                     .buttonStyle(.bordered)
             }
