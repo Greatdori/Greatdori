@@ -24,8 +24,7 @@ struct EventDetailView: View {
                         Spacer()
                         VStack {
                             EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                
-                                .frame(maxWidth: .infinity)
+//                                .frame(maxWidth: .infinity)
                             //                            .ignoresSafeArea(nil)
                         }
                         .padding()
@@ -104,6 +103,7 @@ struct EventDetailOverviewView: View {
     @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
     @State var eventCharacterNameDict: [Int: DoriAPI.LocalizedData<String>] = [:]
     @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
+    @State var cardsArraySeperated: [[DoriFrontend.Card.PreviewCard]] = []
     @State var cardsPercentage: Int = -100
     @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
     @Binding var cardNavigationDestinationID: Int?
@@ -265,18 +265,45 @@ struct EventDetailOverviewView: View {
                                 .bold()
                         }, value: {
                             HStack {
-                                ForEach(cardsArray) { card in
-                                    NavigationLink(destination: {
-                                        //TODO: [NAVI785]CardD
-                                    }, label: {
-                                        CardIconView(card, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                    })
-                                    .buttonStyle(.plain)
-                                    
+                                //TODO: Buggy
+                                ViewThatFits {
+                                    // First Attempt
+                                    HStack {
+                                        ForEach(cardsArray) { card in
+                                            NavigationLink(destination: {
+                                                //TODO: [NAVI785]CardD
+                                            }, label: {
+                                                CardIconView(card, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                            })
+                                            .buttonStyle(.plain)
+                                        }
+                                    }
+                                    // Second Attempt
+                                    Grid(alignment: .trailing) {
+                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
+                                            GridRow {
+                                                HStack {
+                                                    Spacer()
+                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
+                                                        //                                                GridRow {
+                                                        NavigationLink(destination: {
+                                                            //TODO: [NAVI785]CardD
+                                                        }, label: {                                                CardIconView(item, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                                            //                                                        Text("1")
+                                                        })
+                                                        .buttonStyle(.plain)
+                                                    }
+                                                }
+                                            }
+                                            
+                                        }
+                                        //                                        Text("1")
+                                    }
+                                    .gridCellAnchor(.trailing)
                                 }
                                 Text("+\(cardsPercentage)%")
                             }
-                        })
+                        }, compactModeOnly: true)
                         Divider()
                     }
                     //MARK: Rewards
@@ -335,6 +362,7 @@ struct EventDetailOverviewView: View {
                     }
                 }
             }
+            cardsArraySeperated = cardsArray.chunked(into: 3)
         }
     }
     
@@ -663,18 +691,20 @@ struct MultilingualTextForCountdown: View {
 struct ListItemView<Content1: View, Content2: View>: View {
     let title: Content1
     let value: Content2
+    var compactModeOnly: Bool = true
     @State private var totalAvailableWidth: CGFloat = 0
     @State private var titleAvailableWidth: CGFloat = 0
     @State private var valueAvailableWidth: CGFloat = 0
     
-    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2) {
+    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, compactModeOnly: Bool = true) {
         self.title = title()
         self.value = value()
+        self.compactModeOnly = compactModeOnly
     }
     
     var body: some View {
         Group {
-            if valueAvailableWidth < (totalAvailableWidth - titleAvailableWidth - 5) { // HStack (SHORT)
+            if valueAvailableWidth < (totalAvailableWidth - titleAvailableWidth - 5) || compactModeOnly { // HStack (SHORT)
                 HStack {
                     title
                         .background(
