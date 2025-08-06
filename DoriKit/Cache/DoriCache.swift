@@ -25,6 +25,7 @@ public class DoriCache {
             self.initialValue = initialValue
         }
         
+        @MainActor
         internal func updateValue(_ value: Result) {
             _onUpdate?(value)
             isValueFirstUpdated = true
@@ -61,7 +62,7 @@ public class DoriCache {
             }
             
             if let cachedResult {
-                promise.updateValue(cachedResult)
+                await promise.updateValue(cachedResult)
             }
             
             let result = await invocation()
@@ -72,7 +73,7 @@ public class DoriCache {
                 return
             }
             
-            promise.updateValue(result)
+            await promise.updateValue(result)
             
             // Don't save cache if result is nil
             if result == nil {
