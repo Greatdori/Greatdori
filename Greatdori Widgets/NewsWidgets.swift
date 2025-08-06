@@ -14,7 +14,7 @@ struct NewsWidgets: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             CardWidgetsEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .containerBackground(.background, for: .widget)
         }
         .supportedFamilies([.systemMedium, .systemLarge, .systemExtraLarge])
         .configurationDisplayName("资讯")
@@ -99,7 +99,7 @@ private struct CardWidgetsEntryView : View {
     var titleFont: Font {
         switch widgetFamily {
         case .systemMedium: .subheadline
-        case .systemLarge: .body
+        case .systemLarge: .subheadline
         case .systemExtraLarge: .body
         default: .body
         }
