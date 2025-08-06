@@ -9,11 +9,13 @@ import SwiftUI
 import DoriKit
 import SDWebImageSwiftUI
 
-
+//MARK: EventDetailView
 struct EventDetailView: View {
     var id: Int
     @State var information: DoriFrontend.Event.ExtendedEvent?
     @State var infoIsAvailable = true
+    @State var cardNavigationDestinationID: Int?
+    @State var pageWidth: CGFloat = 400
     var body: some View {
         NavigationStack {
             if let information {
@@ -21,8 +23,10 @@ struct EventDetailView: View {
                     HStack {
                         Spacer()
                         VStack {
-                            EventDetailOverviewView(information: information)
-                            .frame(maxWidth: 600)
+                            EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                
+                                .frame(maxWidth: .infinity)
+                            //                            .ignoresSafeArea(nil)
                         }
                         .padding()
                         Spacer()
@@ -40,6 +44,11 @@ struct EventDetailView: View {
                 }
             }
         }
+        .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
+            //                                EmptyView()
+            //                NavigationStack {
+            Text("\(id)")
+        })
         .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "#\(id)"))
         .wrapIf({ if #available(iOS 26, *) { true } else { false } }()) { content in
             if #available(iOS 26, *) {
@@ -61,6 +70,17 @@ struct EventDetailView: View {
                 }
             }
         }
+        .background(
+            GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        pageWidth = geometry.size.width
+                    }
+                    .onChange(of: geometry.size.width) {
+//                        pageWidth = geometry.size.width
+                    }
+            }
+        )
     }
     
     func getInformation() async {
@@ -77,6 +97,7 @@ struct EventDetailView: View {
     }
 }
 
+//MARK: EventDetailOverviewView
 //TODO: Optimize for iPhone
 struct EventDetailOverviewView: View {
     let information: DoriFrontend.Event.ExtendedEvent
@@ -85,205 +106,209 @@ struct EventDetailOverviewView: View {
     @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
     @State var cardsPercentage: Int = -100
     @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
+    @Binding var cardNavigationDestinationID: Int?
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
-        Group {
-            //MARK: Title Image
-            Rectangle()
-                .opacity(0)
-                .frame(height: 2)
-            WebImage(url: information.event.bannerImageURL)
-                .resizable()
-                .aspectRatio(3.0, contentMode: .fit)
-                .frame(maxWidth: 420, maxHeight: 140)
-            Rectangle()
-                .opacity(0)
-                .frame(height: 2)
-            
+        NavigationStack {
             Group {
-                //MARK: Title
-                ListItemView(title: {
-                    Text("Event.title")
-                        .bold()
-                }, value: {
-                    MultilingualText(source: information.event.eventName)
-                })
-                Divider()
-                //MARK: Type
-                ListItemView(title: {
-                    Text("Event.type")
-                        .bold()
-                }, value: {
-                    Text(information.event.eventType.localizedString)
-                })
-                Divider()
-                //MARK: Countdown
-                ListItemView(title: {
-                    Text("Event.countdown")
-                        .bold()
-                }, value: {
-                    MultilingualTextForCountdown(source: information.event)
-                })
-                Divider()
-                //MARK: Start Date
-                ListItemView(title: {
-                    Text("Event.start-date")
-                        .bold()
-                }, value: {
-                    MultilingualText(source: information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                })
-                Divider()
-                //MARK: End Date
-                ListItemView(title: {
-                    Text("Event.end-date")
-                        .bold()
-                }, value: {
-                    MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                })
-                Divider()
-                //MARK: Attribute
-                ListItemView(title: {
-                    Text("Event.attribute")
-                        .bold()
-                }, value: {
-                    ForEach(information.event.attributes, id: \.attribute.rawValue) { attribute in
-                        VStack(alignment: .trailing) {
-                            HStack {
-                                WebImage(url: attribute.attribute.iconImageURL)
-                                    .resizable()
-                                    .frame(width: imageButtonSize, height: imageButtonSize)
-                                Text(verbatim: "+\(attribute.percent)%")
-                            }
-                        }
-                    }
-                })
-                Divider()
-                //MARK: Character
-                ListItemView(title: {
-                    Text("Event.character")
-                        .bold()
-                }, value: {
-                    VStack(alignment: .trailing) {
-                        let keys = eventCharacterPercentageDict.keys.sorted()
-                        ForEach(keys, id: \.self) { percentage in
-                            HStack {
-                                Spacer()
-                                ForEach(eventCharacterPercentageDict[percentage]!, id: \.self) { char in
-                                    #if os(macOS)
-                                    NavigationLink(destination: {
-                                        
-                                    }, label: {
-                                        WebImage(url: char.iconImageURL)
-                                            .resizable()
-                                            .frame(width: imageButtonSize, height: imageButtonSize)
-                                    })
-                                    .buttonStyle(.plain)
-                                    #else
-                                    Menu(content: {
-                                        NavigationLink(destination: {
-                                            
-                                        }, label: {
-                                            HStack {
-                                                WebImage(url: char.iconImageURL)
-                                                    .resizable()
-                                                    .frame(width: imageButtonSize, height: imageButtonSize)
-//                                                Text(char.name)
-                                                Text(eventCharacterNameDict[char.characterID]?.forPreferredLocale() ?? "Unknown")
-                                                Spacer()
-                                            }
-                                        })
-                                    }, label: {
-                                        WebImage(url: char.iconImageURL)
-                                            .resizable()
-                                            .frame(width: imageButtonSize, height: imageButtonSize)
-                                    })
-                                    #endif
-                                }
-                                Text("+\(percentage)%")
-                                //
-                            }
-                        }
-                    }
-                })
-                Divider()
-                //MARK: Parameter
-                if let paramters = information.event.eventCharacterParameterBonus, paramters.total > 0 {
+                //MARK: Title Image
+                Rectangle()
+                    .opacity(0)
+                    .frame(height: 2)
+                WebImage(url: information.event.bannerImageURL)
+                    .resizable()
+                    .aspectRatio(3.0, contentMode: .fit)
+                    .frame(maxWidth: 420, maxHeight: 140)
+                Rectangle()
+                    .opacity(0)
+                    .frame(height: 2)
+                
+                Group {
+                    //MARK: Title
                     ListItemView(title: {
-                        Text("Event.parameter")
+                        Text("Event.title")
                             .bold()
                     }, value: {
-                        VStack(alignment: .trailing) {
-                            if paramters.performance > 0 {
+                        MultilingualText(source: information.event.eventName)
+                    })
+                    Divider()
+                    //MARK: Type
+                    ListItemView(title: {
+                        Text("Event.type")
+                            .bold()
+                    }, value: {
+                        Text(information.event.eventType.localizedString)
+                    })
+                    Divider()
+                    //MARK: Countdown
+                    ListItemView(title: {
+                        Text("Event.countdown")
+                            .bold()
+                    }, value: {
+                        MultilingualTextForCountdown(source: information.event)
+                    })
+                    Divider()
+                    //MARK: Start Date
+                    ListItemView(title: {
+                        Text("Event.start-date")
+                            .bold()
+                    }, value: {
+                        MultilingualText(source: information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                    })
+                    Divider()
+                    //MARK: End Date
+                    ListItemView(title: {
+                        Text("Event.end-date")
+                            .bold()
+                    }, value: {
+                        MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                    })
+                    Divider()
+                    //MARK: Attribute
+                    ListItemView(title: {
+                        Text("Event.attribute")
+                            .bold()
+                    }, value: {
+                        ForEach(information.event.attributes, id: \.attribute.rawValue) { attribute in
+                            VStack(alignment: .trailing) {
                                 HStack {
-                                    Text("Event.parameter.performance")
-                                    Text("+\(paramters.performance)%")
-                                }
-                            }
-                            if paramters.technique > 0 {
-                                HStack {
-                                    Text("Event.parameter.technique")
-                                    Text("+\(paramters.technique)%")
-                                }
-                            }
-                            if paramters.visual > 0 {
-                                HStack {
-                                    Text("Event.parameter.visual")
-                                    Text("+\(paramters.visual)%")
+                                    WebImage(url: attribute.attribute.iconImageURL)
+                                        .resizable()
+                                        .frame(width: imageButtonSize, height: imageButtonSize)
+                                    Text(verbatim: "+\(attribute.percent)%")
                                 }
                             }
                         }
                     })
                     Divider()
-                }
-                //MARK: Card
-                if !cardsArray.isEmpty {
+                    //MARK: Character
                     ListItemView(title: {
-                        Text("Event.card")
+                        Text("Event.character")
                             .bold()
                     }, value: {
-                        HStack {
-                            ForEach(cardsArray) { card in
+                        VStack(alignment: .trailing) {
+                            let keys = eventCharacterPercentageDict.keys.sorted()
+                            ForEach(keys, id: \.self) { percentage in
+                                HStack {
+                                    Spacer()
+                                    ForEach(eventCharacterPercentageDict[percentage]!, id: \.self) { char in
+#if os(macOS)
+                                        NavigationLink(destination: {
+                                            //TODO: [NAVI785]CharD
+                                        }, label: {
+                                            WebImage(url: char.iconImageURL)
+                                                .resizable()
+                                                .frame(width: imageButtonSize, height: imageButtonSize)
+                                        })
+                                        .buttonStyle(.plain)
+#else
+                                        Menu(content: {
+                                            NavigationLink(destination: {
+                                                //TODO: [NAVI785]CharD
+                                            }, label: {
+                                                HStack {
+                                                    WebImage(url: char.iconImageURL)
+                                                        .resizable()
+                                                        .frame(width: imageButtonSize, height: imageButtonSize)
+                                                    //                                                Text(char.name)
+                                                    Text(eventCharacterNameDict[char.characterID]?.forPreferredLocale() ?? "Unknown")
+                                                    Spacer()
+                                                }
+                                            })
+                                        }, label: {
+                                            WebImage(url: char.iconImageURL)
+                                                .resizable()
+                                                .frame(width: imageButtonSize, height: imageButtonSize)
+                                        })
+#endif
+                                    }
+                                    Text("+\(percentage)%")
+                                    //
+                                }
+                            }
+                        }
+                    })
+                    Divider()
+                    //MARK: Parameter
+                    if let paramters = information.event.eventCharacterParameterBonus, paramters.total > 0 {
+                        ListItemView(title: {
+                            Text("Event.parameter")
+                                .bold()
+                        }, value: {
+                            VStack(alignment: .trailing) {
+                                if paramters.performance > 0 {
+                                    HStack {
+                                        Text("Event.parameter.performance")
+                                        Text("+\(paramters.performance)%")
+                                    }
+                                }
+                                if paramters.technique > 0 {
+                                    HStack {
+                                        Text("Event.parameter.technique")
+                                        Text("+\(paramters.technique)%")
+                                    }
+                                }
+                                if paramters.visual > 0 {
+                                    HStack {
+                                        Text("Event.parameter.visual")
+                                        Text("+\(paramters.visual)%")
+                                    }
+                                }
+                            }
+                        })
+                        Divider()
+                    }
+                    //MARK: Card
+                    if !cardsArray.isEmpty {
+                        ListItemView(title: {
+                            Text("Event.card")
+                                .bold()
+                        }, value: {
+                            HStack {
+                                ForEach(cardsArray) { card in
+                                    NavigationLink(destination: {
+                                        //TODO: [NAVI785]CardD
+                                    }, label: {
+                                        CardIconView(card, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                    })
+                                    .buttonStyle(.plain)
+                                    
+                                }
+                                Text("+\(cardsPercentage)%")
+                            }
+                        })
+                        Divider()
+                    }
+                    //MARK: Rewards
+                    if !rewardsArray.isEmpty {
+                        ListItemView(title: {
+                            Text("Event.rewards")
+                                .bold()
+                        }, value: {
+                            ForEach(rewardsArray) { card in
                                 NavigationLink(destination: {
                                     
                                 }, label: {
-                                    CardIconView(card, showNavigationHints: true)
+                                    CardIconView(card, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
                                 })
                                 .buttonStyle(.plain)
                                 
                             }
-                            Text("+\(cardsPercentage)%")
-                        }
-                    })
-                    Divider()
-                }
-                //MARK: Rewards
-                if !rewardsArray.isEmpty {
+                        })
+                        Divider()
+                    }
+                    
+                    //MARK: ID
                     ListItemView(title: {
-                        Text("Event.rewards")
+                        Text("Event.id")
                             .bold()
                     }, value: {
-                        ForEach(rewardsArray) { card in
-                            NavigationLink(destination: {
-                                
-                            }, label: {
-                                CardIconView(card, showNavigationHints: true)
-                            })
-                            .buttonStyle(.plain)
-                            
-                        }
+                        Text("\(information.id)")
                     })
-                    Divider()
                 }
-                
-                //MARK: ID
-                ListItemView(title: {
-                    Text("Event.id")
-                        .bold()
-                }, value: {
-                    Text("\(information.id)")
-                })
             }
         }
+        .frame(maxWidth: 600)
         .onAppear {
             eventCharacterPercentageDict = [:]
             rewardsArray = []
@@ -310,32 +335,12 @@ struct EventDetailOverviewView: View {
                     }
                 }
             }
-            
         }
     }
+    
 }
 
-struct CardIconWithPreviewView: View {
-    @State var isHovering: Bool = false
-    let previewCard: DoriAPI.Card.PreviewCard
-    var body: some View {
-        CardIconView(previewCard)
-//            .onHover { isHovering in
-//                self.isHovering = isHovering
-//            }
-//            .popover(isPresented: $isHovering, arrowEdge: .bottom) {
-//                VStack(alignment: .trailing) {
-////                    ForEach(allAvailableLocales, id: \.self) { localeValue in
-////                        MultilingualTextForCountdownInternalNumbersView(event: source, locale: localeValue)
-////                    }
-//                }
-//                .padding()
-//            }
-//            .contextMenu {
-//                
-//            }
-    }
-}
+
 
 /*
  VStack(alignment: .leading) {

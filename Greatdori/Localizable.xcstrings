@@ -12,6 +12,9 @@
       },
       "shouldTranslate" : false
     },
+    "#%@" : {
+      "shouldTranslate" : false
+    },
     "#%lld" : {
       "shouldTranslate" : false
     },
@@ -918,6 +921,38 @@
         }
       }
     },
+    "Settings.widget.ids" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card IDs"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡牌ID"
+          }
+        }
+      }
+    },
+    "Settings.widgets" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widgets"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小组件"
+          }
+        }
+      }
+    },
     "Welcome.footnote" : {
       "localizations" : {
         "en" : {
@@ -998,20 +1033,53 @@
         }
       }
     },
-    "卡牌名称" : {
-
+    "Widget.cards" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cards"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡牌"
+          }
+        }
+      }
     },
-    "卡牌小组件 ID" : {
-
+    "Widget.cards.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display Designated Card"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "展示指定卡牌"
+          }
+        }
+      }
     },
-    "卡面" : {
-
-    },
-    "小组件" : {
-
-    },
-    "展示指定卡面" : {
-
+    "Widget.cards.name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡牌"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

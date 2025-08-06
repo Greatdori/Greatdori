@@ -30,7 +30,7 @@ extension DoriAPI.Attribute {
 extension DoriAPI.Event.${property} {
     @inlinable
     public var bannerImageURL: URL {
-        .init(string: "https://bestdori.com/assets/\(self.eventName.availableLocale()!.rawValue)/event/\(self.assetBundleName)/images_rip/banner.png")!
+        .init(string: "https://bestdori.com/assets/\(self.startAt.availableLocale()!.rawValue)/event/\(self.assetBundleName)/images_rip/banner.png")!
     }
 }
 % end
@@ -145,9 +145,9 @@ extension DoriAPI.Gacha.${property} {
     @inlinable
     public var bannerImageURL: URL {
         if !bannerAssetBundleName.isEmpty {
-            .init(string: "https://bestdori.com/assets/\(self.gachaName.availableLocale(prefer: .jp)!.rawValue)/homebanner_rip/\(self.bannerAssetBundleName).png")!
+            .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/homebanner_rip/\(self.bannerAssetBundleName).png")!
         } else {
-            .init(string: "https://bestdori.com/assets/\(self.gachaName.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/logo.png")!
+            .init(string:  "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/logo.png")!
         }
     }
 }

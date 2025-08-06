@@ -10,10 +10,10 @@ import WidgetKit
 import AppIntents
 
 struct CardWidgetIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource { "卡面" }
-    static var description: IntentDescription { "展示指定卡面" }
+    static var title: LocalizedStringResource { "Widget.cards" }
+    static var description: IntentDescription { "Widget.cards.description" }
     
-    @Parameter(title: "卡牌名称", optionsProvider: CardOptionsProvider())
+    @Parameter(title: "Widget.cards.name", optionsProvider: CardOptionsProvider())
     var cardName: String?
     
     struct CardOptionsProvider: DynamicOptionsProvider {

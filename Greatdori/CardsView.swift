@@ -336,11 +336,12 @@ struct CardIconView: View {
     private var showNavigationHints: Bool
     @State var cardTitle: DoriAPI.LocalizedData<String>?
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
-    @State var cardNavigationDestinationID: Int?
+//    @State var cardNavigationDestinationID: Int?
+    @Binding var cardNavigationDestinationID: Int?
+    @State var isHovering: Bool = false
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
-    init(_ card: DoriAPI.Card.PreviewCard, showTrainedVersion: Bool = false, sideLength: CGFloat = 72,
-         showNavigationHints: Bool = false) {
+    init(_ card: DoriAPI.Card.PreviewCard, showTrainedVersion: Bool = false, sideLength: CGFloat = 72, showNavigationHints: Bool = false, cardNavigationDestinationID: Binding<Int?>) {
         self.inputtedPreviewCard = card
         self.cardID = card.id
         self.thumbNormalImageURL = card.thumbNormalImageURL
@@ -352,9 +353,10 @@ struct CardIconView: View {
         self.showTrainedVersion = showTrainedVersion
         self.sideLength = sideLength
         self.showNavigationHints = showNavigationHints
+        self._cardNavigationDestinationID = cardNavigationDestinationID
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
-    init(_ card: DoriAPI.Card.Card, showTrainedVersion: Bool = false, sideLength: CGFloat = 72, showNavigationHints: Bool = false) {
+    init(_ card: DoriAPI.Card.Card, showTrainedVersion: Bool = false, sideLength: CGFloat = 72, showNavigationHints: Bool = false, cardNavigationDestinationID: Binding<Int?>) {
         self.cardID = card.id
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
@@ -365,6 +367,7 @@ struct CardIconView: View {
         self.showTrainedVersion = showTrainedVersion
         self.sideLength = sideLength
         self.showNavigationHints = showNavigationHints
+        self._cardNavigationDestinationID = cardNavigationDestinationID
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 332)
     
@@ -429,47 +432,72 @@ struct CardIconView: View {
             .frame(width: sideLength, height: sideLength)
         }
         .wrapIf(showNavigationHints, in: { content in
+            #if os(iOS)
             content
             //TODO: Optimize for macOS
                 .contextMenu(menuItems: {
                     VStack {
                         Button(action: {
-                            //TODO: Navigation Destination Fix
-//                        NavigationLink(destination: {
                             cardNavigationDestinationID = cardID
                         }, label: {
                             if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
-//                                VStack(alignment: .leading) {
                                 Group {
                                     Text(title)
-                                    //                                    Text(character)
                                     Group {
-                                        Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(cardID)")
+                                        Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
                                     }
                                     .font(.caption)
                                 }
-//                                }
                             } else {
                                 Group {
                                     Text(verbatim: "Lorem ipsum dolor")
-                                        .foregroundStyle(.secondary)
+//                                        .foregroundStyle(.secondary)
                                     Text(verbatim: "Lorem ipsum")
-                                        .foregroundStyle(.tertiary)
+                                        .font(.caption)
+//                                        .foregroundStyle(.tertiary)
                                 }
-                                    .redacted(reason: .placeholder)
-                                    
+                                .redacted(reason: .placeholder)
+                                
                             }
                         })
-                        .navigationDestination(item: $cardNavigationDestinationID, destination: { _ in
-                            EmptyView()
-                        })
+                        .disabled(cardTitle?.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
                     }
                 })
+            #else
+            content
+                .onHover { isHovering in
+                    self.isHovering = isHovering
+                }
+                .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+                    VStack(alignment: .center) {
+                        if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+                            Group {
+                                Text(title)
+                                Group {
+                                    Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
+                                }
+                                .font(.caption)
+                            }
+                        } else {
+                            Group {
+                                Text(verbatim: "Lorem ipsum dolor")
+                                    .foregroundStyle(.secondary)
+                                Text(verbatim: "Lorem ipsum")
+                                    .foregroundStyle(.tertiary)
+                            }
+                            .redacted(reason: .placeholder)
+                            
+                        }
+                    }
+                    .padding()
+                }
+            #endif
         })
         .frame(width: sideLength, height: sideLength)
         .onAppear {
             Task {
                 let fullCard = await DoriAPI.Card.Card(id: cardID)
+//                print(fullCard)
                 cardTitle = fullCard?.prefix
                 
                 if let cardCharacterID = fullCard?.characterID {

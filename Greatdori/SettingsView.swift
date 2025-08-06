@@ -24,11 +24,13 @@ struct SettingsView: View {
                 }, footer: {
                     Text("Settings.home-edit.footer")
                 })
+                #if os(iOS)
                 Section {
                     SettingsWidgetView()
                 } header: {
-                    Text("小组件")
+                    Text("Settings.widgets")
                 }
+                #endif
                 
                 #if DEBUG
                 Section(content: {
@@ -145,10 +147,11 @@ struct SettingsHomeView: View {
     }
 }
 
+#if os(iOS)
 struct SettingsWidgetView: View {
     @State var cardIDInput = ""
     var body: some View {
-        TextField("卡牌小组件 ID", text: $cardIDInput)
+        TextField("Settings.widget.ids", text: $cardIDInput)
             .submitLabel(.done)
             .onSubmit {
                 let ids = cardIDInput
@@ -207,6 +210,7 @@ struct SettingsWidgetView: View {
             }
     }
 }
+#endif
 
 struct SettingsDebugView: View {
     @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false

@@ -97,7 +97,7 @@ struct HomeNewsView: View {
     
     var body: some View {
         NavigationLink(destination: {
-            
+            //TODO: [NAVI785] News
         }, label: {
             HStack {
                 VStack(alignment: .leading) {
@@ -226,7 +226,7 @@ struct HomeBirthdayView: View {
                                 // (Cond. 3 is because labels should be expanded to show their full name during their birthday.)
                                 Menu(content: {
                                     NavigationLink(destination: {
-                                        //TODO: Duo 1st
+                                        //TODO: [NAVI785] Duo 1st CharD
                                     }, label: {
                                         HStack {
 #if os(iOS)
@@ -239,7 +239,7 @@ struct HomeBirthdayView: View {
                                         }
                                     })
                                     NavigationLink(destination: {
-                                        //TODO: Duo 2nd
+                                        //TODO: [NAVI785] Duo 2nd CharD
                                     }, label: {
                                         HStack {
 #if os(iOS)
@@ -273,7 +273,8 @@ struct HomeBirthdayView: View {
                                 EmptyView()
                             } else {
                                 NavigationLink(destination: {
-                                    //birthdays[i].id
+                                    //birthdays[i].id/
+//                                   //TODO: [NAVI785]CharD
                                 }, label: {
                                     WebImage(url: birthdays[i].iconImageURL)
                                         .resizable()
@@ -352,7 +353,6 @@ struct HomeEventsView: View {
                 if let latestEvents {
                     NavigationLink(destination: {
                         EventDetailView(id: latestEvents.forLocale(locale)!.id)
-//                        EventDetailView(id: 1)
                     }, label: {
                         EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
                     })

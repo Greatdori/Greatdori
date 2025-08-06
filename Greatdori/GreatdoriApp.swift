@@ -157,3 +157,7 @@ public extension View {
         }
     }
 }
+
+extension Int?: Identifiable {
+    public var id: Int? { self }
+}
