@@ -16,7 +16,12 @@ struct NewsWidgets: Widget {
             CardWidgetsEntryView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-        .supportedFamilies([.systemMedium, .systemLarge, .systemExtraLarge])
+        .supportedFamilies([
+            .systemMedium,
+            .systemLarge,
+            .systemExtraLarge,
+            .init(rawValue: 4)! // systemExtraLargePortrait
+        ])
         .configurationDisplayName("资讯")
         .description("查看最新资讯")
     }
