@@ -34,7 +34,11 @@ private struct Provider: AppIntentTimelineProvider {
         let decoder = PropertyListDecoder()
         guard let data = try? Data(contentsOf: URL(filePath: containerPath + "/CardWidgetDescriptors.plist")) else { return [] }
         guard let descriptors = try? decoder.decode([CardWidgetDescriptor].self, from: data) else { return [] }
-        return descriptors.map { .init(intent: .init(cardName: .init(title: .init(stringLiteral: $0.localizedName))), description: Text($0.localizedName)) }
+        return descriptors.map {
+            let intent = CardWidgetIntent()
+            intent.cardName = $0.localizedName
+            return .init(intent: intent, description: Text($0.localizedName))
+        }
     }
     
     func snapshot(for configuration: CardWidgetIntent, in context: Context) async -> CardEntry {
@@ -45,7 +49,8 @@ private struct Provider: AppIntentTimelineProvider {
         let decoder = PropertyListDecoder()
         guard let data = try? Data(contentsOf: URL(filePath: containerPath + "/CardWidgetDescriptors.plist")) else { return .init() }
         guard let descriptors = try? decoder.decode([CardWidgetDescriptor].self, from: data) else { return .init() }
-        guard let imageURL = descriptors.first(where: { $0.localizedName == configuration.cardName })?.imageURL else { return .init() }
+        guard let _imageURL = descriptors.first(where: { $0.localizedName == configuration.cardName })?.imageURL else { return .init() }
+        let imageURL = URL(filePath: containerPath + _imageURL.path(percentEncoded: false))
         guard let imageData = try? Data(contentsOf: imageURL) else { return .init() }
         let image = UIImage(data: imageData)?.resized(to: .init(width: 204, height: 90))
         return .init(image: image)
@@ -71,9 +76,6 @@ private struct CardWidgetsEntryView : View {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
-        } else {
-            Text("按住后轻触“编辑小组件”以选择卡面")
-                .padding()
         }
     }
 }

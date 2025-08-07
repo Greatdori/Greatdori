@@ -118,6 +118,7 @@
 		8CB4D4F42E449FA30085D57A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4D4F32E449FA00085D57A /* SettingsView.swift */; };
 		8CB4D4F62E44EAEA0085D57A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4F52E44EAEA0085D57A /* Localizable.xcstrings */; };
 		8CB4D4F82E44EAFE0085D57A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4F72E44EAFE0085D57A /* Localizable.xcstrings */; };
+		8CB4D4FC2E4501060085D57A /* Watch-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4FB2E4501060085D57A /* Watch-Info.plist */; };
 		8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */; };
 		8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD02E32B5B6004023F7 /* Constructor.swift */; };
 		8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */; };
@@ -489,6 +490,8 @@
 		8CB4D4F32E449FA00085D57A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8CB4D4F52E44EAEA0085D57A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		8CB4D4F72E44EAFE0085D57A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		8CB4D4F92E4500C70085D57A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8CB4D4FB2E4501060085D57A /* Watch-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Watch-Info.plist"; sourceTree = "<group>"; };
 		8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		8CBC1BD02E32B5B6004023F7 /* Constructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
 		8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCaches.swift; sourceTree = "<group>"; };
@@ -653,6 +656,7 @@
 			isa = PBXGroup;
 			children = (
 				8C6C0EF92E423C8E00D1FB0A /* Greatdori.entitlements */,
+				8CB4D4F92E4500C70085D57A /* Info.plist */,
 				E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */,
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				8C0C997F2E296A5500549B5C /* ContentView.swift */,
@@ -669,6 +673,7 @@
 			isa = PBXGroup;
 			children = (
 				8CB4D4F22E449EE20085D57A /* Greatdori Watch App.entitlements */,
+				8CB4D4FB2E4501060085D57A /* Watch-Info.plist */,
 				8CB4D4F72E44EAFE0085D57A /* Localizable.xcstrings */,
 				8C0C99872E296A5800549B5C /* GreatdoriApp.swift */,
 				8C923D852E304AE5003AFC0A /* Extensions */,
@@ -1274,6 +1279,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CB4D4FC2E4501060085D57A /* Watch-Info.plist in Resources */,
 				8CB4D4F82E44EAFE0085D57A /* Localizable.xcstrings in Resources */,
 				8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */,
 			);
@@ -1752,6 +1758,7 @@
 				DEVELOPMENT_TEAM = B57D8PP775;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Greatdori Watch App/Watch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -1788,6 +1795,7 @@
 				DEVELOPMENT_TEAM = B57D8PP775;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Greatdori Watch App/Watch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -1828,6 +1836,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Greatdori/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -1876,6 +1885,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Greatdori/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -2223,6 +2233,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Greatdori/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -2267,6 +2278,7 @@
 				DEVELOPMENT_TEAM = B57D8PP775;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Greatdori Watch App/Watch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -2443,6 +2455,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Greatdori/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -2488,6 +2501,7 @@
 				DEVELOPMENT_TEAM = B57D8PP775;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Greatdori Watch App/Watch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -2799,6 +2813,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2851,6 +2866,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2903,6 +2919,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -2954,6 +2971,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;

@@ -105,9 +105,6 @@ private struct CardWidgetsEntryView : View {
                     .scaledToFill()
             }
             .buttonStyle(.plain)
-        } else {
-            Text("按住后轻触“编辑小组件”以选择精选集")
-                .padding()
         }
     }
 }

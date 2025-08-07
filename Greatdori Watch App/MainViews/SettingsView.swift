@@ -34,7 +34,7 @@ struct SettingsView: View {
                                     return nil
                                 }
                             }
-                        Task {
+                        Task.detached(priority: .userInitiated) {
                             if let cards = await DoriAPI.Card.all() {
                                 let relatedCards = cards.compactMap { card in
                                     if ids.map({ $0.id }).contains(card.id) {
@@ -44,19 +44,23 @@ struct SettingsView: View {
                                     }
                                 }
                                 var descriptors = [CardWidgetDescriptor]()
+                                let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
+                                try? FileManager.default.createDirectory(atPath: containerPath + "/Documents/WidgetSingleCards", withIntermediateDirectories: true)
                                 for (card, trained) in relatedCards {
+                                    let imageData = try? Data(contentsOf: trained ? (card.coverAfterTrainingImageURL ?? card.coverNormalImageURL) : card.coverNormalImageURL)
+                                    let imageURL = URL(filePath: "/Documents/WidgetSingleCards/\(card.id).png")
+                                    try? imageData?.write(to: imageURL)
                                     descriptors.append(
                                         .init(
                                             cardID: card.id,
                                             trained: trained,
                                             localizedName: card.prefix.forPreferredLocale() ?? "",
-                                            imageURL: trained ? (card.coverAfterTrainingImageURL ?? card.coverNormalImageURL) : card.coverNormalImageURL
+                                            imageURL: imageURL
                                         )
                                     )
                                 }
                                 let encoder = PropertyListEncoder()
                                 encoder.outputFormat = .binary
-                                let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
                                 try? encoder.encode(descriptors).write(to: URL(filePath: containerPath + "/CardWidgetDescriptors.plist"))
                                 WidgetCenter.shared.reloadTimelines(ofKind: "com.memz233.Greatdori.Widgets.Card")
                                 print("Widget update succeeded")
