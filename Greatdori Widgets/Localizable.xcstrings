@@ -29,13 +29,25 @@
     "Widget.cards.description" : {
 
     },
-    "Widget.cards.name" : {
+    "Widget.cards.parameter.name" : {
+
+    },
+    "Widget.collection" : {
+
+    },
+    "Widget.collections" : {
+
+    },
+    "Widget.collections.description" : {
+
+    },
+    "Widget.collections.edit-tip" : {
+
+    },
+    "Widget.collections.parameter.name" : {
 
     },
     "卡面" : {
-
-    },
-    "卡面精选集" : {
 
     },
     "展示指定卡面" : {
@@ -44,19 +56,10 @@
     "按住后轻触“编辑小组件”以选择卡面" : {
 
     },
-    "按住后轻触“编辑小组件”以选择精选集" : {
-
-    },
     "查看最新资讯" : {
 
     },
-    "精选集名称" : {
-
-    },
     "资讯" : {
-
-    },
-    "随机展示指定卡面精选集" : {
 
     }
   },

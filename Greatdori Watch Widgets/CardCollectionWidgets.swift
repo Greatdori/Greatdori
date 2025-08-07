@@ -39,9 +39,6 @@ private struct Provider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: CardCollectionWidgetIntent, in context: Context) async -> CardEntry {
-        if context.isPreview {
-            return entry(in: "BUILTIN_CARD_COLLECTION_GREATDORI")
-        }
         return entry(in: configuration.collectionName)
     }
     
@@ -49,7 +46,11 @@ private struct Provider: AppIntentTimelineProvider {
         var entries = [CardEntry]()
         var date = Date.now
         let calendar = Calendar.current
-        for _ in 0..<48 {
+        for _ in 0..<2 {
+            // Memory limit of WidgetKit on watchOS is like Rikki during dry run,
+            // we have only 20MB available. Since we have to resize the image,
+            // the limit is only enough for processing 2 timelines.
+            // We can't provide more though we have the ability to generate.
             entries.append(entry(for: date, align: false, in: configuration.collectionName))
             date = calendar.date(byAdding: .minute, value: 30, to: date)!
         }
@@ -64,7 +65,7 @@ private struct Provider: AppIntentTimelineProvider {
         guard let collection = CardCollectionManager.shared._collection(named: collectionName) else { return .init() }
         var generator = seed(for: date, align: align)
         guard let card = collection.cards.randomElement(using: &generator) else { return .init() }
-        guard let image = UIImage(data: card.imageData) else { return .init() }
+        guard let image = card.file.image?.resized(to: .init(width: 204, height: 90)) else { return .init() }
         return .init(date: date, image: image)
     }
     
@@ -108,5 +109,24 @@ private struct CardWidgetsEntryView : View {
             Text("按住后轻触“编辑小组件”以选择精选集")
                 .padding()
         }
+    }
+}
+
+extension UIImage {
+    func resized(to newSize: CGSize) -> UIImage {
+        let widthRatio = newSize.width / size.width
+        let heightRatio = newSize.height / size.height
+        let scaleFactor = max(widthRatio, heightRatio)
+        let scaledSize = CGSize(
+            width: size.width * scaleFactor,
+            height: size.height * scaleFactor
+        )
+        let x = (scaledSize.width - newSize.width) / 2
+        let y = (scaledSize.height - newSize.height) / 2
+        let cropRect = CGRect(origin: CGPoint(x: -x, y: -y), size: scaledSize)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: cropRect)
+        return UIGraphicsGetImageFromCurrentImageContext()!
     }
 }

@@ -29,11 +29,11 @@ print("")
 
 print("""
 Output Path
-Default: ~/Desktop/CardCollections.plist
+Default: ~/Desktop/CardCollections
 """)
 print("> ", terminator: .init())
 let _outputPath = readLine() ?? ""
-let outputPath = _outputPath.isEmpty ? "~/Desktop/CardCollections.plist" : _outputPath
+let outputPath = _outputPath.isEmpty ? "~/Desktop/CardCollections" : _outputPath
 print("")
 
 print("Fetching...")
@@ -67,29 +67,65 @@ if let cards = await DoriAPI.Card.all() {
     }
     printProgressBar(0, total: relatedCards.count)
     var resultCards = [Card]()
+    var resultImageData = [(Data, String)]()
     for (index, (card, trained)) in relatedCards.enumerated() {
         let imageURL = trained ? (card.coverAfterTrainingImageURL ?? card.coverNormalImageURL) : card.coverNormalImageURL
         let data = try Data(contentsOf: imageURL)
+        let fileName = "Card\(card.id)\(trained ? "After" : "Before")"
+        resultImageData.append((data, fileName))
         resultCards.append(
             .init(
-                name: card.prefix,
-                imageData: data
+                localizedName: card.prefix,
+                fileName: fileName
             )
         )
         printProgressBar(index + 1, total: relatedCards.count)
     }
     print("")
-    for card in resultCards {
-        if NSImage(data: card.imageData) == nil {
-            print("error: data integrity check failed: image data of card '\(card.name.forPreferredLocale() ?? "nil")' is invalid")
+    try! FileManager.default.createDirectory(atPath: outputPath + "/", withIntermediateDirectories: true)
+    for (data, fileName) in resultImageData {
+        try! FileManager.default.createDirectory(atPath: outputPath + "/\(fileName).imageset" + "/", withIntermediateDirectories: false)
+        try! """
+        {
+          "images" : [
+            {
+              "filename" : "\(fileName).png",
+              "idiom" : "universal"
+            }
+          ],
+          "info" : {
+            "author" : "xcode",
+            "version" : 1
+          }
+        }
+        """.write(toFile: outputPath + "/\(fileName).imageset/Contents.json", atomically: true, encoding: .utf8)
+        try! data.write(to: URL(filePath: outputPath + "/\(fileName).imageset/\(fileName).png"))
+        if NSImage(data: data) == nil {
+            print("error: data integrity check failed: image data of card '\(fileName)' is invalid")
         }
     }
     let encoder = PropertyListEncoder()
     encoder.outputFormat = .binary
     let collection = Collection(name: collectionNameKey, cards: resultCards)
     let data = try! encoder.encode(collection)
-    try! data.write(to: URL(filePath: outputPath))
-    print("Successfully generated card collection file at \(outputPath)")
+    try! FileManager.default.createDirectory(atPath: outputPath + "/\(collectionNameKey).dataset" + "/", withIntermediateDirectories: false)
+    try! """
+    {
+      "data" : [
+        {
+          "filename" : "\(collectionNameKey).plist",
+          "idiom" : "universal",
+          "universal-type-identifier" : "com.apple.property-list"
+        }
+      ],
+      "info" : {
+        "author" : "xcode",
+        "version" : 1
+      }
+    }
+    """.write(toFile: outputPath + "/\(collectionNameKey).dataset/Contents.json", atomically: true, encoding: .utf8)
+    try! data.write(to: URL(filePath: outputPath + "/\(collectionNameKey).dataset/\(collectionNameKey).plist"))
+    print("Successfully generated card collection files at \(outputPath)")
 } else {
     print("Failed to get cards from API")
 }
@@ -120,6 +156,6 @@ struct Collection: Codable {
     var cards: [Card]
 }
 struct Card: Codable {
-    var name: DoriAPI.LocalizedData<String>
-    var imageData: Data
+    var localizedName: DoriAPI.LocalizedData<String>
+    var fileName: String
 }

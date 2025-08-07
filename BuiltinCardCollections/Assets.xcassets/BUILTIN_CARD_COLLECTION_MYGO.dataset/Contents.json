@@ -1,8 +1,9 @@
 {
   "data" : [
     {
-      "filename" : "MyGOCollection.plist",
-      "idiom" : "universal"
+      "filename" : "BUILTIN_CARD_COLLECTION_MYGO.plist",
+      "idiom" : "universal",
+      "universal-type-identifier" : "com.apple.property-list"
     }
   ],
   "info" : {

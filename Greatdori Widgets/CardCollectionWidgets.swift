@@ -55,7 +55,7 @@ private struct Provider: AppIntentTimelineProvider {
         guard let collection = CardCollectionManager.shared._collection(named: collectionName) else { return .init() }
         var generator = seed(for: date, align: align)
         guard let card = collection.cards.randomElement(using: &generator) else { return .init() }
-        guard let image = UIImage(data: card.imageData) else { return .init() }
+        guard let image = card.file.image else { return .init() }
         return .init(date: date, image: image)
     }
     

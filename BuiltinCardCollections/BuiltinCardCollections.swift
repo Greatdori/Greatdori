@@ -21,14 +21,44 @@ public struct BuiltinCardCollection: Codable {
 }
 @_eagerMove
 public struct BuiltinCard: Codable {
-    public var name: DoriAPI.LocalizedData<String>
-    public var imageData: Data
+    public var localizedName: DoriAPI.LocalizedData<String>
+    public var fileName: String
+    
+    #if !os(macOS)
+    @inline(never)
+    public var image: UIImage {
+        #if !os(watchOS)
+        .init(resource: .init(name: fileName, bundle: #bundle))
+        #else
+        .init(named: fileName, in: #bundle, with: nil)!
+        #endif
+    }
+    #else
+    @inline(never)
+    public var image: NSImage {
+        .init(resource: .init(name: fileName, bundle: #bundle))
+    }
+    #endif
 }
 
 public let builtinCardCollectionNames = [
     "BUILTIN_CARD_COLLECTION_GREATDORI",
     "BUILTIN_CARD_COLLECTION_MYGO"
 ]
+
+#if !os(macOS)
+public func builtinImage(named name: String) -> UIImage {
+    #if !os(watchOS)
+    .init(resource: .init(name: name, bundle: #bundle))
+    #else
+    .init(named: name, in: #bundle, with: nil)!
+    #endif
+}
+#else
+public func builtinImage(named name: String) -> NSImage {
+    .init(resource: .init(name: name, bundle: #bundle))
+}
+#endif
 
 extension BuiltinCardCollection {
     @inline(never)

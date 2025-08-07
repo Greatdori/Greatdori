@@ -10,6 +10,7 @@ import DoriKit
 
 struct NavigationListView: View {
     @Binding var navigation: NavigationPage?
+    @State var isSettingsPresented = false
     var body: some View {
         List(selection: $navigation) {
             if !DoriCache.preCacheAvailability {
@@ -127,5 +128,15 @@ struct NavigationListView: View {
             }
         }
         .navigationTitle("Greatdori!")
+        .sheet(isPresented: $isSettingsPresented, content: { SettingsView() })
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: {
+                    isSettingsPresented = true
+                }, label: {
+                    Image(systemName: "gear")
+                })
+            }
+        }
     }
 }

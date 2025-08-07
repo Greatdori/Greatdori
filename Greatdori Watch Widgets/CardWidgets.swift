@@ -47,7 +47,7 @@ private struct Provider: AppIntentTimelineProvider {
         guard let descriptors = try? decoder.decode([CardWidgetDescriptor].self, from: data) else { return .init() }
         guard let imageURL = descriptors.first(where: { $0.localizedName == configuration.cardName })?.imageURL else { return .init() }
         guard let imageData = try? Data(contentsOf: imageURL) else { return .init() }
-        let image = UIImage(data: imageData)
+        let image = UIImage(data: imageData)?.resized(to: .init(width: 204, height: 90))
         return .init(image: image)
     }
     

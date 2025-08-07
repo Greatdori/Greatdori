@@ -57,6 +57,15 @@ class CardCollectionManager {
         updateStorage()
     }
     
+    @discardableResult
+    func writeImageData(_ data: Data, named name: String) -> Card.File {
+        if !FileManager.default.fileExists(atPath: containerPath + "/Documents/CardImages") {
+            try? FileManager.default.createDirectory(atPath: containerPath + "/Documents/CardImages", withIntermediateDirectories: true)
+        }
+        try? data.write(to: URL(filePath: containerPath + "/Documents/CardImages/\(name).png"))
+        return .path("/Documents/CardImages/\(name).png")
+    }
+    
     func nameAvailable(_ name: String) -> Bool {
         !builtinCardCollectionNames.contains(name) && !userCollections.contains(where: { $0.name == name })
     }
@@ -92,8 +101,23 @@ class CardCollectionManager {
     }
     @_eagerMove
     struct Card: Codable {
-        var name: String
-        var imageData: Data
+        var localizedName: DoriAPI.LocalizedData<String>
+        var file: File
+        
+        enum File: Codable {
+            case builtin(String)
+            case path(String)
+            
+            var image: UIImage? {
+                let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
+                switch self {
+                case .builtin(let name):
+                    return builtinImage(named: name)
+                case .path(let path):
+                    return UIImage(contentsOfFile: containerPath + path)
+                }
+            }
+        }
     }
 }
 
@@ -102,7 +126,7 @@ extension CardCollectionManager.Collection {
         self.init(
             name: NSLocalizedString(collection.name, bundle: .main, comment: ""),
             _rawName: collection.name,
-            cards: collection.cards.map { .init(name: $0.name.forPreferredLocale() ?? "", imageData: $0.imageData) }
+            cards: collection.cards.map { .init(localizedName: $0.localizedName, file: .builtin($0.fileName)) }
         )
     }
 }
