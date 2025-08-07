@@ -266,7 +266,7 @@ struct EventDetailOverviewView: View {
                         }, value: {
                             HStack {
                                 //TODO: Buggy
-                                ViewThatFits {
+//                                ViewThatFits(in: .horizontal) {
                                     // First Attempt
                                     HStack {
                                         ForEach(cardsArray) { card in
@@ -278,29 +278,31 @@ struct EventDetailOverviewView: View {
                                             .buttonStyle(.plain)
                                         }
                                     }
+                                    .frame(width: CGFloat(cardsArray.count*72+10))
                                     // Second Attempt
-                                    Grid(alignment: .trailing) {
-                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
-                                            GridRow {
-                                                HStack {
-                                                    Spacer()
-                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
-                                                        //                                                GridRow {
-                                                        NavigationLink(destination: {
-                                                            //TODO: [NAVI785]CardD
-                                                        }, label: {                                                CardIconView(item, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                                            //                                                        Text("1")
-                                                        })
-                                                        .buttonStyle(.plain)
-                                                    }
-                                                }
-                                            }
-                                            
-                                        }
-                                        //                                        Text("1")
-                                    }
-                                    .gridCellAnchor(.trailing)
-                                }
+//                                    Grid(alignment: .trailing) {
+//                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
+//                                            GridRow {
+//                                                HStack {
+//                                                    Spacer()
+//                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
+//                                                        //                                                GridRow {
+//                                                        NavigationLink(destination: {
+//                                                            //TODO: [NAVI785]CardD
+//                                                        }, label: {                                                CardIconView(item, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+//                                                            //                                                        Text("1")
+//                                                        })
+//                                                        .buttonStyle(.plain)
+//                                                    }
+//                                                }
+//                                            }
+//                                            .frame(width: 72*3+10)
+//                                            
+//                                        }
+//                                        //                                        Text("1")
+//                                    }
+//                                    .gridCellAnchor(.trailing)
+//                                }
                                 Text("+\(cardsPercentage)%")
                             }
                         }, compactModeOnly: true)
