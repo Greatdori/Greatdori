@@ -1088,25 +1088,22 @@
       }
     },
     "Widget.cards.name" : {
-        "localizations" : {
-            "en" : {
-                "stringUnit" : {
-                    "state" : "translated",
-                    "value" : "Card"
-                }
-            },
-            "zh-Hans" : {
-                "stringUnit" : {
-                    "state" : "translated",
-                    "value" : "卡牌"
-                }
-            }
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡牌"
+          }
         }
+      }
     },
     "卡面精选集" : {
-
-    },
-    "小组件" : {
 
     },
     "精选集名称" : {

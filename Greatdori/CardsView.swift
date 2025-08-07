@@ -336,6 +336,7 @@ struct CardIconView: View {
     private var showNavigationHints: Bool
     @State var cardTitle: DoriAPI.LocalizedData<String>?
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
+    @State var isCardInfoAvailable = false
 //    @State var cardNavigationDestinationID: Int?
     @Binding var cardNavigationDestinationID: Int?
     @State var isHovering: Bool = false
@@ -464,56 +465,86 @@ struct CardIconView: View {
                     }
                 })
             #else
+            let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
+                VStack {
+                    if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+                        Group {
+                            Text(title)
+                            Group {
+                                Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
+                            }
+                            .font(.caption)
+                        }
+                    } else {
+                        Group {
+                            Text(verbatim: "Lorem ipsum dolor")
+                                .foregroundStyle(.secondary)
+                            Text(verbatim: "Lorem ipsum")
+                                .foregroundStyle(.tertiary)
+                        }
+                        .redacted(reason: .placeholder)
+                        
+                    }
+                }
+                .padding()
+            }
             content
                 .onHover { isHovering in
                     self.isHovering = isHovering
                 }
                 .popover(isPresented: $isHovering, arrowEdge: .bottom) {
-                    VStack(alignment: .center) {
-                        if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
-                            Group {
-                                Text(title)
-                                Group {
-                                    Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
-                                }
-                                .font(.caption)
-                            }
-                        } else {
-                            Group {
-                                Text(verbatim: "Lorem ipsum dolor")
-                                    .foregroundStyle(.secondary)
-                                Text(verbatim: "Lorem ipsum")
-                                    .foregroundStyle(.tertiary)
-                            }
-                            .redacted(reason: .placeholder)
-                            
-                        }
-                    }
-                    .padding()
+                    sumimi
+                }
+                .onChange(of: cardTitle) {
+                    sumimi.updateArguments((cardTitle, cardCharacterName))
+                }
+                .onChange(of: cardCharacterName) {
+                    sumimi.updateArguments((cardTitle, cardCharacterName))
                 }
             #endif
         })
         .frame(width: sideLength, height: sideLength)
-        .onAppear {
-            Task {
-                let fullCard = await DoriAPI.Card.Card(id: cardID)
-//                print(fullCard)
+        .task {
+            let fullCard = await DoriAPI.Card.Card(id: cardID)
+            DispatchQueue.main.async {
                 cardTitle = fullCard?.prefix
-                
-                if let cardCharacterID = fullCard?.characterID {
-                    DoriCache.withCache(id: "CharacterDetail_\(cardCharacterID)") {
-                        await DoriFrontend.Character.extendedInformation(of: cardCharacterID)
-                    } .onUpdate {
-                        if let information = $0 {
+            }
+            
+            if let cardCharacterID = fullCard?.characterID {
+                DoriCache.withCache(id: "CharacterDetail_\(cardCharacterID)") {
+                    await DoriFrontend.Character.extendedInformation(of: cardCharacterID)
+                }.onUpdate {
+                    if let information = $0 {
+                        DispatchQueue.main.async {
                             self.cardCharacterName = information.character.characterName
-                        } else {
-                            cardCharacterName = nil
+                            isCardInfoAvailable = true
                         }
                     }
                 }
             }
         }
     }
+    
+    #if os(macOS)
+    /// Hi, what happened?
+    /// We NEED this to workaround a bug (maybe of SwiftUI?)
+    struct HereTheWorld<each T, V: View>: NSViewRepresentable {
+        private var controller: NSViewController
+        private var viewBuilder: (repeat each T) -> V
+        init(arguments: (repeat each T), @ViewBuilder view: @escaping (repeat each T) -> V) {
+            self.controller = NSHostingController(rootView: view(repeat each arguments))
+            self.viewBuilder = view
+        }
+        func makeNSView(context: Context) -> some NSView {
+            self.controller.view
+        }
+        func updateNSView(_ nsView: NSViewType, context: Context) {}
+        func updateArguments(_ arguments: (repeat each T)) {
+            let newView = viewBuilder(repeat each arguments)
+            controller.view = NSHostingView(rootView: newView)
+        }
+    }
+    #endif
 }
 
 struct ThumbCostumeCardView: View {
