@@ -1,0 +1,58 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "BUILTIN_CARD_COLLECTION_GREATDORI" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greatdori 精选集"
+          }
+        }
+      }
+    },
+    "BUILTIN_CARD_COLLECTION_MYGO" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MyGO 精选集"
+          }
+        }
+      }
+    },
+    "卡牌名称" : {
+
+    },
+    "卡面" : {
+
+    },
+    "卡面精选集" : {
+
+    },
+    "展示指定卡面" : {
+
+    },
+    "按住后轻触“编辑小组件”以选择卡面" : {
+
+    },
+    "按住后轻触“编辑小组件”以选择精选集" : {
+
+    },
+    "查看最新资讯" : {
+
+    },
+    "精选集名称" : {
+
+    },
+    "资讯" : {
+
+    },
+    "随机展示指定卡面精选集" : {
+
+    }
+  },
+  "version" : "1.1"
+}

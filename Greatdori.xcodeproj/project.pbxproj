@@ -98,6 +98,7 @@
 		8CB4D4A92E4481790085D57A /* BuiltinCardCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4D4A82E4481780085D57A /* BuiltinCardCollections.swift */; };
 		8CB4D4AA2E44827E0085D57A /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
 		8CB4D4AF2E44871D0085D57A /* BuiltinCardCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB4D4792E445F700085D57A /* BuiltinCardCollections.framework */; };
+		8CB4D4B52E44938E0085D57A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4B42E44938D0085D57A /* Localizable.xcstrings */; };
 		8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */; };
 		8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD02E32B5B6004023F7 /* Constructor.swift */; };
 		8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */; };
@@ -424,6 +425,7 @@
 		8CB4D4932E4461450085D57A /* CardCollectionGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardCollectionGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CB4D49F2E4461790085D57A /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		8CB4D4A82E4481780085D57A /* BuiltinCardCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuiltinCardCollections.swift; sourceTree = "<group>"; };
+		8CB4D4B42E44938D0085D57A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		8CBC1BD02E32B5B6004023F7 /* Constructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
 		8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCaches.swift; sourceTree = "<group>"; };
@@ -544,8 +546,8 @@
 				8CD13FE32E300ACE00673E15 /* BuildTool */,
 				8C923D982E30AF1E003AFC0A /* AppShared */,
 				8C0C99812E296A5500549B5C /* Greatdori */,
-				8C0C99882E296A5800549B5C /* Greatdori Watch App */,
 				8C6C0EEC2E42301000D1FB0A /* Greatdori Widgets */,
+				8C0C99882E296A5800549B5C /* Greatdori Watch App */,
 				8CB4D48B2E445F870085D57A /* BuiltinCardCollections */,
 				8C0C999E2E296A9000549B5C /* DoriKit */,
 				8C94745D2E35DE6C003A90B4 /* DoriKitTests */,
@@ -650,6 +652,7 @@
 			children = (
 				8C6C0EFA2E423CB900D1FB0A /* Greatdori Widgets.entitlements */,
 				8C6C0EEB2E42301000D1FB0A /* Info.plist */,
+				8CB4D4B42E44938D0085D57A /* Localizable.xcstrings */,
 				8C6C0EEA2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift */,
 				8C6C0F0C2E42654E00D1FB0A /* Date+.swift */,
 				8C6C0EE92E42301000D1FB0A /* CardWidgets.swift */,
@@ -1123,8 +1126,8 @@
 			projectRoot = "";
 			targets = (
 				8C0C995C2E296A4400549B5C /* Greatdori */,
-				8C0C99692E296A4600549B5C /* Greatdori Watch App */,
 				8C6C0EC82E422F8F00D1FB0A /* Greatdori Widgets */,
+				8C0C99692E296A4600549B5C /* Greatdori Watch App */,
 				8CB4D4782E445F700085D57A /* BuiltinCardCollections */,
 				8C0C99902E296A8C00549B5C /* DoriKit */,
 				8C9474512E35DE1C003A90B4 /* DoriKitTests */,
@@ -1177,6 +1180,7 @@
 			files = (
 				8C6C0EF02E42301000D1FB0A /* Assets.xcassets in Resources */,
 				8C6C0EF22E4230B800D1FB0A /* AppIcon.icon in Resources */,
+				8CB4D4B52E44938E0085D57A /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

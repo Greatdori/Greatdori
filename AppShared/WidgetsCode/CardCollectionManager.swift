@@ -23,16 +23,13 @@ class CardCollectionManager {
             let decoder = PropertyListDecoder()
             self.userCollections = (try? decoder.decode([Collection].self, from: data)) ?? []
         }
-        
-        self._builtinCollections = .all()
     }
     
-    private var _builtinCollections: [BuiltinCardCollection]
     private(set) var userCollections = [Collection]()
     
     @inline(__always)
     var builtinCollections: [Collection] {
-        _builtinCollections.map { .init(builtin: $0) }
+        builtinCardCollectionNames.map { .init(builtin: .init(named: $0)!) }
     }
     @inline(__always)
     var allCollections: [Collection] {
@@ -61,13 +58,14 @@ class CardCollectionManager {
     }
     
     func nameAvailable(_ name: String) -> Bool {
-        !userCollections.contains(where: { $0.name == name })
+        !builtinCardCollectionNames.contains(name) && !userCollections.contains(where: { $0.name == name })
     }
     
     func _collection(named name: String) -> Collection? {
-        builtinCollections.first(where: { $0.name == name })
-        ?? builtinCollections.first(where: { $0._rawName == name })
-        ?? userCollections.first(where: { $0.name == name })
+        if builtinCardCollectionNames.contains(name) {
+            return .init(builtin: .init(named: name)!)
+        }
+        return builtinCollections.first(where: { $0.name == name }) ?? userCollections.first(where: { $0.name == name })
     }
     
     private func updateStorage() {
@@ -76,6 +74,7 @@ class CardCollectionManager {
         }
     }
     
+    @_eagerMove
     struct Collection: Codable {
         var name: String
         var _rawName: String?
@@ -91,6 +90,7 @@ class CardCollectionManager {
             self.cards = cards
         }
     }
+    @_eagerMove
     struct Card: Codable {
         var name: String
         var imageData: Data
@@ -100,7 +100,7 @@ class CardCollectionManager {
 extension CardCollectionManager.Collection {
     fileprivate init(builtin collection: BuiltinCardCollection) {
         self.init(
-            name: NSLocalizedString(collection.name, comment: ""),
+            name: NSLocalizedString(collection.name, bundle: .main, comment: ""),
             _rawName: collection.name,
             cards: collection.cards.map { .init(name: $0.name.forPreferredLocale() ?? "", imageData: $0.imageData) }
         )

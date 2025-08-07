@@ -8,6 +8,7 @@
 import DoriKit
 import SwiftUI
 import WidgetKit
+import AppIntents
 
 struct CardCollectionWidgets: Widget {
     let kind: String = "com.memz233.Greatdori.Widgets.CardCollection"
@@ -40,7 +41,7 @@ private struct Provider: AppIntentTimelineProvider {
         var date = Date.now
         let calendar = Calendar.current
         for _ in 0..<48 {
-            entries.append(entry(for: date, in: configuration.collectionName))
+            entries.append(entry(for: date, align: false, in: configuration.collectionName))
             date = calendar.date(byAdding: .minute, value: 30, to: date)!
         }
         return .init(
@@ -49,30 +50,32 @@ private struct Provider: AppIntentTimelineProvider {
         )
     }
     
-    func entry(for date: Date = .now, in collection: String?) -> CardEntry {
+    func entry(for date: Date = .now, align: Bool = true, in collection: String?) -> CardEntry {
         guard let collectionName = collection else { return .init() }
         guard let collection = CardCollectionManager.shared._collection(named: collectionName) else { return .init() }
-        var generator = seed(for: date)
+        var generator = seed(for: date, align: align)
         guard let card = collection.cards.randomElement(using: &generator) else { return .init() }
         guard let image = UIImage(data: card.imageData) else { return .init() }
         return .init(date: date, image: image)
     }
     
-    func seed(for date: Date = .now) -> some RandomNumberGenerator {
+    func seed(for date: Date = .now, align: Bool = true) -> some RandomNumberGenerator {
         struct RandomNumberGeneratorWithSeed: RandomNumberGenerator {
-            init(seed: Int) {
-                srand48(seed)
+            private var state: UInt64
+            init(seed: UInt64) {
+                self.state = UInt64(seed) ^ 0x5DEECE66D
             }
-            func next() -> UInt64 {
-                return withUnsafeBytes(of: drand48()) { bytes in
-                    bytes.load(as: UInt64.self)
-                }
+            mutating func next() -> UInt64 {
+                state = state &* 0x5851F42D4C957F2D &+ 1
+                return state
             }
         }
         
         var date = date
-        date = date.componentsRewritten(second: 0)
-        let seed = Int(date.timeIntervalSince1970)
+        if align {
+            date = date.componentsRewritten(second: 0)
+        }
+        let seed = align ? UInt64(date.timeIntervalSince1970) : UInt64(date.timeIntervalSince1970 * 1000000)
         return RandomNumberGeneratorWithSeed(seed: seed)
     }
 }
@@ -86,9 +89,12 @@ private struct CardWidgetsEntryView : View {
     var entry: Provider.Entry
     var body: some View {
         if let image = entry.image {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
+            Button(intent: CardCollectionWidgetIntent()) {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+            }
+            .buttonStyle(.plain)
         } else {
             Text("按住后轻触“编辑小组件”以选择精选集")
                 .padding()

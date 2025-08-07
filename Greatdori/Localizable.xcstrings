@@ -150,6 +150,28 @@
         }
       }
     },
+    "BUILTIN_CARD_COLLECTION_GREATDORI" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greatdori 精选集"
+          }
+        }
+      }
+    },
+    "BUILTIN_CARD_COLLECTION_MYGO" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MyGO 精选集"
+          }
+        }
+      }
+    },
     "Debug.pre-cache-unavailable-alert.dismiss" : {
       "localizations" : {
         "en" : {

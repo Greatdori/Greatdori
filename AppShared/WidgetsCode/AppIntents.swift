@@ -34,6 +34,10 @@ struct CardCollectionWidgetIntent: WidgetConfigurationIntent {
     @Parameter(title: "精选集名称", optionsProvider: CollectionOptionsProvider())
     var collectionName: String?
     
+    func perform() async throws -> some IntentResult {
+        .result()
+    }
+    
     struct CollectionOptionsProvider: DynamicOptionsProvider {
         func results() async throws -> [String] {
             let collections = CardCollectionManager.shared.allCollections

@@ -6,6 +6,7 @@
 //
 
 import Darwin
+import AppKit
 import DoriKit
 import Foundation
 
@@ -78,6 +79,11 @@ if let cards = await DoriAPI.Card.all() {
         printProgressBar(index + 1, total: relatedCards.count)
     }
     print("")
+    for card in resultCards {
+        if NSImage(data: card.imageData) == nil {
+            print("error: data integrity check failed: image data of card '\(card.name.forPreferredLocale() ?? "nil")' is invalid")
+        }
+    }
     let encoder = PropertyListEncoder()
     encoder.outputFormat = .binary
     let collection = Collection(name: collectionNameKey, cards: resultCards)
