@@ -19,8 +19,8 @@ struct CardCollectionWidgets: Widget {
         }
         .supportedFamilies([.systemMedium, .systemLarge, .systemExtraLarge])
         .contentMarginsDisabled()
-        .configurationDisplayName("卡面精选集")
-        .description("随机展示指定卡面精选集")
+        .configurationDisplayName("Widget.collection")
+        .description("Widget.collections.description")
     }
 }
 
@@ -96,7 +96,7 @@ private struct CardWidgetsEntryView : View {
             }
             .buttonStyle(.plain)
         } else {
-            Text("按住后轻触“编辑小组件”以选择精选集")
+            Text("Widget.collections.edit-tip")
                 .padding()
         }
     }

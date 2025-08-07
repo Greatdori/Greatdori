@@ -12,8 +12,16 @@ import SDWebImageSVGCoder
 
 #if os(macOS)
 let imageButtonSize: CGFloat = 30
+let cardThumbnailSideLength: CGFloat = 64
 #else
 let imageButtonSize: CGFloat = 35
+let cardThumbnailSideLength: CGFloat = 72
+#endif
+
+#if os(macOS)
+let isMACOS = true
+#else
+let isMACOS = false
 #endif
 
 
@@ -168,4 +176,8 @@ extension Array {
             Array(self[$0..<Swift.min($0 + size, count)])
         }
     }
+}
+
+extension Optional {
+    var id: Self { self }
 }

@@ -97,15 +97,17 @@ struct EventDetailView: View {
 }
 
 //MARK: EventDetailOverviewView
-//TODO: Optimize for iPhone
 struct EventDetailOverviewView: View {
     let information: DoriFrontend.Event.ExtendedEvent
     @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
     @State var eventCharacterNameDict: [Int: DoriAPI.LocalizedData<String>] = [:]
     @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
-    @State var cardsArraySeperated: [[DoriFrontend.Card.PreviewCard]] = []
+    @State var cardsArraySeperated: [[DoriFrontend.Card.PreviewCard?]] = []
     @State var cardsPercentage: Int = -100
     @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
+    @State var cardsColumnWidth: CGFloat = 0
+    @State var cardsTitleWidth: CGFloat = 0
+    @State var cardsContentWidth: CGFloat = 0
     @Binding var cardNavigationDestinationID: Int?
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
@@ -263,49 +265,88 @@ struct EventDetailOverviewView: View {
                         ListItemView(title: {
                             Text("Event.card")
                                 .bold()
+                                .background {
+                                    GeometryReader { geometry in
+                                        Color.clear
+                                            .onAppear {
+                                                cardsTitleWidth = geometry.size.width
+                                            }
+                                            .onChange(of: geometry.size.width) {
+                                                cardsTitleWidth = geometry.size.width
+                                            }
+                                    }
+                                }
                         }, value: {
                             HStack {
-                                //TODO: Buggy
-//                                ViewThatFits(in: .horizontal) {
-                                    // First Attempt
+                                if (cardsColumnWidth - cardsTitleWidth - cardsContentWidth) > 20 {
                                     HStack {
                                         ForEach(cardsArray) { card in
                                             NavigationLink(destination: {
                                                 //TODO: [NAVI785]CardD
                                             }, label: {
-                                                CardIconView(card, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                                CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
                                             })
+                                            .contentShape(Rectangle())
                                             .buttonStyle(.plain)
                                         }
                                     }
-                                    .frame(width: CGFloat(cardsArray.count*72+10))
-                                    // Second Attempt
-//                                    Grid(alignment: .trailing) {
-//                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
-//                                            GridRow {
-//                                                HStack {
-//                                                    Spacer()
-//                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
-//                                                        //                                                GridRow {
-//                                                        NavigationLink(destination: {
-//                                                            //TODO: [NAVI785]CardD
-//                                                        }, label: {                                                CardIconView(item, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-//                                                            //                                                        Text("1")
-//                                                        })
-//                                                        .buttonStyle(.plain)
-//                                                    }
-//                                                }
-//                                            }
+                                    //                                    .frame(width: CGFloat(cardsArray.count*72+10))
+                                } else {
+                                    Grid(alignment: .trailing) {
+                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
+                                            GridRow {
+                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
+                                                        if item != nil {
+                                                            NavigationLink(destination: {
+                                                                //TODO: [NAVI785]CardD
+                                                            }, label: {
+                                                                CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                                                //                                                        Text("1")
+                                                            })
+                                                            .buttonStyle(.plain)
+                                                        } else {
+//                                                            CardIconView
+//                                                            EmptyView()
+                                                            Rectangle()
+                                                                .opacity(0)
+                                                        }
+                                                    }
+                                            }
 //                                            .frame(width: 72*3+10)
-//                                            
-//                                        }
-//                                        //                                        Text("1")
-//                                    }
-//                                    .gridCellAnchor(.trailing)
-//                                }
+                                            
+                                        }
+                                        //                                        Text("1")
+                                    }
+                                    .gridCellAnchor(.trailing)
+                                }
                                 Text("+\(cardsPercentage)%")
+                                    .lineLimit(1, reservesSpace: true)
                             }
-                        }, compactModeOnly: true)
+                            .background {
+                                GeometryReader { geometry in
+                                    Color.clear
+                                        .onAppear {
+                                            cardsContentWidth = geometry.size.width
+                                        }
+                                        .onChange(of: geometry.size.width) {
+                                            cardsContentWidth = geometry.size.width
+                                        }
+                                }
+                            }
+                        }/*, compactModeOnly: true*/)
+                        .background(
+                            AnyView(
+                                GeometryReader { geometry in
+                                    Color.clear
+                                        .onAppear {
+                                            cardsColumnWidth = geometry.size.width
+                                        }
+                                        .onChange(of: geometry.size.width) {
+                                            cardsColumnWidth = geometry.size.width
+                                        }
+                                }
+                            )
+                        )
                         Divider()
                     }
                     //MARK: Rewards
@@ -318,8 +359,9 @@ struct EventDetailOverviewView: View {
                                 NavigationLink(destination: {
                                     
                                 }, label: {
-                                    CardIconView(card, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                    CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
                                 })
+                                .contentShape(Rectangle())
                                 .buttonStyle(.plain)
                                 
                             }
@@ -365,10 +407,17 @@ struct EventDetailOverviewView: View {
                 }
             }
             cardsArraySeperated = cardsArray.chunked(into: 3)
+            for i in 0..<cardsArraySeperated.count {
+                while cardsArraySeperated[i].count < 3 {
+                    cardsArraySeperated[i].insert(nil, at: 0)
+                }
+            }
+//            print(cardsArraySeperated)
         }
     }
     
 }
+
 
 
 
@@ -706,7 +755,7 @@ struct ListItemView<Content1: View, Content2: View>: View {
     
     var body: some View {
         Group {
-            if valueAvailableWidth < (totalAvailableWidth - titleAvailableWidth - 5) || compactModeOnly { // HStack (SHORT)
+            if (totalAvailableWidth - titleAvailableWidth - valueAvailableWidth) > 5 || compactModeOnly { // HStack (SHORT)
                 HStack {
                     title
                         .background(

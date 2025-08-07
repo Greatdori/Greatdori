@@ -153,10 +153,16 @@
     "BUILTIN_CARD_COLLECTION_GREATDORI" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greatdori! Collection"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Greatdori 精选集"
+            "value" : "Greatdori! 精选集"
           }
         }
       }
@@ -164,10 +170,16 @@
     "BUILTIN_CARD_COLLECTION_MYGO" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MyGO!!!!! Collection"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MyGO 精选集"
+            "value" : "MyGO!!!!! 精选集"
           }
         }
       }
@@ -1060,7 +1072,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cards"
+            "value" : "Card"
           }
         },
         "zh-Hans" : {
@@ -1076,18 +1088,18 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Display Designated Card"
+            "value" : "Choose a card to display in Home Screen."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "展示指定卡牌"
+            "value" : "选取卡牌以在主屏幕展示。"
           }
         }
       }
     },
-    "Widget.cards.name" : {
+    "Widget.cards.parameter.name" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1103,14 +1115,53 @@
         }
       }
     },
-    "卡面精选集" : {
-
+    "Widget.collections" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collection"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "精选集"
+          }
+        }
+      }
     },
-    "精选集名称" : {
-
+    "Widget.collections.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a collection to shuffle throughout the day."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选取精选集全天随机显示。"
+          }
+        }
+      }
     },
-    "随机展示指定卡面精选集" : {
-
+    "Widget.collections.parameter.name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collection"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "精选集"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

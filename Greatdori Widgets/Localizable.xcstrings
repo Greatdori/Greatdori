@@ -23,7 +23,13 @@
         }
       }
     },
-    "卡牌名称" : {
+    "Widget.cards" : {
+
+    },
+    "Widget.cards.description" : {
+
+    },
+    "Widget.cards.name" : {
 
     },
     "卡面" : {

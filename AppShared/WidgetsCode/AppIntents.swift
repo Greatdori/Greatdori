@@ -13,7 +13,7 @@ struct CardWidgetIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource { "Widget.cards" }
     static var description: IntentDescription { "Widget.cards.description" }
     
-    @Parameter(title: "Widget.cards.name", optionsProvider: CardOptionsProvider())
+    @Parameter(title: "Widget.cards.parameter.name", optionsProvider: CardOptionsProvider())
     var cardName: String?
     
     struct CardOptionsProvider: DynamicOptionsProvider {
@@ -28,10 +28,10 @@ struct CardWidgetIntent: WidgetConfigurationIntent {
 }
 
 struct CardCollectionWidgetIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource { "卡面精选集" }
-    static var description: IntentDescription { "随机展示指定卡面精选集" }
+    static var title: LocalizedStringResource { "Widget.collections" }
+    static var description: IntentDescription { "Widget.collections.description" }
     
-    @Parameter(title: "精选集名称", optionsProvider: CollectionOptionsProvider())
+    @Parameter(title: "Widget.collections.parameter.name", optionsProvider: CollectionOptionsProvider())
     var collectionName: String?
     
     func perform() async throws -> some IntentResult {

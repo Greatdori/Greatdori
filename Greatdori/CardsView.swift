@@ -465,6 +465,8 @@ struct CardIconView: View {
                     }
                 })
             #else
+            // Very weird code cuz SwiftUI has very weird refreshing logic.
+            // Don't touch without complete-understaning
             let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
                 VStack {
                     if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
@@ -679,3 +681,4 @@ struct SongCardView: View {
         }
     }
 }
+
