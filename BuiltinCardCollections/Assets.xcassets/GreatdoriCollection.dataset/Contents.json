@@ -1,0 +1,13 @@
+{
+  "data" : [
+    {
+      "filename" : "GreatdoriCollection.plist",
+      "idiom" : "universal",
+      "universal-type-identifier" : "com.apple.property-list"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

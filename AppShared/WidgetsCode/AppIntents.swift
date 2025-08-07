@@ -26,3 +26,18 @@ struct CardWidgetIntent: WidgetConfigurationIntent {
         }
     }
 }
+
+struct CardCollectionWidgetIntent: WidgetConfigurationIntent {
+    static var title: LocalizedStringResource { "卡面精选集" }
+    static var description: IntentDescription { "随机展示指定卡面精选集" }
+    
+    @Parameter(title: "精选集名称", optionsProvider: CollectionOptionsProvider())
+    var collectionName: String?
+    
+    struct CollectionOptionsProvider: DynamicOptionsProvider {
+        func results() async throws -> [String] {
+            let collections = CardCollectionManager.shared.allCollections
+            return collections.map { $0.name }
+        }
+    }
+}
