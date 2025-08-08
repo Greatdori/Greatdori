@@ -8,6 +8,7 @@
 import SwiftUI
 import DoriKit
 import WidgetKit
+import AuthenticationServices
 
 struct SettingsView: View {
     @State var cardIDInput = ""
@@ -80,8 +81,42 @@ struct SettingsView: View {
             } footer: {
                 Text(verbatim: "[Card ID]:[before|after]\nWait console until 'Widget update succeeded' is printed.")
             }
+            Section {
+                NavigationLink(destination: { AboutView() }) {
+                    Label("关于", systemImage: "info.circle")
+                }
+            }
         }
         .navigationTitle("设置")
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+private struct AboutView: View {
+    var body: some View {
+        List {
+            Section {
+                Button(action: {
+                    let url = URL(string: "https://github.com/WindowsMEMZ/Greatdori")!
+                    let session = ASWebAuthenticationSession(url: url, callbackURLScheme: nil) { _, _ in }
+                    session.prefersEphemeralWebBrowserSession = true
+                    session.start()
+                }, label: {
+                    HStack {
+                        Text(verbatim: "GitHub")
+                        Spacer()
+                        Image(systemName: "arrow.up.right.square")
+                    }
+                })
+            } header: {
+                Text("源代码")
+            }
+            Section {
+                Text("App 内数据来源为 Bestdori!")
+            } header: {
+                Text("数据来源")
+            }
+        }
+        .navigationTitle("关于")
     }
 }

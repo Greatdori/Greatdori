@@ -128,7 +128,11 @@ struct NavigationListView: View {
             }
         }
         .navigationTitle("Greatdori!")
-        .sheet(isPresented: $isSettingsPresented, content: { SettingsView() })
+        .sheet(isPresented: $isSettingsPresented) {
+            NavigationStack {
+                SettingsView()
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
