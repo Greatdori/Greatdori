@@ -20,6 +20,8 @@ public class DoriCache {
         nonisolated(unsafe) private var _onUpdate: ((Result) -> Void)?
         nonisolated(unsafe) private var initialValue: Result?
         nonisolated(unsafe) private var isValueFirstUpdated: Bool = false
+        nonisolated(unsafe) private var isCancelled: Bool = false
+        nonisolated(unsafe) private var _onCancel: (() -> Void)?
         
         internal init(_ initialValue: Result? = nil) {
             self.initialValue = initialValue
@@ -27,15 +29,29 @@ public class DoriCache {
         
         @MainActor
         internal func updateValue(_ value: Result) {
-            _onUpdate?(value)
+            if _fastPath(!isCancelled) {
+                _onUpdate?(value)
+            }
             isValueFirstUpdated = true
         }
+        @discardableResult
+        internal func onCancel(perform action: @escaping () -> Void) -> Self {
+            self._onCancel = action
+            return self
+        }
         
-        public func onUpdate(_ action: @escaping (Result) -> Void) {
+        @discardableResult
+        public func onUpdate(_ action: @escaping (Result) -> Void) -> Self {
             self._onUpdate = action
             if !isValueFirstUpdated, let initialValue {
                 action(initialValue)
             }
+            return self
+        }
+        
+        public func cancel() {
+            self._onCancel?()
+            self.isCancelled = true
         }
     }
     
@@ -47,7 +63,7 @@ public class DoriCache {
         
         let promise: Promise<Result?> = .init()
         
-        Task.detached(priority: .userInitiated) {
+        let task = Task.detached(priority: .userInitiated) {
             var cachedResult: Result?
             if let cachedData = try? Data(contentsOf: cacheURL) {
                 cachedResult = Result(fromCache: cachedData)
@@ -82,6 +98,10 @@ public class DoriCache {
             
             let cache = result.dataForCache
             try? cache.write(to: cacheURL)
+        }
+        
+        promise.onCancel {
+            task.cancel()
         }
         
         return promise

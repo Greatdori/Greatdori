@@ -13,6 +13,7 @@ import SDWebImageSwiftUI
 struct EventDetailView: View {
     var id: Int
     @State var eventID: Int = 0
+    @State var informationLoadPromise: DoriCache.Promise<DoriFrontend.Event.ExtendedEvent?>?
     @State var information: DoriFrontend.Event.ExtendedEvent?
     @State var infoIsAvailable = true
     @State var cardNavigationDestinationID: Int?
@@ -153,7 +154,8 @@ struct EventDetailView: View {
     
     func getInformation(id: Int) async {
         infoIsAvailable = true
-        DoriCache.withCache(id: "EventDetail_\(id)") {
+        informationLoadPromise?.cancel()
+        informationLoadPromise = DoriCache.withCache(id: "EventDetail_\(id)") {
             await DoriFrontend.Event.extendedInformation(of: id)
         } .onUpdate {
             if let information = $0 {

@@ -17,29 +17,34 @@ internal func requestJSON(
     interceptor: RequestInterceptor? = nil,
     requestModifier: Session.RequestModifier? = nil
 ) async -> Result<JSON, Void> {
-    await withCheckedContinuation { continuation in
-        AF.request(
-            convertible,
-            method: method,
-            parameters: parameters,
-            encoding: encoding,
-            interceptor: interceptor,
-            requestModifier: requestModifier
-        ).responseData { response in
-            let data = response.data
-            if data != nil {
-                Task.detached(priority: .userInitiated) {
-                    do {
-                        let json = try JSON(data: data!)
-                        continuation.resume(returning: .success(json))
-                    } catch {
-                        continuation.resume(returning: .failure(()))
+    let request = AF.request(
+        convertible,
+        method: method,
+        parameters: parameters,
+        encoding: encoding,
+        interceptor: interceptor,
+        requestModifier: requestModifier
+    )
+    return await withTaskCancellationHandler {
+        await withCheckedContinuation { continuation in
+            request.responseData { response in
+                let data = response.data
+                if data != nil {
+                    Task.detached(priority: .userInitiated) {
+                        do {
+                            let json = try JSON(data: data!)
+                            continuation.resume(returning: .success(json))
+                        } catch {
+                            continuation.resume(returning: .failure(()))
+                        }
                     }
+                } else {
+                    continuation.resume(returning: .failure(()))
                 }
-            } else {
-                continuation.resume(returning: .failure(()))
             }
         }
+    } onCancel: {
+        request.cancel()
     }
 }
 internal func requestJSON<Parameters: Encodable & Sendable>(
@@ -50,29 +55,34 @@ internal func requestJSON<Parameters: Encodable & Sendable>(
     interceptor: RequestInterceptor? = nil,
     requestModifier: Session.RequestModifier? = nil
 ) async -> Result<JSON, Void> {
-    await withCheckedContinuation { continuation in
-        AF.request(
-            convertible,
-            method: method,
-            parameters: parameters,
-            encoder: encoder,
-            interceptor: interceptor,
-            requestModifier: requestModifier
-        ).responseData { response in
-            let data = response.data
-            if data != nil {
-                Task.detached(priority: .userInitiated) {
-                    do {
-                        let json = try JSON(data: data!)
-                        continuation.resume(returning: .success(json))
-                    } catch {
-                        continuation.resume(returning: .failure(()))
+    let request = AF.request(
+        convertible,
+        method: method,
+        parameters: parameters,
+        encoder: encoder,
+        interceptor: interceptor,
+        requestModifier: requestModifier
+    )
+    return await withTaskCancellationHandler {
+        await withCheckedContinuation { continuation in
+            request.responseData { response in
+                let data = response.data
+                if data != nil {
+                    Task.detached(priority: .userInitiated) {
+                        do {
+                            let json = try JSON(data: data!)
+                            continuation.resume(returning: .success(json))
+                        } catch {
+                            continuation.resume(returning: .failure(()))
+                        }
                     }
+                } else {
+                    continuation.resume(returning: .failure(()))
                 }
-            } else {
-                continuation.resume(returning: .failure(()))
             }
         }
+    } onCancel: {
+        request.cancel()
     }
 }
 
