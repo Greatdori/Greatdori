@@ -265,6 +265,7 @@
       }
     },
     "Event.card" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -408,6 +409,9 @@
         }
       }
     },
+    "Event.gacha" : {
+
+    },
     "Event.id" : {
       "localizations" : {
         "en" : {
@@ -423,6 +427,9 @@
           }
         }
       }
+    },
+    "Event.next" : {
+
     },
     "Event.parameter" : {
       "localizations" : {
@@ -487,6 +494,9 @@
           }
         }
       }
+    },
+    "Event.previous" : {
+
     },
     "Event.rewards" : {
       "localizations" : {

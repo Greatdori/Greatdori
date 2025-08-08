@@ -12,10 +12,13 @@ import SDWebImageSwiftUI
 //MARK: EventDetailView
 struct EventDetailView: View {
     var id: Int
+    @State var eventID: Int = 0
     @State var information: DoriFrontend.Event.ExtendedEvent?
     @State var infoIsAvailable = true
     @State var cardNavigationDestinationID: Int?
     @State var pageWidth: CGFloat = 400
+    @State var latestEventID: Int = 0
+    @State var showSubtitle: Bool = false
     var body: some View {
         NavigationStack {
             if let information {
@@ -29,6 +32,10 @@ struct EventDetailView: View {
                         }
                         .padding()
                         Spacer()
+                    }
+                    HStack {
+                        Text("Event.gacha")
+                            .font(.title3)
                     }
                 }
             } else {
@@ -48,26 +55,88 @@ struct EventDetailView: View {
             //                NavigationStack {
             Text("\(id)")
         })
-        .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "#\(id)"))
-        .wrapIf({ if #available(iOS 26, *) { true } else { false } }()) { content in
-            if #available(iOS 26, *) {
-//                if information?.event.eventName.forPreferredLocale() != nil {
-                    content
-                    .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(id)" : "")
-//                }
-            }
-        }
+        .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "#\(eventID)"))
+//        .wrapIf(showSubtitle) { content in
+//            if #available(iOS 26, *) {
+////                if showSubtitle {
+//                    //                if information?.event.eventName.forPreferredLocale() != nil {
+//                    content
+//                        .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(eventID)" : "")
+//                    //                }
+////                } else {
+////                    content
+////                }
+//            } else {
+//                content
+//            }
+//        }
         //        .navigationTitle(.lineLimit(nil))
         //        .toolbarTitleDisplayMode(.inline)
+        .onAppear {
+            Task {
+                latestEventID = await DoriFrontend.Event.localizedLatestEvent()?.jp?.id ?? 0
+            }
+        }
+        .onChange(of: eventID, {
+            Task {
+                print("on change of eventID: \(eventID)")
+                await getInformation(id: eventID)
+            }
+        })
         .task {
-            await getInformation()
+            eventID = id
+            await getInformation(id: eventID)
         }
         .onTapGesture {
             if !infoIsAvailable {
                 Task {
-                    await getInformation()
+                    await getInformation(id: eventID)
                 }
             }
+        }
+        .toolbar {
+            ToolbarItemGroup(content: {
+                ViewThatFits(in: .horizontal) {
+                    HStack {
+                        Button(action: {
+                            if eventID > 1 {
+                                information = nil
+                                eventID -= 1
+                            }
+                        }, label: {
+                            Label("Event.previous", systemImage: "arrow.backward")
+                        })
+                        .disabled(eventID <= 1)
+                        NavigationLink(destination: {
+                            //MARK: [NAVI785] eventList
+                        }, label: {
+                            Text("#\(eventID)")
+                                .fontDesign(.monospaced)
+                        })
+                        .padding(-2)
+                        Button(action: {
+                            if latestEventID < eventID {
+                                information = nil
+                                eventID += 1
+                            }
+                        }, label: {
+                            Label("Event.next", systemImage: "arrow.forward")
+                        })
+                        .disabled(latestEventID == 0 || latestEventID <= eventID)
+                    }
+                    .onAppear {
+                        showSubtitle = false
+                    }
+                    NavigationLink(destination: {
+                        //MARK: [NAVI785] eventList
+                    }, label: {
+                        Image(systemName: "list.bullet")
+                    })
+                    .onAppear {
+                        showSubtitle = true
+                    }
+                }
+            })
         }
         .background(
             GeometryReader { geometry in
@@ -82,7 +151,7 @@ struct EventDetailView: View {
         )
     }
     
-    func getInformation() async {
+    func getInformation(id: Int) async {
         infoIsAvailable = true
         DoriCache.withCache(id: "EventDetail_\(id)") {
             await DoriFrontend.Event.extendedInformation(of: id)
@@ -261,94 +330,94 @@ struct EventDetailOverviewView: View {
                         Divider()
                     }
                     //MARK: Card
-                    if !cardsArray.isEmpty {
-                        ListItemView(title: {
-                            Text("Event.card")
-                                .bold()
-                                .background {
-                                    GeometryReader { geometry in
-                                        Color.clear
-                                            .onAppear {
-                                                cardsTitleWidth = geometry.size.width
-                                            }
-                                            .onChange(of: geometry.size.width) {
-                                                cardsTitleWidth = geometry.size.width
-                                            }
-                                    }
-                                }
-                        }, value: {
-                            HStack {
-                                if (cardsColumnWidth - cardsTitleWidth - cardsContentWidth) > 20 {
-                                    HStack {
-                                        ForEach(cardsArray) { card in
-                                            NavigationLink(destination: {
-                                                //TODO: [NAVI785]CardD
-                                            }, label: {
-                                                CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                            })
-                                            .contentShape(Rectangle())
-                                            .buttonStyle(.plain)
-                                        }
-                                    }
-                                    //                                    .frame(width: CGFloat(cardsArray.count*72+10))
-                                } else {
-                                    Grid(alignment: .trailing) {
-                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
-                                            GridRow {
-                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
-                                                        if item != nil {
-                                                            NavigationLink(destination: {
-                                                                //TODO: [NAVI785]CardD
-                                                            }, label: {
-                                                                CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                                                //                                                        Text("1")
-                                                            })
-                                                            .buttonStyle(.plain)
-                                                        } else {
-//                                                            CardIconView
-//                                                            EmptyView()
-                                                            Rectangle()
-                                                                .opacity(0)
-                                                        }
-                                                    }
-                                            }
-//                                            .frame(width: 72*3+10)
-                                            
-                                        }
-                                        //                                        Text("1")
-                                    }
-                                    .gridCellAnchor(.trailing)
-                                }
-                                Text("+\(cardsPercentage)%")
-                                    .lineLimit(1, reservesSpace: true)
-                            }
-                            .background {
-                                GeometryReader { geometry in
-                                    Color.clear
-                                        .onAppear {
-                                            cardsContentWidth = geometry.size.width
-                                        }
-                                        .onChange(of: geometry.size.width) {
-                                            cardsContentWidth = geometry.size.width
-                                        }
-                                }
-                            }
-                        }/*, compactModeOnly: true*/)
-                        .background(
-                            AnyView(
-                                GeometryReader { geometry in
-                                    Color.clear
-                                        .onAppear {
-                                            cardsColumnWidth = geometry.size.width
-                                        }
-                                        .onChange(of: geometry.size.width) {
-                                            cardsColumnWidth = geometry.size.width
-                                        }
-                                }
-                            )
-                        )
-                        Divider()
-                    }
+//                    if !cardsArray.isEmpty {
+//                        ListItemView(title: {
+//                            Text("Event.card")
+//                                .bold()
+//                                .background {
+//                                    GeometryReader { geometry in
+//                                        Color.clear
+//                                            .onAppear {
+//                                                cardsTitleWidth = geometry.size.width
+//                                            }
+//                                            .onChange(of: geometry.size.width) {
+//                                                cardsTitleWidth = geometry.size.width
+//                                            }
+//                                    }
+//                                }
+//                        }, value: {
+//                            HStack {
+//                                if (cardsColumnWidth - cardsTitleWidth - cardsContentWidth) > 20 {
+//                                    HStack {
+//                                        ForEach(cardsArray) { card in
+//                                            NavigationLink(destination: {
+//                                                //TODO: [NAVI785]CardD
+//                                            }, label: {
+//                                                CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+//                                            })
+//                                            .contentShape(Rectangle())
+//                                            .buttonStyle(.plain)
+//                                        }
+//                                    }
+//                                    //                                    .frame(width: CGFloat(cardsArray.count*72+10))
+//                                } else {
+//                                    Grid(alignment: .trailing) {
+//                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
+//                                            GridRow {
+//                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
+//                                                        if item != nil {
+//                                                            NavigationLink(destination: {
+//                                                                //TODO: [NAVI785]CardD
+//                                                            }, label: {
+//                                                                CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+//                                                                //                                                        Text("1")
+//                                                            })
+//                                                            .buttonStyle(.plain)
+//                                                        } else {
+////                                                            CardIconView
+////                                                            EmptyView()
+//                                                            Rectangle()
+//                                                                .opacity(0)
+//                                                        }
+//                                                    }
+//                                            }
+////                                            .frame(width: 72*3+10)
+//                                            
+//                                        }
+//                                        //                                        Text("1")
+//                                    }
+//                                    .gridCellAnchor(.trailing)
+//                                }
+//                                Text("+\(cardsPercentage)%")
+//                                    .lineLimit(1, reservesSpace: true)
+//                            }
+//                            .background {
+//                                GeometryReader { geometry in
+//                                    Color.clear
+//                                        .onAppear {
+//                                            cardsContentWidth = geometry.size.width
+//                                        }
+//                                        .onChange(of: geometry.size.width) {
+//                                            cardsContentWidth = geometry.size.width
+//                                        }
+//                                }
+//                            }
+//                        }/*, compactModeOnly: true*/)
+//                        .background(
+//                            AnyView(
+//                                GeometryReader { geometry in
+//                                    Color.clear
+//                                        .onAppear {
+//                                            cardsColumnWidth = geometry.size.width
+//                                        }
+//                                        .onChange(of: geometry.size.width) {
+//                                            cardsColumnWidth = geometry.size.width
+//                                        }
+//                                }
+//                            )
+//                        )
+//                        Divider()
+//                    }
                     //MARK: Rewards
                     if !rewardsArray.isEmpty {
                         ListItemView(title: {
