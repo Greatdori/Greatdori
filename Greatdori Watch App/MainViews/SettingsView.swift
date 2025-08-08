@@ -116,6 +116,22 @@ private struct AboutView: View {
             } header: {
                 Text("数据来源")
             }
+            if NSLocale.current.language.languageCode!.identifier == "zh" {
+                Section {
+                    Button(action: {
+                        let session = ASWebAuthenticationSession(
+                            url: URL(string: "https://beian.miit.gov.cn")!,
+                            callbackURLScheme: nil
+                        ) { _, _ in }
+                        session.prefersEphemeralWebBrowserSession = true
+                        session.start()
+                    }, label: {
+                        Text(verbatim: "蜀ICP备2025125473号-NNA") // FIXME
+                    })
+                } header: {
+                    Text(verbatim: "中国大陆ICP备案号")
+                }
+            }
         }
         .navigationTitle("关于")
     }
