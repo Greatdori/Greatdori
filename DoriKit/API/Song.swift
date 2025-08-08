@@ -46,11 +46,23 @@ extension DoriAPI {
             //     },
             //     ...
             // }
-            let request = await requestJSON("https://bestdori.com/api/songs/all.5.json")
+            let request = await requestJSON("https://bestdori.com/api/songs/all.7.json")
             if case let .success(respJSON) = request {
                 let task = Task.detached(priority: .userInitiated) {
                     var result = [PreviewSong]()
                     for (key, value) in respJSON {
+                        let notes = value["notes"].map {
+                            (key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
+                             value: $0.1.intValue)
+                        }.reduce(into: [DifficultyType: Int]()) { $0.updateValue($1.value, forKey: $1.key) }
+                        
+                        let bpm = value["bpm"].map {
+                            (key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
+                             value: $0.1.map {
+                                BPM(bpm: $0.1["bpm"].intValue, start: $0.1["start"].doubleValue, end: $0.1["end"].doubleValue)
+                            })
+                        }.reduce(into: [DifficultyType: [BPM]]()) { $0.updateValue($1.value, forKey: $1.key) }
+                        
                         result.append(.init(
                             id: Int(key) ?? 0,
                             tag: .init(rawValue: value["tag"].stringValue) ?? .normal,
@@ -92,6 +104,9 @@ extension DoriAPI {
                             }.reduce(into: [DifficultyType: PreviewSong.Difficulty]()) {
                                 $0.updateValue($1.value, forKey: $1.key)
                             },
+                            length: value["length"].doubleValue,
+                            notes: notes,
+                            bpm: bpm,
                             musicVideos: value["musicVideos"].exists() ? value["musicVideos"].map {
                                 (key: $0.0,
                                  value: MusicVideoMetadata(
@@ -115,6 +130,54 @@ extension DoriAPI {
                         ))
                     }
                     return result.sorted { $0.id < $1.id }
+                }
+                return await task.value
+            }
+            return nil
+        }
+        
+        public static func meta() async -> SongMeta? {
+            // Response example:
+            // {
+            //     "1": {
+            //         "0": {
+            //             "3": [
+            //                 2.69,
+            //                 0.3367,
+            //                 3.3662,
+            //                 0.4819
+            //             ],
+            //             ...
+            //         },
+            //         "1": {
+            //             ...
+            //         },
+            //         "2": {
+            //             ...
+            //         },
+            //         "3": {
+            //             ...
+            //         },
+            //         "4": {
+            //             ...
+            //         }
+            //     },
+            //     ...
+            // }
+            let request = await requestJSON("https://bestdori.com/api/songs/meta/all.5.json")
+            if case let .success(respJSON) = request {
+                let task = Task.detached(priority: .userInitiated) {
+                    return respJSON.map {
+                        (key: Int($0.0) ?? 0,
+                         value: $0.1.map {
+                            let value = $0.1.map {
+                                (key: Double($0.0) ?? 0,
+                                 value: $0.1.map { $0.1.doubleValue })
+                            }.reduce(into: [Double: [Double]]()) { $0.updateValue($1.value, forKey: $1.key) }
+                            return (key: DifficultyType(rawValue: Int($0.0) ?? 0) ?? .easy,
+                                    value: value)
+                        }.reduce(into: [DifficultyType: [Double: [Double]]]()) { $0.updateValue($1.value, forKey: $1.key) })
+                    }.reduce(into: SongMeta()) { $0.updateValue($1.value, forKey: $1.key) }
                 }
                 return await task.value
             }
@@ -243,9 +306,9 @@ extension DoriAPI {
                     let bpm = respJSON["bpm"].map {
                         (key: DoriAPI.Song.DifficultyType(rawValue: Int($0.0)!) ?? .easy,
                          value: $0.1.map {
-                            Song.BPM(bpm: $0.1["bpm"].intValue, start: $0.1["start"].doubleValue, end: $0.1["end"].doubleValue)
+                            BPM(bpm: $0.1["bpm"].intValue, start: $0.1["start"].doubleValue, end: $0.1["end"].doubleValue)
                         })
-                    }.reduce(into: [DifficultyType: [Song.BPM]]()) { $0.updateValue($1.value, forKey: $1.key) }
+                    }.reduce(into: [DifficultyType: [BPM]]()) { $0.updateValue($1.value, forKey: $1.key) }
                     
                     return Song(
                         id: id,
@@ -414,6 +477,9 @@ extension DoriAPI.Song {
         public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         public var closedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
         public var difficulty: [DifficultyType: Difficulty] // {Index: {Difficulty}...}(JSON) -> ~(Swift)
+        public var length: Double
+        public var notes: [DifficultyType: Int]
+        public var bpm: [DifficultyType: [BPM]]
         public var musicVideos: [String: MusicVideoMetadata]? // ["music_video_{Int}": ~]
         
         internal init(
@@ -425,6 +491,9 @@ extension DoriAPI.Song {
             publishedAt: DoriAPI.LocalizedData<Date>,
             closedAt: DoriAPI.LocalizedData<Date>,
             difficulty: [DifficultyType : Difficulty],
+            length: Double,
+            notes: [DifficultyType : Int],
+            bpm: [DifficultyType : [BPM]],
             musicVideos: [String : MusicVideoMetadata]?
         ) {
             self.id = id
@@ -435,6 +504,9 @@ extension DoriAPI.Song {
             self.publishedAt = publishedAt
             self.closedAt = closedAt
             self.difficulty = difficulty
+            self.length = length
+            self.notes = notes
+            self.bpm = bpm
             self.musicVideos = musicVideos
         }
         
@@ -608,13 +680,23 @@ extension DoriAPI.Song {
                 }
             }
         }
-        
-        public struct BPM: Sendable, DoriCache.Cacheable {
-            public var bpm: Int
-            public var start: Double
-            public var end: Double
-        }
     }
+    
+    /// ```
+    /// [Int: [DifficultyType: [Double: [Double]]]]
+    ///  ^~~ Song ID
+    /// ```
+    ///
+    /// ```
+    /// [Int: [DifficultyType: [Double: [Double]]]]
+    ///                         ^~~~~~ Skill duration
+    /// ```
+    ///
+    /// ```
+    /// [Int: [DifficultyType: [Double: [Double]]]]
+    ///                   SongMeta Data ^~~~~~~~
+    /// ```
+    public typealias SongMeta = [Int: [DifficultyType: [Double: [Double]]]]
     
     public enum SongTag: String, CaseIterable, Sendable, DoriCache.Cacheable {
         case normal
@@ -631,7 +713,39 @@ extension DoriAPI.Song {
         case special
     }
     
+    @frozen
+    public struct BPM: Sendable, DoriCache.Cacheable {
+        public var bpm: Int
+        public var start: Double
+        public var end: Double
+    }
+    
     public struct MusicVideoMetadata: Sendable, DoriCache.Cacheable {
         public var startAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+    }
+}
+
+// FIXME: Provide an initializer like this for all Preview structures.
+extension DoriAPI.Song.PreviewSong {
+    public init(_ full: DoriAPI.Song.Song) {
+        self.init(
+            id: full.id,
+            tag: full.tag,
+            bandID: full.bandID,
+            jacketImage: full.jacketImage,
+            musicTitle: full.musicTitle,
+            publishedAt: full.publishedAt,
+            closedAt: full.closedAt,
+            difficulty: full.difficulty.mapValues {
+                .init(
+                    playLevel: $0.playLevel,
+                    publishedAt: $0.publishedAt
+                )
+            },
+            length: full.length,
+            notes: full.notes,
+            bpm: full.bpm,
+            musicVideos: full.musicVideos
+        )
     }
 }

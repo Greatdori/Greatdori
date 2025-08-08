@@ -20,7 +20,7 @@ struct SongListView: View {
         List {
             if let songs = searchedSongs ?? songs {
                 ForEach(songs) { song in
-                    NavigationLink(destination: {  }) {
+                    NavigationLink(destination: { SongDetailView(id: song.id) }) {
                         SongCardView(song)
                     }
                 }

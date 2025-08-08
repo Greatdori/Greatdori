@@ -195,6 +195,16 @@ extension DoriAPI.Locale {
         default: return nil
         }
     }
+    
+    internal var rawIntValue: Int {
+        switch self {
+        case .jp: return 0
+        case .en: return 1
+        case .tw: return 2
+        case .cn: return 3
+        case .kr: return 4
+        }
+    }
 }
 
 extension DoriAPI.LocalizedData: Sendable where T: Sendable {}
