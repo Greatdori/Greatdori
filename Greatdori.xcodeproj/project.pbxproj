@@ -419,6 +419,7 @@
 		8C3264052E3C69C000081F4F /* FrontendGacha.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendGacha.swift; sourceTree = "<group>"; };
 		8C3264072E3C723F00081F4F /* GachaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaListView.swift; sourceTree = "<group>"; };
 		8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaDetailView.swift; sourceTree = "<group>"; };
+		8C5AD1AE2E466A3E00E61653 /* PRIVACY_POLICY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PRIVACY_POLICY.md; sourceTree = "<group>"; };
 		8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStoriesView.swift; sourceTree = "<group>"; };
 		8C6C0EC42E41252400D1FB0A /* Package@5.9.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package@5.9.swift"; sourceTree = "<group>"; };
 		8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Greatdori Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -619,6 +620,7 @@
 				8C6C0EC42E41252400D1FB0A /* Package@5.9.swift */,
 				8C818D722E2E671A00D0DD69 /* README.md */,
 				8C0C99C22E2E664900549B5C /* LICENSE.txt */,
+				8C5AD1AE2E466A3E00E61653 /* PRIVACY_POLICY.md */,
 				8C9474442E34DE85003A90B4 /* .editorconfig */,
 				8C9474452E34DF5F003A90B4 /* .gitattributes */,
 				8CD13FE32E300ACE00673E15 /* BuildTool */,
