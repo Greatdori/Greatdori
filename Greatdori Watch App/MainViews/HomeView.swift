@@ -57,7 +57,11 @@ struct HomeView: View {
                                     .resizable()
                                     .clipShape(Circle())
                                     .frame(width: 30, height: 30)
-                                Text("\(character.birthday.components(in: .init(identifier: "Asia/Tokyo")!).month!)月\(character.birthday.components(in: .init(identifier: "Asia/Tokyo")!).day!)日")
+                                if !isTodayBirthday(of: character) {
+                                    Text(birthdayDateFormatter.string(from: character.birthday))
+                                } else {
+                                    Text(character.characterName.forPreferredLocale() ?? birthdayDateFormatter.string(from: character.birthday))
+                                }
                             }
                         }
                     }
@@ -73,7 +77,12 @@ struct HomeView: View {
                     }
                 }
             } header: {
-                Text("生日")
+                if let firstBirthday = birthdays?.first,
+                   isTodayBirthday(of: firstBirthday) {
+                    Text("生日快乐 🎉")
+                } else {
+                    Text("生日")
+                }
             }
             Section {
                 if let latestEvents {
@@ -114,6 +123,20 @@ struct HomeView: View {
         .task {
             await getEvents()
         }
+    }
+    
+    var birthdayDateFormatter: DateFormatter {
+        let result = DateFormatter()
+        result.locale = Locale.current
+        result.setLocalizedDateFormatFromTemplate("MMMd")
+        result.timeZone = .init(identifier: "Asia/Tokyo")
+        return result
+    }
+    func isTodayBirthday(of character: DoriAPI.Character.BirthdayCharacter) -> Bool {
+        let timeZone = TimeZone(identifier: "Asia/Tokyo")!
+        let componments = character.birthday.components(in: timeZone)
+        let nowComponments = Date.now.components
+        return componments.month == nowComponments.month && componments.day == nowComponments.day
     }
     
     func getNews() async {
