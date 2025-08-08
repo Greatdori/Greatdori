@@ -118,7 +118,6 @@
 		8CB4D4F42E449FA30085D57A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4D4F32E449FA00085D57A /* SettingsView.swift */; };
 		8CB4D4F62E44EAEA0085D57A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4F52E44EAEA0085D57A /* Localizable.xcstrings */; };
 		8CB4D4F82E44EAFE0085D57A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4F72E44EAFE0085D57A /* Localizable.xcstrings */; };
-		8CB4D4FC2E4501060085D57A /* Watch-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4FB2E4501060085D57A /* Watch-Info.plist */; };
 		8CB4D4FE2E45A4D30085D57A /* SongDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4D4FD2E45A4CF0085D57A /* SongDetailView.swift */; };
 		8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */; };
 		8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD02E32B5B6004023F7 /* Constructor.swift */; };
@@ -1282,7 +1281,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CB4D4FC2E4501060085D57A /* Watch-Info.plist in Resources */,
 				8CB4D4F82E44EAFE0085D57A /* Localizable.xcstrings in Resources */,
 				8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */,
 			);
@@ -2821,7 +2819,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -2873,7 +2870,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -2925,7 +2921,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -2976,7 +2971,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

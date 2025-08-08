@@ -166,7 +166,7 @@ public extension View {
     }
 }
 
-extension Int?: Identifiable {
+extension Int?: @retroactive Identifiable {
     public var id: Int? { self }
 }
 
