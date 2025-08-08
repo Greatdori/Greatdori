@@ -18,8 +18,8 @@ struct CardWidgets: Widget {
         }
         .supportedFamilies([.systemMedium, .systemLarge, .systemExtraLarge])
         .contentMarginsDisabled()
-        .configurationDisplayName("卡面")
-        .description("展示指定卡面")
+        .configurationDisplayName("Widget.cards")
+        .description("Widget.cards.description")
     }
 }
 
@@ -63,7 +63,7 @@ private struct CardWidgetsEntryView : View {
                 .resizable()
                 .scaledToFill()
         } else {
-            Text("按住后轻触“编辑小组件”以选择卡面")
+            Text("Widget.collections.edit-tip")
                 .padding()
         }
     }

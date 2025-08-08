@@ -43,19 +43,8 @@ private struct Provider: AppIntentTimelineProvider {
     }
     
     func timeline(for configuration: CardCollectionWidgetIntent, in context: Context) async -> Timeline<Entry> {
-        var entries = [CardEntry]()
-        var date = Date.now
-        let calendar = Calendar.current
-        for _ in 0..<2 {
-            // Memory limit of WidgetKit on watchOS is like Rikki during dry run,
-            // we have only 20MB available. Since we have to resize the image,
-            // the limit is only enough for processing 2 timelines.
-            // We can't provide more though we have the ability to generate.
-            entries.append(entry(for: date, align: false, in: configuration.collectionName))
-            date = calendar.date(byAdding: .minute, value: 30, to: date)!
-        }
         return .init(
-            entries: entries,
+            entries: [entry(align: false, in: configuration.collectionName)],
             policy: .atEnd
         )
     }

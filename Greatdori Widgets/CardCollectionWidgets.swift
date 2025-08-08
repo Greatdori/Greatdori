@@ -19,7 +19,7 @@ struct CardCollectionWidgets: Widget {
         }
         .supportedFamilies([.systemMedium, .systemLarge, .systemExtraLarge])
         .contentMarginsDisabled()
-        .configurationDisplayName("Widget.collection")
+        .configurationDisplayName("Widget.collections")
         .description("Widget.collections.description")
     }
 }
@@ -37,15 +37,8 @@ private struct Provider: AppIntentTimelineProvider {
     }
     
     func timeline(for configuration: CardCollectionWidgetIntent, in context: Context) async -> Timeline<Entry> {
-        var entries = [CardEntry]()
-        var date = Date.now
-        let calendar = Calendar.current
-        for _ in 0..<48 {
-            entries.append(entry(for: date, align: false, in: configuration.collectionName))
-            date = calendar.date(byAdding: .minute, value: 30, to: date)!
-        }
-        return .init(
-            entries: entries,
+        .init(
+            entries: [entry(align: false, in: configuration.collectionName)],
             policy: .atEnd
         )
     }
