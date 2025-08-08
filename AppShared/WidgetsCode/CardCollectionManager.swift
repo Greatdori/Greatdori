@@ -108,6 +108,7 @@ class CardCollectionManager {
             case builtin(String)
             case path(String)
             
+            #if !os(macOS)
             var image: UIImage? {
                 let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
                 switch self {
@@ -117,6 +118,17 @@ class CardCollectionManager {
                     return UIImage(contentsOfFile: containerPath + path)
                 }
             }
+            #else
+            var image: NSImage? {
+                let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
+                switch self {
+                case .builtin(let name):
+                    return builtinImage(named: name)
+                case .path(let path):
+                    return NSImage(contentsOfFile: containerPath + path)
+                }
+            }
+            #endif
         }
     }
 }
