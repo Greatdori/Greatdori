@@ -33,7 +33,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                if pageWidth > 675 {
+                ZStack {
                     HStack {
                         VStack {
                             CustomGroupBox { HomeNewsView() }
@@ -49,7 +49,11 @@ struct HomeView: View {
                         }
                     }
                     .padding()
-                } else {
+                    .wrapIf(pageWidth <= 675, in: { content in
+                        content
+                            .opacity(0)
+                            .frame(width: 0, height: 0)
+                    })
                     VStack {
                         CustomGroupBox { HomeNewsView() }
                         CustomGroupBox { HomeBirthdayView() }
@@ -59,10 +63,14 @@ struct HomeView: View {
                         CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp) }
                     }
                     .padding()
+//                    .opacity(pageWidth > 675 ? 0 : 1)
+                    .wrapIf(pageWidth > 675, in: { content in
+                        content
+                            .opacity(0)
+                            .frame(width: 0, height: 0)
+                    })
                 }
-                
             }
-            
             .background(groupedContentBackgroundColor())
             .navigationTitle("App.home")
             .toolbar {

@@ -28,7 +28,7 @@ struct EventDetailView: View {
     @State var latestEventID: Int = 0
     @State var showSubtitle: Bool = false
     var body: some View {
-        NavigationStack {
+        Group {
             if let information {
                 ScrollView {
                     HStack {
@@ -121,9 +121,9 @@ struct EventDetailView: View {
                             Text("#\(eventID)")
                                 .fontDesign(.monospaced)
                         })
-                        .padding(-2)
+//                        .padding(-2)
                         Button(action: {
-                            if latestEventID < eventID {
+                            if eventID < latestEventID {
                                 information = nil
                                 eventID += 1
                             }
@@ -185,7 +185,10 @@ struct EventDetailOverviewView: View {
     @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
     @State var cardsColumnWidth: CGFloat = 0
     @State var cardsTitleWidth: CGFloat = 0
-    @State var cardsContentWidth: CGFloat = 0
+    @State var cardsPercentageWidth: CGFloat = 0
+    @State var cardsContentRegularWidth: CGFloat = 0
+    @State var cardsContentCompactWidth: CGFloat = 0
+    @State var cardsUseCompactLayout = false
     @Binding var cardNavigationDestinationID: Int?
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
@@ -338,95 +341,160 @@ struct EventDetailOverviewView: View {
                         })
                         Divider()
                     }
+                    Group {
+                        Text("(column, title, percentage, regular, compact, useCompact)")
+                        Text("(\(cardsColumnWidth), \(cardsTitleWidth), \(cardsPercentageWidth), \(cardsContentRegularWidth), \(cardsContentCompactWidth), \(cardsUseCompactLayout))")
+                        Text("regular space")
+                        Text("\(cardsColumnWidth - cardsTitleWidth - cardsPercentageWidth - cardsContentRegularWidth)")
+                        Text("compact space")
+                        Text("\(cardsColumnWidth - cardsTitleWidth - cardsPercentageWidth - cardsContentCompactWidth)")
+                    }
+                        .fontDesign(.monospaced)
                     //MARK: Card
-//                    if !cardsArray.isEmpty {
-//                        ListItemView(title: {
-//                            Text("Event.card")
-//                                .bold()
-//                                .background {
-//                                    GeometryReader { geometry in
-//                                        Color.clear
-//                                            .onAppear {
-//                                                cardsTitleWidth = geometry.size.width
+                    if !cardsArray.isEmpty {
+                        ListItemView(title: {
+                            Text("Event.card")
+                                .bold()
+                                .background {
+                                    GeometryReader { geometry in
+                                        Color.clear
+                                            .onAppear {
+                                                cardsTitleWidth = geometry.size.width
+                                            }
+                                            .onChange(of: geometry.size.width) {
+                                                cardsTitleWidth = geometry.size.width
+                                            }
+                                    }
+                                }
+                        }, value: {
+                            HStack {
+                                ZStack {
+//                                    if (cardsColumnWidth - cardsTitleWidth - cardsContentWidth) > 20 {
+                                    // Regular Mode
+                                        HStack {
+                                            ForEach(cardsArray) { card in
+                                                NavigationLink(destination: {
+                                                    //TODO: [NAVI785]CardD
+                                                }, label: {
+                                                    CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                                })
+                                                .contentShape(Rectangle())
+                                                .buttonStyle(.plain)
+                                            }
+                                        }
+                                        .background {
+                                            GeometryReader { geometry in
+                                                Color.clear
+                                                    .onAppear {
+                                                        cardsContentRegularWidth = geometry.size.width
+                                                    }
+                                                    .onChange(of: geometry.size.width) {
+                                                        if geometry.size.width > 5 {
+                                                            cardsContentRegularWidth = geometry.size.width
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                        .onChange(of: cardsContentRegularWidth, {
+                                            if (cardsColumnWidth - cardsTitleWidth - cardsPercentageWidth - cardsContentRegularWidth) < 50 {
+                                                cardsUseCompactLayout = true
+                                            }
+                                            print("[REGULAR CHANGED]")
+                                        })
+                                        .wrapIf(cardsUseCompactLayout, in: { content in
+//                                            cardsContentRegularWidth
+                                            content
+                                            //(cardsColumnWidth - cardsTitleWidth - cardsContentWidth) < 20,
+                                                .opacity(0)
+                                                .frame(width: 0, height: 0)
+                                        })
+//                                    } else {
+                                    // Compact Mode
+                                        Grid(alignment: .trailing) {
+                                            ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
+                                                GridRow {
+                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
+                                                        if item != nil {
+                                                            NavigationLink(destination: {
+                                                                //TODO: [NAVI785]CardD
+                                                            }, label: {
+                                                                CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                                                //                                                        Text("1")
+                                                            })
+                                                            .buttonStyle(.plain)
+                                                        } else {
+                                                            //                                                            CardIconView
+                                                            //                                                            EmptyView()
+                                                            Rectangle()
+                                                                .opacity(0)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+//                                        .onChange(of: cardsContentCompactWidth, {
+//                                            if (cardsColumnWidth - cardsTitleWidth - cardsPercentageWidth - cardsContentCompactWidth) > 99999999 {
+//                                                cardsUseCompactLayout = false
 //                                            }
-//                                            .onChange(of: geometry.size.width) {
-//                                                cardsTitleWidth = geometry.size.width
-//                                            }
+//                                            print("[COMPACT CHANGED]")
+//                                        })
+                                        .background {
+                                            GeometryReader { geometry in
+                                                Color.clear
+                                                    .onAppear {
+                                                        cardsContentCompactWidth = geometry.size.width
+                                                    }
+                                                    .onChange(of: geometry.size.width) {
+                                                        if geometry.size.width > 5 {
+                                                            cardsContentCompactWidth = geometry.size.width
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                        .gridCellAnchor(.trailing)
+                                        .wrapIf(!cardsUseCompactLayout, in: { content in
+                                            content
+                                                .opacity(0)
+                                                .frame(width: 0, height: 0)
+                                        })
 //                                    }
-//                                }
-//                        }, value: {
-//                            HStack {
-//                                if (cardsColumnWidth - cardsTitleWidth - cardsContentWidth) > 20 {
-//                                    HStack {
-//                                        ForEach(cardsArray) { card in
-//                                            NavigationLink(destination: {
-//                                                //TODO: [NAVI785]CardD
-//                                            }, label: {
-//                                                CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-//                                            })
-//                                            .contentShape(Rectangle())
-//                                            .buttonStyle(.plain)
-//                                        }
-//                                    }
-//                                    //                                    .frame(width: CGFloat(cardsArray.count*72+10))
-//                                } else {
-//                                    Grid(alignment: .trailing) {
-//                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
-//                                            GridRow {
-//                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
-//                                                        if item != nil {
-//                                                            NavigationLink(destination: {
-//                                                                //TODO: [NAVI785]CardD
-//                                                            }, label: {
-//                                                                CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-//                                                                //                                                        Text("1")
-//                                                            })
-//                                                            .buttonStyle(.plain)
-//                                                        } else {
-////                                                            CardIconView
-////                                                            EmptyView()
-//                                                            Rectangle()
-//                                                                .opacity(0)
-//                                                        }
-//                                                    }
-//                                            }
-////                                            .frame(width: 72*3+10)
-//                                            
-//                                        }
-//                                        //                                        Text("1")
-//                                    }
-//                                    .gridCellAnchor(.trailing)
-//                                }
-//                                Text("+\(cardsPercentage)%")
-//                                    .lineLimit(1, reservesSpace: true)
-//                            }
-//                            .background {
-//                                GeometryReader { geometry in
-//                                    Color.clear
-//                                        .onAppear {
-//                                            cardsContentWidth = geometry.size.width
-//                                        }
-//                                        .onChange(of: geometry.size.width) {
-//                                            cardsContentWidth = geometry.size.width
-//                                        }
-//                                }
-//                            }
-//                        }/*, compactModeOnly: true*/)
-//                        .background(
-//                            AnyView(
-//                                GeometryReader { geometry in
-//                                    Color.clear
-//                                        .onAppear {
-//                                            cardsColumnWidth = geometry.size.width
-//                                        }
-//                                        .onChange(of: geometry.size.width) {
-//                                            cardsColumnWidth = geometry.size.width
-//                                        }
-//                                }
-//                            )
-//                        )
-//                        Divider()
-//                    }
+                                }
+                                Text("+\(cardsPercentage)%")
+                                    .lineLimit(1, reservesSpace: true)
+                                    .background {
+                                        GeometryReader { geometry in
+                                            Color.clear
+                                                .onAppear {
+                                                    cardsPercentageWidth = geometry.size.width
+                                                }
+                                                .onChange(of: geometry.size.width) {
+                                                    if geometry.size.width > 5 {
+                                                        cardsPercentageWidth = geometry.size.width
+                                                    }
+                                                }
+                                        }
+                                    }
+                            }
+                        }/*, compactModeOnly: true*/)
+                        .background(
+                            AnyView(
+                                GeometryReader { geometry in
+                                    Color.clear
+                                        .onAppear {
+                                            cardsColumnWidth = geometry.size.width
+                                        }
+                                        .onChange(of: geometry.size.width) {
+                                            cardsColumnWidth = geometry.size.width
+                                        }
+                                }
+                            )
+                        )
+                        .onAppear {
+                            
+                        }
+                        
+                        Divider()
+                    }
                     //MARK: Rewards
                     if !rewardsArray.isEmpty {
                         ListItemView(title: {

@@ -49,15 +49,15 @@ struct SettingsView: View {
             }
             .formStyle(.grouped)
             .navigationTitle("Settings")
-            #if !os(macOS)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    DismissButton(action: dismiss.callAsFunction) {
-                        Image(systemName: "xmark")
-                    }
-                }
-            }
-            #endif
+//            #if !os(macOS)
+//            .toolbar {
+//                ToolbarItem(placement: .topBarTrailing) {
+//                    DismissButton(action: dismiss.callAsFunction) {
+//                        Image(systemName: "xmark")
+//                    }
+//                }
+//            }
+//            #endif
         }
     }
 }
