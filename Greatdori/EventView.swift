@@ -24,7 +24,6 @@ struct EventDetailView: View {
     @State var information: DoriFrontend.Event.ExtendedEvent?
     @State var infoIsAvailable = true
     @State var cardNavigationDestinationID: Int?
-    @State var pageWidth: CGFloat = 400
     @State var latestEventID: Int = 0
     @State var showSubtitle: Bool = false
     var body: some View {
@@ -63,23 +62,20 @@ struct EventDetailView: View {
             //                NavigationStack {
             Text("\(id)")
         })
-        .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "#\(eventID)"))
-//        .wrapIf(showSubtitle) { content in
-//            if #available(iOS 26, *) {
-////                if showSubtitle {
-//                    //                if information?.event.eventName.forPreferredLocale() != nil {
-//                    content
-//                        .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(eventID)" : "")
-//                    //                }
-////                } else {
-////                    content
-////                }
-//            } else {
-//                content
-//            }
-//        }
-        //        .navigationTitle(.lineLimit(nil))
-        //        .toolbarTitleDisplayMode(.inline)
+        .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Event") : "")"))
+        #if os(iOS)
+        .wrapIf(showSubtitle) { content in
+            if #available(iOS 26, *) {
+                if showSubtitle {
+                    //                if information?.event.eventName.forPreferredLocale() != nil {
+                    content
+                        .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(eventID)" : "")
+                }
+            } else {
+                content
+            }
+        }
+        #endif
         .onAppear {
             Task {
                 latestEventID = await DoriFrontend.Event.localizedLatestEvent()?.jp?.id ?? 0
@@ -114,12 +110,12 @@ struct EventDetailView: View {
                             Label("Event.previous", systemImage: "arrow.backward")
                         })
                         .disabled(eventID <= 1)
-                        NavigationLink(destination: {
+//                        NavigationLink(destination: {
                             //MARK: [NAVI785] eventList
-                        }, label: {
+//                        }, label: {
                             Text("#\(eventID)")
                                 .fontDesign(.monospaced)
-                        })
+//                        })
 //                        .padding(-2)
                         Button(action: {
                             if eventID < latestEventID {
@@ -142,20 +138,10 @@ struct EventDetailView: View {
                     .onAppear {
                         showSubtitle = true
                     }
+                    .buttonBorderShape(.circle)
                 }
             })
         }
-        .background(
-            GeometryReader { geometry in
-                Color.clear
-                    .onAppear {
-                        pageWidth = geometry.size.width
-                    }
-                    .onChange(of: geometry.size.width) {
-//                        pageWidth = geometry.size.width
-                    }
-            }
-        )
     }
     
     func getInformation(id: Int) async {
@@ -266,6 +252,7 @@ struct EventDetailOverviewView: View {
                     ListItemView(title: {
                         Text("Event.character")
                             .bold()
+                            .fixedSize(horizontal: true, vertical: true)
                     }, value: {
                         VStack(alignment: .trailing) {
                             let keys = eventCharacterPercentageDict.keys.sorted()
@@ -304,6 +291,7 @@ struct EventDetailOverviewView: View {
 #endif
                                     }
                                     Text("+\(percentage)%")
+                                        .fixedSize(horizontal: true, vertical: true)
                                     //
                                 }
                             }
@@ -344,19 +332,10 @@ struct EventDetailOverviewView: View {
                         ListItemView(title: {
                             Text("Event.card")
                                 .bold()
-                                .background {
-                                    GeometryReader { geometry in
-                                        Color.clear
-                                            .onAppear {
-                                                cardsTitleWidth = geometry.size.width
-                                                cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
-                                            }
-                                            .onChange(of: geometry.size.width) {
-                                                cardsTitleWidth = geometry.size.width
-                                                cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
-                                            }
-                                    }
-                                }
+                                .onFrameChange(perform: { geometry in
+                                    cardsTitleWidth = geometry.size.width
+                                    cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
+                                })
                         }, value: {
                             HStack {
                                 ZStack {
@@ -372,19 +351,10 @@ struct EventDetailOverviewView: View {
                                             .buttonStyle(.plain)
                                         }
                                     }
-                                    .background {
-                                        GeometryReader { geometry in
-                                            Color.clear
-                                                .onAppear {
-                                                    cardsContentRegularWidth = geometry.size.width
-                                                    cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
-                                                }
-                                                .onChange(of: geometry.size.width) {
-                                                    cardsContentRegularWidth = geometry.size.width
-                                                    cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
-                                                }
-                                        }
-                                    }
+                                    .onFrameChange(perform: { geometry in
+                                        cardsContentRegularWidth = geometry.size.width
+                                        cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
+                                    })
                                     .wrapIf(cardsUseCompactLayout, in: { content in
                                         content
                                             .opacity(0)
@@ -420,38 +390,23 @@ struct EventDetailOverviewView: View {
                                 }
                                 Text("+\(cardsPercentage)%")
                                     .lineLimit(1, reservesSpace: true)
-                                //                                    .fixedSize()
-                                    .background {
-                                        GeometryReader { geometry in
-                                            Color.clear
-                                                .onAppear {
-                                                    cardsPercentageWidth = geometry.size.width
-                                                    cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
-                                                }
-                                                .onChange(of: geometry.size.width) {
-                                                    cardsPercentageWidth = geometry.size.width
-                                                    cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
-                                                }
-                                        }
-                                    }
+                                    .fixedSize(horizontal: true, vertical: true)
+                                    .onFrameChange(perform: { geometry in
+                                        cardsPercentageWidth = geometry.size.width
+                                        cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
+                                    })
                             }
                         })
                         .onAppear {
                             cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
                         }
-                        .background(
-                            AnyView(
-                                GeometryReader { geometry in
-                                    Color.clear
-                                        .onAppear {
-                                            cardsUseCompactLayout = (geometry.size.width - cardsFixedWidth) < 50
-                                        }
-                                        .onChange(of: geometry.size.width) { value in
-                                            cardsUseCompactLayout = (value - cardsFixedWidth) < 50
-                                        }
-                                }
-                            )
-                        )
+                        .onFrameChange(perform: { geometry in
+                            if (geometry.size.width - cardsFixedWidth) < 50 && !cardsUseCompactLayout {
+                                cardsUseCompactLayout = true
+                            } else if (geometry.size.width - cardsFixedWidth) > 50 && cardsUseCompactLayout {
+                                cardsUseCompactLayout = false
+                            }
+                        })
                         Divider()
                     }
                     //MARK: Rewards
@@ -517,7 +472,6 @@ struct EventDetailOverviewView: View {
                     cardsArraySeperated[i].insert(nil, at: 0)
                 }
             }
-//            print(cardsArraySeperated)
         }
     }
     
@@ -628,6 +582,7 @@ struct MultilingualText: View {
                 ForEach(allLocaleTexts, id: \.self) { localeValue in
                     Button(action: {}, label: {
                         Text(localeValue)
+                            .multilineTextAlignment(.trailing)
                     })
                 }
             }, label: {
@@ -684,6 +639,7 @@ struct MultilingualText: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .multilineTextAlignment(.trailing)
         }
     }
 }
@@ -800,49 +756,6 @@ struct MultilingualTextForCountdown: View {
     }
 }
 
-/*
- struct ListItemView<Content1: View, Content2: View>: View {
- let title: Content1
- let value: Content2
- //    let shouldTitleBeOnTop: Bool
- @State var pageWidth: CGFloat = 600
- 
- init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2/*, shouldTitleBeOnTop: Bool = false*/) {
- self.title = title()
- self.value = value()
- //        self.shouldTitleBeOnTop = shouldTitleBeOnTop
- }
- 
- var body: some View {
- Group {
- 
- HStack {
- //                if shouldTitleBeOnTop {
- //                    VStack {
- //                        title
- //                        Spacer()
- //                    }
- //                } else {
- title
- //                }
- Spacer()
- value
- }
- }
- .background(
- GeometryReader { geometry in
- Color.clear
- .onAppear {
- pageWidth = geometry.size.width
- }
- .onChange(of: geometry.size.width) {
- pageWidth = geometry.size.width
- }
- }
- )
- }
- }
- */
 
 struct ListItemView<Content1: View, Content2: View>: View {
     let title: Content1
@@ -863,74 +776,35 @@ struct ListItemView<Content1: View, Content2: View>: View {
             if (totalAvailableWidth - titleAvailableWidth - valueAvailableWidth) > 5 || compactModeOnly { // HStack (SHORT)
                 HStack {
                     title
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear
-                                    .onAppear {
-                                        titleAvailableWidth = geometry.size.width
-                                    }
-                                    .onChange(of: geometry.size.width) {
-                                        titleAvailableWidth = geometry.size.width
-                                    }
-                            }
-                        )
+                        .fixedSize(horizontal: true, vertical: true)
+                        .onFrameChange(perform: { geometry in
+                            titleAvailableWidth = geometry.size.width
+                        })
                     Spacer()
                     value
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear
-                                    .onAppear {
-                                        valueAvailableWidth = geometry.size.width
-                                    }
-                                    .onChange(of: geometry.size.width) {
-                                        valueAvailableWidth = geometry.size.width
-                                    }
-                            }
-                        )
-                    
+                        .onFrameChange(perform: { geometry in
+                            valueAvailableWidth = geometry.size.width
+                        })
                 }
             } else { // VStack (LONG)
                 VStack(alignment: .leading) {
                     title
-                        .background(
-                            GeometryReader { geometry in
-                                Color.clear
-                                    .onAppear {
-                                        titleAvailableWidth = geometry.size.width
-                                    }
-                                    .onChange(of: geometry.size.width) {
-                                        titleAvailableWidth = geometry.size.width
-                                    }
-                            }
-                        )
+                        .fixedSize(horizontal: true, vertical: true)
+                        .onFrameChange(perform: { geometry in
+                            titleAvailableWidth = geometry.size.width
+                        })
                     HStack {
                         Spacer()
                         value
-                            .background(
-                                GeometryReader { geometry in
-                                    Color.clear
-                                        .onAppear {
-                                            valueAvailableWidth = geometry.size.width
-                                        }
-                                        .onChange(of: geometry.size.width) {
-                                            valueAvailableWidth = geometry.size.width
-                                        }
-                                }
-                            )
+                            .onFrameChange(perform: { geometry in
+                                valueAvailableWidth = geometry.size.width
+                            })
                     }
                 }
             }
         }
-        .background(
-            GeometryReader { geometry in
-                Color.clear
-                    .onAppear {
-                        totalAvailableWidth = geometry.size.width
-                    }
-                    .onChange(of: geometry.size.width) {
-                        totalAvailableWidth = geometry.size.width
-                    }
-            }
-        )
+        .onFrameChange(perform: { geometry in
+            totalAvailableWidth = geometry.size.width
+        })
     }
 }

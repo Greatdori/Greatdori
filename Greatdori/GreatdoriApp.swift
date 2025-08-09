@@ -20,14 +20,10 @@ import SDWebImageSVGCoder
 #if os(macOS)
 let imageButtonSize: CGFloat = 30
 let cardThumbnailSideLength: CGFloat = 64
+let isMACOS = true
 #else
 let imageButtonSize: CGFloat = 35
 let cardThumbnailSideLength: CGFloat = 72
-#endif
-
-#if os(macOS)
-let isMACOS = true
-#else
 let isMACOS = false
 #endif
 

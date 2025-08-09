@@ -254,6 +254,9 @@
         }
       }
     },
+    "Event" : {
+
+    },
     "Event.attribute" : {
       "localizations" : {
         "en" : {
