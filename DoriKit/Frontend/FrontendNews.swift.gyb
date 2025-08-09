@@ -227,7 +227,7 @@ extension DoriFrontend {
 }
 
 extension DoriFrontend.News {
-    public struct ListItem: Sendable, DoriCache.Cacheable {
+    public struct ListItem: Sendable, Hashable, DoriCache.Cacheable {
         public var type: ItemType
         public var relatedID: Int
         public var title: String
@@ -235,7 +235,7 @@ extension DoriFrontend.News {
         public var timestamp: Date
         public var tags: [String]
         
-        public enum ItemType: Sendable, DoriCache.Cacheable {
+        public enum ItemType: Sendable, Hashable, DoriCache.Cacheable {
             case article
             case song
             case loginCampaign

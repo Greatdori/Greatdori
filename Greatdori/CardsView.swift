@@ -517,18 +517,10 @@ struct CardIconView: View {
             DispatchQueue.main.async {
                 cardTitle = fullCard?.prefix
             }
-            
-            if let cardCharacterID = fullCard?.characterID {
-                DoriCache.withCache(id: "CharacterDetail_\(cardCharacterID)") {
-                    await DoriFrontend.Character.extendedInformation(of: cardCharacterID)
-                }.onUpdate {
-                    if let information = $0 {
-                        DispatchQueue.main.async {
-                            self.cardCharacterName = information.character.characterName
-                            isCardInfoAvailable = true
-                        }
-                    }
-                }
+            if let cardCharacterID = fullCard?.characterID,
+               let name = DoriCache.preCache.characterDetails[cardCharacterID]?.characterName {
+                self.cardCharacterName = name
+                isCardInfoAvailable = true
             }
         }
     }

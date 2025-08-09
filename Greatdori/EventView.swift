@@ -339,32 +339,26 @@ struct EventDetailOverviewView: View {
                         }, value: {
                             HStack {
                                 ZStack {
-                                    // Regular Mode
                                     HStack {
                                         ForEach(cardsArray) { card in
-                                            NavigationLink(destination: {
-                                                //TODO: [NAVI785]CardD
-                                            }, label: {
-                                                CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                            })
-                                            .contentShape(Rectangle())
-                                            .buttonStyle(.plain)
+                                            Rectangle() // Pseudo target for calculating regular size
+                                                .fill(Color.clear)
+                                                .frame(width: cardThumbnailSideLength, height: cardThumbnailSideLength)
                                         }
                                     }
                                     .onFrameChange(perform: { geometry in
                                         cardsContentRegularWidth = geometry.size.width
                                         cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
                                     })
-                                    .wrapIf(cardsUseCompactLayout, in: { content in
-                                        content
-                                            .opacity(0)
-                                            .frame(width: 0, height: 0)
-                                    })
-                                    // Compact Mode
                                     Grid(alignment: .trailing) {
-                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
+                                        let separated = if cardsUseCompactLayout {
+                                            cardsArraySeperated
+                                        } else {
+                                            [cardsArraySeperated.flatMap { $0 }.compactMap { $0 }]
+                                        }
+                                        ForEach(separated, id: \.self) { rowContent in
                                             GridRow {
-                                                ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
+                                                ForEach(rowContent, id: \.id) { item in
                                                     if item != nil {
                                                         NavigationLink(destination: {
                                                             //TODO: [NAVI785]CardD
@@ -382,11 +376,6 @@ struct EventDetailOverviewView: View {
                                         }
                                     }
                                     .gridCellAnchor(.trailing)
-                                    .wrapIf(!cardsUseCompactLayout, in: { content in
-                                        content
-                                            .opacity(0)
-                                            .frame(width: 0, height: 0)
-                                    })
                                 }
                                 Text("+\(cardsPercentage)%")
                                     .lineLimit(1, reservesSpace: true)

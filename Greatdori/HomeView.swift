@@ -14,11 +14,23 @@
 
 import SwiftUI
 import DoriKit
+import Combine
 import SDWebImageSwiftUI
 
 let loadingAnimationDuration = 0.1
 let localeFromStringDict: [String: DoriAPI.Locale] = ["jp": .jp, "cn": .cn, "tw": .tw, "en": .en, "kr": .kr]
 let localeToStringDict: [DoriAPI.Locale: String] = [.jp: "JP", .en: "EN", .tw: "TW", .cn: "CN", .kr: "KR"]
+
+private let _homeNavigationSubject = PassthroughSubject<NavigationPage?, Never>()
+@_transparent
+private func homeNavigate(to page: NavigationPage?) {
+    _homeNavigationSubject.send(page)
+}
+enum NavigationPage: Hashable {
+    case news
+    case characterDetail(Int)
+    case eventDetail(Int)
+}
 
 struct HomeView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
@@ -26,6 +38,7 @@ struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var pageWidth: CGFloat = 600
     @State var showSettingsSheet = false
+    @State var currentNavigationPage: NavigationPage?
     @AppStorage("homeEventServer1") var homeEventServer1 = "jp"
     @AppStorage("homeEventServer2") var homeEventServer2 = "cn"
     @AppStorage("homeEventServer3") var homeEventServer3 = "tw"
@@ -49,11 +62,8 @@ struct HomeView: View {
                         }
                     }
                     .padding()
-                    .wrapIf(pageWidth <= 675, in: { content in
-                        content
-                            .opacity(0)
-                            .frame(width: 0, height: 0)
-                    })
+                    .opacity(pageWidth <= 675 ? 0 : 1)
+                    .frame(width: pageWidth <= 675 ? 0 : nil, height: pageWidth <= 675 ? 0 : nil)
                     VStack {
                         CustomGroupBox { HomeNewsView() }
                         CustomGroupBox { HomeBirthdayView() }
@@ -63,16 +73,22 @@ struct HomeView: View {
                         CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp) }
                     }
                     .padding()
-//                    .opacity(pageWidth > 675 ? 0 : 1)
-                    .wrapIf(pageWidth > 675, in: { content in
-                        content
-                            .opacity(0)
-                            .frame(width: 0, height: 0)
-                    })
+                    .opacity(pageWidth > 675 ? 0 : 1)
+                    .frame(width: pageWidth > 675 ? 0 : nil, height: pageWidth > 675 ? 0 : nil)
                 }
             }
             .background(groupedContentBackgroundColor())
             .navigationTitle("App.home")
+            .navigationDestination(item: $currentNavigationPage) { page in
+                switch page {
+                case .news:
+                    EmptyView() // FIXME
+                case .characterDetail(let id):
+                    EmptyView() // FIXME
+                case .eventDetail(let id):
+                    EventDetailView(id: id)
+                }
+            }
             .toolbar {
                 if platform != .mac && sizeClass == .compact {
                     ToolbarItem(placement: .automatic, content: {
@@ -99,6 +115,9 @@ struct HomeView: View {
                     }
             }
         )
+        .onReceive(_homeNavigationSubject) { page in
+            currentNavigationPage = page
+        }
     }
 }
 
@@ -111,8 +130,8 @@ struct HomeNewsView: View {
     }
     
     var body: some View {
-        NavigationLink(destination: {
-            //TODO: [NAVI785] News
+        Button(action: {
+            homeNavigate(to: .news)
         }, label: {
             HStack {
                 VStack(alignment: .leading) {
@@ -240,8 +259,8 @@ struct HomeBirthdayView: View {
                                 // If she is not the last person & the person next have the same birthday & today's not her birthday.
                                 // (Cond. 3 is because labels should be expanded to show their full name during their birthday.)
                                 Menu(content: {
-                                    NavigationLink(destination: {
-                                        //TODO: [NAVI785] Duo 1st CharD
+                                    Button(action: {
+                                        homeNavigate(to: .characterDetail(birthdays[i].id))
                                     }, label: {
                                         HStack {
 #if os(iOS)
@@ -253,8 +272,8 @@ struct HomeBirthdayView: View {
                                             Text(birthdays[i].characterName.forPreferredLocale() ?? "")
                                         }
                                     })
-                                    NavigationLink(destination: {
-                                        //TODO: [NAVI785] Duo 2nd CharD
+                                    Button(action: {
+                                        homeNavigate(to: .characterDetail(birthdays[i + 1].id))
                                     }, label: {
                                         HStack {
 #if os(iOS)
@@ -287,9 +306,8 @@ struct HomeBirthdayView: View {
                                 // If she is not the first person & the person in front have the same birthday & today's not her birthday.
                                 EmptyView()
                             } else {
-                                NavigationLink(destination: {
-                                    //birthdays[i].id/
-//                                   //TODO: [NAVI785]CharD
+                                Button(action: {
+                                    homeNavigate(to: .characterDetail(birthdays[i].id))
                                 }, label: {
                                     WebImage(url: birthdays[i].iconImageURL)
                                         .resizable()
@@ -366,8 +384,8 @@ struct HomeEventsView: View {
         ZStack {
             Group {
                 if let latestEvents {
-                    NavigationLink(destination: {
-                        EventDetailView(id: latestEvents.forLocale(locale)!.id)
+                    Button(action: {
+                        homeNavigate(to: .eventDetail(latestEvents.forLocale(locale)!.id))
                     }, label: {
                         EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
                     })
