@@ -31,7 +31,7 @@ struct SongMetaView: View {
             if let meta {
                 Section {
                     ForEach(Array(meta.enumerated()), id: \.element.self) { (index, meta) in
-                        NavigationLink(destination: {  }) {
+                        NavigationLink(destination: { SongMetaDetailView(meta: meta) }) {
                             HStack {
                                 Text(verbatim: "#\(index + 1)")
                                     .bold()
@@ -105,5 +105,88 @@ struct SongMetaView: View {
                 availability = false
             }
         }
+    }
+}
+
+private struct SongMetaDetailView: View {
+    var meta: DoriFrontend.Song.SongWithMeta
+    var body: some View {
+        List {
+            Section {
+                NavigationLink(destination: { SongDetailView(id: meta.song.id) }) {
+                    SongCardView(meta.song)
+                }
+            }
+            Section {
+                VStack(alignment: .leading) {
+                    Text("时长")
+                        .font(.system(size: 16, weight: .medium))
+                    Text({
+                        let minutes = Int(meta.meta.length) / 60
+                        let remainingSeconds = Int(meta.meta.length) % 60
+                        let tenths = Int((meta.meta.length - floor(meta.meta.length)) * 10)
+                        return String(format: "%d:%02d.%d", minutes, remainingSeconds, tenths)
+                    }())
+                    .font(.system(size: 14))
+                    .opacity(0.6)
+                }
+                VStack(alignment: .leading) {
+                    Text("分数")
+                        .font(.system(size: 16, weight: .medium))
+                    Text(verbatim: "\(Int(meta.meta.score * 100))%")
+                        .font(.system(size: 14))
+                        .opacity(0.6)
+                }
+                VStack(alignment: .leading) {
+                    Text("效率")
+                        .font(.system(size: 16, weight: .medium))
+                    Text(verbatim: "\(Int(meta.meta.efficiency * 100))%")
+                        .font(.system(size: 14))
+                        .opacity(0.6)
+                }
+                VStack(alignment: .leading) {
+                    Text(verbatim: "BPM")
+                        .font(.system(size: 16, weight: .medium))
+                    Text(String(meta.meta.bpm))
+                        .font(.system(size: 14))
+                        .opacity(0.6)
+                }
+                VStack(alignment: .leading) {
+                    Text("音符总数")
+                        .font(.system(size: 16, weight: .medium))
+                    Text(String(meta.meta.notes))
+                        .font(.system(size: 14))
+                        .opacity(0.6)
+                }
+                VStack(alignment: .leading) {
+                    Text("每秒音符总数")
+                        .font(.system(size: 16, weight: .medium))
+                    Text(String(format: "%.1f", meta.meta.notesPerSecond))
+                        .font(.system(size: 14))
+                        .opacity(0.6)
+                }
+                VStack(alignment: .leading) {
+                    Text("技能依赖度")
+                        .font(.system(size: 16, weight: .medium))
+                    Text(verbatim: "\(Int(meta.meta.sr * 100))%")
+                        .font(.system(size: 14))
+                        .opacity(0.6)
+                }
+            } header: {
+                HStack {
+                    Text("Meta")
+                    Spacer()
+                    Text(String(meta.meta.playLevel))
+                        .foregroundStyle(.black)
+                        .frame(width: 20, height: 20)
+                        .background {
+                            Circle()
+                                .fill(meta.meta.difficulty.color)
+                        }
+                }
+            }
+            .listRowBackground(Color.clear)
+        }
+        .navigationTitle(meta.song.musicTitle.forPreferredLocale() ?? "")
     }
 }

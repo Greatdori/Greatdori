@@ -178,7 +178,9 @@ struct EventDetailView: View {
                 if !information.songs.isEmpty {
                     Section {
                         FoldableList(information.songs.reversed()) { song in
-                            SongCardView(song)
+                            NavigationLink(destination: { SongDetailView(id: song.id) }) {
+                                SongCardView(song)
+                            }
                         }
                     } header: {
                         Text("歌曲")
