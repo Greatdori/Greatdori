@@ -188,3 +188,34 @@ extension Array {
 extension Optional {
     var id: Self { self }
 }
+
+extension View {
+    /// Performs action when frame of attached view changes.
+    ///
+    /// ```swift
+    /// struct MyView: View {
+    ///     var body: some View {
+    ///         MyView()
+    ///             .onFrameChange { geometry in
+    ///                 print(geometry)
+    ///             }
+    ///     }
+    /// }
+    /// ```
+    /// 
+    /// - Parameter action: The action to perform.
+    /// - Returns: A view that triggers `action` when its frame changes.
+    func onFrameChange(perform action: @escaping (_ geometry: GeometryProxy) -> Void) -> some View {
+        background(
+            GeometryReader { geometry in
+                Color.clear
+                    .onAppear {
+                        action(geometry)
+                    }
+                    .onChange(of: geometry.size) {
+                        action(geometry)
+                    }
+            }
+        )
+    }
+}
