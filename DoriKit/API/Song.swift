@@ -468,7 +468,7 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Song {
-    public struct PreviewSong: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct PreviewSong: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var tag: SongTag
         public var bandID: Int
@@ -510,7 +510,7 @@ extension DoriAPI.Song {
             self.musicVideos = musicVideos
         }
         
-        public struct Difficulty: Sendable, DoriCache.Cacheable {
+        public struct Difficulty: Sendable, Hashable, DoriCache.Cacheable {
             public var playLevel: Int
             public var publishedAt: DoriAPI.LocalizedData<Date>? // String(JSON) -> Date(Swift)
             
@@ -705,7 +705,7 @@ extension DoriAPI.Song {
     }
     
     @frozen
-    public enum DifficultyType: Int, DoriCache.Cacheable {
+    public enum DifficultyType: Int, Hashable, DoriCache.Cacheable {
         case easy = 0
         case normal
         case hard
@@ -714,13 +714,13 @@ extension DoriAPI.Song {
     }
     
     @frozen
-    public struct BPM: Sendable, DoriCache.Cacheable {
+    public struct BPM: Sendable, Hashable, DoriCache.Cacheable {
         public var bpm: Int
         public var start: Double
         public var end: Double
     }
     
-    public struct MusicVideoMetadata: Sendable, DoriCache.Cacheable {
+    public struct MusicVideoMetadata: Sendable, Hashable, DoriCache.Cacheable {
         public var startAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
     }
 }

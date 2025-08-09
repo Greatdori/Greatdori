@@ -74,7 +74,8 @@ extension DoriFrontend {
             skillLevel: Int,
             perfectRate: Double,
             downtime: Double,
-            fever: Bool
+            fever: Bool,
+            sort: MetaSort = .efficiency
         ) async -> [SongWithMeta]? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Song.meta()
@@ -104,7 +105,24 @@ extension DoriFrontend {
                 }
             }
             
-            return result
+            switch sort {
+            case .difficulty:
+                return result.sorted { $0.meta.difficulty.rawValue > $1.meta.difficulty.rawValue }
+            case .length:
+                return result.sorted { $0.meta.length > $1.meta.length }
+            case .score:
+                return result.sorted { $0.meta.score > $1.meta.score }
+            case .efficiency:
+                return result.sorted { $0.meta.efficiency > $1.meta.efficiency }
+            case .bpm:
+                return result.sorted { $0.meta.bpm > $1.meta.bpm }
+            case .notes:
+                return result.sorted { $0.meta.notes > $1.meta.notes }
+            case .notesPerSecond:
+                return result.sorted { $0.meta.notesPerSecond > $1.meta.notesPerSecond }
+            case .sr:
+                return result.sorted { $0.meta.sr > $1.meta.sr }
+            }
         }
         public static func meta(
             for song: DoriAPI.Song.PreviewSong,
@@ -204,7 +222,7 @@ extension DoriFrontend {
             let multipleBpm = bpmInfo.count > 1
             let noteCount = song.notes[difficulty] ?? 0
             let notesPerSecond = song.length > 0 ? Double(noteCount) / song.length : 0
-            let scoreRatio = (totalScore != 0) ? (c / (r + c)) : 0
+            let sr = (totalScore != 0) ? (c / (r + c)) : 0
             
             return .init(
                 id: song.id,
@@ -217,7 +235,7 @@ extension DoriFrontend {
                 hasMultipleBpms: multipleBpm,
                 notes: noteCount,
                 notesPerSecond: notesPerSecond,
-                scoreRatio: scoreRatio
+                sr: sr
             )
         }
         
@@ -290,7 +308,7 @@ extension DoriFrontend.Song {
     public typealias PreviewSong = DoriAPI.Song.PreviewSong
     public typealias Song = DoriAPI.Song.Song
     
-    public struct Meta: Sendable, DoriCache.Cacheable {
+    public struct Meta: Sendable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var difficulty: DoriAPI.Song.DifficultyType
         public var playLevel: Int
@@ -301,11 +319,21 @@ extension DoriFrontend.Song {
         public var hasMultipleBpms: Bool
         public var notes: Int
         public var notesPerSecond: Double
-        public var scoreRatio: Double
+        public var sr: Double
     }
-    public struct SongWithMeta: Sendable, DoriCache.Cacheable {
-        let song: PreviewSong
-        let meta: Meta
+    public enum MetaSort: String, Hashable, Sendable {
+        case difficulty
+        case length
+        case score
+        case efficiency
+        case bpm
+        case notes
+        case notesPerSecond
+        case sr
+    }
+    public struct SongWithMeta: Sendable, Hashable, DoriCache.Cacheable {
+        public var song: PreviewSong
+        public var meta: Meta
     }
     
     public struct ExtendedSong: Sendable, DoriCache.Cacheable {

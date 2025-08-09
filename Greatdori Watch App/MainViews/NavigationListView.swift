@@ -103,6 +103,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.songMeta) {
+                    Label {
+                        Text("歌曲 Meta")
+                    } icon: {
+                        Image(systemName: "music.pages.fill")
+                            .foregroundStyle(.accent)
+                    }
+                }
             } header: {
                 Text("信息")
             }

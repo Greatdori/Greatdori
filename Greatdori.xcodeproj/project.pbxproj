@@ -30,6 +30,7 @@
 		8C3264062E3C69C900081F4F /* FrontendGacha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264052E3C69C000081F4F /* FrontendGacha.swift */; };
 		8C3264082E3C724900081F4F /* GachaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264072E3C723F00081F4F /* GachaListView.swift */; };
 		8C32640A2E3CB4D000081F4F /* GachaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */; };
+		8C5AD1B02E46F96700E61653 /* SongMetaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */; };
 		8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */; };
 		8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */; };
 		8C6C0ECD2E422F9000D1FB0A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */; };
@@ -420,6 +421,7 @@
 		8C3264072E3C723F00081F4F /* GachaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaListView.swift; sourceTree = "<group>"; };
 		8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaDetailView.swift; sourceTree = "<group>"; };
 		8C5AD1AE2E466A3E00E61653 /* PRIVACY_POLICY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PRIVACY_POLICY.md; sourceTree = "<group>"; };
+		8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongMetaView.swift; sourceTree = "<group>"; };
 		8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStoriesView.swift; sourceTree = "<group>"; };
 		8C6C0EC42E41252400D1FB0A /* Package@5.9.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package@5.9.swift"; sourceTree = "<group>"; };
 		8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Greatdori Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -815,6 +817,7 @@
 				8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */,
 				8CB4D46D2E4309370085D57A /* SongListView.swift */,
 				8CB4D4FD2E45A4CF0085D57A /* SongDetailView.swift */,
+				8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */,
 			);
 			path = Information;
 			sourceTree = "<group>";
@@ -1411,6 +1414,7 @@
 				8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */,
 				8C923D932E307088003AFC0A /* CharacterDetailView.swift in Sources */,
 				8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */,
+				8C5AD1B02E46F96700E61653 /* SongMetaView.swift in Sources */,
 				8C94746B2E3ADE27003A90B4 /* StoryViewerView.swift in Sources */,
 				8C923D8F2E305FF8003AFC0A /* Screen.swift in Sources */,
 				8CB4D46E2E43093A0085D57A /* SongListView.swift in Sources */,
