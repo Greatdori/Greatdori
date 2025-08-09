@@ -87,7 +87,6 @@ struct EventDetailView: View {
         }
         .onChange(of: eventID, {
             Task {
-                print("on change of eventID: \(eventID)")
                 await getInformation(id: eventID)
             }
         })
@@ -183,11 +182,10 @@ struct EventDetailOverviewView: View {
     @State var cardsArraySeperated: [[DoriFrontend.Card.PreviewCard?]] = []
     @State var cardsPercentage: Int = -100
     @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
-    @State var cardsColumnWidth: CGFloat = 0
-    @State var cardsTitleWidth: CGFloat = 0
-    @State var cardsPercentageWidth: CGFloat = 0
-    @State var cardsContentRegularWidth: CGFloat = 0
-    @State var cardsContentCompactWidth: CGFloat = 0
+    @State var cardsTitleWidth: CGFloat = 0 // Fixed
+    @State var cardsPercentageWidth: CGFloat = 0 // Fixed
+    @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
+    @State var cardsFixedWidth: CGFloat = 0 //Fixed
     @State var cardsUseCompactLayout = false
     @Binding var cardNavigationDestinationID: Int?
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
@@ -341,15 +339,6 @@ struct EventDetailOverviewView: View {
                         })
                         Divider()
                     }
-                    Group {
-                        Text("(column, title, percentage, regular, compact, useCompact)")
-                        Text("(\(cardsColumnWidth), \(cardsTitleWidth), \(cardsPercentageWidth), \(cardsContentRegularWidth), \(cardsContentCompactWidth), \(cardsUseCompactLayout))")
-                        Text("regular space")
-                        Text("\(cardsColumnWidth - cardsTitleWidth - cardsPercentageWidth - cardsContentRegularWidth)")
-                        Text("compact space")
-                        Text("\(cardsColumnWidth - cardsTitleWidth - cardsPercentageWidth - cardsContentCompactWidth)")
-                    }
-                        .fontDesign(.monospaced)
                     //MARK: Card
                     if !cardsArray.isEmpty {
                         ListItemView(title: {
@@ -360,139 +349,109 @@ struct EventDetailOverviewView: View {
                                         Color.clear
                                             .onAppear {
                                                 cardsTitleWidth = geometry.size.width
+                                                cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
                                             }
                                             .onChange(of: geometry.size.width) {
                                                 cardsTitleWidth = geometry.size.width
+                                                cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
                                             }
                                     }
                                 }
                         }, value: {
                             HStack {
                                 ZStack {
-//                                    if (cardsColumnWidth - cardsTitleWidth - cardsContentWidth) > 20 {
                                     // Regular Mode
-                                        HStack {
-                                            ForEach(cardsArray) { card in
-                                                NavigationLink(destination: {
-                                                    //TODO: [NAVI785]CardD
-                                                }, label: {
-                                                    CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                                })
-                                                .contentShape(Rectangle())
-                                                .buttonStyle(.plain)
-                                            }
+                                    HStack {
+                                        ForEach(cardsArray) { card in
+                                            NavigationLink(destination: {
+                                                //TODO: [NAVI785]CardD
+                                            }, label: {
+                                                CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                            })
+                                            .contentShape(Rectangle())
+                                            .buttonStyle(.plain)
                                         }
-                                        .background {
-                                            GeometryReader { geometry in
-                                                Color.clear
-                                                    .onAppear {
-                                                        cardsContentRegularWidth = geometry.size.width
-                                                    }
-                                                    .onChange(of: geometry.size.width) {
-                                                        if geometry.size.width > 5 {
-                                                            cardsContentRegularWidth = geometry.size.width
-                                                        }
-                                                    }
-                                            }
+                                    }
+                                    .background {
+                                        GeometryReader { geometry in
+                                            Color.clear
+                                                .onAppear {
+                                                    cardsContentRegularWidth = geometry.size.width
+                                                    cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
+                                                }
+                                                .onChange(of: geometry.size.width) {
+                                                    cardsContentRegularWidth = geometry.size.width
+                                                    cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
+                                                }
                                         }
-                                        .onChange(of: cardsContentRegularWidth, {
-                                            if (cardsColumnWidth - cardsTitleWidth - cardsPercentageWidth - cardsContentRegularWidth) < 50 {
-                                                cardsUseCompactLayout = true
-                                            }
-                                            print("[REGULAR CHANGED]")
-                                        })
-                                        .wrapIf(cardsUseCompactLayout, in: { content in
-//                                            cardsContentRegularWidth
-                                            content
-                                            //(cardsColumnWidth - cardsTitleWidth - cardsContentWidth) < 20,
-                                                .opacity(0)
-                                                .frame(width: 0, height: 0)
-                                        })
-//                                    } else {
+                                    }
+                                    .wrapIf(cardsUseCompactLayout, in: { content in
+                                        content
+                                            .opacity(0)
+                                            .frame(width: 0, height: 0)
+                                    })
                                     // Compact Mode
-                                        Grid(alignment: .trailing) {
-                                            ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
-                                                GridRow {
-                                                    ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
-                                                        if item != nil {
-                                                            NavigationLink(destination: {
-                                                                //TODO: [NAVI785]CardD
-                                                            }, label: {
-                                                                CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                                                //                                                        Text("1")
-                                                            })
-                                                            .buttonStyle(.plain)
-                                                        } else {
-                                                            //                                                            CardIconView
-                                                            //                                                            EmptyView()
-                                                            Rectangle()
-                                                                .opacity(0)
-                                                        }
+                                    Grid(alignment: .trailing) {
+                                        ForEach(0..<cardsArraySeperated.count, id: \.self) { rowIndex in
+                                            GridRow {
+                                                ForEach(cardsArraySeperated[rowIndex], id: \.id) { item in
+                                                    if item != nil {
+                                                        NavigationLink(destination: {
+                                                            //TODO: [NAVI785]CardD
+                                                        }, label: {
+                                                            CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                                        })
+                                                        .buttonStyle(.plain)
+                                                    } else {
+                                                        Rectangle()
+                                                            .opacity(0)
+                                                            .frame(width: 0, height: 0)
                                                     }
                                                 }
                                             }
                                         }
-//                                        .onChange(of: cardsContentCompactWidth, {
-//                                            if (cardsColumnWidth - cardsTitleWidth - cardsPercentageWidth - cardsContentCompactWidth) > 99999999 {
-//                                                cardsUseCompactLayout = false
-//                                            }
-//                                            print("[COMPACT CHANGED]")
-//                                        })
-                                        .background {
-                                            GeometryReader { geometry in
-                                                Color.clear
-                                                    .onAppear {
-                                                        cardsContentCompactWidth = geometry.size.width
-                                                    }
-                                                    .onChange(of: geometry.size.width) {
-                                                        if geometry.size.width > 5 {
-                                                            cardsContentCompactWidth = geometry.size.width
-                                                        }
-                                                    }
-                                            }
-                                        }
-                                        .gridCellAnchor(.trailing)
-                                        .wrapIf(!cardsUseCompactLayout, in: { content in
-                                            content
-                                                .opacity(0)
-                                                .frame(width: 0, height: 0)
-                                        })
-//                                    }
+                                    }
+                                    .gridCellAnchor(.trailing)
+                                    .wrapIf(!cardsUseCompactLayout, in: { content in
+                                        content
+                                            .opacity(0)
+                                            .frame(width: 0, height: 0)
+                                    })
                                 }
                                 Text("+\(cardsPercentage)%")
                                     .lineLimit(1, reservesSpace: true)
+                                //                                    .fixedSize()
                                     .background {
                                         GeometryReader { geometry in
                                             Color.clear
                                                 .onAppear {
                                                     cardsPercentageWidth = geometry.size.width
+                                                    cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
                                                 }
                                                 .onChange(of: geometry.size.width) {
-                                                    if geometry.size.width > 5 {
-                                                        cardsPercentageWidth = geometry.size.width
-                                                    }
+                                                    cardsPercentageWidth = geometry.size.width
+                                                    cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
                                                 }
                                         }
                                     }
                             }
-                        }/*, compactModeOnly: true*/)
+                        })
+                        .onAppear {
+                            cardsFixedWidth = cardsContentRegularWidth + cardsTitleWidth + cardsPercentageWidth
+                        }
                         .background(
                             AnyView(
                                 GeometryReader { geometry in
                                     Color.clear
                                         .onAppear {
-                                            cardsColumnWidth = geometry.size.width
+                                            cardsUseCompactLayout = (geometry.size.width - cardsFixedWidth) < 50
                                         }
-                                        .onChange(of: geometry.size.width) {
-                                            cardsColumnWidth = geometry.size.width
+                                        .onChange(of: geometry.size.width) { value in
+                                            cardsUseCompactLayout = (value - cardsFixedWidth) < 50
                                         }
                                 }
                             )
                         )
-                        .onAppear {
-                            
-                        }
-                        
                         Divider()
                     }
                     //MARK: Rewards

@@ -12,19 +12,6 @@
       },
       "shouldTranslate" : false
     },
-    "(%lf, %lf, %lf, %lf, %lf, %@)" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "(%1$lf, %2$lf, %3$lf, %4$lf, %5$lf, %6$@)"
-          }
-        }
-      }
-    },
-    "(column, title, percentage, regular, compact, useCompact)" : {
-
-    },
     "#%@" : {
       "shouldTranslate" : false
     },
@@ -201,9 +188,6 @@
       }
     },
     "community" : {
-
-    },
-    "compact space" : {
 
     },
     "Debug.pre-cache-unavailable-alert.dismiss" : {
@@ -859,9 +843,6 @@
       }
     },
     "leaderboard" : {
-
-    },
-    "regular space" : {
 
     },
     "Settings" : {
