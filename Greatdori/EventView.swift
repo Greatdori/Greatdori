@@ -764,7 +764,7 @@ struct ListItemView<Content1: View, Content2: View>: View {
     
     var body: some View {
         Group {
-            if (totalAvailableWidth - titleAvailableWidth - valueAvailableWidth) > 5 || compactModeOnly { // HStack (SHORT)
+            if compactModeOnly || (totalAvailableWidth - titleAvailableWidth - valueAvailableWidth) > 5 { // HStack (SHORT)
                 HStack {
                     title
                         .fixedSize(horizontal: true, vertical: true)

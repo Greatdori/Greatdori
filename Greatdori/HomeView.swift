@@ -36,7 +36,7 @@ struct HomeView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     @Environment(\.platform) var platform
     @Environment(\.colorScheme) var colorScheme
-    @State var pageWidth: CGFloat = 600
+    @State var useCompactVariant = true
     @State var showSettingsSheet = false
     @State var currentNavigationPage: NavigationPage?
     @AppStorage("homeEventServer1") var homeEventServer1 = "jp"
@@ -62,8 +62,8 @@ struct HomeView: View {
                         }
                     }
                     .padding()
-                    .opacity(pageWidth <= 675 ? 0 : 1)
-                    .frame(width: pageWidth <= 675 ? 0 : nil, height: pageWidth <= 675 ? 0 : nil)
+                    .opacity(useCompactVariant ? 0 : 1)
+                    .frame(width: useCompactVariant ? 0 : nil, height: useCompactVariant ? 0 : nil)
                     VStack {
                         CustomGroupBox { HomeNewsView() }
                         CustomGroupBox { HomeBirthdayView() }
@@ -73,8 +73,8 @@ struct HomeView: View {
                         CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp) }
                     }
                     .padding()
-                    .opacity(pageWidth > 675 ? 0 : 1)
-                    .frame(width: pageWidth > 675 ? 0 : nil, height: pageWidth > 675 ? 0 : nil)
+                    .opacity(!useCompactVariant ? 0 : 1)
+                    .frame(width: !useCompactVariant ? 0 : nil, height: !useCompactVariant ? 0 : nil)
                 }
             }
             .background(groupedContentBackgroundColor())
@@ -104,17 +104,13 @@ struct HomeView: View {
                 SettingsView()
             })
         }
-        .background(
-            GeometryReader { geometry in
-                Color.clear
-                    .onAppear {
-                        pageWidth = geometry.size.width
-                    }
-                    .onChange(of: geometry.size.width) {
-                        pageWidth = geometry.size.width
-                    }
+        .onFrameChange { geometry in
+            if useCompactVariant && geometry.size.width > 675 {
+                useCompactVariant = false
+            } else if !useCompactVariant && geometry.size.width <= 675 {
+                useCompactVariant = true
             }
-        )
+        }
         .onReceive(_homeNavigationSubject) { page in
             currentNavigationPage = page
         }
