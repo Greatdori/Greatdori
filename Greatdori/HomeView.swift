@@ -386,6 +386,7 @@ struct HomeEventsView: View {
                 if let latestEvents {
                     Button(action: {
                         homeNavigate(to: .eventDetail(latestEvents.forLocale(locale)!.id))
+//                        homeNavigate(to: .eventDetail(180))
                     }, label: {
                         EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
                     })

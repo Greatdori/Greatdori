@@ -149,7 +149,8 @@
 		8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FC32E2FE2BF00673E15 /* Logger.swift */; };
 		8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FCA2E2FEFCC00673E15 /* Date+.swift */; };
 		8CD13FE72E300D2300673E15 /* FrontendNews.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */; };
-		E93265342E37A322003F9AAF /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93265332E37A31F003F9AAF /* CardsView.swift */; };
+		E9140C592E47894200D6589E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9140C582E47893E00D6589E /* CardView.swift */; };
+		E93265342E37A322003F9AAF /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93265332E37A31F003F9AAF /* ImagesView.swift */; };
 		E9364C912E3761530090E6E3 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9364C902E3761490090E6E3 /* DebugView.swift */; };
 		E93A1FAF2E38E53500F5390A /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93A1FAE2E38E52E00F5390A /* EventView.swift */; };
 		E975A7142E386FB900EFAE34 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975A7132E386FB600EFAE34 /* SettingsView.swift */; };
@@ -526,7 +527,8 @@
 		8CD13FC32E2FE2BF00673E15 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		8CD13FCA2E2FEFCC00673E15 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		8CD13FE42E300AE700673E15 /* gyb.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = gyb.py; sourceTree = "<group>"; };
-		E93265332E37A31F003F9AAF /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
+		E9140C582E47893E00D6589E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		E93265332E37A31F003F9AAF /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
 		E9364C902E3761490090E6E3 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		E93A1FAE2E38E52E00F5390A /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		E975A7132E386FB600EFAE34 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -666,9 +668,10 @@
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				8C0C997F2E296A5500549B5C /* ContentView.swift */,
 				E9E3C0572E35C7710059BCE8 /* HomeView.swift */,
-				E93265332E37A31F003F9AAF /* CardsView.swift */,
-				E93A1FAE2E38E52E00F5390A /* EventView.swift */,
 				E975A7132E386FB600EFAE34 /* SettingsView.swift */,
+				E93A1FAE2E38E52E00F5390A /* EventView.swift */,
+				E9140C582E47893E00D6589E /* CardView.swift */,
+				E93265332E37A31F003F9AAF /* ImagesView.swift */,
 				E9364C902E3761490090E6E3 /* DebugView.swift */,
 			);
 			path = Greatdori;
@@ -1397,12 +1400,13 @@
 				E9364C912E3761530090E6E3 /* DebugView.swift in Sources */,
 				8CB4D4712E4454890085D57A /* CardCollectionManager.swift in Sources */,
 				E93A1FAF2E38E53500F5390A /* EventView.swift in Sources */,
-				E93265342E37A322003F9AAF /* CardsView.swift in Sources */,
+				E93265342E37A322003F9AAF /* ImagesView.swift in Sources */,
 				E9E3C0582E35C7740059BCE8 /* HomeView.swift in Sources */,
 				E975A7142E386FB900EFAE34 /* SettingsView.swift in Sources */,
 				8C0C99832E296A5500549B5C /* ContentView.swift in Sources */,
 				8C6C0EFF2E42462A00D1FB0A /* OptionsData.swift in Sources */,
 				8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */,
+				E9140C592E47894200D6589E /* CardView.swift in Sources */,
 				8C6C0EF82E42352700D1FB0A /* AppIntents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

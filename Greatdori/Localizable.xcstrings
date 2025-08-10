@@ -33,7 +33,7 @@
       "shouldTranslate" : false
     },
     "%lf" : {
-
+      "shouldTranslate" : false
     },
     "%lld" : {
       "shouldTranslate" : false
@@ -104,6 +104,9 @@
           }
         }
       }
+    },
+    "App.info.events" : {
+
     },
     "App.leaderboard" : {
       "localizations" : {
@@ -187,9 +190,6 @@
         }
       }
     },
-    "community" : {
-
-    },
     "Debug.pre-cache-unavailable-alert.dismiss" : {
       "localizations" : {
         "en" : {
@@ -255,7 +255,20 @@
       }
     },
     "Event" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动"
+          }
+        }
+      }
     },
     "Event.attribute" : {
       "localizations" : {
@@ -418,7 +431,21 @@
       }
     },
     "Event.gacha" : {
-
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募"
+          }
+        }
+      }
     },
     "Event.id" : {
       "localizations" : {
@@ -437,7 +464,20 @@
       }
     },
     "Event.next" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next Event"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一个活动"
+          }
+        }
+      }
     },
     "Event.parameter" : {
       "localizations" : {
@@ -504,7 +544,20 @@
       }
     },
     "Event.previous" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous Event"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上一个活动"
+          }
+        }
+      }
     },
     "Event.rewards" : {
       "localizations" : {
@@ -521,6 +574,12 @@
           }
         }
       }
+    },
+    "Event.search.placeholder" : {
+
+    },
+    "Event.search.unavailable" : {
+
     },
     "Event.start-date" : {
       "localizations" : {
@@ -690,15 +749,7 @@
         }
       }
     },
-    "Greatdori" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Greatdori!"
-          }
-        }
-      },
+    "Greatdori!" : {
       "shouldTranslate" : false
     },
     "Home.birthday" : {
@@ -845,7 +896,7 @@
         }
       }
     },
-    "leaderboard" : {
+    "Lorum Ipsum" : {
 
     },
     "Settings" : {

@@ -21,7 +21,7 @@ enum AppSection: Hashable {
 }
 
 enum InfoTab: CaseIterable, Hashable {
-    case home, characters
+    case home, characters, events
 }
 
 struct ContentView: View {
@@ -44,15 +44,18 @@ struct ContentView: View {
                     }
                     Tab("App.community", systemImage: "at", value: .community) {
 //                        HomeView()
-                        Text("community")
+                        Text(verbatim: "community")
                     }
                     Tab("App.leaderboard", systemImage: "chart.bar", value: .leaderboard) {
 //                        HomeView()
-                        Text("leaderboard")
+                        Text(verbatim: "leaderboard")
                     }
                     TabSection("App.info", content: {
                         Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
                             Text(verbatim: "char")
+                        }
+                        Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
+                            EventSearchView()
                         }
                     })
                     #if os(iOS)
@@ -84,7 +87,7 @@ struct ContentView: View {
                             Label("App.settings", systemImage: "gear").tag(AppSection.settings)
 #endif
                         }
-                        .navigationTitle("Greatdori")
+                        .navigationTitle("Greatdori!")
                     } detail: {
                         detailView(for: selection)
                     }
