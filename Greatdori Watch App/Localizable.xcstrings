@@ -22,7 +22,15 @@
       }
     },
     "%@，今天生日" : {
-      "comment" : "Accessibility"
+      "comment" : "Accessibility",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, birthday today"
+          }
+        }
+      }
     },
     "%@前" : {
       "localizations" : {
@@ -1572,6 +1580,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Color"
+          }
+        }
+      }
+    },
+    "首选服务器" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preferred Server"
           }
         }
       }

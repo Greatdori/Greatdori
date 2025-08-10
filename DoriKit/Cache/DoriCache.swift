@@ -113,6 +113,18 @@ public class DoriCache {
         
         return promise
     }
+    
+    public static func invalidate<T>(_ type: T.Type, withID id: String) {
+        let cacheURL = URL(filePath: NSHomeDirectory() + "/Library/Caches/DoriKit_\(type)_\(id).cache")
+        try? FileManager.default.removeItem(at: cacheURL)
+    }
+    public static func invalidateAll() {
+        let cacheRootPath = NSHomeDirectory() + "/Library/Caches"
+        guard let files = try? FileManager.default.contentsOfDirectory(atPath: cacheRootPath) else { return }
+        for file in files where file.hasPrefix("DoriKit") && file.hasSuffix(".cache") && !file.hasPrefix(".") {
+            try? FileManager.default.removeItem(atPath: "\(cacheRootPath)/\(file)")
+        }
+    }
 }
 
 extension DoriCache.Promise: Sendable where Result: Sendable {}

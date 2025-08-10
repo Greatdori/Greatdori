@@ -18,9 +18,21 @@ import WidgetKit
 import AuthenticationServices
 
 struct SettingsView: View {
+    @State var preferredLocale = DoriAPI.preferredLocale
     @State var cardIDInput = ""
     var body: some View {
         List {
+            Section {
+                Picker("首选服务器", selection: $preferredLocale) {
+                    ForEach(DoriAPI.Locale.allCases, id: \.rawValue) { locale in
+                        Text(locale.rawValue.uppercased()).tag(locale)
+                    }
+                }
+                .onChange(of: preferredLocale) {
+                    DoriAPI.preferredLocale = preferredLocale
+                    DoriCache.invalidateAll()
+                }
+            }
             Section {
                 TextField("卡牌 ID", text: $cardIDInput)
                     .submitLabel(.done)
