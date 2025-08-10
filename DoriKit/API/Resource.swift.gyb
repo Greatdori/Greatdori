@@ -131,6 +131,34 @@ extension DoriAPI.Card.${property} {
 }
 % end
 
+extension DoriAPI.Comic.Comic {
+    public var imageURL: URL? {
+        var id = String(self.id)
+        var fixFlag = false
+        if id.count == 6 {
+            id.removeFirst(2)
+            fixFlag = true
+        }
+        if id.count == 4 {
+            id.removeFirst()
+        }
+        if fixFlag {
+            id = "100" + id
+        }
+        while id.count < 3 {
+            id = "0" + id
+        }
+        return switch self.type {
+        case .singleFrame:
+            .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_singleframe/comic_\(id)_rip/comic_\(id).png")
+        case .fourFrame:
+            .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_fourframe/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")
+        case .none:
+            nil
+        }
+    }
+}
+
 %{
     properties = ["PreviewCostume", "Costume"]
 }%

@@ -52,6 +52,8 @@
 		8C6C0F0F2E42700B00D1FB0A /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8C7288DE2E3B4458002AF70F /* Selectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7288DD2E3B4451002AF70F /* Selectors.swift */; };
 		8C7855972E48A811000EA06E /* LoginCampaign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855962E48A80B000EA06E /* LoginCampaign.swift */; };
+		8C7855992E48C68F000EA06E /* Comic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855982E48C68C000EA06E /* Comic.swift */; };
+		8C78559B2E48C94D000EA06E /* FrontendComic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C78559A2E48C949000EA06E /* FrontendComic.swift */; };
 		8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift */; };
 		8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */; };
 		8C923D7D2E304882003AFC0A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */; };
@@ -442,6 +444,8 @@
 		8C6C0F0C2E42654E00D1FB0A /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		8C7288DD2E3B4451002AF70F /* Selectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectors.swift; sourceTree = "<group>"; };
 		8C7855962E48A80B000EA06E /* LoginCampaign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCampaign.swift; sourceTree = "<group>"; };
+		8C7855982E48C68C000EA06E /* Comic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comic.swift; sourceTree = "<group>"; };
+		8C78559A2E48C949000EA06E /* FrontendComic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendComic.swift; sourceTree = "<group>"; };
 		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 		8C923D772E3034AD003AFC0A /* HomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendCharacter.swift; sourceTree = "<group>"; };
@@ -915,6 +919,7 @@
 				8CD13FA12E2FE2BF00673E15 /* Band.swift */,
 				8CD13FA22E2FE2BF00673E15 /* Card.swift */,
 				8CD13FA32E2FE2BF00673E15 /* Character.swift */,
+				8C7855982E48C68C000EA06E /* Comic.swift */,
 				8CD13FA42E2FE2BF00673E15 /* Costume.swift */,
 				8CD13FA52E2FE2BF00673E15 /* Degree.swift */,
 				8CD13FA72E2FE2BF00673E15 /* Event.swift */,
@@ -939,6 +944,7 @@
 				8CBC1BDA2E334233004023F7 /* Searching.swift */,
 				8C923D9C2E313B47003AFC0A /* FrontendCard.swift */,
 				8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */,
+				8C78559A2E48C949000EA06E /* FrontendComic.swift */,
 				8CBC1BDE2E3408A7004023F7 /* FrontendCostume.swift */,
 				8C923D882E305228003AFC0A /* FrontendEvent.swift */,
 				8C3264052E3C69C000081F4F /* FrontendGacha.swift */,
@@ -1479,6 +1485,7 @@
 				8CBC1BDF2E3408AB004023F7 /* FrontendCostume.swift in Sources */,
 				8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */,
 				8C2CCD4D2E3E66C90014189F /* RichContentView.swift in Sources */,
+				8C78559B2E48C94D000EA06E /* FrontendComic.swift in Sources */,
 				8C2CCD512E3F0D850014189F /* PagedContent.swift in Sources */,
 				8C923D952E307227003AFC0A /* TaskGroup.swift.gyb in Sources */,
 				8C923D9B2E3138E3003AFC0A /* Post.swift in Sources */,
@@ -1495,6 +1502,7 @@
 				8CD13FB72E2FE2BF00673E15 /* Resource.swift.gyb in Sources */,
 				8CD13FB82E2FE2BF00673E15 /* Skill.swift in Sources */,
 				8CD13FB92E2FE2BF00673E15 /* Song.swift in Sources */,
+				8C7855992E48C68F000EA06E /* Comic.swift in Sources */,
 				8C923D9F2E313C0B003AFC0A /* Filters.swift in Sources */,
 				8CD13FC12E2FE2BF00673E15 /* NetworkRequest.swift in Sources */,
 				8C923D972E30A1BC003AFC0A /* LocalizedStrings.swift in Sources */,
