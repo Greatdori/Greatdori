@@ -78,6 +78,7 @@ struct ComicDetailView: View {
                             ProgressView()
                                 .controlSize(.large)
                         }
+                        .inspectable()
                         .scaledToFit()
                         .cornerRadius(8)
                         .frame(width: screenBounds.width - 20)
