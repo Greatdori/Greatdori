@@ -62,8 +62,17 @@ public class DoriCache {
         }
     }
     
+    public enum CacheTrait: Sendable {
+        case realTime
+        case invocationElidable
+    }
+    
+    private static let cacheDateEncoder = PropertyListEncoder()
+    private static let cacheDateDecoder = PropertyListDecoder()
+    
     public static func withCache<Result: Sendable & Cacheable>(
         id: String,
+        trait: CacheTrait = .invocationElidable,
         invocation: sending @escaping () async -> Result?
     ) -> Promise<Result?> {
         let cacheURL = URL(filePath: NSHomeDirectory() + "/Library/Caches/DoriKit_\(Result.self)_\(id).cache")
@@ -86,6 +95,24 @@ public class DoriCache {
             
             if let cachedResult {
                 await promise.updateValue(cachedResult)
+                if trait == .invocationElidable {
+                    let cacheInfoURL = URL(filePath: NSHomeDirectory() + "/Library/Caches/DoriCacheInfo.plist")
+                    let nowDate = Date.now
+                    let newCacheDates: [String: TimeInterval]
+                    if let _data = try? Data(contentsOf: cacheInfoURL),
+                       var cacheDates = try? cacheDateDecoder.decode([String: TimeInterval].self, from: _data) {
+                        if let thisDate = cacheDates["\(Result.self)_\(id)"],
+                           nowDate.timeIntervalSince1970 - thisDate <= 24 * 60 * 60 {
+                            // Current cache is new enough, we elide request from network
+                            return
+                        }
+                        cacheDates.updateValue(nowDate.timeIntervalSince1970, forKey: "\(Result.self)_\(id)")
+                        newCacheDates = cacheDates
+                    } else {
+                        newCacheDates = ["\(Result.self)_\(id)": nowDate.timeIntervalSince1970]
+                    }
+                    try? cacheDateEncoder.encode(newCacheDates).write(to: cacheInfoURL)
+                }
             }
             
             let result = await invocation()

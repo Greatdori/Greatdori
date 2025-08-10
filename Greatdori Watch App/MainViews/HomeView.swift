@@ -150,7 +150,7 @@ struct HomeView: View {
     
     func getNews() async {
         availability[0] = true
-        DoriCache.withCache(id: "Home_News") {
+        DoriCache.withCache(id: "Home_News", trait: .realTime) {
             await DoriFrontend.News.list()
         }.onUpdate {
             if let news = $0 {
@@ -162,7 +162,7 @@ struct HomeView: View {
     }
     func getBirthdays() async {
         availability[1] = true
-        DoriCache.withCache(id: "Home_Birthdays") {
+        DoriCache.withCache(id: "Home_Birthdays", trait: .realTime) {
             await DoriFrontend.Character.recentBirthdayCharacters()
         }.onUpdate {
             if let birthdays = $0 {
@@ -174,7 +174,7 @@ struct HomeView: View {
     }
     func getEvents() async {
         availability[2] = true
-        DoriCache.withCache(id: "Home_LatestEvents") {
+        DoriCache.withCache(id: "Home_LatestEvents", trait: .realTime) {
             await DoriFrontend.Event.localizedLatestEvent()
         }.onUpdate {
             if let latestEvents = $0 {
