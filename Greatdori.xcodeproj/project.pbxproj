@@ -6,6 +6,25 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		8C7855CE2E491E23000EA06E /* Greatdori Installer */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 8C7855CF2E491E24000EA06E /* Build configuration list for PBXAggregateTarget "Greatdori Installer" */;
+			buildPhases = (
+				8C7855D72E4927B7000EA06E /* Remove Framework in Main Bundle */,
+				8C7855D82E492965000EA06E /* Re-Sign Main Bundle */,
+				8C7855D42E491E7E000EA06E /* Build Installer */,
+			);
+			dependencies = (
+				8C7855D62E4925BB000EA06E /* PBXTargetDependency */,
+			);
+			name = "Greatdori Installer";
+			packageProductDependencies = (
+			);
+			productName = "Greatdori Installer";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		8C0C996B2E296A4600549B5C /* Greatdori Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8C0C99832E296A5500549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C997F2E296A5500549B5C /* ContentView.swift */; };
@@ -257,6 +276,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
 			remoteInfo = DoriKit;
+		};
+		8C7855D52E4925BB000EA06E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C0C995C2E296A4400549B5C;
+			remoteInfo = Greatdori;
 		};
 		8C9474572E35DE1C003A90B4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1242,6 +1268,9 @@
 					8C6C0EC82E422F8F00D1FB0A = {
 						CreatedOnToolsVersion = 26.0;
 					};
+					8C7855CE2E491E23000EA06E = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					8C9474512E35DE1C003A90B4 = {
 						CreatedOnToolsVersion = 26.0;
 					};
@@ -1289,6 +1318,7 @@
 				8C0C99902E296A8C00549B5C /* DoriKit */,
 				8C9474512E35DE1C003A90B4 /* DoriKitTests */,
 				8C2CCD392E3E058E0014189F /* DoriEmoji */,
+				8C7855CE2E491E23000EA06E /* Greatdori Installer */,
 				8CB4D4922E4461450085D57A /* CardCollectionGen */,
 			);
 		};
@@ -1407,6 +1437,63 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "TIMESTAMP_FILE=\"$BUILT_PRODUCTS_DIR/LastPreCacheGenerationDate.txt\"\nCURRENT_DATE=$(date +%s)\nTHRESHOLD=604800\nNEED_RUN=false\nif ([ ! -f \"$CODESIGNING_FOLDER_PATH/Resources/PreCache.cache\" ] && [ ! -f \"$CODESIGNING_FOLDER_PATH/PreCache.cache\" ]) || [ ! -f \"$TIMESTAMP_FILE\" ] || ! grep -qE '^[0-9]+$' \"$TIMESTAMP_FILE\"; then\n    NEED_RUN=true\nelse\n    LAST_DATE=$(cat \"$TIMESTAMP_FILE\")\n    DIFF=$((CURRENT_DATE - LAST_DATE))\n    if [ \"$DIFF\" -ge \"$THRESHOLD\" ]; then\n        NEED_RUN=true\n    fi\nfi\nALWAYS_SKIP=$(defaults read com.memz233.PreCacheGen _AlwaysSkipGenerationWhenPossible)\nif [[ \"$ALWAYS_SKIP\" == \"YES\" ]]; then\n    NEED_RUN=false\n    if ([ ! -f \"$CODESIGNING_FOLDER_PATH/Resources/PreCache.cache\" ] && [ ! -f \"$CODESIGNING_FOLDER_PATH/PreCache.cache\" ]); then\n        NEED_RUN=true\n    fi\nfi\nif [[ \"$CONFIGURATION\" == *\"WithoutPreCache\"* ]]; then\n    NEED_RUN=false\nfi\nif $NEED_RUN; then\n    xcrun --sdk macosx swift run --package-path $SRCROOT/BuildTool/PreCacheGen/ -c release PreCacheGen\n    EXIT_STATUS=$?\n    if [ $EXIT_STATUS -eq 0 ]; then\n        echo \"$CURRENT_DATE\" > \"$TIMESTAMP_FILE\"\n    else\n        exit $EXIT_STATUS\n    fi\nfi\n";
+		};
+		8C7855D42E491E7E000EA06E /* Build Installer */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Installer";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "productbuild --sign 'Developer ID Installer: Yuxuan Chen' --component \"$BUILT_PRODUCTS_DIR/Greatdori.app\" /Applications --component \"$BUILT_PRODUCTS_DIR/DoriKit.framework\" /Library/Frameworks --component \"$BUILT_PRODUCTS_DIR/BuiltinCardCollections.framework\" /Library/Frameworks \"$BUILT_PRODUCTS_DIR/Greatdori!-$CONFIGURATION-osx.pkg\"\n";
+		};
+		8C7855D72E4927B7000EA06E /* Remove Framework in Main Bundle */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Remove Framework in Main Bundle";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -rf \"$BUILT_PRODUCTS_DIR/Greatdori.app/Contents/Frameworks/\"\n";
+		};
+		8C7855D82E492965000EA06E /* Re-Sign Main Bundle */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Re-Sign Main Bundle";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/bin/codesign --force --sign 'Apple Development: Yuxuan Chen' -o runtime --entitlements \"$CONFIGURATION_TEMP_DIR/Greatdori.build/Greatdori.app.xcent\" --timestamp\\=none --generate-entitlement-der \"$BUILT_PRODUCTS_DIR/Greatdori.app\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1614,6 +1701,11 @@
 			);
 			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
 			targetProxy = 8C6C0EE42E422FEC00D1FB0A /* PBXContainerItemProxy */;
+		};
+		8C7855D62E4925BB000EA06E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C0C995C2E296A4400549B5C /* Greatdori */;
+			targetProxy = 8C7855D52E4925BB000EA06E /* PBXContainerItemProxy */;
 		};
 		8C9474582E35DE1C003A90B4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1897,6 +1989,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
@@ -1947,6 +2040,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
@@ -1995,6 +2089,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -2048,6 +2143,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -2296,6 +2392,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
@@ -2380,6 +2477,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -2520,6 +2618,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
@@ -2606,6 +2705,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -2681,6 +2781,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
@@ -2723,6 +2824,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
@@ -2766,6 +2868,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
@@ -2809,6 +2912,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
@@ -2827,6 +2931,46 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+			};
+			name = RelWithoutPreCache;
+		};
+		8C7855D02E491E24000EA06E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8C7855D12E491E24000EA06E /* DebWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = DebWithoutPreCache;
+		};
+		8C7855D22E491E24000EA06E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		8C7855D32E491E24000EA06E /* RelWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = RelWithoutPreCache;
 		};
@@ -2906,6 +3050,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -2957,6 +3102,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -3008,6 +3154,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -3058,6 +3205,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
+					/Library/Frameworks,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -3358,6 +3506,17 @@
 				8C6C0EDE2E422F9100D1FB0A /* DebWithoutPreCache */,
 				8C6C0EDF2E422F9100D1FB0A /* Release */,
 				8C6C0EE02E422F9100D1FB0A /* RelWithoutPreCache */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C7855CF2E491E24000EA06E /* Build configuration list for PBXAggregateTarget "Greatdori Installer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C7855D02E491E24000EA06E /* Debug */,
+				8C7855D12E491E24000EA06E /* DebWithoutPreCache */,
+				8C7855D22E491E24000EA06E /* Release */,
+				8C7855D32E491E24000EA06E /* RelWithoutPreCache */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
