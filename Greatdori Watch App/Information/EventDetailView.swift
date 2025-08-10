@@ -105,7 +105,7 @@ struct EventDetailView: View {
                                 WebImage(url: attribute.attribute.iconImageURL)
                                     .resizable()
                                     .frame(width: 20, height: 20)
-                                Text("+\(attribute.percent)%")
+                                Text(verbatim: "+\(attribute.percent)%")
                                     .font(.system(size: 14))
                                     .opacity(0.6)
                             }
@@ -120,7 +120,7 @@ struct EventDetailView: View {
                                     .resizable()
                                     .frame(width: 20, height: 20)
                                 if let percent = information.event.characters.first(where: { $0.characterID == character.id })?.percent {
-                                    Text("+\(percent)%")
+                                    Text(verbatim: "+\(percent)%")
                                         .font(.system(size: 14))
                                         .opacity(0.6)
                                 }
@@ -139,7 +139,7 @@ struct EventDetailView: View {
                                         CardIconView(card)
                                     }
                                     .buttonStyle(.borderless)
-                                    Text("+\(percent)%")
+                                    Text(verbatim: "+\(percent)%")
                                         .font(.system(size: 14))
                                         .opacity(0.6)
                                 }

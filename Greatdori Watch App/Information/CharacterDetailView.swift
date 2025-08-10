@@ -96,7 +96,7 @@ struct CharacterDetailView: View {
                         VStack(alignment: .leading) {
                             Text("生日")
                                 .font(.system(size: 16, weight: .medium))
-                            Text("\(birthday.components(in: .init(identifier: "Asia/Tokyo")!).month!)月\(birthday.components(in: .init(identifier: "Asia/Tokyo")!).day!)日")
+                            Text(birthdayDateFormatter.string(from: birthday))
                                 .font(.system(size: 14))
                                 .opacity(0.6)
                         }
@@ -247,6 +247,14 @@ struct CharacterDetailView: View {
         .task {
             await getInformation()
         }
+    }
+    
+    var birthdayDateFormatter: DateFormatter {
+        let result = DateFormatter()
+        result.locale = Locale.current
+        result.setLocalizedDateFormatFromTemplate("MMMd")
+        result.timeZone = .init(identifier: "Asia/Tokyo")
+        return result
     }
     
     func getInformation() async {

@@ -190,7 +190,7 @@ struct CardDetailView: View {
                                 VStack(alignment: .leading) {
                                     Text(verbatim: "等级")
                                         .font(.system(size: 16, weight: .medium))
-                                    Text({
+                                    Text(verbatim: {
                                         switch statsView {
                                         case 0: "\(minLevel)"
                                         case 1: "\(maxLevel)"
