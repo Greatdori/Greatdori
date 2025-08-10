@@ -21,6 +21,9 @@
         }
       }
     },
+    "%@，今天生日" : {
+      "comment" : "Accessibility"
+    },
     "%@前" : {
       "localizations" : {
         "en" : {
@@ -89,6 +92,35 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@后结束%2$@"
+          }
+        }
+      }
+    },
+    "%@的%lld星卡牌，%@" : {
+      "comment" : "Accessibility",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%2$lld-star card of %1$@, %3$@."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%2$lld-stars card of %1$@, %3$@."
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@的%2$lld星卡牌，%3$@"
           }
         }
       }

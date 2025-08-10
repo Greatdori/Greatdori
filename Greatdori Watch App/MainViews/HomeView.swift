@@ -66,8 +66,10 @@ struct HomeView: View {
                                     .frame(width: 30, height: 30)
                                 if !isTodayBirthday(of: character) {
                                     Text(birthdayDateFormatter.string(from: character.birthday))
+                                        .accessibilityLabel(Text(verbatim: "\(character.characterName.forPreferredLocale() ?? ""), \(birthdayDateFormatter.string(from: character.birthday))"))
                                 } else {
                                     Text(character.characterName.forPreferredLocale() ?? birthdayDateFormatter.string(from: character.birthday))
+                                        .accessibilityLabel(Text("\(character.characterName.forPreferredLocale() ?? "")，今天生日", comment: "Accessibility"))
                                 }
                             }
                         }

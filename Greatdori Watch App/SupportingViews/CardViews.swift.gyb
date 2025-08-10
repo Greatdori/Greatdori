@@ -97,6 +97,8 @@ struct EventCardView: View {
 }
 
 struct CardCardView: View {
+    private var characterName: String
+    private var cardPrefix: String
     private var normalBackgroundImageURL: URL
     private var trainedBackgroundImageURL: URL?
     private var cardType: DoriAPI.Card.CardType
@@ -109,6 +111,8 @@ struct CardCardView: View {
 }%
     % for cardType in cardTypes:
     init(_ card: DoriAPI.Card.${cardType}) {
+        self.characterName = DoriCache.preCache.characterDetails[card.characterID]?.characterName.forPreferredLocale() ?? ""
+        self.cardPrefix = card.prefix.forPreferredLocale() ?? ""
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
         self.cardType = card.type
@@ -209,6 +213,8 @@ struct CardCardView: View {
         .frame(width: screenBounds.width - 5, height: (screenBounds.width - 5) * 0.7511244378)
         .listRowBackground(Color.clear)
         .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+        .accessibilityElement()
+        .accessibilityLabel(Text("\(characterName)的\(rarity)星卡牌，\(cardPrefix)", comment: "Accessibility"))
     }
 }
 struct ThumbCardCardView: View {
