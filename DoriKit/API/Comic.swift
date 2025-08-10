@@ -16,9 +16,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about comics in Bandori.
     public class Comic {
         private init() {}
         
+        /// Get all comics in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested comics, nil if failed to fetch data.
         public static func all() async -> [Comic]? {
             // Response example:
             // {
@@ -75,7 +81,7 @@ extension DoriAPI {
                             characterIDs: value["characterId"].map { $0.1.intValue }
                         ))
                     }
-                    return result
+                    return result.sorted { $0.id < $1.id }
                 }
                 return await task.value
             }
@@ -85,12 +91,19 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Comic {
+    /// Represent general data of a comic
     public struct Comic: Sendable, Identifiable, DoriCache.Cacheable {
+        /// A unique ID of comic.
         public var id: Int
+        /// Name of resource bundle, used for combination of resource URLs.
         public var assetBundleName: String
+        /// Localized title of comic.
         public var title: DoriAPI.LocalizedData<String>
+        /// Localized subtitle of comic.
         public var subTitle: DoriAPI.LocalizedData<String>
+        /// Localized date where comic is available.
         public var publicStartAt: DoriAPI.LocalizedData<Date>
+        /// IDs of characters related to this comic.
         public var characterIDs: [Int]
     }
 }
