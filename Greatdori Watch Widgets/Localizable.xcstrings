@@ -24,34 +24,64 @@
       }
     },
     "Widget.cards" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡牌"
+          }
+        }
+      }
     },
     "Widget.cards.description" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选取卡牌以在主屏幕展示。"
+          }
+        }
+      }
     },
     "Widget.cards.parameter.name" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡牌"
+          }
+        }
+      }
     },
     "Widget.collections" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "精选集"
+          }
+        }
+      }
     },
     "Widget.collections.description" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选取精选集全天随机显示。"
+          }
+        }
+      }
     },
     "Widget.collections.parameter.name" : {
-
-    },
-    "卡面" : {
-
-    },
-    "卡面精选集" : {
-
-    },
-    "展示指定卡面" : {
-
-    },
-    "随机展示指定卡面精选集" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "精选集"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

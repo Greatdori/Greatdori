@@ -26,8 +26,8 @@ struct CardWidgets: Widget {
         }
         .supportedFamilies([.accessoryRectangular])
         .contentMarginsDisabled()
-        .configurationDisplayName("卡面")
-        .description("展示指定卡面")
+        .configurationDisplayName("Widget.cards")
+        .description("Widget.cards.description")
     }
 }
 
