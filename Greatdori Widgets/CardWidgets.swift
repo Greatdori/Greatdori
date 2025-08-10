@@ -45,7 +45,11 @@ private struct Provider: AppIntentTimelineProvider {
         guard let descriptors = try? decoder.decode([CardWidgetDescriptor].self, from: data) else { return .init() }
         guard let imageURL = descriptors.first(where: { $0.localizedName == configuration.cardName })?.imageURL else { return .init() }
         guard let imageData = try? Data(contentsOf: imageURL) else { return .init() }
+        #if !os(macOS)
         let image = UIImage(data: imageData)
+        #else
+        let image = NSImage(data: imageData)
+        #endif
         return .init(image: image)
     }
     
@@ -59,16 +63,26 @@ private struct Provider: AppIntentTimelineProvider {
 
 private struct CardEntry: TimelineEntry {
     let date: Date = .now
+    #if !os(macOS)
     var image: UIImage?
+    #else
+    var image: NSImage?
+    #endif
 }
 
 private struct CardWidgetsEntryView : View {
     var entry: Provider.Entry
     var body: some View {
         if let image = entry.image {
+            #if !os(macOS)
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
+            #else
+            Image(nsImage: image)
+                .resizable()
+                .scaledToFill()
+            #endif
         } else {
             Text("Widget.collections.edit-tip")
                 .padding()

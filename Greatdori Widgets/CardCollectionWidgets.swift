@@ -82,7 +82,11 @@ private struct Provider: AppIntentTimelineProvider {
 
 private struct CardEntry: TimelineEntry {
     var date: Date = .now
+    #if !os(macOS)
     var image: UIImage?
+    #else
+    var image: NSImage?
+    #endif
 }
 
 private struct CardWidgetsEntryView : View {
@@ -90,9 +94,15 @@ private struct CardWidgetsEntryView : View {
     var body: some View {
         if let image = entry.image {
             Button(intent: CardCollectionWidgetIntent()) {
+                #if !os(macOS)
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
+                #else
+                Image(nsImage: image)
+                    .resizable()
+                    .scaledToFill()
+                #endif
             }
             .buttonStyle(.plain)
         } else {

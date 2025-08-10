@@ -34,8 +34,8 @@
 		8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */; };
 		8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */; };
 		8C6C0ECD2E422F9000D1FB0A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */; };
-		8C6C0EDA2E422F9100D1FB0A /* Greatdori Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8C6C0EE22E422FEC00D1FB0A /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
+		8C6C0EDA2E422F9100D1FB0A /* Greatdori Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8C6C0EE22E422FEC00D1FB0A /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; platformFilters = (ios, macos, ); };
 		8C6C0EED2E42301000D1FB0A /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE72E42301000D1FB0A /* AppIntents.swift */; };
 		8C6C0EEE2E42301000D1FB0A /* CardWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE92E42301000D1FB0A /* CardWidgets.swift */; };
 		8C6C0EEF2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EEA2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift */; };
@@ -98,7 +98,7 @@
 		8CB4D4A32E4462AE0085D57A /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8CB4D4A92E4481790085D57A /* BuiltinCardCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4D4A82E4481780085D57A /* BuiltinCardCollections.swift */; };
 		8CB4D4AA2E44827E0085D57A /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
-		8CB4D4AF2E44871D0085D57A /* BuiltinCardCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB4D4792E445F700085D57A /* BuiltinCardCollections.framework */; };
+		8CB4D4AF2E44871D0085D57A /* BuiltinCardCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB4D4792E445F700085D57A /* BuiltinCardCollections.framework */; platformFilters = (ios, macos, ); };
 		8CB4D4B52E44938E0085D57A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4B42E44938D0085D57A /* Localizable.xcstrings */; };
 		8CB4D4BB2E449CC80085D57A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */; };
 		8CB4D4BC2E449CC80085D57A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */; };
@@ -1577,12 +1577,15 @@
 		};
 		8C6C0ED92E422F9100D1FB0A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			platformFilter = ios;
 			target = 8C6C0EC82E422F8F00D1FB0A /* Greatdori Widgets */;
 			targetProxy = 8C6C0ED82E422F9100D1FB0A /* PBXContainerItemProxy */;
 		};
 		8C6C0EE52E422FEC00D1FB0A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilters = (
+				ios,
+				macos,
+			);
 			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
 			targetProxy = 8C6C0EE42E422FEC00D1FB0A /* PBXContainerItemProxy */;
 		};
@@ -1613,6 +1616,10 @@
 		};
 		8CB4D4B22E44871D0085D57A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilters = (
+				ios,
+				macos,
+			);
 			target = 8CB4D4782E445F700085D57A /* BuiltinCardCollections */;
 			targetProxy = 8CB4D4B12E44871D0085D57A /* PBXContainerItemProxy */;
 		};
@@ -2628,9 +2635,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori Widgets";
+				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2638,13 +2648,15 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -2665,9 +2677,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori Widgets";
+				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2675,13 +2690,15 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -2703,9 +2720,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori Widgets";
+				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2713,13 +2733,15 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -2741,9 +2763,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori Widgets";
+				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2751,13 +2776,15 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
