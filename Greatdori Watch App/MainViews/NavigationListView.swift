@@ -118,6 +118,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.comic) {
+                    Label {
+                        Text("漫画")
+                    } icon: {
+                        Image(systemName: "photo.on.rectangle.angled.fill")
+                            .foregroundStyle(.accent)
+                    }
+                }
             } header: {
                 Text("信息")
             }

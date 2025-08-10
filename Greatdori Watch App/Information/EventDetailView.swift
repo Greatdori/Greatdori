@@ -198,7 +198,7 @@ struct EventDetailView: View {
                 }
             }
         }
-        .navigationTitle(information?.event.eventName.forPreferredLocale() ?? "正在载入活动...")
+        .navigationTitle(information?.event.eventName.forPreferredLocale() ?? String(localized: "正在载入活动..."))
         .task {
             await getInformation()
         }

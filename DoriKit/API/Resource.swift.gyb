@@ -132,7 +132,7 @@ extension DoriAPI.Card.${property} {
 % end
 
 extension DoriAPI.Comic.Comic {
-    public var imageURL: URL? {
+    private func idForURL() -> String {
         var id = String(self.id)
         var fixFlag = false
         if id.count == 6 {
@@ -148,11 +148,28 @@ extension DoriAPI.Comic.Comic {
         while id.count < 3 {
             id = "0" + id
         }
+        return id
+    }
+    
+    public var imageURL: URL? {
+        let id = idForURL()
         return switch self.type {
         case .singleFrame:
             .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_singleframe/comic_\(id)_rip/comic_\(id).png")
         case .fourFrame:
             .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_fourframe/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")
+        case .none:
+            nil
+        }
+    }
+    
+    public var thumbImageURL: URL? {
+        let id = idForURL()
+        return switch self.type {
+        case .singleFrame:
+            .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_singleframe_thumbnail/comic_\(id)_rip/comic_\(id).png")
+        case .fourFrame:
+            .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_fourframe_thumbnail/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")
         case .none:
             nil
         }

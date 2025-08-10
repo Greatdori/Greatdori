@@ -591,6 +591,9 @@
         }
       }
     },
+    "副标题" : {
+
+    },
     "区域对话" : {
       "localizations" : {
         "en" : {
@@ -1104,6 +1107,18 @@
         }
       }
     },
+    "正在载入卡牌..." : {
+
+    },
+    "正在载入招募..." : {
+
+    },
+    "正在载入歌曲..." : {
+
+    },
+    "正在载入活动..." : {
+
+    },
     "正在载入角色..." : {
       "localizations" : {
         "en" : {
@@ -1160,6 +1175,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Source Code"
+          }
+        }
+      }
+    },
+    "漫画" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comics"
           }
         }
       }
@@ -1440,6 +1465,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Failed to Load Events"
+          }
+        }
+      }
+    },
+    "载入漫画时出错" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to Load Comics"
           }
         }
       }

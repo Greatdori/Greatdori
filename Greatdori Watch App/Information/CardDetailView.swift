@@ -309,7 +309,7 @@ struct CardDetailView: View {
                 }
             }
         }
-        .navigationTitle(information?.card.prefix.forPreferredLocale() ?? "正在载入卡牌...")
+        .navigationTitle(information?.card.prefix.forPreferredLocale() ?? String(localized: "正在载入卡牌..."))
         .task {
             await getInformation()
         }

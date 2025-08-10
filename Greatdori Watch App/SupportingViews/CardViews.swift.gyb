@@ -416,6 +416,24 @@ struct CardIconView: View {
     }
 }
 
+struct ComicCardView: View {
+    private var comic: DoriAPI.Comic.Comic
+    
+    init(_ comic: DoriAPI.Comic.Comic) {
+        self.comic = comic
+    }
+    
+    var body: some View {
+        HStack {
+            WebImage(url: comic.thumbImageURL)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 50)
+            Text(comic.title.forPreferredLocale() ?? "")
+        }
+    }
+}
+
 struct ThumbCostumeCardView: View {
     private var thumbImageURL: URL
     private var description: DoriAPI.LocalizedData<String>

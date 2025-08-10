@@ -17,6 +17,26 @@ import Foundation
 extension DoriFrontend {
     public class Comic {
         private init() {}
+        
+        public static func list(filter: Filter = .init()) async -> [Comic]? {
+            guard let comics = await DoriAPI.Comic.all() else { return nil }
+            
+            var filteredComics = comics
+            if filter.isFiltered {
+                filteredComics = comics.filter { comic in
+                    filter.character.contains { comic.characterIDs.contains($0.rawValue) }
+                }.filter { comic in
+                    filter.server.contains { locale in
+                        comic.publicStartAt.availableInLocale(locale)
+                    }
+                }
+            }
+            
+            // Comics can only be sorted by ID.
+            return filteredComics.sorted { lhs, rhs in
+                filter.sort.compare(lhs.id, rhs.id)
+            }
+        }
     }
 }
 
@@ -26,13 +46,18 @@ extension DoriFrontend.Comic {
 
 extension DoriAPI.Comic.Comic {
     @frozen
-    public enum ComicType: Int {
+    public enum ComicType: String {
         case singleFrame
         case fourFrame
+        
+        @inline(never)
+        public var localizedString: String {
+            NSLocalizedString(rawValue, bundle: #bundle, comment: "")
+        }
     }
     
     @inlinable
     public var type: ComicType? {
-        self.id > 0 && self.id <= 1000 ? .singleFrame : self.id > 1000 && self.id <= 2000 ? .fourFrame : nil
+        self.id > 0 && self.id <= 1000 ? .singleFrame : self.id > 1000 ? .fourFrame : nil
     }
 }

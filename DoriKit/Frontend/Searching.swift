@@ -196,6 +196,20 @@ extension DoriAPI.Card.PreviewCard: DoriFrontend.Searchable {
         [self.attribute]
     }
 }
+extension DoriAPI.Comic.Comic: DoriFrontend.Searchable {
+    public var _searchLocalizedStrings: [DoriAPI.LocalizedData<String>] {
+        [self.title, self.subTitle]
+    }
+    public var _searchLocales: [DoriAPI.Locale] {
+        var result = [DoriAPI.Locale]()
+        for locale in DoriAPI.Locale.allCases {
+            if self.publicStartAt.availableInLocale(locale) {
+                result.append(locale)
+            }
+        }
+        return result
+    }
+}
 extension DoriAPI.Costume.PreviewCostume: DoriFrontend.Searchable {
     public var _searchLocalizedStrings: [DoriAPI.LocalizedData<String>] {
         [self.description]

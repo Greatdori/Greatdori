@@ -236,7 +236,7 @@ struct GachaDetailView: View {
                 }
             }
         }
-        .navigationTitle(information?.gacha.gachaName.forPreferredLocale() ?? "正在载入招募...")
+        .navigationTitle(information?.gacha.gachaName.forPreferredLocale() ?? String(localized: "正在载入招募..."))
         .task {
             await getInformation()
         }

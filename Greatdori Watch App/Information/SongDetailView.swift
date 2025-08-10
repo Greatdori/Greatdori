@@ -239,7 +239,7 @@ struct SongDetailView: View {
                 }
             }
         }
-        .navigationTitle(information?.song.musicTitle.forPreferredLocale() ?? "正在载入歌曲...")
+        .navigationTitle(information?.song.musicTitle.forPreferredLocale() ?? String(localized: "正在载入歌曲..."))
         .task {
             await getInformation()
         }
