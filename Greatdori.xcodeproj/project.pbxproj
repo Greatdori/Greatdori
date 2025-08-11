@@ -76,6 +76,8 @@
 		8C78559D2E48F10C000EA06E /* ComicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C78559C2E48F107000EA06E /* ComicListView.swift */; };
 		8C78559F2E48F6E4000EA06E /* ComicDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C78559E2E48F6E0000EA06E /* ComicDetailView.swift */; };
 		8C7855A12E48FBF9000EA06E /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855A02E48FBF5000EA06E /* ImageViewer.swift */; };
+		8C7855DA2E4A6994000EA06E /* MiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855D92E4A698D000EA06E /* MiracleTicket.swift */; };
+		8C7855DC2E4A6BFA000EA06E /* FrontendMiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */; };
 		8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift */; };
 		8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */; };
 		8C923D7D2E304882003AFC0A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */; };
@@ -478,6 +480,8 @@
 		8C78559C2E48F107000EA06E /* ComicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicListView.swift; sourceTree = "<group>"; };
 		8C78559E2E48F6E0000EA06E /* ComicDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetailView.swift; sourceTree = "<group>"; };
 		8C7855A02E48FBF5000EA06E /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
+		8C7855D92E4A698D000EA06E /* MiracleTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiracleTicket.swift; sourceTree = "<group>"; };
+		8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendMiracleTicket.swift; sourceTree = "<group>"; };
 		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 		8C923D772E3034AD003AFC0A /* HomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendCharacter.swift; sourceTree = "<group>"; };
@@ -964,6 +968,7 @@
 				8C923D9A2E3138E1003AFC0A /* Post.swift */,
 				8CD13FAB2E2FE2BF00673E15 /* Skill.swift */,
 				8CD13FAC2E2FE2BF00673E15 /* Song.swift */,
+				8C7855D92E4A698D000EA06E /* MiracleTicket.swift */,
 				8C9474402E345BE9003A90B4 /* Misc.swift */,
 				8CD13FAA2E2FE2BF00673E15 /* Resource.swift.gyb */,
 				8C923D962E30A1B8003AFC0A /* LocalizedStrings.swift */,
@@ -985,6 +990,7 @@
 				8C3264052E3C69C000081F4F /* FrontendGacha.swift */,
 				8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */,
 				8CB4D46B2E43049E0085D57A /* FrontendSong.swift */,
+				8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */,
 				8C9474422E348D1A003A90B4 /* FrontendMisc.swift */,
 			);
 			path = Frontend;
@@ -1582,10 +1588,12 @@
 				8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */,
 				8CD13FC52E2FE2BF00673E15 /* Color+.swift in Sources */,
 				8CBC1BDF2E3408AB004023F7 /* FrontendCostume.swift in Sources */,
+				8C7855DA2E4A6994000EA06E /* MiracleTicket.swift in Sources */,
 				8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */,
 				8C2CCD4D2E3E66C90014189F /* RichContentView.swift in Sources */,
 				8C78559B2E48C94D000EA06E /* FrontendComic.swift in Sources */,
 				8C2CCD512E3F0D850014189F /* PagedContent.swift in Sources */,
+				8C7855DC2E4A6BFA000EA06E /* FrontendMiracleTicket.swift in Sources */,
 				8C923D952E307227003AFC0A /* TaskGroup.swift.gyb in Sources */,
 				8C923D9B2E3138E3003AFC0A /* Post.swift in Sources */,
 				8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */,
