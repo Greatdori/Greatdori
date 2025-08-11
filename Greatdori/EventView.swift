@@ -131,17 +131,22 @@ struct EventDetailView: View {
                     .onAppear {
                         showSubtitle = false
                     }
-                    NavigationLink(destination: {
-                        //MARK: [NAVI785] eventList
-                    }, label: {
-                        Image(systemName: "list.bullet")
-                    })
-                    .buttonBorderShape(.circle)
-                    .onAppear {
-                        showSubtitle = true
+                    HStack {
+                        Spacer()
+                            .frame(width: 0)
+                        NavigationLink(destination: {
+                            //MARK: [NAVI785] eventList
+                        }, label: {
+                            Image(systemName: "list.bullet")
+                        })
+                        .onAppear {
+                            showSubtitle = true
+                        }
+//                        .buttonStyle(.bordered)
+//                        .buttonBorderShape(.circle)
                     }
+//                    .buttonBorderShape(.circle)
                 }
-                .frame(width: showSubtitle ? 20 : nil, height: showSubtitle ? 20 : nil)
             })
         }
     }
