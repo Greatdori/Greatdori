@@ -400,6 +400,10 @@ extension DoriAPI {
                             kr: cardSource(atLocalizedIndex: 4)
                         ),
                         type: .init(rawValue: respJSON["type"].stringValue) ?? .others,
+                        animation: respJSON["animation"]["situationId"].int != nil ? .init(
+                            situationID: respJSON["animation"]["situationId"].intValue,
+                            assetBundleName: respJSON["animation"]["assetBundleName"].stringValue
+                        ) : nil,
                         stat: stats
                     )
                 }
@@ -479,8 +483,50 @@ extension DoriAPI.Card {
         public var source: DoriAPI.LocalizedData<Set<CardSource>>
         /// Type of card.
         public var type: CardType
+        /// Animation metadata of card, if available.
+        public var animation: Animation?
         /// Stats of card.
         public var stat: CardStat
+        
+        internal init(
+            id: Int,
+            characterID: Int,
+            rarity: Int,
+            attribute: DoriAPI.Attribute,
+            levelLimit: Int,
+            resourceSetName: String,
+            sdResourceName: String,
+            episodes: [CardEpisode],
+            costumeID: Int,
+            gachaText: DoriAPI.LocalizedData<String>,
+            prefix: DoriAPI.LocalizedData<String>,
+            releasedAt: DoriAPI.LocalizedData<Date>,
+            skillName: DoriAPI.LocalizedData<String>,
+            skillID: Int,
+            source: DoriAPI.LocalizedData<Set<CardSource>>,
+            type: CardType,
+            animation: Animation?,
+            stat: CardStat
+        ) {
+            self.id = id
+            self.characterID = characterID
+            self.rarity = rarity
+            self.attribute = attribute
+            self.levelLimit = levelLimit
+            self.resourceSetName = resourceSetName
+            self.sdResourceName = sdResourceName
+            self.episodes = episodes
+            self.costumeID = costumeID
+            self.gachaText = gachaText
+            self.prefix = prefix
+            self.releasedAt = releasedAt
+            self.skillName = skillName
+            self.skillID = skillID
+            self.source = source
+            self.type = type
+            self.animation = animation
+            self.stat = stat
+        }
         
         /// Represent source of a card.
         public enum CardSource: Sendable, Hashable, DoriCache.Cacheable {
@@ -496,6 +542,11 @@ extension DoriAPI.Card {
             case event([Int: Int])
             /// Information about a card can be got from login campaigns.
             case login(ids: [Int])
+        }
+        
+        public struct Animation: Sendable, Hashable, DoriCache.Cacheable {
+            public var situationID: Int
+            public var assetBundleName: String
         }
     }
     

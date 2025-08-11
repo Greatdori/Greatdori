@@ -130,6 +130,16 @@ extension DoriAPI.Card.${property} {
     }
 }
 % end
+extension DoriAPI.Card.Card {
+    @inlinable
+    public var animationVideoURL: URL? {
+        if let bundleName = self.animation?.assetBundleName {
+            .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/movie/animation_episode/\(bundleName)_rip/\(bundleName).mp4")!
+        } else {
+            nil
+        }
+    }
+}
 
 extension DoriAPI.Comic.Comic {
     private func idForURL() -> String {
