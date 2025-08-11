@@ -16,7 +16,7 @@ import SwiftUI
 import DoriKit
 
 struct CardListView: View {
-    @State var filter = DoriFrontend.Filter()
+    @State var filter = DoriFrontend.Filter.recoverable(id: "CardList")
     @State var cards: [DoriFrontend.Card.CardWithBand]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false

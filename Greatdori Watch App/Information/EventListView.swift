@@ -16,7 +16,7 @@ import SwiftUI
 import DoriKit
 
 struct EventListView: View {
-    @State var filter = DoriFrontend.Filter()
+    @State var filter = DoriFrontend.Filter.recoverable(id: "EventList")
     @State var events: [DoriFrontend.Event.PreviewEvent]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false

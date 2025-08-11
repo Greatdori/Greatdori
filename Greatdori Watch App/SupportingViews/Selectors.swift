@@ -23,7 +23,7 @@ struct CardSelector: View {
     @State private var availability = true
     @State private var isSelectorPresented = false
     @State private var isFilterSettingsPresented = false
-    @State private var filter = DoriFrontend.Filter()
+    @State private var filter = DoriFrontend.Filter.recoverable(id: "CardSelector")
     @State private var searchInput = ""
     var body: some View {
         Button(action: {

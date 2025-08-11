@@ -18,19 +18,19 @@ import Foundation
 
 extension DoriFrontend {
     public struct Filter: Sendable, Codable {
-        public var band: Set<Band> = .init(Band.allCases)
-        public var attribute: Set<Attribute> = .init(Attribute.allCases)
-        public var rarity: Set<Rarity> = [1, 2, 3, 4, 5]
-        public var character: Set<Character> = .init(Character.allCases)
-        public var server: Set<Server> = .init(Server.allCases)
-        public var released: Set<Bool> = [false, true]
-        public var cardType: Set<CardType> = .init(CardType.allCases)
-        public var eventType: Set<EventType> = .init(EventType.allCases)
-        public var gachaType: Set<GachaType> = .init(GachaType.allCases)
-        public var songType: Set<SongType> = .init(SongType.allCases)
-        public var skill: Skill? = nil
-        public var timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases)
-        public var sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))
+        public var band: Set<Band> = .init(Band.allCases) { didSet { store() } }
+        public var attribute: Set<Attribute> = .init(Attribute.allCases)  { didSet { store() } }
+        public var rarity: Set<Rarity> = [1, 2, 3, 4, 5]  { didSet { store() } }
+        public var character: Set<Character> = .init(Character.allCases)  { didSet { store() } }
+        public var server: Set<Server> = .init(Server.allCases)  { didSet { store() } }
+        public var released: Set<Bool> = [false, true]  { didSet { store() } }
+        public var cardType: Set<CardType> = .init(CardType.allCases)  { didSet { store() } }
+        public var eventType: Set<EventType> = .init(EventType.allCases)  { didSet { store() } }
+        public var gachaType: Set<GachaType> = .init(GachaType.allCases)  { didSet { store() } }
+        public var songType: Set<SongType> = .init(SongType.allCases)  { didSet { store() } }
+        public var skill: Skill? = nil  { didSet { store() } }
+        public var timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases)  { didSet { store() } }
+        public var sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))  { didSet { store() } }
         
         public init(
             band: Set<Band> = .init(Band.allCases),
@@ -60,6 +60,21 @@ extension DoriFrontend {
             self.skill = skill
             self.timelineStatus = timelineStatus
             self.sort = sort
+        }
+        
+        private var recoveryID: String?
+        
+        public static func recoverable(id: String) -> Self {
+            let storageURL = URL(filePath: NSHomeDirectory() + "/Documents/DoriKit_Filter_Status.plist")
+            let decoder = PropertyListDecoder()
+            var result: Self = if let _data = try? Data(contentsOf: storageURL),
+                                  let storage = try? decoder.decode([String: Filter].self, from: _data) {
+                storage[id] ?? .init()
+            } else {
+                .init()
+            }
+            result.recoveryID = id
+            return result
         }
         
         public var isFiltered: Bool {
@@ -93,6 +108,26 @@ extension DoriFrontend {
             \(timelineStatus.sorted { $0.rawValue < $1.rawValue })
             """
             return String(SHA256.hash(data: desc.data(using: .utf8)!).map { $0.description }.joined().prefix(8))
+        }
+        
+        private static let _storageLock = NSLock()
+        private func store() {
+            guard let recoveryID else { return }
+            DispatchQueue(label: "com.memz233.DoriKit.Filter-Store", qos: .utility).async {
+                Self._storageLock.lock()
+                let storageURL = URL(filePath: NSHomeDirectory() + "/Documents/DoriKit_Filter_Status.plist")
+                let decoder = PropertyListDecoder()
+                let encoder = PropertyListEncoder()
+                if let _data = try? Data(contentsOf: storageURL),
+                   var storage = try? decoder.decode([String: Filter].self, from: _data) {
+                    storage.updateValue(self, forKey: recoveryID)
+                    try? encoder.encode(storage).write(to: storageURL)
+                } else {
+                    let storage = [recoveryID: self]
+                    try? encoder.encode(storage).write(to: storageURL)
+                }
+                Self._storageLock.unlock()
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ import SwiftUI
 import DoriKit
 
 struct CostumeListView: View {
-    @State var filter = DoriFrontend.Filter()
+    @State var filter = DoriFrontend.Filter.recoverable(id: "CostumeList")
     @State var costumes: [DoriFrontend.Costume.PreviewCostume]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false

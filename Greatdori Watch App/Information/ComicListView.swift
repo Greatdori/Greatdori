@@ -16,7 +16,7 @@ import SwiftUI
 import DoriKit
 
 struct ComicListView: View {
-    @State var filter = DoriFrontend.Filter()
+    @State var filter = DoriFrontend.Filter.recoverable(id: "ComicList")
     @State var comics: [DoriFrontend.Comic.Comic]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false

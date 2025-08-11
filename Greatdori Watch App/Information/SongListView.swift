@@ -16,7 +16,7 @@ import SwiftUI
 import DoriKit
 
 struct SongListView: View {
-    @State var filter = DoriFrontend.Filter()
+    @State var filter = DoriFrontend.Filter.recoverable(id: "SongList")
     @State var songs: [DoriFrontend.Song.PreviewSong]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false

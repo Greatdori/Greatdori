@@ -16,7 +16,7 @@ import SwiftUI
 import DoriKit
 
 struct GachaListView: View {
-    @State var filter = DoriFrontend.Filter()
+    @State var filter = DoriFrontend.Filter.recoverable(id: "GachaList")
     @State var gacha: [DoriFrontend.Gacha.PreviewGacha]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
