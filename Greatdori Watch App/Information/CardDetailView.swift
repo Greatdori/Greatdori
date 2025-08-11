@@ -14,6 +14,7 @@
 
 import SwiftUI
 import DoriKit
+import AVFoundation
 import SDWebImageSwiftUI
 
 struct CardDetailView: View {
@@ -41,6 +42,17 @@ struct CardDetailView: View {
                         }
                         Button("播放语音", systemImage: "play.fill") {
                             playAudio(url: information.card.gachaVoiceURL)
+                        }
+                    }
+                    if let url = information.card.animationVideoURL {
+                        Button("播放视频", systemImage: "play.rectangle.fill") {
+                            WKApplication.shared()
+                                .visibleInterfaceController?
+                                .presentMediaPlayerController(
+                                    with: url,
+                                    options: [WKMediaPlayerControllerOptionsAutoplayKey: true],
+                                    completion: { _, _, _ in }
+                                )
                         }
                     }
                 }
