@@ -145,7 +145,7 @@ private struct AboutView: View {
                         session.prefersEphemeralWebBrowserSession = true
                         session.start()
                     }, label: {
-                        Text(verbatim: "蜀ICP备2025125473号-NNA") // FIXME
+                        Text(verbatim: "蜀ICP备2025125473号-17A")
                     })
                 } header: {
                     Text(verbatim: "中国大陆ICP备案号")
