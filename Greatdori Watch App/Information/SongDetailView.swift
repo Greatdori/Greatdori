@@ -38,41 +38,11 @@ struct SongDetailView: View {
                     .listRowInsets(.init())
                 }
                 Section {
-                    VStack(alignment: .leading) {
-                        Text("标题")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.song.musicTitle.forPreferredLocale() ?? "")
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                    VStack(alignment: .leading) {
-                        Text("种类")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.song.tag.localizedString)
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                    VStack(alignment: .leading) {
-                        Text("歌词")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.song.lyricist.forPreferredLocale() ?? "")
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                    VStack(alignment: .leading) {
-                        Text("作曲")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.song.composer.forPreferredLocale() ?? "")
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                    VStack(alignment: .leading) {
-                        Text("编曲")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.song.arranger.forPreferredLocale() ?? "")
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
+                    InfoTextView("标题", text: information.song.musicTitle)
+                    InfoTextView("种类", text: information.song.tag.localizedString)
+                    InfoTextView("歌词", text: information.song.lyricist)
+                    InfoTextView("作曲", text: information.song.composer)
+                    InfoTextView("编曲", text: information.song.arranger)
                 }
                 .listRowBackground(Color.clear)
                 Section {

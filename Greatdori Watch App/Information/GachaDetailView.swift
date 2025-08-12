@@ -33,25 +33,11 @@ struct GachaDetailView: View {
                         .listRowInsets(.init())
                 }
                 Section {
-                    VStack(alignment: .leading) {
-                        Text("标题")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.gacha.gachaName.forPreferredLocale() ?? "")
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                    VStack(alignment: .leading) {
-                        Text("种类")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.gacha.type.localizedString)
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
+                    InfoTextView("标题", text: information.gacha.gachaName)
+                    InfoTextView("种类", text: information.gacha.type.localizedString)
                     if let publishedDate = information.gacha.publishedAt.forPreferredLocale(),
                        let closedDate = information.gacha.closedAt.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("倒计时")
-                                .font(.system(size: 16, weight: .medium))
+                        InfoTextView("倒计时") {
                             Group {
                                 if publishedDate > .now {
                                     Text("\(Text(publishedDate, style: .relative))后开始")
@@ -61,42 +47,13 @@ struct GachaDetailView: View {
                                     Text("已完结")
                                 }
                             }
-                            .font(.system(size: 14))
                             .opacity(0.6)
                         }
                     }
-                    if let date = information.gacha.publishedAt.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("发布日期")
-                                .font(.system(size: 16, weight: .medium))
-                            Text({
-                                let df = DateFormatter()
-                                df.dateStyle = .medium
-                                df.timeStyle = .short
-                                return df.string(from: date)
-                            }())
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                        }
-                    }
-                    if let date = information.gacha.closedAt.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("结束日期")
-                                .font(.system(size: 16, weight: .medium))
-                            Text({
-                                let df = DateFormatter()
-                                df.dateStyle = .medium
-                                df.timeStyle = .short
-                                return df.string(from: date)
-                            }())
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                        }
-                    }
+                    InfoTextView("发布日期", date: information.gacha.publishedAt)
+                    InfoTextView("结束日期", date: information.gacha.closedAt)
                     if !information.pickupCards.isEmpty {
-                        VStack(alignment: .leading) {
-                            Text("PICK UP 成员卡牌")
-                                .font(.system(size: 16, weight: .medium))
+                        InfoTextView("PICK UP 成员卡牌") {
                             ScrollView(.horizontal) {
                                 HStack {
                                     ForEach(information.pickupCards) { card in
@@ -108,13 +65,7 @@ struct GachaDetailView: View {
                             .scrollIndicators(.never)
                         }
                     }
-                    VStack(alignment: .leading) {
-                        Text("说明")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.gacha.description.forPreferredLocale() ?? "")
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
+                    InfoTextView("说明", text: information.gacha.description)
                 }
                 .listRowBackground(Color.clear)
                 if !information.events.isEmpty {

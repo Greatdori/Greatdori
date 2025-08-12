@@ -50,6 +50,7 @@
 		8C3264082E3C724900081F4F /* GachaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264072E3C723F00081F4F /* GachaListView.swift */; };
 		8C32640A2E3CB4D000081F4F /* GachaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */; };
 		8C3FA2422E4B5699001526F2 /* MiracleTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2412E4B5690001526F2 /* MiracleTicketView.swift */; };
+		8C3FA2442E4B5D1E001526F2 /* InfoTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2432E4B5D19001526F2 /* InfoTextView.swift */; };
 		8C5AD1B02E46F96700E61653 /* SongMetaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */; };
 		8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */; };
 		8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */; };
@@ -457,6 +458,7 @@
 		8C3264072E3C723F00081F4F /* GachaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaListView.swift; sourceTree = "<group>"; };
 		8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaDetailView.swift; sourceTree = "<group>"; };
 		8C3FA2412E4B5690001526F2 /* MiracleTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiracleTicketView.swift; sourceTree = "<group>"; };
+		8C3FA2432E4B5D19001526F2 /* InfoTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextView.swift; sourceTree = "<group>"; };
 		8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongMetaView.swift; sourceTree = "<group>"; };
 		8C5AD1B72E47317D00E61653 /* .mailmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = .mailmap; sourceTree = "<group>"; };
 		8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStoriesView.swift; sourceTree = "<group>"; };
@@ -820,6 +822,7 @@
 		8C6C0F052E42585E00D1FB0A /* SupportingViews */ = {
 			isa = PBXGroup;
 			children = (
+				8C3FA2432E4B5D19001526F2 /* InfoTextView.swift */,
 				8C923D8C2E3056C8003AFC0A /* CardViews.swift.gyb */,
 				8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */,
 				8CBC1BDC2E33654D004023F7 /* SearchView.swift */,
@@ -1544,6 +1547,7 @@
 				8C0C99892E296A5800549B5C /* ContentView.swift in Sources */,
 				8CBC1BD92E333461004023F7 /* FoldableList.swift in Sources */,
 				8C32640A2E3CB4D000081F4F /* GachaDetailView.swift in Sources */,
+				8C3FA2442E4B5D1E001526F2 /* InfoTextView.swift in Sources */,
 				8CBC1BE12E340AD8004023F7 /* CostumeListView.swift in Sources */,
 				8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */,
 				8C923D872E304AF3003AFC0A /* Date+.swift in Sources */,

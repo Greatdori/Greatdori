@@ -21,34 +21,12 @@ struct ComicDetailView: View {
     var body: some View {
         List {
             Section {
-                VStack(alignment: .leading) {
-                    Text("标题")
-                        .font(.system(size: 16, weight: .medium))
-                    Text(comic.title.forPreferredLocale() ?? "")
-                        .font(.system(size: 14))
-                        .opacity(0.6)
-                }
-                VStack(alignment: .leading) {
-                    Text("副标题")
-                        .font(.system(size: 16, weight: .medium))
-                    Text(comic.subTitle.forPreferredLocale() ?? "")
-                        .font(.system(size: 14))
-                        .opacity(0.6)
-                }
-                if let type = comic.type {
-                    VStack(alignment: .leading) {
-                        Text("种类")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(type.localizedString)
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                }
+                InfoTextView("标题", text: comic.title)
+                InfoTextView("副标题", text: comic.subTitle)
+                InfoTextView("种类", text: comic.type?.localizedString)
                 let characters = DoriCache.preCache.characterDetails.filter { comic.characterIDs.contains($0.key) }
                 if !characters.isEmpty {
-                    VStack(alignment: .leading) {
-                        Text("角色")
-                            .font(.system(size: 16, weight: .medium))
+                    InfoTextView("角色") {
                         HStack {
                             ForEach(characters.sorted { $0.key < $1.key }, id: \.key) { (_, character) in
                                 WebImage(url: character.iconImageURL)
@@ -59,13 +37,7 @@ struct ComicDetailView: View {
                         }
                     }
                 }
-                VStack(alignment: .leading) {
-                    Text(verbatim: "ID")
-                        .font(.system(size: 16, weight: .medium))
-                    Text(String(comic.id))
-                        .font(.system(size: 14))
-                        .opacity(0.6)
-                }
+                InfoTextView(verbatim: "ID", text: String(comic.id))
             }
             .listRowBackground(Color.clear)
             Section {

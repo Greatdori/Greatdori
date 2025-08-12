@@ -35,48 +35,10 @@ struct MiracleTicketView: View {
                 }
                 if let selectedTicket {
                     Section {
-                        VStack(alignment: .leading) {
-                            Text("标题")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(selectedTicket.ticket.name.forPreferredLocale() ?? "")
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                        if let date = selectedTicket.ticket.exchangeStartAt.forPreferredLocale() {
-                            VStack(alignment: .leading) {
-                                Text("发布日期")
-                                    .font(.system(size: 16, weight: .medium))
-                                Text({
-                                    let df = DateFormatter()
-                                    df.dateStyle = .medium
-                                    df.timeStyle = .short
-                                    return df.string(from: date)
-                                }())
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                            }
-                        }
-                        if let date = selectedTicket.ticket.exchangeEndAt.forPreferredLocale() {
-                            VStack(alignment: .leading) {
-                                Text("结束日期")
-                                    .font(.system(size: 16, weight: .medium))
-                                Text({
-                                    let df = DateFormatter()
-                                    df.dateStyle = .medium
-                                    df.timeStyle = .short
-                                    return df.string(from: date)
-                                }())
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                            }
-                        }
-                        VStack(alignment: .leading) {
-                            Text(verbatim: "ID")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(String(selectedTicket.ticket.id))
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
+                        InfoTextView("标题", text: selectedTicket.ticket.name)
+                        InfoTextView("发布日期", date: selectedTicket.ticket.exchangeStartAt)
+                        InfoTextView("结束日期", date: selectedTicket.ticket.exchangeEndAt)
+                        InfoTextView(verbatim: "ID", text: String(selectedTicket.ticket.id))
                     } header: {
                         Text("信息")
                     }

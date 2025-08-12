@@ -57,60 +57,37 @@ struct CardDetailView: View {
                     }
                 }
                 Section {
-                    VStack(alignment: .leading) {
-                        Text("标题")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.card.prefix.forPreferredLocale() ?? "")
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                    VStack(alignment: .leading) {
-                        Text("种类")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.card.type.localizedString)
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                    VStack(alignment: .leading) {
-                        Text("角色")
-                            .font(.system(size: 16, weight: .medium))
+                    InfoTextView("标题", text: information.card.prefix)
+                    InfoTextView("种类", text: information.card.type.localizedString)
+                    InfoTextView("角色") {
                         HStack {
                             WebImage(url: information.character.iconImageURL)
                                 .resizable()
                                 .clipShape(Circle())
                                 .frame(width: 20, height: 20)
                             Text(information.character.characterName.forPreferredLocale() ?? "")
-                                .font(.system(size: 14))
                                 .opacity(0.6)
                         }
                     }
-                    VStack(alignment: .leading) {
-                        Text("乐团")
-                            .font(.system(size: 16, weight: .medium))
+                    InfoTextView("乐团") {
                         HStack {
                             WebImage(url: information.band.iconImageURL)
                                 .resizable()
                                 .frame(width: 20, height: 20)
                             Text(information.band.bandName.forPreferredLocale() ?? "")
-                                .font(.system(size: 14))
                                 .opacity(0.6)
                         }
                     }
-                    VStack(alignment: .leading) {
-                        Text("属性")
-                            .font(.system(size: 16, weight: .medium))
+                    InfoTextView("属性") {
                         HStack {
                             WebImage(url: information.card.attribute.iconImageURL)
                                 .resizable()
                                 .frame(width: 20, height: 20)
                             Text(information.card.attribute.rawValue.uppercased())
-                                .font(.system(size: 14))
                                 .opacity(0.6)
                         }
                     }
-                    VStack(alignment: .leading) {
-                        Text("稀有度")
-                            .font(.system(size: 16, weight: .medium))
+                    InfoTextView("稀有度") {
                         HStack {
                             ForEach(1...information.card.rarity, id: \.self) { _ in
                                 Image(information.card.rarity >= 4 ? .trainedStar : .star)
@@ -119,43 +96,10 @@ struct CardDetailView: View {
                             }
                         }
                     }
-                    VStack(alignment: .leading) {
-                        Text("技能")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.skill.maximumDescription.forPreferredLocale() ?? "")
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                    if let text = information.card.gachaText.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("招募语")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(text)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
-                    if let date = information.card.releasedAt.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("发布日期")
-                                .font(.system(size: 16, weight: .medium))
-                            Text({
-                                let df = DateFormatter()
-                                df.dateStyle = .medium
-                                df.timeStyle = .short
-                                return df.string(from: date)
-                            }())
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                        }
-                    }
-                    VStack(alignment: .leading) {
-                        Text(verbatim: "ID")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(String(id))
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
+                    InfoTextView("技能", text: information.skill.maximumDescription)
+                    InfoTextView("招募语", text: information.card.gachaText)
+                    InfoTextView("发布日期", date: information.card.releasedAt)
+                    InfoTextView(verbatim: "ID", text: String(id))
                 }
                 .listRowBackground(Color.clear)
                 if let minLevel = information.card.stat.minimumLevel,

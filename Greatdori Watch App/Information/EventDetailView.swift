@@ -31,27 +31,13 @@ struct EventDetailView: View {
                         .listRowInsets(.init())
                 }
                 Section {
-                    VStack(alignment: .leading) {
-                        Text("标题")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.event.eventName.forPreferredLocale() ?? "")
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
-                    VStack(alignment: .leading) {
-                        Text("种类")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(information.event.eventType.localizedString)
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
+                    InfoTextView("标题", text: information.event.eventName)
+                    InfoTextView("种类", text: information.event.eventType.localizedString)
                     if let startDate = information.event.startAt.forPreferredLocale(),
                        let endDate = information.event.endAt.forPreferredLocale(),
                        let aggregateEndDate = information.event.aggregateEndAt.forPreferredLocale(),
                        let distributionStartDate = information.event.distributionStartAt.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("倒计时")
-                                .font(.system(size: 16, weight: .medium))
+                        InfoTextView("倒计时") {
                             Group {
                                 if startDate > .now {
                                     Text("\(Text(startDate, style: .relative))后开始")
@@ -65,55 +51,23 @@ struct EventDetailView: View {
                                     Text("已完结")
                                 }
                             }
-                            .font(.system(size: 14))
                             .opacity(0.6)
                         }
                     }
-                    if let date = information.event.startAt.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("开始日期")
-                                .font(.system(size: 16, weight: .medium))
-                            Text({
-                                let df = DateFormatter()
-                                df.dateStyle = .medium
-                                df.timeStyle = .short
-                                return df.string(from: date)
-                            }())
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                        }
-                    }
-                    if let date = information.event.endAt.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("结束日期")
-                                .font(.system(size: 16, weight: .medium))
-                            Text({
-                                let df = DateFormatter()
-                                df.dateStyle = .medium
-                                df.timeStyle = .short
-                                return df.string(from: date)
-                            }())
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                        }
-                    }
-                    VStack(alignment: .leading) {
-                        Text("属性")
-                            .font(.system(size: 16, weight: .medium))
+                    InfoTextView("开始日期", date: information.event.startAt)
+                    InfoTextView("结束日期", date: information.event.endAt)
+                    InfoTextView("属性") {
                         ForEach(information.event.attributes, id: \.attribute.rawValue) { attribute in
                             HStack {
                                 WebImage(url: attribute.attribute.iconImageURL)
                                     .resizable()
                                     .frame(width: 20, height: 20)
                                 Text(verbatim: "+\(attribute.percent)%")
-                                    .font(.system(size: 14))
                                     .opacity(0.6)
                             }
                         }
                     }
-                    VStack(alignment: .leading) {
-                        Text("角色")
-                            .font(.system(size: 16, weight: .medium))
+                    InfoTextView("角色") {
                         ForEach(information.characters) { character in
                             HStack {
                                 WebImage(url: character.iconImageURL)
@@ -121,15 +75,12 @@ struct EventDetailView: View {
                                     .frame(width: 20, height: 20)
                                 if let percent = information.event.characters.first(where: { $0.characterID == character.id })?.percent {
                                     Text(verbatim: "+\(percent)%")
-                                        .font(.system(size: 14))
                                         .opacity(0.6)
                                 }
                             }
                         }
                     }
-                    VStack(alignment: .leading) {
-                        Text("卡牌")
-                            .font(.system(size: 16, weight: .medium))
+                    InfoTextView("卡牌") {
                         ForEach(information.cards) { card in
                             // if the card is contained in `members`, it is a card that has bonus in this event.
                             // if not, it should be shown in rewards section (the next one).
@@ -140,15 +91,12 @@ struct EventDetailView: View {
                                     }
                                     .buttonStyle(.borderless)
                                     Text(verbatim: "+\(percent)%")
-                                        .font(.system(size: 14))
                                         .opacity(0.6)
                                 }
                             }
                         }
                     }
-                    VStack(alignment: .leading) {
-                        Text("奖励")
-                            .font(.system(size: 16, weight: .medium))
+                    InfoTextView("奖励") {
                         HStack {
                             ForEach(information.cards) { card in
                                 if information.event.rewardCards.contains(card.id) {

@@ -37,150 +37,48 @@ struct CharacterDetailView: View {
                     }
                 }
                 Section {
-                    if let name = information.character.characterName.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("名字")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(name)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
-                    if let cv = information.character.profile?.characterVoice.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("配音")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(cv)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
+                    InfoTextView("名字", text: information.character.characterName)
+                    InfoTextView("配音", text: information.character.profile?.characterVoice)
                     if let color = information.character.color {
-                        VStack(alignment: .leading) {
-                            Text("颜色")
-                                .font(.system(size: 16, weight: .medium))
+                        InfoTextView("颜色") {
                             HStack {
                                 RoundedRectangle(cornerRadius: 3)
                                     .fill(color)
                                     .frame(width: 20, height: 20)
                                 Text(String(color.description.dropLast(2)))
-                                    .font(.system(size: 14))
                                     .opacity(0.6)
                             }
                         }
                     }
                     if let band = information.band {
-                        VStack(alignment: .leading) {
-                            Text("乐团")
-                                .font(.system(size: 16, weight: .medium))
+                        InfoTextView("乐团") {
                             HStack {
                                 WebImage(url: band.iconImageURL)
                                     .resizable()
                                     .frame(width: 20, height: 20)
                                 Text(band.bandName.forPreferredLocale() ?? "")
-                                    .font(.system(size: 14))
                                     .opacity(0.6)
                             }
                         }
                     }
-                    if let part = information.character.profile?.part {
-                        VStack(alignment: .leading) {
-                            Text("位置")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(part.localizedString)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
+                    InfoTextView("位置", text: information.character.profile?.part.localizedString)
                     if let birthday = information.character.profile?.birthday {
-                        VStack(alignment: .leading) {
-                            Text("生日")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(birthdayDateFormatter.string(from: birthday))
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
+                        InfoTextView("生日", text: birthdayDateFormatter.string(from: birthday))
                     }
-                    if let constellation = information.character.profile?.constellation {
-                        VStack(alignment: .leading) {
-                            Text("星座")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(constellation.localizedString)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
+                    InfoTextView("星座", text: information.character.profile?.constellation.localizedString)
                     if let height = information.character.profile?.height {
-                        VStack(alignment: .leading) {
-                            Text("身高")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(verbatim: "\(height) cm")
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
+                        InfoTextView("身高", text: "\(height) cm")
                     }
-                    if let school = information.character.profile?.school.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("学校")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(school)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
+                    InfoTextView("学校", text: information.character.profile?.school)
                     if let year = information.character.profile?.schoolYear.forPreferredLocale(),
                        let `class` = information.character.profile?.schoolClass.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("年 - 班")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(verbatim: "\(year) - \(`class`)")
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
+                        InfoTextView("年 - 班", text: "\(year) - \(`class`)")
                     }
-                    if let favoriteFood = information.character.profile?.favoriteFood.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("喜欢的食物")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(favoriteFood)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
-                    if let hatedFood = information.character.profile?.hatedFood.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("讨厌的食物")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(hatedFood)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
-                    if let hobby = information.character.profile?.hobby.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("爱好")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(hobby)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
-                    if let intro = information.character.profile?.selfIntroduction.forPreferredLocale() {
-                        VStack(alignment: .leading) {
-                            Text("介绍")
-                                .font(.system(size: 16, weight: .medium))
-                            Text(intro)
-                                .font(.system(size: 14))
-                                .opacity(0.6)
-                        }
-                    }
-                    VStack(alignment: .leading) {
-                        Text(verbatim: "ID")
-                            .font(.system(size: 16, weight: .medium))
-                        Text(String(id))
-                            .font(.system(size: 14))
-                            .opacity(0.6)
-                    }
+                    InfoTextView("喜欢的食物", text: information.character.profile?.favoriteFood)
+                    InfoTextView("讨厌的食物", text: information.character.profile?.hatedFood)
+                    InfoTextView("爱好", text: information.character.profile?.hobby)
+                    InfoTextView("介绍", text: information.character.profile?.selfIntroduction)
+                    InfoTextView(verbatim: "ID", text: String(id))
                 }
                 .listRowBackground(Color.clear)
                 if !information.cards.isEmpty {
