@@ -592,7 +592,14 @@
       }
     },
     "副标题" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subtitle"
+          }
+        }
+      }
     },
     "区域对话" : {
       "localizations" : {
@@ -868,7 +875,14 @@
       }
     },
     "播放视频" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play Video"
+          }
+        }
+      }
     },
     "播放语音" : {
       "localizations" : {
@@ -1111,16 +1125,44 @@
       }
     },
     "正在载入卡牌..." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading Cards…"
+          }
+        }
+      }
     },
     "正在载入招募..." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading Gacha..."
+          }
+        }
+      }
     },
     "正在载入歌曲..." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading Songs..."
+          }
+        }
+      }
     },
     "正在载入活动..." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading Events…"
+          }
+        }
+      }
     },
     "正在载入角色..." : {
       "localizations" : {
@@ -1168,6 +1210,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Costs"
+          }
+        }
+      }
+    },
+    "清除过滤" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
           }
         }
       }

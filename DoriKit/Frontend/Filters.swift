@@ -110,6 +110,21 @@ extension DoriFrontend {
             return String(SHA256.hash(data: desc.data(using: .utf8)!).map { $0.description }.joined().prefix(8))
         }
         
+        public mutating func clearAll() {
+            band = .init(Band.allCases)
+            attribute = .init(Attribute.allCases)
+            rarity = [1, 2, 3, 4, 5]
+            character = .init(Character.allCases)
+            server = .init(Server.allCases)
+            released = [false, true]
+            cardType = .init(CardType.allCases)
+            eventType = .init(EventType.allCases)
+            gachaType = .init(GachaType.allCases)
+            songType = .init(SongType.allCases)
+            skill = nil
+            timelineStatus = .init(TimelineStatus.allCases)
+        }
+        
         private static let _storageLock = NSLock()
         private func store() {
             guard let recoveryID else { return }

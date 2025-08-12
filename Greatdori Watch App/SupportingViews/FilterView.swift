@@ -44,16 +44,24 @@ struct FilterView: View {
     var body: some View {
         NavigationStack {
             List {
-                let sortedKeys = includingKeys.sorted()
-                ForEach(sortedKeys) { key in
-                    switch key.selector.type {
-                    case .single:
-                        SingleSelector(filter: $filter, key: key)
-                    case .multiple:
-                        MultipleSelector(filter: $filter, key: key)
+                if filter.isFiltered {
+                    Button("清除过滤", systemImage: "arrow.counterclockwise") {
+                        filter.clearAll()
+                    }
+                }
+                Section {
+                    let sortedKeys = includingKeys.sorted()
+                    ForEach(sortedKeys) { key in
+                        switch key.selector.type {
+                        case .single:
+                            SingleSelector(filter: $filter, key: key)
+                        case .multiple:
+                            MultipleSelector(filter: $filter, key: key)
+                        }
                     }
                 }
             }
+            .animation(.default, value: filter.isFiltered)
             .navigationTitle("过滤")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $isSearchPresented) {
