@@ -43,10 +43,10 @@
           "image-name" : "图层 1.png",
           "name" : "Note",
           "position" : {
-            "scale" : 0.78,
+            "scale" : 0.7,
             "translation-in-points" : [
-              -0.2,
-              -0.1172369840686236
+              0,
+              0
             ]
           }
         },
