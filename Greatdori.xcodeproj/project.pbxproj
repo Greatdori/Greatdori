@@ -1912,7 +1912,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Watch App/Watch-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -1950,7 +1950,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Watch App/Watch-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -1992,7 +1992,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Greatdori/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
@@ -2043,7 +2043,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Greatdori/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
@@ -2395,7 +2395,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Greatdori/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
@@ -2442,7 +2442,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Watch App/Watch-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -2621,7 +2621,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Greatdori/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
@@ -2669,7 +2669,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Watch App/Watch-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -2790,7 +2790,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2833,7 +2833,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2877,7 +2877,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2921,7 +2921,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3324,7 +3324,7 @@
 				DEVELOPMENT_TEAM = B57D8PP775;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Watch Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3360,7 +3360,7 @@
 				DEVELOPMENT_TEAM = B57D8PP775;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Watch Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3397,7 +3397,7 @@
 				DEVELOPMENT_TEAM = B57D8PP775;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Watch Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3433,7 +3433,7 @@
 				DEVELOPMENT_TEAM = B57D8PP775;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Greatdori Watch Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Greatdori;
+				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
