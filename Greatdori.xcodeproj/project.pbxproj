@@ -55,6 +55,13 @@
 		8C3FA25B2E4B9EC6001526F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2572E4B9EC6001526F2 /* ContentView.swift */; };
 		8C3FA25C2E4B9EC6001526F2 /* GreatLyricsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2582E4B9EC6001526F2 /* GreatLyricsApp.swift */; };
 		8C3FA25E2E4BA52C001526F2 /* GreatLyricsIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8C3FA25D2E4BA52C001526F2 /* GreatLyricsIcon.icon */; };
+		8C3FA2612E4BA6EA001526F2 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
+		8C3FA2622E4BA6EA001526F2 /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8C3FA2692E4BC9DC001526F2 /* FileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2682E4BC9D1001526F2 /* FileView.swift */; };
+		8C3FA26B2E4BCC20001526F2 /* StyleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA26A2E4BCC1A001526F2 /* StyleView.swift */; };
+		8C3FA26D2E4BCE7B001526F2 /* TextStyleRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA26C2E4BCE77001526F2 /* TextStyleRender.swift */; };
+		8C3FA26F2E4BCEC2001526F2 /* WrapIf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA26E2E4BCEC0001526F2 /* WrapIf.swift */; };
+		8C3FA2712E4BD487001526F2 /* StyleEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2702E4BD484001526F2 /* StyleEditorView.swift */; };
 		8C5AD1B02E46F96700E61653 /* SongMetaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */; };
 		8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */; };
 		8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */; };
@@ -271,6 +278,13 @@
 			remoteGlobalIDString = 8C2CCD392E3E058E0014189F;
 			remoteInfo = DoriEmoji;
 		};
+		8C3FA2632E4BA6EA001526F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
+			remoteInfo = DoriKit;
+		};
 		8C6C0ED82E422F9100D1FB0A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
@@ -381,6 +395,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C3FA2652E4BA6EA001526F2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8C3FA2622E4BA6EA001526F2 /* DoriKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C6C0EE12E422F9100D1FB0A /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -468,6 +493,11 @@
 		8C3FA2572E4B9EC6001526F2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8C3FA2582E4B9EC6001526F2 /* GreatLyricsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatLyricsApp.swift; sourceTree = "<group>"; };
 		8C3FA25D2E4BA52C001526F2 /* GreatLyricsIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = GreatLyricsIcon.icon; path = Artwork/GreatLyricsIcon.icon; sourceTree = SOURCE_ROOT; };
+		8C3FA2682E4BC9D1001526F2 /* FileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileView.swift; sourceTree = "<group>"; };
+		8C3FA26A2E4BCC1A001526F2 /* StyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleView.swift; sourceTree = "<group>"; };
+		8C3FA26C2E4BCE77001526F2 /* TextStyleRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyleRender.swift; sourceTree = "<group>"; };
+		8C3FA26E2E4BCEC0001526F2 /* WrapIf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapIf.swift; sourceTree = "<group>"; };
+		8C3FA2702E4BD484001526F2 /* StyleEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleEditorView.swift; sourceTree = "<group>"; };
 		8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongMetaView.swift; sourceTree = "<group>"; };
 		8C5AD1B72E47317D00E61653 /* .mailmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = .mailmap; sourceTree = "<group>"; };
 		8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStoriesView.swift; sourceTree = "<group>"; };
@@ -627,6 +657,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C3FA2612E4BA6EA001526F2 /* DoriKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -807,7 +838,12 @@
 			children = (
 				8C3FA25D2E4BA52C001526F2 /* GreatLyricsIcon.icon */,
 				8C3FA2582E4B9EC6001526F2 /* GreatLyricsApp.swift */,
+				8C3FA26E2E4BCEC0001526F2 /* WrapIf.swift */,
+				8C3FA26C2E4BCE77001526F2 /* TextStyleRender.swift */,
 				8C3FA2572E4B9EC6001526F2 /* ContentView.swift */,
+				8C3FA2682E4BC9D1001526F2 /* FileView.swift */,
+				8C3FA26A2E4BCC1A001526F2 /* StyleView.swift */,
+				8C3FA2702E4BD484001526F2 /* StyleEditorView.swift */,
 				8C3FA2562E4B9EC6001526F2 /* Assets.xcassets */,
 			);
 			path = GreatLyrics;
@@ -1186,10 +1222,12 @@
 				8C3FA2452E4B9EBF001526F2 /* Sources */,
 				8C3FA2462E4B9EBF001526F2 /* Frameworks */,
 				8C3FA2472E4B9EBF001526F2 /* Resources */,
+				8C3FA2652E4BA6EA001526F2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8C3FA2642E4BA6EA001526F2 /* PBXTargetDependency */,
 			);
 			name = GreatLyrics;
 			packageProductDependencies = (
@@ -1690,7 +1728,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C3FA2692E4BC9DC001526F2 /* FileView.swift in Sources */,
 				8C3FA25B2E4B9EC6001526F2 /* ContentView.swift in Sources */,
+				8C3FA26D2E4BCE7B001526F2 /* TextStyleRender.swift in Sources */,
+				8C3FA2712E4BD487001526F2 /* StyleEditorView.swift in Sources */,
+				8C3FA26B2E4BCC20001526F2 /* StyleView.swift in Sources */,
+				8C3FA26F2E4BCEC2001526F2 /* WrapIf.swift in Sources */,
 				8C3FA25C2E4B9EC6001526F2 /* GreatLyricsApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1773,6 +1816,11 @@
 			isa = PBXTargetDependency;
 			target = 8C2CCD392E3E058E0014189F /* DoriEmoji */;
 			targetProxy = 8C2CCD412E3E06100014189F /* PBXContainerItemProxy */;
+		};
+		8C3FA2642E4BA6EA001526F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
+			targetProxy = 8C3FA2632E4BA6EA001526F2 /* PBXContainerItemProxy */;
 		};
 		8C6C0ED92E422F9100D1FB0A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2866,7 +2914,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.GreatLyrics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2902,7 +2950,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.GreatLyrics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2938,7 +2986,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.GreatLyrics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2974,7 +3022,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori.GreatLyrics;
 				PRODUCT_NAME = "$(TARGET_NAME)";

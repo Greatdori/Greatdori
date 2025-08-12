@@ -12,6 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftUI
 import Foundation
 
 extension DoriFrontend {
@@ -349,5 +350,148 @@ extension DoriFrontend.Song {
         public var events: [DoriAPI.Event.PreviewEvent]
         public var meta: [DoriAPI.Song.DifficultyType: Meta]
         public var metaFever: [DoriAPI.Song.DifficultyType: Meta]
+    }
+}
+
+extension DoriFrontend.Song {
+    public struct Lyrics: Sendable, Identifiable, DoriCache.Cacheable {
+        public var id: Int
+        public var version: Int
+        public var lyrics: [LyricLine]
+        public var mainStyle: Style?
+        public var metadata: Metadata
+        
+        @_spi(GreatLyrics)
+        public init(
+            id: Int,
+            version: Int,
+            lyrics: [LyricLine],
+            mainStyle: Style? = nil,
+            metadata: Metadata
+        ) {
+            self.id = id
+            self.version = version
+            self.lyrics = lyrics
+            self.mainStyle = mainStyle
+            self.metadata = metadata
+        }
+        
+        public struct LyricLine: Sendable, DoriCache.Cacheable {
+            public var original: String
+            public var translations: DoriAPI.LocalizedData<String>
+            public var ruby: Ruby?
+            public var partialStyle: [ClosedRange<Int>: Style]
+            
+            @_spi(GreatLyrics)
+            public init(
+                original: String,
+                translations: DoriAPI.LocalizedData<String>,
+                ruby: Ruby? = nil,
+                partialStyle: [ClosedRange<Int> : Style]
+            ) {
+                self.original = original
+                self.translations = translations
+                self.ruby = ruby
+                self.partialStyle = partialStyle
+            }
+            
+            public struct Ruby: Sendable, DoriCache.Cacheable {
+                public var romaji: String
+                public var kana: String
+                
+                @_spi(GreatLyrics)
+                public init(romaji: String, kana: String) {
+                    self.romaji = romaji
+                    self.kana = kana
+                }
+            }
+        }
+        
+        public struct Style: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+            public var id: UUID = UUID()
+            public var color: Color?
+            public var fontOverride: String?
+            public var stroke: Stroke?
+            public var shadow: Shadow?
+            public var maskLines: [MaskLine]
+            
+            @_spi(GreatLyrics)
+            public init(
+                color: Color,
+                fontOverride: String? = nil,
+                stroke: Stroke? = nil,
+                shadow: Shadow? = nil,
+                maskLines: [MaskLine] = []
+            ) {
+                self.color = color
+                self.fontOverride = fontOverride
+                self.stroke = stroke
+                self.shadow = shadow
+                self.maskLines = maskLines
+            }
+            
+            public struct Stroke: Sendable, Hashable, DoriCache.Cacheable {
+                public var color: Color
+                public var width: CGFloat
+                public var radius: CGFloat
+                
+                @_spi(GreatLyrics)
+                public init(color: Color, width: CGFloat, radius: CGFloat) {
+                    self.color = color
+                    self.width = width
+                    self.radius = radius
+                }
+            }
+            public struct Shadow: Sendable, Hashable, DoriCache.Cacheable {
+                public var color: Color
+                public var x: CGFloat
+                public var y: CGFloat
+                public var blur: CGFloat
+                
+                @_spi(GreatLyrics)
+                public init(color: Color, x: CGFloat, y: CGFloat, blur: CGFloat) {
+                    self.color = color
+                    self.x = x
+                    self.y = y
+                    self.blur = blur
+                }
+            }
+            public struct MaskLine: Sendable, Hashable, DoriCache.Cacheable {
+                public var color: Color
+                public var width: CGFloat
+                public var start: CGPoint
+                public var end: CGPoint
+                
+                @_spi(GreatLyrics)
+                public init(color: Color, width: CGFloat, start: CGPoint, end: CGPoint) {
+                    self.color = color
+                    self.width = width
+                    self.start = start
+                    self.end = end
+                }
+            }
+        }
+        
+        public struct Metadata: Sendable, DoriCache.Cacheable {
+            public var annotation: String?
+            public var legends: [Legend]
+            
+            @_spi(GreatLyrics)
+            public init(annotation: String? = nil, legends: [Legend]) {
+                self.annotation = annotation
+                self.legends = legends
+            }
+            
+            public struct Legend: Sendable, DoriCache.Cacheable {
+                public var color: Color
+                public var text: DoriAPI.LocalizedData<String>
+                
+                @_spi(GreatLyrics)
+                public init(color: Color, text: DoriAPI.LocalizedData<String>) {
+                    self.color = color
+                    self.text = text
+                }
+            }
+        }
     }
 }

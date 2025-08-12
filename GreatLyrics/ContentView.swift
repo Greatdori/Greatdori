@@ -13,19 +13,30 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftUI
+@_spi(GreatLyrics) import DoriKit
 
 struct ContentView: View {
+    @State var lyrics = Lyrics(
+        id: 0,
+        version: 1,
+        lyrics: [],
+        mainStyle: nil,
+        metadata: .init(legends: [])
+    )
+    @State var mainTabSelection = 0
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView(selection: $mainTabSelection) {
+            Tab("File", systemImage: "document", value: 0) {
+                NavigationStack {
+                    FileView(lyrics: $lyrics)
+                }
+            }
+            Tab("Style", systemImage: "paintbrush", value: 1) {
+                NavigationStack {
+                    StyleView(lyrics: $lyrics)
+                }
+            }
         }
-        .padding()
+        .tabViewStyle(.sidebarAdaptable)
     }
-}
-
-#Preview {
-    ContentView()
 }

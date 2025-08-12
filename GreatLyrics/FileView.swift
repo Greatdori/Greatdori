@@ -1,6 +1,6 @@
 //===---*- Greatdori! -*---------------------------------------------------===//
 //
-// GreatLyricsApp.swift
+// FileView.swift
 //
 // This source file is part of the Greatdori! open source project
 //
@@ -15,16 +15,21 @@
 import SwiftUI
 @_spi(GreatLyrics) import DoriKit
 
-typealias Lyrics = DoriFrontend.Song.Lyrics
-
-/// A utility for generating lyric files.
-///
-/// This app is only used for development and is not intended to publish.
-@main
-struct GreatLyricsApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+struct FileView: View {
+    @Binding var lyrics: Lyrics
+    var body: some View {
+        Form {
+            Section {
+                HStack {
+                    Text("Decodable File")
+                    Spacer()
+                    Button("Export...") {
+                        
+                    }
+                }
+            }
         }
+        .formStyle(.grouped)
+        .navigationSubtitle("File")
     }
 }
