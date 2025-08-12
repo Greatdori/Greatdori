@@ -95,7 +95,7 @@ extension DoriAPI {
 }
 
 extension DoriAPI.MiracleTicket {
-    public struct MiracleTicket: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct MiracleTicket: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var name: DoriAPI.LocalizedData<String>
         public var ids: DoriAPI.LocalizedData<[Int]>

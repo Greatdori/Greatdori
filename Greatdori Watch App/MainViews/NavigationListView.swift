@@ -118,6 +118,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.miracleTicket) {
+                    Label {
+                        Text("自选券")
+                    } icon: {
+                        Image(systemName: "ticket.fill")
+                            .foregroundStyle(.accent)
+                    }
+                }
                 NavigationLink(value: NavigationPage.comic) {
                     Label {
                         Text("漫画")

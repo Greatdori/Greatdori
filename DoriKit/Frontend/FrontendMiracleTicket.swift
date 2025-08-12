@@ -44,7 +44,7 @@ extension DoriFrontend {
 }
 
 extension DoriFrontend.MiracleTicket {
-    public struct ExtendedMiracleTicket: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct ExtendedMiracleTicket: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var ticket: DoriAPI.MiracleTicket.MiracleTicket
         public var cards: DoriAPI.LocalizedData<[DoriAPI.Card.PreviewCard]>
         

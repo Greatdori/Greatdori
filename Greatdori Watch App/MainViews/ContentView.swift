@@ -42,6 +42,8 @@ struct ContentView: View {
                     SongListView()
                 case .songMeta:
                     SongMetaView()
+                case .miracleTicket:
+                    MiracleTicketView()
                 case .comic:
                     ComicListView()
                 case .eventTracker:
@@ -67,6 +69,7 @@ enum NavigationPage {
     case gacha
     case song
     case songMeta
+    case miracleTicket
     case comic
     case eventTracker
     case storyViewer

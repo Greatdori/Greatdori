@@ -1,6 +1,16 @@
 {
   "sourceLanguage" : "zh-Hans",
   "strings" : {
+    "(选择一项)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(Select…)"
+          }
+        }
+      }
+    },
     "(选择乐团)" : {
       "localizations" : {
         "en" : {
@@ -1384,6 +1394,26 @@
         }
       }
     },
+    "自选券" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miracle Ticket"
+          }
+        }
+      }
+    },
+    "自选券可以选择卡池里任何一张卡牌" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miracle Ticket can be used to exchange one card of your choice"
+          }
+        }
+      }
+    },
     "角色" : {
       "localizations" : {
         "en" : {
@@ -1540,6 +1570,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Failed to Load Birthday"
+          }
+        }
+      }
+    },
+    "载入自选券时出错" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to Load Miracle Tickets"
           }
         }
       }
