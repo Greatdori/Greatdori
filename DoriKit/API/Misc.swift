@@ -387,6 +387,157 @@ extension DoriAPI {
             }
             return await task.value
         }
+        
+        public static func playerProfile(of id: Int, in locale: Locale) async -> PlayerProfile? {
+            let request = await requestJSON("https://bestdori.com/api/player/\(locale.rawValue)/\(id)?mode=2")
+            if case let .success(respJSON) = request {
+                let task = Task.detached(priority: .userInitiated) { () -> PlayerProfile? in
+                    guard respJSON["result"].boolValue else { return nil }
+                    let profile = respJSON["data"]["profile"]
+                    
+                    var flagsValue: UInt16 = 0
+                    if profile["publishTotalDeckPowerFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishTotalDeckPower.rawValue
+                    }
+                    if profile["publishBandRankFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishBandRank.rawValue
+                    }
+                    if profile["publishMusicClearedFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishMusicCleared.rawValue
+                    }
+                    if profile["publishMusicFullComboFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishMusicFullCombo.rawValue
+                    }
+                    if profile["publishHighScoreRatingFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishHighScoreRating.rawValue
+                    }
+                    if profile["publishUserIdFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishUserID.rawValue
+                    }
+                    if profile["searchableFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.searchable.rawValue
+                    }
+                    if profile["publishUpdatedAtFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishUpdatedAt.rawValue
+                    }
+                    if profile["friendApplicableFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.friendApplicable.rawValue
+                    }
+                    if profile["publishMusicAllPerfectFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishMusicAllPerfect.rawValue
+                    }
+                    if profile["publishDeckRankFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishDeckRank.rawValue
+                    }
+                    if profile["publishStageChallengeAchievementConditionsFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishStageChallengeAchievementConditions.rawValue
+                    }
+                    if profile["publishStageChallengeFriendRankingFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishStageChallengeFriendRanking.rawValue
+                    }
+                    if profile["publishCharacterRankFlg"].boolValue {
+                        flagsValue |= PlayerProfile.Flags.publishCharacterRank.rawValue
+                    }
+                    
+                    func highScoreMusic(for key: String) -> [PlayerProfile.HighScoreRating.HighScoreMusic] {
+                        profile["userHighScoreRating"][key]["entries"].map {
+                            .init(
+                                musicID: $0.1["musicId"].intValue,
+                                difficulty: .init(rawStringValue: $0.1["difficulty"].stringValue) ?? .easy,
+                                rating: $0.1["rating"].intValue
+                            )
+                        }
+                    }
+                    
+                    let userMusicClearInfo = profile["userMusicClearInfoMap"]["entries"].map {
+                        (key: DoriAPI.Song.DifficultyType(rawStringValue: $0.0) ?? .easy,
+                         value: PlayerProfile.MusicClearInfo(
+                            clearedMusicCount: $0.1["clearedMusicCount"].intValue,
+                            fullComboMusicCount: $0.1["fullComboMusicCount"].intValue,
+                            allPerfectMusicCount: $0.1["allPerfectMusicCount"].intValue
+                         ))
+                    }.reduce(into: [DoriAPI.Song.DifficultyType: PlayerProfile.MusicClearInfo]()) { $0.updateValue($1.value, forKey: $1.key) }
+                    let stageChallengeAchievementConditions = profile["stageChallengeAchievementConditionsMap"]["entries"].map {
+                        (key: Int($0.0) ?? 0, value: $0.1.intValue)
+                    }.reduce(into: [Int: Int]()) { $0.updateValue($1.value, forKey: $1.key) }
+                    
+                    return .init(
+                        userName: profile["userName"].stringValue,
+                        rank: profile["rank"].intValue,
+                        degree: profile["degree"].intValue,
+                        introduction: profile["introduction"].stringValue,
+                        flags: .init(rawValue: flagsValue),
+                        mainDeckUserSituations: profile["mainDeckUserSituations"]["entries"].map {
+                            .init(
+                                userID: Int($0.1["userId"].stringValue) ?? 0,
+                                situationID: $0.1["situationId"].intValue,
+                                level: $0.1["level"].intValue,
+                                exp: $0.1["exp"].intValue,
+                                createdAt: .init(timeIntervalSince1970: Double(Int($0.1["createdAt"][0].stringValue.dropLast(3))!)),
+                                addExp: $0.1["addExp"].intValue,
+                                trained: $0.1["trainingStatus"].stringValue == "done",
+                                duplicateCount: $0.1["duplicateCount"].intValue,
+                                illust: $0.1["illust"].stringValue,
+                                skillExp: $0.1["skillExp"].intValue,
+                                skillLevel: $0.1["skillLevel"].intValue,
+                                userAppendParameter: .init(
+                                    stat: .init(
+                                        performance: $0.1["userAppendParameter"]["performance"].intValue,
+                                        technique: $0.1["userAppendParameter"]["technique"].intValue,
+                                        visual: $0.1["userAppendParameter"]["visual"].intValue
+                                    ),
+                                    characterPotentialStat: .init(
+                                        performance: $0.1["userAppendParameter"]["characterPotentialPerformance"].intValue,
+                                        technique: $0.1["userAppendParameter"]["characterPotentialTechnique"].intValue,
+                                        visual: $0.1["userAppendParameter"]["characterPotentialVisual"].intValue
+                                    ),
+                                    characterBonusStat: .init(
+                                        performance: $0.1["userAppendParameter"]["characterBonusPerformance"].intValue,
+                                        technique: $0.1["userAppendParameter"]["characterBonusTechnique"].intValue,
+                                        visual: $0.1["userAppendParameter"]["characterBonusVisual"].intValue
+                                    )
+                                ),
+                                limitBreakRank: $0.1["limitBreakRank"].intValue
+                            )
+                        },
+                        userHighScoreRating: .init(
+                            poppinParty: highScoreMusic(for: "userPoppinPartyHighScoreMusicList"),
+                            afterglow: highScoreMusic(for: "userAfterglowHighScoreMusicList"),
+                            pastelPalettes: highScoreMusic(for: "userPastelPalettesHighScoreMusicList"),
+                            helloHappyWorld: highScoreMusic(for: "userHelloHappyWorldHighScoreMusicList"),
+                            roselia: highScoreMusic(for: "userRoseliaHighScoreMusicList"),
+                            morfonica: highScoreMusic(for: "userMorfonicaHighScoreMusicList"),
+                            raiseASuilen: highScoreMusic(for: "userRaiseASuilenHighScoreMusicList"),
+                            myGO: highScoreMusic(for: "userMyGOScoreMusicList"),
+                            others: highScoreMusic(for: "userOtherHighScoreMusicList")
+                        ),
+                        mainUserDeck: .init(
+                            deckID: profile["mainUserDeck"]["deckId"].intValue,
+                            deckName: profile["mainUserDeck"]["deckName"].stringValue,
+                            leader: profile["mainUserDeck"]["leader"].intValue,
+                            member1: profile["mainUserDeck"]["member1"].intValue,
+                            member2: profile["mainUserDeck"]["member2"].intValue,
+                            member3: profile["mainUserDeck"]["member3"].intValue,
+                            member4: profile["mainUserDeck"]["member4"].intValue
+                        ),
+                        userProfileSituation: .init(
+                            userID: Int(profile["userProfileSituation"]["userId"].stringValue) ?? 0,
+                            situationID: profile["userProfileSituation"]["situationId"].intValue,
+                            illust: profile["userProfileSituation"]["illust"].stringValue,
+                            viewProfileSituationStatus: profile["userProfileSituation"]["viewProfileSituationStatus"].stringValue
+                        ),
+                        userProfileDegree: [
+                            profile["userProfileDegreeMap"]["entries"]["first"]["degreeId"].int,
+                            profile["userProfileDegreeMap"]["entries"]["second"]["degreeId"].int
+                        ],
+                        stageChallengeAchievementConditions: stageChallengeAchievementConditions,
+                        userMusicClearInfo: userMusicClearInfo
+                    )
+                }
+                return await task.value
+            }
+            return nil
+        }
     }
 }
 
@@ -624,6 +775,108 @@ extension DoriAPI.Misc {
             public var volume: Double
             public var seBundleName: String
             public var duration: Double
+        }
+    }
+    
+    public struct PlayerProfile: Sendable, DoriCache.Cacheable {
+        public var userName: String
+        public var rank: Int
+        public var degree: Int
+        public var introduction: String
+        public var flags: Flags // Bool<.+Flg>(JSON) -> Flags(:OptionSet)(Swift)
+        public var mainDeckUserSituations: [Situation]
+        public var userHighScoreRating: HighScoreRating
+        public var mainUserDeck: UserDeck
+        public var userProfileSituation: ProfileSituation
+        public var userProfileDegree: [Int?] // [FirstID, SecondID]
+        public var stageChallengeAchievementConditions: [Int: Int]
+        public var userMusicClearInfo: [DoriAPI.Song.DifficultyType: MusicClearInfo]
+        
+        public struct Flags: Sendable, OptionSet, DoriCache.Cacheable {
+            public var rawValue: UInt16
+            
+            public init(rawValue: UInt16) {
+                self.rawValue = rawValue
+            }
+            
+            public static let publishTotalDeckPower                      = Flags(rawValue: 1 << 0)
+            public static let publishBandRank                            = Flags(rawValue: 1 << 1)
+            public static let publishMusicCleared                        = Flags(rawValue: 1 << 2)
+            public static let publishMusicFullCombo                      = Flags(rawValue: 1 << 3)
+            public static let publishHighScoreRating                     = Flags(rawValue: 1 << 4)
+            public static let publishUserID                              = Flags(rawValue: 1 << 5)
+            public static let searchable                                 = Flags(rawValue: 1 << 6)
+            public static let publishUpdatedAt                           = Flags(rawValue: 1 << 7)
+            public static let friendApplicable                           = Flags(rawValue: 1 << 8)
+            public static let publishMusicAllPerfect                     = Flags(rawValue: 1 << 9)
+            public static let publishDeckRank                            = Flags(rawValue: 1 << 10)
+            public static let publishStageChallengeAchievementConditions = Flags(rawValue: 1 << 11)
+            public static let publishStageChallengeFriendRanking         = Flags(rawValue: 1 << 12)
+            public static let publishCharacterRank                       = Flags(rawValue: 1 << 13)
+        }
+        
+        public struct Situation: Sendable, DoriCache.Cacheable {
+            public var userID: Int
+            public var situationID: Int
+            public var level: Int
+            public var exp: Int
+            public var createdAt: Date
+            public var addExp: Int
+            public var trained: Bool // String<trainingStatus>(JSON) -> Bool<trained>(Swift)
+                                     // true where trainingStatus == "done"
+            public var duplicateCount: Int
+            public var illust: String
+            public var skillExp: Int
+            public var skillLevel: Int
+            public var userAppendParameter: AppendParameter
+            public var limitBreakRank: Int
+            
+            public struct AppendParameter: Sendable, DoriCache.Cacheable {
+                public var stat: DoriAPI.Card.Stat // Int<performance|technique|visual>(JSON) -> Stat(Swift)
+                public var characterPotentialStat: DoriAPI.Card.Stat // Int<characterPotential.+>(JSON) -> Stat(Swift)
+                public var characterBonusStat: DoriAPI.Card.Stat // Int<characterPotential.+>(JSON) -> Stat(Swift)
+            }
+        }
+        
+        public struct HighScoreRating: Sendable, DoriCache.Cacheable {
+            public var poppinParty: [HighScoreMusic]
+            public var afterglow: [HighScoreMusic]
+            public var pastelPalettes: [HighScoreMusic]
+            public var helloHappyWorld: [HighScoreMusic]
+            public var roselia: [HighScoreMusic]
+            public var morfonica: [HighScoreMusic]
+            public var raiseASuilen: [HighScoreMusic]
+            public var myGO: [HighScoreMusic]
+            public var others: [HighScoreMusic]
+            
+            public struct HighScoreMusic: Sendable, DoriCache.Cacheable {
+                public var musicID: Int
+                public var difficulty: DoriAPI.Song.DifficultyType
+                public var rating: Int
+            }
+        }
+        
+        public struct UserDeck: Sendable, DoriCache.Cacheable {
+            public var deckID: Int
+            public var deckName: String
+            public var leader: Int
+            public var member1: Int
+            public var member2: Int
+            public var member3: Int
+            public var member4: Int
+        }
+        
+        public struct ProfileSituation: Sendable, DoriCache.Cacheable {
+            public var userID: Int
+            public var situationID: Int
+            public var illust: String
+            public var viewProfileSituationStatus: String
+        }
+        
+        public struct MusicClearInfo: Sendable, DoriCache.Cacheable {
+            public var clearedMusicCount: Int
+            public var fullComboMusicCount: Int
+            public var allPerfectMusicCount: Int
         }
     }
 }

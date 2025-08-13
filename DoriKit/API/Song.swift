@@ -732,6 +732,19 @@ extension DoriAPI.Song {
     }
 }
 
+extension DoriAPI.Song.DifficultyType {
+    internal init?(rawStringValue name: String) {
+        switch name {
+        case "easy": self = .easy
+        case "normal": self = .normal
+        case "hard": self = .hard
+        case "expert": self = .expert
+        case "special": self = .special
+        default: return nil
+        }
+    }
+}
+
 // FIXME: Provide an initializer like this for all Preview structures.
 extension DoriAPI.Song.PreviewSong {
     public init(_ full: DoriAPI.Song.Song) {
