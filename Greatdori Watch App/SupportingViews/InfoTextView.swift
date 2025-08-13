@@ -112,6 +112,7 @@ extension InfoTextView: View {
                 content()
                     .font(.system(size: 14))
             }
+            .accessibilityElement(children: .combine)
         } else {
             EmptyView()
         }
