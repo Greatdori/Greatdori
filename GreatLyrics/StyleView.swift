@@ -23,12 +23,7 @@ struct StyleView: View {
             Section {
                 if !presetStyles.isEmpty {
                     ForEach(Array(presetStyles.enumerated()), id: \.element.id) { (index, style) in
-                        NavigationLink {
-                            StyleEditorView(style: style) { newStyle in
-                                presetStyles[index] = newStyle
-                                savePresets()
-                            }
-                        } label: {
+                        NavigationLink(value: index) {
                             TextStyleRender(text: "迷い星のうた", style: style)
                         }
                     }
@@ -57,6 +52,12 @@ struct StyleView: View {
         }
         .formStyle(.grouped)
         .navigationSubtitle("Style")
+        .navigationDestination(for: Int.self) { index in
+            StyleEditorView(style: presetStyles[index]) { newStyle in
+                presetStyles[index] = newStyle
+                savePresets()
+            }
+        }
         .task {
             let decoder = PropertyListDecoder()
             let source = URL(filePath: NSHomeDirectory() + "/Documents/StylePresets.plist")
