@@ -535,6 +535,20 @@ extension DoriAPI.Gacha {
     }
 }
 
+extension DoriAPI.Gacha.PreviewGacha {
+    public init(_ full: DoriAPI.Gacha.Gacha) {
+        self.init(
+            id: full.id,
+            resourceName: full.resourceName,
+            bannerAssetBundleName: full.bannerAssetBundleName,
+            gachaName: full.gachaName,
+            publishedAt: full.publishedAt,
+            closedAt: full.closedAt,
+            type: full.type,
+            newCards: full.newCards
+        )
+    }
+}
 extension DoriAPI.Gacha.Gacha {
     @inlinable
     public init?(id: Int) async {

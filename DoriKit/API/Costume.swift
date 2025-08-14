@@ -181,6 +181,17 @@ extension DoriAPI.Costume {
     }
 }
 
+extension DoriAPI.Costume.PreviewCostume {
+    public init(_ full: DoriAPI.Costume.Costume) {
+        self.init(
+            id: full.id,
+            characterID: full.characterID,
+            assetBundleName: full.assetBundleName,
+            description: full.description,
+            publishedAt: full.publishedAt
+        )
+    }
+}
 extension DoriAPI.Costume.Costume {
     @inlinable
     public init?(id: Int) async {

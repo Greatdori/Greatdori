@@ -560,6 +560,32 @@ extension DoriAPI.Character {
     }
 }
 
+extension DoriAPI.Character.PreviewCharacter {
+    public init(_ full: DoriAPI.Character.Character) {
+        self.init(
+            id: full.id,
+            characterType: full.characterType,
+            characterName: full.characterName,
+            nickname: full.nickname,
+            bandID: full.bandID,
+            color: full.color
+        )
+    }
+}
+extension DoriAPI.Character.BirthdayCharacter {
+    public init?(_ full: DoriAPI.Character.Character) {
+        if let birthday = full.profile?.birthday {
+            self.init(
+                id: full.id,
+                characterName: full.characterName,
+                nickname: full.nickname,
+                birthday: birthday
+            )
+        } else {
+            return nil
+        }
+    }
+}
 extension DoriAPI.Character.Character {
     @inlinable
     public init?(id: Int) async {

@@ -745,7 +745,6 @@ extension DoriAPI.Song.DifficultyType {
     }
 }
 
-// FIXME: Provide an initializer like this for all Preview structures.
 extension DoriAPI.Song.PreviewSong {
     public init(_ full: DoriAPI.Song.Song) {
         self.init(

@@ -441,6 +441,17 @@ extension DoriAPI.News {
     }
 }
 
+extension DoriAPI.News.PreviewItem {
+    public init(_ full: DoriAPI.News.Item) {
+        self.init(
+            id: full.id,
+            title: full.title,
+            authors: full.authors,
+            timestamp: full.timestamp,
+            tags: full.tags
+        )
+    }
+}
 extension DoriAPI.News.Item {
     @inlinable
     public init?(id: Int) async {

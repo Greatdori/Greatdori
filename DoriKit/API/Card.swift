@@ -656,6 +656,23 @@ extension DoriAPI.Card {
     }
 }
 
+extension DoriAPI.Card.PreviewCard {
+    public init(_ full: DoriAPI.Card.Card) {
+        self.init(
+            id: full.id,
+            characterID: full.characterID,
+            rarity: full.rarity,
+            attribute: full.attribute,
+            levelLimit: full.levelLimit,
+            resourceSetName: full.resourceSetName,
+            prefix: full.prefix,
+            releasedAt: full.releasedAt,
+            skillID: full.skillID,
+            type: full.type,
+            stat: full.stat
+        )
+    }
+}
 extension DoriAPI.Card.Card {
     @inlinable
     public init?(id: Int) async {

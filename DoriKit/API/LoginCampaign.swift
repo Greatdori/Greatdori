@@ -255,3 +255,31 @@ extension DoriAPI.LoginCampaign {
         case noAsset = "no_asset"
     }
 }
+
+extension DoriAPI.LoginCampaign.PreviewCampaign {
+    public init(_ full: DoriAPI.LoginCampaign.Campaign) {
+        self.init(
+            id: full.id,
+            loginBonusType: full.loginBonusType,
+            assetBundleName: full.assetBundleName,
+            caption: full.caption,
+            publishedAt: full.publishedAt,
+            closedAt: full.closedAt
+        )
+    }
+}
+extension DoriAPI.LoginCampaign.Campaign {
+    @inlinable
+    public init?(id: Int) async {
+        if let campaign = await DoriAPI.LoginCampaign.detail(of: id) {
+            self = campaign
+        } else {
+            return nil
+        }
+    }
+    
+    @inlinable
+    public init?(preview: DoriAPI.LoginCampaign.PreviewCampaign) async {
+        await self.init(id: preview.id)
+    }
+}

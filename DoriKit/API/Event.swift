@@ -1043,6 +1043,24 @@ extension DoriAPI.Event {
     }
 }
 
+extension DoriAPI.Event.PreviewEvent {
+    public init(_ full: DoriAPI.Event.Event) {
+        self.init(
+            id: full.id,
+            eventType: full.eventType,
+            eventName: full.eventName,
+            assetBundleName: full.assetBundleName,
+            bannerAssetBundleName: full.bannerAssetBundleName,
+            startAt: full.startAt,
+            endAt: full.endAt,
+            attributes: full.attributes,
+            characters: full.characters,
+            members: full.members,
+            limitBreaks: full.limitBreaks,
+            rewardCards: full.rewardCards
+        )
+    }
+}
 extension DoriAPI.Event.Event {
     @inlinable
     public init?(id: Int) async {
