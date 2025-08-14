@@ -53,6 +53,12 @@ private struct _StyleRenderer: TextRenderer {
     var factor: CGFloat
     var partialStyle: [ClosedRange<Int>: Lyrics.Style]
     func draw(layout: Text.Layout, in ctx: inout GraphicsContext) {
+        if partialStyle.isEmpty {
+            for line in layout {
+                ctx.draw(line)
+            }
+            return
+        }
         for line in layout {
             for run in line {
                 for glyph in run {

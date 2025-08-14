@@ -24,7 +24,30 @@ struct StyleView: View {
                 if !presetStyles.isEmpty {
                     ForEach(Array(presetStyles.enumerated()), id: \.element.id) { (index, style) in
                         NavigationLink(value: index) {
-                            TextStyleRender(text: "迷い星のうた", style: style)
+                            HStack {
+                                TextStyleRender(text: "迷い星のうた", style: style)
+                                Spacer()
+                                if lyrics.mainStyle?.id == style.id {
+                                    Text("Main")
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.green)
+                                        .padding(2)
+                                        .padding(.horizontal, 3)
+                                        .background {
+                                            RoundedRectangle(cornerRadius: 4)
+                                                .strokeBorder(Color.green)
+                                        }
+                                        .contextMenu {
+                                            Button("Remove Main Style") {
+                                                lyrics.mainStyle = nil
+                                            }
+                                        }
+                                } else {
+                                    Button("Set as Main") {
+                                        lyrics.mainStyle = style
+                                    }
+                                }
+                            }
                         }
                     }
                 } else {

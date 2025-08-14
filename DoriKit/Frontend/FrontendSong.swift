@@ -354,20 +354,20 @@ extension DoriFrontend.Song {
 }
 
 extension DoriFrontend.Song {
-    public struct Lyrics: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct Lyrics: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var version: Int
         public var lyrics: [LyricLine]
         public var mainStyle: Style?
         public var metadata: Metadata
         
-        public struct LyricLine: Sendable, DoriCache.Cacheable {
+        public struct LyricLine: Sendable, Hashable, DoriCache.Cacheable {
             public var original: String
             public var translations: DoriAPI.LocalizedData<String>
             public var ruby: Ruby?
             public var partialStyle: [ClosedRange<Int>: Style]
             
-            public struct Ruby: Sendable, DoriCache.Cacheable {
+            public struct Ruby: Sendable, Hashable, DoriCache.Cacheable {
                 public var romaji: String
                 public var kana: String
             }
@@ -400,7 +400,7 @@ extension DoriFrontend.Song {
             }
         }
         
-        public struct Metadata: Sendable, DoriCache.Cacheable {
+        public struct Metadata: Sendable, Hashable, DoriCache.Cacheable {
             public var annotation: String?
             public var legends: [Legend]
             
