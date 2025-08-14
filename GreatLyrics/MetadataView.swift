@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftUI
-@_spi(GreatLyrics) import DoriKit
+@_private(sourceFile: "FrontendSong.swift") import DoriKit
 
 struct MetadataView: View {
     @Binding var lyrics: Lyrics

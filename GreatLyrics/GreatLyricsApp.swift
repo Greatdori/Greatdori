@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftUI
-@_spi(GreatLyrics) import DoriKit
+@_private(sourceFile: "FrontendSong.swift") import DoriKit
 
 typealias Lyrics = DoriFrontend.Song.Lyrics
 
