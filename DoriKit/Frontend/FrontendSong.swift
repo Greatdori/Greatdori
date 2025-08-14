@@ -404,7 +404,7 @@ extension DoriFrontend.Song {
             public var annotation: String?
             public var legends: [Legend]
             
-            public struct Legend: Sendable, DoriCache.Cacheable {
+            public struct Legend: Sendable, Hashable, DoriCache.Cacheable {
                 public var color: Color
                 public var text: DoriAPI.LocalizedData<String>
             }

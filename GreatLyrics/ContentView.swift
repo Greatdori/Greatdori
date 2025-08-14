@@ -33,6 +33,7 @@ struct ContentView: View {
                 Label("File", systemImage: "document").tag(0)
                 Label("Style", systemImage: "paintbrush").tag(1)
                 Label("Metadata", systemImage: "gearshape").tag(2)
+                Label("Lyrics", systemImage: "music.note.list").tag(3)
             }
             .navigationSplitViewColumnWidth(180)
         } detail: {
@@ -42,6 +43,7 @@ struct ContentView: View {
                     case 0: FileView(lyrics: $lyrics)
                     case 1: StyleView(lyrics: $lyrics)
                     case 2: MetadataView(lyrics: $lyrics)
+                    case 3: LyricsView(lyrics: $lyrics)
                     default: EmptyView()
                     }
                 }
@@ -54,7 +56,6 @@ struct ContentView: View {
             }
         }
         .onChange(of: detailNavigationPath) {
-            debugPrint(detailNavigationPath)
             if !shouldRecordChange {
                 shouldRecordChange = true
                 return

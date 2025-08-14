@@ -17,64 +17,23 @@ import SwiftUI
 
 struct TextStyleRender: View {
     var text: String
-    var style: Lyrics.Style
+    var partialStyle: [ClosedRange<Int>: Lyrics.Style]
     @Environment(\.font) var envFont
     @Environment(\.fontResolutionContext) var envFontContext
     @State var factor: CGFloat = 14
-    var body: some View {
-        ZStack {
-            baseText
-                .wrapIfLet(style.stroke) { content, stroke in
-                    ZStack {
-                        ZStack {
-                            content.offset(x:  stroke.width / 30 * factor, y:  stroke.width / 30 * factor)
-                            content.offset(x: -stroke.width / 30 * factor, y: -stroke.width / 30 * factor)
-                            content.offset(x: -stroke.width / 30 * factor, y:  stroke.width / 30 * factor)
-                            content.offset(x:  stroke.width / 30 * factor, y: -stroke.width / 30 * factor)
-                        }
-                        .foregroundStyle(stroke.color)
-                        .blur(radius: stroke.radius / 30 * factor)
-                        content
-                    }
-                }
-                .wrapIfLet(style.shadow) { content, shadow in
-                    content
-                        .shadow(color: shadow.color, radius: shadow.blur / 30 * factor, x: shadow.x / 30 * factor, y: shadow.y / 30 * factor)
-                }
-            baseText
-                .wrapIf(!style.maskLines.isEmpty) { content in
-                    let maskLines = style.maskLines
-                    content
-                        .overlay {
-                            ForEach(maskLines, id: \.self) { maskLine in
-                                GeometryReader { proxy in
-                                    Path { path in
-                                        let startAbs = CGPoint(
-                                            x: maskLine.start.x * proxy.size.width,
-                                            y: maskLine.start.y * proxy.size.height
-                                        )
-                                        let endAbs = CGPoint(
-                                            x: maskLine.end.x * proxy.size.width,
-                                            y: maskLine.end.y * proxy.size.height
-                                        )
-                                        path.move(to: startAbs)
-                                        path.addLine(to: endAbs)
-                                    }
-                                    .stroke(maskLine.color, lineWidth: maskLine.width / 30 * factor)
-                                }
-                                .mask {
-                                    content
-                                }
-                            }
-                        }
-                }
-        }
+    
+    init(text: String, style: Lyrics.Style) {
+        self.text = text
+        self.partialStyle = [.init(0..<text.count): style]
+    }
+    init(text: String, partialStyle: [ClosedRange<Int>: Lyrics.Style]) {
+        self.text = text
+        self.partialStyle = partialStyle
     }
     
-    var baseText: some View {
+    var body: some View {
         Text(text)
-            .foregroundStyle(style.color ?? Color.primary)
-            .wrapIfLet(style.fontOverride) { content, fontName in
+            .wrapIfLet(partialStyle.first?.value.fontOverride) { content, fontName in
                 if let envFont {
                     content
                         .font(.custom(fontName, size: envFont.resolve(in: envFontContext).pointSize))
@@ -86,5 +45,108 @@ struct TextStyleRender: View {
                         .font(.custom(fontName, size: 14))
                 }
             }
+            .textRenderer(_StyleRenderer(factor: factor, partialStyle: partialStyle))
+    }
+}
+
+private struct _StyleRenderer: TextRenderer {
+    var factor: CGFloat
+    var partialStyle: [ClosedRange<Int>: Lyrics.Style]
+    func draw(layout: Text.Layout, in ctx: inout GraphicsContext) {
+        for line in layout {
+            for run in line {
+                for glyph in run {
+                    let glyphRange = glyph.startIndex..<glyph.endIndex
+                    for (range, style) in partialStyle {
+                        if range.overlaps(glyphRange) {
+                            // Apply style
+                            if let shadow = style.shadow {
+                                var ctxShadow = ctx
+                                ctxShadow.clipToLayer { lctx in
+                                    lctx.translateBy(x: shadow.x / 30 * factor, y: shadow.y / 30 * factor)
+                                    lctx.draw(glyph)
+                                }
+                                ctxShadow.addFilter(.blur(radius: shadow.blur / 30 * factor))
+                                ctxShadow.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(shadow.color))
+                            }
+                            var ctxcpy = ctx
+                            ctxcpy.clipToLayer { lctx in
+                                lctx.draw(glyph)
+                            }
+                            if let color = style.color {
+                                ctxcpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(color))
+                            } else {
+                                ctxcpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .foreground)
+                            }
+                            ctxcpy = ctx
+                            if let stroke = style.stroke {
+                                var ctxStroke = ctx
+                                if stroke.radius > 0 {
+                                    ctxStroke.addFilter(.blur(radius: stroke.radius / 30 * factor))
+                                }
+                                var ctxStrokecpy = ctxStroke
+                                ctxStrokecpy.clipToLayer { lctx in
+                                    lctx.translateBy(x: stroke.width / 30 * factor, y: stroke.width / 30 * factor)
+                                    lctx.draw(glyph)
+                                }
+                                ctxStrokecpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(stroke.color))
+                                ctxStrokecpy = ctxStroke
+                                ctxStrokecpy.clipToLayer { lctx in
+                                    lctx.translateBy(x: -stroke.width / 30 * factor, y: -stroke.width / 30 * factor)
+                                    lctx.draw(glyph)
+                                }
+                                ctxStrokecpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(stroke.color))
+                                ctxStrokecpy = ctxStroke
+                                ctxStrokecpy.clipToLayer { lctx in
+                                    lctx.translateBy(x: -stroke.width / 30 * factor, y: stroke.width / 30 * factor)
+                                    lctx.draw(glyph)
+                                }
+                                ctxStrokecpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(stroke.color))
+                                ctxStrokecpy = ctxStroke
+                                ctxStrokecpy.clipToLayer { lctx in
+                                    lctx.translateBy(x: stroke.width / 30 * factor, y: -stroke.width / 30 * factor)
+                                    lctx.draw(glyph)
+                                }
+                                ctxStrokecpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(stroke.color))
+                            }
+                        } else {
+                            ctx.draw(glyph)
+                        }
+                    }
+                }
+            }
+        }
+        for (range, style) in partialStyle {
+            let glyphs = layout.flatMap { $0 }.flatMap { $0 }
+            let glyphSlice = glyphs[range.lowerBound..<min(range.upperBound, glyphs.count)]
+            for maskLine in style.maskLines {
+                var ctxMaskLine = ctx
+                ctxMaskLine.clipToLayer { lctx in
+                    for glyph in glyphSlice {
+                        lctx.draw(glyph)
+                    }
+                }
+                let _size = layout.compactMap {
+                    ($0.typographicBounds.rect.width, $0.typographicBounds.rect.height)
+                }.reduce(into: (0.0, 0.0)) {
+                    if $0.0 == 0 { $0.0 = $1.0 }
+                    $0.1 += $1.1
+                }
+                let size = CGSize(width: _size.0, height: _size.1)
+                let path = Path { path in
+                    let startAbs = CGPoint(
+                        x: maskLine.start.x * size.width,
+                        y: maskLine.start.y * size.height
+                    )
+                    let endAbs = CGPoint(
+                        x: maskLine.end.x * size.width,
+                        y: maskLine.end.y * size.height
+                    )
+                    path.move(to: startAbs)
+                    path.addLine(to: endAbs)
+                }
+                ctxMaskLine.stroke(path, with: .color(maskLine.color), lineWidth: maskLine.width / 30 * factor)
+            }
+        }
     }
 }
