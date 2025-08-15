@@ -25,6 +25,7 @@ struct LyricsView: View {
     @State var editingField = LyricField.original
     @State var temporaryCombinedText = ""
     @State var currentTextSelection: TextSelection?
+    @State var previewSecondaryField = LyricField.original
     var body: some View {
         VSplitView {
             HSplitView {
@@ -71,7 +72,8 @@ struct LyricsView: View {
                 } header: {
                     Text("Editing")
                 }
-                if let currentTextSelection,
+                if editingField == .original,
+                   let currentTextSelection,
                    !currentTextSelection.isInsertion,
                    case let .selection(range) = currentTextSelection.indices,
                    !temporaryCombinedText[range].contains("\n") {
@@ -149,40 +151,95 @@ struct LyricsView: View {
     }
     @ViewBuilder
     var preview: some View {
-        ScrollView {
+        VStack {
             HStack {
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("Preview")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                        Spacer()
-                        ProgressView()
-                            .controlSize(.small)
-                            .opacity(isPreviewUpdating ? 1 : 0)
-                    }
-                    .padding(.bottom, 5)
-                    if let lyrics = lyricsForPreview {
-                        ForEach(lyrics.lyrics) { lyricLine in
-                            if let mainStyle = lyrics.mainStyle {
-                                TextStyleRender(text: lyricLine.original, partialStyle: mergingMainStyle(mainStyle, with: lyricLine.partialStyle, for: lyricLine))
-                            } else {
-                                TextStyleRender(text: lyricLine.original, partialStyle: lyricLine.partialStyle)
+                Text("Preview")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                Spacer()
+                ProgressView()
+                    .controlSize(.small)
+                    .opacity(isPreviewUpdating ? 1 : 0)
+                Picker("Secondary Text", selection: $previewSecondaryField) {
+                    Text("None").tag(LyricField.original)
+                    Text("Translation (JP)").tag(LyricField.translation(.jp))
+                    Text("Translation (EN)").tag(LyricField.translation(.en))
+                    Text("Translation (TW)").tag(LyricField.translation(.tw))
+                    Text("Translation (CN)").tag(LyricField.translation(.cn))
+                    Text("Translation (KR)").tag(LyricField.translation(.kr))
+                    Text("Ruby (Romaji)").tag(LyricField.rubyRomaji)
+                    Text("Ruby (Kana)").tag(LyricField.rubyKana)
+                }
+            }
+            .padding([.horizontal, .top])
+            ScrollView {
+                HStack {
+                    VStack(alignment: .leading, spacing: previewSecondaryField == .original ? 5 : 10) {
+                        if let lyrics = lyricsForPreview {
+                            ForEach(lyrics.lyrics) { lyricLine in
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Group {
+                                        if let mainStyle = lyrics.mainStyle {
+                                            TextStyleRender(text: lyricLine.original, partialStyle: mergingMainStyle(mainStyle, with: lyricLine.partialStyle, for: lyricLine))
+                                        } else {
+                                            TextStyleRender(text: lyricLine.original, partialStyle: lyricLine.partialStyle)
+                                        }
+                                    }
+                                    .font(.system(size: 20))
+                                    if previewSecondaryField != .original {
+                                        let secondaryText = switch previewSecondaryField {
+                                        case .original:
+                                            lyricLine.original
+                                        case .translation(let locale):
+                                            lyricLine.translations.forLocale(locale) ?? ""
+                                        case .rubyRomaji:
+                                            lyricLine.ruby?.romaji ?? ""
+                                        case .rubyKana:
+                                            lyricLine.ruby?.kana ?? ""
+                                        }
+                                        if !secondaryText.isEmpty {
+                                            if let mainStyle = lyrics.mainStyle {
+                                                TextStyleRender(text: secondaryText, style: mainStyle)
+                                            } else {
+                                                TextStyleRender(text: secondaryText, style: .init())
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            HStack {
+                                Spacer()
+                                Text("Preview Unavailable")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.gray)
+                                Spacer()
                             }
                         }
-                    } else {
-                        HStack {
-                            Spacer()
-                            Text("Preview Unavailable")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .foregroundStyle(.gray)
-                            Spacer()
-                        }
                     }
+                    .padding()
+                    Spacer()
                 }
-                .padding()
-                Spacer()
+            }
+            .mask {
+                LinearGradient(colors: [
+                    .black.opacity(0),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1),
+                    .black.opacity(1)
+                ], startPoint: .top, endPoint: .bottom)
             }
         }
         .onChange(of: temporaryCombinedText) {
@@ -343,4 +400,4 @@ struct LyricsView: View {
 }
 
 // FIXME: Delete this comment after finishing debugging
-// {"id":489,"lyrics":[{"id":"1B1E64D0-812D-4F32-BF67-1D1700D63FAD","original":"交差点の真ん中　急ぐ人に紛れて","partialStyle":[],"translations":{}},{"id":"49C8B73C-BA48-46E2-AF7C-5740E1A24BA1","original":"僕だけがあてもなく　漂うみたいだ","partialStyle":[],"translations":{}},{"id":"3F8E09B5-42B5-4151-B5F3-C10CE7493D17","original":"流行りの歌はいつも　僕のことは歌ってない","partialStyle":[],"translations":{}},{"id":"8500D3CE-1BB2-406C-80E2-42998A2E603A","original":"ねえビジョンの中から　笑いかけないで","partialStyle":[],"translations":{}},{"id":"02768460-6393-439E-A467-18BE5BB61278","original":"また今日も声にならずに　飲み込んだ感情","partialStyle":[],"translations":{}},{"id":"A60219EA-A29B-427E-8757-78E614A99115","original":"下書き埋め尽くして","partialStyle":[],"translations":{}},{"id":"8E6CA252-CEDB-4017-81F9-AF5FF8127EBF","original":"ああ　そうやって何千回夜を越える","partialStyle":[],"translations":{}},{"id":"9710A991-8959-4D9A-ACD8-9736813FC69E","original":"僕のため　それだけ　それだけだったんだよ","partialStyle":[],"translations":{}},{"id":"60874C39-FFA7-49AE-B92B-61CD3D2B374B","original":"出口探し　溢れただけの言葉","partialStyle":[],"translations":{}},{"id":"1CDB002F-5D30-47E8-A50A-A74D53BDADF2","original":"君の心へ届いて　隙間をちょっと埋めるなら","partialStyle":[],"translations":{}},{"id":"DD4A19DA-DEBB-46E2-A61C-154D649A51B5","original":"こんな僕でも　ここにいる　叫ぶよ","partialStyle":[],"translations":{}},{"id":"92648FE9-CE77-41CD-99D2-6B5F31269121","original":"迷い星のうた","partialStyle":[],"translations":{}},{"id":"18C29DF1-5B25-4CC2-9B17-B7B6E84D5254","original":"問われることは何故か　将来のことばかり","partialStyle":[],"translations":{}},{"id":"DBEA0AAD-1424-4456-8833-CADC24B974A9","original":"目の前にいる僕の　今はおざなりで","partialStyle":[],"translations":{}},{"id":"06CBF4D4-A423-4909-9E1C-0F66663761A5","original":"華やぎに馴染めない　この心を無視して","partialStyle":[],"translations":{}},{"id":"7E933D65-A037-4979-AE47-1581FC4C11C3","original":"輝かしい明日を　推奨しないでくれ","partialStyle":[],"translations":{}},{"id":"7E50212A-2572-4B21-88EC-996DA6371FD6","original":"夜空にチカチカ光る　頼りない星屑","partialStyle":[],"translations":{}},{"id":"0B30328E-0D8C-4FB6-989D-9D81311351D4","original":"躊躇いながらはぐれて","partialStyle":[],"translations":{}},{"id":"8043AC5C-8C3C-49F7-A5A0-7415ECA49820","original":"ああ　彷徨っているそれが僕","partialStyle":[],"translations":{}},{"id":"ADA2F30D-653D-471D-9515-B362E76B5DAD","original":"僕になる　それしか　それしかできないだろう","partialStyle":[],"translations":{}},{"id":"797A039C-A0A0-47E1-94FB-7FB44CDB13C6","original":"誰の真似も　上手くやれないんだ","partialStyle":[],"translations":{}},{"id":"506398D6-C5AA-4A6D-85C3-DAAE011D9BD5","original":"こんな痛い日々をなんで　退屈だって片付ける？","partialStyle":[],"translations":{}},{"id":"0FF87722-8878-418E-A190-7349C1E5294A","original":"よろめきながらでも　もがいているんだよ","partialStyle":[],"translations":{}},{"id":"41482815-688D-4867-B824-8B7228E618C9","original":"迷い星のうた","partialStyle":[],"translations":{}},{"id":"A5302DA8-7C59-48D7-833F-4698A54D807B","original":"僕のため　それだけ　それだけだったんだよ","partialStyle":[],"translations":{}},{"id":"F6141033-AF74-48E9-B396-FCD9F2B20C77","original":"涙流し　やっと生まれた言葉","partialStyle":[],"translations":{}},{"id":"904FC662-7AF2-4845-BEA6-9196CA7CD985","original":"どこかで同じように　ヒリヒリする胸抱えて","partialStyle":[],"translations":{}},{"id":"9D3B8B21-1390-48DE-917A-F2F905F92727","original":"震える君に　僕もいる　叫ぶよ","partialStyle":[],"translations":{}},{"id":"470C50B4-0F36-421E-BF26-566D152EE13F","original":"迷い星のうた","partialStyle":[],"translations":{}}],"mainStyle":{"color":{"blue":0.8244126,"green":0.701363,"red":0.4210273},"fontOverride":"HanziPen SC","id":"D8FB913C-7E04-4B7D-A065-854023E54190","maskLines":[{"color":{"blue":0.6904459,"green":0.99995595,"red":1.0000879},"end":[1,0.09234639830508476],"start":[0,0.7190033783783782],"width":5.499999999999997}],"shadow":{"blur":0.5,"color":{"blue":0,"green":0,"red":0},"x":2.000000000000001,"y":2.000000000000001},"stroke":{"color":{"blue":0.9098039,"green":0.7529412,"red":0},"radius":0,"width":0.20000000000000015}},"metadata":{"legends":[]},"version":1}
+// {"id":489,"lyrics":[{"id":"1B1E64D0-812D-4F32-BF67-1D1700D63FAD","original":"交差点の真ん中　急ぐ人に紛れて","partialStyle":[],"translations":{"cn":"置身十字路口正中央　混入熙来攘往的人群","en":"In the middle of the intersection, mixed among the busy crowd"}},{"id":"49C8B73C-BA48-46E2-AF7C-5740E1A24BA1","original":"僕だけがあてもなく　漂うみたいだ","partialStyle":[],"translations":{"cn":"唯独我漫无目的　有如流浪者一般","en":"I'm the only one who seems to be drifting aimlessly"}},{"id":"3F8E09B5-42B5-4151-B5F3-C10CE7493D17","original":"流行りの歌はいつも　僕のことは歌ってない","partialStyle":[],"translations":{"cn":"那些流行的首首歌曲　总是唱不出我的心思","en":"The popular songs never sing about me"}},{"id":"8500D3CE-1BB2-406C-80E2-42998A2E603A","original":"ねえビジョンの中から　笑いかけないで","partialStyle":[],"translations":{"cn":"请别在幻象之中　对我露出微笑","en":"Please, don't laugh at me from within that billboard screen"}},{"id":"02768460-6393-439E-A467-18BE5BB61278","original":"また今日も声にならずに　飲み込んだ感情","partialStyle":[],"translations":{"cn":"今天又语不成声　将感情吞入心底","en":"Today's another day of swallowing my feelings without voicing them"}},{"id":"A60219EA-A29B-427E-8757-78E614A99115","original":"下書き埋め尽くして","partialStyle":[],"translations":{"cn":"书页写满了草稿","en":"Filling my drafts up to the brim"}},{"id":"8E6CA252-CEDB-4017-81F9-AF5FF8127EBF","original":"ああ　そうやって何千回夜を越える","partialStyle":[],"translations":{"cn":"啊啊　就这么度过了数千个夜晚","en":"Ah, and like that, I get through the night, thousands of times"}},{"id":"9710A991-8959-4D9A-ACD8-9736813FC69E","original":"僕のため　それだけ　それだけだったんだよ","partialStyle":[],"translations":{"cn":"为了我自己　只是如此　就仅仅是如此而已","en":"They're for my sake, that's all, that's all they ever were"}},{"id":"60874C39-FFA7-49AE-B92B-61CD3D2B374B","original":"出口探し　溢れただけの言葉","partialStyle":[],"translations":{"cn":"为从心头满溢而出的话语找寻出口","en":"The words that just happened to overflow, spilling out of me as they searched for an exit"}},{"id":"1CDB002F-5D30-47E8-A50A-A74D53BDADF2","original":"君の心へ届いて　隙間をちょっと埋めるなら","partialStyle":[],"translations":{"cn":"若能传达至你的心中　稍稍填补虚无的空隙","en":"If they reach your heart and fill in its cracks even a little"}},{"id":"DD4A19DA-DEBB-46E2-A61C-154D649A51B5","original":"こんな僕でも　ここにいる　叫ぶよ","partialStyle":[],"translations":{"cn":"即使是这样的我　也将大喊我在这里","en":"Then although I'm just me, I'll scream that I'm right here"}},{"id":"92648FE9-CE77-41CD-99D2-6B5F31269121","original":"迷い星のうた","partialStyle":[],"translations":{"cn":"唱着迷途之星的歌","en":"The song of a lost star"}},{"id":"18C29DF1-5B25-4CC2-9B17-B7B6E84D5254","original":"問われることは何故か　将来のことばかり","partialStyle":[],"translations":{"cn":"不知为何每每问起　谈论的总都是未来","en":"For some reason, people always ask about my distant future"}},{"id":"DBEA0AAD-1424-4456-8833-CADC24B974A9","original":"目の前にいる僕の　今はおざなりで","partialStyle":[],"translations":{"cn":"但讲到眼前的我　却总是敷衍了事","en":"Never bothering with the present me who stands before them"}},{"id":"06CBF4D4-A423-4909-9E1C-0F66663761A5","original":"華やぎに馴染めない　この心を無視して","partialStyle":[],"translations":{"cn":"无视于我无法融入亮丽世界的心绪","en":"Please don't ignore the fact that I can't fit in with all that shines bright"}},{"id":"7E933D65-A037-4979-AE47-1581FC4C11C3","original":"輝かしい明日を　推奨しないでくれ","partialStyle":[],"translations":{"cn":"请不要推荐我走向散发光辉的明天","en":"And push suggestions of a brilliant future onto me"}},{"id":"7E50212A-2572-4B21-88EC-996DA6371FD6","original":"夜空にチカチカ光る　頼りない星屑","partialStyle":[],"translations":{"cn":"夜空中闪烁光芒　无依无靠的星辰","en":"That speck of stardust flickering unreliably in the night sky,"}},{"id":"0B30328E-0D8C-4FB6-989D-9D81311351D4","original":"躊躇いながらはぐれて","partialStyle":[],"translations":{"cn":"在踌躇之中失散","en":"Straying off as it hesitates"}},{"id":"8043AC5C-8C3C-49F7-A5A0-7415ECA49820","original":"ああ　彷徨っているそれが僕","partialStyle":[],"translations":{"cn":"啊啊　那颗彷徨的星儿就是我啊","en":"Ah, it's wandering about; that is me"}},{"id":"ADA2F30D-653D-471D-9515-B362E76B5DAD","original":"僕になる　それしか　それしかできないだろう","partialStyle":[],"translations":{"cn":"成为我自己　只有如此　我能做的只有如此","en":"I'll become myself, that's all, that's all I really can do"}},{"id":"797A039C-A0A0-47E1-94FB-7FB44CDB13C6","original":"誰の真似も　上手くやれないんだ","partialStyle":[],"translations":{"cn":"模仿他人这种事　我也没办法做得好","en":"I can't pretend to be someone else, anyway"}},{"id":"506398D6-C5AA-4A6D-85C3-DAAE011D9BD5","original":"こんな痛い日々をなんで　退屈だって片付ける？","partialStyle":[],"translations":{"cn":"为何要将这种痛苦的日子　用一句无趣带过","en":"Why must these days that hurt so much be wrapped up nicely into the word \"boring\"?"}},{"id":"0FF87722-8878-418E-A190-7349C1E5294A","original":"よろめきながらでも　もがいているんだよ","partialStyle":[],"translations":{"cn":"就算步伐多踉跄　我也是在挣扎着啊","en":"Even though I stagger, I'm fighting my way through"}},{"id":"41482815-688D-4867-B824-8B7228E618C9","original":"迷い星のうた","partialStyle":[],"translations":{"cn":"唱着迷途之星的歌","en":"The song of a lost star"}},{"id":"A5302DA8-7C59-48D7-833F-4698A54D807B","original":"僕のため　それだけ　それだけだったんだよ","partialStyle":[],"translations":{"cn":"为了我自己　只是如此　就仅仅是如此而已","en":"They're for my sake, that's all, that's all they ever were"}},{"id":"F6141033-AF74-48E9-B396-FCD9F2B20C77","original":"涙流し　やっと生まれた言葉","partialStyle":[],"translations":{"cn":"在流下泪水之后　才终于诞生的话语","en":"The words that were finally born as I shed tears"}},{"id":"904FC662-7AF2-4845-BEA6-9196CA7CD985","original":"どこかで同じように　ヒリヒリする胸抱えて","partialStyle":[],"translations":{"cn":"彼此似乎有些许相似　怀抱隐隐作痛的胸口","en":"If somewhere out there, you're carrying a stinging heart like mine,"}},{"id":"9D3B8B21-1390-48DE-917A-F2F905F92727","original":"震える君に　僕もいる　叫ぶよ","partialStyle":[],"translations":{"cn":"面对在颤抖的你　大喊着我与你同在","en":"To that trembling you, I'll scream that I'm here too"}},{"id":"470C50B4-0F36-421E-BF26-566D152EE13F","original":"迷い星のうた","partialStyle":[],"translations":{"cn":"唱着迷途之星的歌","en":"The song of a lost star"}}],"mainStyle":{"color":{"blue":0.8244126,"green":0.701363,"red":0.4210273},"fontOverride":"HanziPen SC","id":"D8FB913C-7E04-4B7D-A065-854023E54190","maskLines":[{"color":{"blue":0.6904459,"green":0.99995595,"red":1.0000879},"end":[1,0.09234639830508476],"start":[0,0.7190033783783782],"width":5.499999999999997}],"shadow":{"blur":0.5,"color":{"blue":0,"green":0,"red":0},"x":2.000000000000001,"y":2.000000000000001},"stroke":{"color":{"blue":0.9098039,"green":0.7529412,"red":0},"radius":0,"width":0.20000000000000015}},"metadata":{"legends":[]},"version":1}
