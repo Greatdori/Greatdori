@@ -17,8 +17,11 @@ import SwiftUI
 
 struct LyricsView: View {
     @Binding var lyrics: Lyrics
-    @Environment(\.scenePhase) var scenePhase
+    @Environment(\.appearsActive) var appearsActive
     @Environment(\.openWindow) var openWindow
+    @State var lyricsForPreview: Lyrics?
+    @State var isPreviewUpdating = false
+    @State var previewUpdateTimer: Timer?
     @State var editingField = LyricField.original
     @State var temporaryCombinedText = ""
     @State var currentTextSelection: TextSelection?
@@ -33,17 +36,18 @@ struct LyricsView: View {
         .navigationSubtitle("Lyrics")
         .task {
             temporaryCombinedText = combinedText(for: lyrics.lyrics, in: editingField)
+            lyricsForPreview = lyrics
         }
         .onDisappear {
-            writeBackLyrics(from: temporaryCombinedText, in: editingField)
+            writeBackLyrics(from: temporaryCombinedText, in: editingField, to: &lyrics)
         }
         .onChange(of: editingField) { oldValue, newValue in
-            writeBackLyrics(from: temporaryCombinedText, in: oldValue)
+            writeBackLyrics(from: temporaryCombinedText, in: oldValue, to: &lyrics)
             temporaryCombinedText = combinedText(for: lyrics.lyrics, in: newValue)
         }
-        .onChange(of: scenePhase) {
-            if scenePhase == .inactive {
-                writeBackLyrics(from: temporaryCombinedText, in: editingField)
+        .onChange(of: appearsActive) {
+            if !appearsActive {
+                writeBackLyrics(from: temporaryCombinedText, in: editingField, to: &lyrics)
             }
         }
     }
@@ -132,15 +136,32 @@ struct LyricsView: View {
         ScrollView {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Preview")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .padding(.bottom, 5)
-                    ForEach(lyrics.lyrics, id: \.self) { lyricLine in
-                        if let mainStyle = lyrics.mainStyle {
-                            TextStyleRender(text: lyricLine.original, partialStyle: mergingMainStyle(mainStyle, with: lyricLine.partialStyle, for: lyricLine))
-                        } else {
-                            TextStyleRender(text: lyricLine.original, partialStyle: lyricLine.partialStyle)
+                    HStack {
+                        Text("Preview")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                        Spacer()
+                        ProgressView()
+                            .controlSize(.small)
+                            .opacity(isPreviewUpdating ? 1 : 0)
+                    }
+                    .padding(.bottom, 5)
+                    if let lyrics = lyricsForPreview {
+                        ForEach(lyrics.lyrics, id: \.self) { lyricLine in
+                            if let mainStyle = lyrics.mainStyle {
+                                TextStyleRender(text: lyricLine.original, partialStyle: mergingMainStyle(mainStyle, with: lyricLine.partialStyle, for: lyricLine))
+                            } else {
+                                TextStyleRender(text: lyricLine.original, partialStyle: lyricLine.partialStyle)
+                            }
+                        }
+                    } else {
+                        HStack {
+                            Spacer()
+                            Text("Preview Unavailable")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.gray)
+                            Spacer()
                         }
                     }
                 }
@@ -148,13 +169,28 @@ struct LyricsView: View {
                 Spacer()
             }
         }
+        .onChange(of: temporaryCombinedText) {
+            isPreviewUpdating = true
+            previewUpdateTimer?.invalidate()
+            previewUpdateTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
+                DispatchQueue.main.async {
+                    var result = lyricsForPreview ?? lyrics
+                    writeBackLyrics(from: temporaryCombinedText, in: editingField, to: &result)
+                    lyricsForPreview = result
+                    isPreviewUpdating = false
+                }
+            }
+        }
+        .onChange(of: lyrics) {
+            lyricsForPreview = lyrics
+        }
     }
     
-    func writeBackLyrics(from temporaryText: String, in field: LyricField) {
-        func setField(_ field: LyricField, of line: inout Lyrics.LyricLine, to text: String) {
+    func writeBackLyrics(from temporaryText: String, in field: LyricField, to lyrics: inout Lyrics) {
+        func setField(_ field: LyricField, of line: inout Lyrics.LyricLine, to text: String?) {
             switch field {
             case .original:
-                line.original = text
+                line.original = text ?? ""
             case .translation(let locale):
                 switch locale {
                 case .jp:
@@ -170,26 +206,45 @@ struct LyricsView: View {
                 }
             case .rubyRomaji:
                 if line.ruby != nil {
-                    line.ruby!.romaji = text
+                    line.ruby!.romaji = text ?? ""
                 } else {
-                    line.ruby = .init(romaji: text, kana: "")
+                    line.ruby = .init(romaji: text ?? "", kana: "")
+                }
+                if line.ruby == .init(romaji: "", kana: "") {
+                    line.ruby = nil
                 }
             case .rubyKana:
                 if line.ruby != nil {
-                    line.ruby!.kana = text
+                    line.ruby!.kana = text ?? ""
                 } else {
-                    line.ruby = .init(romaji: "", kana: text)
+                    line.ruby = .init(romaji: "", kana: text ?? "")
+                }
+                if line.ruby == .init(romaji: "", kana: "") {
+                    line.ruby = nil
                 }
             }
         }
         
         let lineText = temporaryText.components(separatedBy: "\n")
         var lineIterator = lineText.makeIterator()
+        var removalLines = IndexSet()
         for case (let index, var lyricLine) in lyrics.lyrics.enumerated() {
             if let text = lineIterator.next() {
                 setField(field, of: &lyricLine, to: text)
+            } else {
+                setField(field, of: &lyricLine, to: nil)
+                if lyricLine.original.isEmpty
+                    && lyricLine.translations == .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
+                    && lyricLine.ruby == nil {
+                    removalLines.insert(index)
+                    continue
+                }
             }
             lyrics.lyrics[index] = lyricLine
+        }
+        if !removalLines.isEmpty {
+            lyrics.lyrics.remove(atOffsets: removalLines)
+            return
         }
         while let text = lineIterator.next() {
             var newLine = Lyrics.LyricLine(original: "", translations: .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil), partialStyle: [:])

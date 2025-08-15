@@ -61,8 +61,10 @@ private struct _StyleRenderer: TextRenderer {
         }
         for line in layout {
             for run in line {
+                let runIndent = run.startIndex
                 for glyph in run {
-                    let glyphRange = glyph.startIndex..<glyph.endIndex
+                    let glyphRange = (glyph.startIndex + runIndent)..<(glyph.endIndex + runIndent)
+                    var hasDrawn = false
                     for (range, style) in partialStyle {
                         if range.overlaps(glyphRange) {
                             // Apply style
@@ -115,9 +117,11 @@ private struct _StyleRenderer: TextRenderer {
                                 }
                                 ctxStrokecpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(stroke.color))
                             }
-                        } else {
-                            ctx.draw(glyph)
+                            hasDrawn = true
                         }
+                    }
+                    if !hasDrawn {
+                        ctx.draw(glyph)
                     }
                 }
             }
