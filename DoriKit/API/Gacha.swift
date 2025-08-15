@@ -345,7 +345,7 @@ extension DoriAPI {
 
 extension DoriAPI.Gacha {
     /// Represent simplified data of gacha.
-    public struct PreviewGacha: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct PreviewGacha: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of gacha.
         public var id: Int
         /// Name of resource bundle, used for combination of resource URLs.
@@ -367,7 +367,7 @@ extension DoriAPI.Gacha {
     }
     
     /// Represent detailed data of gacha.
-    public struct Gacha: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct Gacha: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of gacha.
         public var id: Int
         /// Localized details of gacha.
@@ -412,7 +412,7 @@ extension DoriAPI.Gacha {
         public var information: Information
         
         /// Represent detail of a card in gacha.
-        public struct CardDetail: Sendable, DoriCache.Cacheable {
+        public struct CardDetail: Sendable, Hashable, DoriCache.Cacheable {
             /// Rarity of card.
             public var rarityIndex: Int
             /// Weight of card.
@@ -422,7 +422,7 @@ extension DoriAPI.Gacha {
         }
         
         /// Represent rate of a rarity in gacha.
-        public struct Rate: Sendable, DoriCache.Cacheable {
+        public struct Rate: Sendable, Hashable, DoriCache.Cacheable {
             /// Rate.
             public var rate: Double
             /// Total of weight for cards in this rate.
@@ -510,7 +510,7 @@ extension DoriAPI.Gacha {
         }
         
         /// Represent information of gacha.
-        public struct Information: Sendable, DoriCache.Cacheable {
+        public struct Information: Sendable, Hashable, DoriCache.Cacheable {
             /// Localized description of gacha.
             public var description: DoriAPI.LocalizedData<String>
             /// Localized term of gacha.
@@ -523,7 +523,7 @@ extension DoriAPI.Gacha {
     }
     
     /// Represent type of gacha.
-    public enum GachaType: String, Sendable, CaseIterable, DoriCache.Cacheable {
+    public enum GachaType: String, Sendable, CaseIterable, Hashable, DoriCache.Cacheable {
         case free
         case permanent
         case miracle

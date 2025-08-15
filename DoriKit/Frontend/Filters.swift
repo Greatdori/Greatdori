@@ -17,7 +17,7 @@ import CryptoKit
 import Foundation
 
 extension DoriFrontend {
-    public struct Filter: Sendable, Codable {
+    public struct Filter: Sendable, Hashable, Codable {
         public var band: Set<Band> = .init(Band.allCases) { didSet { store() } }
         public var attribute: Set<Attribute> = .init(Attribute.allCases)  { didSet { store() } }
         public var rarity: Set<Rarity> = [1, 2, 3, 4, 5]  { didSet { store() } }
@@ -157,7 +157,7 @@ extension DoriFrontend.Filter {
     public typealias SongType = DoriAPI.Song.SongTag
     public typealias Skill = DoriAPI.Skill.Skill
     
-    public enum Band: Int, Sendable, CaseIterable, Codable {
+    public enum Band: Int, Sendable, CaseIterable, Hashable, Codable {
         case poppinParty = 1
         case afterglow
         case helloHappyWorld
@@ -183,7 +183,7 @@ extension DoriFrontend.Filter {
             }
         }
     }
-    public enum Character: Int, Sendable, CaseIterable, Codable {
+    public enum Character: Int, Sendable, CaseIterable, Hashable, Codable {
         // Poppin'Party
         case kasumi = 1
         case tae
@@ -246,7 +246,7 @@ extension DoriFrontend.Filter {
         }
     }
     @frozen
-    public enum TimelineStatus: Int, CaseIterable, Codable {
+    public enum TimelineStatus: Int, CaseIterable, Hashable, Codable {
         case ended
         case ongoing
         case upcoming
@@ -312,7 +312,7 @@ extension DoriFrontend.Filter {
         }
     }
     
-    public enum Key: Int, CaseIterable {
+    public enum Key: Int, CaseIterable, Hashable {
         case band
         case attribute
         case rarity

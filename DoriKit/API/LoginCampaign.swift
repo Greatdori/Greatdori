@@ -197,7 +197,7 @@ extension DoriAPI {
 }
 
 extension DoriAPI.LoginCampaign {
-    public struct PreviewCampaign: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct PreviewCampaign: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var loginBonusType: CampaignType
         public var assetBundleName: DoriAPI.LocalizedData<String>
@@ -206,7 +206,7 @@ extension DoriAPI.LoginCampaign {
         public var closedAt: DoriAPI.LocalizedData<Date>
     }
     
-    public struct Campaign: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct Campaign: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var loginBonusType: CampaignType
         public var assetBundleName: DoriAPI.LocalizedData<String>
@@ -215,7 +215,7 @@ extension DoriAPI.LoginCampaign {
         public var closedAt: DoriAPI.LocalizedData<Date>
         public var details: DoriAPI.LocalizedData<[Bonus]>
         
-        public struct Bonus: Sendable, DoriCache.Cacheable {
+        public struct Bonus: Sendable, Hashable, DoriCache.Cacheable {
             public var loginBonusID: Int
             public var days: Int
             public var item: DoriAPI.Item
@@ -239,13 +239,13 @@ extension DoriAPI.LoginCampaign {
                 self.grantType = grantType
             }
             
-            public enum GrantType: String, Sendable, DoriCache.Cacheable {
+            public enum GrantType: String, Sendable, Hashable, DoriCache.Cacheable {
                 case present
             }
         }
     }
     
-    public enum CampaignType: String, Sendable, DoriCache.Cacheable {
+    public enum CampaignType: String, Sendable, Hashable, DoriCache.Cacheable {
         case normal
         case event
         case birthday

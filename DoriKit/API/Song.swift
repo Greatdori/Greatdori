@@ -533,7 +533,7 @@ extension DoriAPI.Song {
         }
     }
     
-    public struct Song: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct Song: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var bgmID: String
         public var bgmFile: String
@@ -608,12 +608,12 @@ extension DoriAPI.Song {
             self.musicVideos = musicVideos
         }
         
-        public struct Achievement: Sendable, DoriCache.Cacheable {
+        public struct Achievement: Sendable, Hashable, DoriCache.Cacheable {
             public var musicID: Int
             public var achievementType: AchievementType
             public var reward: DoriAPI.Item
             
-            public enum AchievementType: String, Sendable, DoriCache.Cacheable {
+            public enum AchievementType: String, Sendable, Hashable, DoriCache.Cacheable {
                 case comboEasy = "combo_easy"
                 case comboNormal = "combo_normal"
                 case comboHard = "combo_hard"
@@ -634,7 +634,7 @@ extension DoriAPI.Song {
             }
         }
         
-        public struct Difficulty: Sendable, DoriCache.Cacheable {
+        public struct Difficulty: Sendable, Hashable, DoriCache.Cacheable {
             public var playLevel: Int
             public var publishedAt: DoriAPI.LocalizedData<Date>? // String(JSON) -> Date(Swift)
             public var notesQuantity: Int
@@ -667,7 +667,7 @@ extension DoriAPI.Song {
                 self.multiLiveScoreMap = multiLiveScoreMap
             }
             
-            public struct MultiLiveScore: Sendable, DoriCache.Cacheable {
+            public struct MultiLiveScore: Sendable, Hashable, DoriCache.Cacheable {
                 public var musicID: Int
                 public var musicDifficulty: String
                 public var multiLiveDifficultyID: Int
@@ -705,7 +705,7 @@ extension DoriAPI.Song {
     /// ```
     public typealias SongMeta = [Int: [DifficultyType: [Double: [Double]]]]
     
-    public enum SongTag: String, CaseIterable, Sendable, DoriCache.Cacheable {
+    public enum SongTag: String, CaseIterable, Sendable, Hashable, DoriCache.Cacheable {
         case normal
         case anime
         case tieUp = "tie_up"

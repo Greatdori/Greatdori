@@ -111,7 +111,7 @@ extension DoriAPI {
 
 extension DoriAPI.Degree {
     /// Represent information of a degree.
-    public struct Degree: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct Degree: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of degree.
         public var id: Int
         /// Localized type of degree.

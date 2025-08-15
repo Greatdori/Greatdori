@@ -93,7 +93,7 @@ extension DoriFrontend {
 extension DoriFrontend {
     public typealias Item = DoriAPI.Item
     
-    public struct ExtendedItem: Identifiable, DoriCache.Cacheable {
+    public struct ExtendedItem: Identifiable, Hashable, DoriCache.Cacheable {
         public var item: Item
         public var text: DoriAPI.Misc.ItemText?
         

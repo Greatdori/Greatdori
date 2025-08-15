@@ -378,7 +378,7 @@ extension DoriAPI {
 
 extension DoriAPI.Character {
     /// Represent simplified data of a character.
-    public struct PreviewCharacter: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct PreviewCharacter: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of character.
         public var id: Int
         /// Type of character.
@@ -413,7 +413,7 @@ extension DoriAPI.Character {
     }
     
     /// Represent birthday information of a character.
-    public struct BirthdayCharacter: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct BirthdayCharacter: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of character.
         public var id: Int
         /// Localized name of character.
@@ -428,7 +428,7 @@ extension DoriAPI.Character {
     }
     
     /// Represent detailed data of a character.
-    public struct Character: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct Character: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of character.
         public var id: Int
         /// Type of character.
@@ -505,7 +505,7 @@ extension DoriAPI.Character {
         }
         
         /// Represent profile of a character.
-        public struct Profile: Sendable, DoriCache.Cacheable {
+        public struct Profile: Sendable, Hashable, DoriCache.Cacheable {
             /// Localized name of character's voice actor.
             public var characterVoice: DoriAPI.LocalizedData<String>
             /// Localized favorite food of character.
@@ -532,7 +532,7 @@ extension DoriAPI.Character {
             public var height: Int
             
             /// Represent a part in bands.
-            public enum Part: String, Sendable, DoriCache.Cacheable {
+            public enum Part: String, Sendable, Hashable, DoriCache.Cacheable {
                 case vocal
                 case keyboard
                 case guitar
@@ -553,7 +553,7 @@ extension DoriAPI.Character {
     /// *Misaki* is an exception which is associated ``another``.
     ///
     /// - SeeAlso: Learn more about *main band* in ``DoriAPI/Band/main()``.
-    public enum CharacterType: String, Sendable, DoriCache.Cacheable {
+    public enum CharacterType: String, Sendable, Hashable, DoriCache.Cacheable {
         case unique
         case common
         case another

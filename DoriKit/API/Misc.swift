@@ -544,7 +544,7 @@ extension DoriAPI {
 // We declare extension of `DoriAPI` instead of `DoriAPI.Misc`
 // to make them can be found easier.
 extension DoriAPI {
-    public struct Item: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct Item: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var itemID: Int?
         public var type: ItemType
         public var quantity: Int
@@ -564,7 +564,7 @@ extension DoriAPI {
             }
         }
         
-        public enum ItemType: String, Sendable, DoriCache.Cacheable {
+        public enum ItemType: String, Sendable, Hashable, DoriCache.Cacheable {
             case item
             case star
             case coin
@@ -594,7 +594,7 @@ extension DoriAPI {
 // These declerations are less used so we define it in
 // extension of `DoriAPI.Misc`
 extension DoriAPI.Misc {
-    public struct ItemText: Sendable, DoriCache.Cacheable {
+    public struct ItemText: Sendable, Hashable, DoriCache.Cacheable {
         public var name: DoriAPI.LocalizedData<String>
         public var type: ItemType?
         public var resourceID: Int
@@ -605,7 +605,7 @@ extension DoriAPI.Misc {
             self.resourceID = resourceID
         }
         
-        public enum ItemType: String, Sendable, DoriCache.Cacheable {
+        public enum ItemType: String, Sendable, Hashable, DoriCache.Cacheable {
             case normal
             case practice
             case special
@@ -634,23 +634,23 @@ extension DoriAPI.Misc {
         public var publishedAt: DoriAPI.LocalizedData<Date>
         public var stories: [DoriAPI.Story]
     }
-    public struct AfterLiveTalk: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct AfterLiveTalk: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var scenarioID: String
         public var description: DoriAPI.LocalizedData<String>
     }
     
-    public struct Area: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct Area: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var areaName: DoriAPI.LocalizedData<String>
     }
-    public struct ActionSet: Sendable, Identifiable, DoriCache.Cacheable {
+    public struct ActionSet: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var areaID: Int
         public var characterIDs: [Int]
         public var actionSetType: ActionSetType
         
-        public enum ActionSetType: String, Sendable, DoriCache.Cacheable {
+        public enum ActionSetType: String, Sendable, Hashable, DoriCache.Cacheable {
             case normal
             case birthday
             case areaItem = "area_item"
@@ -658,7 +658,7 @@ extension DoriAPI.Misc {
         }
     }
     
-    public struct StoryAsset: Sendable, DoriCache.Cacheable {
+    public struct StoryAsset: Sendable, Hashable, DoriCache.Cacheable {
         public var scenarioSceneID: String
         public var storyType: Int
         public var appearCharacters: [AppearCharacter]
@@ -672,18 +672,18 @@ extension DoriAPI.Misc {
         public var soundData: [SoundData]
         public var includeSoundDataBundleNames: [String]
         
-        public struct AppearCharacter: Sendable, DoriCache.Cacheable {
+        public struct AppearCharacter: Sendable, Hashable, DoriCache.Cacheable {
             public var characterID: Int
             public var costumeType: String
         }
-        public struct Snippet: Sendable, DoriCache.Cacheable {
+        public struct Snippet: Sendable, Hashable, DoriCache.Cacheable {
             public var actionType: ActionType
             public var progressType: Int
             public var referenceIndex: Int
             public var delay: Double
             public var isWaitForSkipMode: Bool // Int(JSON) -> Bool(Swift)
             
-            public enum ActionType: Int, Sendable, DoriCache.Cacheable {
+            public enum ActionType: Int, Sendable, Hashable, DoriCache.Cacheable {
                 case none
                 case talk
                 case layout
@@ -694,7 +694,7 @@ extension DoriAPI.Misc {
                 case sound
             }
         }
-        public struct TalkData: Sendable, DoriCache.Cacheable {
+        public struct TalkData: Sendable, Hashable, DoriCache.Cacheable {
             public var talkCharacters: [TalkCharacter]
             public var windowDisplayName: String
             public var body: String
@@ -712,22 +712,22 @@ extension DoriAPI.Misc {
             public var soundReferenceIdx: Int
             public var whenStartHideWindow: Bool // Int(JSON) -> Bool(Swift)
             
-            public struct TalkCharacter: Sendable, DoriCache.Cacheable {
+            public struct TalkCharacter: Sendable, Hashable, DoriCache.Cacheable {
                 public var characterID: Int
             }
-            public struct Motion: Sendable, DoriCache.Cacheable {
+            public struct Motion: Sendable, Hashable, DoriCache.Cacheable {
                 public var characterID: Int
                 public var motionName: String
                 public var expressionName: String
                 public var timingSyncValue: String
             }
-            public struct Voice: Sendable, DoriCache.Cacheable {
+            public struct Voice: Sendable, Hashable, DoriCache.Cacheable {
                 public var characterID: Int
                 public var voiceID: String
                 public var volume: Double
             }
         }
-        public struct LayoutData: Sendable, DoriCache.Cacheable {
+        public struct LayoutData: Sendable, Hashable, DoriCache.Cacheable {
             public var type: Int
             public var sideFrom: Int
             public var sideFromOffsetX: Int
@@ -740,14 +740,14 @@ extension DoriAPI.Misc {
             public var expressionName: String
             public var moveSpeedType: Int
         }
-        public struct SpecialEffectData: Sendable, DoriCache.Cacheable {
+        public struct SpecialEffectData: Sendable, Hashable, DoriCache.Cacheable {
             public var effectType: EffectType
             public var stringVal: String
             public var stringValSub: String
             public var duration: Double
             public var animationTriggerName: String
             
-            public enum EffectType: Int, Sendable, DoriCache.Cacheable {
+            public enum EffectType: Int, Sendable, Hashable, DoriCache.Cacheable {
                 case none
                 case blackIn
                 case blackOut
@@ -768,7 +768,7 @@ extension DoriAPI.Misc {
                 case changeBackgroundStill
             }
         }
-        public struct SoundData: Sendable, DoriCache.Cacheable {
+        public struct SoundData: Sendable, Hashable, DoriCache.Cacheable {
             public var playMode: Int
             public var bgm: String
             public var se: String
@@ -778,7 +778,7 @@ extension DoriAPI.Misc {
         }
     }
     
-    public struct PlayerProfile: Sendable, DoriCache.Cacheable {
+    public struct PlayerProfile: Sendable, Hashable, DoriCache.Cacheable {
         public var userName: String
         public var rank: Int
         public var degree: Int
@@ -792,7 +792,7 @@ extension DoriAPI.Misc {
         public var stageChallengeAchievementConditions: [Int: Int]
         public var userMusicClearInfo: [DoriAPI.Song.DifficultyType: MusicClearInfo]
         
-        public struct Flags: Sendable, OptionSet, DoriCache.Cacheable {
+        public struct Flags: Sendable, OptionSet, Hashable, DoriCache.Cacheable {
             public var rawValue: UInt16
             
             public init(rawValue: UInt16) {
@@ -815,7 +815,7 @@ extension DoriAPI.Misc {
             public static let publishCharacterRank                       = Flags(rawValue: 1 << 13)
         }
         
-        public struct Situation: Sendable, DoriCache.Cacheable {
+        public struct Situation: Sendable, Hashable, DoriCache.Cacheable {
             public var userID: Int
             public var situationID: Int
             public var level: Int
@@ -831,14 +831,14 @@ extension DoriAPI.Misc {
             public var userAppendParameter: AppendParameter
             public var limitBreakRank: Int
             
-            public struct AppendParameter: Sendable, DoriCache.Cacheable {
+            public struct AppendParameter: Sendable, Hashable, DoriCache.Cacheable {
                 public var stat: DoriAPI.Card.Stat // Int<performance|technique|visual>(JSON) -> Stat(Swift)
                 public var characterPotentialStat: DoriAPI.Card.Stat // Int<characterPotential.+>(JSON) -> Stat(Swift)
                 public var characterBonusStat: DoriAPI.Card.Stat // Int<characterPotential.+>(JSON) -> Stat(Swift)
             }
         }
         
-        public struct HighScoreRating: Sendable, DoriCache.Cacheable {
+        public struct HighScoreRating: Sendable, Hashable, DoriCache.Cacheable {
             public var poppinParty: [HighScoreMusic]
             public var afterglow: [HighScoreMusic]
             public var pastelPalettes: [HighScoreMusic]
@@ -849,14 +849,14 @@ extension DoriAPI.Misc {
             public var myGO: [HighScoreMusic]
             public var others: [HighScoreMusic]
             
-            public struct HighScoreMusic: Sendable, DoriCache.Cacheable {
+            public struct HighScoreMusic: Sendable, Hashable, DoriCache.Cacheable {
                 public var musicID: Int
                 public var difficulty: DoriAPI.Song.DifficultyType
                 public var rating: Int
             }
         }
         
-        public struct UserDeck: Sendable, DoriCache.Cacheable {
+        public struct UserDeck: Sendable, Hashable, DoriCache.Cacheable {
             public var deckID: Int
             public var deckName: String
             public var leader: Int
@@ -866,14 +866,14 @@ extension DoriAPI.Misc {
             public var member4: Int
         }
         
-        public struct ProfileSituation: Sendable, DoriCache.Cacheable {
+        public struct ProfileSituation: Sendable, Hashable, DoriCache.Cacheable {
             public var userID: Int
             public var situationID: Int
             public var illust: String
             public var viewProfileSituationStatus: String
         }
         
-        public struct MusicClearInfo: Sendable, DoriCache.Cacheable {
+        public struct MusicClearInfo: Sendable, Hashable, DoriCache.Cacheable {
             public var clearedMusicCount: Int
             public var fullComboMusicCount: Int
             public var allPerfectMusicCount: Int

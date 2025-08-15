@@ -17,7 +17,7 @@ internal import SwiftyJSON
 
 public typealias RichContentGroup = [RichContent]
 
-public enum RichContent: Sendable, Equatable, DoriCache.Cacheable {
+public enum RichContent: Sendable, Equatable, Hashable, DoriCache.Cacheable {
     case br
     case text(String)
     case image([URL])

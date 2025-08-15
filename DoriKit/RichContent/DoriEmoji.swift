@@ -24,7 +24,7 @@ internal let _doriEmojiBundle = Bundle(path: #bundle.path(forResource: "DoriEmoj
 
 extension RichContent {
     @frozen
-    public struct Emoji {
+    public struct Emoji: Hashable {
         public static var all: [Emoji] {
             let namesFile = _doriEmojiBundle.url(forResource: "emoji_names", withExtension: "plist")!
             let data = try! Data(contentsOf: namesFile)

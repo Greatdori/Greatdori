@@ -344,7 +344,7 @@ extension DoriFrontend.Song {
         public var meta: Meta
     }
     
-    public struct ExtendedSong: Sendable, DoriCache.Cacheable {
+    public struct ExtendedSong: Sendable, Hashable, DoriCache.Cacheable {
         public var song: Song
         public var band: DoriAPI.Band.Band?
         public var events: [DoriAPI.Event.PreviewEvent]

@@ -46,7 +46,7 @@ extension DoriFrontend.Comic {
 
 extension DoriAPI.Comic.Comic {
     @frozen
-    public enum ComicType: String {
+    public enum ComicType: String, Hashable {
         case singleFrame
         case fourFrame
         
