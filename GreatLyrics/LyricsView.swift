@@ -89,6 +89,22 @@ struct LyricsView: View {
                                     Text("No Partial Style")
                                 }
                                 Spacer()
+                                if let sourceKey = lyricLine.partialStyle.keys.first(where: { $0.overlaps(lineRange) }) {
+                                    Button("Remove", role: .destructive) {
+                                        if lyrics.lyrics[lineIndex].partialStyle.removeValue(forKey: lineRange) != nil {
+                                            return
+                                        }
+                                        let sourceKeySet = Set(sourceKey)
+                                        let selectedKeySet = Set(lineRange)
+                                        lyrics.lyrics[lineIndex].partialStyle.removeValue(forKey: sourceKey)
+                                        let sourceDiff = sourceKeySet.subtracting(selectedKeySet).sorted()
+                                        if !sourceDiff.isEmpty {
+                                            let sourceDiffKey = sourceDiff.first!...sourceDiff.last!
+                                            lyrics.lyrics[lineIndex].partialStyle.updateValue(lyricLine.partialStyle[sourceKey]!, forKey: sourceDiffKey)
+                                        }
+                                    }
+                                    .tint(.red)
+                                }
                                 Button("Edit...") {
                                     let pUpdate = malloc(16)!
                                     let update: (Lyrics.Style) -> Void = { newStyle in
@@ -100,7 +116,7 @@ struct LyricsView: View {
                                             let sourceDiff = sourceKeySet.subtracting(selectedKeySet).sorted()
                                             if !sourceDiff.isEmpty {
                                                 let sourceDiffKey = sourceDiff.first!...sourceDiff.last!
-                                                lyrics.lyrics[lineIndex].partialStyle.updateValue(newStyle, forKey: sourceDiffKey)
+                                                lyrics.lyrics[lineIndex].partialStyle.updateValue(lyricLine.partialStyle[sourceKey]!, forKey: sourceDiffKey)
                                             }
                                         } else {
                                             lyrics.lyrics[lineIndex].partialStyle.updateValue(newStyle, forKey: lineRange)
