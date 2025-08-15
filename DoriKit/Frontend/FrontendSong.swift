@@ -361,7 +361,8 @@ extension DoriFrontend.Song {
         public var mainStyle: Style?
         public var metadata: Metadata
         
-        public struct LyricLine: Sendable, Hashable, DoriCache.Cacheable {
+        public struct LyricLine: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+            public var id: UUID = UUID()
             public var original: String
             public var translations: DoriAPI.LocalizedData<String>
             public var ruby: Ruby?
