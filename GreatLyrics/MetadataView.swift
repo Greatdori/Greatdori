@@ -39,7 +39,7 @@ struct MetadataView: View {
             Section {
                 List(selection: $selectedLegendIndex) {
                     if !lyrics.metadata.legends.isEmpty {
-                        ForEach(Array(lyrics.metadata.legends.enumerated()), id: \.element.self) { (index, legend) in
+                        ForEach(Array(lyrics.metadata.legends.enumerated()), id: \.element.id) { (index, legend) in
                             HStack {
                                 Circle()
                                     .fill(legend.color)

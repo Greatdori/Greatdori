@@ -1,0 +1,3285 @@
+//===---*- Greatdori! -*---------------------------------------------------===//
+//
+// GreatLyricsApp.swift
+//
+// This source file is part of the Greatdori! open source project
+//
+// Copyright (c) 2025 the Greatdori! project authors
+// Licensed under Apache License v2.0
+//
+// See https://greatdori.memz.top/LICENSE.txt for license information
+// See https://greatdori.memz.top/CONTRIBUTORS.txt for the list of Greatdori! project authors
+//
+//===----------------------------------------------------------------------===//
+//
+//  This json contains complex styling and all useful attributes,
+//  use it to check completion of renderer and other operations.
+//
+//===----------------------------------------------------------------------===//
+
+{
+    "id" : 684,
+    "lyrics" : [
+        {
+            "id" : "86CCD94A-A407-4348-92EE-E65F2568DC5D",
+            "original" : "きっと理由は　バラバラだった",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "きっとりゆうは　バラバラだった",
+                "romaji" : "Kitto riyuu wa barabara datta"
+            },
+            "translations" : {
+                "cn" : "彼此的缘由  肯定各不相同",
+                "en" : "I'm sure our reasons were different"
+            }
+        },
+        {
+            "id" : "0746825E-5EA8-4577-8E8A-9F00B87D89CB",
+            "original" : "寄る辺のない　あの日の僕たち",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "よるべのない　あのひのぼくたち",
+                "romaji" : "Yorube no nai ano hi no bokutachi"
+            },
+            "translations" : {
+                "cn" : "那天的我们  身边无依无靠",
+                "en" : "On that day when we had nowhere to turn to"
+            }
+        },
+        {
+            "id" : "1F0FCF9D-1717-4D06-96E0-FB704605395A",
+            "original" : "もう二度と傷つきたくないって",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "もうにどときずつきたくないって",
+                "romaji" : "Mou nidoto kizutsukitakunai tte"
+            },
+            "translations" : {
+                "cn" : "已经不想再受伤了",
+                "en" : "I don't want to get hurt ever again,"
+            }
+        },
+        {
+            "id" : "2A48EED9-66E9-4900-84A8-A52BBB62A14B",
+            "original" : "そう思って　うつむいたのに",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "そうおもって　うつむいたのに",
+                "romaji" : "Sou omotte utsumuita no ni"
+            },
+            "translations" : {
+                "cn" : "明明这样想着  垂头丧气",
+                "en" : "I hung my head and thought that, and yet"
+            }
+        },
+        {
+            "id" : "D0A4999D-398F-4FC9-915B-23CC7C145BC4",
+            "original" : "迷ってたから出会えて",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "まよってたからであえて",
+                "romaji" : "Mayotteta kara deaete"
+            },
+            "translations" : {
+                "cn" : "但正因迷茫才能邂逅",
+                "en" : "It's because we were lost that we could meet each other"
+            }
+        },
+        {
+            "id" : "AA606B71-9B3D-48CD-A957-B644791EB47F",
+            "original" : "やっと繋いだ手を",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "やっとつないだてを",
+                "romaji" : "Yatto tsunaida te wo"
+            },
+            "translations" : {
+                "cn" : "终于牵起的手",
+                "en" : "And the hands that we've finally linked"
+            }
+        },
+        {
+            "id" : "44B0AFA5-18D8-42D7-96D4-4A209DB54D30",
+            "original" : "もう僕は離さない",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "もうぼくわはなさない",
+                "romaji" : "Mou boku wa hanasanai"
+            },
+            "translations" : {
+                "cn" : "我不会再放开",
+                "en" : "I won't let go of them anymore"
+            }
+        },
+        {
+            "id" : "87CDC6D8-C2A5-4543-9215-5B98244B5AD3",
+            "original" : "何があっても　握りしめていく",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "なにがあってもにぎりしめていく",
+                "romaji" : "Nani ga atte mo nigirishimete iku"
+            },
+            "translations" : {
+                "cn" : "无论发生什么  都会紧紧握住",
+                "en" : "No matter what happens, I'll keep holding on tight"
+            }
+        },
+        {
+            "id" : "E6963A63-BA03-43BF-88CD-8860B8022D39",
+            "original" : "正解なんてわからなくて",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "せいかいなんてわからなくて",
+                "romaji" : "Seikai nante wakaranakute"
+            },
+            "translations" : {
+                "cn" : "我不知道什么是正确答案",
+                "en" : "Not knowing what the right answer was"
+            }
+        },
+        {
+            "id" : "A7D7D941-0695-46FE-BE3A-5A80ED8E022A",
+            "original" : "転んでまた痛みを知った",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "ころんでまたいたもをしった",
+                "romaji" : "Koronde mata itamo wo shitta"
+            },
+            "translations" : {
+                "cn" : "跌倒后又感受到了痛楚",
+                "en" : "I fell over and faced pain once again"
+            }
+        },
+        {
+            "id" : "4F3AD233-C5FD-4CDA-9884-86707387F8B9",
+            "original" : "それでも立ち上がった君を",
+            "partialStyle" : [
+                [
+                    0,
+                    11
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "それでもたちあがったきみを",
+                "romaji" : "Soredemo tachiagatta kimi wo"
+            },
+            "translations" : {
+                "cn" : "即使如此你也站了起来",
+                "en" : "Even so, you stood back up"
+            }
+        },
+        {
+            "id" : "8EBC91A4-B080-4DAC-906B-7D6A11363AAF",
+            "original" : "笑うはずなんてない",
+            "partialStyle" : [
+                [
+                    0,
+                    8
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "わらうはずなんてない",
+                "romaji" : "Warau hazu nante nai"
+            },
+            "translations" : {
+                "cn" : "我们决不会嘲笑你",
+                "en" : "There's no way I could laugh at you for that"
+            }
+        },
+        {
+            "id" : "78C23B6A-33A4-4398-89FE-CAE08DE709E5",
+            "original" : "行き止まりばかりでも　また道を探す",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "いきどまりばかりでも　またみちをさがす",
+                "romaji" : "Ikidomari bakari de mo mata michi wo sagasu"
+            },
+            "translations" : {
+                "cn" : "即使四处都走不通  也要继续寻找道路",
+                "en" : "Even if all I run into is dead ends, I'll keep looking for another way"
+            }
+        },
+        {
+            "id" : "71EAEA42-B061-4B1C-AA0A-92A4B26A73E3",
+            "original" : "この音で響き合うため　ここに立つため",
+            "partialStyle" : [
+                [
+                    11,
+                    17
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "このおとでひびきあうため　ここにたつため",
+                "romaji" : "Kono oto de hibikiau tame koko ni tatsu tame"
+            },
+            "translations" : {
+                "cn" : "为了以这乐音共鸣  为了站在这里",
+                "en" : "So that we can resonate with this sound, so that we can stand here"
+            }
+        },
+        {
+            "id" : "A9B8A3F4-FE5E-495A-97F9-6BC43CCE70D5",
+            "original" : "ぶつかりながら (何度も)",
+            "partialStyle" : [
+                [
+                    0,
+                    12
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "ぶつかりながら（なんども）",
+                "romaji" : "Butsukari nagara (nando mo)"
+            },
+            "translations" : {
+                "cn" : "即使跌跌撞撞（无数次）",
+                "en" : "While clashing with each other (Over and over)"
+            }
+        },
+        {
+            "id" : "582161CE-49E9-4F83-AA15-F8F55992F709",
+            "original" : "心の中に　瞬間灯った",
+            "partialStyle" : [
+                [
+                    5,
+                    9
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "こころのなかに　しゅんかんともった",
+                "romaji" : "Kokoro no naka ni shunkan tomotta"
+            },
+            "translations" : {
+                "cn" : "在心中（瞬间点亮的）",
+                "en" : "Within my heart, it lit up in an instant"
+            }
+        },
+        {
+            "id" : "4A052759-289D-4C04-A2AB-BB368B45A2F4",
+            "original" : "小さな火消さないでいて",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "ちいさなひけさないでいて",
+                "romaji" : "Chiisana hi kesanaideite"
+            },
+            "translations" : {
+                "cn" : "那微弱的灯火  不要让它熄灭",
+                "en" : "That small flame, please don't go out"
+            }
+        },
+        {
+            "id" : "A7D6F232-616F-406D-A127-3360744FD17D",
+            "original" : "(消えない)",
+            "partialStyle" : [
+                [
+                    0,
+                    5
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "(きえない)",
+                "romaji" : "(Kienai)"
+            },
+            "translations" : {
+                "cn" : "（不会熄灭）",
+                "en" : "(It won't go out)"
+            }
+        },
+        {
+            "id" : "E3965B5E-0391-4AC1-99C8-1E717AC98488",
+            "original" : "意味とか行き先とかまだない",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "いみとかいきさきとかまだない",
+                "romaji" : "Imi toka ikisaki toka mada nai"
+            },
+            "translations" : {
+                "cn" : "意义和目标都尚不存在",
+                "en" : "We don't have any sort of meaning or destination yet"
+            }
+        },
+        {
+            "id" : "5E4E170A-15E5-4F2F-87F3-059FFCAAC112",
+            "original" : "完璧なんて　ほど遠い僕たちだけど(ah)",
+            "partialStyle" : [
+                [
+                    16,
+                    19
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "かんぺきなんて　ほどとおいぼくたちだけど(ah)",
+                "romaji" : "Kanpeki nante hodotooi bokutachi dakedo (ah)"
+            },
+            "translations" : {
+                "cn" : "虽然我们离完美还很遥远(ah)",
+                "en" : "And we're nowhere near being perfect, but (ah)"
+            }
+        },
+        {
+            "id" : "2D21BA33-0827-4329-A395-AA3E3856D080",
+            "original" : "この音色でしかたきつけられない",
+            "partialStyle" : [
+                [
+                    9,
+                    14
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                },
+                [
+                    0,
+                    6
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                },
+                [
+                    7,
+                    8
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.69803923,
+                        "green" : 0.5058824,
+                        "red" : 0.5176469
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        
+                    ],
+                    "shadow" : {
+                        "blur" : 17,
+                        "color" : {
+                            "blue" : 1.0000001,
+                            "green" : 1,
+                            "red" : 1.0000001
+                        },
+                        "x" : 3.8000000000000025,
+                        "y" : 1
+                    },
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 1,
+                            "green" : 0.9921569,
+                            "red" : 0.99607843
+                        },
+                        "radius" : 0,
+                        "width" : 0.9999999999999999
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "このねいろでしかたきつけられない",
+                "romaji" : "Kono neiro de shika takitsukerarenai"
+            },
+            "translations" : {
+                "cn" : "唯有以此音色方能燃立希望",
+                "en" : "We can only kindle it with this timbre"
+            }
+        },
+        {
+            "id" : "8EFB0677-7DC2-4C7C-B2D6-D3C41A81ABE7",
+            "original" : "胸がいま騒ぎ出して",
+            "partialStyle" : [
+                [
+                    0,
+                    8
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "むねがいまさわぎだして",
+                "romaji" : "Mune ga ima sawagi dashite"
+            },
+            "translations" : {
+                "cn" : "胸口此刻躁动起来",
+                "en" : "My heart is roaring now"
+            }
+        },
+        {
+            "id" : "8D4BC689-32A4-4C71-A95C-33DAC8DCFEE1",
+            "original" : "こころのまんなかに(oh まんなかに)",
+            "partialStyle" : [
+                [
+                    9,
+                    18
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "こころのまんあかに(oh まんあかに)",
+                "romaji" : "Kokoro no mannaka ni (oh mannaka ni)"
+            },
+            "translations" : {
+                "cn" : "在心灵的正中央（在正中央）",
+                "en" : "The song being housed in the center of my heart (oh, in the center)"
+            }
+        },
+        {
+            "id" : "04903E42-80E2-4B15-868E-FA793236032A",
+            "original" : "宿すうたを　ともりびに",
+            "partialStyle" : [
+                [
+                    6,
+                    8
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.8627451,
+                        "green" : 0.74509805,
+                        "red" : 0.5686275
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        
+                    ],
+                    "shadow" : {
+                        "blur" : 15,
+                        "color" : {
+                            "blue" : 1,
+                            "green" : 1,
+                            "red" : 1
+                        },
+                        "x" : -0.4999999999999999,
+                        "y" : -0.4999999999999998
+                    },
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.9647059,
+                            "green" : 0.92156863,
+                            "red" : 0.91764706
+                        },
+                        "radius" : 0,
+                        "width" : 1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "やどすうたを　ともりびに",
+                "romaji" : "Yadosu uta wo tomoribi ni"
+            },
+            "translations" : {
+                "cn" : "怀揣的歌化作灯火",
+                "en" : "I'll use it as a flame to light the way"
+            }
+        },
+        {
+            "id" : "746EBB81-3FEC-4015-8C9E-EEEB71ADB377",
+            "original" : "僕たちの音鳴らしていたいよ",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "ぼくたちのおとならしていたいよ",
+                "romaji" : "Bokutachi no oto narashiteitai yo"
+            },
+            "translations" : {
+                "cn" : "多想让我们的乐音永远响彻",
+                "en" : "I want to keep ringing out our sound"
+            }
+        },
+        {
+            "id" : "31C6408F-B1A4-42A7-8BFF-21EEAB674A48",
+            "original" : "明日はね　遠いけど(ah)",
+            "partialStyle" : [
+                [
+                    9,
+                    12
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "あしたはね　とおいけど(ah)",
+                "romaji" : "Ashita wa ne tooi kedo (ah)"
+            },
+            "translations" : {
+                "cn" : "虽然明天尚且遥远(ah)",
+                "en" : "Tomorrow is far off (ah)"
+            }
+        },
+        {
+            "id" : "D5B5CC8D-5CA5-45CA-982A-3F0AF31A9570",
+            "original" : "たった今ここに立つ僕たちを照らそう",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "たったいまここにたつぼくたちをてらそう",
+                "romaji" : "Tatta ima koko ni tatsu bokutachi wo terasou"
+            },
+            "translations" : {
+                "cn" : "也要将现在立于此处的我们照亮",
+                "en" : "But let's illuminate the us who stand here right now"
+            }
+        },
+        {
+            "id" : "A9A0FE0A-FDDC-4043-B787-8CC0C358CDE7",
+            "original" : "迷うことに迷わないでいいよ",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "もようことにまよわないでいいよ",
+                "romaji" : "Mayou koto ni mayowanaide ii yo"
+            },
+            "translations" : {
+                "cn" : "不畏迷茫  砥砺前行就好",
+                "en" : "We don't have to feel lost about being lost"
+            }
+        },
+        {
+            "id" : "E199F33A-5D94-4BB7-8F46-FCA12206CCF1",
+            "original" : "(It's our sound)",
+            "partialStyle" : [
+                [
+                    0,
+                    15
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                }
+            ],
+            "translations" : {
+                "cn" : "这是我们的声音",
+                "en" : ""
+            }
+        },
+        {
+            "id" : "744BD4D3-E139-40DE-8EAB-703791BC0CD9",
+            "original" : "言葉になんてしたところで",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "ことばになんてしたところで",
+                "romaji" : "Kotoba ni nante shita tokoro de"
+            },
+            "translations" : {
+                "cn" : "即使将思绪化作言语",
+                "en" : "Even when I tried to put things into words,"
+            }
+        },
+        {
+            "id" : "3D84FD6D-4837-4899-983A-AE61181D6A50",
+            "original" : "戸惑う人の目が怖かった",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "とまどう人のめがこわかった",
+                "romaji" : "Tomadou hito no me ga kowakatta"
+            },
+            "translations" : {
+                "cn" : "依旧惧怕不解的目光",
+                "en" : "I feared the gazes of people who were bewildered by them"
+            }
+        },
+        {
+            "id" : "409C305C-C396-48E7-B70E-1CE51CBCD75C",
+            "original" : "それでも抱えた声を",
+            "partialStyle" : [
+                [
+                    0,
+                    8
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "それでもかかえたこえを",
+                "romaji" : "Soredemo kakaeta koe wo"
+            },
+            "translations" : {
+                "cn" : "即使如此",
+                "en" : "Even so, there was music"
+            }
+        },
+        {
+            "id" : "6D3030AC-B281-4640-ADD4-BA16BB867A91",
+            "original" : "受け止めてくれた音楽",
+            "partialStyle" : [
+                [
+                    0,
+                    9
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "うけとめてくれたおんがく",
+                "romaji" : "Uketomete kureta ongaku"
+            },
+            "translations" : {
+                "cn" : "音乐也接纳了我内心的声音",
+                "en" : "That accepted the voice you carry"
+            }
+        },
+        {
+            "id" : "72D127B8-08B1-4DA6-AB09-0DF6D0D6EBE6",
+            "original" : "こぼれた涙さえ　ここじゃあたたかく",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "こぼれたなみださえ　ここじゃあたたかく",
+                "romaji" : "Koboreta namida sae koko ja atatakaku"
+            },
+            "translations" : {
+                "cn" : "连零落的泪水  在这里也如此温暖",
+                "en" : "Even the tears I spilled felt warm, because I was here"
+            }
+        },
+        {
+            "id" : "640561BA-8665-41F9-ACD0-61C25003CDE3",
+            "original" : "ほらあなのライブハウスに",
+            "partialStyle" : [
+                [
+                    1,
+                    3
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.5686275,
+                        "green" : 0.8784314,
+                        "red" : 0.619608
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        
+                    ],
+                    "shadow" : {
+                        "blur" : 17,
+                        "color" : {
+                            "blue" : 1.0000001,
+                            "green" : 1,
+                            "red" : 1.0000001
+                        },
+                        "x" : 2.000000000000001,
+                        "y" : 1
+                    },
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 1,
+                            "green" : 0.9921569,
+                            "red" : 0.99607843
+                        },
+                        "radius" : 0,
+                        "width" : 0.9999999999999999
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "ほらあなのライブハウスに",
+                "romaji" : "Horaana no raibuhausu ni"
+            },
+            "translations" : {
+                "cn" : "在这猫穴般的Live House里",
+                "en" : "In this cave of a live house"
+            }
+        },
+        {
+            "id" : "B9BDBAAC-2D98-4AE0-9DFD-ADFCB910721D",
+            "original" : "打ち鳴らすたび",
+            "partialStyle" : [
+                [
+                    0,
+                    6
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "うちならしたび",
+                "romaji" : "Uchinarashi tabi"
+            },
+            "translations" : {
+                "cn" : "每次敲响时",
+                "en" : "Every time we crash and clang"
+            }
+        },
+        {
+            "id" : "5781A52A-F81A-47CC-BE7B-68120F25B087",
+            "original" : "咲いた熱は (消えない)",
+            "partialStyle" : [
+                [
+                    0,
+                    11
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "さいたねつわ（きえない）",
+                "romaji" : "Saita netsu wa (kienai)"
+            },
+            "translations" : {
+                "cn" : "都绽放的热情（永不消失）",
+                "en" : "The heat that blooms (It won't go out)"
+            }
+        },
+        {
+            "id" : "E8D70CF3-52A8-498C-83B6-229C22DD0DF9",
+            "original" : "分け合う種火　共振するんだ",
+            "partialStyle" : [
+                [
+                    7,
+                    12
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "わけあうたねび　きょうしんするんだ",
+                "romaji" : "Wakeau tanebi kyoushin surunda"
+            },
+            "translations" : {
+                "cn" : "分享的火种  彼此共振",
+                "en" : "Is our shared embers, and they resonate"
+            }
+        },
+        {
+            "id" : "991D224E-E6AF-4694-8B55-7D23E87FE5C1",
+            "original" : "宿火よ　君を照らせ",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "やどしびよ　きみをてらせ",
+                "romaji" : "Yadoshibi yo kimi wo terase"
+            },
+            "translations" : {
+                "cn" : "心中火焰  将你照亮吧",
+                "en" : "Oh buried fire, light up!"
+            }
+        },
+        {
+            "id" : "553C40BE-4590-4484-AEC9-0EA87FA3D5BF",
+            "original" : "(かざせ)",
+            "partialStyle" : [
+                [
+                    0,
+                    4
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "(かざせ)",
+                "romaji" : "(Kazase)"
+            },
+            "translations" : {
+                "cn" : "（振臂高挥）",
+                "en" : "(Hold your hand out)"
+            }
+        },
+        {
+            "id" : "F2F9806B-FB1C-4308-8BEE-A5CD77E8ACE9",
+            "original" : "それぞれの拳の中に",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "それぞれのこぶしのなかに",
+                "romaji" : "Sorezore no kobushi no naka ni"
+            },
+            "translations" : {
+                "cn" : "各自的拳中",
+                "en" : "It's okay if within our fists"
+            }
+        },
+        {
+            "id" : "DD5FD4D8-0F5F-4CCF-85B4-66EB56FD50CF",
+            "original" : "握ってるものは　違ったっていいんだよ(ah)",
+            "partialStyle" : [
+                [
+                    18,
+                    21
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "にぎってるものは　ちがったっていいんだよ(ah)",
+                "romaji" : "Nigitteru mono wa chigatta tte iindayo (ah)"
+            },
+            "translations" : {
+                "cn" : "握紧之物不同也无妨(ah)",
+                "en" : "The things we're holding tightly onto are all different (ah)"
+            }
+        },
+        {
+            "id" : "C24005D9-2838-4931-88F2-FC91795B62CD",
+            "original" : "このパンクロックの中で同じ熱になれるいまがすべて",
+            "partialStyle" : [
+                [
+                    0,
+                    23
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "このバンクロックのなかでおなじねつになれるいまがすべて",
+                "romaji" : "Kono pankurokku no naka de onaji netsu ni nareru ima ga subete"
+            },
+            "translations" : {
+                "cn" : "在这朋克摇滚中  让我们同样炽热的当下即一切",
+                "en" : "This moment when we can reach the same heat within this punk rock is everything"
+            }
+        },
+        {
+            "id" : "BB1C3F8C-1D31-456D-9F41-BCE631E0D793",
+            "original" : "この喉を鳴らして(oh 鳴らして)",
+            "partialStyle" : [
+                [
+                    8,
+                    16
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "こののでをならして(oh　ならして)",
+                "romaji" : "Kono nodo wo narashite (oh narashite)"
+            },
+            "translations" : {
+                "cn" : "我开口高声呼喊（高声呼喊）",
+                "en" : "On the day I let my voice ring out (oh, ring out)"
+            }
+        },
+        {
+            "id" : "596FE693-DC9E-4197-97C4-A422E804F06A",
+            "original" : "音にいだかれたあの日に",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "おとにいだかれたあのひに",
+                "romaji" : "Oto ni idakareta ano hi ni"
+            },
+            "translations" : {
+                "cn" : "在被乐音怀抱的那天",
+                "en" : "And was embraced by the sound"
+            }
+        },
+        {
+            "id" : "A5FB5A67-0333-4253-B710-43BD397EF625",
+            "original" : "震える胸に宿した青い炎",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "ふるえるむねにやどしたあおいほのお",
+                "romaji" : "Furueru mune ni yadoshita aoi honoo"
+            },
+            "translations" : {
+                "cn" : "颤抖的胸中燃起青蓝的火焰",
+                "en" : "My trembling chest housed a blue flame"
+            }
+        },
+        {
+            "id" : "FB8FEB2A-F005-4E5E-A841-B2251EEB4EA1",
+            "original" : "そよぐはずない風に(ah)",
+            "partialStyle" : [
+                [
+                    0,
+                    1
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.3568627,
+                        "green" : 0.7490196,
+                        "red" : 0.8901961
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        
+                    ],
+                    "shadow" : {
+                        "blur" : 17,
+                        "color" : {
+                            "blue" : 1.0000001,
+                            "green" : 1,
+                            "red" : 1.0000001
+                        },
+                        "x" : 2.000000000000001,
+                        "y" : 1
+                    },
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 1,
+                            "green" : 0.9921569,
+                            "red" : 0.99607843
+                        },
+                        "radius" : 0,
+                        "width" : 0.9999999999999999
+                    }
+                },
+                [
+                    9,
+                    12
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.7254903,
+                        "green" : 0.654902,
+                        "red" : 1
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6904459,
+                                "green" : 0.99995595,
+                                "red" : 1.0000879
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.7781132,
+                                "green" : 0.49551058,
+                                "red" : 0.725102
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.60184264,
+                                "green" : 0.89043915,
+                                "red" : 1.0021856
+                            },
+                            "end" : [
+                                1,
+                                0.17819940476190477
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.6039216,
+                            "green" : 0.6666667,
+                            "red" : 0
+                        },
+                        "radius" : 2,
+                        "width" : 0.1
+                    }
+                }
+            ],
+            "ruby" : {
+                "kana" : "そよぐはずないかぜに(ah)",
+                "romaji" : "Soyogu hazu nai kaze ni (ah)"
+            },
+            "translations" : {
+                "cn" : "清爽微风本不应拂动此世(ah)",
+                "en" : "A wind that shouldn't be stirring"
+            }
+        },
+        {
+            "id" : "AF34C04D-B6E1-4F83-BFC1-D9C084583660",
+            "original" : "吹かれてる箱の中　自由に飛べるだろう",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "ふかれてるはこのなか　じゆうにとべるだろう",
+                "romaji" : "Fukareteru hako no naka jiyuu ni toberu darou"
+            },
+            "translations" : {
+                "cn" : "在这风吹不止的箱庭里  一定能自由飞翔",
+                "en" : "Is blowing through this box; within it, I can fly freely"
+            }
+        },
+        {
+            "id" : "DDA15FF7-AE90-48A5-B6B0-E82990282E1A",
+            "original" : "君とならどこまでもいきたいよ",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "きみとならどこまでもいきたいよ",
+                "romaji" : "Kimi to nara doko made mo ikitai yo"
+            },
+            "translations" : {
+                "cn" : "只要与你一起  我愿去往天涯海角",
+                "en" : "I want to go anywhere and everywhere if it's with you"
+            }
+        },
+        {
+            "id" : "43032789-8BB2-451E-B0E8-A82B7E114332",
+            "original" : "(It's our sound)",
+            "partialStyle" : [
+                [
+                    0,
+                    15
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                }
+            ],
+            "translations" : {
+                "cn" : "这是我们的声音",
+                "en" : ""
+            }
+        },
+        {
+            "id" : "D195FA94-A828-4DB6-B75D-37A93D24A4CD",
+            "original" : "(It's the blazing our sound.",
+            "partialStyle" : [
+                [
+                    0,
+                    27
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                }
+            ],
+            "translations" : {
+                "cn" : "这是我们炽热的歌声",
+                "en" : ""
+            }
+        },
+        {
+            "id" : "76685793-314F-4729-9182-12B667E058C7",
+            "original" : "We all sing out with the same heat.)",
+            "partialStyle" : [
+                [
+                    0,
+                    35
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                }
+            ],
+            "translations" : {
+                "cn" : "我们心怀相同的热情歌唱",
+                "en" : ""
+            }
+        },
+        {
+            "id" : "E4A682A7-5D98-4A03-8A82-046ED0F043A1",
+            "original" : "(We will go with our song.",
+            "partialStyle" : [
+                [
+                    0,
+                    25
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                }
+            ],
+            "translations" : {
+                "cn" : "我们将与心爱之音同行",
+                "en" : ""
+            }
+        },
+        {
+            "id" : "0A271F97-135E-4312-94ED-F7C60EDD8881",
+            "original" : "Yet still tomorrow is unknown.)",
+            "partialStyle" : [
+                [
+                    0,
+                    21
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                },
+                [
+                    29,
+                    30
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.88166356,
+                        "green" : 0.7378849,
+                        "red" : 0.37440464
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        {
+                            "color" : {
+                                "blue" : 0.6039216,
+                                "green" : 0.6666667,
+                                "red" : 0
+                            },
+                            "end" : [
+                                0.5025221456692913,
+                                0.10460069444444445
+                            ],
+                            "start" : [
+                                0,
+                                0.7190033783783782
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.53333336,
+                                "green" : 0.87058824,
+                                "red" : 1
+                            },
+                            "end" : [
+                                0.5566560039370079,
+                                0.3950892857142857
+                            ],
+                            "start" : [
+                                0.33177083333333335,
+                                0.7386423319327731
+                            ],
+                            "width" : 5.499999999999997
+                        },
+                        {
+                            "color" : {
+                                "blue" : 0.72941184,
+                                "green" : 0.39999986,
+                                "red" : 0.6627451
+                            },
+                            "end" : [
+                                1,
+                                0.1932043650793651
+                            ],
+                            "start" : [
+                                0.5653645833333333,
+                                0.8254332983193278
+                            ],
+                            "width" : 5.499999999999997
+                        }
+                    ],
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 0.7254903,
+                            "green" : 0.654902,
+                            "red" : 1
+                        },
+                        "radius" : 1,
+                        "width" : 0.5
+                    }
+                },
+                [
+                    22,
+                    28
+                ],
+                {
+                    "color" : {
+                        "blue" : 0.6627451,
+                        "green" : 0.6117647,
+                        "red" : 0.9137255
+                    },
+                    "fontOverride" : "HanziPen SC",
+                    "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+                    "maskLines" : [
+                        
+                    ],
+                    "shadow" : {
+                        "blur" : 17,
+                        "color" : {
+                            "blue" : 1.0000001,
+                            "green" : 1,
+                            "red" : 1.0000001
+                        },
+                        "x" : 1.5000000000000004,
+                        "y" : 1
+                    },
+                    "stroke" : {
+                        "color" : {
+                            "blue" : 1,
+                            "green" : 0.9921569,
+                            "red" : 0.99607843
+                        },
+                        "radius" : 0,
+                        "width" : 0.8999999999999999
+                    }
+                }
+            ],
+            "translations" : {
+                "cn" : "即使明天仍旧未知",
+                "en" : ""
+            }
+        },
+        {
+            "id" : "C3C8089F-9F6C-4599-913A-964CC26B046B",
+            "original" : "暗闇の中でも今は　一緒に迷ってくれる人がいる",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "くらやみのなかでもいまは　いっしょにまよってくれるひとがいる",
+                "romaji" : "Kurayami no naka demo ima wa isshoni mayottekureru hito ga iru"
+            },
+            "translations" : {
+                "cn" : "即使在黑暗之中  现在也有人陪我一起迷茫",
+                "en" : "Even if I'm in the dark, I have people who will get lost with me now"
+            }
+        },
+        {
+            "id" : "755A3D45-632A-4592-9C10-F0F364C44304",
+            "original" : "それでも一人になる日には　このうたを灯して歩く",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "それでもひとりになるひには　このうたをともしてあるく",
+                "romaji" : "Soredemo hitori ni naru hi ni wa kono uta wo tomoshite aruku"
+            },
+            "translations" : {
+                "cn" : "即使如此也孤身一人的日子  我会点亮这首歌前行",
+                "en" : "And even on days when I'm left alone, I'll walk with this song as my light"
+            }
+        },
+        {
+            "id" : "2AE0C8F6-79CA-43B3-845C-461C2CC7EF61",
+            "original" : "また傷つくよ　この先でも",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "またきずつくよ　このさきでも",
+                "romaji" : "Mata kizutsuku yo kono saki demo"
+            },
+            "translations" : {
+                "cn" : "今后也一定会受伤",
+                "en" : "I'll get hurt again. In the times to come"
+            }
+        },
+        {
+            "id" : "C07A9DAC-821D-40BA-B211-56666F50D09B",
+            "original" : "それでも離したくない手があって",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "それでもはなしたくないてがあって",
+                "romaji" : "Soredemo hanashitakunai te ga atte"
+            },
+            "translations" : {
+                "cn" : "即使如此  我也有不愿松开的手",
+                "en" : "But even so, there are hands I don't want to let go of"
+            }
+        },
+        {
+            "id" : "C28D2C34-5F25-4850-AC05-350A29808D2A",
+            "original" : "はぐれてもあきらめないよ",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "はぐれてもあきらめないよ",
+                "romaji" : "Hagurete mo akiramenai yo"
+            },
+            "translations" : {
+                "cn" : "即使走散  我也不会放弃",
+                "en" : "Even if I lose sight of them, I won't give up"
+            }
+        },
+        {
+            "id" : "36A5A356-20DF-484B-A3A3-C7D3793F315B",
+            "original" : "転んでも君みたいに立ち上がる",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "ころんでもきみみたいにたちあがる",
+                "romaji" : "Koronde mo kimi mitai ni tachiagaru"
+            },
+            "translations" : {
+                "cn" : "即使跌倒  我也会像你一样站起来",
+                "en" : "Even if I fall over, I'll stand up again, just like you"
+            }
+        },
+        {
+            "id" : "D3F7DE4A-FD91-4C84-9C36-D437955F7A8E",
+            "original" : "大丈夫　僕たちは進もう",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "だいじょうぶ　ぼくたちわすすもう",
+                "romaji" : "Daijoubu bokutachi wa susumou"
+            },
+            "translations" : {
+                "cn" : "没关系  让我们前进吧",
+                "en" : "It's okay. Let's move forward"
+            }
+        },
+        {
+            "id" : "BD2FF5A3-634B-45B5-8627-8378174F3CD3",
+            "original" : "迷うことに　もう迷わない",
+            "partialStyle" : [
+                
+            ],
+            "ruby" : {
+                "kana" : "まようことに　もうまよわない",
+                "romaji" : "Mayou koto ni mou mayowanai"
+            },
+            "translations" : {
+                "cn" : "我们已不畏迷茫  我们将砥砺前行",
+                "en" : "I won't feel lost about getting lost anymore"
+            }
+        }
+    ],
+    "mainStyle" : {
+        "color" : {
+            "blue" : 0.8244126,
+            "green" : 0.701363,
+            "red" : 0.4210273
+        },
+        "fontOverride" : "HanziPen SC",
+        "id" : "D8FB913C-7E04-4B7D-A065-854023E54190",
+        "maskLines" : [
+            {
+                "color" : {
+                    "blue" : 0.6904459,
+                    "green" : 0.99995595,
+                    "red" : 1.0000879
+                },
+                "end" : [
+                    1,
+                    0.09234639830508476
+                ],
+                "start" : [
+                    0,
+                    0.7190033783783782
+                ],
+                "width" : 5.499999999999997
+            }
+        ],
+        "shadow" : {
+            "blur" : 0.5,
+            "color" : {
+                "blue" : 0,
+                "green" : 0,
+                "red" : 0
+            },
+            "x" : 2.000000000000001,
+            "y" : 2.000000000000001
+        },
+        "stroke" : {
+            "color" : {
+                "blue" : 0.9098039,
+                "green" : 0.7529412,
+                "red" : 0
+            },
+            "radius" : 0,
+            "width" : 0.20000000000000015
+        }
+    },
+    "metadata" : {
+        "legends" : [
+            {
+                "color" : {
+                    "blue" : 0.8235294,
+                    "green" : 0.7019608,
+                    "red" : 0.41960785
+                },
+                "id" : "D8FB913C-7E04-4B7D-A065-854023E12502",
+                "text" : {
+                    "cn" : "高松灯",
+                    "en" : "Tomori Takamatsu",
+                    "jp" : "高松燈",
+                    "tw" : "高松燈"
+                }
+            },
+            {
+                "color" : {
+                    "blue" : 0.7254903,
+                    "green" : 0.654902,
+                    "red" : 1
+                },
+                "id" : "D8FB913C-7E04-4B7D-A065-854023E47691",
+                "text" : {
+                    "cn" : "千早爱音",
+                    "en" : "Anon Chihaya",
+                    "jp" : "千早愛音",
+                    "tw" : "千早愛音"
+                }
+            },
+            {
+                "color" : {
+                    "blue" : 0.668196,
+                    "green" : 0.71529293,
+                    "red" : -0.11362303
+                },
+                "id" : "06CBA436-C667-4602-A2CC-18A3FC7F0DAA",
+                "text" : {
+                    "cn" : "要乐奈",
+                    "en" : "Rana Kaname",
+                    "jp" : "要楽奈",
+                    "tw" : "要樂奈"
+                }
+            },
+            {
+                "color" : {
+                    "blue" : 0.60184264,
+                    "green" : 0.89043915,
+                    "red" : 1.0021856
+                },
+                "id" : "D7C54A80-0883-4BC1-90AD-7727420688AE",
+                "text" : {
+                    "cn" : "长崎爽世",
+                    "en" : "Soyo Nagasaki",
+                    "jp" : "長崎そよ",
+                    "tw" : "長崎爽世"
+                }
+            },
+            {
+                "color" : {
+                    "blue" : 0.7781132,
+                    "green" : 0.49551058,
+                    "red" : 0.725102
+                },
+                "id" : "26FD4CD7-44DF-4AE5-A1C8-B068D1F75884",
+                "text" : {
+                    "cn" : "椎名立希",
+                    "en" : "Taki Shina",
+                    "jp" : "椎名立希",
+                    "tw" : "椎名立希"
+                }
+            }
+        ]
+    },
+    "version" : 1
+}

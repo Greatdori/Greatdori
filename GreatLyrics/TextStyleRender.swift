@@ -77,16 +77,6 @@ private struct _StyleRenderer: TextRenderer {
                                 ctxShadow.addFilter(.blur(radius: shadow.blur / 30 * factor))
                                 ctxShadow.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(shadow.color))
                             }
-                            var ctxcpy = ctx
-                            ctxcpy.clipToLayer { lctx in
-                                lctx.draw(glyph)
-                            }
-                            if let color = style.color {
-                                ctxcpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(color))
-                            } else {
-                                ctxcpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .foreground)
-                            }
-                            ctxcpy = ctx
                             if let stroke = style.stroke {
                                 var ctxStroke = ctx
                                 if stroke.radius > 0 {
@@ -117,6 +107,15 @@ private struct _StyleRenderer: TextRenderer {
                                 }
                                 ctxStrokecpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(stroke.color))
                             }
+                            var ctxcpy = ctx
+                            ctxcpy.clipToLayer { lctx in
+                                lctx.draw(glyph)
+                            }
+                            if let color = style.color {
+                                ctxcpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .color(color))
+                            } else {
+                                ctxcpy.fill(Rectangle().path(in: glyph.typographicBounds.rect), with: .foreground)
+                            }
                             hasDrawn = true
                         }
                     }
@@ -128,6 +127,7 @@ private struct _StyleRenderer: TextRenderer {
         }
         for (range, style) in partialStyle {
             let glyphs = layout.flatMap { $0 }.flatMap { $0 }
+            guard range.lowerBound < glyphs.count else { continue }
             let glyphSlice = glyphs[range.lowerBound..<min(range.upperBound, glyphs.count)]
             for maskLine in style.maskLines {
                 var ctxMaskLine = ctx
