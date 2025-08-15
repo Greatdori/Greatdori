@@ -111,7 +111,7 @@ struct GachaDetailView: View {
                                         }, label: {
                                             HStack {
                                                 VStack(alignment: .leading) {
-                                                    Text(verbatim: "\(String(format: "%.2f", Double(pickups.first!.value.weight) / Double(rates[key]!.weightTotal) * rates[key]!.rate))%")
+                                                    Text(verbatim: "\(unsafe String(format: "%.2f", Double(pickups.first!.value.weight) / Double(rates[key]!.weightTotal) * rates[key]!.rate))%")
                                                     Spacer()
                                                     Text("\(pickups.count)张")
                                                         .font(.system(size: 13))
@@ -132,7 +132,7 @@ struct GachaDetailView: View {
                                     }, label: {
                                         HStack {
                                             VStack(alignment: .leading) {
-                                                Text(verbatim: "\(String(format: "%.2f", Double(nonPickups.first!.value.weight) / Double(rates[key]!.weightTotal) * rates[key]!.rate))%")
+                                                Text(verbatim: "\(unsafe String(format: "%.2f", Double(nonPickups.first!.value.weight) / Double(rates[key]!.weightTotal) * rates[key]!.rate))%")
                                                 Spacer()
                                                 Text("\(nonPickups.count)张")
                                                     .font(.system(size: 13))
@@ -222,7 +222,7 @@ struct GachaDetailView: View {
     }
 }
 
-extension Array<DoriFrontend.Card.PreviewCard>: @retroactive @preconcurrency Identifiable {
+extension Array<DoriFrontend.Card.PreviewCard>: @retroactive Identifiable {
     public var id: String {
         self.reduce(into: "") { partialResult, card in
             partialResult += String(card.id)

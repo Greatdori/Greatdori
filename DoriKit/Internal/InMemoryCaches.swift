@@ -17,6 +17,7 @@ import Foundation
 internal class InMemoryCache {
     private init() {}
     
+    @safe
     nonisolated(unsafe)
     internal static var allSkills = [DoriAPI.Skill.Skill]()
     

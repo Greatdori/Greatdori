@@ -83,7 +83,7 @@ struct SongDetailView: View {
                             let minutes = Int(information.song.length) / 60
                             let remainingSeconds = Int(information.song.length) % 60
                             let tenths = Int((information.song.length - floor(information.song.length)) * 10)
-                            return String(format: "%d:%02d.%d", minutes, remainingSeconds, tenths)
+                            return unsafe String(format: "%d:%02d.%d", minutes, remainingSeconds, tenths)
                         }())
                         .font(.system(size: 14))
                         .opacity(0.6)

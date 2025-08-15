@@ -424,7 +424,7 @@ struct HomeEventsView: View {
     }
 }
 
-
+extension PassthroughSubject: @retroactive @unchecked Sendable where Output: Sendable, Failure: Sendable {}
 
 
 

@@ -17,7 +17,7 @@ import DoriKit
 import Foundation
 private import BuiltinCardCollections
 
-class CardCollectionManager {
+final class CardCollectionManager: Sendable {
     static let shared = CardCollectionManager()
     
     private let encoder: PropertyListEncoder
@@ -32,6 +32,7 @@ class CardCollectionManager {
         }
     }
     
+    @safe nonisolated(unsafe)
     private(set) var userCollections = [Collection]()
     
     @inline(__always)

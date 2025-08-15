@@ -209,7 +209,7 @@ struct CardDetailView: View {
                                 VStack(alignment: .leading) {
                                     Text(verbatim: "持续时间")
                                         .font(.system(size: 16, weight: .medium))
-                                    Text(information.skill.duration.map { String(format: "%.1f", $0) }.joined(separator: ", "))
+                                    Text(information.skill.duration.map { unsafe String(format: "%.1f", $0) }.joined(separator: ", "))
                                         .font(.system(size: 14))
                                         .opacity(0.6)
                                 }

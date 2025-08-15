@@ -39,7 +39,7 @@ private struct Provider: TimelineProvider {
         .init(date: .now, news: nil)
     }
     
-    func getSnapshot(in context: Context, completion: @escaping (NewsEntry) -> Void) {
+    func getSnapshot(in context: Context, completion: @escaping @Sendable (NewsEntry) -> Void) {
         if context.isPreview {
             completion(.init(date: .now))
             return
@@ -49,7 +49,7 @@ private struct Provider: TimelineProvider {
         }
     }
     
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+    func getTimeline(in context: Context, completion: @escaping @Sendable (Timeline<Entry>) -> Void) {
         let calendar = Calendar.current
         let now = Date.now
         let nextUpdateDate: Date
@@ -63,7 +63,7 @@ private struct Provider: TimelineProvider {
         }
     }
     
-    func getNewsList(completion: @escaping ([DoriFrontend.News.ListItem]?) -> Void) {
+    func getNewsList(completion: sending @escaping ([DoriFrontend.News.ListItem]?) -> Void) {
         Task {
             let cacheURL = URL(filePath: NSHomeDirectory() + "/Library/Caches/Greatdori_Widget_News.cache")
             

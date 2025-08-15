@@ -22,6 +22,7 @@ public class DoriAPI {
     private init() {}
     
     @usableFromInline
+    @safe
     nonisolated(unsafe)
     internal static var _preferredLocale = Locale(rawValue: UserDefaults.standard.string(forKey: "_DoriKit_DoriAPIPreferredLocale") ?? "jp") ?? .jp
     /// The preferred locale.
@@ -36,6 +37,7 @@ public class DoriAPI {
         }
     }
     @usableFromInline
+    @safe
     nonisolated(unsafe)
     internal static var _secondaryLocale = Locale(rawValue: UserDefaults.standard.string(forKey: "_DoriKit_DoriAPISecondaryLocale") ?? "jp") ?? .jp
     /// The secondary preferred locale.

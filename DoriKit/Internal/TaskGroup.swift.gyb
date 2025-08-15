@@ -31,7 +31,7 @@ internal func withTasksResult<${": Sendable, ".join(typeNames[0:(i + 1)])}: Send
         }
         % end
         var result: (${", ".join(map((lambda n: f"{n}?"), typeNames[0:(i + 1)]))}) = (${", ".join(repeat("nil", i + 1))})
-        for await (id, r) in group {
+        for await unsafe (id, r) in group {
             % for t in typeNames[0:(i + 1)]:
             if id == "${t}" {
                 % if i != 0:

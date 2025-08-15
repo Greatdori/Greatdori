@@ -122,13 +122,13 @@ private struct SongMetaDetailView: View {
                     let minutes = Int(meta.meta.length) / 60
                     let remainingSeconds = Int(meta.meta.length) % 60
                     let tenths = Int((meta.meta.length - floor(meta.meta.length)) * 10)
-                    return String(format: "%d:%02d.%d", minutes, remainingSeconds, tenths)
+                    return unsafe String(format: "%d:%02d.%d", minutes, remainingSeconds, tenths)
                 }())
                 InfoTextView("分数", text: "\(Int(meta.meta.score * 100))%")
                 InfoTextView("效率", text: "\(Int(meta.meta.efficiency * 100))%")
                 InfoTextView(verbatim: "BPM", text: String(meta.meta.bpm))
                 InfoTextView("音符总数", text: String(meta.meta.notes))
-                InfoTextView("每秒音符总数", text: String(format: "%.1f", meta.meta.notesPerSecond))
+                InfoTextView("每秒音符总数", text: unsafe String(format: "%.1f", meta.meta.notesPerSecond))
                 InfoTextView("技能依赖度", text: "\(Int(meta.meta.sr * 100))%")
             } header: {
                 HStack {

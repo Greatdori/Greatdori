@@ -65,7 +65,7 @@ struct StyleEditorView: View {
                         HStack {
                             Text("Width")
                             Spacer()
-                            Text(String(format: "%.1f", stroke.width))
+                            Text(unsafe String(format: "%.1f", stroke.width))
                             Stepper(value: .init {
                                 stroke.width
                             } set: {
@@ -76,7 +76,7 @@ struct StyleEditorView: View {
                         HStack {
                             Text("Radius")
                             Spacer()
-                            Text(String(format: "%.1f", stroke.radius))
+                            Text(unsafe String(format: "%.1f", stroke.radius))
                             Stepper(value: .init {
                                 stroke.radius
                             } set: {
@@ -109,7 +109,7 @@ struct StyleEditorView: View {
                         HStack {
                             Text("X")
                             Spacer()
-                            Text(String(format: "%.1f", shadow.x))
+                            Text(unsafe String(format: "%.1f", shadow.x))
                             Stepper(value: .init {
                                 shadow.x
                             } set: {
@@ -119,7 +119,7 @@ struct StyleEditorView: View {
                         HStack {
                             Text("Y")
                             Spacer()
-                            Text(String(format: "%.1f", shadow.y))
+                            Text(unsafe String(format: "%.1f", shadow.y))
                             Stepper(value: .init {
                                 shadow.y
                             } set: {
@@ -129,7 +129,7 @@ struct StyleEditorView: View {
                         HStack {
                             Text("Blur")
                             Spacer()
-                            Text(String(format: "%.1f", shadow.blur))
+                            Text(unsafe String(format: "%.1f", shadow.blur))
                             Stepper(value: .init {
                                 shadow.blur
                             } set: {
@@ -151,7 +151,7 @@ struct StyleEditorView: View {
                             HStack {
                                 Text("Width")
                                 Spacer()
-                                Text(String(format: "%.1f", maskLine.width))
+                                Text(unsafe String(format: "%.1f", maskLine.width))
                                 Stepper(value: .init {
                                     maskLine.width
                                 } set: {

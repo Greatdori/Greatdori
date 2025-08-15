@@ -29,8 +29,8 @@ struct GreatLyricsApp: App {
         
         WindowGroup("Style Editor", id: "StyleEditor", for: StyleEditorWindowData.self) { $data in
             if let data {
-                let ptrUpdate = UnsafePointer<(Lyrics.Style) -> Void>(bitPattern: data.update)!
-                StyleEditorView(style: data.style, update: ptrUpdate.pointee)
+                let ptrUpdate = unsafe UnsafePointer<(Lyrics.Style) -> Void>(bitPattern: data.update)!
+                StyleEditorView(style: data.style, update: unsafe ptrUpdate.pointee)
             }
         }
     }
@@ -38,5 +38,5 @@ struct GreatLyricsApp: App {
 
 struct StyleEditorWindowData: Hashable, Codable {
     var style: Lyrics.Style
-    var update: Int
+    @unsafe var update: Int
 }

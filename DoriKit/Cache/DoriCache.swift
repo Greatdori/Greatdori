@@ -24,11 +24,16 @@ public class DoriCache {
     }
     
     public final class Promise<Result> {
-        nonisolated(unsafe) private var _onUpdate: ((Result) -> Void)?
-        nonisolated(unsafe) private var initialValue: Result?
-        nonisolated(unsafe) private var isValueFirstUpdated: Bool = false
-        nonisolated(unsafe) private var isCancelled: Bool = false
-        nonisolated(unsafe) private var _onCancel: (() -> Void)?
+        @safe nonisolated(unsafe)
+        private var _onUpdate: ((Result) -> Void)?
+        @safe nonisolated(unsafe)
+        private var initialValue: Result?
+        @safe nonisolated(unsafe)
+        private var isValueFirstUpdated: Bool = false
+        @safe nonisolated(unsafe)
+        private var isCancelled: Bool = false
+        @safe nonisolated(unsafe)
+        private var _onCancel: (() -> Void)?
         
         internal init(_ initialValue: Result? = nil) {
             self.initialValue = initialValue

@@ -261,12 +261,12 @@ struct EventTrackerView: View {
 private func formatNumber(_ number: Double) -> String {
     switch number {
     case 1_000_000_000...:
-        return String(format: "%.0fB", number / 1_000_000_000)
+        return unsafe String(format: "%.0fB", number / 1_000_000_000)
     case 1_000_000...:
-        return String(format: "%.0fM", number / 1_000_000)
+        return unsafe String(format: "%.0fM", number / 1_000_000)
     case 1_000...:
-        return String(format: "%.0fK", number / 1_000)
+        return unsafe String(format: "%.0fK", number / 1_000)
     default:
-        return String(format: "%.0f", number)
+        return unsafe String(format: "%.0f", number)
     }
 }

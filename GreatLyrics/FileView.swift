@@ -141,7 +141,7 @@ struct FileView: View {
 }
 
 private struct LyricsFile: FileDocument {
-    static var readableContentTypes = [UTType.propertyList]
+    static let readableContentTypes = [UTType.propertyList]
     
     var lyrics: Lyrics
     

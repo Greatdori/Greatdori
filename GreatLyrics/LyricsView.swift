@@ -103,10 +103,10 @@ struct LyricsView: View {
                                         }
                                         
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                                            pUpdate.deallocate()
+                                            unsafe pUpdate.deallocate()
                                         }
                                     }
-                                    pUpdate.initializeMemory(as: ((Lyrics.Style) -> Void).self, to: update)
+                                    unsafe pUpdate.initializeMemory(as: ((Lyrics.Style) -> Void).self, to: update)
                                     openWindow(
                                         id: "StyleEditor",
                                         value: StyleEditorWindowData(
