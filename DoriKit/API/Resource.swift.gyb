@@ -39,6 +39,14 @@ extension DoriAPI.Event.${property} {
     public var bannerImageURL: URL {
         .init(string: "https://bestdori.com/assets/\(self.startAt.availableLocale()!.rawValue)/event/\(self.assetBundleName)/images_rip/banner.png")!
     }
+    @inlinable
+    public func bannerImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.startAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/event/\(self.assetBundleName)/images_rip/banner.png")!
+        } else {
+            nil
+        }
+    }
 }
 % end
 extension DoriAPI.Event.EventCharacter {
@@ -56,6 +64,18 @@ extension DoriAPI.Band.Band {
             id = "0" + id
         }
         return .init(string: "https://bestdori.com/assets/\(self.bandName.availableLocale()!.rawValue)/band/logo/\(id)_rip/logoL.png")!
+    }
+    @inlinable
+    public func logoImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        var id = String(self.id)
+        while id.count < 3 {
+            id = "0" + id
+        }
+        return if let locale = _resLocale(locale, by: self.bandName, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/band/logo/\(id)_rip/logoL.png")!
+        } else {
+            nil
+        }
     }
     
     @inlinable
@@ -76,6 +96,18 @@ extension DoriAPI.Character.${property} {
             id = "0" + id
         }
         return .init(string: "https://bestdori.com/assets/\(self.characterName.availableLocale()!.rawValue)/ui/character_kv_image/\(id)_rip/image.png")!
+    }
+    @inlinable
+    public func keyVisualImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        var id = String(self.id)
+        while id.count < 3 {
+            id = "0" + id
+        }
+        return if let locale = _resLocale(locale, by: self.characterName, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/ui/character_kv_image/\(id)_rip/image.png")!
+        } else {
+            nil
+        }
     }
     
     @inlinable
@@ -102,6 +134,23 @@ extension DoriAPI.Card.${property} {
             nil
         }
     }
+    @inlinable
+    public func coverNormalImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/characters/resourceset/\(self.resourceSetName)_rip/card_normal.png")!
+        } else {
+            nil
+        }
+    }
+    @inlinable
+    public func coverAfterTrainingImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if self.rarity >= 4 || (self.rarity >= 3 && [.others, .campaign, .birthday].contains(self.type)),
+           let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/characters/resourceset/\(self.resourceSetName)_rip/card_after_training.png")!
+        } else {
+            nil
+        }
+    }
     
     @inlinable
     public var thumbNormalImageURL: URL {
@@ -123,10 +172,46 @@ extension DoriAPI.Card.${property} {
             return nil
         }
     }
+    @inlinable
+    public func thumbNormalImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        var ripID = String(Int(Double(self.id) / 50))
+        while ripID.count < 5 {
+            ripID = "0" + ripID
+        }
+        return if let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/thumb/chara/card\(ripID)_rip/\(self.resourceSetName)_normal.png")!
+        } else {
+            nil
+        }
+    }
+    @inlinable
+    public func thumbAfterTrainingImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if self.rarity >= 4 || (self.rarity >= 3 && [.others, .campaign, .birthday].contains(self.type)) {
+            var ripID = String(Int(Double(self.id) / 50))
+            while ripID.count < 5 {
+                ripID = "0" + ripID
+            }
+            return if let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+                .init(string: "https://bestdori.com/assets/\(locale)/thumb/chara/card\(ripID)_rip/\(self.resourceSetName)_after_training.png")!
+            } else {
+                nil
+            }
+        } else {
+            return nil
+        }
+    }
     
     @inlinable
     public var gachaVoiceURL: URL {
         .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/sound/voice/gacha/limitedspin_rip/\(self.resourceSetName).mp3")!
+    }
+    @inlinable
+    public func gachaVoiceURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/sound/voice/gacha/limitedspin_rip/\(self.resourceSetName).mp3")!
+        } else {
+            nil
+        }
     }
 }
 % end
@@ -135,6 +220,15 @@ extension DoriAPI.Card.Card {
     public var animationVideoURL: URL? {
         if let bundleName = self.animation?.assetBundleName {
             .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/movie/animation_episode/\(bundleName)_rip/\(bundleName).mp4")!
+        } else {
+            nil
+        }
+    }
+    @inlinable
+    public func animationVideoURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let bundleName = self.animation?.assetBundleName,
+           let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/movie/animation_episode/\(bundleName)_rip/\(bundleName).mp4")!
         } else {
             nil
         }
@@ -172,6 +266,21 @@ extension DoriAPI.Comic.Comic {
             nil
         }
     }
+    public func imageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        let id = idForURL()
+        return if let locale = _resLocale(locale, by: self.publicStartAt, allowsFallback: allowsFallback) {
+            switch self.type {
+            case .singleFrame:
+                .init(string: "https://bestdori.com/assets/\(locale)/comic/comic_singleframe/comic_\(id)_rip/comic_\(id).png")
+            case .fourFrame:
+                .init(string: "https://bestdori.com/assets/\(locale)/comic/comic_fourframe/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")
+            case .none:
+                nil
+            }
+        } else {
+            nil
+        }
+    }
     
     public var thumbImageURL: URL? {
         let id = idForURL()
@@ -181,6 +290,21 @@ extension DoriAPI.Comic.Comic {
         case .fourFrame:
             .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_fourframe_thumbnail/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")
         case .none:
+            nil
+        }
+    }
+    public func thumbImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        let id = idForURL()
+        return if let locale = _resLocale(locale, by: self.publicStartAt, allowsFallback: allowsFallback) {
+            switch self.type {
+            case .singleFrame:
+                .init(string: "https://bestdori.com/assets/\(locale)/comic/comic_singleframe_thumbnail/comic_\(id)_rip/comic_\(id).png")
+            case .fourFrame:
+                .init(string: "https://bestdori.com/assets/\(locale)/comic/comic_fourframe_thumbnail/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")
+            case .none:
+                nil
+            }
+        } else {
             nil
         }
     }
@@ -195,6 +319,15 @@ extension DoriAPI.Costume.${property} {
     public var thumbImageURL: URL {
         let groupID = String(Int(Double(self.id) / 50))
         return .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale()!.rawValue)/thumb/costume/group\(groupID)_rip/\(self.assetBundleName).png")!
+    }
+    @inlinable
+    public func thumbImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        let groupID = String(Int(Double(self.id) / 50))
+        return if let locale = _resLocale(locale, by: self.publishedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/thumb/costume/group\(groupID)_rip/\(self.assetBundleName).png")!
+        } else {
+            nil
+        }
     }
 }
 % end
@@ -212,6 +345,18 @@ extension DoriAPI.Gacha.${property} {
             .init(string:  "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/logo.png")!
         }
     }
+    @inlinable
+    public func bannerImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.publishedAt, allowsFallback: allowsFallback) {
+            if !bannerAssetBundleName.isEmpty {
+                .init(string: "https://bestdori.com/assets/\(locale)/homebanner_rip/\(self.bannerAssetBundleName).png")!
+            } else {
+                .init(string:  "https://bestdori.com/assets/\(locale)/gacha/screen/\(self.resourceName)_rip/logo.png")!
+            }
+        } else {
+            nil
+        }
+    }
 }
 % end
 extension DoriAPI.Gacha.Gacha.PaymentMethod.Method {
@@ -223,6 +368,18 @@ extension DoriAPI.Gacha.Gacha.PaymentMethod.Method {
         case .overThe3StarTicket: URL(string: "https://bestdori.com/assets/\(DoriAPI.preferredLocale.rawValue)/thumb/common_rip/gachaTicket2.png")
         case .overThe4StarTicket: URL(string: "https://bestdori.com/assets/\(DoriAPI.preferredLocale.rawValue)/thumb/common_rip/gachaTicket5.png")
         case .fixed5StarTicket: URL(string: "https://bestdori.com/assets/\(DoriAPI.preferredLocale.rawValue)/thumb/common_rip/gachaTicket4.png")
+        @unknown default:
+            Builtin.unreachable()
+        }
+    }
+    public func iconImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        switch self {
+        case .free: nil
+        case .paidStar, .freeStar: URL(string: "https://bestdori.com/assets/\(locale.rawValue)/thumb/common_rip/star.png")
+        case .normalTicket: URL(string: "https://bestdori.com/assets/\(locale.rawValue)/thumb/common_rip/gachaTicket1.png")
+        case .overThe3StarTicket: URL(string: "https://bestdori.com/assets/\(locale.rawValue)/thumb/common_rip/gachaTicket2.png")
+        case .overThe4StarTicket: URL(string: "https://bestdori.com/assets/\(locale.rawValue)/thumb/common_rip/gachaTicket5.png")
+        case .fixed5StarTicket: URL(string: "https://bestdori.com/assets/\(locale.rawValue)/thumb/common_rip/gachaTicket4.png")
         @unknown default:
             Builtin.unreachable()
         }
@@ -252,5 +409,19 @@ extension DoriAPI.Song.${property} {
         let jacketID = Int(ceil(Double(self.id) / 10) * 10)
         return .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale()!.rawValue)/musicjacket/musicjacket\(jacketID)_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket\(jacketID)-\(self.jacketImage[0])-jacket.png")!
     }
+    @inlinable
+    public func jacketImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        let jacketID = Int(ceil(Double(self.id) / 10) * 10)
+        return if let locale = _resLocale(locale, by: self.publishedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/musicjacket/musicjacket\(jacketID)_rip/assets-star-forassetbundle-startapp-musicjacket-musicjacket\(jacketID)-\(self.jacketImage[0])-jacket.png")!
+        } else {
+            nil
+        }
+    }
 }
 % end
+
+@usableFromInline
+internal func _resLocale<T>(_ l: DoriAPI.Locale, by d: DoriAPI.LocalizedData<T>, allowsFallback f: Bool) -> String? {
+    d.availableInLocale(l) ? l.rawValue : (f ? d.availableLocale(prefer: l)?.rawValue : nil)
+}
