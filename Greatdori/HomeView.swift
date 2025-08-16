@@ -49,15 +49,15 @@ struct HomeView: View {
                 ZStack {
                     HStack {
                         VStack {
-                            CustomGroupBox { HomeNewsView() }
+                            HomeNewsView()
                             CustomGroupBox { HomeBirthdayView() }
-                            CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp) }
+                            HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp)
                             Spacer()
                         }
                         VStack {
-                            CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer1] ?? .jp) }
-                            CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer2] ?? .jp) }
-                            CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer3] ?? .jp) }
+                            HomeEventsView(locale: localeFromStringDict[homeEventServer1] ?? .jp)
+                            HomeEventsView(locale: localeFromStringDict[homeEventServer2] ?? .jp)
+                            HomeEventsView(locale: localeFromStringDict[homeEventServer3] ?? .jp)
                             Spacer()
                         }
                     }
@@ -65,12 +65,12 @@ struct HomeView: View {
                     .opacity(useCompactVariant ? 0 : 1)
                     .frame(width: useCompactVariant ? 0 : nil, height: useCompactVariant ? 0 : nil)
                     VStack {
-                        CustomGroupBox { HomeNewsView() }
+                        HomeNewsView()
                         CustomGroupBox { HomeBirthdayView() }
-                        CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer1] ?? .jp) }
-                        CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer2] ?? .jp) }
-                        CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer3] ?? .jp) }
-                        CustomGroupBox { HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp) }
+                        HomeEventsView(locale: localeFromStringDict[homeEventServer1] ?? .jp)
+                        HomeEventsView(locale: localeFromStringDict[homeEventServer2] ?? .jp)
+                        HomeEventsView(locale: localeFromStringDict[homeEventServer3] ?? .jp)
+                        HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp)
                     }
                     .padding()
                     .opacity(!useCompactVariant ? 0 : 1)
@@ -129,56 +129,57 @@ struct HomeNewsView: View {
         Button(action: {
             homeNavigate(to: .news)
         }, label: {
-            HStack {
-                VStack(alignment: .leading) {
-                    HStack {
-                        if news != nil {
-                            Text("Home.news")
-                                .font(.title2)
-                                .bold()
-                        } else {
-                            Text("Home.news")
-                                .font(.title2)
-                                .bold()
-                                .redacted(reason: .placeholder)
-                        }
-                        Spacer()
-                    }
-                    Rectangle()
-                        .frame(height: 1)
-                        .opacity(0)
-                        .accessibilityHidden(true)
-                    if let news {
-                        ForEach(0..<news.prefix(totalNewsNumber).count, id: \.self) { newsIndex in
-                            NewsPreview(news: news[newsIndex])
-                            if newsIndex != (totalNewsNumber - 1) {
-                                Rectangle()
-                                    .frame(height: 1)
-                                    .opacity(0)
-                            }
-                        }
-                    } else {
-                        ForEach(0..<5, id: \.self) { newsIndex in
-                            VStack(alignment: .leading) {
-                                Rectangle()
-                                    .frame(height: 40)
-                                    .cornerRadius(5)
-                                    .foregroundStyle(.secondary)
+            CustomGroupBox {
+                HStack {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            if news != nil {
+                                Text("Home.news")
+                                    .font(.title2)
+                                    .bold()
+                            } else {
+                                Text("Home.news")
+                                    .font(.title2)
+                                    .bold()
                                     .redacted(reason: .placeholder)
                             }
-                            
-                            if newsIndex != 4 {
-                                Rectangle()
-                                    .frame(height: 1)
-                                    .opacity(0)
+                            Spacer()
+                        }
+                        Rectangle()
+                            .frame(height: 1)
+                            .opacity(0)
+                            .accessibilityHidden(true)
+                        if let news {
+                            ForEach(0..<news.prefix(totalNewsNumber).count, id: \.self) { newsIndex in
+                                NewsPreview(news: news[newsIndex])
+                                if newsIndex != (totalNewsNumber - 1) {
+                                    Rectangle()
+                                        .frame(height: 1)
+                                        .opacity(0)
+                                }
+                            }
+                        } else {
+                            ForEach(0..<5, id: \.self) { newsIndex in
+                                VStack(alignment: .leading) {
+                                    Rectangle()
+                                        .frame(height: 40)
+                                        .cornerRadius(5)
+                                        .foregroundStyle(.secondary)
+                                        .redacted(reason: .placeholder)
+                                }
+                                
+                                if newsIndex != 4 {
+                                    Rectangle()
+                                        .frame(height: 1)
+                                        .opacity(0)
+                                }
                             }
                         }
                     }
+                    Spacer()
                 }
-                Spacer()
             }
         })
-        .containerShape(Rectangle())
         .animation(.easeInOut(duration: loadingAnimationDuration), value: news?.count)
         .buttonStyle(.plain)
         .foregroundStyle(.primary)
@@ -404,38 +405,42 @@ struct HomeEventsView: View {
     }
     
     var body: some View {
-        ZStack {
-            Group {
-                if let latestEvents {
-                    Button(action: {
-                        homeNavigate(to: .eventDetail(latestEvents.forLocale(locale)!.id))
-//                        homeNavigate(to: .eventDetail(180))
-                    }, label: {
-                        EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
-                    })
-                    .buttonStyle(.plain)
-                }
+        Button(action: {
+            if let latestEvents {
+                homeNavigate(to: .eventDetail(latestEvents.forLocale(locale)!.id))
+//                homeNavigate(to: .eventDetail(180))
             }
-            .opacity(imageOpacity)
-            .zIndex(2)
-            Group {
-                if latestEvents == nil {
-                    VStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.15))
-                            .aspectRatio(3.0, contentMode: .fit)
-                        Text(verbatim: "Lorem ipsum dolor sit amet consectetur")
-                            .bold()
-                            .font(.title3)
-                            .redacted(reason: .placeholder)
-                        Text(verbatim: "Lorem ipsum dolor")
-                            .redacted(reason: .placeholder)
+        }, label: {
+            CustomGroupBox {
+                ZStack {
+                    Group {
+                        if let latestEvents {
+                            EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
+                        }
                     }
+                    .opacity(imageOpacity)
+                    .zIndex(2)
+                    Group {
+                        if latestEvents == nil {
+                            VStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.gray.opacity(0.15))
+                                    .aspectRatio(3.0, contentMode: .fit)
+                                Text(verbatim: "Lorem ipsum dolor sit amet consectetur")
+                                    .bold()
+                                    .font(.title3)
+                                    .redacted(reason: .placeholder)
+                                Text(verbatim: "Lorem ipsum dolor")
+                                    .redacted(reason: .placeholder)
+                            }
+                        }
+                    }
+                    .opacity(placeholderOpacity)
+                    .zIndex(1)
                 }
             }
-            .opacity(placeholderOpacity)
-            .zIndex(1)
-        }
+        })
+        .buttonStyle(.plain)
         .foregroundStyle(.primary)
         .task {
             DoriCache.withCache(id: "Home_LatestEvents", trait: .realTime) {
