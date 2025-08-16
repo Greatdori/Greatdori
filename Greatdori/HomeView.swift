@@ -162,9 +162,9 @@ struct HomeNewsView: View {
                             ForEach(0..<5, id: \.self) { newsIndex in
                                 VStack(alignment: .leading) {
                                     Rectangle()
+                                        .fill(Color.gray.opacity(0.15))
                                         .frame(height: 40)
                                         .cornerRadius(5)
-                                        .foregroundStyle(.secondary)
                                         .redacted(reason: .placeholder)
                                 }
                                 

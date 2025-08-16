@@ -160,7 +160,6 @@ extension EnvironmentValues {
 
 
 struct CustomGroupBox<Content: View>: View {
-    @Environment(\.colorScheme) var colorScheme
     let content: () -> Content
     init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content

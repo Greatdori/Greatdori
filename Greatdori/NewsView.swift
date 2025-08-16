@@ -16,7 +16,11 @@ import DoriKit
 import SwiftUI
 import SDWebImageSwiftUI
 
+//MARK: NewsView
 struct NewsView: View {
+    let filterLocalizedString: [DoriFrontend.News.ListFilter?: LocalizedStringResource] = [nil: "News.filter.selection.all", .bestdori: "News.filter.selection.bestdori", .article: "News.filter.selection.article", .patchNote: "News.filter.selection.patch-note", .update: "News.filter.selection.update", .locale(.jp): "News.filter.selection.jp", .locale(.en): "News.filter.selection.en", .locale(.tw): "News.filter.selection.tw", .locale(.cn): "News.filter.selection.cn", .locale(.kr): "News.filter.selection.kr"]
+    let filterOptions: [DoriFrontend.News.ListFilter?] = [nil, .bestdori, .article, .patchNote, .update, .locale(.jp), .locale(.en), .locale(.tw), .locale(.cn), .locale(.kr)]
+    @Environment(\.colorScheme) var colorScheme
     @State var news: [DoriFrontend.News.ListItem]?
     @State var filter: DoriFrontend.News.ListFilter? = nil
     var dateFormatter = DateFormatter()
@@ -49,63 +53,40 @@ struct NewsView: View {
                                 EmptyView()
                             }
                         }, label: {
-                            NewsPreview(news: news[newsIndex], showDetails: true, showImages: true)
+                            NewsPreview(news: news[newsIndex], showLocale: {
+                                if case .locale = filter { false } else { true }
+                            }(), showDetails: true, showImages: true)
                         })
-                        .navigationBarBackButtonHidden()
+//                        .navigationBarBackButtonHidden()
+//                        .navigationLinkIndicatorVisibility(.hidden)
                     }
                 }
                 .toolbar {
                     ToolbarItem(content: {
-                        //TODO: PICKER -> MENU
                         Menu(content: {
-                            Text("News.filter.selection.all")
-                                .tag(nil as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.bestdori")
-                                .tag(.bestdori as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.article")
-                                .tag(.article as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.patch-note")
-                                .tag(.patchNote as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.update")
-                                .tag(.update as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.jp")
-                                .tag(.locale(.jp) as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.en")
-                                .tag(.locale(.en) as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.tw")
-                                .tag(.locale(.tw) as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.cn")
-                                .tag(.locale(.cn) as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.kr")
-                                .tag(.locale(.kr) as DoriFrontend.News.ListFilter?)
+                            ForEach(0..<filterOptions.count, id: \.self) { filterIndex in
+                                Button(action: {
+                                    filter = filterOptions[filterIndex]
+                                }, label: {
+                                    HStack {
+                                        if filter == filterOptions[filterIndex] {
+                                            Image(systemName: "checkmark")
+                                        }
+                                        Text(filterLocalizedString[filterOptions[filterIndex]]!)
+                                    }
+                                })
+                            }
                         }, label: {
-                            Image(systemName: "line.3.horizontal.decrease")
+                            if let filter {
+                                Image(systemName: "line.3.horizontal.decrease")
+                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                    .background {
+                                        Capsule().foregroundStyle(.blue).scaledToFill().scaleEffect(1.3)
+                                    }
+                            } else {
+                                Image(systemName: "line.3.horizontal.decrease")
+                            }
                         })
-                        Picker(selection: $filter, content: {
-                            Text("News.filter.selection.all")
-                                .tag(nil as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.bestdori")
-                                .tag(.bestdori as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.article")
-                                .tag(.article as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.patch-note")
-                                .tag(.patchNote as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.update")
-                                .tag(.update as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.jp")
-                                .tag(.locale(.jp) as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.en")
-                                .tag(.locale(.en) as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.tw")
-                                .tag(.locale(.tw) as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.cn")
-                                .tag(.locale(.cn) as DoriFrontend.News.ListFilter?)
-                            Text("News.filter.selection.kr")
-                                .tag(.locale(.kr) as DoriFrontend.News.ListFilter?)
-                        }, label: {
-                            
-                        })
-                        .pickerStyle(.menu)
                     })
                 }
             } else {
@@ -113,6 +94,18 @@ struct NewsView: View {
             }
         }
         .navigationTitle("Home.news")
+        .wrapIf(true, in: { content in
+            if filter != nil {
+                if #available(iOS 26.0, *) {
+                    content
+                        .navigationSubtitle(filterLocalizedString[filter]!)
+                } else {
+                    content
+                }
+            } else {
+                content
+            }
+        })
         .task {
             DoriCache.withCache(id: "News", trait: .realTime) {
                 await DoriFrontend.News.list(filter: filter)
@@ -132,7 +125,9 @@ struct NewsView: View {
     }
 }
 
+//MARK: NewsPreview
 struct NewsPreview: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
     @State var imageURL: URL? = nil
     var news: DoriFrontend.News.ListItem
     var showLocale: Bool = true
@@ -212,7 +207,7 @@ struct NewsPreview: View {
             Spacer()
             
             if showImages {
-                ViewThatFits {
+                if sizeClass == .regular {
                     Group {
                         if let imageURL {
                             WebImage(url: imageURL)
@@ -229,18 +224,18 @@ struct NewsPreview: View {
                     Rectangle()
                         .frame(width: 0, height: 0)
                         .opacity(0)
-                }
-                .task {
-                    switch news.type {
-                    case .event:
-                        imageURL = await DoriFrontend.Event.Event(id: news.relatedID)?.logoImageURL(in: news.locale ?? .jp) ?? nil
-                    case .gacha:
-                        imageURL = await DoriFrontend.Gacha.Gacha(id: news.relatedID)?.logoImageURL(in: news.locale ?? .jp) ?? nil
-                    case .song:
-                        imageURL = await DoriAPI.Song.detail(of: news.relatedID)?.jacketImageURL(in: news.locale ?? .jp) ?? nil
-                    default:
-                        imageURL = nil
-                    }
+                        .task {
+                            switch news.type {
+                            case .event:
+                                imageURL = await DoriFrontend.Event.Event(id: news.relatedID)?.logoImageURL(in: news.locale ?? .jp) ?? nil
+                            case .gacha:
+                                imageURL = await DoriFrontend.Gacha.Gacha(id: news.relatedID)?.logoImageURL(in: news.locale ?? .jp) ?? nil
+                            case .song:
+                                imageURL = await DoriAPI.Song.detail(of: news.relatedID)?.jacketImageURL(in: news.locale ?? .jp) ?? nil
+                            default:
+                                imageURL = nil
+                            }
+                        }
                 }
             }
         }
@@ -253,3 +248,17 @@ let newsItemTypeColor: [DoriFrontend.News.ListItem.ItemType: Color] = [.article:
 let newsItemTypeLocalizedString: [DoriFrontend.News.ListItem.ItemType: LocalizedStringResource] = [.article: "News.type.article", .event: "News.type.event", .gacha: "News.type.gacha", .loginCampaign: "News.type.login-campaign", .song: "News.type.song"]
 //let newsTimeMarkTypeLocalizedString: [Dori]
 
+
+extension View {
+      public func inverseMask<Mask: View>(
+        @ViewBuilder _ mask: () -> Mask,
+        alignment: Alignment = .center
+      ) -> some View {
+            self.mask {
+                  Rectangle()
+                    .overlay(alignment: alignment) {
+                          mask().blendMode(.destinationOut)
+                        }
+                }
+          }
+}
