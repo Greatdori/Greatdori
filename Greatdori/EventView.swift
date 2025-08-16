@@ -949,7 +949,7 @@ struct EventSearchView: View {
             if let resultEvents = searchedEvents ?? events {
                 ScrollView {
                     ViewThatFits {
-                        LazyVGrid(columns: [GridItem(.flexible(), spacing: 0), GridItem(.flexible(), spacing: 0)], content: {
+                        LazyVGrid(columns: [GridItem(.fixed(420), spacing: 0), GridItem(.fixed(420), spacing: 0)], content: {
                             ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
@@ -959,7 +959,7 @@ struct EventSearchView: View {
                                 .buttonStyle(.plain)
                             }
                         })
-                        List {
+                        LazyVStack {
                             ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
