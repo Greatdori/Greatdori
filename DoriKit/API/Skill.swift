@@ -17,9 +17,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about skills in Bandori.
     public class Skill {
         private init() {}
         
+        /// Get all skills in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested skills, nil if failed to fetch data.
         public static func all() async -> [Skill]? {
             // Response example:
             // {
@@ -125,12 +131,59 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Skill {
+    /// Represent a skill of card.
     public struct Skill: Sendable, Identifiable, Equatable, Hashable, DoriCache.Cacheable {
+        /// A unique ID of skill.
         public var id: Int
+        /// Localized simple description of skill.
+        ///
+        /// Simple description is a shorten and general description of a skill,
+        /// without duration in text.
+        ///
+        /// ```
+        /// PERFECTのみ\nスコア150%UP
+        /// ```
+        ///
+        /// - Note:
+        ///     `simpleDescription` may contain a **line break** like the example above.
+        ///     You can replace all line breaks with spaces to make it compact:
+        ///     ```swift
+        ///     skill.simpleDescription.map { string in
+        ///         string.replacing("\n", with: " ")
+        ///     }
+        ///     ```
+        ///
+        /// - SeeAlso:
+        ///     - ``description``
+        ///     - ``DoriAPI/LocalizedData/map(_:)``
         public var simpleDescription: DoriAPI.LocalizedData<String>
-        public var description: DoriAPI.LocalizedData<String> // Uses `{Int}` for string interpolation
+        /// Localized description of skill.
+        ///
+        /// Description is a full descriptive text for skill.
+        /// It may contain `{0}` and `{1}` for string interpolation,
+        /// where `{0}` is duration of the skill when `{1}` is not exist,
+        /// or it stands for the other argument of skill. `{1}` stands for duration if presents.
+        ///
+        /// ```
+        /// ライフが{0}回復し、{1}秒間  スコアが10%UPする
+        /// ```
+        ///
+        /// - SeeAlso:
+        ///     - ``simpleDescription``
+        ///
+        ///     Instead of replacing `{0}` and `{1}` according to the rules above by yourself,
+        ///     use ``replacedDescription(with:)`` to let DoriKit do this,
+        ///     which is more stable. ``maximumDescription`` calculates arguments
+        ///     automatically for maximum level of the skill and returns you description for maximum level.
+        public var description: DoriAPI.LocalizedData<String>
+        /// Durations of skill.
+        ///
+        /// Duration values in this array have sorted by level and guarantee there're 5 elements,
+        /// where the first value is the duration when level of skill is 1.
         public var duration: [Double]
+        /// Activation effect of skill.
         public var activationEffect: ActivationEffect
+        /// Once effect of skill, if available.
         public var onceEffect: OnceEffect?
         
         public struct ActivationEffect: Sendable, Equatable, Hashable, DoriCache.Cacheable {

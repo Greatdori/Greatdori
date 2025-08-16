@@ -16,9 +16,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about login campaigns in Bandori.
     public class LoginCampaign {
         private init() {}
         
+        /// Get all login campaigns in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested login campaigns, nil if failed to fetch data.
         public static func all() async -> [PreviewCampaign]? {
             // Response example:
             // {
@@ -81,13 +87,16 @@ extension DoriAPI {
                             )
                         ))
                     }
-                    return result
+                    return result.sorted { $0.id < $1.id }
                 }
                 return await task.value
             }
             return nil
         }
         
+        /// Get detail of a login campaign in Bandori.
+        /// - Parameter id: ID of target login campaign.
+        /// - Returns: Detail data of requested login campaign, nil if failed to fetch.
         public static func detail(of id: Int) async -> Campaign? {
             // Response example:
             // {
@@ -197,27 +206,45 @@ extension DoriAPI {
 }
 
 extension DoriAPI.LoginCampaign {
+    /// Represent simplified data of login campaign.
     public struct PreviewCampaign: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+        /// A unique ID of login campaign.
         public var id: Int
+        /// Type of login campaign.
         public var loginBonusType: CampaignType
+        /// Name of resource bundle, used for combination of resource URLs.
         public var assetBundleName: DoriAPI.LocalizedData<String>
+        /// Localized caption of login campaign.
         public var caption: DoriAPI.LocalizedData<String>
+        /// Localized publish date of login campaign.
         public var publishedAt: DoriAPI.LocalizedData<Date>
+        /// Localized close date of login campaign.
         public var closedAt: DoriAPI.LocalizedData<Date>
     }
     
     public struct Campaign: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+        /// A unique ID of login campaign.
         public var id: Int
+        /// Type of login campaign.
         public var loginBonusType: CampaignType
+        /// Name of resource bundle, used for combination of resource URLs.
         public var assetBundleName: DoriAPI.LocalizedData<String>
+        /// Localized caption of login campaign.
         public var caption: DoriAPI.LocalizedData<String>
+        /// Localized publish date of login campaign.
         public var publishedAt: DoriAPI.LocalizedData<Date>
+        /// Localized close date of login campaign.
         public var closedAt: DoriAPI.LocalizedData<Date>
+        /// Localized bonus details.
         public var details: DoriAPI.LocalizedData<[Bonus]>
         
+        /// Represent a bonus detail of login campaign.
         public struct Bonus: Sendable, Hashable, DoriCache.Cacheable {
+            /// Corresponding login campaign ID.
             public var loginBonusID: Int
+            /// Relative days from start of login campaign to the bonus available.
             public var days: Int
+            /// Item for this bonus.
             public var item: DoriAPI.Item
             public var voiceID: String?
             public var seq: Int
@@ -245,6 +272,7 @@ extension DoriAPI.LoginCampaign {
         }
     }
     
+    /// Represent type of a login campaign.
     public enum CampaignType: String, Sendable, Hashable, DoriCache.Cacheable {
         case normal
         case event
