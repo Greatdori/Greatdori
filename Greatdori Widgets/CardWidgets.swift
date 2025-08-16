@@ -85,6 +85,9 @@ private struct CardWidgetsEntryView : View {
             #endif
         } else {
             Text("Widget.collections.edit-tip")
+                .multilineTextAlignment(.center)
+                .bold()
+                .foregroundStyle(.secondary)
                 .padding()
         }
     }

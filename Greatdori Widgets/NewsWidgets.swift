@@ -29,8 +29,8 @@ struct NewsWidgets: Widget {
             .systemExtraLarge,
             .init(rawValue: 4)! // systemExtraLargePortrait
         ])
-        .configurationDisplayName("资讯")
-        .description("查看最新资讯")
+        .configurationDisplayName("Widget.news")
+        .description("Widget.news.description")
     }
 }
 
@@ -103,9 +103,9 @@ private struct CardWidgetsEntryView : View {
     var capacity: Int {
         switch widgetFamily {
         case .systemMedium: 1
-        case .systemLarge: 5
-        case .systemExtraLarge: 5
-        default: 5
+        case .systemLarge: 3
+        case .systemExtraLarge: 4
+        default: 3
         }
     }
     var titleFont: Font {
@@ -129,49 +129,38 @@ private struct CardWidgetsEntryView : View {
         HStack {
             VStack(alignment: .leading) {
                 HStack {
-                    Text("资讯")
-                        .font(.title2)
+                    Text("News")
+                        .font(.title)
                         .bold()
-                    _HSpacer()
+                    Spacer()
                 }
-                Rectangle()
-                    .frame(height: 2)
-                    .opacity(0)
+                Spacer()
+                    .frame(maxHeight: 3)
+//                Rectangle()
+//                    .frame(height: 1)
+//                Divider()
+//                    .opacity(0)
                 if let news = entry.news {
-                    ForEach(0..<news.prefix(capacity).count, id: \.self) { i in
-                        VStack(alignment: .leading) {
-                            Text(news[i].title)
-                                .font(titleFont)
-                                .foregroundStyle(.primary)
-                                .bold()
-                                .lineLimit(2)
-                            Text(dateFormatter.string(from: news[i].timestamp))
-                                .font(dateFont)
-                                .foregroundStyle(.secondary)
-                        }
+                    ForEach(0..<news.prefix(capacity).count, id: \.self) { newsIndex in
+                        NewsPreview(news: news[newsIndex])
                         
-                        if widgetFamily == .systemLarge || widgetFamily == .systemExtraLarge && i != 4 {
-                            Rectangle()
-                                .frame(height: 1)
-                                .opacity(0)
+//                        if widgetFamily == .systemLarge || widgetFamily == .systemExtraLarge && newsIndex != capacity-1 {
+//                            Divider()
+//                        }
+                        if newsIndex != capacity-1 {
+                            Divider()
                         }
                     }
                 } else {
-                    ForEach(0..<capacity, id: \.self) { i in
+                    ForEach(0..<5, id: \.self) { newsIndex in
                         VStack(alignment: .leading) {
-                            Text(verbatim: "Lorem ipsum dolor sit amet consectetur adipiscing elit.")
-                                .font(titleFont)
-                                .lineLimit(1)
-                                .foregroundStyle(.primary)
-                                .bold()
-                                .redacted(reason: .placeholder)
-                            Text(verbatim: "2000/01/01 12:00")
-                                .font(dateFont)
+                            Text(verbatim: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+                                .lineLimit(3)
                                 .foregroundStyle(.secondary)
                                 .redacted(reason: .placeholder)
                         }
                         
-                        if widgetFamily == .systemLarge || widgetFamily == .systemExtraLarge && i != 4 {
+                        if newsIndex != 4 {
                             Rectangle()
                                 .frame(height: 1)
                                 .opacity(0)
@@ -184,3 +173,70 @@ private struct CardWidgetsEntryView : View {
         .animation(.easeInOut(duration: 0.1), value: entry.news?.count)
     }
 }
+
+struct NewsPreview: View {
+    var news: DoriFrontend.News.ListItem
+    var showLocale: Bool = true
+    var titleFont: Font = .body
+    var dateFont: Font = .footnote
+    var dateFormatter = DateFormatter()
+    init(news: DoriFrontend.News.ListItem, showLocale: Bool = true, titleFont: Font = .body, dateFont: Font = .footnote) {
+        self.news = news
+        self.showLocale = showLocale
+        self.titleFont = titleFont
+        self.dateFont = dateFont
+        //        dateFormatter.dateStyle = .short
+        //        dateFormatter.timeStyle = .short
+        dateFormatter.setLocalizedDateFormatFromTemplate("Mdjm")
+    }
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Group {
+                    Image(systemName: newsItemTypeIcon[news.type]!)
+                    Group {
+                        Text(newsItemTypeLocalizedString[news.type]!) + Text((showLocale && news.locale != nil) ? "(\(news.locale!.rawValue.uppercased()))" : "")
+                    }
+                    .offset(x: -3)
+                }
+                .foregroundStyle(newsItemTypeColor[news.type]!)
+                Text(dateFormatter.string(from: news.timestamp))
+                    .foregroundStyle(.secondary)
+            }
+            .font(dateFont)
+            .bold()
+            //            .font(.caption)
+            Text(news.subject)
+                .lineLimit(2)
+                .foregroundStyle(.primary)
+                .font(titleFont)
+                .bold()
+            
+            Group {
+                switch news.timeMark {
+                case .willStartAfter(let interval):
+                    Text("News.time-mark.will-start-after.\(interval)")
+                case .willEndAfter(let interval):
+                    Text("News.time-mark.will-end-after.\(interval)")
+                case .willEndToday:
+                    Text("News.time-mark.will-end-today")
+                case .hasEnded:
+                    Text("News.time-mark.has-ended")
+                case .hasPublished:
+                    Text("News.time-mark.has-published")
+                @unknown default:
+                    //                    Text("")
+                    EmptyView()
+                }
+            }
+            .foregroundStyle(.primary)
+            .font(titleFont)
+            .fontWeight(.light)
+        }
+    }
+}
+
+let newsItemTypeIcon: [DoriFrontend.News.ListItem.ItemType: String] = [.article: "text.page", .event: "star.hexagon", .gacha: "dice", .loginCampaign: "calendar", .song: "music.microphone"]
+let newsItemTypeColor: [DoriFrontend.News.ListItem.ItemType: Color] = [.article: .gray, .event: .green, .gacha: .blue, .loginCampaign: .red, .song: .purple]
+let newsItemTypeLocalizedString: [DoriFrontend.News.ListItem.ItemType: LocalizedStringResource] = [.article: "News.type.article", .event: "News.type.event", .gacha: "News.type.gacha", .loginCampaign: "News.type.login-campaign", .song: "News.type.song"]
+//let newsTimeMarkTypeLocalizedString: [Dori]

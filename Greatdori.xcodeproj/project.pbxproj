@@ -196,6 +196,7 @@
 		8CFEF5C12E4DE6250017FF66 /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */; };
 		E9140C592E47894200D6589E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9140C582E47893E00D6589E /* CardView.swift */; };
 		E93265342E37A322003F9AAF /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93265332E37A31F003F9AAF /* ImagesView.swift */; };
+		E9351AE02E503AA400F0C8C9 /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9351ADF2E503AA000F0C8C9 /* NewsView.swift */; };
 		E9364C912E3761530090E6E3 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9364C902E3761490090E6E3 /* DebugView.swift */; };
 		E93A1FAF2E38E53500F5390A /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93A1FAE2E38E52E00F5390A /* EventView.swift */; };
 		E975A7142E386FB900EFAE34 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975A7132E386FB600EFAE34 /* SettingsView.swift */; };
@@ -625,6 +626,7 @@
 		8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsView.swift; sourceTree = "<group>"; };
 		E9140C582E47893E00D6589E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		E93265332E37A31F003F9AAF /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
+		E9351ADF2E503AA000F0C8C9 /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
 		E9364C902E3761490090E6E3 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		E93A1FAE2E38E52E00F5390A /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		E975A7132E386FB600EFAE34 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -776,6 +778,7 @@
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				8C0C997F2E296A5500549B5C /* ContentView.swift */,
 				E9E3C0572E35C7710059BCE8 /* HomeView.swift */,
+				E9351ADF2E503AA000F0C8C9 /* NewsView.swift */,
 				E975A7132E386FB600EFAE34 /* SettingsView.swift */,
 				E93A1FAE2E38E52E00F5390A /* EventView.swift */,
 				E9140C582E47893E00D6589E /* CardView.swift */,
@@ -1641,6 +1644,7 @@
 				E9EE03812E4F5DB30088843B /* FilterView.swift in Sources */,
 				E9E3C0582E35C7740059BCE8 /* HomeView.swift in Sources */,
 				E975A7142E386FB900EFAE34 /* SettingsView.swift in Sources */,
+				E9351AE02E503AA400F0C8C9 /* NewsView.swift in Sources */,
 				8C0C99832E296A5500549B5C /* ContentView.swift in Sources */,
 				8C6C0EFF2E42462A00D1FB0A /* OptionsData.swift in Sources */,
 				8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */,

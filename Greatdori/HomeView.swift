@@ -82,7 +82,7 @@ struct HomeView: View {
             .navigationDestination(item: $currentNavigationPage) { page in
                 switch page {
                 case .news:
-                    EmptyView() // FIXME: [NAVI785]
+                    NewsView() // FIXME: [NAVI785]
                 case .characterDetail(let id):
                     EmptyView() // FIXME: [NAVI785]
                 case .eventDetail(let id):
@@ -124,7 +124,7 @@ struct HomeNewsView: View {
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
     }
-    
+    let totalNewsNumber = 4
     var body: some View {
         Button(action: {
             homeNavigate(to: .news)
@@ -144,41 +144,27 @@ struct HomeNewsView: View {
                         }
                         Spacer()
                     }
-                    Rectangle()
-                        .frame(height: 2)
-                        .opacity(0)
+                    Spacer()
+                        .frame(height: 3)
                     if let news {
-                        ForEach(0..<news.prefix(5).count, id: \.self) { i in
-                            VStack(alignment: .leading) {
-                                Text(news[i].title)
-                                    .foregroundStyle(.primary)
-                                    .bold()
-                                Text(dateFormatter.string(from: news[i].timestamp))
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            
-                            if i != 4 {
+                        ForEach(0..<news.prefix(totalNewsNumber).count, id: \.self) { newsIndex in
+                            NewsPreview(news: news[newsIndex])
+                            if newsIndex != (totalNewsNumber - 1) {
                                 Rectangle()
                                     .frame(height: 1)
                                     .opacity(0)
                             }
                         }
                     } else {
-                        ForEach(0..<5, id: \.self) { i in
+                        ForEach(0..<5, id: \.self) { newsIndex in
                             VStack(alignment: .leading) {
-                                Text(verbatim: "Lorem ipsum dolor sit amet consectetur adipiscing elit.")
-                                    .lineLimit(1)
-                                    .foregroundStyle(.primary)
-                                    .bold()
-                                    .redacted(reason: .placeholder)
-                                Text(verbatim: "2000/01/01 12:00")
-                                    .font(.caption)
+                                Text(verbatim: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+                                    .lineLimit(3)
                                     .foregroundStyle(.secondary)
                                     .redacted(reason: .placeholder)
                             }
                             
-                            if i != 4 {
+                            if newsIndex != 4 {
                                 Rectangle()
                                     .frame(height: 1)
                                     .opacity(0)

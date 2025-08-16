@@ -42,7 +42,10 @@ extension DoriFrontend {
                         title: news.title,
                         author: news.authors.joined(separator: ", "),
                         timestamp: news.timestamp,
-                        tags: news.tags
+                        tags: news.tags,
+                        subject: news.title,
+                        locale: nil,
+                        timeMark: .hasPublished
                     )
             })
             
@@ -104,7 +107,10 @@ extension DoriFrontend {
                                     minute: startDate.components.minute,
                                     second: startDate.components.second
                                 ),
-                                tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"]
+                                tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"],
+                                subject: item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!,
+                                locale: locale,
+                                timeMark: .willStartAfter(interval)
                             ))
                         % if subcategory != "songs":
                         %     if subcategory == "events":
@@ -124,7 +130,10 @@ extension DoriFrontend {
                                     ),
                                     author: "Bestdori! Update Bot",
                                     timestamp: endDate,
-                                    tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"]
+                                    tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"],
+                                    subject: item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!,
+                                    locale: locale,
+                                    timeMark: .hasEnded
                                 ))
                             } else {
                                 // Not ended yet
@@ -150,7 +159,10 @@ extension DoriFrontend {
                                             minute: endDate.components.minute,
                                             second: endDate.components.second
                                         ),
-                                        tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"]
+                                        tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"],
+                                        subject: item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!,
+                                        locale: locale,
+                                        timeMark: .willEndAfter(interval)
                                     ))
                                 } else {
                                     unsortedResult.append(.init(
@@ -166,7 +178,10 @@ extension DoriFrontend {
                                             minute: endDate.components.minute,
                                             second: endDate.components.second
                                         ),
-                                        tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"]
+                                        tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"],
+                                        subject: item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!,
+                                        locale: locale,
+                                        timeMark: .willEndToday
                                     ))
                                 }
                             }
@@ -183,7 +198,10 @@ extension DoriFrontend {
                                 ),
                                 author: "Bestdori! Update Bot",
                                 timestamp: startDate,
-                                tags: ["Update", "GBP", locale.rawValue.uppercased(), "Song"]
+                                tags: ["Update", "GBP", locale.rawValue.uppercased(), "Song"],
+                                subject: item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!,
+                                locale: locale,
+                                timeMark: .hasPublished
                             ))
                         }
                         % end
@@ -234,6 +252,9 @@ extension DoriFrontend.News {
         public var author: String
         public var timestamp: Date
         public var tags: [String]
+        public var subject: String
+        public var locale: DoriAPI.Locale?
+        public var timeMark: TimeMark
         
         public enum ItemType: Sendable, Hashable, DoriCache.Cacheable {
             case article
@@ -241,6 +262,14 @@ extension DoriFrontend.News {
             case loginCampaign
             case event
             case gacha
+        }
+        
+        public enum TimeMark: Sendable, Hashable, DoriCache.Cacheable {
+            case willStartAfter(Int)
+            case hasEnded
+            case willEndAfter(Int)
+            case willEndToday
+            case hasPublished
         }
     }
 }
