@@ -1,7 +1,12 @@
-# Greatdori
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="Artwork/IconWithText~dark.png">
+  <img src="Artwork/IconWithText.png" alt="Greatdori! logo" height="70">
+</picture>
+
+# Greatdori!
 
 > [!NOTE]
-> Greatdori project is still working in progress.
+> Greatdori! project is still working in progress.
 
 Greatdori includes DoriKit library, iOS app and watchOS app.
 DoriKit allows you to fetch data from Bestdori API in Swifty way:
@@ -29,28 +34,88 @@ Then add the dependency to targets you're going to use it:
 ```
 
 > [!IMPORTANT]
-> Greatdori project is on a **really early stage** of development,
+> Greatdori! project is on a **early stage** of development,
 > DO NOT depend on it in any production environment.
 
 ## Building
-Xcode 26.0 (currently beta) is required for building this project.
+Xcode 26.0 (currently beta) and Swift 6.2+ is required for building this project.
 
 Open `Greatdori.xcodeproj`, then select a scheme you want to build.
+You can also use `swift build` to build DoriKit from Package.swift.
+However, functionality of DoriKit is limited if it's built as a Swift Package.
 
-## Contributing to Greatdori
-Contributions to Greatdori are welcomed and encouraged!
+### Schemes
+There're several schemes in Greatdori! project:
+
+- **Greatdori**: The Greatdori! app for iOS, iPadOS and macOS;
+- **Greatdori Widgets**: Widget extension for **Greatdori** scheme;
+- **Greatdori Watch App**: The Greatdori! app for watchOS;
+- **Greatdori Watch Widgets**: Widget extension for **Greatdori Watch App** scheme;
+- **BuiltinCardCollections**: Built-in card collection for widgets;
+- **DoriKit**: The DoriKit framework;
+- **DoriKitTests**: Tests for DoriKit;
+- **DoriEmoji**: Emoji collections for community UI of DoriKit;
+- **Greatdori Installer**: Generates a `pkg` installer for macOS app;
+- **CardCollectionGen**: A CLI tool which generates built-in card collections;
+- **GreatLyrics**: A tool for making lyrics file of songs.
+
+Besides, some targets have a corresponding *Without Pre-Cache* scheme,
+which builds the target without [pre-cache](#pre-cache) for DoriKit.
+
+### Pre-Cache
+To make it faster to get some data which is updated less frequent,
+DoriKit generates a `PreCache.cache` file in **compile-time**
+and embeds it to `DoriKit.framework` bundle. This allows you to get some information
+like character list from `DoriCache.preCache` without performing a network request.
+
+Pre-Cache generation happens when you first build DoriKit for a configuration,
+after you cleaned build folder, or if the previous generation date was over a week ago.
+If you're experiencing a poor network connection
+that makes you can't generate pre-cache successfully,
+you can opt-out it by building your target from `Without Pre-Cache` scheme.
+
+### Code Signing
+All development teams of each targets are set to `Yuxuan Chen (8CZ4JT4F3M)`
+which makes it easier for our CI runs and distribution workflows.
+You have to change it to your own team before building,
+or choose *None* if you build it only for simulator or macOS.
+(And don't forget to change it back if you'd like to open a pull request!)
+
+## Contributing to Greatdori!
+Contributions to Greatdori! are welcomed and encouraged!
 Fork the project, make changes and open your pull requests!
 
-If you're experiencing some bugs, or have any suggestion to Greatdori,
+If you're experiencing some bugs, or have any suggestion to Greatdori!,
 filing an issue for it is also welcomed.
 
 ### `Greatdori.xcodeproj` & `Package.swift`
-`Greatdori.xcodeproj` is the main project file of Greatdori,
-we suggest you to open this project file in Xcode to make changes to Greatdori.
+`Greatdori.xcodeproj` is the main project file of Greatdori!,
+we suggest you to open this project file in Xcode to make changes to Greatdori!.
 
 `Package.swift` makes it easier to embed DoriKit in other projects,
-and should not be used for editing code of Greatdori,
+and should not be used for editing code of Greatdori!,
 because `xcodeproj` file maintains structures of all files in this project.
+
+### Targets Relationship
+```mermaid
+---
+config:
+  layout: elk
+---
+flowchart TD;
+    GA["Greatdori"] --> DK["DoriKit"] & GW["Greatdori Widgets"] & BCC["BuiltinCardCollections"]
+    GWA["Greatdori Watch App"] <--> GA
+    GW --> DK & BCC
+    GWA --> DK & BCC & GWW["Greatdori Watch Widgets"]
+    GWW --> DK & BCC
+    BCC --> DK
+    DKT["DoriKitTests"] --> DK
+    DK --> DE["DoriEmoji"]
+    DK -.-> PCG["PreCacheGen"]
+    GI["Greatdori Installer"] --> GA
+    CCG["CardCollectionGen"] --> DK
+    GL["GreatLyrics"] --> DK
+```
 
 ### About GYB Source Files
 You may note that some source files have suffix `.swift.gyb` instead of `.swift`,
