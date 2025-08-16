@@ -944,12 +944,11 @@ struct EventSearchView: View {
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
     @State var infoIsAvailable = true
     @State var searchedText = ""
-    @State var useCompactLayout = true
     var body: some View {
         Group {
             if let resultEvents = searchedEvents ?? events {
                 ScrollView {
-                    if !useCompactLayout {
+                    ViewThatFits {
                         LazyVGrid(columns: [GridItem(.flexible(), spacing: 0), GridItem(.flexible(), spacing: 0)], content: {
                             ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
                                 NavigationLink(destination: {
@@ -960,13 +959,15 @@ struct EventSearchView: View {
                                 .buttonStyle(.plain)
                             }
                         })
-                    } else {
-                        ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
-                            NavigationLink(destination: {
-                                EventDetailView(id: resultEvents[eventIndex].id)
-                            }, label: {
-                                EventCardResultView(resultEvents[eventIndex], inLocale: nil)
-                            })
+                        LazyVStack {
+                            ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
+                                NavigationLink(destination: {
+                                    EventDetailView(id: resultEvents[eventIndex].id)
+                                }, label: {
+                                    EventCardResultView(resultEvents[eventIndex], inLocale: nil)
+                                })
+                                .buttonStyle(.plain)
+                            }
                         }
                     }
                 }
@@ -987,13 +988,6 @@ struct EventSearchView: View {
         .task {
             await getEvents()
         }
-        .onFrameChange(perform: { geometry in
-            if geometry.size.width > 675 && !useCompactLayout {
-                useCompactLayout = true
-            } else if geometry.size.width <= 675 && useCompactLayout {
-                useCompactLayout = false
-            }
-        })
     }
     
     func getEvents() async {
