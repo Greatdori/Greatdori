@@ -57,11 +57,18 @@ extension DoriFrontend {
             let before = sortedBirthdays.reversed().first { $0.birthday <= today } ?? sortedBirthdays.last!
             // Because more than 1 people may have the same birthday,
             // we have to filter them out again.
-            let result = sortedBirthdays.filter { $0.birthday == after.birthday || $0.birthday == before.birthday }
+            var result = sortedBirthdays.filter { $0.birthday == after.birthday || $0.birthday == before.birthday }
             // And filter from source again because they've been normalized...
-            return allBirthday
+            result = allBirthday
                 .filter { character in result.contains { $0.id == character.id } }
                 .sorted { $0.birthday > $1.birthday }
+            let sortedAll = allBirthday.sorted { $0.birthday < $1.birthday }
+            if result.contains(where: { $0.id == sortedAll.first!.id })
+                && result.contains(where: { $0.id == sortedAll.last!.id }) {
+                // Make sure the character whose birthday isn't passed appears first.
+                result.swapAt(0, 1)
+            }
+            return result
         }
         
         public static func categorizedCharacters() async -> CategorizedCharacters? {
