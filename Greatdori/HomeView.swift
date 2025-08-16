@@ -144,8 +144,10 @@ struct HomeNewsView: View {
                         }
                         Spacer()
                     }
-                    Spacer()
-                        .frame(height: 3)
+                    Rectangle()
+                        .frame(height: 1)
+                        .opacity(0)
+                        .accessibilityHidden(true)
                     if let news {
                         ForEach(0..<news.prefix(totalNewsNumber).count, id: \.self) { newsIndex in
                             NewsPreview(news: news[newsIndex])
@@ -158,8 +160,9 @@ struct HomeNewsView: View {
                     } else {
                         ForEach(0..<5, id: \.self) { newsIndex in
                             VStack(alignment: .leading) {
-                                Text(verbatim: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
-                                    .lineLimit(3)
+                                Rectangle()
+                                    .frame(height: 40)
+                                    .cornerRadius(5)
                                     .foregroundStyle(.secondary)
                                     .redacted(reason: .placeholder)
                             }
@@ -175,6 +178,7 @@ struct HomeNewsView: View {
                 Spacer()
             }
         })
+        .containerShape(Rectangle())
         .animation(.easeInOut(duration: loadingAnimationDuration), value: news?.count)
         .buttonStyle(.plain)
         .foregroundStyle(.primary)

@@ -945,7 +945,7 @@ struct EventSearchView: View {
     @State var infoIsAvailable = true
     @State var searchedText = ""
     var body: some View {
-        Group {
+        NavigationStack {
             if let resultEvents = searchedEvents ?? events {
                 ScrollView {
                     ViewThatFits {
@@ -959,7 +959,7 @@ struct EventSearchView: View {
                                 .buttonStyle(.plain)
                             }
                         })
-                        LazyVStack {
+                        List {
                             ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
@@ -971,6 +971,8 @@ struct EventSearchView: View {
                         }
                     }
                 }
+                .ignoresSafeArea()
+                .padding()
                 .searchable(text: $searchedText, prompt: "Event.search.placeholder")
             } else {
                 if infoIsAvailable {

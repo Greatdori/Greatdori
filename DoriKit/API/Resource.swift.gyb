@@ -47,6 +47,18 @@ extension DoriAPI.Event.${property} {
             nil
         }
     }
+    @inlinable
+    public var logoImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.startAt.availableLocale()!.rawValue)/event/\(self.assetBundleName)/images_rip/logo.png")!
+    }
+    @inlinable
+    public func logoImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.startAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/event/\(self.assetBundleName)/images_rip/logo.png")!
+        } else {
+            nil
+        }
+    }
 }
 % end
 extension DoriAPI.Event.EventCharacter {
@@ -342,7 +354,7 @@ extension DoriAPI.Gacha.${property} {
         if !bannerAssetBundleName.isEmpty {
             .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/homebanner_rip/\(self.bannerAssetBundleName).png")!
         } else {
-            .init(string:  "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/logo.png")!
+            .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/logo.png")!
         }
     }
     @inlinable
@@ -351,8 +363,19 @@ extension DoriAPI.Gacha.${property} {
             if !bannerAssetBundleName.isEmpty {
                 .init(string: "https://bestdori.com/assets/\(locale)/homebanner_rip/\(self.bannerAssetBundleName).png")!
             } else {
-                .init(string:  "https://bestdori.com/assets/\(locale)/gacha/screen/\(self.resourceName)_rip/logo.png")!
+                .init(string: "https://bestdori.com/assets/\(locale)/gacha/screen/\(self.resourceName)_rip/logo.png")!
             }
+        } else {
+            nil
+        }
+    }
+    public var logoImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/logo.png")!
+    }
+    @inlinable
+    public func logoImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.publishedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/gacha/screen/\(self.resourceName)_rip/logo.png")!
         } else {
             nil
         }
