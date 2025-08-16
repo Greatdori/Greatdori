@@ -81,11 +81,7 @@ struct DebugBirthdayViewUnit: View {
             }
         }
         .task {
-            DoriCache.withCache(id: "Home_Birthdays") {
-                await DoriFrontend.Character.recentBirthdayCharacters(aroundDate: receivedToday ?? Date.now)
-            } .onUpdate {
-                birthdays = $0
-            }
+            birthdays = await DoriFrontend.Character.recentBirthdayCharacters(aroundDate: receivedToday ?? Date.now)
         }
     }
 }
