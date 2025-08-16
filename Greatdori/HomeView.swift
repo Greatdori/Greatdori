@@ -82,9 +82,9 @@ struct HomeView: View {
             .navigationDestination(item: $currentNavigationPage) { page in
                 switch page {
                 case .news:
-                    EmptyView() // FIXME
+                    EmptyView() // FIXME: [NAVI785]
                 case .characterDetail(let id):
-                    EmptyView() // FIXME
+                    EmptyView() // FIXME: [NAVI785]
                 case .eventDetail(let id):
                     EventDetailView(id: id)
                 }
@@ -101,7 +101,7 @@ struct HomeView: View {
                 }
             }
             .sheet(isPresented: $showSettingsSheet, content: {
-                SettingsView()
+                SettingsView(usedAsSheet: true)
             })
         }
         .onFrameChange { geometry in
@@ -193,7 +193,7 @@ struct HomeNewsView: View {
         .buttonStyle(.plain)
         .foregroundStyle(.primary)
         .task {
-            DoriCache.withCache(id: "Home_News") {
+            DoriCache.withCache(id: "Home_News", trait: .realTime) {
                 await DoriFrontend.News.list()
             } .onUpdate {
                 news = $0
@@ -203,16 +203,24 @@ struct HomeNewsView: View {
 }
 
 struct HomeBirthdayView: View {
-    @State var birthdays: [DoriFrontend.Character.BirthdayCharacter]?
     @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false
-    var formatter = DateFormatter()
-    var calendar = Calendar(identifier: .gregorian)
+    @AppStorage("showBirthdayDate") var showBirthdayDate = showBirthdayDateDefaultValue
+    @State var birthdays: [DoriFrontend.Character.BirthdayCharacter]?
     @State var debugDate: Date = Date.now
+    var formatter = DateFormatter()
+    var todaysDateFormatter = DateFormatter()
+    var calendar = Calendar(identifier: .gregorian)
+    var todaysDateCalendar = Calendar(identifier: .gregorian)
     init() {
         calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
         formatter.locale = Locale.current
         formatter.setLocalizedDateFormatFromTemplate("MMMd")
         formatter.timeZone = .init(identifier: "Asia/Tokyo")
+        
+        todaysDateCalendar.timeZone = getBirthdayTimeZone()
+        todaysDateFormatter.locale = Locale.current
+        todaysDateFormatter.setLocalizedDateFormatFromTemplate("MMMd")
+        todaysDateFormatter.timeZone = getBirthdayTimeZone()
     }
     var body: some View {
         HStack {
@@ -233,18 +241,33 @@ struct HomeBirthdayView: View {
                             .redacted(reason: .placeholder)
                     }
                     Spacer()
+                    Group {
+                        if showBirthdayDate == 3 {
+                            Text(todaysDateFormatter.string(from: debugDate))
+                        } else if showBirthdayDate == 2 {
+                            if (birthdays != nil && todaysHerBirthday(birthdays!.first!.birthday, debugDate)) {
+                                Text(todaysDateFormatter.string(from: debugDate))
+                            }
+                        } else if showBirthdayDate == 1 {
+                            if (birthdays != nil && todaysHerBirthday(birthdays!.first!.birthday, debugDate) && !birthdayTimeIsInSameDayWithSystemTime()) {
+                                Text(todaysDateFormatter.string(from: debugDate))
+                            }
+                        }
+                    }
+                    .foregroundStyle(.secondary)
+//                    .bold()
+                    .fontWeight(.light)
+                    .font(.title3)
                     if debugShowHomeBirthdayDatePicker {
                         DatePicker("", selection: $debugDate)
+                            .labelsHidden()
                         Button(action: {
                             Task {
-                                DoriCache.withCache(id: "Home_Birthdays") {
-                                    await DoriFrontend.Character.recentBirthdayCharacters(aroundDate: debugDate)
-                                } .onUpdate {
-                                    birthdays = $0
-                                }
+                                birthdays = await DoriFrontend.Character.recentBirthdayCharacters(aroundDate: debugDate, timeZone: getBirthdayTimeZone())
                             }
                         }, label: {
-                            Text(verbatim: "[DEBUG REFRESH DATE]")
+//                            Text(verbatim: "")
+                            Image(systemName: "arrow.clockwise")
                         })
                     }
                 }
@@ -341,26 +364,40 @@ struct HomeBirthdayView: View {
         .buttonStyle(.plain)
         .foregroundStyle(.primary)
         .task {
-            DoriCache.withCache(id: "Home_Birthdays") {
-                await DoriFrontend.Character.recentBirthdayCharacters()
-            } .onUpdate {
-                birthdays = $0
+            birthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone())
+        }
+        .onAppear {
+            Task {
+                birthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone())
             }
         }
     }
-    func todaysHerBirthday(_ date1: Date, _ date2: Date = Date()) -> Bool {
-        let calendar = Calendar(identifier: .gregorian)
+    func todaysHerBirthday(_ birthday: Date, _ today: Date = Date.now) -> Bool {
+        var calendar = Calendar(identifier: .gregorian)
         var jstCalendar = calendar
+        calendar.timeZone = getBirthdayTimeZone()
         jstCalendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
         
+        let birthdaysMonth: Int = jstCalendar.component(.month, from: birthday)
+        let birthdaysDay: Int = jstCalendar.component(.day, from: birthday)
         
-        var components = jstCalendar.dateComponents([.month, .day], from: date2)
-        components.year = 2000
-        let inputtedToday = jstCalendar.date(from: components)!
+        let todaysMonth: Int = calendar.component(.month, from: today)
+        let todaysDay: Int = calendar.component(.day, from: today)
         
+        return (birthdaysMonth == todaysMonth && birthdaysDay == todaysDay)
+    }
+    func birthdayTimeIsInSameDayWithSystemTime() -> Bool {
+        var birthdayCalendar = Calendar(identifier: .gregorian)
+        birthdayCalendar.timeZone = getBirthdayTimeZone()
+        var systemCalendar = Calendar(identifier: .gregorian)
         
+        let birthdayMonth: Int = birthdayCalendar.component(.month, from: Date.now)
+        let birthdayDay: Int = birthdayCalendar.component(.day, from: Date.now)
         
-        return jstCalendar.isDate(date1, equalTo: inputtedToday, toGranularity: .day)
+        let systemMonth: Int = systemCalendar.component(.month, from: Date.now)
+        let systemDay: Int = systemCalendar.component(.day, from: Date.now)
+        
+        return (birthdayMonth == systemMonth && birthdayDay == systemDay)
     }
 }
 
@@ -411,7 +448,7 @@ struct HomeEventsView: View {
         }
         .foregroundStyle(.primary)
         .task {
-            DoriCache.withCache(id: "Home_LatestEvents") {
+            DoriCache.withCache(id: "Home_LatestEvents", trait: .realTime) {
                 await DoriFrontend.Event.localizedLatestEvent()
             } .onUpdate {
                 latestEvents = $0

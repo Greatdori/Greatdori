@@ -32,7 +32,7 @@ struct EventCardView: View {
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
     init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showsCountdown: Bool = false) {
-        self.eventImageURL = event.bannerImageURL
+        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
         self.startAt = event.startAt
         self.endAt = event.endAt
@@ -41,7 +41,7 @@ struct EventCardView: View {
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
     init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showsCountdown: Bool = false) {
-        self.eventImageURL = event.bannerImageURL
+        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
         self.startAt = event.startAt
         self.endAt = event.endAt
@@ -61,6 +61,76 @@ struct EventCardView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.gray.opacity(0.15))
                     .aspectRatio(3.0, contentMode: .fit)
+            }
+            .interpolation(.high)
+            .cornerRadius(10)
+            
+            if showsCountdown { // Accually Title & Countdown
+                Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                    .bold()
+                    .font(.title3)
+                Group {
+                    if let startDate = locale != nil ? startAt.forLocale(locale!) : startAt.forPreferredLocale(),
+                       let endDate = locale != nil ? endAt.forLocale(locale!) : startAt.forPreferredLocale() {
+                        if startDate > .now {
+                            Text("Events.countdown.start-at.\(Text(startDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                        } else if endDate > .now {
+                            Text("Events.countdown.end-at.\(Text(endDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                        } else {
+                            Text("Events.countdown.ended.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                        }
+                    } else {
+                        Text("Events.countdown.unstarted.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: EventCardView [✓]
+struct EventCardResultView: View {
+    private var eventImageURL: URL
+    private var title: DoriAPI.LocalizedData<String>
+    private var startAt: DoriAPI.LocalizedData<Date>
+    private var endAt: DoriAPI.LocalizedData<Date>
+    private var locale: DoriAPI.Locale?
+    private var showsCountdown: Bool
+    
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
+    init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showsCountdown: Bool = false) {
+        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = event.eventName
+        self.startAt = event.startAt
+        self.endAt = event.endAt
+        self.locale = locale
+        self.showsCountdown = showsCountdown
+    }
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
+    init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showsCountdown: Bool = false) {
+        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = event.eventName
+        self.startAt = event.startAt
+        self.endAt = event.endAt
+        self.locale = locale
+        self.showsCountdown = showsCountdown
+    }
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
+    
+    var body: some View {
+        VStack {
+            WebImage(url: eventImageURL) { image in
+                image
+                    .resizable()
+                    .antialiased(true)
+                    .scaledToFit()
+                    .aspectRatio(3.0, contentMode: .fit)
+                    .frame(maxWidth: 420, maxHeight: 140)
+            } placeholder: {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.15))
+                    .aspectRatio(3.0, contentMode: .fit)
+                    .frame(maxWidth: 420, maxHeight: 140)
             }
             .interpolation(.high)
             .cornerRadius(10)
@@ -547,6 +617,7 @@ struct CardIconView: View {
     #endif
 }
 
+//MARK: ThumbCostumeCardView
 struct ThumbCostumeCardView: View {
     private var thumbImageURL: URL
     private var description: DoriAPI.LocalizedData<String>
@@ -579,6 +650,8 @@ struct ThumbCostumeCardView: View {
     }
 }
 
+
+//MARK: GachaCardView
 struct GachaCardView: View {
     private var bannerImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
@@ -631,6 +704,8 @@ struct GachaCardView: View {
     }
 }
 
+
+//MARK: SongCardView
 struct SongCardView: View {
     private var jacketImageURL: URL
     private var title: DoriAPI.LocalizedData<String>

@@ -314,7 +314,7 @@ struct EventDetailOverviewView: View {
                                                 if let name = eventCharacterNameDict[value.characterID]?.forPreferredLocale() {
                                                     Text(name)
                                                 } else {
-                                                    Text("Lorum Ipsum")
+                                                    Text(verbatim: "Lorum Ipsum")
                                                         .redacted(reason: .placeholder)
                                                 }
                                                 Spacer()
@@ -944,18 +944,33 @@ struct EventSearchView: View {
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
     @State var infoIsAvailable = true
     @State var searchedText = ""
+    @State var useCompactLayout = true
     var body: some View {
         Group {
-            if let events = searchedEvents ?? events {
+            if let resultEvents = searchedEvents ?? events {
                 ScrollView {
-                    ForEach(events) { event in
-                        NavigationLink(destination: {
-                            EventDetailView(id: event.id)
-                        }, label: {
-                            EventCardView(event, inLocale: nil)
+                    if !useCompactLayout {
+                        LazyVGrid(columns: [GridItem(.flexible(), spacing: 0), GridItem(.flexible(), spacing: 0)], content: {
+                            ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
+                                NavigationLink(destination: {
+                                    EventDetailView(id: resultEvents[eventIndex].id)
+                                }, label: {
+                                    EventCardResultView(resultEvents[eventIndex], inLocale: nil)
+                                })
+                                .buttonStyle(.plain)
+                            }
                         })
+                    } else {
+                        ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
+                            NavigationLink(destination: {
+                                EventDetailView(id: resultEvents[eventIndex].id)
+                            }, label: {
+                                EventCardResultView(resultEvents[eventIndex], inLocale: nil)
+                            })
+                        }
                     }
                 }
+                .searchable(text: $searchedText, prompt: "Event.search.placeholder")
             } else {
                 if infoIsAvailable {
                     HStack {
@@ -972,16 +987,13 @@ struct EventSearchView: View {
         .task {
             await getEvents()
         }
-        .searchable(text: $searchedText, prompt: "Event.search.placeholder")
-//        .toolbar {
-//            ToolbarItem(placement: .principal) {
-////                HStack {
-//                TextField(text: $searchedText, label: {
-//                    Label("Event.search.placeholder", systemImage: "magnifyingglass")
-//                })
-//                .frame(width: 100)
-//            }
-//        }
+        .onFrameChange(perform: { geometry in
+            if geometry.size.width > 675 && !useCompactLayout {
+                useCompactLayout = true
+            } else if geometry.size.width <= 675 && useCompactLayout {
+                useCompactLayout = false
+            }
+        })
     }
     
     func getEvents() async {

@@ -50,18 +50,23 @@ struct ContentView: View {
 //                        HomeView()
                         Text(verbatim: "leaderboard")
                     }
-                    TabSection("App.info", content: {
+                    TabSection(content: {
                         Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
                             Text(verbatim: "char")
                         }
                         Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
                             EventSearchView()
                         }
+                    }, header: {
+                        Text("App.info")
                     })
+
                     #if os(iOS)
-                    Tab("App.settings", systemImage: "gear", value: .settings) {
-//                        Text("settings")
-                        SettingsView()
+                    if sizeClass == .regular {
+                        Tab("App.settings", systemImage: "gear", value: .settings) {
+                            //                        Text("settings")
+                            SettingsView()
+                        }
                     }
                     #endif
                     //                }

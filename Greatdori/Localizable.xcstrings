@@ -106,7 +106,20 @@
       }
     },
     "App.info.events" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Events"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动"
+          }
+        }
+      }
     },
     "App.leaderboard" : {
       "localizations" : {
@@ -576,10 +589,24 @@
       }
     },
     "Event.search.placeholder" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索活动"
+          }
+        }
+      }
     },
     "Event.search.unavailable" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动搜索不可用"
+          }
+        }
+      }
     },
     "Event.start-date" : {
       "localizations" : {
@@ -784,6 +811,86 @@
         }
       }
     },
+    "Home.home.show-current-date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Today’s Date in Birthday"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生日卡片显示今日日期"
+          }
+        }
+      }
+    },
+    "Home.home.show-current-date.selection.always" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Always"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "始终"
+          }
+        }
+      }
+    },
+    "Home.home.show-current-date.selection.automatic" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatically"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动"
+          }
+        }
+      }
+    },
+    "Home.home.show-current-date.selection.during-birthday" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "During Someone’s Birthday"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当有人过生日时"
+          }
+        }
+      }
+    },
+    "Home.home.show-current-date.selection.never" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永不"
+          }
+        }
+      }
+    },
     "Home.news" : {
       "localizations" : {
         "en" : {
@@ -896,9 +1003,6 @@
         }
       }
     },
-    "Lorum Ipsum" : {
-
-    },
     "Settings" : {
       "localizations" : {
         "en" : {
@@ -911,6 +1015,134 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "设置"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Birthday Time Zone"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生日时区"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Birthday Time Zone will only affect birthdays’ algorithm. All other data will be displayed in system time."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“生日时区”只影响对角色生日的判断。其他所有信息均以系统时间呈现。"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.selection.adaptive" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Time"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统时间"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.selection.CST" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "China Standard Time (UTC+8)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中国标准时间(UTC+8)"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.selection.JST" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Japan Standard Time (UTC+9)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本标准时间 (UTC+9)"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.selection.PT.PDT" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pacific Time (UTC-7)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "太平洋时间 (UTC-7)"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.selection.PT.PST" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pacific Time (UTC-8)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "太平洋时间 (UTC-8)"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.selection.UTC" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coordinated Universal Time (UTC)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "协调世界时 (UTC)"
           }
         }
       }
@@ -979,12 +1211,28 @@
         }
       }
     },
-    "Settings.server" : {
+    "Settings.home-edit.footer.compact" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Region"
+            "value" : "Event cards are arranged from #1 to #4 in single-column view."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "单列显示下，活动卡片从上到下按照#1到#4排列。"
+          }
+        }
+      }
+    },
+    "Settings.locale" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locale"
           }
         },
         "zh-Hans" : {

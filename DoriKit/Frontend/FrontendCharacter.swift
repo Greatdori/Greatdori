@@ -18,26 +18,32 @@ extension DoriFrontend {
     public class Character {
         private init() {}
         
-        public static func recentBirthdayCharacters(aroundDate date: Date = .now) async -> [BirthdayCharacter]? {
-            func normalize(_ date: Date) -> Date {
+        public static func recentBirthdayCharacters(aroundDate date: Date = .now, timeZone: TimeZone = .init(identifier: "Asia/Tokyo")!) async -> [BirthdayCharacter]? {
+            func normalize(_ inputDate: Date, timezone: TimeZone = .init(identifier: "Asia/Tokyo")!) -> Date {
                 var calendar = Calendar(identifier: .gregorian)
-                calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
-                var components = calendar.dateComponents([.month, .day], from: date)
+                calendar.timeZone = timezone
+                var components = calendar.dateComponents([.month, .day], from: inputDate)
                 components.year = 2000
                 components.hour = 0
                 components.minute = 0
                 components.second = 0
-                return calendar.date(from: components)!.componentsRewritten(year: 2000, hour: 0, minute: 0, second: 0)
+                return calendar.date(from: components)!/*.componentsRewritten(year: 2000, hour: 0, minute: 0, second: 0)*/
             }
             
             guard let allBirthday = await DoriAPI.Character.allBirthday() else { return nil }
             
-            let today = normalize(date)
+            var todaysCalender = Calendar(identifier: .gregorian)
+            todaysCalender.timeZone = timeZone
+            let todaysMonth: Int = todaysCalender.component(.month, from: date)
+            let todaysDay: Int = todaysCalender.component(.day, from: date)
+            todaysCalender.timeZone = .init(identifier: "Asia/Tokyo")!
+            let today = todaysCalender.date(from: DateComponents(timeZone: .init(identifier: "Asia/Tokyo")!, year: 2000, month: todaysMonth, day: todaysDay, hour: 0, minute: 0, second: 0))!
             
             // Make all birthdays in the same year, hour, minute and second
             let normalizedBirthdays = allBirthday.map { character in
                 var mutableCharacter = character
                 mutableCharacter.birthday = normalize(character.birthday)
+                // mutableCharacters
                 return mutableCharacter
             }
             

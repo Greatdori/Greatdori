@@ -18,19 +18,27 @@ import WidgetKit
 
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.horizontalSizeClass) var sizeClass
+    var usedAsSheet: Bool = false
     var body: some View {
         NavigationStack {
             Form {
-                Section("Settings.server") {
+                Section(content: {
                     SettingsServerView()
-                }
+                }, header: {
+                    Text("Settings.locale")
+                }, footer: {
+                    Text("Settings.birthday-time-zone.footer")
+                })
+                
                 Section(content: {
                     SettingsHomeView()
                 }, header: {
                     Text("Settings.home-edit")
                 }, footer: {
-                    Text("Settings.home-edit.footer")
+                    Text(sizeClass == .compact ? "Settings.home-edit.footer.compact" : "Settings.home-edit.footer")
                 })
+                
                 #if os(iOS)
                 Section {
                     SettingsWidgetView()
@@ -49,15 +57,18 @@ struct SettingsView: View {
             }
             .formStyle(.grouped)
             .navigationTitle("Settings")
-//            #if !os(macOS)
-//            .toolbar {
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    DismissButton(action: dismiss.callAsFunction) {
-//                        Image(systemName: "xmark")
-//                    }
-//                }
-//            }
-//            #endif
+            #if !os(macOS)
+            .wrapIf(usedAsSheet, in: { content in
+                content
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            DismissButton(action: dismiss.callAsFunction) {
+                                Image(systemName: "xmark")
+                            }
+                        }
+                    }
+            })
+            #endif
         }
     }
 }
@@ -66,6 +77,7 @@ struct SettingsServerView: View {
     @State var primaryLocale = "jp"
     @State var secondaryLocale = "en"
     @State var server: String = "jp"
+    @State var birthdayTimeZone: BirthdayTimeZone = .JST
     var body: some View {
         Group {
             Picker(selection: $primaryLocale, content: {
@@ -112,20 +124,53 @@ struct SettingsServerView: View {
             .onChange(of: secondaryLocale, {
                 DoriAPI.secondaryLocale = localeFromStringDict[secondaryLocale] ?? .en
             })
+            Picker(selection: $birthdayTimeZone, content: {
+                Text("Settings.birthday-time-zone.selection.adaptive")
+                    .tag(BirthdayTimeZone.adaptive)
+                Text("Settings.birthday-time-zone.selection.JST")
+                    .tag(BirthdayTimeZone.JST)
+                Text("Settings.birthday-time-zone.selection.UTC")
+                    .tag(BirthdayTimeZone.UTC)
+                Text("Settings.birthday-time-zone.selection.CST")
+                    .tag(BirthdayTimeZone.CST)
+                Text(TimeZone(identifier: "America/Los_Angeles")!.isDaylightSavingTime() ? "Settings.birthday-time-zone.selection.PT.PDT" : "Settings.birthday-time-zone.selection.PT.PST")
+                    .tag(BirthdayTimeZone.PT)
+            }, label: {
+                Text("Settings.birthday-time-zone")
+            })
+            .onChange(of: birthdayTimeZone, {
+                UserDefaults.standard.setValue(birthdayTimeZone.rawValue, forKey: "BirthdayTimeZone")
+            })
         }
         .onAppear {
             primaryLocale = localeToStringDict[DoriAPI.preferredLocale]?.lowercased() ?? "jp"
             secondaryLocale = localeToStringDict[DoriAPI.secondaryLocale]?.lowercased() ?? "en"
+            birthdayTimeZone = BirthdayTimeZone(rawValue: UserDefaults.standard.string(forKey: "BirthdayTimeZone") ?? "JST") ?? .JST
+//            birthdayTimeZone = (UserDefaults.standard.value(forKey: "BirthdayTimeZone") ?? "JST")
         }
     }
 }
 
+let showBirthdayDateDefaultValue = 2
 struct SettingsHomeView: View {
+    @AppStorage("showBirthdayDate") var showBirthdayDate = showBirthdayDateDefaultValue
     var body: some View {
         HomeEditEventsPicker(id: 1)
         HomeEditEventsPicker(id: 2)
         HomeEditEventsPicker(id: 3)
         HomeEditEventsPicker(id: 4)
+        Picker(selection: $showBirthdayDate, content: {
+            Text("Home.home.show-current-date.selection.always")
+                .tag(3)
+            Text("Home.home.show-current-date.selection.during-birthday")
+                .tag(2)
+            Text("Home.home.show-current-date.selection.automatic")
+                .tag(1)
+            Text("Home.home.show-current-date.selection.never")
+                .tag(0)
+        }, label: {
+            Text("Home.home.show-current-date")
+        })
     }
     
     struct HomeEditEventsPicker: View {
@@ -249,3 +294,28 @@ struct SettingsDebugView: View {
         })
     }
 }
+
+enum BirthdayTimeZone: String {
+    case adaptive
+    case JST
+    case UTC
+    case CST
+    case PT
+}
+
+
+func getBirthdayTimeZone() -> TimeZone {
+    switch BirthdayTimeZone(rawValue: UserDefaults.standard.string(forKey: "BirthdayTimeZone") ?? "JST")! {
+    case .adaptive:
+        return TimeZone.autoupdatingCurrent
+    case .JST:
+        return TimeZone(identifier: "Asia/Tokyo")!
+    case .UTC:
+        return TimeZone.gmt
+    case .CST:
+        return TimeZone(identifier: "Asia/Shanghai")!
+    case .PT:
+        return TimeZone(identifier: "America/Los_Angeles")!
+    }
+}
+
