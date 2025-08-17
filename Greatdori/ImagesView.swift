@@ -92,17 +92,17 @@ struct EventCardHomeView: View {
 struct EventCardView: View {
     private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
-    private var eventType: DoriAPI.Event.EventType
+    private var startAt: DoriAPI.LocalizedData<Date>
+    private var endAt: DoriAPI.LocalizedData<Date>
     private var locale: DoriAPI.Locale?
     private var showDetails: Bool
-    @State var backgroundOpacity: CGFloat = 1
-    @Namespace private var namespace
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
     init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false) {
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
-        self.eventType = event.eventType
+        self.startAt = event.startAt
+        self.endAt = event.endAt
         self.locale = locale
         self.showDetails = showDetails
     }
@@ -110,71 +110,56 @@ struct EventCardView: View {
     init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false) {
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
-        self.eventType = event.eventType
+        self.startAt = event.startAt
+        self.endAt = event.endAt
         self.locale = locale
         self.showDetails = showDetails
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
     
     var body: some View {
-        Group {
-            if showDetails {
-                CustomGroupBox(backgroundOpacity: $backgroundOpacity) {
-                    VStack {
-                        EventCardViewSimple(eventImageURL)
-                        .matchedGeometryEffect(id: "Image", in: namespace)
-                        
-                        VStack { // Accually Title & Countdown
-                            Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
-                                .bold()
-                                .font(.title3)
-                            Text(eventType.localizedString)
+        CustomGroupBox(showGroupBox: showDetails) {
+            VStack {
+                WebImage(url: eventImageURL) { image in
+                    image
+                        .resizable()
+                        .antialiased(true)
+                        .scaledToFit()
+                        .aspectRatio(3.0, contentMode: .fit)
+                        .frame(maxWidth: 420, maxHeight: 140)
+                } placeholder: {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.gray.opacity(0.15))
+                        .aspectRatio(3.0, contentMode: .fit)
+                        .frame(maxWidth: 420, maxHeight: 140)
+                }
+                .interpolation(.high)
+                .cornerRadius(10)
+                
+                VStack { // Accually Title & Countdown
+                    Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                        .bold()
+                        .font(.title3)
+                    Group {
+                        if let startDate = locale != nil ? startAt.forLocale(locale!) : startAt.forPreferredLocale(),
+                           let endDate = locale != nil ? endAt.forLocale(locale!) : startAt.forPreferredLocale() {
+                            if startDate > .now {
+                                Text("Events.countdown.start-at.\(Text(startDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                            } else if endDate > .now {
+                                Text("Events.countdown.end-at.\(Text(endDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                            } else {
+                                Text("Events.countdown.ended.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                            }
+                        } else {
+                            Text("Events.countdown.unstarted.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
                         }
-//                        .frame(height: showDetails ? nil : 0)
-                        .opacity(backgroundOpacity)
                     }
                 }
-            } else {
-                EventCardViewSimple(eventImageURL)
-                .matchedGeometryEffect(id: "Image", in: namespace)
+                .frame(height: showDetails ? nil : 0)
+                .opacity(showDetails ? 1 : 0)
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: showDetails)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                backgroundOpacity = showDetails ? 1 : 0
-            }
-        }
-        .onChange(of: showDetails, {
-//            withAnimation(.easeInOut(duration: 0.3)) {
-                if showDetails {
-                    backgroundOpacity = 1
-                } else {
-                    backgroundOpacity = 0
-                }
-                //                backgroundOpacity = showDetails ? 1 : 0
-//            }
-        })
-
-    }
-    @ViewBuilder
-    func EventCardViewSimple(_ url: URL) -> some View {
-        WebImage(url: url) { image in
-            image
-                .resizable()
-                .antialiased(true)
-                .scaledToFit()
-                .aspectRatio(3.0, contentMode: .fit)
-                .frame(maxWidth: 420, maxHeight: 140)
-        } placeholder: {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.gray.opacity(0.15))
-                .aspectRatio(3.0, contentMode: .fit)
-                .frame(maxWidth: 420, maxHeight: 140)
-        }
-        .interpolation(.high)
-        .cornerRadius(10)
-//        .matchedGeometryEffect(id: "Image", in: namespace)
+//        .animation(.easeInOut(duration: 0.5))
     }
 }
 
