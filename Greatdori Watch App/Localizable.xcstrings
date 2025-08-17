@@ -641,16 +641,6 @@
         }
       }
     },
-    "卡牌 ID" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Card ID"
-          }
-        }
-      }
-    },
     "卡牌故事" : {
       "localizations" : {
         "en" : {
@@ -720,9 +710,6 @@
           }
         }
       }
-    },
-    "小组件设置 [INTERNAL]" : {
-      "shouldTranslate" : false
     },
     "属性" : {
       "localizations" : {

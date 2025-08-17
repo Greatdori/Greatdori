@@ -18,7 +18,6 @@ import WidgetKit
 @main
 struct GreatdoriWidgetsBundle: WidgetBundle {
     var body: some Widget {
-        CardWidgets()
         CardCollectionWidgets()
     }
 }
