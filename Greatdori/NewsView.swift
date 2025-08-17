@@ -18,6 +18,7 @@ import SDWebImageSwiftUI
 
 //MARK: NewsView
 struct NewsView: View {
+    @Binding var path: NavigationPath
     let filterLocalizedString: [DoriFrontend.News.ListFilter?: LocalizedStringResource] = [nil: "News.filter.selection.all", .bestdori: "News.filter.selection.bestdori", .article: "News.filter.selection.article", .patchNote: "News.filter.selection.patch-note", .update: "News.filter.selection.update", .locale(.jp): "News.filter.selection.jp", .locale(.en): "News.filter.selection.en", .locale(.tw): "News.filter.selection.tw", .locale(.cn): "News.filter.selection.cn", .locale(.kr): "News.filter.selection.kr"]
     let filterOptions: [DoriFrontend.News.ListFilter?] = [nil, .bestdori, .article, .patchNote, .update, .locale(.jp), .locale(.en), .locale(.tw), .locale(.cn), .locale(.kr)]
     @Environment(\.colorScheme) var colorScheme
@@ -26,14 +27,12 @@ struct NewsView: View {
     @State var allEvents: [DoriAPI.Event.PreviewEvent]?
     @State var allGacha: [DoriAPI.Gacha.PreviewGacha]?
     @State var allSongs: [DoriAPI.Song.PreviewSong]?
-    var dateFormatter = DateFormatter()
-    init() {
+    var dateFormatter = {
+        var dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
         return dateFormatter
     }()
-//    init()
-    @Binding var path: NavigationPath
     var body: some View {
         Group {
             if let news {

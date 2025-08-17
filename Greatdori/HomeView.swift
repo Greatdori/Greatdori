@@ -118,11 +118,12 @@ struct HomeNewsView: View {
     @State var allEvents: [DoriAPI.Event.PreviewEvent]?
     @State var allGacha: [DoriAPI.Gacha.PreviewGacha]?
     @State var allSongs: [DoriAPI.Song.PreviewSong]?
-    var dateFormatter = DateFormatter()
-    init() {
+    var dateFormatter = {
+        var dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
-    }
+        return dateFormatter
+    }()
     let totalNewsNumber = 4
     var body: some View {
         Button(action: {
