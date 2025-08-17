@@ -187,23 +187,36 @@ extension EnvironmentValues {
 
 struct CustomGroupBox<Content: View>: View {
     let content: () -> Content
-    init(@ViewBuilder content: @escaping () -> Content) {
+    var showGroupBox: Bool = true
+    let uuid = UUID()
+    @Namespace private var groupBoxNamespace
+    init(showGroupBox: Bool = true, @ViewBuilder content: @escaping () -> Content) {
+        self.showGroupBox = showGroupBox
         self.content = content
     }
     var body: some View {
+        Group {
+            if showGroupBox {
 #if os(iOS)
-        content()
-            .padding()
-            .background {
-                RoundedRectangle(cornerRadius: 15)
-                    .foregroundStyle(Color(.secondarySystemGroupedBackground))
-            }
+                content()
+                    .matchedGeometryEffect(id: uuid, in: groupBoxNamespace)
+                    .padding()
+                    .background {
+                        RoundedRectangle(cornerRadius: 15)
+                            .foregroundStyle(Color(.secondarySystemGroupedBackground))
+                    }
 #elseif os(macOS)
-        GroupBox {
-            content()
-                .padding()
-        }
+                GroupBox {
+                    content()
+                        .matchedGeometryEffect(id: uuid, in: groupBoxNamespace)
+                        .padding()
+                }
 #endif
+            } else {
+                content()
+                    .matchedGeometryEffect(id: uuid, in: groupBoxNamespace)
+            }
+        }
     }
 }
 

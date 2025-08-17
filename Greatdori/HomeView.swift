@@ -438,7 +438,7 @@ struct HomeEventsView: View {
                 ZStack {
                     Group {
                         if let latestEvents {
-                            EventCardView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
+                            EventCardHomeView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
                         }
                     }
                     .opacity(imageOpacity)

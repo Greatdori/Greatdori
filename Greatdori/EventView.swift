@@ -113,12 +113,11 @@ struct EventDetailView: View {
                         })
                         .disabled(eventID <= 1)
                         NavigationLink(destination: {
-                            //FIXME: [NAVI785] eventList
+                            EventSearchView()
                         }, label: {
                             Text("#\(eventID)")
                                 .fontDesign(.monospaced)
                         })
-                        .disabled(eventID == 0)
                         Button(action: {
                             if eventID < latestEventID {
                                 information = nil
@@ -127,8 +126,9 @@ struct EventDetailView: View {
                         }, label: {
                             Label("Event.next", systemImage: "arrow.forward")
                         })
-                        .disabled(latestEventID == 0 || latestEventID <= eventID)
+                        .disabled(latestEventID <= eventID)
                     }
+                    .disabled(latestEventID == 0 || eventID == 0)
                     .onAppear {
                         showSubtitle = false
                     }
@@ -943,6 +943,7 @@ struct EventSearchView: View {
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
     @State var infoIsAvailable = true
     @State var searchedText = ""
+    @State var showDetails = false
     var body: some View {
         NavigationStack {
             if let resultEvents = searchedEvents ?? events {
@@ -953,7 +954,7 @@ struct EventSearchView: View {
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
                                 }, label: {
-                                    EventCardResultView(resultEvents[eventIndex], inLocale: nil)
+                                    EventCardView(resultEvents[eventIndex], inLocale: nil, showDetails: showDetails)
                                 })
                                 .buttonStyle(.plain)
                             }
@@ -963,7 +964,7 @@ struct EventSearchView: View {
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
                                 }, label: {
-                                    EventCardResultView(resultEvents[eventIndex], inLocale: nil)
+                                    EventCardView(resultEvents[eventIndex], inLocale: nil)
                                 })
                                 .buttonStyle(.plain)
                             }
@@ -988,6 +989,13 @@ struct EventSearchView: View {
         .navigationTitle("Event")
         .task {
             await getEvents()
+        }
+        .toolbar {
+            ToolbarItem {
+                Toggle(isOn: $showDetails, label: {
+                    Image(systemName: "info.circle")
+                })
+            }
         }
     }
     
