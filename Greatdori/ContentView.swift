@@ -208,6 +208,30 @@ struct CustomGroupBox<Content: View>: View {
     }
 }
 
+struct CustomGroupBoxOld<Content: View>: View {
+    @Binding var backgroundOpacity: CGFloat
+    let content: () -> Content
+    init(backgroundOpacity: Binding<CGFloat> = .constant(1), @ViewBuilder content: @escaping () -> Content) {
+        self._backgroundOpacity = backgroundOpacity
+        self.content = content
+    }
+    var body: some View {
+#if os(iOS)
+        content()
+            .padding()
+            .background {
+                RoundedRectangle(cornerRadius: 15)
+                    .foregroundStyle(Color(.secondarySystemGroupedBackground))
+            }
+#elseif os(macOS)
+        GroupBox {
+            content()
+                .padding()
+        }
+#endif
+    }
+}
+
 func groupedContentBackgroundColor() -> Color {
 #if os(iOS)
     return Color(.systemGroupedBackground)

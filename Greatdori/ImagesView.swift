@@ -92,8 +92,7 @@ struct EventCardHomeView: View {
 struct EventCardView: View {
     private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
-    private var startAt: DoriAPI.LocalizedData<Date>
-    private var endAt: DoriAPI.LocalizedData<Date>
+    private var eventType: DoriAPI.Event.EventType
     private var locale: DoriAPI.Locale?
     private var showDetails: Bool
     
@@ -101,8 +100,7 @@ struct EventCardView: View {
     init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false) {
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
-        self.startAt = event.startAt
-        self.endAt = event.endAt
+        self.eventType = event.eventType
         self.locale = locale
         self.showDetails = showDetails
     }
@@ -110,8 +108,7 @@ struct EventCardView: View {
     init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false) {
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
-        self.startAt = event.startAt
-        self.endAt = event.endAt
+        self.eventType = event.eventType
         self.locale = locale
         self.showDetails = showDetails
     }
@@ -140,20 +137,7 @@ struct EventCardView: View {
                     Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
                         .bold()
                         .font(.title3)
-                    Group {
-                        if let startDate = locale != nil ? startAt.forLocale(locale!) : startAt.forPreferredLocale(),
-                           let endDate = locale != nil ? endAt.forLocale(locale!) : startAt.forPreferredLocale() {
-                            if startDate > .now {
-                                Text("Events.countdown.start-at.\(Text(startDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
-                            } else if endDate > .now {
-                                Text("Events.countdown.end-at.\(Text(endDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
-                            } else {
-                                Text("Events.countdown.ended.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
-                            }
-                        } else {
-                            Text("Events.countdown.unstarted.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
-                        }
-                    }
+                    Text(eventType.localizedString)
                 }
                 .frame(height: showDetails ? nil : 0)
                 .opacity(showDetails ? 1 : 0)
