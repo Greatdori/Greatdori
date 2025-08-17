@@ -964,16 +964,14 @@ struct EventSearchView: View {
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
                                 }, label: {
-                                    EventCardView(resultEvents[eventIndex], inLocale: nil)
+                                    EventCardView(resultEvents[eventIndex], inLocale: nil, showDetails: showDetails)
                                 })
                                 .buttonStyle(.plain)
                             }
                         }
                     }
-                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
+//                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
                 }
-                .ignoresSafeArea()
-                .padding()
                 .searchable(text: $searchedText, prompt: "Event.search.placeholder")
             } else {
                 if infoIsAvailable {
@@ -998,6 +996,7 @@ struct EventSearchView: View {
                 })
             }
         }
+        
     }
     
     func getEvents() async {

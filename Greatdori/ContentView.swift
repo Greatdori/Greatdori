@@ -186,25 +186,51 @@ extension EnvironmentValues {
 
 
 struct CustomGroupBox<Content: View>: View {
+    @Binding var backgroundOpacity: CGFloat
     let content: () -> Content
-    var showGroupBox: Bool = true
-    init(showGroupBox: Bool = true, @ViewBuilder content: @escaping () -> Content) {
-        self.showGroupBox = showGroupBox
+    init(backgroundOpacity: Binding<CGFloat> = .constant(1), @ViewBuilder content: @escaping () -> Content) {
+        self._backgroundOpacity = backgroundOpacity
         self.content = content
     }
     var body: some View {
         content()
             .padding()
             .background {
-                if showGroupBox {
+                Group {
                     RoundedRectangle(cornerRadius: 15)
-                    #if !os(macOS)
+#if !os(macOS)
                         .foregroundStyle(Color(.secondarySystemGroupedBackground))
-                    #else
+#else
                         .foregroundStyle(Color(NSColor.quaternarySystemFill))
-                    #endif
+#endif
                 }
+                .opacity(backgroundOpacity)
+                .animation(.easeInOut(duration: 0.3), value: backgroundOpacity)
             }
+    }
+}
+
+struct CustomGroupBoxOld<Content: View>: View {
+    @Binding var backgroundOpacity: CGFloat
+    let content: () -> Content
+    init(backgroundOpacity: Binding<CGFloat> = .constant(1), @ViewBuilder content: @escaping () -> Content) {
+        self._backgroundOpacity = backgroundOpacity
+        self.content = content
+    }
+    var body: some View {
+#if os(iOS)
+        content()
+            .padding()
+            .background {
+                RoundedRectangle(cornerRadius: 15)
+                    .foregroundStyle(Color(.secondarySystemGroupedBackground))
+            }
+#elseif os(macOS)
+        GroupBox {
+            content()
+                .padding()
+        }
+#endif
     }
 }
 
