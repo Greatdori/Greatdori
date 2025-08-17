@@ -36,53 +36,87 @@ struct ContentView: View {
     
     var body: some View {
         Group {
-            if platform == .mac || sizeClass == .regular {
-                NavigationSplitView {
-                    List(selection: $selection) {
-                        Label("App.home", systemImage: "house").tag(AppSection.home)
-                        Label("App.community", systemImage: "at").tag(AppSection.community)
-                        Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
-                        Section("App.info", content: {
-                            Label("App.info.characters", systemImage: "person.2").tag(AppSection.info(.characters))
-                            Label("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal").tag(AppSection.info(.events))
-                        })
-                        //                    Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
-                        Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
-                        #if os(iOS)
-                        Label("App.settings", systemImage: "gear").tag(AppSection.settings)
-                        #endif
-                    }
-                    .navigationTitle("Greatdori!")
-                } detail: {
-                    detailView(for: selection)
-                }
-                .navigationSplitViewColumnWidth(min: 180, ideal: 180)
-            } else {
+            if #available(macOS 15.0, iOS 18.0, *) {
                 TabView(selection: $selection) {
-                    detailView(for: .home)
-                        .tabItem { Label("App.home", systemImage: "house") }
-                        .tag(AppSection.home)
                     
-                    detailView(for: .community)
-                        .tabItem { Label("App.community", systemImage: "at") }
-                        .tag(AppSection.community)
-                    
-                    detailView(for: .leaderboard)
-                        .tabItem { Label("App.leaderboard", systemImage: "chart.bar") }
-                        .tag(AppSection.leaderboard)
-                    
-                    detailView(for: .info(.home))
-                        .tabItem { Label("App.info", systemImage: "rectangle.stack") }
-                        .tag(AppSection.info(.home))
-                    
-                    detailView(for: .tools)
-                        .tabItem { Label("App.tools", systemImage: "slider.horizontal.3") }
-                        .tag(AppSection.tools)
+                    Tab("App.home", systemImage: "house", value: .home) {
+                        HomeView()
+                    }
+                    Tab("App.community", systemImage: "at", value: .community) {
+//                        HomeView()
+                        Text(verbatim: "community")
+                    }
+                    Tab("App.leaderboard", systemImage: "chart.bar", value: .leaderboard) {
+//                        HomeView()
+                        Text(verbatim: "leaderboard")
+                    }
+                    TabSection(content: {
+                        Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
+                            Text(verbatim: "char")
+                        }
+                        Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
+                            EventSearchView()
+                        }
+                    }, header: {
+                        Text("App.info")
+                    })
+
+                    #if os(iOS)
+                    if sizeClass == .regular {
+                        Tab("App.settings", systemImage: "gear", value: .settings) {
+                            //                        Text("settings")
+                            SettingsView()
+                        }
+                    }
+                    #endif
+                    //                }
+                    //                Tab($selection, tag: .community) { HomeView() }
+                    //                Tab($selection, tag: .leaderboard) { HomeView() }
+                    //                Tab($selection, tag: .info) { HomeView() }
+                    //                Tab($selection, tag: .tools) { HomeView() }
                 }
-                .wrapIf({ if #available(macOS 15.0, iOS 18.0, *) { true } else { false } }()) { content in
-                    if #available(macOS 15.0, iOS 18.0, *) {
-                        content
-                            .tabViewStyle(.sidebarAdaptable)
+                .tabViewStyle(.sidebarAdaptable)
+            } else {
+                if platform == .mac || sizeClass == .regular {
+                    NavigationSplitView {
+                        List(selection: $selection) {
+                            Label("App.home", systemImage: "house").tag(AppSection.home)
+                            Label("App.community", systemImage: "at").tag(AppSection.community)
+                            Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
+                            Section("App.info", content: {
+                                //                            Label("App.info.characters", systemImage: "person.2").tag(AppSection.info)
+                            })
+                            //                    Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
+                            Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
+#if os(iOS)
+                            Label("App.settings", systemImage: "gear").tag(AppSection.settings)
+#endif
+                        }
+                        .navigationTitle("Greatdori!")
+                    } detail: {
+                        detailView(for: selection)
+                    }
+                } else {
+                    TabView(selection: $selection) {
+                        detailView(for: .home)
+                            .tabItem { Label("App.home", systemImage: "house") }
+                            .tag(AppSection.home)
+                        
+                        detailView(for: .community)
+                            .tabItem { Label("App.community", systemImage: "at") }
+                            .tag(AppSection.community)
+                        
+                        detailView(for: .leaderboard)
+                            .tabItem { Label("App.leaderboard", systemImage: "chart.bar") }
+                            .tag(AppSection.leaderboard)
+                        
+                        detailView(for: .info(.home))
+                            .tabItem { Label("App.info", systemImage: "rectangle.stack") }
+                            .tag(AppSection.info(.home))
+                        
+                        detailView(for: .tools)
+                            .tabItem { Label("App.tools", systemImage: "slider.horizontal.3") }
+                            .tag(AppSection.tools)
                     }
                 }
             }
@@ -116,15 +150,7 @@ struct ContentView: View {
         case .home: HomeView()
         case .community: HomeView()
         case .leaderboard: HomeView()
-        case .info(let tab):
-            switch tab {
-            case .home:
-                HomeView()
-            case .characters:
-                HomeView()
-            case .events:
-                EventSearchView()
-            }
+        case .info: HomeView()
         case .tools: HomeView()
         case .settings: SettingsView()
         case nil: EmptyView()
