@@ -964,7 +964,7 @@ struct EventSearchView: View {
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
                                 }, label: {
-                                    EventCardView(resultEvents[eventIndex], inLocale: nil)
+                                    EventCardView(resultEvents[eventIndex], inLocale: nil, showDetails: showDetails)
                                 })
                                 .buttonStyle(.plain)
                             }
