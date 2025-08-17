@@ -119,6 +119,9 @@ struct HomeView: View {
 
 struct HomeNewsView: View {
     @State var news: [DoriFrontend.News.ListItem]?
+    @State var allEvents: [DoriAPI.Event.PreviewEvent]?
+    @State var allGacha: [DoriAPI.Gacha.PreviewGacha]?
+    @State var allSongs: [DoriAPI.Song.PreviewSong]?
     var dateFormatter = DateFormatter()
     init() {
         dateFormatter.dateStyle = .medium
@@ -151,7 +154,7 @@ struct HomeNewsView: View {
                             .accessibilityHidden(true)
                         if let news {
                             ForEach(0..<news.prefix(totalNewsNumber).count, id: \.self) { newsIndex in
-                                NewsPreview(news: news[newsIndex])
+                                NewsPreview(allEvents: allEvents, allGacha: allGacha, allSongs: allSongs, news: news[newsIndex])
                                 if newsIndex != (totalNewsNumber - 1) {
                                     Rectangle()
                                         .frame(height: 1)
@@ -188,6 +191,26 @@ struct HomeNewsView: View {
                 await DoriFrontend.News.list()
             } .onUpdate {
                 news = $0
+            }
+            await withTaskGroup { group in
+                group.addTask {
+                    let events = await DoriAPI.Event.all()
+                    await MainActor.run {
+                        allEvents = events
+                    }
+                }
+                group.addTask {
+                    let gacha = await DoriAPI.Gacha.all()
+                    await MainActor.run {
+                        allGacha = gacha
+                    }
+                }
+                group.addTask {
+                    let songs = await DoriAPI.Song.all()
+                    await MainActor.run {
+                        allSongs = songs
+                    }
+                }
             }
         }
     }

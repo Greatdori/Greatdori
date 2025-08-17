@@ -23,6 +23,9 @@ struct NewsView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var news: [DoriFrontend.News.ListItem]?
     @State var filter: DoriFrontend.News.ListFilter? = nil
+    @State var allEvents: [DoriAPI.Event.PreviewEvent]?
+    @State var allGacha: [DoriAPI.Gacha.PreviewGacha]?
+    @State var allSongs: [DoriAPI.Song.PreviewSong]?
     var dateFormatter = DateFormatter()
     init() {
         dateFormatter.dateStyle = .medium
@@ -32,14 +35,14 @@ struct NewsView: View {
         Group {
             if let news {
                 List {
-                    ForEach(0..<news.count, id: \.self) { newsIndex in
+                    ForEach(news, id: \.self) { news in
                         NavigationLink(destination: {
-                            switch news[newsIndex].type {
+                            switch news.type {
                             case .article:
                                 //FIXME: [NAVI785]
                                 EmptyView()
                             case .event:
-                                EventDetailView(id: news[newsIndex].relatedID)
+                                EventDetailView(id: news.relatedID)
                             case .gacha:
                                 //FIXME: [NAVI785]
                                 EmptyView()
@@ -53,7 +56,7 @@ struct NewsView: View {
                                 EmptyView()
                             }
                         }, label: {
-                            NewsPreview(news: news[newsIndex], showLocale: {
+                            NewsPreview(allEvents: allEvents, allGacha: allGacha, allSongs: allSongs, news: news, showLocale: {
                                 if case .locale = filter { false } else { true }
                             }(), showDetails: true, showImages: true)
                         })
@@ -112,21 +115,40 @@ struct NewsView: View {
             } .onUpdate {
                 news = $0
             }
-        }
-        .onChange(of: filter, {
-            Task {
-                DoriCache.withCache(id: "News", trait: .realTime) {
-                    await DoriFrontend.News.list(filter: filter)
-                } .onUpdate {
-                    news = $0
+            await withTaskGroup { group in
+                group.addTask {
+                    let events = await DoriAPI.Event.all()
+                    await MainActor.run {
+                        allEvents = events
+                    }
+                }
+                group.addTask {
+                    let gacha = await DoriAPI.Gacha.all()
+                    await MainActor.run {
+                        allGacha = gacha
+                    }
+                }
+                group.addTask {
+                    let songs = await DoriAPI.Song.all()
+                    await MainActor.run {
+                        allSongs = songs
+                    }
                 }
             }
-        })
+        }
+        .onChange(of: filter) {
+            Task {
+                news = await DoriFrontend.News.list(filter: filter)
+            }
+        }
     }
 }
 
 //MARK: NewsPreview
 struct NewsPreview: View {
+    var allEvents: [DoriAPI.Event.PreviewEvent]?
+    var allGacha: [DoriAPI.Gacha.PreviewGacha]?
+    var allSongs: [DoriAPI.Song.PreviewSong]?
     @Environment(\.horizontalSizeClass) var sizeClass
     @State var imageURL: URL? = nil
     var news: DoriFrontend.News.ListItem
@@ -134,13 +156,22 @@ struct NewsPreview: View {
     var showDetails: Bool = false
     var showImages: Bool = false
     var dateFormatter = DateFormatter()
-    init(news: DoriFrontend.News.ListItem, showLocale: Bool = true, showDetails: Bool = false, showImages: Bool = false) {
+    init(
+        allEvents: [DoriAPI.Event.PreviewEvent]?,
+        allGacha: [DoriAPI.Gacha.PreviewGacha]?,
+        allSongs: [DoriAPI.Song.PreviewSong]?,
+        news: DoriFrontend.News.ListItem,
+        showLocale: Bool = true,
+        showDetails: Bool = false,
+        showImages: Bool = false
+    ) {
+        self.allEvents = allEvents
+        self.allGacha = allGacha
+        self.allSongs = allSongs
         self.news = news
         self.showLocale = showLocale
         self.showDetails = showDetails
         self.showImages = showImages
-        //        dateFormatter.dateStyle = .short
-        //        dateFormatter.timeStyle = .short
         dateFormatter.setLocalizedDateFormatFromTemplate(showDetails ? "YMdjm" : "Mdjm")
     }
     var body: some View {
@@ -224,17 +255,44 @@ struct NewsPreview: View {
                     Rectangle()
                         .frame(width: 0, height: 0)
                         .opacity(0)
-                        .task {
-                            switch news.type {
-                            case .event:
-                                imageURL = await DoriFrontend.Event.Event(id: news.relatedID)?.logoImageURL(in: news.locale ?? .jp) ?? nil
-                            case .gacha:
-                                imageURL = await DoriFrontend.Gacha.Gacha(id: news.relatedID)?.logoImageURL(in: news.locale ?? .jp) ?? nil
-                            case .song:
-                                imageURL = await DoriAPI.Song.detail(of: news.relatedID)?.jacketImageURL(in: news.locale ?? .jp) ?? nil
-                            default:
-                                imageURL = nil
-                            }
+                        .wrapIf({ if case .event = news.type { true } else { false } }()) { content in
+                            content
+                                .onAppear {
+                                    if let allEvents {
+                                        imageURL = allEvents.first { $0.id == news.relatedID }?.logoImageURL(in: news.locale ?? .jp) ?? nil
+                                    }
+                                }
+                                .onChange(of: allEvents) {
+                                    if imageURL == nil, let allEvents {
+                                        imageURL = allEvents.first { $0.id == news.relatedID }?.logoImageURL(in: news.locale ?? .jp) ?? nil
+                                    }
+                                }
+                        }
+                        .wrapIf({ if case .gacha = news.type { true } else { false } }()) { content in
+                            content
+                                .onAppear {
+                                    if let allGacha {
+                                        imageURL = allGacha.first { $0.id == news.relatedID }?.logoImageURL(in: news.locale ?? .jp) ?? nil
+                                    }
+                                }
+                                .onChange(of: allEvents) {
+                                    if imageURL == nil, let allGacha {
+                                        imageURL = allGacha.first { $0.id == news.relatedID }?.logoImageURL(in: news.locale ?? .jp) ?? nil
+                                    }
+                                }
+                        }
+                        .wrapIf({ if case .song = news.type { true } else { false } }()) { content in
+                            content
+                                .onAppear {
+                                    if let allSongs {
+                                        imageURL = allSongs.first { $0.id == news.relatedID }?.jacketImageURL(in: news.locale ?? .jp) ?? nil
+                                    }
+                                }
+                                .onChange(of: allEvents) {
+                                    if imageURL == nil, let allSongs {
+                                        imageURL = allSongs.first { $0.id == news.relatedID }?.jacketImageURL(in: news.locale ?? .jp) ?? nil
+                                    }
+                                }
                         }
                 }
             }
@@ -247,18 +305,3 @@ let newsItemTypeIcon: [DoriFrontend.News.ListItem.ItemType: String] = [.article:
 let newsItemTypeColor: [DoriFrontend.News.ListItem.ItemType: Color] = [.article: .gray, .event: .green, .gacha: .blue, .loginCampaign: .red, .song: .purple]
 let newsItemTypeLocalizedString: [DoriFrontend.News.ListItem.ItemType: LocalizedStringResource] = [.article: "News.type.article", .event: "News.type.event", .gacha: "News.type.gacha", .loginCampaign: "News.type.login-campaign", .song: "News.type.song"]
 //let newsTimeMarkTypeLocalizedString: [Dori]
-
-
-extension View {
-      public func inverseMask<Mask: View>(
-        @ViewBuilder _ mask: () -> Mask,
-        alignment: Alignment = .center
-      ) -> some View {
-            self.mask {
-                  Rectangle()
-                    .overlay(alignment: alignment) {
-                          mask().blendMode(.destinationOut)
-                        }
-                }
-          }
-}
