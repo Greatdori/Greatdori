@@ -2817,6 +2817,34 @@
         }
       }
     },
+    "EVENT_%@_IN_%@_WILL_START_TODAY" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ Event “%1$@” is Available Today!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@のイベント「%1$@」は今日に開始！"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@活动“%1$@”将在今天开始！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@活動“%1$@”將在今天開始！"
+          }
+        }
+      }
+    },
     "eventchallenge" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3857,6 +3885,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%2$@轉蛋“%1$@”將在%3$lld天後開始！"
+          }
+        }
+      }
+    },
+    "GACHA_%@_IN_%@_WILL_START_TODAY" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ Gacha “%1$@” is Available Today!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@のガチャ「%1$@」は今日に開始！"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@转蛋“%1$@”将在今天开始！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@轉蛋“%1$@”將在今天開始！"
           }
         }
       }
@@ -5058,6 +5114,34 @@
         }
       }
     },
+    "LOGIN_CAMPAIGN_%@_IN_%@_WILL_START_TODAY" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ Login Campaign “%1$@” is Available Today!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@のログインキャンペーン「%1$@」は今日に開始！"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@登录奖励“%1$@”将在今天开始！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@登入獎勵“%1$@”將在今天開始！"
+          }
+        }
+      }
+    },
     "loginbirthday" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5905,6 +5989,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%2$@歌曲“%1$@”將在%3$lld天後實裝！"
+          }
+        }
+      }
+    },
+    "SONG_%@_IN_%@_WILL_START_TODAY" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ Song “%1$@” is Releasing Today!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@の楽曲「%1$@」は今日に公開！"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@歌曲“%1$@”将在今天发布！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@歌曲“%1$@”將在今天實裝！"
           }
         }
       }

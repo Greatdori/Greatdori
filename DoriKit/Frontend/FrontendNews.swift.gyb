@@ -94,24 +94,45 @@ extension DoriFrontend {
                                 Date(timeIntervalSince1970: Date.now.timeIntervalSince1970 - 86400)
                             }
                             let interval = startDate.interval(to: comparing).day!
-                            unsortedResult.append(.init(
-                                type: .${itemTypesOfSubcategory[subcategory]},
-                                relatedID: item.id,
-                                title: String(
-                                    localized: "${localizationKeyOfSubcategory[subcategory]}_\(item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!)_IN_\(locale.rawValue.uppercased())_WILL_START_AFTER_\(interval)_DAYS",
-                                    bundle: #bundle
-                                ),
-                                author: "Bestdori! Update Bot",
-                                timestamp: comparing.componentsRewritten(
-                                    hour: startDate.components.hour,
-                                    minute: startDate.components.minute,
-                                    second: startDate.components.second
-                                ),
-                                tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"],
-                                subject: item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!,
-                                locale: locale,
-                                timeMark: .willStartAfter(interval)
-                            ))
+                            if interval != 0 {
+                                unsortedResult.append(.init(
+                                    type: .${itemTypesOfSubcategory[subcategory]},
+                                    relatedID: item.id,
+                                    title: String(
+                                        localized: "${localizationKeyOfSubcategory[subcategory]}_\(item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!)_IN_\(locale.rawValue.uppercased())_WILL_START_AFTER_\(interval)_DAYS",
+                                        bundle: #bundle
+                                    ),
+                                    author: "Bestdori! Update Bot",
+                                    timestamp: comparing.componentsRewritten(
+                                        hour: startDate.components.hour,
+                                        minute: startDate.components.minute,
+                                        second: startDate.components.second
+                                    ),
+                                    tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"],
+                                    subject: item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!,
+                                    locale: locale,
+                                    timeMark: .willStartAfter(interval)
+                                ))
+                            } else {
+                                unsortedResult.append(.init(
+                                    type: .${itemTypesOfSubcategory[subcategory]},
+                                    relatedID: item.id,
+                                    title: String(
+                                        localized: "${localizationKeyOfSubcategory[subcategory]}_\(item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!)_IN_\(locale.rawValue.uppercased())_WILL_START_TODAY",
+                                        bundle: #bundle
+                                    ),
+                                    author: "Bestdori! Update Bot",
+                                    timestamp: comparing.componentsRewritten(
+                                        hour: startDate.components.hour,
+                                        minute: startDate.components.minute,
+                                        second: startDate.components.second
+                                    ),
+                                    tags: ["Update", "GBP", locale.rawValue.uppercased(), "${tagsOfSubcategory[subcategory]}"],
+                                    subject: item.${namePropOfSubgategory[subcategory]}.forLocale(locale)!,
+                                    locale: locale,
+                                    timeMark: .willStartToday
+                                ))
+                            }
                         % if subcategory != "songs":
                         %     if subcategory == "events":
                         } else if let endDate = item.endAt.forLocale(locale) {
@@ -257,8 +278,10 @@ extension DoriFrontend.News {
             case gacha
         }
         
+        @frozen
         public enum TimeMark: Sendable, Hashable, DoriCache.Cacheable {
             case willStartAfter(Int)
+            case willStartToday
             case hasEnded
             case willEndAfter(Int)
             case willEndToday
