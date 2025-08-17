@@ -234,13 +234,6 @@ extension DoriFrontend {
             
             return unsortedResult.sorted { $0.timestamp > $1.timestamp }
         }
-        public enum ListFilter: Equatable, Hashable, Sendable {
-            case bestdori
-            case article
-            case patchNote
-            case update
-            case locale(DoriAPI.Locale)
-        }
     }
 }
 
@@ -271,5 +264,13 @@ extension DoriFrontend.News {
             case willEndToday
             case hasPublished
         }
+    }
+    
+    public enum ListFilter: Equatable, Hashable, Sendable {
+        case bestdori
+        case article
+        case patchNote
+        case update
+        case locale(DoriAPI.Locale)
     }
 }
