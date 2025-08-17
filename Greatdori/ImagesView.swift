@@ -158,8 +158,8 @@ struct EventCardView: View {
                 .frame(height: showDetails ? nil : 0)
                 .opacity(showDetails ? 1 : 0)
             }
+            .padding(showDetails ? 0 : -10)
         }
-//        .animation(.easeInOut(duration: 0.5))
     }
 }
 
