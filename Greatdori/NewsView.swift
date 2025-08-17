@@ -30,10 +30,7 @@ struct NewsView: View {
     init() {
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
-        return dateFormatter
-    }()
-//    init()
-    @Binding var path: NavigationPath
+    }
     var body: some View {
         Group {
             if let news {
@@ -83,7 +80,7 @@ struct NewsView: View {
                                 })
                             }
                         }, label: {
-                            if filter != nil {
+                            if let filter {
                                 Image(systemName: "line.3.horizontal.decrease")
                                     .foregroundStyle(colorScheme == .dark ? .white : .black)
                                     .background {
@@ -184,7 +181,7 @@ struct NewsPreview: View {
                     Group {
                         Image(systemName: newsItemTypeIcon[news.type]!)
                         Group {
-                            Text(newsItemTypeLocalizedString[news.type]!) + Text((showLocale && news.locale != nil) ? "Typography.brackets.with-space.\(news.locale!.rawValue.uppercased())" : "")
+                            Text(newsItemTypeLocalizedString[news.type]!) + Text((showLocale && news.locale != nil) ? "(\(news.locale!.rawValue.uppercased()))" : "")
                         }
                         .offset(x: -3)
                     }
@@ -247,7 +244,7 @@ struct NewsPreview: View {
                             WebImage(url: imageURL)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(maxHeight: news.type == .song ? 100 : 75)
+                                .frame(maxHeight: 75)
                                 .cornerRadius(5)
                         } else {
                             Rectangle()

@@ -21,6 +21,11 @@ let loadingAnimationDuration = 0.1
 let localeFromStringDict: [String: DoriAPI.Locale] = ["jp": .jp, "cn": .cn, "tw": .tw, "en": .en, "kr": .kr]
 let localeToStringDict: [DoriAPI.Locale: String] = [.jp: "JP", .en: "EN", .tw: "TW", .cn: "CN", .kr: "KR"]
 
+private let _homeNavigationSubject = PassthroughSubject<NavigationPage?, Never>()
+@_transparent
+private func homeNavigate(to page: NavigationPage?) {
+    _homeNavigationSubject.send(page)
+}
 enum NavigationPage: Hashable {
     case news
     case characterDetail(Int)
@@ -33,29 +38,26 @@ struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var useCompactVariant = true
     @State var showSettingsSheet = false
-//    @State var currentNavigationPage: NavigationPage?
+    @State var currentNavigationPage: NavigationPage?
     @AppStorage("homeEventServer1") var homeEventServer1 = "jp"
     @AppStorage("homeEventServer2") var homeEventServer2 = "cn"
     @AppStorage("homeEventServer3") var homeEventServer3 = "tw"
     @AppStorage("homeEventServer4") var homeEventServer4 = "en"
-//    @StateObject var navigationModel = HomeNavigationModel()
-    @Binding var path: NavigationPath
-    
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack {
             ScrollView {
                 ZStack {
                     HStack {
                         VStack {
-                            HomeNewsView(path: $path)
-                            CustomGroupBox { HomeBirthdayView(path: $path) }
-                            HomeEventsView(path: $path, locale: localeFromStringDict[homeEventServer4] ?? .jp)
+                            HomeNewsView()
+                            CustomGroupBox { HomeBirthdayView() }
+                            HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp)
                             Spacer()
                         }
                         VStack {
-                            HomeEventsView(path: $path, locale: localeFromStringDict[homeEventServer1] ?? .jp)
-                            HomeEventsView(path: $path, locale: localeFromStringDict[homeEventServer2] ?? .jp)
-                            HomeEventsView(path: $path, locale: localeFromStringDict[homeEventServer3] ?? .jp)
+                            HomeEventsView(locale: localeFromStringDict[homeEventServer1] ?? .jp)
+                            HomeEventsView(locale: localeFromStringDict[homeEventServer2] ?? .jp)
+                            HomeEventsView(locale: localeFromStringDict[homeEventServer3] ?? .jp)
                             Spacer()
                         }
                     }
@@ -63,12 +65,12 @@ struct HomeView: View {
                     .opacity(useCompactVariant ? 0 : 1)
                     .frame(width: useCompactVariant ? 0 : nil, height: useCompactVariant ? 0 : nil)
                     VStack {
-                        HomeNewsView(path: $path)
-                        CustomGroupBox { HomeBirthdayView(path: $path) }
-                        HomeEventsView(path: $path, locale: localeFromStringDict[homeEventServer1] ?? .jp)
-                        HomeEventsView(path: $path, locale: localeFromStringDict[homeEventServer2] ?? .jp)
-                        HomeEventsView(path: $path, locale: localeFromStringDict[homeEventServer3] ?? .jp)
-                        HomeEventsView(path: $path, locale: localeFromStringDict[homeEventServer4] ?? .jp)
+                        HomeNewsView()
+                        CustomGroupBox { HomeBirthdayView() }
+                        HomeEventsView(locale: localeFromStringDict[homeEventServer1] ?? .jp)
+                        HomeEventsView(locale: localeFromStringDict[homeEventServer2] ?? .jp)
+                        HomeEventsView(locale: localeFromStringDict[homeEventServer3] ?? .jp)
+                        HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp)
                     }
                     .padding()
                     .opacity(!useCompactVariant ? 0 : 1)
@@ -77,10 +79,10 @@ struct HomeView: View {
             }
             .background(groupedContentBackgroundColor())
             .navigationTitle("App.home")
-            .navigationDestination(for: NavigationPage.self) { page in
+            .navigationDestination(item: $currentNavigationPage) { page in
                 switch page {
                 case .news:
-                    NewsView(path: $path) // FIXME: [NAVI785]
+                    NewsView() // FIXME: [NAVI785]
                 case .characterDetail(let id):
                     EmptyView() // FIXME: [NAVI785]
                 case .eventDetail(let id):
@@ -109,11 +111,13 @@ struct HomeView: View {
                 useCompactVariant = true
             }
         }
+        .onReceive(_homeNavigationSubject) { page in
+            currentNavigationPage = page
+        }
     }
 }
 
 struct HomeNewsView: View {
-    @Binding var path: NavigationPath
     @State var news: [DoriFrontend.News.ListItem]?
     @State var allEvents: [DoriAPI.Event.PreviewEvent]?
     @State var allGacha: [DoriAPI.Gacha.PreviewGacha]?
@@ -126,7 +130,7 @@ struct HomeNewsView: View {
     let totalNewsNumber = 4
     var body: some View {
         Button(action: {
-            path.append(NavigationPage.news)
+            homeNavigate(to: .news)
         }, label: {
             CustomGroupBox {
                 HStack {
@@ -213,7 +217,6 @@ struct HomeNewsView: View {
 }
 
 struct HomeBirthdayView: View {
-    @Binding var path: NavigationPath
     @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false
     @AppStorage("showBirthdayDate") var showBirthdayDate = showBirthdayDateDefaultValue
     @State var birthdays: [DoriFrontend.Character.BirthdayCharacter]?
@@ -222,8 +225,7 @@ struct HomeBirthdayView: View {
     var todaysDateFormatter = DateFormatter()
     var calendar = Calendar(identifier: .gregorian)
     var todaysDateCalendar = Calendar(identifier: .gregorian)
-    init(path: Binding<NavigationPath>) {
-        self._path = path
+    init() {
         calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
         formatter.locale = Locale.current
         formatter.setLocalizedDateFormatFromTemplate("MMMd")
@@ -291,8 +293,7 @@ struct HomeBirthdayView: View {
                                 // (Cond. 3 is because labels should be expanded to show their full name during their birthday.)
                                 Menu(content: {
                                     Button(action: {
-//                                        homeNavigate(to: .characterDetail(birthdays[i].id))
-                                        path.append(NavigationPage.characterDetail(birthdays[i].id))
+                                        homeNavigate(to: .characterDetail(birthdays[i].id))
                                     }, label: {
                                         HStack {
 #if os(iOS)
@@ -305,8 +306,7 @@ struct HomeBirthdayView: View {
                                         }
                                     })
                                     Button(action: {
-//                                        homeNavigate(to: .characterDetail(birthdays[i + 1].id))
-                                        path.append(NavigationPage.characterDetail(birthdays[i + 1].id))
+                                        homeNavigate(to: .characterDetail(birthdays[i + 1].id))
                                     }, label: {
                                         HStack {
 #if os(iOS)
@@ -340,8 +340,7 @@ struct HomeBirthdayView: View {
                                 EmptyView()
                             } else {
                                 Button(action: {
-//                                    homeNavigate(.)
-                                    path.append(NavigationPage.characterDetail(birthdays[i].id))
+                                    homeNavigate(to: .characterDetail(birthdays[i].id))
                                 }, label: {
                                     WebImage(url: birthdays[i].iconImageURL)
                                         .resizable()
@@ -417,14 +416,12 @@ struct HomeBirthdayView: View {
 }
 
 struct HomeEventsView: View {
-    @Binding var path: NavigationPath
     @State var latestEvents: DoriAPI.LocalizedData<DoriFrontend.Event.PreviewEvent>?
     @State var imageOpacity: Double = 0
     @State var placeholderOpacity: Double = 1
     var locale: DoriAPI.Locale = .jp
     var dateFormatter = DateFormatter()
-    init(path: Binding<NavigationPath>, locale: DoriAPI.Locale = .jp) {
-        self._path = path
+    init(locale: DoriAPI.Locale = .jp) {
         self.locale = locale
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
@@ -433,8 +430,7 @@ struct HomeEventsView: View {
     var body: some View {
         Button(action: {
             if let latestEvents {
-//                homeNavigate(to: .eventDetail(latestEvents.forLocale(locale)!.id))
-                path.append(NavigationPage.eventDetail(latestEvents.forLocale(locale)!.id))
+                homeNavigate(to: .eventDetail(latestEvents.forLocale(locale)!.id))
 //                homeNavigate(to: .eventDetail(180))
             }
         }, label: {
@@ -484,6 +480,7 @@ struct HomeEventsView: View {
 }
 
 extension PassthroughSubject: @retroactive @unchecked Sendable where Output: Sendable, Failure: Sendable {}
+
 
 
 

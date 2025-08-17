@@ -33,7 +33,6 @@ struct ContentView: View {
     @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
     @State var showWelcomeScreen = false
     @State var showPreCacheAlert = false
-    @State var homeNavigationPath = NavigationPath()
     
     var body: some View {
         Group {
@@ -41,7 +40,7 @@ struct ContentView: View {
                 TabView(selection: $selection) {
                     
                     Tab("App.home", systemImage: "house", value: .home) {
-                        HomeView(path: $homeNavigationPath)
+                        HomeView()
                     }
                     Tab("App.community", systemImage: "at", value: .community) {
 //                        HomeView()
@@ -148,11 +147,11 @@ struct ContentView: View {
     @ViewBuilder
     func detailView(for section: AppSection?) -> some View {
         switch section {
-        case .home: HomeView(path: $homeNavigationPath)
-        case .community: EmptyView()
-        case .leaderboard: EmptyView()
-        case .info: EmptyView()
-        case .tools: EmptyView()
+        case .home: HomeView()
+        case .community: HomeView()
+        case .leaderboard: HomeView()
+        case .info: HomeView()
+        case .tools: HomeView()
         case .settings: SettingsView()
         case nil: EmptyView()
         }

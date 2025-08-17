@@ -1252,13 +1252,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Is Ending in %lld Day"
+                  "value" : "Will End in %lld Day"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Is Ending in %lld Days"
+                  "value" : "Will End in %lld Days"
                 }
               }
             }
@@ -1277,7 +1277,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Is Ending Today"
+            "value" : "Will End Today"
           }
         },
         "zh-Hans" : {
@@ -1296,13 +1296,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Is Starting in %lld Day"
+                  "value" : "Will Start in %lld Day"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Is Starting in %lld Days"
+                  "value" : "Will Start in %lld Days"
                 }
               }
             }
@@ -1696,22 +1696,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "小组件"
-          }
-        }
-      }
-    },
-    "Typography.brackets.with-space.%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : " (%@)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "(%@)"
           }
         }
       }

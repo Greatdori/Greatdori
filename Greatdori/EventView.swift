@@ -18,7 +18,6 @@ import SDWebImageSwiftUI
 
 //MARK: EventDetailView
 struct EventDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     var id: Int
     @State var eventID: Int = 0
     @State var informationLoadPromise: DoriCache.Promise<DoriFrontend.Event.ExtendedEvent?>?
@@ -101,8 +100,8 @@ struct EventDetailView: View {
         }
         .toolbar {
             ToolbarItemGroup(content: {
-                if sizeClass == .regular {
-                    HStack(spacing: 0) {
+                ViewThatFits(in: .horizontal) {
+                    HStack {
                         Button(action: {
                             if eventID > 1 {
                                 information = nil
@@ -112,13 +111,13 @@ struct EventDetailView: View {
                             Label("Event.previous", systemImage: "arrow.backward")
                         })
                         .disabled(eventID <= 1)
-                        NavigationLink(destination: {
-                            //FIXME: [NAVI785] eventList
-                        }, label: {
+//                        NavigationLink(destination: {
+                            //MARK: [NAVI785] eventList
+//                        }, label: {
                             Text("#\(eventID)")
                                 .fontDesign(.monospaced)
-                        })
-                        .disabled(eventID == 0)
+//                        })
+//                        .padding(-2)
                         Button(action: {
                             if eventID < latestEventID {
                                 information = nil
@@ -132,9 +131,11 @@ struct EventDetailView: View {
                     .onAppear {
                         showSubtitle = false
                     }
-                } else {
+                    HStack {
+                        Spacer()
+                            .frame(width: 0)
                         NavigationLink(destination: {
-                            //FIXME: [NAVI785] eventList
+                            //MARK: [NAVI785] eventList
                         }, label: {
                             Image(systemName: "list.bullet")
                         })
@@ -143,6 +144,7 @@ struct EventDetailView: View {
                         }
 //                        .buttonStyle(.bordered)
 //                        .buttonBorderShape(.circle)
+                    }
 //                    .buttonBorderShape(.circle)
                 }
             })
@@ -947,7 +949,7 @@ struct EventSearchView: View {
             if let resultEvents = searchedEvents ?? events {
                 ScrollView {
                     ViewThatFits {
-                        LazyVGrid(columns: [GridItem(.fixed(420), spacing: 10), GridItem(.fixed(420), spacing: 0)], content: {
+                        LazyVGrid(columns: [GridItem(.fixed(420), spacing: 0), GridItem(.fixed(420), spacing: 0)], content: {
                             ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
