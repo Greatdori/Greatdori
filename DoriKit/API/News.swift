@@ -440,6 +440,12 @@ extension DoriAPI.News {
         }
     }
 }
+extension Array<DoriAPI.News.Item.Content> {
+    @inlinable
+    public var forRichRendering: RichContentGroup {
+        .init(self)
+    }
+}
 
 extension DoriAPI.News.PreviewItem {
     public init(_ full: DoriAPI.News.Item) {

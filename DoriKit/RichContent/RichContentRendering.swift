@@ -48,6 +48,8 @@ extension RichContent {
         return switch self {
         case .br: .text(Text("\n"))
         case .text(let text): .text(Text(text))
+        case .heading(let text): .text(Text(text).font(.headline))
+        case .bullet(let text): .text(Text(try! .init(markdown: "- \(text)")))
         case .image(let urls): .other(AnyView(imagesView(from: urls)))
         case .link(let url): .text(linkText(from: url))
         case .emoji(let emoji): .text(emojiText(from: emoji))

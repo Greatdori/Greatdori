@@ -20,6 +20,8 @@ public typealias RichContentGroup = [RichContent]
 public enum RichContent: Sendable, Equatable, Hashable, DoriCache.Cacheable {
     case br
     case text(String)
+    case heading(String)
+    case bullet(String)
     case image([URL])
     case link(URL)
     case emoji(Emoji)
@@ -54,6 +56,53 @@ extension RichContentGroup {
         for (_, value) in json {
             if let content = RichContent(parsing: value) {
                 self.append(content)
+            }
+        }
+    }
+    @usableFromInline
+    internal init(_ newsContent: [DoriAPI.News.Item.Content]) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        func parseSection(_ section: [DoriAPI.News.Item.Content.ContentDataSection], ul: Bool = false) -> Self {
+            var result = Self()
+            for data in section {
+                switch data {
+                case .localizedText(let text):
+                    if !ul {
+                        result.append(.text(NSLocalizedString(text, bundle: #bundle, comment: "")))
+                    } else {
+                        result.append(.bullet(NSLocalizedString(text, bundle: #bundle, comment: "")))
+                    }
+                case .textLiteral(let text):
+                    if !ul {
+                        result.append(.text(text))
+                    } else {
+                        result.append(.bullet(text))
+                    }
+                case .ul(let sections):
+                    result.append(contentsOf: sections.flatMap { parseSection($0, ul: true) })
+                case .link(_, let data, _):
+                    if let url = URL(string: data) {
+                        result.append(.link(url))
+                    } else {
+                        result.append(.text(data))
+                    }
+                case .br:
+                    result.append(.br)
+                case .date(let date):
+                    result.append(.text(dateFormatter.string(from: date)))
+                }
+            }
+            return result
+        }
+        self = []
+        for content in newsContent {
+            switch content {
+            case .content(let section):
+                self.append(contentsOf: parseSection(section))
+            case .heading(let string):
+                self.append(.heading(string))
             }
         }
     }

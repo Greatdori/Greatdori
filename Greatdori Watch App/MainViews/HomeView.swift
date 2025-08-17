@@ -26,7 +26,7 @@ struct HomeView: View {
             Section {
                 if let news {
                     ForEach(news.prefix(5), id: \.title) { item in
-                        NavigationLink(destination: {  }) {
+                        NavigationLink(destination: { NewsDetailView(item: item) }) {
                             VStack(alignment: .leading) {
                                 Text(item.title)
                                     .font(.system(size: 14, weight: .semibold))
