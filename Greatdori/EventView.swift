@@ -970,6 +970,7 @@ struct EventSearchView: View {
                             }
                         }
                     }
+                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
                 }
                 .ignoresSafeArea()
                 .padding()

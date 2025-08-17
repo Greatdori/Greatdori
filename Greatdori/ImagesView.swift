@@ -136,7 +136,7 @@ struct EventCardView: View {
                 .interpolation(.high)
                 .cornerRadius(10)
                 
-                if showDetails { // Accually Title & Countdown
+                VStack { // Accually Title & Countdown
                     Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
                         .bold()
                         .font(.title3)
@@ -155,6 +155,8 @@ struct EventCardView: View {
                         }
                     }
                 }
+                .frame(height: showDetails ? nil : 0)
+                .opacity(showDetails ? 1 : 0)
             }
         }
 //        .animation(.easeInOut(duration: 0.5))
