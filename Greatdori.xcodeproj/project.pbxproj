@@ -192,6 +192,8 @@
 		8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FC32E2FE2BF00673E15 /* Logger.swift */; };
 		8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FCA2E2FEFCC00673E15 /* Date+.swift */; };
 		8CD13FE72E300D2300673E15 /* FrontendNews.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */; };
+		8CE186AA2E5352D1009C1C87 /* CommandLineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */; };
+		8CE186AD2E535324009C1C87 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 8CE186AC2E535324009C1C87 /* ArgumentParser */; };
 		8CFEF5BF2E4DD5F00017FF66 /* FrontendLoginCampaign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */; };
 		8CFEF5C12E4DE6250017FF66 /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */; };
 		E9140C592E47894200D6589E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9140C582E47893E00D6589E /* CardView.swift */; };
@@ -467,6 +469,15 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8CE1869B2E53529A009C1C87 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -621,6 +632,8 @@
 		8CD13FC32E2FE2BF00673E15 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		8CD13FCA2E2FEFCC00673E15 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		8CD13FE42E300AE700673E15 /* gyb.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = gyb.py; sourceTree = "<group>"; };
+		8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OfflineResBundleGen; sourceTree = BUILT_PRODUCTS_DIR; };
+		8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineEntry.swift; sourceTree = "<group>"; };
 		8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendLoginCampaign.swift; sourceTree = "<group>"; };
 		8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsView.swift; sourceTree = "<group>"; };
 		E9140C582E47893E00D6589E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -721,6 +734,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8CE1869A2E53529A009C1C87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CE186AD2E535324009C1C87 /* ArgumentParser in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -745,6 +766,7 @@
 				8C2CCD432E3E06910014189F /* DoriEmoji */,
 				8CB4D4A02E4461790085D57A /* CardCollectionGen */,
 				8C3FA2592E4B9EC6001526F2 /* GreatLyrics */,
+				8CE186A92E5352D1009C1C87 /* OfflineResBundleGen */,
 				8C0C99A12E296B3E00549B5C /* Frameworks */,
 				8C0C995E2E296A4400549B5C /* Products */,
 			);
@@ -763,6 +785,7 @@
 				8CB4D4932E4461450085D57A /* CardCollectionGen */,
 				8CB4D4BA2E449CC80085D57A /* Greatdori Watch Widgets.appex */,
 				8C3FA2492E4B9EBF001526F2 /* GreatLyrics.app */,
+				8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1116,6 +1139,14 @@
 			path = BuildTool;
 			sourceTree = "<group>";
 		};
+		8CE186A92E5352D1009C1C87 /* OfflineResBundleGen */ = {
+			isa = PBXGroup;
+			children = (
+				8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */,
+			);
+			path = OfflineResBundleGen;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1361,6 +1392,26 @@
 			productReference = 8CB4D4BA2E449CC80085D57A /* Greatdori Watch Widgets.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		8CE1869C2E53529A009C1C87 /* OfflineResBundleGen */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8CE186A12E53529A009C1C87 /* Build configuration list for PBXNativeTarget "OfflineResBundleGen" */;
+			buildPhases = (
+				8CE186992E53529A009C1C87 /* Sources */,
+				8CE1869A2E53529A009C1C87 /* Frameworks */,
+				8CE1869B2E53529A009C1C87 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OfflineResBundleGen;
+			packageProductDependencies = (
+				8CE186AC2E535324009C1C87 /* ArgumentParser */,
+			);
+			productName = OfflineResBundleGen;
+			productReference = 8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1407,6 +1458,9 @@
 						CreatedOnToolsVersion = 26.0;
 						LastSwiftMigration = 2600;
 					};
+					8CE1869C2E53529A009C1C87 = {
+						CreatedOnToolsVersion = 26.0;
+					};
 				};
 			};
 			buildConfigurationList = 8C0C99582E296A4400549B5C /* Build configuration list for PBXProject "Greatdori" */;
@@ -1427,6 +1481,7 @@
 				8C923D7B2E304882003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				8C923D7E2E30488E003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */,
 				8C499F8B2E4FD9CE0073FCB6 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+				8CE186AB2E535324009C1C87 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8C0C995E2E296A4400549B5C /* Products */;
@@ -1444,6 +1499,7 @@
 				8C7855CE2E491E23000EA06E /* Greatdori Installer */,
 				8CB4D4922E4461450085D57A /* CardCollectionGen */,
 				8C3FA2482E4B9EBF001526F2 /* GreatLyrics */,
+				8CE1869C2E53529A009C1C87 /* OfflineResBundleGen */,
 			);
 		};
 /* End PBXProject section */
@@ -1818,6 +1874,14 @@
 				8CB4D4EB2E449DA50085D57A /* OptionsData.swift in Sources */,
 				8CB4D4EC2E449DA90085D57A /* AppIntents.swift in Sources */,
 				8CB4D4ED2E449DAB0085D57A /* CardCollectionManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8CE186992E53529A009C1C87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CE186AA2E5352D1009C1C87 /* CommandLineEntry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3787,6 +3851,66 @@
 			};
 			name = RelWithoutPreCache;
 		};
+		8CE186A22E53529A009C1C87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		8CE186A32E53529A009C1C87 /* DebWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = DebWithoutPreCache;
+		};
+		8CE186A42E53529A009C1C87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		8CE186A52E53529A009C1C87 /* RelWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = RelWithoutPreCache;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3922,6 +4046,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		8CE186A12E53529A009C1C87 /* Build configuration list for PBXNativeTarget "OfflineResBundleGen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8CE186A22E53529A009C1C87 /* Debug */,
+				8CE186A32E53529A009C1C87 /* DebWithoutPreCache */,
+				8CE186A42E53529A009C1C87 /* Release */,
+				8CE186A52E53529A009C1C87 /* RelWithoutPreCache */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -3965,6 +4100,14 @@
 				minimumVersion = 1.8.0;
 			};
 		};
+		8CE186AB2E535324009C1C87 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -4002,6 +4145,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C923D7E2E30488E003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */;
 			productName = SDWebImageSVGCoder;
+		};
+		8CE186AC2E535324009C1C87 /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CE186AB2E535324009C1C87 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
