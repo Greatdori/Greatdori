@@ -60,6 +60,7 @@ extension DoriAPI {
 
 extension DoriAPI.Asset {
     public typealias AssetList = [String: Child]
+    @frozen
     public enum Child: Sendable {
         case files(Int) // Int -> file count
         case list(AssetList)
@@ -81,7 +82,7 @@ extension DoriAPI.Asset {
             if !separatedPath.isEmpty {
                 separatedPath[separatedPath.count - 1] += "_rip"
             }
-            return .init(string: "https://bestdori.com/assets/\(locale.rawValue)\(separatedPath.joined(separator: "/")).json")!
+            return .init(string: "https://bestdori.com/assets/\(locale.rawValue)\(separatedPath.joined(separator: "/"))/\(name)")!
         }
     }
 }

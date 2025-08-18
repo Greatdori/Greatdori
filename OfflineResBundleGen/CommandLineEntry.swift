@@ -17,7 +17,21 @@ import ArgumentParser
 
 @main
 struct CommandLineEntry: AsyncParsableCommand {
+    @Option(name: .shortAndLong, help: "Output path, should be a directory.", transform: URL.init(fileURLWithPath:))
+    var output: URL
+    @Option
+    var maxConnectionCount: Int = 10
     mutating func run() async throws {
+        var isDirectory: ObjCBool = false
+        if !FileManager.default.fileExists(atPath: output.path(percentEncoded: false), isDirectory: &isDirectory) {
+            try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        } else if !isDirectory.boolValue {
+            print("error: output path is not a directory", to: &stderr)
+            Foundation.exit(EXIT_FAILURE)
+        }
         
+        LimitedTaskQueue.shared = .init(limit: maxConnectionCount)
+        
+        try await generate(to: output)
     }
 }
