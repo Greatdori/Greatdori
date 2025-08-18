@@ -867,6 +867,7 @@ struct EventSearchView: View {
                                 .buttonStyle(.plain)
                             }
                         })
+                        .frame(maxWidth: bannerWidth * 2 + bannerSpacing)
                         .border(.red)
                         LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
                             ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
@@ -885,7 +886,7 @@ struct EventSearchView: View {
 //                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
                     .animation(.easeOut(duration: 0.2), value: showDetails)
                 }
-//                .padding(.horizontal)
+                //TODO: ScrollView Horizontally Infinetely Expandable [250818]
                 .searchable(text: $searchedText, prompt: "Event.search.placeholder")
             } else {
                 if infoIsAvailable {
@@ -899,6 +900,7 @@ struct EventSearchView: View {
                 }
             }
         }
+        .background(groupedContentBackgroundColor())
         .navigationTitle("Event")
         .task {
             await getEvents()

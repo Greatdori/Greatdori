@@ -123,7 +123,7 @@ struct EventCardView: View {
                         .resizable()
                         .antialiased(true)
                     //                        .scaledToFit()
-                        .aspectRatio(3.0, contentMode: showDetails ? .fit : .fill)
+                        .aspectRatio(3.0, contentMode: .fit)
                         .frame(maxWidth: 420, maxHeight: 140)
                 } placeholder: {
                     RoundedRectangle(cornerRadius: 10)
