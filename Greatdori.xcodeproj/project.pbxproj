@@ -194,6 +194,9 @@
 		8CD13FE72E300D2300673E15 /* FrontendNews.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */; };
 		8CE186AA2E5352D1009C1C87 /* CommandLineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */; };
 		8CE186AD2E535324009C1C87 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 8CE186AC2E535324009C1C87 /* ArgumentParser */; };
+		8CE186AF2E535DE0009C1C87 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE186AE2E535DDD009C1C87 /* Asset.swift */; };
+		8CE186B02E536138009C1C87 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
+		8CE186B12E536138009C1C87 /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8CFEF5BF2E4DD5F00017FF66 /* FrontendLoginCampaign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */; };
 		8CFEF5C12E4DE6250017FF66 /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */; };
 		E9140C592E47894200D6589E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9140C582E47893E00D6589E /* CardView.swift */; };
@@ -378,6 +381,13 @@
 			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
 			remoteInfo = DoriKit;
 		};
+		8CE186B22E536138009C1C87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
+			remoteInfo = DoriKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -477,6 +487,17 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		8CE186B42E536138009C1C87 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8CE186B12E536138009C1C87 /* DoriKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -634,6 +655,7 @@
 		8CD13FE42E300AE700673E15 /* gyb.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = gyb.py; sourceTree = "<group>"; };
 		8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OfflineResBundleGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineEntry.swift; sourceTree = "<group>"; };
+		8CE186AE2E535DDD009C1C87 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendLoginCampaign.swift; sourceTree = "<group>"; };
 		8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsView.swift; sourceTree = "<group>"; };
 		E9140C582E47893E00D6589E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -739,6 +761,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CE186AD2E535324009C1C87 /* ArgumentParser in Frameworks */,
+				8CE186B02E536138009C1C87 /* DoriKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1068,6 +1091,7 @@
 			children = (
 				8CD13FA62E2FE2BF00673E15 /* DoriAPI.swift */,
 				8C2CCD502E3F0D820014189F /* PagedContent.swift */,
+				8CE186AE2E535DDD009C1C87 /* Asset.swift */,
 				8CD13FA12E2FE2BF00673E15 /* Band.swift */,
 				8CD13FA22E2FE2BF00673E15 /* Card.swift */,
 				8CD13FA32E2FE2BF00673E15 /* Character.swift */,
@@ -1399,10 +1423,12 @@
 				8CE186992E53529A009C1C87 /* Sources */,
 				8CE1869A2E53529A009C1C87 /* Frameworks */,
 				8CE1869B2E53529A009C1C87 /* CopyFiles */,
+				8CE186B42E536138009C1C87 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8CE186B32E536138009C1C87 /* PBXTargetDependency */,
 			);
 			name = OfflineResBundleGen;
 			packageProductDependencies = (
@@ -1764,6 +1790,7 @@
 				8CD13FBD2E2FE2BF00673E15 /* DoriFrontend.swift in Sources */,
 				8C9474412E345BED003A90B4 /* Misc.swift in Sources */,
 				8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */,
+				8CE186AF2E535DE0009C1C87 /* Asset.swift in Sources */,
 				8C923D892E305237003AFC0A /* FrontendEvent.swift in Sources */,
 				8CD13FB02E2FE2BF00673E15 /* Character.swift in Sources */,
 				8CD13FB12E2FE2BF00673E15 /* Costume.swift in Sources */,
@@ -1981,6 +2008,11 @@
 			isa = PBXTargetDependency;
 			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
 			targetProxy = 8CB4D4D52E449CD50085D57A /* PBXContainerItemProxy */;
+		};
+		8CE186B32E536138009C1C87 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
+			targetProxy = 8CE186B22E536138009C1C87 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
