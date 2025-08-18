@@ -35,17 +35,10 @@ struct EventDetailView: View {
                         Spacer()
                         VStack {
                             EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
-//                                .frame(maxWidth: .infinity)
-                            //                            .ignoresSafeArea(nil)
                         }
                         .padding()
                         Spacer()
                     }
-//                    HStack {
-//                        Text("Event.gacha")
-//                            .font(.title3)
-//                    .bold
-//                    }
                 }
             } else {
                 if infoIsAvailable {
@@ -60,16 +53,13 @@ struct EventDetailView: View {
             }
         }
         .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
-            //                                EmptyView()
-            //                NavigationStack {
             Text("\(id)")
         })
         .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Event") : "")"))
-        #if os(iOS)
+#if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, *) {
                 if showSubtitle {
-                    //                if information?.event.eventName.forPreferredLocale() != nil {
                     content
                         .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(eventID)" : "")
                 }
@@ -77,7 +67,7 @@ struct EventDetailView: View {
                 content
             }
         }
-        #endif
+#endif
         .onAppear {
             Task {
                 latestEventID = await DoriFrontend.Event.localizedLatestEvent()?.jp?.id ?? 0
@@ -133,18 +123,14 @@ struct EventDetailView: View {
                         showSubtitle = false
                     }
                 } else {
-                        NavigationLink(destination: {
-                            //FIXME: [NAVI785] eventList
-                        }, label: {
-                            Image(systemName: "list.bullet")
-                        })
-                        .onAppear {
-                            showSubtitle = true
-                        }
-//                        .buttonStyle(.bordered)
-//                        .buttonBorderShape(.circle)
-                
-//                    .buttonBorderShape(.circle)
+                    NavigationLink(destination: {
+                        EventSearchView()
+                    }, label: {
+                        Image(systemName: "list.bullet")
+                    })
+                    .onAppear {
+                        showSubtitle = true
+                    }
                 }
             })
         }
@@ -153,7 +139,7 @@ struct EventDetailView: View {
     func getInformation(id: Int) async {
         infoIsAvailable = true
         informationLoadPromise?.cancel()
-        informationLoadPromise = DoriCache.withCache(id: "EventDetail_\(id)") {
+        informationLoadPromise = DoriCache.withCache(id: "EventDetail_\(id)", trait: .realTime) {
             await DoriFrontend.Event.extendedInformation(of: id)
         } .onUpdate {
             if let information = $0 {
@@ -284,7 +270,7 @@ struct EventDetailOverviewView: View {
                                     .bold()
                                     .fixedSize(horizontal: true, vertical: true)
                             }, element: { value in
-    #if os(macOS)
+#if os(macOS)
                                 if let value = value {
                                     NavigationLink(destination: {
                                         //TODO: [NAVI785]CharD
@@ -299,7 +285,7 @@ struct EventDetailOverviewView: View {
                                         .opacity(0)
                                         .frame(width: 0, height: 0)
                                 }
-    #else
+#else
                                 if let value = value {
                                     Menu(content: {
                                         NavigationLink(destination: {
@@ -329,7 +315,7 @@ struct EventDetailOverviewView: View {
                                         .opacity(0)
                                         .frame(width: 0, height: 0)
                                 }
-    #endif
+#endif
                             }, caption: {
                                 Text("+\(firstKey)%")
                                     .lineLimit(1)
@@ -340,7 +326,7 @@ struct EventDetailOverviewView: View {
                                 Text("Event.character")
                                     .bold()
                                     .fixedSize(horizontal: true, vertical: true)
-//                                Text("*")
+                                //                                Text("*")
                             }, value: {
                                 VStack(alignment: .trailing) {
                                     let keys = eventCharacterPercentageDict.keys.sorted()
@@ -380,7 +366,6 @@ struct EventDetailOverviewView: View {
                                             }
                                             Text("+\(percentage)%")
                                                 .fixedSize(horizontal: true, vertical: true)
-                                            //
                                         }
                                     }
                                 }
@@ -437,34 +422,6 @@ struct EventDetailOverviewView: View {
                                 .lineLimit(1, reservesSpace: true)
                                 .fixedSize(horizontal: true, vertical: true)
                         }, contentArray: cardsArray, columnNumbers: 3, elementWidth: cardThumbnailSideLength)
-                                    /*
-                                    Grid(alignment: .trailing) {
-                                        let separated = if cardsUseCompactLayout {
-                                            cardsArraySeperated
-                                        } else {
-                                            [cardsArraySeperated.flatMap { $0 }.compactMap { $0 }]
-                                        }
-                                        ForEach(separated, id: \.self) { rowContent in
-                                            GridRow {
-                                                ForEach(rowContent, id: \.id) { item in
-                                                    if item != nil {
-                                                        NavigationLink(destination: {
-                                                            //TODO: [NAVI785]CardD
-                                                        }, label: {
-                                                            CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                                        })
-                                                        .buttonStyle(.plain)
-                                                    } else {
-                                                        Rectangle()
-                                                            .opacity(0)
-                                                            .frame(width: 0, height: 0)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    .gridCellAnchor(.trailing)
-                                    */
                         Divider()
                     }
                     
@@ -636,14 +593,8 @@ struct MultilingualText: View {
 struct MultilingualTextForCountdown: View {
     let source: DoriAPI.Event.Event
     @State var isHovering = false
-    //    @State var allLocaleTexts: [String] = []
-    //    @State var primaryDisplayString = ""
     @State var allAvailableLocales: [DoriAPI.Locale] = []
     @State var primaryDisplayLocale: DoriAPI.Locale?
-    
-    //    init(source: DoriAPI.Event.Event/*, isHovering: Bool = false, allLocaleTexts: [String], primaryDisplayString: String = ""*/) {
-    //        self.source = source
-    //    }
     var body: some View {
         Group {
 #if !os(macOS)
@@ -724,7 +675,7 @@ struct MultilingualTextForCountdown: View {
         let locale: DoriAPI.Locale
         var body: some View {
             Group {
-                if let startDate = event.startAt.forLocale(locale),
+                if  let startDate = event.startAt.forLocale(locale),
                    let endDate = event.endAt.forLocale(locale),
                    let aggregateEndDate = event.aggregateEndAt.forLocale(locale),
                    let distributionStartDate = event.distributionStartAt.forLocale(locale) {
@@ -798,18 +749,6 @@ struct ListItemView<Content1: View, Content2: View>: View {
         })
     }
 }
-//struct ThisView<Content2: View>: View {
-//    let element: (T?) -> Content2
-//    init(@ViewBuilder element: () -> Content2) {
-//        self.element = element()
-//    }
-//    var body: some View {
-//        element(someSortOfVariableThatIsGivenFromThisView)
-//    }
-//}
-
-
-
 
 
 //MARK: ListItemWithWrappingView
@@ -823,7 +762,7 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
     @State var contentArrayChunked: [[T?]] = []
     @State var titleWidth: CGFloat = 0 // Fixed
     @State var captionWidth: CGFloat = 0 // Fixed
-//    @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
+    //    @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
     @State var fixedWidth: CGFloat = 0 //Fixed
     @State var useCompactLayout = true
     
@@ -852,49 +791,15 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
                         }
                     }
                 } else {
-                    /*
-                     Grid(alignment: .trailing) {
-                     let separated = if cardsUseCompactLayout {
-                     cardsArraySeperated
-                     } else {
-                     [cardsArraySeperated.flatMap { $0 }.compactMap { $0 }]
-                     }
-                     ForEach(separated, id: \.self) { rowContent in
-                     GridRow {
-                     ForEach(rowContent, id: \.id) { item in
-                     if item != nil {
-                     NavigationLink(destination: {
-                     //TODO: [NAVI785]CardD
-                     Text("\(item)")
-                     }, label: {
-                     CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                     })
-                     .buttonStyle(.plain)
-                     } else {
-                     Rectangle()
-                     .opacity(0)
-                     .frame(width: 0, height: 0)
-                     }
-                     }
-                     }
-                     }
-                     }
-                     .gridCellAnchor(.trailing)
-                     */
                     Grid(alignment: .trailing) {
                         ForEach(0..<contentArrayChunked.count, id: \.self) { rowIndex in
-                            
                             GridRow {
                                 ForEach(0..<contentArrayChunked[rowIndex].count, id: \.self) { columnIndex in
                                     if contentArrayChunked[rowIndex][columnIndex] != nil {
                                         NavigationLink(destination: {
                                             //TODO: [NAVI785]CardD
                                         }, label: {
-                                            //                                            CardIconView(item!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                            //                                            element
-                                            //                                            Text("")
                                             element(contentArrayChunked[rowIndex][columnIndex]!)
-//                                            Text("")
                                         })
                                         .buttonStyle(.plain)
                                     } else {
@@ -938,6 +843,8 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
 
 //MARK: EventSearchView
 struct EventSearchView: View {
+    let bannerWidth: CGFloat = isMACOS ? 370 : 420
+    let bannerSpacing: CGFloat = isMACOS ? 10 : 15
     @State var filter = DoriFrontend.Filter()
     @State var events: [DoriFrontend.Event.PreviewEvent]?
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
@@ -945,35 +852,40 @@ struct EventSearchView: View {
     @State var searchedText = ""
     @State var showDetails = false
     var body: some View {
-        NavigationStack {
+        Group {
             if let resultEvents = searchedEvents ?? events {
                 ScrollView {
                     ViewThatFits {
-                        LazyVGrid(columns: [GridItem(.fixed(420), spacing: 10), GridItem(.fixed(420), spacing: 0)], content: {
+                        LazyVGrid(columns: [GridItem(.fixed(bannerWidth), spacing: showDetails ? nil : bannerSpacing), GridItem(.fixed(bannerWidth))], spacing: showDetails ? nil : bannerSpacing, content: {
                             ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
                                 }, label: {
                                     EventCardView(resultEvents[eventIndex], inLocale: nil, showDetails: showDetails)
                                 })
+//                                .padding(.all, showDetails ? 0 : nil)
                                 .buttonStyle(.plain)
                             }
                         })
-                        LazyVStack {
+                        .border(.red)
+                        LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
                             ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
                                 NavigationLink(destination: {
                                     EventDetailView(id: resultEvents[eventIndex].id)
                                 }, label: {
                                     EventCardView(resultEvents[eventIndex], inLocale: nil, showDetails: showDetails)
+//                                        .padding(.all, showDetails ? 0 : nil)
+                                        .frame(maxWidth: bannerWidth)
                                 })
                                 .buttonStyle(.plain)
                             }
                         }
                     }
-                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
+                    .padding(.horizontal)
+//                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
+                    .animation(.easeOut(duration: 0.2), value: showDetails)
                 }
-//                .ignoresSafeArea()
-                .padding()
+//                .padding(.horizontal)
                 .searchable(text: $searchedText, prompt: "Event.search.placeholder")
             } else {
                 if infoIsAvailable {
@@ -1015,26 +927,26 @@ struct EventSearchView: View {
 }
 
 /*
-    .sheet(isPresented: $isFilterSettingsPresented) {
-        Task {
-            events = nil
-            await getEvents()
-        }
-    } content: {
-        FilterView(filter: $filter, includingKeys: [
-            .attribute,
-            .character,
-            .server,
-            .timelineStatus,
-            .eventType,
-            .sort
-        ]) {
-            if let events {
-                SearchView(items: events, text: $searchInput) { result in
-                    searchedEvents = result
-                }
-            }
-        }
-    }
+ .sheet(isPresented: $isFilterSettingsPresented) {
+ Task {
+ events = nil
+ await getEvents()
+ }
+ } content: {
+ FilterView(filter: $filter, includingKeys: [
+ .attribute,
+ .character,
+ .server,
+ .timelineStatus,
+ .eventType,
+ .sort
+ ]) {
+ if let events {
+ SearchView(items: events, text: $searchInput) { result in
+ searchedEvents = result
+ }
+ }
+ }
+ }
  */
 

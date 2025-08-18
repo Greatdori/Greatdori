@@ -95,6 +95,7 @@ struct EventCardView: View {
     private var eventType: DoriAPI.Event.EventType
     private var locale: DoriAPI.Locale?
     private var showDetails: Bool
+//    @State var imageHeight: CGFloat = 100
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
     init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false) {
@@ -121,8 +122,8 @@ struct EventCardView: View {
                     image
                         .resizable()
                         .antialiased(true)
-                        .scaledToFit()
-                        .aspectRatio(3.0, contentMode: .fit)
+                    //                        .scaledToFit()
+                        .aspectRatio(3.0, contentMode: showDetails ? .fit : .fill)
                         .frame(maxWidth: 420, maxHeight: 140)
                 } placeholder: {
                     RoundedRectangle(cornerRadius: 10)
@@ -133,16 +134,17 @@ struct EventCardView: View {
                 .interpolation(.high)
                 .cornerRadius(10)
                 
-                VStack { // Accually Title & Countdown
-                    Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
-                        .bold()
-                        .font(.title3)
-                    Text(eventType.localizedString)
+                if showDetails {
+                    VStack { // Accually Title & Countdown
+                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                            .bold()
+                            .font(.title3)
+                        Text(eventType.localizedString)
+                    }
+                    .frame(height: showDetails ? nil : 0)
+                    .opacity(showDetails ? 1 : 0)
                 }
-                .frame(height: showDetails ? nil : 0)
-                .opacity(showDetails ? 1 : 0)
             }
-            .padding(showDetails ? 0 : -10)
         }
     }
 }

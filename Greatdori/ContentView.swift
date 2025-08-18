@@ -55,7 +55,9 @@ struct ContentView: View {
                             Text(verbatim: "char")
                         }
                         Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
-                            EventSearchView()
+                            NavigationStack {
+                                EventSearchView()
+                            }
                         }
                     }, header: {
                         Text("App.info")
@@ -194,7 +196,12 @@ struct CustomGroupBox<Content: View>: View {
     }
     var body: some View {
         content()
-            .padding()
+//            .wrapIf(showGroupBox) { content in
+//                content
+//                    .padding()
+//            }
+            .padding(.all, showGroupBox ? nil : 0)
+//            .padding(.all, showGroupBox ? nil : 0)
             .background {
                 if showGroupBox {
                     RoundedRectangle(cornerRadius: 15)
