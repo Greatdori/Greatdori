@@ -20,7 +20,7 @@ struct CommandLineEntry: AsyncParsableCommand {
     @Option(name: .shortAndLong, help: "Output path, should be a directory.", transform: URL.init(fileURLWithPath:))
     var output: URL
     @Option
-    var maxConnectionCount: Int = 10
+    var maxConnectionCount: Int = 20
     mutating func run() async throws {
         var isDirectory: ObjCBool = false
         if !FileManager.default.fileExists(atPath: output.path(percentEncoded: false), isDirectory: &isDirectory) {

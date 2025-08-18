@@ -14,16 +14,7 @@
 
 import Foundation
 
-func printProgressBar(_ value: Int, total: Int) {
-    func terminalWidth() -> Int {
-        var w = winsize()
-        if ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 {
-            return Int(w.ws_col)
-        } else {
-            return 80
-        }
-    }
-    
+func printProgressBar(_ value: Int, total: Int, message: String? = nil) {
     let width = terminalWidth()
     let reservedSpace = 10 + String(value).count + String(total).count
     let barLength = max(10, width - reservedSpace)
@@ -31,6 +22,21 @@ func printProgressBar(_ value: Int, total: Int) {
     let percent = Int(progress * 100)
     let filledLength = Int(progress * Double(barLength))
     let bar = String(repeating: "█", count: filledLength) + String(repeating: "-", count: barLength - filledLength)
+    if message != nil {
+        print("\r\u{1B}[K\u{1B}[1A\u{1B}[K", terminator: "")
+        fflush(stdout)
+    }
     print("\r[\(bar)] \(value)/\(total) \(percent)%", terminator: "")
+    if let message {
+        print("\n\(message)", terminator: "")
+    }
     fflush(stdout)
+}
+func terminalWidth() -> Int {
+    var w = winsize()
+    if ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 {
+        return Int(w.ws_col)
+    } else {
+        return 80
+    }
 }

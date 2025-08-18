@@ -16,22 +16,23 @@ import DoriKit
 import Foundation
 
 func generate(to output: URL) async throws {
+    let startTime = CFAbsoluteTimeGetCurrent()
     for locale in DoriAPI.Locale.allCases {
-        print("Generating for \(locale.rawValue.uppercased())...")
+        print("Generating for \(locale.rawValue.uppercased())...\n")
         
         let localizedOutput = output.appending(path: locale.rawValue)
         if !FileManager.default.fileExists(atPath: localizedOutput.path(percentEncoded: false)) {
             try FileManager.default.createDirectory(at: localizedOutput, withIntermediateDirectories: true)
         }
         
-        try await generateLocale(locale, to: localizedOutput)
+        try await generateLocale(locale, to: localizedOutput, startTime: startTime)
     }
 }
 
-private func generateLocale(_ locale: DoriAPI.Locale, to output: URL) async throws {
+func generateLocale(_ locale: DoriAPI.Locale, to output: URL, startTime: TimeInterval = CFAbsoluteTimeGetCurrent()) async throws {
     let info = await retryUntilNonNil { await DoriAPI.Asset.info(in: locale) }
     var finishedCount = 0
-    try await generateFromInfo(info, in: locale, to: output, finished: &finishedCount, total: fileCount(of: info))
+    try await generateFromInfo(info, in: locale, to: output, finished: &finishedCount, total: fileCount(of: info), startTime: startTime)
     await LimitedTaskQueue.shared.waitUntilAllFinished()
 }
 
@@ -41,6 +42,7 @@ private func generateFromInfo(
     to output: URL,
     finished: inout Int,
     total: Int,
+    startTime: TimeInterval,
     _path: String = "/"
 ) async throws {
     for (name, child) in info {
@@ -48,7 +50,16 @@ private func generateFromInfo(
         case .files:
             let ptrFinished = withUnsafeMutablePointer(to: &finished) { $0 }
             LimitedTaskQueue.shared.addTask {
-                let contents = await retryUntilNonNil { await DoriAPI.Asset._contentsOf(_path + name, in: locale) }
+                var contents: [String]!
+                for i in 0..<5 {
+                    if let result = await DoriAPI.Asset._contentsOf(_path + name, in: locale) {
+                        contents = result
+                        break
+                    } else if i == 4 {
+                        print("\nwarning: Failed to get contents of '\(_path + name)'. Skipping\n")
+                        return
+                    }
+                }
                 let fileContainerURL = output.appending(path: "\(name)_rip")
                 if !FileManager.default.fileExists(atPath: fileContainerURL.path(percentEncoded: false)) {
                     try! FileManager.default.createDirectory(at: fileContainerURL, withIntermediateDirectories: true)
@@ -63,19 +74,19 @@ private func generateFromInfo(
                                     if (try? Data(contentsOf: resourceURL).write(to: fileURL)) != nil {
                                         break
                                     } else if i == 4 {
-                                        print("\nwarning: Failed to download \(resourceURL.absoluteString). Skipping.", to: &stderr)
+                                        print("\nwarning: Failed to download \(resourceURL.absoluteString). Skipping\n", to: &stderr)
                                     }
                                 }
                                 DispatchQueue.main.async {
                                     ptrFinished.pointee += 1
-                                    printProgressBar(ptrFinished.pointee, total: total)
+                                    printProgressBar(ptrFinished.pointee, total: total, message: "Downloading \(clipPathForPrinting("\(_path)\(name)_rip/\(content)", reserve: 15)) \(formatSeconds(Int(CFAbsoluteTimeGetCurrent() - startTime)))")
                                 }
                             }
                         }
                     } else {
                         DispatchQueue.main.async {
                             ptrFinished.pointee += 1
-                            printProgressBar(ptrFinished.pointee, total: total)
+                            printProgressBar(ptrFinished.pointee, total: total, message: "Downloading \(clipPathForPrinting("\(_path)\(name)_rip/\(content)", reserve: 15)) \(formatSeconds(Int(CFAbsoluteTimeGetCurrent() - startTime)))")
                         }
                     }
                 }
@@ -85,7 +96,7 @@ private func generateFromInfo(
             if !FileManager.default.fileExists(atPath: newOutput.path(percentEncoded: false)) {
                 try FileManager.default.createDirectory(at: newOutput, withIntermediateDirectories: true)
             }
-            try await generateFromInfo(c, in: locale, to: newOutput, finished: &finished, total: total, _path: _path + "\(name)/")
+            try await generateFromInfo(c, in: locale, to: newOutput, finished: &finished, total: total, startTime: startTime, _path: _path + "\(name)/")
         }
     }
 }
@@ -101,4 +112,28 @@ private func fileCount(of info: DoriAPI.Asset.AssetList) -> Int {
         }
     }
     return result
+}
+
+private func formatSeconds(_ seconds: Int) -> String {
+    let hours = seconds / 3600
+    let minutes = (seconds % 3600) / 60
+    let secs = seconds % 60
+    if hours > 0 {
+        return String(format: "%d:%02d:%02d", hours, minutes, secs)
+    } else {
+        return String(format: "%d:%02d", minutes, secs)
+    }
+}
+
+private func clipPathForPrinting(_ path: String, reserve: Int = 0) -> String {
+    let width = terminalWidth()
+    if path.count <= width - 10 - reserve {
+        return path
+    } else {
+        var result = path
+        while result.count > width - 13 - reserve {
+            result.removeLast()
+        }
+        return result + "..."
+    }
 }
