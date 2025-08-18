@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import OSLog
 import Foundation
+internal import OSLog
 
 internal let logger = Logger(subsystem: "com.apple.runtime-issues", category: "DoriKit")
 

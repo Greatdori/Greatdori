@@ -12,9 +12,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import os
-import CryptoKit
 import Foundation
+internal import os
+internal import CryptoKit
 
 extension DoriFrontend {
     public struct Filter: Sendable, Hashable, Codable {

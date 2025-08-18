@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import os
 import Foundation
+internal import os
 internal import SwiftyJSON
 
 extension DoriAPI {
