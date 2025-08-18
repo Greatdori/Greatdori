@@ -32,6 +32,7 @@ private func generateLocale(_ locale: DoriAPI.Locale, to output: URL) async thro
     let info = await retryUntilNonNil { await DoriAPI.Asset.info(in: locale) }
     var finishedCount = 0
     try await generateFromInfo(info, in: locale, to: output, finished: &finishedCount, total: fileCount(of: info))
+    await LimitedTaskQueue.shared.waitUntilAllFinished()
 }
 
 private func generateFromInfo(
@@ -45,20 +46,37 @@ private func generateFromInfo(
     for (name, child) in info {
         switch child {
         case .files:
-            let contents = await retryUntilNonNil { await DoriAPI.Asset._contentsOf(_path + name, in: locale) }
-            let fileContainerURL = output.appending(path: "\(name)_rip")
-            if !FileManager.default.fileExists(atPath: fileContainerURL.path(percentEncoded: false)) {
-                try FileManager.default.createDirectory(at: fileContainerURL, withIntermediateDirectories: true)
-            }
-            for content in contents {
-                let resourceURL = URL(string: "https://bestdori.com/assets/\(locale.rawValue)\(_path + "\(name)_rip")/\(content)")!
-                let fileURL = fileContainerURL.appending(path: content)
-                let ptrFinished = withUnsafeMutablePointer(to: &finished) { $0 }
-                LimitedTaskQueue.shared.addTask {
-                    try! Data(contentsOf: resourceURL).write(to: fileURL)
-                    DispatchQueue.main.async {
-                        ptrFinished.pointee += 1
-                        printProgressBar(ptrFinished.pointee, total: total)
+            let ptrFinished = withUnsafeMutablePointer(to: &finished) { $0 }
+            LimitedTaskQueue.shared.addTask {
+                let contents = await retryUntilNonNil { await DoriAPI.Asset._contentsOf(_path + name, in: locale) }
+                let fileContainerURL = output.appending(path: "\(name)_rip")
+                if !FileManager.default.fileExists(atPath: fileContainerURL.path(percentEncoded: false)) {
+                    try! FileManager.default.createDirectory(at: fileContainerURL, withIntermediateDirectories: true)
+                }
+                for content in contents {
+                    let resourceURL = URL(string: "https://bestdori.com/assets/\(locale.rawValue)\(_path + "\(name)_rip")/\(content)")!
+                    let fileURL = fileContainerURL.appending(path: content)
+                    if _fastPath(!FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false))) {
+                        await withTaskGroup { group in
+                            group.addTask {
+                                for i in 0..<5 { // Retry
+                                    if (try? Data(contentsOf: resourceURL).write(to: fileURL)) != nil {
+                                        break
+                                    } else if i == 4 {
+                                        print("\nwarning: Failed to download \(resourceURL.absoluteString). Skipping.", to: &stderr)
+                                    }
+                                }
+                                DispatchQueue.main.async {
+                                    ptrFinished.pointee += 1
+                                    printProgressBar(ptrFinished.pointee, total: total)
+                                }
+                            }
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            ptrFinished.pointee += 1
+                            printProgressBar(ptrFinished.pointee, total: total)
+                        }
                     }
                 }
             }

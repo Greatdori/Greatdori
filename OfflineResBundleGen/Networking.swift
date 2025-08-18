@@ -14,7 +14,7 @@
 
 import Foundation
 
-func retryUntilNonNil<T>(maxRetry: Int = 5, perform: () async -> T?) async -> T {
+func retryUntilNonNil<T>(maxRetry: Int = 10, perform: () async -> T?) async -> T {
     for _ in 0..<maxRetry {
         if let result = await perform() {
             return result
