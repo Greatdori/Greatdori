@@ -1107,7 +1107,20 @@
       }
     },
     "Message.copied" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已复制"
+          }
+        }
+      }
     },
     "News.author.%@" : {
       "extractionState" : "stale",
