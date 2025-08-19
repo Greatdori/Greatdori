@@ -90,6 +90,8 @@ struct EventCardHomeView: View {
 
 // MARK: EventCardView [✓]
 struct EventCardView: View {
+    @Binding var searchedKeyword: String
+    @State var attributedString: AttributedString = AttributedString("")
     private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
     private var eventType: DoriAPI.Event.EventType
@@ -98,20 +100,22 @@ struct EventCardView: View {
 //    @State var imageHeight: CGFloat = 100
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false) {
+    init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
         self.eventType = event.eventType
         self.locale = locale
         self.showDetails = showDetails
+        self._searchedKeyword = searchedKeyword
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false) {
+    init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
         self.eventType = event.eventType
         self.locale = locale
         self.showDetails = showDetails
+        self._searchedKeyword = searchedKeyword
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
     
@@ -136,9 +140,17 @@ struct EventCardView: View {
                 
                 if showDetails {
                     VStack { // Accually Title & Countdown
-                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+//                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                        Text(attributedString)
                             .bold()
                             .font(.title3)
+                            .onAppear {
+                                attributedString = highlightKeyword(in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")), keyword: searchedKeyword)
+                            }
+                            .onChange(of: searchedKeyword, {
+                                print("searchKeywordUpdate")
+                                attributedString = highlightKeyword(in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")), keyword: searchedKeyword)
+                            })
                         Text(eventType.localizedString)
                     }
                     .frame(height: showDetails ? nil : 0)

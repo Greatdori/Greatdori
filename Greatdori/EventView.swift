@@ -855,39 +855,48 @@ struct EventSearchView: View {
         Group {
             if let resultEvents = searchedEvents ?? events {
                 ScrollView {
-                    ViewThatFits {
-                        LazyVGrid(columns: [GridItem(.fixed(bannerWidth), spacing: showDetails ? nil : bannerSpacing), GridItem(.fixed(bannerWidth))], spacing: showDetails ? nil : bannerSpacing, content: {
-                            ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
-                                NavigationLink(destination: {
-                                    EventDetailView(id: resultEvents[eventIndex].id)
-                                }, label: {
-                                    EventCardView(resultEvents[eventIndex], inLocale: nil, showDetails: showDetails)
-                                })
-//                                .padding(.all, showDetails ? 0 : nil)
-                                .buttonStyle(.plain)
-                            }
-                        })
-                        .frame(maxWidth: bannerWidth * 2 + bannerSpacing)
-                        .border(.red)
-                        LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
-                            ForEach(0..<resultEvents.count, id: \.self) { eventIndex in
-                                NavigationLink(destination: {
-                                    EventDetailView(id: resultEvents[eventIndex].id)
-                                }, label: {
-                                    EventCardView(resultEvents[eventIndex], inLocale: nil, showDetails: showDetails)
-//                                        .padding(.all, showDetails ? 0 : nil)
-                                        .frame(maxWidth: bannerWidth)
-                                })
-                                .buttonStyle(.plain)
+                    HStack {
+                        Spacer(minLength: 0)
+                        ViewThatFits {
+                            LazyVGrid(columns: [GridItem(.fixed(bannerWidth), spacing: showDetails ? nil : bannerSpacing), GridItem(.fixed(bannerWidth))], spacing: showDetails ? nil : bannerSpacing, content: {
+                                ForEach(resultEvents, id: \.self) { event in
+                                    NavigationLink(destination: {
+                                        EventDetailView(id: event.id)
+                                    }, label: {
+                                        EventCardView(event, inLocale: nil, showDetails: showDetails)
+                                    })
+                                    //                                .padding(.all, showDetails ? 0 : nil)
+                                    .buttonStyle(.plain)
+                                }
+                            })
+                            .frame(maxWidth: bannerWidth * 2 + bannerSpacing)
+                            //                        .border(.red)
+                            LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+                                ForEach(resultEvents, id: \.self) { event in
+                                    NavigationLink(destination: {
+                                        EventDetailView(id: event.id)
+                                    }, label: {
+                                        EventCardView(event, inLocale: nil, showDetails: showDetails)
+                                        //                                        .padding(.all, showDetails ? 0 : nil)
+                                            .frame(maxWidth: bannerWidth)
+                                    })
+                                    .buttonStyle(.plain)
+                                }
                             }
                         }
+                        .padding(.horizontal)
+                        //                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
+                        .animation(.easeOut(duration: 0.2), value: showDetails)
+                        Spacer(minLength: 0)
                     }
-                    .padding(.horizontal)
-//                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
-                    .animation(.easeOut(duration: 0.2), value: showDetails)
                 }
                 //TODO: ScrollView Horizontally Infinetely Expandable [250818]
                 .searchable(text: $searchedText, prompt: "Event.search.placeholder")
+                .onChange(of: searchedText, {
+                    if events != nil {
+                        searchedEvents = events!.search(for: searchedText)
+                    }
+                })
             } else {
                 if infoIsAvailable {
                     HStack {
@@ -904,6 +913,7 @@ struct EventSearchView: View {
         .navigationTitle("Event")
         .task {
             await getEvents()
+            searchedEvents = events
         }
         .toolbar {
             ToolbarItem {
@@ -926,7 +936,24 @@ struct EventSearchView: View {
             }
         }
     }
+    
 }
+
+func highlightKeyword(in content: String, keyword: String) -> AttributedString {
+    var attributed = AttributedString(content)
+    
+    var searchRange = attributed.startIndex..<attributed.endIndex
+    while let range = attributed.range(of: keyword,
+                                       options: [.caseInsensitive]
+                                       /*range: searchRange*/) {
+        attributed[range].foregroundColor = .blue
+//        attributed[range].font = .headline
+        searchRange = range.upperBound..<attributed.endIndex
+    }
+    
+    return attributed
+}
+
 
 /*
  .sheet(isPresented: $isFilterSettingsPresented) {
