@@ -215,3 +215,18 @@ extension View {
         )
     }
 }
+
+func highlightKeyword(in content: String, keyword: String) -> AttributedString {
+    var attributed = AttributedString(content)
+    
+    var searchRange = attributed.startIndex..<attributed.endIndex
+    while let range = attributed.range(of: keyword,
+                                       options: [.caseInsensitive]
+                                       /*range: searchRange*/) {
+        attributed[range].foregroundColor = .blue
+        //        attributed[range].font = .headline
+        searchRange = range.upperBound..<attributed.endIndex
+    }
+    
+    return attributed
+}

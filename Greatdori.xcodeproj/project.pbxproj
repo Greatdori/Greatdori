@@ -209,6 +209,7 @@
 		E9351AE02E503AA400F0C8C9 /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9351ADF2E503AA000F0C8C9 /* NewsView.swift */; };
 		E9364C912E3761530090E6E3 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9364C902E3761490090E6E3 /* DebugView.swift */; };
 		E93A1FAF2E38E53500F5390A /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93A1FAE2E38E52E00F5390A /* EventView.swift */; };
+		E9681C232E54249C00166125 /* BasicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9681C222E54249500166125 /* BasicView.swift */; };
 		E975A7142E386FB900EFAE34 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975A7132E386FB600EFAE34 /* SettingsView.swift */; };
 		E9E3C0582E35C7740059BCE8 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E3C0572E35C7710059BCE8 /* HomeView.swift */; };
 		E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */; };
@@ -673,6 +674,7 @@
 		E9351ADF2E503AA000F0C8C9 /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
 		E9364C902E3761490090E6E3 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		E93A1FAE2E38E52E00F5390A /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		E9681C222E54249500166125 /* BasicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicView.swift; sourceTree = "<group>"; };
 		E975A7132E386FB600EFAE34 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E9E3C0572E35C7710059BCE8 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -830,6 +832,7 @@
 				8CB4D4F92E4500C70085D57A /* Info.plist */,
 				E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */,
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
+				E9681C222E54249500166125 /* BasicView.swift */,
 				8C0C997F2E296A5500549B5C /* ContentView.swift */,
 				E9E3C0572E35C7710059BCE8 /* HomeView.swift */,
 				E9351ADF2E503AA000F0C8C9 /* NewsView.swift */,
@@ -1739,6 +1742,7 @@
 				E9EE03812E4F5DB30088843B /* FilterView.swift in Sources */,
 				E9E3C0582E35C7740059BCE8 /* HomeView.swift in Sources */,
 				E975A7142E386FB900EFAE34 /* SettingsView.swift in Sources */,
+				E9681C232E54249C00166125 /* BasicView.swift in Sources */,
 				E9351AE02E503AA400F0C8C9 /* NewsView.swift in Sources */,
 				8C0C99832E296A5500549B5C /* ContentView.swift in Sources */,
 				8C6C0EFF2E42462A00D1FB0A /* OptionsData.swift in Sources */,
