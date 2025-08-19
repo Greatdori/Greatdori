@@ -516,17 +516,21 @@ struct EventSearchView: View {
                     HStack {
                         Spacer(minLength: 0)
                         ViewThatFits {
-                            LazyVGrid(columns: [GridItem(.fixed(bannerWidth), spacing: showDetails ? nil : bannerSpacing), GridItem(.fixed(bannerWidth))], spacing: showDetails ? nil : bannerSpacing, content: {
-                                ForEach(resultEvents, id: \.self) { event in
-                                    NavigationLink(destination: {
-                                        EventDetailView(id: event.id)
-                                    }, label: {
-                                        EventCardView(event, inLocale: nil, showDetails: showDetails)
-                                    })
-                                    //                                .padding(.all, showDetails ? 0 : nil)
-                                    .buttonStyle(.plain)
+                            LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+                                let events = resultEvents.chunked(into: 2)
+                                ForEach(events, id: \.self) { eventGroup in
+                                    HStack(spacing: showDetails ? nil : bannerSpacing) {
+                                        ForEach(eventGroup) { event in
+                                            NavigationLink(destination: {
+                                                EventDetailView(id: event.id)
+                                            }, label: {
+                                                EventCardView(event, inLocale: nil, showDetails: showDetails)
+                                            })
+                                            .buttonStyle(.plain)
+                                        }
+                                    }
                                 }
-                            })
+                            }
                             .frame(maxWidth: bannerWidth * 2 + bannerSpacing)
                             //                        .border(.red)
                             LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
