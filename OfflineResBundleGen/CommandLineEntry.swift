@@ -12,11 +12,14 @@
 //
 //===----------------------------------------------------------------------===//
 
+import DoriKit
 import Foundation
 import ArgumentParser
 
 @main
 struct CommandLineEntry: AsyncParsableCommand {
+    @Flag
+    var locale: LocaleFlag = .all
     @Option(name: .shortAndLong, help: "Output path, should be a directory.", transform: URL.init(fileURLWithPath:))
     var output: URL
     @Option
@@ -32,6 +35,34 @@ struct CommandLineEntry: AsyncParsableCommand {
         
         LimitedTaskQueue.shared = .init(limit: maxConnectionCount)
         
-        try await generate(to: output)
+        if locale == .all {
+            try await generate(to: output)
+        } else {
+            print("Generating for \(locale.rawValue.uppercased())...\n")
+            let localizedOutput = output.appending(path: locale.rawValue)
+            if !FileManager.default.fileExists(atPath: localizedOutput.path(percentEncoded: false)) {
+                try FileManager.default.createDirectory(at: localizedOutput, withIntermediateDirectories: true)
+            }
+            try await generateLocale(locale.apiLocale, to: localizedOutput)
+        }
+    }
+    
+    enum LocaleFlag: String, EnumerableFlag {
+        case all
+        case jp
+        case en
+        case tw
+        case cn
+        case kr
+        
+        var apiLocale: DoriAPI.Locale {
+            switch self {
+            case .en: .en
+            case .tw: .tw
+            case .cn: .cn
+            case .kr: .kr
+            default: .jp
+            }
+        }
     }
 }
