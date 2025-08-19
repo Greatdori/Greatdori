@@ -58,11 +58,11 @@ struct EventDetailView: View {
         .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Event") : "")"))
 #if os(iOS)
         .wrapIf(showSubtitle) { content in
-            if #available(iOS 26, *) {
-                if showSubtitle {
+            if #available(iOS 26, macOS 14.0, *) {
+//                if showSubtitle {
                     content
                         .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(eventID)" : "")
-                }
+//                }
             } else {
                 content
             }
@@ -105,7 +105,7 @@ struct EventDetailView: View {
                         NavigationLink(destination: {
                             EventSearchView()
                         }, label: {
-                            Text("#\(eventID)")
+                            Text("#\(String(eventID))")
                                 .fontDesign(.monospaced)
                                 .bold()
                         })
@@ -514,47 +514,60 @@ struct EventSearchView: View {
     var body: some View {
         Group {
             if let resultEvents = searchedEvents ?? events {
-                ScrollView {
-                    HStack {
-                        Spacer(minLength: 0)
-                        ViewThatFits {
-                            LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
-                                let events = resultEvents.chunked(into: 2)
-                                ForEach(events, id: \.self) { eventGroup in
-                                    HStack(spacing: showDetails ? nil : bannerSpacing) {
-                                        ForEach(eventGroup) { event in
+                Group {
+                    if !resultEvents.isEmpty {
+                        ScrollView {
+                            HStack {
+                                Spacer(minLength: 0)
+                                ViewThatFits {
+                                    LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+                                        let events = resultEvents.chunked(into: 2)
+                                        ForEach(events, id: \.self) { eventGroup in
+                                            HStack(spacing: showDetails ? nil : bannerSpacing) {
+                                                ForEach(eventGroup) { event in
+                                                    NavigationLink(destination: {
+                                                        EventDetailView(id: event.id)
+                                                    }, label: {
+                                                        EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                    })
+                                                    .buttonStyle(.plain)
+                                                    if eventGroup.count == 1 && events[0].count != 1 {
+                                                        Rectangle()
+                                                            .frame(maxWidth: 420, maxHeight: 140)
+                                                            .opacity(0)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .frame(width: bannerWidth * 2 + bannerSpacing)
+                                    //                        .border(.red)
+                                    LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+                                        ForEach(resultEvents, id: \.self) { event in
                                             NavigationLink(destination: {
                                                 EventDetailView(id: event.id)
                                             }, label: {
                                                 EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                //                                        .padding(.all, showDetails ? 0 : nil)
+                                                    .frame(maxWidth: bannerWidth)
                                             })
                                             .buttonStyle(.plain)
                                         }
                                     }
+                                    .frame(maxWidth: bannerWidth)
                                 }
+                                .padding(.horizontal)
+                                //                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
+                                .animation(.easeOut(duration: 0.2), value: showDetails)
+                                Spacer(minLength: 0)
                             }
-                            .border(Color.red)
-                            .frame(width: bannerWidth * 2 + bannerSpacing)
-                            //                        .border(.red)
-                            LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
-                                ForEach(resultEvents, id: \.self) { event in
-                                    NavigationLink(destination: {
-                                        EventDetailView(id: event.id)
-                                    }, label: {
-                                        EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
-                                        //                                        .padding(.all, showDetails ? 0 : nil)
-                                            .frame(maxWidth: bannerWidth)
-                                    })
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                            .frame(maxWidth: bannerWidth)
-//                            .border(.yellow)
+                            .padding(.vertical)
                         }
-                        .padding(.horizontal)
-                        //                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
-                        .animation(.easeOut(duration: 0.2), value: showDetails)
-                        Spacer(minLength: 0)
+                        //                .onChange(of: searchedEvents, {
+                        //                    searchedEventsChunked = searchedEvents.chunked(into: 2)
+                        //                })
+                    } else {
+                        ContentUnavailableView("Event.search.no-results", systemImage: "magnifyingglass", description: Text("Event.search.no-results.description"))
                     }
                 }
                 .searchable(text: $searchedText, prompt: "Event.search.placeholder")
@@ -563,9 +576,6 @@ struct EventSearchView: View {
                         searchedEvents = events.search(for: searchedText)
                     }
                 })
-//                .onChange(of: searchedEvents, {
-//                    searchedEventsChunked = searchedEvents.chunked(into: 2)
-//                })
             } else {
                 if infoIsAvailable {
                     HStack {
@@ -578,8 +588,19 @@ struct EventSearchView: View {
                 }
             }
         }
-        .background(groupedContentBackgroundColor())
+        .withSystemBackground()
         .navigationTitle("Event")
+        .wrapIf(searchedEvents != nil, in: { content in
+            if #available(iOS 26.0, *) {
+                content.navigationSubtitle(searchedText.isEmpty ? "Event.count.\(searchedEvents!.count)" :  "Event.result.\(searchedEvents!.count)")
+            } else {
+                content
+            }
+        })
+//    }
+    //        .wrapIf(if @available(iOs), in: { content in
+//            
+//        })
         .task {
             await getEvents()
             searchedEvents = events

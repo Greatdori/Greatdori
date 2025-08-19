@@ -97,14 +97,10 @@ struct NewsView: View {
             }
         }
         .navigationTitle("Home.news")
-        .wrapIf(true, in: { content in
-            if filter != nil {
-                if #available(iOS 26.0, *) {
-                    content
-                        .navigationSubtitle(filterLocalizedString[filter]!)
-                } else {
-                    content
-                }
+        .wrapIf(filter != nil, in: { content in
+            if #available(iOS 26.0, macOS 14.0, *) {
+                content
+                    .navigationSubtitle(filterLocalizedString[filter]!)
             } else {
                 content
             }

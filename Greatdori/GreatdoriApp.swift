@@ -167,6 +167,16 @@ public extension View {
             elseContainer(self)
         }
     }
+    
+    @ViewBuilder
+    func withSystemBackground() -> some View {
+#if os(iOS)
+        self
+            .background(Color(.systemGroupedBackground))
+#else
+        self
+#endif
+    }
 }
 
 extension Int?: @retroactive Identifiable {
@@ -241,7 +251,7 @@ func highlightOccurrences(of keyword: String, in content: String) -> AttributedS
     guard !keyword.isEmpty else { return attributedString }
     guard !content.isEmpty else { return attributedString }
 //    let keywordTrimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard let range = attributedString.range(of: keyword) else { return attributedString }
+    guard let range = attributedString.range(of: keyword, options: .caseInsensitive) else { return attributedString }
     attributedString[range].foregroundColor = .accent
 
     return attributedString
@@ -258,4 +268,14 @@ func highlightOccurrencesOld(of keyword: String, in content: String) -> Attribut
         searchRange = range.upperBound..<attributed.endIndex
     }
     return attributed
+}
+
+func copyStringToClipboard(_ content: String) {
+    #if os(macOS)
+    let pasteboard = NSPasteboard.general
+    pasteboard.clearContents()
+    pasteboard.setString(content, forType: .string)
+    #else
+    UIPasteboard.general.string = content
+    #endif
 }

@@ -102,6 +102,7 @@ struct MultilingualText: View {
     @State var isHovering = false
     @State var allLocaleTexts: [String] = []
     @State var primaryDisplayString = ""
+    @State var showCopyMessage = false
     
     init(source: DoriAPI.LocalizedData<String>, showLocaleKey: Bool = false) {
         self.source = source
@@ -122,13 +123,31 @@ struct MultilingualText: View {
 #if !os(macOS)
             Menu(content: {
                 ForEach(allLocaleTexts, id: \.self) { localeValue in
-                    Button(action: {}, label: {
+                    Button(action: {
+                        copyStringToClipboard(localeValue)
+                        showCopyMessage = true
+                    }, label: {
                         Text(localeValue)
                             .multilineTextAlignment(.trailing)
+                            .textSelection(.enabled)
                     })
                 }
             }, label: {
-                MultilingualTextInternalLabel(source: source, showLocaleKey: showLocaleKey)
+                ZStack(alignment: .trailing, content: {
+                    Label("Message.copied", systemImage: "document.on.document")
+                        .opacity(showCopyMessage ? 1 : 0)
+                    MultilingualTextInternalLabel(source: source, showLocaleKey: showLocaleKey)
+                        .opacity(showCopyMessage ? 0 : 1)
+                })
+                .animation(.easeIn(duration: 0.2), value: showCopyMessage)
+                .onChange(of: showCopyMessage, {
+                    if showCopyMessage {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                            print("1.5 秒后执行操作")
+                            showCopyMessage = false
+                        }
+                    }
+                })
             })
             .menuStyle(.button)
             .buttonStyle(.borderless)
@@ -154,6 +173,7 @@ struct MultilingualText: View {
         let source: DoriAPI.LocalizedData<String>
         //    let locale: Locale
         let showLocaleKey: Bool
+        let allowTextSelection: Bool = true
         @State var primaryDisplayString: String = ""
         var body: some View {
             VStack(alignment: .trailing) {
@@ -182,6 +202,13 @@ struct MultilingualText: View {
                 }
             }
             .multilineTextAlignment(.trailing)
+            .wrapIf(allowTextSelection, in: { content in
+                content
+                    .textSelection(.enabled)
+            }, else: { content in
+                content
+                    .textSelection(.disabled)
+            })
         }
     }
 }
@@ -300,14 +327,16 @@ struct ListItemView<Content1: View, Content2: View>: View {
     let title: Content1
     let value: Content2
     var compactModeOnly: Bool = true
+    var allowTextSelection: Bool = true
     @State private var totalAvailableWidth: CGFloat = 0
     @State private var titleAvailableWidth: CGFloat = 0
     @State private var valueAvailableWidth: CGFloat = 0
     
-    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, compactModeOnly: Bool = true) {
+    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, compactModeOnly: Bool = true, allowTextSelection: Bool = true) {
         self.title = title()
         self.value = value()
         self.compactModeOnly = compactModeOnly
+        self.allowTextSelection = allowTextSelection
     }
     
     var body: some View {
@@ -321,6 +350,11 @@ struct ListItemView<Content1: View, Content2: View>: View {
                         })
                     Spacer()
                     value
+                        .wrapIf(allowTextSelection, in: { content in
+                            content.textSelection(.enabled)
+                        }, else: { content in
+                            content.textSelection(.disabled)
+                        })
                         .onFrameChange(perform: { geometry in
                             valueAvailableWidth = geometry.size.width
                         })
@@ -335,6 +369,11 @@ struct ListItemView<Content1: View, Content2: View>: View {
                     HStack {
                         Spacer()
                         value
+                            .wrapIf(allowTextSelection, in: { content in
+                                content.textSelection(.enabled)
+                            }, else: { content in
+                                content.textSelection(.disabled)
+                            })
                             .onFrameChange(perform: { geometry in
                                 valueAvailableWidth = geometry.size.width
                             })
@@ -439,11 +478,11 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
 }
 
 
-//MARK: groupedContentBackgroundColor
-func groupedContentBackgroundColor() -> Color {
-#if os(iOS)
-    return Color(.systemGroupedBackground)
-#elseif os(macOS)
-    return Color(NSColor.windowBackgroundColor)
-#endif
-}
+////MARK: groupedContentBackgroundColor
+//func groupedContentBackgroundColor() -> Color {
+//#if os(iOS)
+//    return Color(.systemGroupedBackground)
+//#elseif os(macOS)
+//    return Color(NSColor.windowBackgroundColor)
+//#endif
+//}

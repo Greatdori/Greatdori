@@ -77,11 +77,7 @@ struct HomeView: View {
                     .frame(width: !useCompactVariant ? 0 : nil, height: !useCompactVariant ? 0 : nil)
                 }
             }
-            .background(groupedContentBackgroundColor())
-//            .wrapIf(!isMACOS, in: { content in
-//                content
-//                    .background(groupedContentBackgroundColor())
-//            })
+            .withSystemBackground()
             .navigationTitle("App.home")
             .navigationDestination(item: $currentNavigationPage) { page in
                 switch page {

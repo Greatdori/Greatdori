@@ -334,6 +334,34 @@
         }
       }
     },
+    "Event.count.%lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld event"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld events"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld个活动"
+          }
+        }
+      }
+    },
     "Event.countdown" : {
       "localizations" : {
         "en" : {
@@ -575,6 +603,34 @@
         }
       }
     },
+    "Event.result.%lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld result"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld results"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld个结果"
+          }
+        }
+      }
+    },
     "Event.rewards" : {
       "localizations" : {
         "en" : {
@@ -587,6 +643,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "奖励"
+          }
+        }
+      }
+    },
+    "Event.search.no-results" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Results"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无结果"
+          }
+        }
+      }
+    },
+    "Event.search.no-results.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No event matched your search."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有活动匹配你的搜索条件。"
           }
         }
       }
@@ -1017,6 +1105,9 @@
           }
         }
       }
+    },
+    "Message.copied" : {
+
     },
     "News.author.%@" : {
       "extractionState" : "stale",
@@ -1733,6 +1824,7 @@
       }
     },
     "Typography.dot-seperater" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

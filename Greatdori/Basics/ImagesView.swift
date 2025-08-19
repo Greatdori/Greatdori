@@ -100,26 +100,29 @@ struct EventCardView: View {
     private var eventType: DoriAPI.Event.EventType
     private var locale: DoriAPI.Locale?
     private var showDetails: Bool
+    private var showID: Bool
 //    @State var imageHeight: CGFloat = 100
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
         self.eventID = event.id
         self.eventType = event.eventType
         self.locale = locale
         self.showDetails = showDetails
+        self.showID = showID
         self._searchedKeyword = searchedKeyword
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false, showID: Bool = true,  searchedKeyword: Binding<String> = .constant("")) {
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
         self.eventID = event.id
         self.eventType = event.eventType
         self.locale = locale
         self.showDetails = showDetails
+        self.showID = showID
         self._searchedKeyword = searchedKeyword
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
@@ -147,6 +150,7 @@ struct EventCardView: View {
                     VStack { // Accually Title & Countdown
                         //                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
                         Text(attributedTitle)
+                            .multilineTextAlignment(.center)
                             .bold()
                             .font(.title3)
                             .onAppear {
@@ -157,11 +161,17 @@ struct EventCardView: View {
                                 attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
                             })
                         Group {
-                            if !searchedKeyword.isEmpty {
-                                Text("#\(eventID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
-                            } else {
-                                Text(eventType.localizedString)
-                            }
+//                            if !searchedKeyword.isEmpty {
+//                                Text("#\(eventID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
+                                HStack {
+                                    Text(attributedType)
+                                    if showID {
+                                        Text("#\(String(eventID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .secondary)
+                                    }
+                                }
+//                            } else {
+//                                Text(eventType.localizedString)
+//                            }
                         }
                         .onAppear {
                             attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
@@ -774,4 +784,5 @@ struct SongCardView: View {
         }
     }
 }
+
 
