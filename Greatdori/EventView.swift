@@ -534,7 +534,7 @@ struct EventSearchView: View {
                                 }
                             }
                             .border(Color.red)
-                            .frame(maxWidth: bannerWidth * 2 + bannerSpacing)
+                            .frame(width: bannerWidth * 2 + bannerSpacing)
                             //                        .border(.red)
                             LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
                                 ForEach(resultEvents, id: \.self) { event in
