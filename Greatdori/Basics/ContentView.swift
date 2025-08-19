@@ -47,7 +47,14 @@ struct ContentView: View {
                     }
                     TabSection(content: {
                         Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
-                            Text(verbatim: "char")
+//                            Text(verbatim: "char")
+                            ScrollView {
+                                VStack {
+                                    ForEach(0..<100, id: \.self) { value in
+                                        Text("\(value)")
+                                    }
+                                }
+                            }
                         }
                         Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
                             NavigationStack {

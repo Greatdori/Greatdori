@@ -507,6 +507,7 @@ struct EventSearchView: View {
     @State var filter = DoriFrontend.Filter()
     @State var events: [DoriFrontend.Event.PreviewEvent]?
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
+    @State var searchedEventsChunked: [[DoriFrontend.Event.PreviewEvent]]?
     @State var infoIsAvailable = true
     @State var searchedText = ""
     @State var showDetails = false
@@ -532,6 +533,7 @@ struct EventSearchView: View {
                                     }
                                 }
                             }
+                            .border(Color.red)
                             .frame(maxWidth: bannerWidth * 2 + bannerSpacing)
                             //                        .border(.red)
                             LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
@@ -546,6 +548,8 @@ struct EventSearchView: View {
                                     .buttonStyle(.plain)
                                 }
                             }
+                            .frame(maxWidth: bannerWidth)
+//                            .border(.yellow)
                         }
                         .padding(.horizontal)
                         //                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
@@ -553,13 +557,15 @@ struct EventSearchView: View {
                         Spacer(minLength: 0)
                     }
                 }
-                //TODO: ScrollView Horizontally Infinetely Expandable [250818]
                 .searchable(text: $searchedText, prompt: "Event.search.placeholder")
                 .onChange(of: searchedText, {
-                    if events != nil {
-                        searchedEvents = events!.search(for: searchedText)
+                    if let events {
+                        searchedEvents = events.search(for: searchedText)
                     }
                 })
+//                .onChange(of: searchedEvents, {
+//                    searchedEventsChunked = searchedEvents.chunked(into: 2)
+//                })
             } else {
                 if infoIsAvailable {
                     HStack {
@@ -577,6 +583,9 @@ struct EventSearchView: View {
         .task {
             await getEvents()
             searchedEvents = events
+//            if let events {
+                searchedEventsChunked = events?.chunked(into: 2)
+//            }
         }
         .toolbar {
             ToolbarItem {
@@ -585,6 +594,11 @@ struct EventSearchView: View {
                 })
             }
         }
+        .onChange(of: searchedEvents, {
+            if let searchedEvents {
+                searchedEventsChunked = searchedEvents.chunked(into: 2)
+            }
+        })
     }
     
     func getEvents() async {

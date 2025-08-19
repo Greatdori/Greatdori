@@ -158,7 +158,7 @@ struct EventCardView: View {
                             })
                         Group {
                             if !searchedKeyword.isEmpty {
-                                Text("#\(eventID)").foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .primary) + Text("Typography.bold-dot-seperater").bold() + Text(eventType.localizedString)
+                                Text("#\(eventID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
                             } else {
                                 Text(eventType.localizedString)
                             }

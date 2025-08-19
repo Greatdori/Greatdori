@@ -834,6 +834,7 @@
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				E90769D42E546D5B00C9871C /* Basics */,
 				E90769CC2E546D5500C9871C /* Home */,
+				E9BD6C4F2E547A7200D56E55 /* Settings */,
 				E93A1FAE2E38E52E00F5390A /* EventView.swift */,
 				E9140C582E47893E00D6589E /* CardView.swift */,
 				E9EE03802E4F5DB00088843B /* FilterView.swift */,
@@ -1196,13 +1197,20 @@
 		E90769D42E546D5B00C9871C /* Basics */ = {
 			isa = PBXGroup;
 			children = (
-				E90769D02E546D5B00C9871C /* CornerstoneView.swift */,
 				E90769CF2E546D5B00C9871C /* ContentView.swift */,
+				E90769D02E546D5B00C9871C /* CornerstoneView.swift */,
 				E90769D22E546D5B00C9871C /* ImagesView.swift */,
+			);
+			path = Basics;
+			sourceTree = "<group>";
+		};
+		E9BD6C4F2E547A7200D56E55 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
 				E90769D32E546D5B00C9871C /* SettingsView.swift */,
 				E90769D12E546D5B00C9871C /* DebugView.swift */,
 			);
-			path = Basics;
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
