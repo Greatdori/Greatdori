@@ -27,7 +27,6 @@
 
 /* Begin PBXBuildFile section */
 		8C0C996B2E296A4600549B5C /* Greatdori Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8C0C99832E296A5500549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C997F2E296A5500549B5C /* ContentView.swift */; };
 		8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99802E296A5500549B5C /* GreatdoriApp.swift */; };
 		8C0C99892E296A5800549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99862E296A5800549B5C /* ContentView.swift */; };
 		8C0C998A2E296A5800549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99872E296A5800549B5C /* GreatdoriApp.swift */; };
@@ -204,14 +203,15 @@
 		8CE186B12E536138009C1C87 /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8CFEF5BF2E4DD5F00017FF66 /* FrontendLoginCampaign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */; };
 		8CFEF5C12E4DE6250017FF66 /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */; };
+		E90769CD2E546D5500C9871C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769CA2E546D5500C9871C /* HomeView.swift */; };
+		E90769CE2E546D5500C9871C /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769CB2E546D5500C9871C /* NewsView.swift */; };
+		E90769D52E546D5B00C9871C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769CF2E546D5B00C9871C /* ContentView.swift */; };
+		E90769D62E546D5B00C9871C /* CornerstoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769D02E546D5B00C9871C /* CornerstoneView.swift */; };
+		E90769D72E546D5B00C9871C /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769D12E546D5B00C9871C /* DebugView.swift */; };
+		E90769D82E546D5B00C9871C /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769D22E546D5B00C9871C /* ImagesView.swift */; };
+		E90769D92E546D5B00C9871C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769D32E546D5B00C9871C /* SettingsView.swift */; };
 		E9140C592E47894200D6589E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9140C582E47893E00D6589E /* CardView.swift */; };
-		E93265342E37A322003F9AAF /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93265332E37A31F003F9AAF /* ImagesView.swift */; };
-		E9351AE02E503AA400F0C8C9 /* NewsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9351ADF2E503AA000F0C8C9 /* NewsView.swift */; };
-		E9364C912E3761530090E6E3 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9364C902E3761490090E6E3 /* DebugView.swift */; };
 		E93A1FAF2E38E53500F5390A /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93A1FAE2E38E52E00F5390A /* EventView.swift */; };
-		E9681C232E54249C00166125 /* BasicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9681C222E54249500166125 /* BasicView.swift */; };
-		E975A7142E386FB900EFAE34 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975A7132E386FB600EFAE34 /* SettingsView.swift */; };
-		E9E3C0582E35C7740059BCE8 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E3C0572E35C7710059BCE8 /* HomeView.swift */; };
 		E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */; };
 		E9EE03812E4F5DB30088843B /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE03802E4F5DB00088843B /* FilterView.swift */; };
 /* End PBXBuildFile section */
@@ -510,7 +510,6 @@
 /* Begin PBXFileReference section */
 		8C0C995D2E296A4400549B5C /* Greatdori.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Greatdori.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Greatdori Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C0C997F2E296A5500549B5C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8C0C99802E296A5500549B5C /* GreatdoriApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatdoriApp.swift; sourceTree = "<group>"; };
 		8C0C99862E296A5800549B5C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8C0C99872E296A5800549B5C /* GreatdoriApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatdoriApp.swift; sourceTree = "<group>"; };
@@ -669,14 +668,15 @@
 		8CE186AE2E535DDD009C1C87 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendLoginCampaign.swift; sourceTree = "<group>"; };
 		8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsView.swift; sourceTree = "<group>"; };
+		E90769CA2E546D5500C9871C /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		E90769CB2E546D5500C9871C /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
+		E90769CF2E546D5B00C9871C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E90769D02E546D5B00C9871C /* CornerstoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerstoneView.swift; sourceTree = "<group>"; };
+		E90769D12E546D5B00C9871C /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
+		E90769D22E546D5B00C9871C /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
+		E90769D32E546D5B00C9871C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E9140C582E47893E00D6589E /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
-		E93265332E37A31F003F9AAF /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
-		E9351ADF2E503AA000F0C8C9 /* NewsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsView.swift; sourceTree = "<group>"; };
-		E9364C902E3761490090E6E3 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		E93A1FAE2E38E52E00F5390A /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
-		E9681C222E54249500166125 /* BasicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicView.swift; sourceTree = "<group>"; };
-		E975A7132E386FB600EFAE34 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		E9E3C0572E35C7710059BCE8 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		E9EE03802E4F5DB00088843B /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -832,15 +832,10 @@
 				8CB4D4F92E4500C70085D57A /* Info.plist */,
 				E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */,
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
-				E9681C222E54249500166125 /* BasicView.swift */,
-				8C0C997F2E296A5500549B5C /* ContentView.swift */,
-				E9E3C0572E35C7710059BCE8 /* HomeView.swift */,
-				E9351ADF2E503AA000F0C8C9 /* NewsView.swift */,
-				E975A7132E386FB600EFAE34 /* SettingsView.swift */,
+				E90769D42E546D5B00C9871C /* Basics */,
+				E90769CC2E546D5500C9871C /* Home */,
 				E93A1FAE2E38E52E00F5390A /* EventView.swift */,
 				E9140C582E47893E00D6589E /* CardView.swift */,
-				E93265332E37A31F003F9AAF /* ImagesView.swift */,
-				E9364C902E3761490090E6E3 /* DebugView.swift */,
 				E9EE03802E4F5DB00088843B /* FilterView.swift */,
 			);
 			path = Greatdori;
@@ -1187,6 +1182,27 @@
 				8C0D89B72E536B8C004BD1D6 /* Generation.swift */,
 			);
 			path = OfflineResBundleGen;
+			sourceTree = "<group>";
+		};
+		E90769CC2E546D5500C9871C /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				E90769CA2E546D5500C9871C /* HomeView.swift */,
+				E90769CB2E546D5500C9871C /* NewsView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		E90769D42E546D5B00C9871C /* Basics */ = {
+			isa = PBXGroup;
+			children = (
+				E90769D02E546D5B00C9871C /* CornerstoneView.swift */,
+				E90769CF2E546D5B00C9871C /* ContentView.swift */,
+				E90769D22E546D5B00C9871C /* ImagesView.swift */,
+				E90769D32E546D5B00C9871C /* SettingsView.swift */,
+				E90769D12E546D5B00C9871C /* DebugView.swift */,
+			);
+			path = Basics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1735,16 +1751,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9364C912E3761530090E6E3 /* DebugView.swift in Sources */,
 				8CB4D4712E4454890085D57A /* CardCollectionManager.swift in Sources */,
 				E93A1FAF2E38E53500F5390A /* EventView.swift in Sources */,
-				E93265342E37A322003F9AAF /* ImagesView.swift in Sources */,
+				E90769CD2E546D5500C9871C /* HomeView.swift in Sources */,
+				E90769CE2E546D5500C9871C /* NewsView.swift in Sources */,
+				E90769D52E546D5B00C9871C /* ContentView.swift in Sources */,
+				E90769D62E546D5B00C9871C /* CornerstoneView.swift in Sources */,
+				E90769D72E546D5B00C9871C /* DebugView.swift in Sources */,
+				E90769D82E546D5B00C9871C /* ImagesView.swift in Sources */,
+				E90769D92E546D5B00C9871C /* SettingsView.swift in Sources */,
 				E9EE03812E4F5DB30088843B /* FilterView.swift in Sources */,
-				E9E3C0582E35C7740059BCE8 /* HomeView.swift in Sources */,
-				E975A7142E386FB900EFAE34 /* SettingsView.swift in Sources */,
-				E9681C232E54249C00166125 /* BasicView.swift in Sources */,
-				E9351AE02E503AA400F0C8C9 /* NewsView.swift in Sources */,
-				8C0C99832E296A5500549B5C /* ContentView.swift in Sources */,
 				8C6C0EFF2E42462A00D1FB0A /* OptionsData.swift in Sources */,
 				8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */,
 				E9140C592E47894200D6589E /* CardView.swift in Sources */,

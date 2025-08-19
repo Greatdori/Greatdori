@@ -1700,6 +1700,22 @@
         }
       }
     },
+    "Typography.bold-dot-seperater" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " • "
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " • "
+          }
+        }
+      }
+    },
     "Typography.brackets.with-space.%@" : {
       "localizations" : {
         "en" : {

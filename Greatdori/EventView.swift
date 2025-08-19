@@ -107,6 +107,7 @@ struct EventDetailView: View {
                         }, label: {
                             Text("#\(eventID)")
                                 .fontDesign(.monospaced)
+                                .bold()
                         })
                         Button(action: {
                             if eventID < latestEventID {
@@ -524,7 +525,7 @@ struct EventSearchView: View {
                                             NavigationLink(destination: {
                                                 EventDetailView(id: event.id)
                                             }, label: {
-                                                EventCardView(event, inLocale: nil, showDetails: showDetails)
+                                                EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                             })
                                             .buttonStyle(.plain)
                                         }
@@ -538,7 +539,7 @@ struct EventSearchView: View {
                                     NavigationLink(destination: {
                                         EventDetailView(id: event.id)
                                     }, label: {
-                                        EventCardView(event, inLocale: nil, showDetails: showDetails)
+                                        EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                         //                                        .padding(.all, showDetails ? 0 : nil)
                                             .frame(maxWidth: bannerWidth)
                                     })
@@ -593,6 +594,7 @@ struct EventSearchView: View {
         }.onUpdate {
             if let events = $0 {
                 self.events = events
+//                self.events = firstXElements(events, x: 10)
             } else {
                 infoIsAvailable = false
             }

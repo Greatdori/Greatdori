@@ -14,14 +14,15 @@
 
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 1)
 
+
+// This file is essential for almost all image.
+// Files not marked with [✓] is not optimized for multiplatform yet (they're from watchOS).
+
 import SwiftUI
 import DoriKit
 import SDWebImageSwiftUI
 
-
-// **DON'T KNOW, DON'T TOUCH**
-
-// MARK: EventCardHomeView [✓]
+//MARK: EventCardHomeView [✓]
 struct EventCardHomeView: View {
     private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
@@ -88,7 +89,7 @@ struct EventCardHomeView: View {
     }
 }
 
-// MARK: EventCardView [✓]
+//MARK: EventCardView [✓]
 struct EventCardView: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")

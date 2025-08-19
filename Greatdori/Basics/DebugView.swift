@@ -12,6 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
+// Greatdori! Users will not expect to see any of these.
+// For anyone curious: these are just some data algorithm tests (and some basic toggles in SettingsView.swift).
+// It's not that fun.
+
 import SwiftUI
 import DoriKit
 import SDWebImageSwiftUI

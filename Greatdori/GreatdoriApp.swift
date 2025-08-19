@@ -230,3 +230,32 @@ func highlightKeyword(in content: String, keyword: String) -> AttributedString {
     
     return attributed
 }
+
+/// Highlights all occurrences of a keyword within a string in blue.
+/// - Parameters:
+///   - keyword: The substring to highlight within `content`. If empty or only whitespace, no highlighting occurs.
+///   - content: The string to search in.
+/// - Returns: An AttributedString (from `content`) with all `keyword` occurrences colored blue.
+func highlightOccurrences(of keyword: String, in content: String) -> AttributedString {
+    var attributedString = AttributedString(content)
+    guard !keyword.isEmpty else { return attributedString }
+    guard !content.isEmpty else { return attributedString }
+//    let keywordTrimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard let range = attributedString.range(of: keyword) else { return attributedString }
+    attributedString[range].foregroundColor = .accent
+
+    return attributedString
+}
+
+func highlightOccurrencesOld(of keyword: String, in content: String) -> AttributedString {
+    var attributed = AttributedString(content)
+    let keywordTrimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !keywordTrimmed.isEmpty else { return attributed }
+    
+    var searchRange = attributed.startIndex..<attributed.endIndex
+    while let range = attributed.range(of: keywordTrimmed, options: [.caseInsensitive]/*, range: searchRange*/) {
+        attributed[range].foregroundColor = .blue
+        searchRange = range.upperBound..<attributed.endIndex
+    }
+    return attributed
+}

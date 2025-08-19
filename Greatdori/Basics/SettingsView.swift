@@ -12,6 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+// Settings, literally.
+
 import SwiftUI
 import DoriKit
 import WidgetKit

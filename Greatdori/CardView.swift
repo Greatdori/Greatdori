@@ -12,3 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
+// Not to be confused with "cards" in ImageView.swift.
+// These cards are the ones that you would taken to Live and earn better scores.
+// They're able to train & upgrade, and usually go with 2 stories.
