@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-// Settings, literally.
+// Settings.
 
 import SwiftUI
 import DoriKit
@@ -30,7 +30,7 @@ struct SettingsView: View {
                 }, header: {
                     Text("Settings.locale")
                 }, footer: {
-                    Text("Settings.birthday-time-zone.footer")
+                    Text("Settings.birthday-time-zone.footer.\(String(localized: birthdayTimeZoneNameDict[birthdayTimeZone]!))")
                 })
                 
                 Section(content: {
@@ -321,3 +321,4 @@ func getBirthdayTimeZone() -> TimeZone {
     }
 }
 
+let birthdayTimeZoneNameDict: [BirthdayTimeZone: LocalizedStringResource] = [.adaptive: "Settings.birthday-time-zone.name.adaptive", .JST: "Settings.birthday-time-zone.name.JST", .UTC: "Settings.birthday-time-zone.name.UTC", .CST: "Settings.birthday-time-zone.name.CST", .PT: "Settings.birthday-time-zone.name.PT"]
