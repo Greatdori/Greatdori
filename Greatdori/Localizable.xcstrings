@@ -1537,13 +1537,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Birthday Time Zone will only affect birthdays’ algorithm. All other data will be displayed in system time."
+            "value" : "The character’s birthday will be based on Japan Standard Time."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“生日时区”只影响对角色生日的判断。其他所有信息均以系统时间呈现。"
+            "value" : "角色的生日将按照日本标准时间计算。"
           }
         }
       }
@@ -1681,13 +1681,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Home Arrangement"
+            "value" : "Home"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "首页排布"
+            "value" : "首页"
           }
         }
       }
