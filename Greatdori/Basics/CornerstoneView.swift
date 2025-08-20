@@ -220,19 +220,38 @@ struct MultilingualTextForCountdown: View {
     @State var isHovering = false
     @State var allAvailableLocales: [DoriAPI.Locale] = []
     @State var primaryDisplayLocale: DoriAPI.Locale?
+    @State var showCopyMessage = false
     var body: some View {
         Group {
 #if !os(macOS)
             Menu(content: {
                 VStack(alignment: .trailing) {
                     ForEach(allAvailableLocales, id: \.self) { localeValue in
-                        Button(action: {}, label: {
+                        Button(action: {
+                            //FIXME: clipboard LocalizedStringResource to String [250820]
+//                            copyStringToClipboard(getCountdownLocalizedString(source, forLocale: localeValue) ?? LocalizedStringResource(""))
+                            showCopyMessage = true
+                        }, label: {
                             MultilingualTextForCountdownInternalNumbersView(event: source, locale: localeValue)
                         })
                     }
                 }
             }, label: {
-                MultilingualTextForCountdownInternalLabel(source: source, allAvailableLocales: allAvailableLocales)
+                ZStack(alignment: .trailing, content: {
+                    Label("Message.copied", systemImage: "document.on.document")
+                        .opacity(showCopyMessage ? 1 : 0)
+                    MultilingualTextForCountdownInternalLabel(source: source, allAvailableLocales: allAvailableLocales)
+                        .opacity(showCopyMessage ? 0 : 1)
+                })
+                .animation(.easeIn(duration: 0.2), value: showCopyMessage)
+                .onChange(of: showCopyMessage, {
+                    if showCopyMessage {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                            print("1.5 秒后执行操作")
+                            showCopyMessage = false
+                        }
+                    }
+                })
             })
             .menuStyle(.button)
             .buttonStyle(.borderless)
@@ -265,6 +284,7 @@ struct MultilingualTextForCountdown: View {
     struct MultilingualTextForCountdownInternalLabel: View {
         let source: DoriAPI.Event.Event
         let allAvailableLocales: [DoriAPI.Locale]
+        let allowTextSelection: Bool = true
         @State var primaryDisplayingLocale: DoriAPI.Locale? = nil
         var body: some View {
             VStack(alignment: .trailing) {
@@ -293,29 +313,21 @@ struct MultilingualTextForCountdown: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .wrapIf(allowTextSelection, in: { content in
+                content
+                    .textSelection(.enabled)
+            }, else: { content in
+                content
+                    .textSelection(.disabled)
+            })
         }
     }
     struct MultilingualTextForCountdownInternalNumbersView: View {
         let event: DoriFrontend.Event.Event
         let locale: DoriAPI.Locale
         var body: some View {
-            Group {
-                if  let startDate = event.startAt.forLocale(locale),
-                    let endDate = event.endAt.forLocale(locale),
-                    let aggregateEndDate = event.aggregateEndAt.forLocale(locale),
-                    let distributionStartDate = event.distributionStartAt.forLocale(locale) {
-                    if startDate > .now {
-                        Text("Event.countdown.start-at.\(Text(startDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
-                    } else if endDate > .now {
-                        Text("Event.countdown.end-at.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
-                    } else if aggregateEndDate > .now {
-                        Text("Event.countdown.results-in.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
-                    } else if distributionStartDate > .now {
-                        Text("Event.countdown.rewards-in.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
-                    } else {
-                        Text("Event.countdown.completed.\(localeToStringDict[locale] ?? "??")")
-                    }
-                }
+            if let localizedString = getCountdownLocalizedString(event, forLocale: locale) {
+                Text(localizedString)
             }
         }
     }

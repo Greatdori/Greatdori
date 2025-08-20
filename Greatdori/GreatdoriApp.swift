@@ -279,3 +279,24 @@ func copyStringToClipboard(_ content: String) {
     UIPasteboard.general.string = content
     #endif
 }
+
+func getCountdownLocalizedString(_ event: DoriFrontend.Event.Event, forLocale locale: DoriAPI.Locale) -> LocalizedStringResource? {
+    //FIXME: Text doesn't render normally [250220]
+    if let startDate = event.startAt.forLocale(locale),
+       let endDate = event.endAt.forLocale(locale),
+       let aggregateEndDate = event.aggregateEndAt.forLocale(locale),
+       let distributionStartDate = event.distributionStartAt.forLocale(locale) {
+        if startDate > .now {
+            return LocalizedStringResource("Event.countdown.start-at.\(Text(startDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+        } else if endDate > .now {
+            return LocalizedStringResource("Event.countdown.end-at.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+        } else if aggregateEndDate > .now {
+            return LocalizedStringResource("Event.countdown.results-in.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+        } else if distributionStartDate > .now {
+            return LocalizedStringResource("Event.countdown.rewards-in.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+        } else {
+            return LocalizedStringResource("Event.countdown.completed.\(localeToStringDict[locale] ?? "??")")
+        }
+    }
+    return nil
+}

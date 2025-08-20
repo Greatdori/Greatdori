@@ -48,7 +48,22 @@ struct EventDetailView: View {
                         Spacer()
                     }
                 } else {
-                    ContentUnavailableView("Event.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Event.unavailable.description"))
+                    Button(action: {
+                        Task {
+                            await getInformation(id: eventID)
+                        }
+                    }, label: {
+                        VStack {
+                            Spacer()
+                            HStack {
+                                Spacer()
+                                ContentUnavailableView("Event.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Event.unavailable.description"))
+                                Spacer()
+                            }
+                            Spacer()
+                        }
+                    })
+                   
                 }
             }
         }
@@ -81,13 +96,6 @@ struct EventDetailView: View {
         .task {
             eventID = id
             await getInformation(id: eventID)
-        }
-        .onTapGesture {
-            if !infoIsAvailable {
-                Task {
-                    await getInformation(id: eventID)
-                }
-            }
         }
         .toolbar {
             ToolbarItemGroup(content: {
