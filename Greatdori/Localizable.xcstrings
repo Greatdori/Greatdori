@@ -951,13 +951,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Automatically"
+            "value" : "When Differences Occur Between Time Zones"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "自动"
+            "value" : "系统和生日时区内容发生差异时"
           }
         }
       }
@@ -973,7 +973,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当有人过生日时"
+            "value" : "有人过生日时"
           }
         }
       }
@@ -1106,7 +1106,7 @@
         }
       }
     },
-    "Message.copied" : {
+    "Message.copy.success" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1122,19 +1122,51 @@
         }
       }
     },
-    "News.author.%@" : {
-      "extractionState" : "stale",
+    "Message.copy.success.locale.%@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Send by %@"
+            "value" : "Copied (%@)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "发自%@"
+            "value" : "已复制(%@)"
+          }
+        }
+      }
+    },
+    "Message.copy.unavailable" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Unavailable"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制不可用"
+          }
+        }
+      }
+    },
+    "Message.copy.unavailable.for.countdown" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Unavailable for Countdown"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "倒计时不支持复制"
           }
         }
       }
@@ -1532,18 +1564,98 @@
         }
       }
     },
-    "Settings.birthday-time-zone.footer" : {
+    "Settings.birthday-time-zone.footer.%@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The character’s birthday will be based on Japan Standard Time."
+            "value" : "Characters’ birthday will be based on %@."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "角色的生日将按照日本标准时间计算。"
+            "value" : "角色的生日将按照%@计算。"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.name.adaptive" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Time"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统时间"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.name.CST" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "China Standard Time"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中国标准时间"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.name.JST" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Japan Standard Time"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日本标准时间"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.name.PT" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pacific Time"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "太平洋时间"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.name.UTC" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coordinated Universal Time"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "协调世界时"
           }
         }
       }
@@ -1837,7 +1949,7 @@
       }
     },
     "Typography.dot-seperater" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {

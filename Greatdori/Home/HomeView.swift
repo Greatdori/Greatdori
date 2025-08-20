@@ -220,6 +220,7 @@ struct HomeBirthdayView: View {
     @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false
     @AppStorage("showBirthdayDate") var showBirthdayDate = showBirthdayDateDefaultValue
     @State var birthdays: [DoriFrontend.Character.BirthdayCharacter]?
+    @State var systemBirthdays: [DoriFrontend.Character.BirthdayCharacter]?
     @State var debugDate: Date = Date.now
     var formatter = DateFormatter()
     var todaysDateFormatter = DateFormatter()
@@ -259,11 +260,12 @@ struct HomeBirthdayView: View {
                         if showBirthdayDate == 3 {
                             Text(todaysDateFormatter.string(from: debugDate))
                         } else if showBirthdayDate == 2 {
+                            // If today's someone's birthday
                             if (birthdays != nil && todaysHerBirthday(birthdays!.first!.birthday, debugDate)) {
                                 Text(todaysDateFormatter.string(from: debugDate))
                             }
                         } else if showBirthdayDate == 1 {
-                            if (birthdays != nil && todaysHerBirthday(birthdays!.first!.birthday, debugDate) && !birthdayTimeIsInSameDayWithSystemTime()) {
+                            if systemBirthdays != nil && birthdays != nil && (systemBirthdays != birthdays) {
                                 Text(todaysDateFormatter.string(from: debugDate))
                             }
                         }
@@ -277,7 +279,10 @@ struct HomeBirthdayView: View {
                             .labelsHidden()
                         Button(action: {
                             Task {
-                                birthdays = await DoriFrontend.Character.recentBirthdayCharacters(aroundDate: debugDate, timeZone: getBirthdayTimeZone())
+                                birthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone())
+                                if getBirthdayTimeZone() != TimeZone.autoupdatingCurrent {
+                                    systemBirthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone(from: .adaptive))
+                                }
                             }
                         }, label: {
 //                            Text(verbatim: "")
@@ -377,12 +382,16 @@ struct HomeBirthdayView: View {
         .animation(.easeInOut(duration: loadingAnimationDuration), value: birthdays?.count)
         .buttonStyle(.plain)
         .foregroundStyle(.primary)
-        .task {
-            birthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone())
-        }
+//        .task {
+//            birthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone())
+////            birthdays =
+//        }
         .onAppear {
             Task {
                 birthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone())
+                if getBirthdayTimeZone() != TimeZone.autoupdatingCurrent {
+                    systemBirthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone(from: .adaptive))
+                }
             }
         }
     }

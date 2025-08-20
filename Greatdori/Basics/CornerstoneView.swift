@@ -101,22 +101,27 @@ struct MultilingualText: View {
     var showLocaleKey: Bool = false
     @State var isHovering = false
     @State var allLocaleTexts: [String] = []
+    @State var shownLocaleValueDict: [String: DoriAPI.Locale] = [:]
     @State var primaryDisplayString = ""
     @State var showCopyMessage = false
+    @State var lastCopiedLocaleValue: DoriAPI.Locale? = nil
     
     init(source: DoriAPI.LocalizedData<String>, showLocaleKey: Bool = false) {
         self.source = source
         self.showLocaleKey = showLocaleKey
         
         var __allLocaleTexts: [String] = []
+        var __shownLocaleValueDict: [String: DoriAPI.Locale] = [:]
         for lang in DoriAPI.Locale.allCases {
             if let pendingString = source.forLocale(lang) {
                 if !__allLocaleTexts.contains(pendingString) {
                     __allLocaleTexts.append("\(pendingString)\(showLocaleKey ? " (\(localeToStringDict[lang] ?? "?"))" : "")")
+                    __shownLocaleValueDict.updateValue(lang, forKey: __allLocaleTexts.last!)
                 }
             }
         }
         self._allLocaleTexts = .init(initialValue: __allLocaleTexts)
+        self._shownLocaleValueDict = .init(initialValue: __shownLocaleValueDict)
     }
     var body: some View {
         Group {
@@ -125,6 +130,9 @@ struct MultilingualText: View {
                 ForEach(allLocaleTexts, id: \.self) { localeValue in
                     Button(action: {
                         copyStringToClipboard(localeValue)
+                        print(shownLocaleValueDict)
+                        lastCopiedLocaleValue = shownLocaleValueDict[localeValue]
+                        print()
                         showCopyMessage = true
                     }, label: {
                         Text(localeValue)
@@ -134,8 +142,9 @@ struct MultilingualText: View {
                 }
             }, label: {
                 ZStack(alignment: .trailing, content: {
-                    Label("Message.copied", systemImage: "document.on.document")
+                    Label(lastCopiedLocaleValue == nil ? "Message.copy.success" : "Message.copy.success.locale.\(lastCopiedLocaleValue!.rawValue.uppercased())", systemImage: "document.on.document")
                         .opacity(showCopyMessage ? 1 : 0)
+                        .offset(y: 2)
                     MultilingualTextInternalLabel(source: source, showLocaleKey: showLocaleKey)
                         .opacity(showCopyMessage ? 0 : 1)
                 })
@@ -143,7 +152,6 @@ struct MultilingualText: View {
                 .onChange(of: showCopyMessage, {
                     if showCopyMessage {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                            print("1.5 秒后执行操作")
                             showCopyMessage = false
                         }
                     }
@@ -228,7 +236,6 @@ struct MultilingualTextForCountdown: View {
                 VStack(alignment: .trailing) {
                     ForEach(allAvailableLocales, id: \.self) { localeValue in
                         Button(action: {
-                            //FIXME: clipboard LocalizedStringResource to String [250820]
 //                            copyStringToClipboard(getCountdownLocalizedString(source, forLocale: localeValue) ?? LocalizedStringResource(""))
                             showCopyMessage = true
                         }, label: {
@@ -238,7 +245,8 @@ struct MultilingualTextForCountdown: View {
                 }
             }, label: {
                 ZStack(alignment: .trailing, content: {
-                    Label("Message.copied", systemImage: "document.on.document")
+                    Label("Message.copy.unavailable.for.countdown", systemImage: "exclamationmark.circle")
+                        .offset(y: 2)
                         .opacity(showCopyMessage ? 1 : 0)
                     MultilingualTextForCountdownInternalLabel(source: source, allAvailableLocales: allAvailableLocales)
                         .opacity(showCopyMessage ? 0 : 1)
@@ -247,7 +255,6 @@ struct MultilingualTextForCountdown: View {
                 .onChange(of: showCopyMessage, {
                     if showCopyMessage {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                            print("1.5 秒后执行操作")
                             showCopyMessage = false
                         }
                     }
@@ -326,8 +333,21 @@ struct MultilingualTextForCountdown: View {
         let event: DoriFrontend.Event.Event
         let locale: DoriAPI.Locale
         var body: some View {
-            if let localizedString = getCountdownLocalizedString(event, forLocale: locale) {
-                Text(localizedString)
+            if let startDate = event.startAt.forLocale(locale),
+               let endDate = event.endAt.forLocale(locale),
+               let aggregateEndDate = event.aggregateEndAt.forLocale(locale),
+               let distributionStartDate = event.distributionStartAt.forLocale(locale) {
+                if startDate > .now {
+                    Text("Event.countdown.start-at.\(Text(startDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+                } else if endDate > .now {
+                    Text("Event.countdown.end-at.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+                } else if aggregateEndDate > .now {
+                    Text("Event.countdown.results-in.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+                } else if distributionStartDate > .now {
+                    Text("Event.countdown.rewards-in.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+                } else {
+                    Text("Event.countdown.completed.\(localeToStringDict[locale] ?? "??")")
+                }
             }
         }
     }

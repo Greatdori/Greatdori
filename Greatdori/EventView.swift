@@ -185,10 +185,20 @@ struct EventDetailOverviewView: View {
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)
-                    WebImage(url: information.event.bannerImageURL)
-                        .resizable()
-                        .aspectRatio(3.0, contentMode: .fit)
-                        .frame(maxWidth: 420, maxHeight: 140)
+                    WebImage(url: information.event.bannerImageURL) { image in
+                        image
+                            .antialiased(true)
+                            .resizable()
+                            .aspectRatio(3.0, contentMode: .fit)
+                            .frame(maxWidth: 420, maxHeight: 140)
+                    } placeholder: {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.15))
+                            .aspectRatio(3.0, contentMode: .fit)
+                            .frame(maxWidth: 420, maxHeight: 140)
+                    }
+                    .interpolation(.high)
+                    .cornerRadius(10)
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)
@@ -510,6 +520,7 @@ struct EventDetailOverviewView: View {
 
 //MARK: EventSearchView
 struct EventSearchView: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
     let bannerWidth: CGFloat = isMACOS ? 370 : 420
     let bannerSpacing: CGFloat = isMACOS ? 10 : 15
     @State var filter = DoriFrontend.Filter()
@@ -519,6 +530,7 @@ struct EventSearchView: View {
     @State var infoIsAvailable = true
     @State var searchedText = ""
     @State var showDetails = false
+    @Namespace var eventLists
     var body: some View {
         Group {
             if let resultEvents = searchedEvents ?? events {
@@ -535,10 +547,30 @@ struct EventSearchView: View {
                                                 ForEach(eventGroup) { event in
                                                     NavigationLink(destination: {
                                                         EventDetailView(id: event.id)
+                                                            .wrapIf(true, in: { content in
+                                                                if #available(iOS 18.0, macOS 14.0, *) {
+                                                                    content
+                                                                        .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
+                                                                } else {
+                                                                    content
+                                                                }
+                                                            })
                                                     }, label: {
                                                         EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                     })
                                                     .buttonStyle(.plain)
+                                                    .wrapIf(true, in: { content in
+                                                        if #available(iOS 18.0, macOS 14.0, *) {
+                                                            content
+                                                                .matchedTransitionSource(
+                                                                    id: event.id,
+                                                                    in: eventLists
+                                                                )
+                                                        } else {
+                                                            content
+                                                        }
+                                                    })
+                                                    
                                                     if eventGroup.count == 1 && events[0].count != 1 {
                                                         Rectangle()
                                                             .frame(maxWidth: 420, maxHeight: 140)
@@ -557,16 +589,35 @@ struct EventSearchView: View {
                                             }, label: {
                                                 EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                 //                                        .padding(.all, showDetails ? 0 : nil)
+                                                    .wrapIf(true, in: { content in
+                                                        if #available(iOS 18.0, macOS 14.0, *) {
+                                                            content
+                                                                .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
+                                                        } else {
+                                                            content
+                                                        }
+                                                    })
                                                     .frame(maxWidth: bannerWidth)
                                             })
                                             .buttonStyle(.plain)
+                                            .wrapIf(true, in: { content in
+                                                if #available(iOS 18.0, macOS 14.0, *) {
+                                                    content
+                                                        .matchedTransitionSource(
+                                                            id: event.id,
+                                                            in: eventLists
+                                                        )
+                                                } else {
+                                                    content
+                                                }
+                                            })
                                         }
                                     }
                                     .frame(maxWidth: bannerWidth)
                                 }
                                 .padding(.horizontal)
                                 //                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
-                                .animation(.easeOut(duration: 0.2), value: showDetails)
+                                .animation(.easeInOut(duration: 0.2), value: showDetails)
                                 Spacer(minLength: 0)
                             }
                             .padding(.vertical)
