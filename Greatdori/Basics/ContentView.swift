@@ -43,11 +43,17 @@ struct ContentView: View {
                     }
                     Tab("App.leaderboard", systemImage: "chart.bar", value: .leaderboard) {
 //                        HomeView()
-                        Text(verbatim: "leaderboard")
+//                        Text(verbatim: "leaderboard")
+                        NavigationStack {
+                            Text("1")
+                        }
+                            .searchable(text: .constant("1"))
+                        //MARK: UI RESEARCH ONLY!!!
                     }
                     TabSection(content: {
                         Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
 //                            Text(verbatim: "char")
+                            
                         }
                         Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
                             NavigationStack {
@@ -73,6 +79,14 @@ struct ContentView: View {
                     //                Tab($selection, tag: .tools) { HomeView() }
                 }
                 .tabViewStyle(.sidebarAdaptable)
+                .wrapIf(true, in: { content in
+                    if #available(iOS 26.0, *) {
+                        content
+                            .tabBarMinimizeBehavior(.automatic)
+                    } else {
+                        content
+                    }
+                })
             } else {
                 if platform == .mac || sizeClass == .regular {
                     NavigationSplitView {
@@ -281,6 +295,7 @@ struct WelcomeView: View {
                 }, label: {
                     Text("Done")
                 })
+//                .background()
             })
         }
     }

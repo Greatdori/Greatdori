@@ -144,6 +144,7 @@ struct HomeNewsView: View {
                                 Text("Home.news")
                                     .font(.title2)
                                     .bold()
+                                    .foregroundStyle(Color(UIColor.placeholderText))
                                     .redacted(reason: .placeholder)
                             }
                             Spacer()
@@ -165,7 +166,8 @@ struct HomeNewsView: View {
                             ForEach(0..<5, id: \.self) { newsIndex in
                                 VStack(alignment: .leading) {
                                     Rectangle()
-                                        .fill(Color.gray.opacity(0.15))
+//                                        .fill(Color.gray.opacity(0.15))
+                                        .fill(Color(UIColor.placeholderText))
                                         .frame(height: 40)
                                         .cornerRadius(5)
                                         .redacted(reason: .placeholder)
@@ -251,6 +253,7 @@ struct HomeBirthdayView: View {
                             .bold()
                     } else {
                         Text("Home.birthday")
+                            .foregroundStyle(Color(UIColor.placeholderText))
                             .font(.title2)
                             .bold()
                             .redacted(reason: .placeholder)
@@ -367,11 +370,13 @@ struct HomeBirthdayView: View {
                 } else {
                     HStack {
                         Text(verbatim: "Lorem ipsum")
+                            .foregroundStyle(Color(UIColor.placeholderText))
                             .redacted(reason: .placeholder)
                         Rectangle()
                             .opacity(0)
                             .frame(width: 2, height: 2)
                         Text(verbatim: "dolor sit")
+                            .foregroundStyle(Color(UIColor.placeholderText))
                             .redacted(reason: .placeholder)
                         Spacer()
                     }
@@ -461,8 +466,10 @@ struct HomeEventsView: View {
                                 Text(verbatim: "Lorem ipsum dolor sit amet consectetur")
                                     .bold()
                                     .font(.title3)
+                                    .foregroundStyle(Color(UIColor.placeholderText))
                                     .redacted(reason: .placeholder)
                                 Text(verbatim: "Lorem ipsum dolor")
+                                    .foregroundStyle(Color(UIColor.placeholderText))
                                     .redacted(reason: .placeholder)
                             }
                         }

@@ -60,7 +60,7 @@ struct EventCardHomeView: View {
                     .scaledToFit()
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.gray.opacity(0.15))
+                    .fill(Color(UIColor.placeholderText))
                     .aspectRatio(3.0, contentMode: .fit)
             }
             .interpolation(.high)
@@ -139,7 +139,8 @@ struct EventCardView: View {
                         .frame(maxWidth: 420, maxHeight: 140)
                 } placeholder: {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.15))
+//                        .fill(Color.gray.opacity(0.15))
+                        .fill(Color(UIColor.placeholderText))
                         .aspectRatio(3.0, contentMode: .fit)
                         .frame(maxWidth: 420, maxHeight: 140)
                 }
@@ -226,7 +227,8 @@ struct CardCardView: View {
                             image
                         } placeholder: {
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.gray.opacity(0.15))
+//                                .fill(Color.gray.opacity(0.15))
+                                .fill(Color(UIColor.placeholderText))
                         }
                         .resizable()
                         .interpolation(.high)
@@ -238,7 +240,8 @@ struct CardCardView: View {
                             image
                         } placeholder: {
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.gray.opacity(0.15))
+//                                .fill(Color.gray.opacity(0.15))
+                                .fill(Color(UIColor.placeholderText))
                         }
                         .resizable()
                         .interpolation(.high)
@@ -252,7 +255,8 @@ struct CardCardView: View {
                         image
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.15))
+//                            .fill(Color.gray.opacity(0.15))
+                            .fill(Color(UIColor.placeholderText))
                     }
                     .resizable()
                     .interpolation(.high)
@@ -264,7 +268,8 @@ struct CardCardView: View {
                     image
                 } placeholder: {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.15))
+//                        .fill(Color.gray.opacity(0.15))
+                        .fill(Color(UIColor.placeholderText))
                 }
                 .resizable()
                 .interpolation(.high)
@@ -351,7 +356,8 @@ struct ThumbCardCardView: View {
                         image
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.15))
+//                            .fill(Color.gray.opacity(0.15))
+                            .fill(Color(UIColor.placeholderText))
                             .aspectRatio(1, contentMode: .fit)
                     }
                     .resizable()
@@ -368,7 +374,8 @@ struct ThumbCardCardView: View {
                         image
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.15))
+//                            .fill(Color.gray.opacity(0.15))
+                            .fill(Color(UIColor.placeholderText))
                             .aspectRatio(1, contentMode: .fit)
                     }
                     .resizable()
@@ -485,7 +492,8 @@ struct CardIconView: View {
                 image
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.gray.opacity(0.15))
+//                    .fill(Color.gray.opacity(0.15))
+                    .fill(Color(UIColor.placeholderText))
                     .aspectRatio(1, contentMode: .fit)
             }
             .resizable()
@@ -586,7 +594,8 @@ struct CardIconView: View {
                     } else {
                         Group {
                             Text(verbatim: "Lorem ipsum dolor")
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color(UIColor.placeholderText))
+//                                .fill()
                             Text(verbatim: "Lorem ipsum")
                                 .foregroundStyle(.tertiary)
                         }
@@ -670,7 +679,7 @@ struct ThumbCostumeCardView: View {
                 image
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.gray.opacity(0.15))
+                    .fill(Color(UIColor.placeholderText))
             }
             .resizable()
             .scaledToFit()
@@ -704,7 +713,7 @@ struct GachaCardView: View {
                 image
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.gray.opacity(0.15))
+                    .fill(Color(UIColor.placeholderText))
             }
             .resizable()
             .scaledToFill()

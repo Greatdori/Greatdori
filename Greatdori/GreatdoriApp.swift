@@ -12,10 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftUI
 import DoriKit
 import SDWebImage
 import SDWebImageSVGCoder
+import SwiftUI
+import UIKit
 
 #if os(macOS)
 let imageButtonSize: CGFloat = 30

@@ -85,7 +85,11 @@ struct EventDetailView: View {
 #endif
         .onAppear {
             Task {
-                latestEventID = await DoriFrontend.Event.localizedLatestEvent()?.jp?.id ?? 0
+                DoriCache.withCache(id: "Event_LatestEvent_JP_ID", trait: .realTime) {
+                    await DoriFrontend.Event.localizedLatestEvent()?.jp?.id
+                } .onUpdate {
+                    latestEventID = $0 ?? 0
+                }
             }
         }
         .onChange(of: eventID, {
@@ -193,7 +197,8 @@ struct EventDetailOverviewView: View {
                             .frame(maxWidth: 420, maxHeight: 140)
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.15))
+//                            .fill(Color.gray.opacity(0.15))
+                            .fill(Color(UIColor.placeholderText))
                             .aspectRatio(3.0, contentMode: .fit)
                             .frame(maxWidth: 420, maxHeight: 140)
                     }
@@ -319,6 +324,7 @@ struct EventDetailOverviewView: View {
                                                     Text(name)
                                                 } else {
                                                     Text(verbatim: "Lorum Ipsum")
+                                                        .foregroundStyle(Color(UIColor.placeholderText))
                                                         .redacted(reason: .placeholder)
                                                 }
                                                 Spacer()
@@ -521,6 +527,7 @@ struct EventDetailOverviewView: View {
 //MARK: EventSearchView
 struct EventSearchView: View {
     @Environment(\.accessibilityReduceMotion) var reduceMotion
+    @Environment(\.horizontalSizeClass) var sizeClass
     let bannerWidth: CGFloat = isMACOS ? 370 : 420
     let bannerSpacing: CGFloat = isMACOS ? 10 : 15
     @State var filter = DoriFrontend.Filter()
@@ -620,7 +627,7 @@ struct EventSearchView: View {
                                 .animation(.easeInOut(duration: 0.2), value: showDetails)
                                 Spacer(minLength: 0)
                             }
-                            .padding(.vertical)
+                            .padding(sizeClass == .compact ? .bottom: .vertical)
                         }
                         //                .onChange(of: searchedEvents, {
                         //                    searchedEventsChunked = searchedEvents.chunked(into: 2)
@@ -630,6 +637,7 @@ struct EventSearchView: View {
                     }
                 }
                 .searchable(text: $searchedText, prompt: "Event.search.placeholder")
+//                .searc
                 .onChange(of: searchedText, {
                     if let events {
                         searchedEvents = events.search(for: searchedText)
