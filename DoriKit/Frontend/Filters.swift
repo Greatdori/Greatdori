@@ -17,6 +17,17 @@ internal import os
 internal import CryptoKit
 
 extension DoriFrontend {
+    /// Filter results that match the requirements.
+    ///
+    /// You don't filter some items you need from a full result, instead,
+    /// `list` methods in DoriFrontend allow you to pass a `Filter` as an argument
+    /// and return you filtered results.
+    ///
+    /// Not all keys in filters takes effect in a `list` request,
+    /// see documentation of matching `list` methods for more information.
+    ///
+    /// - SeeAlso:
+    ///     Interact with each keys of a filter by ``Key``, which also allows you to build UI for filter.
     public struct Filter: Sendable, Hashable, Codable {
         public var band: Set<Band> = .init(Band.allCases) { didSet { store() } }
         public var attribute: Set<Attribute> = .init(Attribute.allCases)  { didSet { store() } }
@@ -64,6 +75,9 @@ extension DoriFrontend {
         
         private var recoveryID: String?
         
+        /// Create a filter which can restore to its latest selections across sessions.
+        /// - Parameter id: An identifier for restoration.
+        /// - Returns: A filter which stores its selections automaticlly and can be restore by provided ID.
         public static func recoverable(id: String) -> Self {
             let storageURL = URL(filePath: NSHomeDirectory() + "/Documents/DoriKit_Filter_Status.plist")
             let decoder = PropertyListDecoder()
@@ -77,6 +91,7 @@ extension DoriFrontend {
             return result
         }
         
+        /// Whether this filter actually filters something.
         public var isFiltered: Bool {
             band.count != Band.allCases.count
             || attribute.count != Attribute.allCases.count
@@ -92,6 +107,10 @@ extension DoriFrontend {
             || timelineStatus.count != TimelineStatus.allCases.count
         }
         
+        /// A string identity of the filter.
+        ///
+        /// This allows you to identify whether two filters have the same effect,
+        /// which is useful when working with ``DoriCache``.
         public var identity: String {
             // We skips `skill` in identity encoding because it's too dynamic.
             let desc = """
@@ -110,6 +129,7 @@ extension DoriFrontend {
             return String(SHA256.hash(data: desc.data(using: .utf8)!).map { $0.description }.joined().prefix(8))
         }
         
+        /// Set the filter to initial selections.
         public mutating func clearAll() {
             band = .init(Band.allCases)
             attribute = .init(Attribute.allCases)
@@ -240,6 +260,7 @@ extension DoriFrontend.Filter {
         case soyo
         case taki
         
+        /// Localized character name.
         @inline(never)
         public var name: String {
             NSLocalizedString("CHARACTER_NAME_ID_" + String(self.rawValue), bundle: #bundle, comment: "")
@@ -251,6 +272,7 @@ extension DoriFrontend.Filter {
         case ongoing
         case upcoming
         
+        /// Localized description text for status.
         @inline(never)
         internal var localizedString: String {
             switch self {
@@ -292,6 +314,7 @@ extension DoriFrontend.Filter {
                 .id
             ]
             
+            /// Localized description text for keyword.
             @inline(never)
             internal var localizedString: String {
                 switch self {
@@ -312,6 +335,14 @@ extension DoriFrontend.Filter {
         }
     }
     
+    /// Key for filter.
+    ///
+    /// `Key` allows you to read and modify a filter dynamically,
+    /// which is useful for building UI.
+    ///
+    /// - SeeAlso:
+    ///     Use ``subscript(position:)`` to read or modify a filter from a key,
+    ///     or use ``updateValue(_:forKey:)`` as an alternative method to modify a filter.
     public enum Key: Int, CaseIterable, Hashable {
         case band
         case attribute
@@ -406,6 +437,14 @@ extension DoriFrontend.Filter: MutableCollection {
         }
     }
     
+    /// Update a value of filter for key.
+    ///
+    /// - Parameters:
+    ///   - value: Type-erased value.
+    ///   - key: Key for filter item.
+    ///
+    /// The underlying value of type-erased value passed to this method must match the actual value type of key,
+    /// or this method logs the event and does nothing.
     public mutating func updateValue(_ value: AnyHashable, forKey key: Key) {
         let expectedValueType = type(of: self[key])
         let valueType = type(of: value)
@@ -577,6 +616,15 @@ extension DoriFrontend.Filter.Sort: DoriFrontend.Filter._Selectable {
     }
 }
 extension DoriFrontend.Filter.Key {
+    /// Get a selector for key.
+    ///
+    /// You use `type` of selector to check whether this key should be treat as single or multiple selection,
+    /// multiple selections in filter are wrapped in `Set`, whereas single selections are represented in native types directly.
+    ///
+    /// `items` is a sorted collection of all cases for key.
+    ///
+    /// - SeeAlso:
+    ///     See ``SelectorItem`` to learn more about `items`.
     public var selector: (type: SelectionType, items: [SelectorItem<DoriFrontend.Filter._AnySelectable>]) {
         switch self {
         case .band:

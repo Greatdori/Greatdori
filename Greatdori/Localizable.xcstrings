@@ -47,12 +47,6 @@
     "1" : {
 
     },
-    "A" : {
-
-    },
-    "AAAAA" : {
-
-    },
     "App.community" : {
       "localizations" : {
         "en" : {
@@ -180,12 +174,6 @@
           }
         }
       }
-    },
-    "Bbbbbb" : {
-
-    },
-    "Bbbbbbbbbbb" : {
-
     },
     "BUILTIN_CARD_COLLECTION_GREATDORI" : {
       "extractionState" : "manual",
@@ -893,6 +881,9 @@
           }
         }
       }
+    },
+    "Filter.key.attribute" : {
+
     },
     "Greatdori!" : {
       "shouldTranslate" : false
