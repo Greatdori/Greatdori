@@ -20,14 +20,27 @@ struct FilterView: View {
     @Binding var filter: DoriFrontend.Filter
     var includingKeys: [DoriFrontend.Filter.Key]
     var body: some View {
-        List {
-            if includingKeys.contains(.attribute) {
-                ListItemView(title: {
-                    Text("Filter.key.attribute")
-                }, value: {
-                    Text(verbatim: "111")
-                })
-            }
+        Form {
+            Section(content: {
+                if includingKeys.contains(.attribute) {
+                    ListItemView(title: {
+                        Text("Filter.key.attribute")
+                            .bold()
+                    }, value: {
+                        HStack {
+//                            Button(action: {
+//                                
+//                            }, label: {
+//                                Image()
+//                            })
+//                            Button/
+                        }
+                    })
+                }
+            }, footer: {
+                Text("Filter.footer")
+            })
+            
         }
 //        .gridColumnAlignment(.trailing, for: 0)
 //        .gridColumnAlignment(.leading, for: 1)

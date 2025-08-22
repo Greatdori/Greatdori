@@ -654,6 +654,7 @@ struct EventSearchView: View {
             }
         }
         .withSystemBackground()
+//        .background(showDetails ? getGroupedBackgroundColor : getWindowBackgroundColor())
         .navigationTitle("Event")
         .wrapIf(searchedEvents != nil, in: { content in
             if #available(iOS 26.0, *) {
@@ -687,6 +688,7 @@ struct EventSearchView: View {
                 })
                 .popover(isPresented: $showFilterSheet) {
                     FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
+                        .frame(minWidth: 400, minHeight: 400)
                 }
             }
         }

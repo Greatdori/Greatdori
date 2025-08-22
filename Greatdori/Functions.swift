@@ -30,6 +30,13 @@ func copyStringToClipboard(_ content: String) {
 #endif
 }
 
+func getGroupedBackgroundColor() -> Color {
+#if os(iOS)
+    return Color(UIColor.systemGroupedBackground)
+#else
+    return Color(NSColor.groupedBackgroundColor)
+#endif
+}
 
 func getPlaceholderColor() -> Color {
 #if os(iOS)
@@ -39,7 +46,15 @@ func getPlaceholderColor() -> Color {
 #endif
 }
 
-//MARK: 
+func getWindowBackgroundColor() -> Color {
+#if os(iOS)
+    return Color(UIColor.systemBackground)
+#else
+    return Color(NSColor.windowBackground)
+#endif
+}
+
+//MARK:
 /// Highlights all occurrences of a keyword within a string in blue.
 /// - Parameters:
 ///   - keyword: The substring to highlight within `content`. If empty or only whitespace, no highlighting occurs.
