@@ -216,19 +216,21 @@ struct NewsPreview: View {
                 .fontWeight(.light)
                 
                 if showDetails {
-                    HStack {
-                        //                    Text("News.author.\(news.author)")
-                        Text(news.author)
-                            .font(.caption)
-                            .bold()
-                        ForEach(0..<news.tags.count, id: \.self) { tagIndex in
-                            Text("#\(news.tags[tagIndex])")
-                                .font(.caption)
-                            //                            .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                    }
+//                    HStack {
+//                        //                    Text("News.author.\(news.author)")
+//                        Text(news.author)
+//                            .font(.caption)
+//                            .bold()
+//                        ForEach(0..<news.tags.count, id: \.self) { tagIndex in
+//                            Text("#\(news.tags[tagIndex])")
+//                                .font(.caption)
+//                            //                            .foregroundStyle(.secondary)
+//                        }
+//                        Spacer()
+//                    }
+                    getDetailsLineString(author: news.author, tags: news.tags)
                     .foregroundStyle(.secondary)
+                    .font(.caption)
                 }
             }
             Spacer()
@@ -293,7 +295,10 @@ struct NewsPreview: View {
                 }
             }
         }
-        
+    }
+    func getDetailsLineString(author: String, tags: [String], separator: String = "  ") -> SwiftUI.Text {
+        let tagsCombined = news.tags.map { "#\($0)" }.joined(separator: separator)
+        return Text(author).bold() + Text(separator) + Text(tagsCombined)
     }
 }
 

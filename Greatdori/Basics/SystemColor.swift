@@ -12,8 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
+
+//MARK: The reason I make it comments is that it does not really work well.
+
 import SwiftUI
 
+/*
 extension Color {
     public static let label = Self.init(.label)
     public static let secondaryLebel = Self.init(.secondaryLabel)
@@ -38,7 +42,7 @@ extension Color {
         #if os(iOS)
         .init(.darkText)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(macOS, unavailable)
@@ -46,7 +50,7 @@ extension Color {
         #if os(iOS)
         .init(.lightText)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(macOS, unavailable)
@@ -54,7 +58,7 @@ extension Color {
         #if os(iOS)
         .init(.opaqueSeparator)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     public static var placeholderText: Self {
@@ -76,7 +80,7 @@ extension Color {
         #if os(iOS)
         .init(.systemBackground)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(macOS, unavailable)
@@ -84,7 +88,7 @@ extension Color {
         #if os(iOS)
         .init(.secondarySystemBackground)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(macOS, unavailable)
@@ -92,7 +96,7 @@ extension Color {
         #if os(iOS)
         .init(.tertiarySystemBackground)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     public static var systemFill: Self {
@@ -128,7 +132,7 @@ extension Color {
         #if os(iOS)
         .init(.systemGroupedBackground)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(macOS, unavailable)
@@ -136,7 +140,7 @@ extension Color {
         #if os(iOS)
         .init(.secondarySystemGroupedBackground)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(macOS, unavailable)
@@ -144,7 +148,7 @@ extension Color {
         #if os(iOS)
         .init(.tertiarySystemGroupedBackground)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     
@@ -153,7 +157,7 @@ extension Color {
         #if os(macOS)
         .init(.controlAccentColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -161,7 +165,7 @@ extension Color {
         #if os(macOS)
         .init(.controlBackgroundColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -169,7 +173,7 @@ extension Color {
         #if os(macOS)
         .init(.controlColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -177,7 +181,7 @@ extension Color {
         #if os(macOS)
         .init(.controlTextColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -185,7 +189,7 @@ extension Color {
         #if os(macOS)
         .init(.disabledControlTextColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -193,7 +197,7 @@ extension Color {
         #if os(macOS)
         .init(.findHighlightColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -201,7 +205,7 @@ extension Color {
         #if os(macOS)
         .init(.gridColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -209,7 +213,7 @@ extension Color {
         #if os(macOS)
         .init(.headerTextColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -217,7 +221,7 @@ extension Color {
         #if os(macOS)
         .init(.keyboardFocusIndicatorColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -225,7 +229,7 @@ extension Color {
         #if os(macOS)
         .init(.selectedContentBackgroundColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -233,7 +237,7 @@ extension Color {
         #if os(macOS)
         .init(.unemphasizedSelectedContentBackgroundColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -241,7 +245,7 @@ extension Color {
         #if os(macOS)
         .init(.selectedControlColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -249,7 +253,7 @@ extension Color {
         #if os(macOS)
         .init(.selectedControlTextColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -257,7 +261,7 @@ extension Color {
         #if os(macOS)
         .init(.alternateSelectedControlTextColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -265,7 +269,7 @@ extension Color {
         #if os(macOS)
         .init(.selectedTextBackgroundColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -273,7 +277,7 @@ extension Color {
         #if os(macOS)
         .init(.selectedTextColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -281,7 +285,7 @@ extension Color {
         #if os(macOS)
         .init(.unemphasizedSelectedTextColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -289,7 +293,7 @@ extension Color {
         #if os(macOS)
         .init(.textBackgroundColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -297,7 +301,7 @@ extension Color {
         #if os(macOS)
         .init(.underPageBackgroundColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -305,7 +309,7 @@ extension Color {
         #if os(macOS)
         .init(.windowBackgroundColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
     @available(iOS, unavailable)
@@ -313,7 +317,8 @@ extension Color {
         #if os(macOS)
         .init(.windowFrameTextColor)
         #else
-        assertionFailure()
+        preconditionFailure()
         #endif
     }
 }
+*/

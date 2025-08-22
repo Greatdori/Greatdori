@@ -15,9 +15,16 @@
 // As name, this file is the cornerstone for the whole app, providing the most basic & repeative views.
 // Views marked with [×] are deprecated.
 
+// MARK: This file should be view only.
+
 import DoriKit
 import SwiftUI
 
+//MARK: Constants
+let bannerWidth: CGFloat = isMACOS ? 370 : 420
+let bannerSpacing: CGFloat = isMACOS ? 10 : 15
+let imageButtonSize: CGFloat = isMACOS ? 30 : 35
+let cardThumbnailSideLength: CGFloat = isMACOS ? 64 : 72
 
 //MARK: CustomGroupBox
 struct CustomGroupBox<Content: View>: View {
@@ -115,7 +122,7 @@ struct MultilingualText: View {
         for lang in DoriAPI.Locale.allCases {
             if let pendingString = source.forLocale(lang) {
                 if !__allLocaleTexts.contains(pendingString) {
-                    __allLocaleTexts.append("\(pendingString)\(showLocaleKey ? " (\(localeToStringDict[lang] ?? "?"))" : "")")
+                    __allLocaleTexts.append("\(pendingString)\(showLocaleKey ? " (\(lang.rawValue.uppercased()))" : "")")
                     __shownLocaleValueDict.updateValue(lang, forKey: __allLocaleTexts.last!)
                 }
             }
@@ -186,12 +193,12 @@ struct MultilingualText: View {
         var body: some View {
             VStack(alignment: .trailing) {
                 if let sourceInPrimaryLocale = source.forPreferredLocale(allowsFallback: false) {
-                    Text("\(sourceInPrimaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.preferredLocale] ?? "?"))" : "")")
+                    Text("\(sourceInPrimaryLocale)\(showLocaleKey ? " (\(DoriAPI.preferredLocale.rawValue.uppercased()))" : "")")
                         .onAppear {
                             primaryDisplayString = sourceInPrimaryLocale
                         }
                 } else if let sourceInSecondaryLocale = source.forSecondaryLocale(allowsFallback: false) {
-                    Text("\(sourceInSecondaryLocale)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                    Text("\(sourceInSecondaryLocale)\(showLocaleKey ? " (\(DoriAPI.secondaryLocale.rawValue.uppercased()))" : "")")
                         .onAppear {
                             primaryDisplayString = sourceInSecondaryLocale
                         }
@@ -200,9 +207,29 @@ struct MultilingualText: View {
                         .onAppear {
                             primaryDisplayString = sourceInJP
                         }
+                } else if let sourceInWhateverLocale = source.en {
+                    Text("\(sourceInWhateverLocale)\(showLocaleKey ? " (EN)" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInWhateverLocale
+                        }
+                } else if let sourceInWhateverLocale = source.tw {
+                    Text("\(sourceInWhateverLocale)\(showLocaleKey ? " (TW)" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInWhateverLocale
+                        }
+                } else if let sourceInWhateverLocale = source.cn {
+                    Text("\(sourceInWhateverLocale)\(showLocaleKey ? " (CN)" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInWhateverLocale
+                        }
+                } else if let sourceInWhateverLocale = source.kr {
+                    Text("\(sourceInWhateverLocale)\(showLocaleKey ? " (KR)" : "")")
+                        .onAppear {
+                            primaryDisplayString = sourceInWhateverLocale
+                        }
                 }
                 if let secondarySourceInSecondaryLang = source.forSecondaryLocale(allowsFallback: false), secondarySourceInSecondaryLang != primaryDisplayString {
-                    Text("\(secondarySourceInSecondaryLang)\(showLocaleKey ? " (\(localeToStringDict[DoriAPI.secondaryLocale] ?? "?"))" : "")")
+                    Text("\(secondarySourceInSecondaryLang)\(showLocaleKey ? " (\(DoriAPI.secondaryLocale.rawValue.uppercased()))" : "")")
                         .foregroundStyle(.secondary)
                 } else if let secondarySourceInJP = source.jp, secondarySourceInJP != primaryDisplayString {
                     Text("\(secondarySourceInJP)\(showLocaleKey ? " (JP)" : "")")
@@ -310,6 +337,12 @@ struct MultilingualTextForCountdown: View {
                         .onAppear {
                             primaryDisplayingLocale = .jp
                         }
+                } else if !allAvailableLocales.isEmpty {
+                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: allAvailableLocales.first!)
+                        .onAppear {
+                            print(allAvailableLocales)
+                            primaryDisplayingLocale = allAvailableLocales.first!
+                        }
                 }
                 
                 if allAvailableLocales.contains(DoriAPI.secondaryLocale), DoriAPI.secondaryLocale != primaryDisplayingLocale {
@@ -327,6 +360,9 @@ struct MultilingualTextForCountdown: View {
                 content
                     .textSelection(.disabled)
             })
+            .onAppear {
+//                print(allAvailableLocales)
+            }
         }
     }
     struct MultilingualTextForCountdownInternalNumbersView: View {
@@ -338,15 +374,15 @@ struct MultilingualTextForCountdown: View {
                let aggregateEndDate = event.aggregateEndAt.forLocale(locale),
                let distributionStartDate = event.distributionStartAt.forLocale(locale) {
                 if startDate > .now {
-                    Text("Event.countdown.start-at.\(Text(startDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+                    Text("Event.countdown.start-at.\(Text(startDate, style: .relative)).\(locale.rawValue.uppercased())")
                 } else if endDate > .now {
-                    Text("Event.countdown.end-at.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+                    Text("Event.countdown.end-at.\(Text(endDate, style: .relative)).\(locale.rawValue.uppercased())")
                 } else if aggregateEndDate > .now {
-                    Text("Event.countdown.results-in.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+                    Text("Event.countdown.results-in.\(Text(endDate, style: .relative)).\(locale.rawValue.uppercased())")
                 } else if distributionStartDate > .now {
-                    Text("Event.countdown.rewards-in.\(Text(endDate, style: .relative)).\(localeToStringDict[locale] ?? "??")")
+                    Text("Event.countdown.rewards-in.\(Text(endDate, style: .relative)).\(locale.rawValue.uppercased())")
                 } else {
-                    Text("Event.countdown.completed.\(localeToStringDict[locale] ?? "??")")
+                    Text("Event.countdown.completed.\(locale.rawValue.uppercased())")
                 }
             }
         }

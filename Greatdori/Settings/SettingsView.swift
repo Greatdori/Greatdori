@@ -140,8 +140,8 @@ struct SettingsLocaleView: View {
                 })
             }
             .onAppear {
-                primaryLocale = localeToStringDict[DoriAPI.preferredLocale]?.lowercased() ?? "jp"
-                secondaryLocale = localeToStringDict[DoriAPI.secondaryLocale]?.lowercased() ?? "en"
+                primaryLocale = DoriAPI.preferredLocale.rawValue
+                secondaryLocale = DoriAPI.secondaryLocale.rawValue
                 birthdayTimeZone = BirthdayTimeZone(rawValue: UserDefaults.standard.string(forKey: "BirthdayTimeZone") ?? "JST") ?? .JST
                 //            birthdayTimeZone = (UserDefaults.standard.value(forKey: "BirthdayTimeZone") ?? "JST")
             }

@@ -63,7 +63,7 @@ struct EventDetailView: View {
                             Spacer()
                         }
                     })
-                   
+                    .buttonStyle(.plain)
                 }
             }
         }
@@ -113,7 +113,7 @@ struct EventDetailView: View {
                         }, label: {
                             Label("Event.previous", systemImage: "arrow.backward")
                         })
-                        .disabled(eventID <= 1)
+                        .disabled(eventID <= 1 || eventID > latestEventID)
                         NavigationLink(destination: {
                             EventSearchView()
                         }, label: {
@@ -194,13 +194,13 @@ struct EventDetailOverviewView: View {
                             .antialiased(true)
                             .resizable()
                             .aspectRatio(3.0, contentMode: .fit)
-                            .frame(maxWidth: 420, maxHeight: 140)
+                            .frame(maxWidth: bannerWidth, maxHeight: bannerWidth/3)
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
 //                            .fill(Color.gray.opacity(0.15))
-                            .fill(Color(UIColor.placeholderText))
+                            .fill(getPlaceholderColor())
                             .aspectRatio(3.0, contentMode: .fit)
-                            .frame(maxWidth: 420, maxHeight: 140)
+                            .frame(maxWidth: bannerWidth, maxHeight: bannerWidth/3)
                     }
                     .interpolation(.high)
                     .cornerRadius(10)
@@ -476,7 +476,7 @@ struct EventDetailOverviewView: View {
                             Text("Event.id")
                                 .bold()
                         }, value: {
-                            Text("\(information.id)")
+                            Text("\(String(information.id))")
                         })
                     }
                 }
@@ -521,22 +521,18 @@ struct EventDetailOverviewView: View {
 }
 
 
-
-
-
 //MARK: EventSearchView
 struct EventSearchView: View {
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.horizontalSizeClass) var sizeClass
-    let bannerWidth: CGFloat = isMACOS ? 370 : 420
-    let bannerSpacing: CGFloat = isMACOS ? 10 : 15
     @State var filter = DoriFrontend.Filter()
     @State var events: [DoriFrontend.Event.PreviewEvent]?
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
     @State var searchedEventsChunked: [[DoriFrontend.Event.PreviewEvent]]?
     @State var infoIsAvailable = true
     @State var searchedText = ""
-    @State var showDetails = false
+    @State var showDetails = true
+    @State var showFilterSheet = false
     @Namespace var eventLists
     var body: some View {
         Group {
@@ -554,20 +550,22 @@ struct EventSearchView: View {
                                                 ForEach(eventGroup) { event in
                                                     NavigationLink(destination: {
                                                         EventDetailView(id: event.id)
+                                                        #if os(iOS)
                                                             .wrapIf(true, in: { content in
-                                                                if #available(iOS 18.0, macOS 14.0, *) {
+                                                                if #available(iOS 18.0, macOS 15.0, *) {
                                                                     content
                                                                         .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
                                                                 } else {
                                                                     content
                                                                 }
                                                             })
+                                                        #endif
                                                     }, label: {
                                                         EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
-                                                        if #available(iOS 18.0, macOS 14.0, *) {
+                                                        if #available(iOS 18.0, macOS 15.0, *) {
                                                             content
                                                                 .matchedTransitionSource(
                                                                     id: event.id,
@@ -577,7 +575,6 @@ struct EventSearchView: View {
                                                             content
                                                         }
                                                     })
-                                                    
                                                     if eventGroup.count == 1 && events[0].count != 1 {
                                                         Rectangle()
                                                             .frame(maxWidth: 420, maxHeight: 140)
@@ -595,20 +592,21 @@ struct EventSearchView: View {
                                                 EventDetailView(id: event.id)
                                             }, label: {
                                                 EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
-                                                //                                        .padding(.all, showDetails ? 0 : nil)
+                                                #if os(iOS)
                                                     .wrapIf(true, in: { content in
-                                                        if #available(iOS 18.0, macOS 14.0, *) {
+                                                        if #available(iOS 18.0, macOS 15.0, *) {
                                                             content
                                                                 .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
                                                         } else {
                                                             content
                                                         }
                                                     })
+                                                #endif
                                                     .frame(maxWidth: bannerWidth)
                                             })
                                             .buttonStyle(.plain)
                                             .wrapIf(true, in: { content in
-                                                if #available(iOS 18.0, macOS 14.0, *) {
+                                                if #available(iOS 18.0, macOS 15.0, *) {
                                                     content
                                                         .matchedTransitionSource(
                                                             id: event.id,
@@ -627,7 +625,7 @@ struct EventSearchView: View {
                                 .animation(.easeInOut(duration: 0.2), value: showDetails)
                                 Spacer(minLength: 0)
                             }
-                            .padding(sizeClass == .compact ? .bottom: .vertical)
+//                            .padding(sizeClass == .compact ? .bottom: .vertical)
                         }
                         //                .onChange(of: searchedEvents, {
                         //                    searchedEventsChunked = searchedEvents.chunked(into: 2)
@@ -681,12 +679,26 @@ struct EventSearchView: View {
                     Image(systemName: "info.circle")
                 })
             }
+            ToolbarItem {
+                Button(action: {
+                    showFilterSheet = true
+                }, label: {
+                    Image(systemName: "line.3.horizontal.decrease")
+                })
+                .popover(isPresented: $showFilterSheet) {
+                    FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
+                }
+            }
         }
         .onChange(of: searchedEvents, {
             if let searchedEvents {
                 searchedEventsChunked = searchedEvents.chunked(into: 2)
             }
         })
+//        .sheet(isPresented: $showFilterSheet, content: {
+//            FilterView()
+////                .sheet
+//        })
     }
     
     func getEvents() async {

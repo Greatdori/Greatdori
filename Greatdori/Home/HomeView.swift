@@ -19,7 +19,7 @@ import SDWebImageSwiftUI
 
 let loadingAnimationDuration = 0.1
 let localeFromStringDict: [String: DoriAPI.Locale] = ["jp": .jp, "cn": .cn, "tw": .tw, "en": .en, "kr": .kr]
-let localeToStringDict: [DoriAPI.Locale: String] = [.jp: "JP", .en: "EN", .tw: "TW", .cn: "CN", .kr: "KR"]
+//let localeToStringDict: [DoriAPI.Locale: String] = [.jp: "JP", .en: "EN", .tw: "TW", .cn: "CN", .kr: "KR"]
 
 private let _homeNavigationSubject = PassthroughSubject<NavigationPage?, Never>()
 @_transparent
@@ -61,7 +61,7 @@ struct HomeView: View {
                             Spacer()
                         }
                     }
-                    .padding()
+                    .padding(.horizontal)
                     .opacity(useCompactVariant ? 0 : 1)
                     .frame(width: useCompactVariant ? 0 : nil, height: useCompactVariant ? 0 : nil)
                     VStack {
@@ -72,7 +72,7 @@ struct HomeView: View {
                         HomeEventsView(locale: localeFromStringDict[homeEventServer3] ?? .jp)
                         HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp)
                     }
-                    .padding()
+                    .padding(.horizontal)
                     .opacity(!useCompactVariant ? 0 : 1)
                     .frame(width: !useCompactVariant ? 0 : nil, height: !useCompactVariant ? 0 : nil)
                 }
@@ -144,7 +144,7 @@ struct HomeNewsView: View {
                                 Text("Home.news")
                                     .font(.title2)
                                     .bold()
-                                    .foregroundStyle(Color(UIColor.placeholderText))
+                                    .foregroundStyle(getPlaceholderColor())
                                     .redacted(reason: .placeholder)
                             }
                             Spacer()
@@ -166,8 +166,8 @@ struct HomeNewsView: View {
                             ForEach(0..<5, id: \.self) { newsIndex in
                                 VStack(alignment: .leading) {
                                     Rectangle()
-//                                        .fill(Color.gray.opacity(0.15))
-                                        .fill(Color(UIColor.placeholderText))
+                                        .fill(Color.gray.opacity(0.15))
+//                                        .fill(Color.placeholderText)
                                         .frame(height: 40)
                                         .cornerRadius(5)
                                         .redacted(reason: .placeholder)
@@ -253,7 +253,7 @@ struct HomeBirthdayView: View {
                             .bold()
                     } else {
                         Text("Home.birthday")
-                            .foregroundStyle(Color(UIColor.placeholderText))
+                            .foregroundStyle(getPlaceholderColor())
                             .font(.title2)
                             .bold()
                             .redacted(reason: .placeholder)
@@ -370,13 +370,13 @@ struct HomeBirthdayView: View {
                 } else {
                     HStack {
                         Text(verbatim: "Lorem ipsum")
-                            .foregroundStyle(Color(UIColor.placeholderText))
+                            .foregroundStyle(getPlaceholderColor())
                             .redacted(reason: .placeholder)
                         Rectangle()
                             .opacity(0)
                             .frame(width: 2, height: 2)
                         Text(verbatim: "dolor sit")
-                            .foregroundStyle(Color(UIColor.placeholderText))
+                            .foregroundStyle(getPlaceholderColor())
                             .redacted(reason: .placeholder)
                         Spacer()
                     }
@@ -466,10 +466,10 @@ struct HomeEventsView: View {
                                 Text(verbatim: "Lorem ipsum dolor sit amet consectetur")
                                     .bold()
                                     .font(.title3)
-                                    .foregroundStyle(Color(UIColor.placeholderText))
+                                    .foregroundStyle(getPlaceholderColor())
                                     .redacted(reason: .placeholder)
                                 Text(verbatim: "Lorem ipsum dolor")
-                                    .foregroundStyle(Color(UIColor.placeholderText))
+                                    .foregroundStyle(getPlaceholderColor())
                                     .redacted(reason: .placeholder)
                             }
                         }

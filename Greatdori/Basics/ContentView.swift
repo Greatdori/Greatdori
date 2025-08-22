@@ -14,6 +14,8 @@
 
 // This file is the root of the navigation system for the whole cross-platform, multi-system-version app.
 
+// MARK: This file is root-navigation-related items only.
+
 import SwiftUI
 import DoriKit
 
@@ -80,7 +82,7 @@ struct ContentView: View {
                 }
                 .tabViewStyle(.sidebarAdaptable)
                 .wrapIf(true, in: { content in
-                    if #available(iOS 26.0, *) {
+                    if #available(iOS 26.0, macOS 26.0, *) {
                         content
                             .tabBarMinimizeBehavior(.automatic)
                     } else {
@@ -283,8 +285,8 @@ struct WelcomeView: View {
         }
         .padding()
         .onAppear {
-            primaryLocale = localeToStringDict[DoriAPI.preferredLocale]?.lowercased() ?? "jp"
-            secondaryLocale = localeToStringDict[DoriAPI.secondaryLocale]?.lowercased() ?? "en"
+            primaryLocale = DoriAPI.preferredLocale.rawValue
+            secondaryLocale = DoriAPI.secondaryLocale.rawValue
         }
         .toolbar {
             ToolbarItem(placement: .confirmationAction, content: {
