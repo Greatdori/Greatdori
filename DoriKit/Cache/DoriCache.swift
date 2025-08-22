@@ -166,6 +166,8 @@ extension DoriCache.Cacheable {
         let decoder = PropertyListDecoder()
         if let data = try? decoder.decode(Self.self, from: cache) {
             self = data
+        } else if let wrapped = try? decoder.decode(CacheWrapper<Self>.self, from: cache) {
+            self = wrapped.value
         } else {
             return nil
         }
@@ -173,8 +175,19 @@ extension DoriCache.Cacheable {
     public var dataForCache: Data {
         let encoder = PropertyListEncoder()
         encoder.outputFormat = .binary
-        return try! encoder.encode(self)
+        do {
+            return try encoder.encode(self)
+        } catch {
+            // If `self` is a single value (e.g. String),
+            // PropertyListEncoder can't encode it,
+            // we use a wrapper then.
+            let wrappedValue = CacheWrapper(value: self)
+            return try! encoder.encode(wrappedValue)
+        }
     }
+}
+private struct CacheWrapper<T: DoriCache.Cacheable>: DoriCache.Cacheable {
+    var value: T
 }
 
 extension Color: @retroactive Encodable {
