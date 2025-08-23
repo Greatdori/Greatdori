@@ -30,35 +30,11 @@ func copyStringToClipboard(_ content: String) {
 #endif
 }
 
-func getGroupedBackgroundColor() -> Color {
-#if os(iOS)
-    return Color(UIColor.systemGroupedBackground)
-#else
-    return Color(NSColor.groupedBackgroundColor)
-#endif
-}
-
-func getSecondarySystemBackgroundColor() -> Color {
-#if os(iOS)
-    return Color(UIColor.tertiarySystemGroupedBackground)
-#else
-    return Color(NSColor.secondarySystemBackground)
-#endif
-}
-
 func getPlaceholderColor() -> Color {
 #if os(iOS)
     return Color(UIColor.placeholderText)
 #else
     return Color(NSColor.placeholderTextColor)
-#endif
-}
-
-func getWindowBackgroundColor() -> Color {
-#if os(iOS)
-    return Color(UIColor.systemBackground)
-#else
-    return Color(NSColor.windowBackground)
 #endif
 }
 
