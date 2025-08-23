@@ -17,12 +17,9 @@
 
 /**
  * @file git2/merge.h
- * @brief Merge re-joins diverging branches of history
+ * @brief Git merge routines
  * @defgroup git_merge Git merge routines
  * @ingroup Git
- *
- * Merge will take two commits and attempt to produce a commit that
- * includes the changes that were made in both branches.
  * @{
  */
 GIT_BEGIN_DECL
@@ -48,10 +45,7 @@ typedef struct {
 	unsigned int mode;
 } git_merge_file_input;
 
-/** Current version for the `git_merge_file_input_options` structure */
 #define GIT_MERGE_FILE_INPUT_VERSION 1
-
-/** Static constructor for `git_merge_file_input_options` */
 #define GIT_MERGE_FILE_INPUT_INIT {GIT_MERGE_FILE_INPUT_VERSION}
 
 /**
@@ -98,14 +92,6 @@ typedef enum {
 	 * merge base to `git-merge-resolve`.
 	 */
 	GIT_MERGE_NO_RECURSIVE = (1 << 3),
-
-	/**
-	 * Treat this merge as if it is to produce the virtual base
-	 * of a recursive merge.  This will ensure that there are
-	 * no conflicts, any conflicting regions will keep conflict
-	 * markers in the merge result.
-	 */
-	GIT_MERGE_VIRTUAL_BASE = (1 << 4)
 } git_merge_flag_t;
 
 /**
@@ -141,7 +127,7 @@ typedef enum {
 	 * which has the result of combining both files.  The index will not
 	 * record a conflict.
 	 */
-	GIT_MERGE_FILE_FAVOR_UNION = 3
+	GIT_MERGE_FILE_FAVOR_UNION = 3,
 } git_merge_file_favor_t;
 
 /**
@@ -174,19 +160,8 @@ typedef enum {
 
 	/** Take extra time to find minimal diff */
 	GIT_MERGE_FILE_DIFF_MINIMAL = (1 << 7),
-
-	/** Create zdiff3 ("zealous diff3")-style files */
-	GIT_MERGE_FILE_STYLE_ZDIFF3 = (1 << 8),
-
-	/**
-	 * Do not produce file conflicts when common regions have
-	 * changed; keep the conflict markers in the file and accept
-	 * that as the merge result.
-	 */
-	GIT_MERGE_FILE_ACCEPT_CONFLICTS = (1 << 9)
 } git_merge_file_flag_t;
 
-/** Default size for conflict markers */
 #define GIT_MERGE_CONFLICT_MARKER_SIZE	7
 
 /**
@@ -224,10 +199,7 @@ typedef struct {
 	unsigned short marker_size;
 } git_merge_file_options;
 
-/** Current version for the `git_merge_file_options` structure */
 #define GIT_MERGE_FILE_OPTIONS_VERSION 1
-
-/** Static constructor for `git_merge_file_options` */
 #define GIT_MERGE_FILE_OPTIONS_INIT {GIT_MERGE_FILE_OPTIONS_VERSION}
 
 /**
@@ -322,10 +294,7 @@ typedef struct {
 	uint32_t file_flags;
 } git_merge_options;
 
-/** Current version for the `git_merge_options` structure */
 #define GIT_MERGE_OPTIONS_VERSION 1
-
-/** Static constructor for `git_merge_options` */
 #define GIT_MERGE_OPTIONS_INIT { \
 	GIT_MERGE_OPTIONS_VERSION, GIT_MERGE_FIND_RENAMES }
 
@@ -372,7 +341,7 @@ typedef enum {
 	 * a valid commit.  No merge can be performed, but the caller may wish
 	 * to simply set HEAD to the target commit(s).
 	 */
-	GIT_MERGE_ANALYSIS_UNBORN = (1 << 3)
+	GIT_MERGE_ANALYSIS_UNBORN = (1 << 3),
 } git_merge_analysis_t;
 
 /**
@@ -395,7 +364,7 @@ typedef enum {
 	 * There is a `merge.ff=only` configuration setting, suggesting that
 	 * the user only wants fast-forward merges.
 	 */
-	GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY = (1 << 1)
+	GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY = (1 << 1),
 } git_merge_preference_t;
 
 /**
@@ -403,7 +372,6 @@ typedef enum {
  * merging them into the HEAD of the repository.
  *
  * @param analysis_out analysis enumeration that the result is written into
- * @param preference_out One of the `git_merge_preference_t` flag.
  * @param repo the repository to merge
  * @param their_heads the heads to merge into
  * @param their_heads_len the number of heads to merge
@@ -421,7 +389,6 @@ GIT_EXTERN(int) git_merge_analysis(
  * merging them into a reference.
  *
  * @param analysis_out analysis enumeration that the result is written into
- * @param preference_out One of the `git_merge_preference_t` flag.
  * @param repo the repository to merge
  * @param our_ref the reference to perform the analysis from
  * @param their_heads the heads to merge into
@@ -483,37 +450,6 @@ GIT_EXTERN(int) git_merge_base_many(
 
 /**
  * Find all merge bases given a list of commits
- *
- * This behaves similar to [`git merge-base`](https://git-scm.com/docs/git-merge-base#_discussion).
- *
- * Given three commits `a`, `b`, and `c`, `merge_base_many`
- * will compute a hypothetical commit `m`, which is a merge between `b`
- * and `c`.
-
- * For example, with the following topology:
- * ```text
- *        o---o---o---o---C
- *       /
- *      /   o---o---o---B
- *     /   /
- * ---2---1---o---o---o---A
- * ```
- *
- * the result of `merge_base_many` given `a`, `b`, and `c` is 1. This is
- * because the equivalent topology with the imaginary merge commit `m`
- * between `b` and `c` is:
- * ```text
- *        o---o---o---o---o
- *       /                 \
- *      /   o---o---o---o---M
- *     /   /
- * ---2---1---o---o---o---A
- * ```
- *
- * and the result of `merge_base_many` given `a` and `m` is 1.
- *
- * If you're looking to recieve the common ancestor between all the
- * given commits, use `merge_base_octopus`.
  *
  * @param out array in which to store the resulting ids
  * @param repo the repository where the commits exist
@@ -647,7 +583,7 @@ GIT_EXTERN(int) git_merge_commits(
  * completes, resolve any conflicts and prepare a commit.
  *
  * For compatibility with git, the repository is put into a merging
- * state. Once the commit is done (or if the user wishes to abort),
+ * state. Once the commit is done (or if the uses wishes to abort),
  * you should clear this state by calling
  * `git_repository_state_cleanup()`.
  *
@@ -667,5 +603,4 @@ GIT_EXTERN(int) git_merge(
 
 /** @} */
 GIT_END_DECL
-
 #endif

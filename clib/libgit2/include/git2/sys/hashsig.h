@@ -9,16 +9,6 @@
 
 #include "git2/common.h"
 
-/**
- * @file git2/sys/hashsig.h
- * @brief Signatures for file similarity comparison
- * @defgroup git_hashsig Git merge routines
- * @ingroup Git
- *
- * Hash signatures are used for file similary comparison; this is
- * used for git's rename handling.
- * @{
- */
 GIT_BEGIN_DECL
 
 /**
@@ -111,7 +101,6 @@ GIT_EXTERN(int) git_hashsig_compare(
 	const git_hashsig *a,
 	const git_hashsig *b);
 
-/** @} */
 GIT_END_DECL
 
 #endif

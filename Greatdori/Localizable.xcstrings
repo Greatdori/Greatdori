@@ -206,6 +206,12 @@
         }
       }
     },
+    "Clone" : {
+
+    },
+    "Clone preferred locale basic (check console)" : {
+
+    },
     "Debug.pre-cache-unavailable-alert.dismiss" : {
       "localizations" : {
         "en" : {
@@ -1290,6 +1296,9 @@
         }
       }
     },
+    "Inspection" : {
+
+    },
     "Message.copy.success" : {
       "localizations" : {
         "en" : {
@@ -1715,6 +1724,12 @@
           }
         }
       }
+    },
+    "Offline Asset Debug" : {
+
+    },
+    "Open documents directory" : {
+
     },
     "Settings" : {
       "localizations" : {

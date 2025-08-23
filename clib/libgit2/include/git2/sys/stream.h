@@ -11,16 +11,8 @@
 #include "git2/types.h"
 #include "git2/proxy.h"
 
-/**
- * @file git2/sys/stream.h
- * @brief Streaming file I/O functionality
- * @defgroup git_stream Streaming file I/O functionality
- * @ingroup Git
- * @{
- */
 GIT_BEGIN_DECL
 
-/** Current version for the `git_stream` structures */
 #define GIT_STREAM_VERSION 1
 
 /**
@@ -37,22 +29,8 @@ GIT_BEGIN_DECL
 typedef struct git_stream {
 	int version;
 
-	unsigned int encrypted : 1,
-	             proxy_support : 1;
-
-	/**
-	 * Timeout for read and write operations; can be set to `0` to
-	 * block indefinitely.
-	 */
-	int timeout;
-
-	/**
-	 * Timeout to connect to the remote server; can be set to `0`
-	 * to use the system defaults. This can be shorter than the
-	 * system default - often 75 seconds - but cannot be longer.
-	 */
-	int connect_timeout;
-
+	int encrypted;
+	int proxy_support;
 	int GIT_CALLBACK(connect)(struct git_stream *);
 	int GIT_CALLBACK(certificate)(git_cert **, struct git_stream *);
 	int GIT_CALLBACK(set_proxy)(struct git_stream *, const git_proxy_options *proxy_opts);
@@ -101,7 +79,7 @@ typedef enum {
 	GIT_STREAM_STANDARD = 1,
 
 	/** A TLS-encrypted socket. */
-	GIT_STREAM_TLS = 2
+	GIT_STREAM_TLS = 2,
 } git_stream_t;
 
 /**
@@ -155,7 +133,6 @@ GIT_EXTERN(int) git_stream_register_tls(git_stream_cb ctor);
 
 #endif
 
-/**@}*/
 GIT_END_DECL
 
 #endif

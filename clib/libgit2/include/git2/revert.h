@@ -13,8 +13,8 @@
 
 /**
  * @file git2/revert.h
- * @brief Cherry-pick the inverse of a change to "undo" its effects
- * @defgroup git_revert Cherry-pick the inverse of a change to "undo" its effects
+ * @brief Git revert routines
+ * @defgroup git_revert Git revert routines
  * @ingroup Git
  * @{
  */
@@ -33,13 +33,8 @@ typedef struct {
 	git_checkout_options checkout_opts; /**< Options for the checkout */
 } git_revert_options;
 
-/** Current version for the `git_revert_options` structure */
 #define GIT_REVERT_OPTIONS_VERSION 1
-
-/** Static constructor for `git_revert_options` */
-#define GIT_REVERT_OPTIONS_INIT { \
-	GIT_REVERT_OPTIONS_VERSION, 0, \
-	GIT_MERGE_OPTIONS_INIT, GIT_CHECKOUT_OPTIONS_INIT }
+#define GIT_REVERT_OPTIONS_INIT {GIT_REVERT_OPTIONS_VERSION, 0, GIT_MERGE_OPTIONS_INIT, GIT_CHECKOUT_OPTIONS_INIT}
 
 /**
  * Initialize git_revert_options structure
@@ -92,5 +87,5 @@ GIT_EXTERN(int) git_revert(
 
 /** @} */
 GIT_END_DECL
-
 #endif
+

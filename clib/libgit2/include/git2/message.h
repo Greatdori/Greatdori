@@ -12,7 +12,7 @@
 
 /**
  * @file git2/message.h
- * @brief Commit messages
+ * @brief Git message management routines
  * @ingroup Git
  * @{
  */
@@ -75,12 +75,10 @@ GIT_EXTERN(int) git_message_trailers(git_message_trailer_array *arr, const char 
 /**
  * Clean's up any allocated memory in the git_message_trailer_array filled by
  * a call to git_message_trailers.
- *
- * @param arr The trailer to free.
  */
 GIT_EXTERN(void) git_message_trailer_array_free(git_message_trailer_array *arr);
 
 /** @} */
 GIT_END_DECL
 
-#endif
+#endif /* INCLUDE_git_message_h__ */

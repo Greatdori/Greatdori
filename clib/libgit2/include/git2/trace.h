@@ -12,8 +12,8 @@
 
 /**
  * @file git2/trace.h
- * @brief Tracing functionality to introspect libgit2 in your application
- * @defgroup git_trace Tracing functionality to introspect libgit2 in your application
+ * @brief Git tracing configuration routines
+ * @defgroup git_trace Git tracing configuration routines
  * @ingroup Git
  * @{
  */
@@ -48,13 +48,8 @@ typedef enum {
 
 /**
  * An instance for a tracing function
- *
- * @param level the trace level
- * @param msg the trace message
  */
-typedef void GIT_CALLBACK(git_trace_cb)(
-	git_trace_level_t level,
-	const char *msg);
+typedef void GIT_CALLBACK(git_trace_cb)(git_trace_level_t level, const char *msg);
 
 /**
  * Sets the system tracing configuration to the specified level with the
@@ -69,5 +64,4 @@ GIT_EXTERN(int) git_trace_set(git_trace_level_t level, git_trace_cb cb);
 
 /** @} */
 GIT_END_DECL
-
 #endif

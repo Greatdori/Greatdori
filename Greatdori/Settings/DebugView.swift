@@ -89,3 +89,32 @@ struct DebugBirthdayViewUnit: View {
         }
     }
 }
+
+@available(iOS, unavailable)
+struct DebugOfflineAssetView: View {
+    var body: some View {
+        #if os(macOS)
+        Form {
+            Section {
+                Button("Open documents directory") {
+                    NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: NSHomeDirectory() + "/Documents")
+                }
+            } header: {
+                Text("Inspection")
+            }
+            Section {
+                Button("Clone preferred locale basic (check console)") {
+                    DoriOfflineAsset.shared.downloadResource(of: "basic", in: .cn) { percentage, finished, total in
+                        print("\(percentage)%, \(finished) / \(total)")
+                    }
+                }
+            } header: {
+                Text("Clone")
+            }
+        }
+        .formStyle(.grouped)
+        #else
+        preconditionFailure()
+        #endif
+    }
+}

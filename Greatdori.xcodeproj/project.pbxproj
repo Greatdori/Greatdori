@@ -100,9 +100,21 @@
 		8C7855DA2E4A6994000EA06E /* MiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855D92E4A698D000EA06E /* MiracleTicket.swift */; };
 		8C7855DC2E4A6BFA000EA06E /* FrontendMiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */; };
 		8C7F6B152E581BDC0040C206 /* SystemColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F6B142E581BD80040C206 /* SystemColor.swift */; };
-		8C7F6B802E5919CC0040C206 /* libgit2_iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B7A2E5918990040C206 /* libgit2_iphoneos.a */; platformFilter = ios; };
-		8C7F6B812E591A5F0040C206 /* libgit2_osx.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B792E5918420040C206 /* libgit2_osx.dylib */; platformFilters = (macos, ); };
-		8C7F6B822E591A5F0040C206 /* libgit2_osx.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B792E5918420040C206 /* libgit2_osx.dylib */; platformFilters = (macos, ); settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		8C7F6B9A2E593AFE0040C206 /* DoriOfflineAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F6B992E593AFB0040C206 /* DoriOfflineAsset.swift */; };
+		8C7F6BCB2E5949950040C206 /* DoriAssetShims.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8C7F6BD42E5949AE0040C206 /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B922E5922070040C206 /* GSS.framework */; platformFilters = (ios, maccatalyst, macos, xros, ); };
+		8C7F6BD52E5949AE0040C206 /* libgssapi_krb5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B8E2E5921990040C206 /* libgssapi_krb5.tbd */; platformFilters = (maccatalyst, macos, ); };
+		8C7F6BD62E5949B40040C206 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B902E5921BB0040C206 /* libiconv.tbd */; };
+		8C7F6BE02E594A6C0040C206 /* AssetShims.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F6BBB2E59478C0040C206 /* AssetShims.m */; };
+		8C7F6BE32E594AC60040C206 /* DoriAssetShims.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C7F6BE22E594AC60040C206 /* DoriAssetShims.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C7F6BF62E594EDF0040C206 /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B922E5922070040C206 /* GSS.framework */; platformFilters = (ios, maccatalyst, macos, xros, ); };
+		8C7F6BF72E594EDF0040C206 /* libgssapi_krb5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B8E2E5921990040C206 /* libgssapi_krb5.tbd */; platformFilters = (maccatalyst, macos, ); };
+		8C7F6BF82E594EE60040C206 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B902E5921BB0040C206 /* libiconv.tbd */; };
+		8C7F6C052E59935C0040C206 /* DoriAssetShims.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */; platformFilters = (ios, maccatalyst, macos, ); };
+		8C7F6C0B2E59950C0040C206 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C0A2E59950C0040C206 /* libgit2.xcframework */; };
+		8C7F6C0D2E5995990040C206 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C0C2E5995990040C206 /* libssh2.xcframework */; };
+		8C7F6C112E5996540040C206 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C102E5996540040C206 /* OpenSSL.xcframework */; };
+		8C7F6C132E5996AB0040C206 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C122E5996A70040C206 /* libz.tbd */; };
 		8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift */; };
 		8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */; };
 		8C923D7D2E304882003AFC0A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */; };
@@ -330,6 +342,27 @@
 			remoteGlobalIDString = 8C0C995C2E296A4400549B5C;
 			remoteInfo = Greatdori;
 		};
+		8C7F6BC82E5949950040C206 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C7F6BC32E5949950040C206;
+			remoteInfo = DoriAssetShims;
+		};
+		8C7F6BF42E594EA70040C206 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C7F6BC32E5949950040C206;
+			remoteInfo = DoriAssetShims;
+		};
+		8C7F6C072E59935C0040C206 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C7F6BC32E5949950040C206;
+			remoteInfo = DoriAssetShims;
+		};
 		8C9474572E35DE1C003A90B4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
@@ -420,7 +453,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8C7F6B822E591A5F0040C206 /* libgit2_osx.dylib in Embed Frameworks */,
+				8C7F6BCB2E5949950040C206 /* DoriAssetShims.framework in Embed Frameworks */,
 				8CB4D4802E445F700085D57A /* BuiltinCardCollections.framework in Embed Frameworks */,
 				8C0C99982E296A8C00549B5C /* DoriKit.framework in Embed Frameworks */,
 			);
@@ -585,101 +618,108 @@
 		8C7855D92E4A698D000EA06E /* MiracleTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiracleTicket.swift; sourceTree = "<group>"; };
 		8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendMiracleTicket.swift; sourceTree = "<group>"; };
 		8C7F6B142E581BD80040C206 /* SystemColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemColor.swift; sourceTree = "<group>"; };
-		8C7F6B192E5918040040C206 /* git2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = git2.h; sourceTree = "<group>"; };
-		8C7F6B1A2E5918040040C206 /* alloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = alloc.h; sourceTree = "<group>"; };
-		8C7F6B1B2E5918040040C206 /* commit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commit.h; sourceTree = "<group>"; };
-		8C7F6B1C2E5918040040C206 /* commit_graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commit_graph.h; sourceTree = "<group>"; };
-		8C7F6B1D2E5918040040C206 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		8C7F6B1E2E5918040040C206 /* cred.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cred.h; sourceTree = "<group>"; };
-		8C7F6B1F2E5918040040C206 /* credential.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credential.h; sourceTree = "<group>"; };
-		8C7F6B202E5918040040C206 /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
-		8C7F6B212E5918040040C206 /* email.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = email.h; sourceTree = "<group>"; };
-		8C7F6B222E5918040040C206 /* errors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
-		8C7F6B232E5918040040C206 /* filter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filter.h; sourceTree = "<group>"; };
-		8C7F6B242E5918040040C206 /* hashsig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hashsig.h; sourceTree = "<group>"; };
-		8C7F6B252E5918040040C206 /* index.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = index.h; sourceTree = "<group>"; };
-		8C7F6B262E5918040040C206 /* mempack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mempack.h; sourceTree = "<group>"; };
-		8C7F6B272E5918040040C206 /* merge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = merge.h; sourceTree = "<group>"; };
-		8C7F6B282E5918040040C206 /* midx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = midx.h; sourceTree = "<group>"; };
-		8C7F6B292E5918040040C206 /* odb_backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = odb_backend.h; sourceTree = "<group>"; };
-		8C7F6B2A2E5918040040C206 /* openssl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = openssl.h; sourceTree = "<group>"; };
-		8C7F6B2B2E5918040040C206 /* path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = path.h; sourceTree = "<group>"; };
-		8C7F6B2C2E5918040040C206 /* refdb_backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refdb_backend.h; sourceTree = "<group>"; };
-		8C7F6B2D2E5918040040C206 /* refs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refs.h; sourceTree = "<group>"; };
-		8C7F6B2E2E5918040040C206 /* remote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = remote.h; sourceTree = "<group>"; };
-		8C7F6B2F2E5918040040C206 /* repository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = repository.h; sourceTree = "<group>"; };
-		8C7F6B302E5918040040C206 /* stream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stream.h; sourceTree = "<group>"; };
-		8C7F6B312E5918040040C206 /* transport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = transport.h; sourceTree = "<group>"; };
-		8C7F6B332E5918040040C206 /* annotated_commit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = annotated_commit.h; sourceTree = "<group>"; };
-		8C7F6B342E5918040040C206 /* apply.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = apply.h; sourceTree = "<group>"; };
-		8C7F6B352E5918040040C206 /* attr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = attr.h; sourceTree = "<group>"; };
-		8C7F6B362E5918040040C206 /* blame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blame.h; sourceTree = "<group>"; };
-		8C7F6B372E5918040040C206 /* blob.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blob.h; sourceTree = "<group>"; };
-		8C7F6B382E5918040040C206 /* branch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = branch.h; sourceTree = "<group>"; };
-		8C7F6B392E5918040040C206 /* buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = buffer.h; sourceTree = "<group>"; };
-		8C7F6B3A2E5918040040C206 /* cert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cert.h; sourceTree = "<group>"; };
-		8C7F6B3B2E5918040040C206 /* checkout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = checkout.h; sourceTree = "<group>"; };
-		8C7F6B3C2E5918040040C206 /* cherrypick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cherrypick.h; sourceTree = "<group>"; };
-		8C7F6B3D2E5918040040C206 /* clone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clone.h; sourceTree = "<group>"; };
-		8C7F6B3E2E5918040040C206 /* commit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commit.h; sourceTree = "<group>"; };
-		8C7F6B3F2E5918040040C206 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
-		8C7F6B402E5918040040C206 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		8C7F6B412E5918040040C206 /* cred_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cred_helpers.h; sourceTree = "<group>"; };
-		8C7F6B422E5918040040C206 /* credential.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credential.h; sourceTree = "<group>"; };
-		8C7F6B432E5918040040C206 /* credential_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credential_helpers.h; sourceTree = "<group>"; };
-		8C7F6B442E5918040040C206 /* deprecated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deprecated.h; sourceTree = "<group>"; };
-		8C7F6B452E5918040040C206 /* describe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = describe.h; sourceTree = "<group>"; };
-		8C7F6B462E5918040040C206 /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
-		8C7F6B472E5918040040C206 /* email.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = email.h; sourceTree = "<group>"; };
-		8C7F6B482E5918040040C206 /* errors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
-		8C7F6B492E5918040040C206 /* experimental.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = experimental.h; sourceTree = "<group>"; };
-		8C7F6B4A2E5918040040C206 /* filter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filter.h; sourceTree = "<group>"; };
-		8C7F6B4B2E5918040040C206 /* global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = global.h; sourceTree = "<group>"; };
-		8C7F6B4C2E5918040040C206 /* graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = graph.h; sourceTree = "<group>"; };
-		8C7F6B4D2E5918040040C206 /* ignore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ignore.h; sourceTree = "<group>"; };
-		8C7F6B4E2E5918040040C206 /* index.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = index.h; sourceTree = "<group>"; };
-		8C7F6B4F2E5918040040C206 /* indexer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = indexer.h; sourceTree = "<group>"; };
-		8C7F6B502E5918040040C206 /* mailmap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mailmap.h; sourceTree = "<group>"; };
-		8C7F6B512E5918040040C206 /* merge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = merge.h; sourceTree = "<group>"; };
-		8C7F6B522E5918040040C206 /* message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = message.h; sourceTree = "<group>"; };
-		8C7F6B532E5918040040C206 /* net.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = net.h; sourceTree = "<group>"; };
-		8C7F6B542E5918040040C206 /* notes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = notes.h; sourceTree = "<group>"; };
-		8C7F6B552E5918040040C206 /* object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = object.h; sourceTree = "<group>"; };
-		8C7F6B562E5918040040C206 /* odb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = odb.h; sourceTree = "<group>"; };
-		8C7F6B572E5918040040C206 /* odb_backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = odb_backend.h; sourceTree = "<group>"; };
-		8C7F6B582E5918040040C206 /* oid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oid.h; sourceTree = "<group>"; };
-		8C7F6B592E5918040040C206 /* oidarray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oidarray.h; sourceTree = "<group>"; };
-		8C7F6B5A2E5918040040C206 /* pack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pack.h; sourceTree = "<group>"; };
-		8C7F6B5B2E5918040040C206 /* patch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = patch.h; sourceTree = "<group>"; };
-		8C7F6B5C2E5918040040C206 /* pathspec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pathspec.h; sourceTree = "<group>"; };
-		8C7F6B5D2E5918040040C206 /* proxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = proxy.h; sourceTree = "<group>"; };
-		8C7F6B5E2E5918040040C206 /* rebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rebase.h; sourceTree = "<group>"; };
-		8C7F6B5F2E5918040040C206 /* refdb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refdb.h; sourceTree = "<group>"; };
-		8C7F6B602E5918040040C206 /* reflog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reflog.h; sourceTree = "<group>"; };
-		8C7F6B612E5918040040C206 /* refs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refs.h; sourceTree = "<group>"; };
-		8C7F6B622E5918040040C206 /* refspec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refspec.h; sourceTree = "<group>"; };
-		8C7F6B632E5918040040C206 /* remote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = remote.h; sourceTree = "<group>"; };
-		8C7F6B642E5918040040C206 /* repository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = repository.h; sourceTree = "<group>"; };
-		8C7F6B652E5918040040C206 /* reset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reset.h; sourceTree = "<group>"; };
-		8C7F6B662E5918040040C206 /* revert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = revert.h; sourceTree = "<group>"; };
-		8C7F6B672E5918040040C206 /* revparse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = revparse.h; sourceTree = "<group>"; };
-		8C7F6B682E5918040040C206 /* revwalk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = revwalk.h; sourceTree = "<group>"; };
-		8C7F6B692E5918040040C206 /* signature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = signature.h; sourceTree = "<group>"; };
-		8C7F6B6A2E5918040040C206 /* stash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stash.h; sourceTree = "<group>"; };
-		8C7F6B6B2E5918040040C206 /* status.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = status.h; sourceTree = "<group>"; };
-		8C7F6B6C2E5918040040C206 /* stdint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stdint.h; sourceTree = "<group>"; };
-		8C7F6B6D2E5918040040C206 /* strarray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = strarray.h; sourceTree = "<group>"; };
-		8C7F6B6E2E5918040040C206 /* submodule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = submodule.h; sourceTree = "<group>"; };
-		8C7F6B6F2E5918040040C206 /* tag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tag.h; sourceTree = "<group>"; };
-		8C7F6B702E5918040040C206 /* trace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = trace.h; sourceTree = "<group>"; };
-		8C7F6B712E5918040040C206 /* transaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = transaction.h; sourceTree = "<group>"; };
-		8C7F6B722E5918040040C206 /* transport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = transport.h; sourceTree = "<group>"; };
-		8C7F6B732E5918040040C206 /* tree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tree.h; sourceTree = "<group>"; };
-		8C7F6B742E5918040040C206 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		8C7F6B752E5918040040C206 /* version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
-		8C7F6B762E5918040040C206 /* worktree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = worktree.h; sourceTree = "<group>"; };
-		8C7F6B792E5918420040C206 /* libgit2_osx.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libgit2_osx.dylib; sourceTree = "<group>"; };
-		8C7F6B7A2E5918990040C206 /* libgit2_iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libgit2_iphoneos.a; sourceTree = "<group>"; };
+		8C7F6B8E2E5921990040C206 /* libgssapi_krb5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libgssapi_krb5.tbd; path = usr/lib/libgssapi_krb5.tbd; sourceTree = SDKROOT; };
+		8C7F6B902E5921BB0040C206 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		8C7F6B922E5922070040C206 /* GSS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GSS.framework; path = System/Library/Frameworks/GSS.framework; sourceTree = SDKROOT; };
+		8C7F6B992E593AFB0040C206 /* DoriOfflineAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriOfflineAsset.swift; sourceTree = "<group>"; };
+		8C7F6BBB2E59478C0040C206 /* AssetShims.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AssetShims.m; sourceTree = "<group>"; };
+		8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DoriAssetShims.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C7F6BE22E594AC60040C206 /* DoriAssetShims.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DoriAssetShims.h; sourceTree = "<group>"; };
+		8C7F6BE72E594CB30040C206 /* libDoriAssetShims.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDoriAssetShims.a; path = "../../../Library/Developer/Xcode/DerivedData/Greatdori-aghqtexjlhuxqfcowlzrriajcttj/Build/Products/Debug/libDoriAssetShims.a"; sourceTree = "<group>"; };
+		8C7F6BF22E594E870040C206 /* libDoriAssetShims */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDoriAssetShims; path = "../../../Library/Developer/Xcode/DerivedData/Greatdori-aghqtexjlhuxqfcowlzrriajcttj/Build/Products/Debug/DoriAssetShims.framework/Versions/A/libDoriAssetShims"; sourceTree = "<group>"; };
+		8C7F6C002E5975790040C206 /* libboringssl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libboringssl.tbd; path = usr/lib/libboringssl.tbd; sourceTree = SDKROOT; };
+		8C7F6C042E59922C0040C206 /* libDoriAssetShims */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDoriAssetShims; path = "../../../Library/Developer/Xcode/DerivedData/Greatdori-aghqtexjlhuxqfcowlzrriajcttj/Build/Products/Debug-iphoneos/DoriAssetShims.framework/libDoriAssetShims"; sourceTree = "<group>"; };
+		8C7F6C0A2E59950C0040C206 /* libgit2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libgit2.xcframework; sourceTree = "<group>"; };
+		8C7F6C0C2E5995990040C206 /* libssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libssh2.xcframework; sourceTree = "<group>"; };
+		8C7F6C102E5996540040C206 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenSSL.xcframework; sourceTree = "<group>"; };
+		8C7F6C122E5996A70040C206 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		8C7F6C142E5997830040C206 /* git2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = git2.h; sourceTree = "<group>"; };
+		8C7F6C152E5997830040C206 /* alloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = alloc.h; sourceTree = "<group>"; };
+		8C7F6C162E5997830040C206 /* commit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commit.h; sourceTree = "<group>"; };
+		8C7F6C172E5997830040C206 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		8C7F6C182E5997830040C206 /* cred.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cred.h; sourceTree = "<group>"; };
+		8C7F6C192E5997830040C206 /* credential.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credential.h; sourceTree = "<group>"; };
+		8C7F6C1A2E5997830040C206 /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
+		8C7F6C1B2E5997830040C206 /* filter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filter.h; sourceTree = "<group>"; };
+		8C7F6C1C2E5997830040C206 /* hashsig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hashsig.h; sourceTree = "<group>"; };
+		8C7F6C1D2E5997830040C206 /* index.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = index.h; sourceTree = "<group>"; };
+		8C7F6C1E2E5997830040C206 /* mempack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mempack.h; sourceTree = "<group>"; };
+		8C7F6C1F2E5997830040C206 /* merge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = merge.h; sourceTree = "<group>"; };
+		8C7F6C202E5997830040C206 /* odb_backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = odb_backend.h; sourceTree = "<group>"; };
+		8C7F6C212E5997830040C206 /* openssl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = openssl.h; sourceTree = "<group>"; };
+		8C7F6C222E5997830040C206 /* path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = path.h; sourceTree = "<group>"; };
+		8C7F6C232E5997830040C206 /* refdb_backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refdb_backend.h; sourceTree = "<group>"; };
+		8C7F6C242E5997830040C206 /* reflog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reflog.h; sourceTree = "<group>"; };
+		8C7F6C252E5997830040C206 /* refs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refs.h; sourceTree = "<group>"; };
+		8C7F6C262E5997830040C206 /* repository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = repository.h; sourceTree = "<group>"; };
+		8C7F6C272E5997830040C206 /* stream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stream.h; sourceTree = "<group>"; };
+		8C7F6C282E5997830040C206 /* transport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = transport.h; sourceTree = "<group>"; };
+		8C7F6C2A2E5997830040C206 /* annotated_commit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = annotated_commit.h; sourceTree = "<group>"; };
+		8C7F6C2B2E5997830040C206 /* apply.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = apply.h; sourceTree = "<group>"; };
+		8C7F6C2C2E5997830040C206 /* attr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = attr.h; sourceTree = "<group>"; };
+		8C7F6C2D2E5997830040C206 /* blame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blame.h; sourceTree = "<group>"; };
+		8C7F6C2E2E5997830040C206 /* blob.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blob.h; sourceTree = "<group>"; };
+		8C7F6C2F2E5997830040C206 /* branch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = branch.h; sourceTree = "<group>"; };
+		8C7F6C302E5997830040C206 /* buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = buffer.h; sourceTree = "<group>"; };
+		8C7F6C312E5997830040C206 /* cert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cert.h; sourceTree = "<group>"; };
+		8C7F6C322E5997830040C206 /* checkout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = checkout.h; sourceTree = "<group>"; };
+		8C7F6C332E5997830040C206 /* cherrypick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cherrypick.h; sourceTree = "<group>"; };
+		8C7F6C342E5997830040C206 /* clone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clone.h; sourceTree = "<group>"; };
+		8C7F6C352E5997830040C206 /* commit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commit.h; sourceTree = "<group>"; };
+		8C7F6C362E5997830040C206 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		8C7F6C372E5997830040C206 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		8C7F6C382E5997830040C206 /* cred_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cred_helpers.h; sourceTree = "<group>"; };
+		8C7F6C392E5997830040C206 /* credential.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credential.h; sourceTree = "<group>"; };
+		8C7F6C3A2E5997830040C206 /* credential_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credential_helpers.h; sourceTree = "<group>"; };
+		8C7F6C3B2E5997830040C206 /* deprecated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deprecated.h; sourceTree = "<group>"; };
+		8C7F6C3C2E5997830040C206 /* describe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = describe.h; sourceTree = "<group>"; };
+		8C7F6C3D2E5997830040C206 /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
+		8C7F6C3E2E5997830040C206 /* errors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
+		8C7F6C3F2E5997830040C206 /* filter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filter.h; sourceTree = "<group>"; };
+		8C7F6C402E5997830040C206 /* global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = global.h; sourceTree = "<group>"; };
+		8C7F6C412E5997830040C206 /* graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = graph.h; sourceTree = "<group>"; };
+		8C7F6C422E5997830040C206 /* ignore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ignore.h; sourceTree = "<group>"; };
+		8C7F6C432E5997830040C206 /* index.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = index.h; sourceTree = "<group>"; };
+		8C7F6C442E5997830040C206 /* indexer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = indexer.h; sourceTree = "<group>"; };
+		8C7F6C452E5997830040C206 /* mailmap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mailmap.h; sourceTree = "<group>"; };
+		8C7F6C462E5997830040C206 /* merge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = merge.h; sourceTree = "<group>"; };
+		8C7F6C472E5997830040C206 /* message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = message.h; sourceTree = "<group>"; };
+		8C7F6C482E5997830040C206 /* net.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = net.h; sourceTree = "<group>"; };
+		8C7F6C492E5997830040C206 /* notes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = notes.h; sourceTree = "<group>"; };
+		8C7F6C4A2E5997830040C206 /* object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = object.h; sourceTree = "<group>"; };
+		8C7F6C4B2E5997830040C206 /* odb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = odb.h; sourceTree = "<group>"; };
+		8C7F6C4C2E5997830040C206 /* odb_backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = odb_backend.h; sourceTree = "<group>"; };
+		8C7F6C4D2E5997830040C206 /* oid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oid.h; sourceTree = "<group>"; };
+		8C7F6C4E2E5997830040C206 /* oidarray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oidarray.h; sourceTree = "<group>"; };
+		8C7F6C4F2E5997830040C206 /* pack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pack.h; sourceTree = "<group>"; };
+		8C7F6C502E5997830040C206 /* patch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = patch.h; sourceTree = "<group>"; };
+		8C7F6C512E5997830040C206 /* pathspec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pathspec.h; sourceTree = "<group>"; };
+		8C7F6C522E5997830040C206 /* proxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = proxy.h; sourceTree = "<group>"; };
+		8C7F6C532E5997830040C206 /* rebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rebase.h; sourceTree = "<group>"; };
+		8C7F6C542E5997830040C206 /* refdb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refdb.h; sourceTree = "<group>"; };
+		8C7F6C552E5997830040C206 /* reflog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reflog.h; sourceTree = "<group>"; };
+		8C7F6C562E5997830040C206 /* refs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refs.h; sourceTree = "<group>"; };
+		8C7F6C572E5997830040C206 /* refspec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refspec.h; sourceTree = "<group>"; };
+		8C7F6C582E5997830040C206 /* remote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = remote.h; sourceTree = "<group>"; };
+		8C7F6C592E5997830040C206 /* repository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = repository.h; sourceTree = "<group>"; };
+		8C7F6C5A2E5997830040C206 /* reset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reset.h; sourceTree = "<group>"; };
+		8C7F6C5B2E5997830040C206 /* revert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = revert.h; sourceTree = "<group>"; };
+		8C7F6C5C2E5997830040C206 /* revparse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = revparse.h; sourceTree = "<group>"; };
+		8C7F6C5D2E5997830040C206 /* revwalk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = revwalk.h; sourceTree = "<group>"; };
+		8C7F6C5E2E5997830040C206 /* signature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = signature.h; sourceTree = "<group>"; };
+		8C7F6C5F2E5997830040C206 /* stash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stash.h; sourceTree = "<group>"; };
+		8C7F6C602E5997830040C206 /* status.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = status.h; sourceTree = "<group>"; };
+		8C7F6C612E5997830040C206 /* stdint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stdint.h; sourceTree = "<group>"; };
+		8C7F6C622E5997830040C206 /* strarray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = strarray.h; sourceTree = "<group>"; };
+		8C7F6C632E5997830040C206 /* submodule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = submodule.h; sourceTree = "<group>"; };
+		8C7F6C642E5997830040C206 /* tag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tag.h; sourceTree = "<group>"; };
+		8C7F6C652E5997830040C206 /* trace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = trace.h; sourceTree = "<group>"; };
+		8C7F6C662E5997830040C206 /* transaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = transaction.h; sourceTree = "<group>"; };
+		8C7F6C672E5997830040C206 /* transport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = transport.h; sourceTree = "<group>"; };
+		8C7F6C682E5997830040C206 /* tree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tree.h; sourceTree = "<group>"; };
+		8C7F6C692E5997830040C206 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		8C7F6C6A2E5997830040C206 /* version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
+		8C7F6C6B2E5997830040C206 /* worktree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = worktree.h; sourceTree = "<group>"; };
 		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 		8C923D772E3034AD003AFC0A /* HomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendCharacter.swift; sourceTree = "<group>"; };
@@ -794,7 +834,6 @@
 				8CB4D47F2E445F700085D57A /* BuiltinCardCollections.framework in Frameworks */,
 				8C923D842E304899003AFC0A /* SDWebImageSVGCoder in Frameworks */,
 				8C923D822E304899003AFC0A /* SDWebImageSwiftUI in Frameworks */,
-				8C7F6B812E591A5F0040C206 /* libgit2_osx.dylib in Frameworks */,
 				8C0C99972E296A8C00549B5C /* DoriKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -814,9 +853,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C7F6C052E59935C0040C206 /* DoriAssetShims.framework in Frameworks */,
+				8C7F6BF82E594EE60040C206 /* libiconv.tbd in Frameworks */,
 				8C0C99B12E296F3900549B5C /* SwiftyJSON in Frameworks */,
 				8C0C99AE2E296F2D00549B5C /* Alamofire in Frameworks */,
-				8C7F6B802E5919CC0040C206 /* libgit2_iphoneos.a in Frameworks */,
+				8C7F6BF72E594EDF0040C206 /* libgssapi_krb5.tbd in Frameworks */,
+				8C7F6BF62E594EDF0040C206 /* GSS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -837,6 +879,20 @@
 				8C6C0EE22E422FEC00D1FB0A /* DoriKit.framework in Frameworks */,
 				8C6C0ECD2E422F9000D1FB0A /* SwiftUI.framework in Frameworks */,
 				8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C7F6BC12E5949950040C206 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C7F6C112E5996540040C206 /* OpenSSL.xcframework in Frameworks */,
+				8C7F6BD62E5949B40040C206 /* libiconv.tbd in Frameworks */,
+				8C7F6C132E5996AB0040C206 /* libz.tbd in Frameworks */,
+				8C7F6BD42E5949AE0040C206 /* GSS.framework in Frameworks */,
+				8C7F6C0D2E5995990040C206 /* libssh2.xcframework in Frameworks */,
+				8C7F6BD52E5949AE0040C206 /* libgssapi_krb5.tbd in Frameworks */,
+				8C7F6C0B2E59950C0040C206 /* libgit2.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -905,6 +961,7 @@
 				8CB4D4DC2E449CFD0085D57A /* Greatdori Watch Widgets */,
 				8CB4D48B2E445F870085D57A /* BuiltinCardCollections */,
 				8C0C999E2E296A9000549B5C /* DoriKit */,
+				8C7F6BBC2E59478C0040C206 /* DoriAssetShims */,
 				8C94745D2E35DE6C003A90B4 /* DoriKitTests */,
 				8C2CCD432E3E06910014189F /* DoriEmoji */,
 				8CB4D4A02E4461790085D57A /* CardCollectionGen */,
@@ -929,6 +986,7 @@
 				8CB4D4BA2E449CC80085D57A /* Greatdori Watch Widgets.appex */,
 				8C3FA2492E4B9EBF001526F2 /* GreatLyrics.app */,
 				8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */,
+				8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -980,6 +1038,7 @@
 				8CD13FAD2E2FE2BF00673E15 /* API */,
 				8CD13FBC2E2FE2BF00673E15 /* Frontend */,
 				8C9474482E35AB60003A90B4 /* Cache */,
+				8C7F6B832E591AC60040C206 /* OfflineAsset */,
 			);
 			path = DoriKit;
 			sourceTree = "<group>";
@@ -987,6 +1046,14 @@
 		8C0C99A12E296B3E00549B5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C7F6C122E5996A70040C206 /* libz.tbd */,
+				8C7F6C042E59922C0040C206 /* libDoriAssetShims */,
+				8C7F6C002E5975790040C206 /* libboringssl.tbd */,
+				8C7F6BF22E594E870040C206 /* libDoriAssetShims */,
+				8C7F6BE72E594CB30040C206 /* libDoriAssetShims.a */,
+				8C7F6B922E5922070040C206 /* GSS.framework */,
+				8C7F6B902E5921BB0040C206 /* libiconv.tbd */,
+				8C7F6B8E2E5921990040C206 /* libgssapi_krb5.tbd */,
 				8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */,
 				8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */,
 			);
@@ -1155,126 +1222,146 @@
 		8C7F6B182E5917F70040C206 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				8C7F6B772E5918040040C206 /* git2 */,
-				8C7F6B192E5918040040C206 /* git2.h */,
+				8C7F6C6C2E5997830040C206 /* git2 */,
+				8C7F6C142E5997830040C206 /* git2.h */,
 			);
 			path = include;
-			sourceTree = "<group>";
-		};
-		8C7F6B322E5918040040C206 /* sys */ = {
-			isa = PBXGroup;
-			children = (
-				8C7F6B1A2E5918040040C206 /* alloc.h */,
-				8C7F6B1B2E5918040040C206 /* commit.h */,
-				8C7F6B1C2E5918040040C206 /* commit_graph.h */,
-				8C7F6B1D2E5918040040C206 /* config.h */,
-				8C7F6B1E2E5918040040C206 /* cred.h */,
-				8C7F6B1F2E5918040040C206 /* credential.h */,
-				8C7F6B202E5918040040C206 /* diff.h */,
-				8C7F6B212E5918040040C206 /* email.h */,
-				8C7F6B222E5918040040C206 /* errors.h */,
-				8C7F6B232E5918040040C206 /* filter.h */,
-				8C7F6B242E5918040040C206 /* hashsig.h */,
-				8C7F6B252E5918040040C206 /* index.h */,
-				8C7F6B262E5918040040C206 /* mempack.h */,
-				8C7F6B272E5918040040C206 /* merge.h */,
-				8C7F6B282E5918040040C206 /* midx.h */,
-				8C7F6B292E5918040040C206 /* odb_backend.h */,
-				8C7F6B2A2E5918040040C206 /* openssl.h */,
-				8C7F6B2B2E5918040040C206 /* path.h */,
-				8C7F6B2C2E5918040040C206 /* refdb_backend.h */,
-				8C7F6B2D2E5918040040C206 /* refs.h */,
-				8C7F6B2E2E5918040040C206 /* remote.h */,
-				8C7F6B2F2E5918040040C206 /* repository.h */,
-				8C7F6B302E5918040040C206 /* stream.h */,
-				8C7F6B312E5918040040C206 /* transport.h */,
-			);
-			path = sys;
-			sourceTree = "<group>";
-		};
-		8C7F6B772E5918040040C206 /* git2 */ = {
-			isa = PBXGroup;
-			children = (
-				8C7F6B322E5918040040C206 /* sys */,
-				8C7F6B332E5918040040C206 /* annotated_commit.h */,
-				8C7F6B342E5918040040C206 /* apply.h */,
-				8C7F6B352E5918040040C206 /* attr.h */,
-				8C7F6B362E5918040040C206 /* blame.h */,
-				8C7F6B372E5918040040C206 /* blob.h */,
-				8C7F6B382E5918040040C206 /* branch.h */,
-				8C7F6B392E5918040040C206 /* buffer.h */,
-				8C7F6B3A2E5918040040C206 /* cert.h */,
-				8C7F6B3B2E5918040040C206 /* checkout.h */,
-				8C7F6B3C2E5918040040C206 /* cherrypick.h */,
-				8C7F6B3D2E5918040040C206 /* clone.h */,
-				8C7F6B3E2E5918040040C206 /* commit.h */,
-				8C7F6B3F2E5918040040C206 /* common.h */,
-				8C7F6B402E5918040040C206 /* config.h */,
-				8C7F6B412E5918040040C206 /* cred_helpers.h */,
-				8C7F6B422E5918040040C206 /* credential.h */,
-				8C7F6B432E5918040040C206 /* credential_helpers.h */,
-				8C7F6B442E5918040040C206 /* deprecated.h */,
-				8C7F6B452E5918040040C206 /* describe.h */,
-				8C7F6B462E5918040040C206 /* diff.h */,
-				8C7F6B472E5918040040C206 /* email.h */,
-				8C7F6B482E5918040040C206 /* errors.h */,
-				8C7F6B492E5918040040C206 /* experimental.h */,
-				8C7F6B4A2E5918040040C206 /* filter.h */,
-				8C7F6B4B2E5918040040C206 /* global.h */,
-				8C7F6B4C2E5918040040C206 /* graph.h */,
-				8C7F6B4D2E5918040040C206 /* ignore.h */,
-				8C7F6B4E2E5918040040C206 /* index.h */,
-				8C7F6B4F2E5918040040C206 /* indexer.h */,
-				8C7F6B502E5918040040C206 /* mailmap.h */,
-				8C7F6B512E5918040040C206 /* merge.h */,
-				8C7F6B522E5918040040C206 /* message.h */,
-				8C7F6B532E5918040040C206 /* net.h */,
-				8C7F6B542E5918040040C206 /* notes.h */,
-				8C7F6B552E5918040040C206 /* object.h */,
-				8C7F6B562E5918040040C206 /* odb.h */,
-				8C7F6B572E5918040040C206 /* odb_backend.h */,
-				8C7F6B582E5918040040C206 /* oid.h */,
-				8C7F6B592E5918040040C206 /* oidarray.h */,
-				8C7F6B5A2E5918040040C206 /* pack.h */,
-				8C7F6B5B2E5918040040C206 /* patch.h */,
-				8C7F6B5C2E5918040040C206 /* pathspec.h */,
-				8C7F6B5D2E5918040040C206 /* proxy.h */,
-				8C7F6B5E2E5918040040C206 /* rebase.h */,
-				8C7F6B5F2E5918040040C206 /* refdb.h */,
-				8C7F6B602E5918040040C206 /* reflog.h */,
-				8C7F6B612E5918040040C206 /* refs.h */,
-				8C7F6B622E5918040040C206 /* refspec.h */,
-				8C7F6B632E5918040040C206 /* remote.h */,
-				8C7F6B642E5918040040C206 /* repository.h */,
-				8C7F6B652E5918040040C206 /* reset.h */,
-				8C7F6B662E5918040040C206 /* revert.h */,
-				8C7F6B672E5918040040C206 /* revparse.h */,
-				8C7F6B682E5918040040C206 /* revwalk.h */,
-				8C7F6B692E5918040040C206 /* signature.h */,
-				8C7F6B6A2E5918040040C206 /* stash.h */,
-				8C7F6B6B2E5918040040C206 /* status.h */,
-				8C7F6B6C2E5918040040C206 /* stdint.h */,
-				8C7F6B6D2E5918040040C206 /* strarray.h */,
-				8C7F6B6E2E5918040040C206 /* submodule.h */,
-				8C7F6B6F2E5918040040C206 /* tag.h */,
-				8C7F6B702E5918040040C206 /* trace.h */,
-				8C7F6B712E5918040040C206 /* transaction.h */,
-				8C7F6B722E5918040040C206 /* transport.h */,
-				8C7F6B732E5918040040C206 /* tree.h */,
-				8C7F6B742E5918040040C206 /* types.h */,
-				8C7F6B752E5918040040C206 /* version.h */,
-				8C7F6B762E5918040040C206 /* worktree.h */,
-			);
-			path = git2;
 			sourceTree = "<group>";
 		};
 		8C7F6B782E5918340040C206 /* bin */ = {
 			isa = PBXGroup;
 			children = (
-				8C7F6B792E5918420040C206 /* libgit2_osx.dylib */,
-				8C7F6B7A2E5918990040C206 /* libgit2_iphoneos.a */,
+				8C7F6C0A2E59950C0040C206 /* libgit2.xcframework */,
+				8C7F6C0C2E5995990040C206 /* libssh2.xcframework */,
+				8C7F6C102E5996540040C206 /* OpenSSL.xcframework */,
 			);
 			path = bin;
+			sourceTree = "<group>";
+		};
+		8C7F6B832E591AC60040C206 /* OfflineAsset */ = {
+			isa = PBXGroup;
+			children = (
+				8C7F6B992E593AFB0040C206 /* DoriOfflineAsset.swift */,
+			);
+			path = OfflineAsset;
+			sourceTree = "<group>";
+		};
+		8C7F6BBC2E59478C0040C206 /* DoriAssetShims */ = {
+			isa = PBXGroup;
+			children = (
+				8C7F6BF92E594F5C0040C206 /* include */,
+				8C7F6BBB2E59478C0040C206 /* AssetShims.m */,
+			);
+			path = DoriAssetShims;
+			sourceTree = "<group>";
+		};
+		8C7F6BF92E594F5C0040C206 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				8C7F6BE22E594AC60040C206 /* DoriAssetShims.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		8C7F6C292E5997830040C206 /* sys */ = {
+			isa = PBXGroup;
+			children = (
+				8C7F6C152E5997830040C206 /* alloc.h */,
+				8C7F6C162E5997830040C206 /* commit.h */,
+				8C7F6C172E5997830040C206 /* config.h */,
+				8C7F6C182E5997830040C206 /* cred.h */,
+				8C7F6C192E5997830040C206 /* credential.h */,
+				8C7F6C1A2E5997830040C206 /* diff.h */,
+				8C7F6C1B2E5997830040C206 /* filter.h */,
+				8C7F6C1C2E5997830040C206 /* hashsig.h */,
+				8C7F6C1D2E5997830040C206 /* index.h */,
+				8C7F6C1E2E5997830040C206 /* mempack.h */,
+				8C7F6C1F2E5997830040C206 /* merge.h */,
+				8C7F6C202E5997830040C206 /* odb_backend.h */,
+				8C7F6C212E5997830040C206 /* openssl.h */,
+				8C7F6C222E5997830040C206 /* path.h */,
+				8C7F6C232E5997830040C206 /* refdb_backend.h */,
+				8C7F6C242E5997830040C206 /* reflog.h */,
+				8C7F6C252E5997830040C206 /* refs.h */,
+				8C7F6C262E5997830040C206 /* repository.h */,
+				8C7F6C272E5997830040C206 /* stream.h */,
+				8C7F6C282E5997830040C206 /* transport.h */,
+			);
+			path = sys;
+			sourceTree = "<group>";
+		};
+		8C7F6C6C2E5997830040C206 /* git2 */ = {
+			isa = PBXGroup;
+			children = (
+				8C7F6C292E5997830040C206 /* sys */,
+				8C7F6C2A2E5997830040C206 /* annotated_commit.h */,
+				8C7F6C2B2E5997830040C206 /* apply.h */,
+				8C7F6C2C2E5997830040C206 /* attr.h */,
+				8C7F6C2D2E5997830040C206 /* blame.h */,
+				8C7F6C2E2E5997830040C206 /* blob.h */,
+				8C7F6C2F2E5997830040C206 /* branch.h */,
+				8C7F6C302E5997830040C206 /* buffer.h */,
+				8C7F6C312E5997830040C206 /* cert.h */,
+				8C7F6C322E5997830040C206 /* checkout.h */,
+				8C7F6C332E5997830040C206 /* cherrypick.h */,
+				8C7F6C342E5997830040C206 /* clone.h */,
+				8C7F6C352E5997830040C206 /* commit.h */,
+				8C7F6C362E5997830040C206 /* common.h */,
+				8C7F6C372E5997830040C206 /* config.h */,
+				8C7F6C382E5997830040C206 /* cred_helpers.h */,
+				8C7F6C392E5997830040C206 /* credential.h */,
+				8C7F6C3A2E5997830040C206 /* credential_helpers.h */,
+				8C7F6C3B2E5997830040C206 /* deprecated.h */,
+				8C7F6C3C2E5997830040C206 /* describe.h */,
+				8C7F6C3D2E5997830040C206 /* diff.h */,
+				8C7F6C3E2E5997830040C206 /* errors.h */,
+				8C7F6C3F2E5997830040C206 /* filter.h */,
+				8C7F6C402E5997830040C206 /* global.h */,
+				8C7F6C412E5997830040C206 /* graph.h */,
+				8C7F6C422E5997830040C206 /* ignore.h */,
+				8C7F6C432E5997830040C206 /* index.h */,
+				8C7F6C442E5997830040C206 /* indexer.h */,
+				8C7F6C452E5997830040C206 /* mailmap.h */,
+				8C7F6C462E5997830040C206 /* merge.h */,
+				8C7F6C472E5997830040C206 /* message.h */,
+				8C7F6C482E5997830040C206 /* net.h */,
+				8C7F6C492E5997830040C206 /* notes.h */,
+				8C7F6C4A2E5997830040C206 /* object.h */,
+				8C7F6C4B2E5997830040C206 /* odb.h */,
+				8C7F6C4C2E5997830040C206 /* odb_backend.h */,
+				8C7F6C4D2E5997830040C206 /* oid.h */,
+				8C7F6C4E2E5997830040C206 /* oidarray.h */,
+				8C7F6C4F2E5997830040C206 /* pack.h */,
+				8C7F6C502E5997830040C206 /* patch.h */,
+				8C7F6C512E5997830040C206 /* pathspec.h */,
+				8C7F6C522E5997830040C206 /* proxy.h */,
+				8C7F6C532E5997830040C206 /* rebase.h */,
+				8C7F6C542E5997830040C206 /* refdb.h */,
+				8C7F6C552E5997830040C206 /* reflog.h */,
+				8C7F6C562E5997830040C206 /* refs.h */,
+				8C7F6C572E5997830040C206 /* refspec.h */,
+				8C7F6C582E5997830040C206 /* remote.h */,
+				8C7F6C592E5997830040C206 /* repository.h */,
+				8C7F6C5A2E5997830040C206 /* reset.h */,
+				8C7F6C5B2E5997830040C206 /* revert.h */,
+				8C7F6C5C2E5997830040C206 /* revparse.h */,
+				8C7F6C5D2E5997830040C206 /* revwalk.h */,
+				8C7F6C5E2E5997830040C206 /* signature.h */,
+				8C7F6C5F2E5997830040C206 /* stash.h */,
+				8C7F6C602E5997830040C206 /* status.h */,
+				8C7F6C612E5997830040C206 /* stdint.h */,
+				8C7F6C622E5997830040C206 /* strarray.h */,
+				8C7F6C632E5997830040C206 /* submodule.h */,
+				8C7F6C642E5997830040C206 /* tag.h */,
+				8C7F6C652E5997830040C206 /* trace.h */,
+				8C7F6C662E5997830040C206 /* transaction.h */,
+				8C7F6C672E5997830040C206 /* transport.h */,
+				8C7F6C682E5997830040C206 /* tree.h */,
+				8C7F6C692E5997830040C206 /* types.h */,
+				8C7F6C6A2E5997830040C206 /* version.h */,
+				8C7F6C6B2E5997830040C206 /* worktree.h */,
+			);
+			path = git2;
 			sourceTree = "<group>";
 		};
 		8C923D852E304AE5003AFC0A /* Extensions */ = {
@@ -1476,6 +1563,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C7F6BBF2E5949950040C206 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C7F6BE32E594AC60040C206 /* DoriAssetShims.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8CB4D4742E445F700085D57A /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1505,6 +1600,7 @@
 				8C0C99962E296A8C00549B5C /* PBXTargetDependency */,
 				8C6C0ED92E422F9100D1FB0A /* PBXTargetDependency */,
 				8CB4D47E2E445F700085D57A /* PBXTargetDependency */,
+				8C7F6BC92E5949950040C206 /* PBXTargetDependency */,
 			);
 			name = Greatdori;
 			packageProductDependencies = (
@@ -1556,7 +1652,9 @@
 				8CD13FE62E300BEC00673E15 /* PBXBuildRule */,
 			);
 			dependencies = (
+				8C7F6BF52E594EA70040C206 /* PBXTargetDependency */,
 				8C2CCD422E3E06100014189F /* PBXTargetDependency */,
+				8C7F6C082E59935C0040C206 /* PBXTargetDependency */,
 			);
 			name = DoriKit;
 			packageProductDependencies = (
@@ -1627,6 +1725,26 @@
 			productName = "Greatdori WidgetsExtension";
 			productReference = 8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		8C7F6BC32E5949950040C206 /* DoriAssetShims */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C7F6BCD2E5949960040C206 /* Build configuration list for PBXNativeTarget "DoriAssetShims" */;
+			buildPhases = (
+				8C7F6BBF2E5949950040C206 /* Headers */,
+				8C7F6BC02E5949950040C206 /* Sources */,
+				8C7F6BC12E5949950040C206 /* Frameworks */,
+				8C7F6BC22E5949950040C206 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DoriAssetShims;
+			packageProductDependencies = (
+			);
+			productName = DoriAssetShims;
+			productReference = 8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		8C9474512E35DE1C003A90B4 /* DoriKitTests */ = {
 			isa = PBXNativeTarget;
@@ -1751,6 +1869,7 @@
 					};
 					8C0C99902E296A8C00549B5C = {
 						CreatedOnToolsVersion = 26.0;
+						LastSwiftMigration = 2600;
 					};
 					8C2CCD392E3E058E0014189F = {
 						CreatedOnToolsVersion = 26.0;
@@ -1763,6 +1882,9 @@
 						CreatedOnToolsVersion = 26.0;
 					};
 					8C7855CE2E491E23000EA06E = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					8C7F6BC32E5949950040C206 = {
 						CreatedOnToolsVersion = 26.0;
 					};
 					8C9474512E35DE1C003A90B4 = {
@@ -1815,6 +1937,7 @@
 				8CB4D4B92E449CC80085D57A /* Greatdori Watch Widgets */,
 				8CB4D4782E445F700085D57A /* BuiltinCardCollections */,
 				8C0C99902E296A8C00549B5C /* DoriKit */,
+				8C7F6BC32E5949950040C206 /* DoriAssetShims */,
 				8C9474512E35DE1C003A90B4 /* DoriKitTests */,
 				8C2CCD392E3E058E0014189F /* DoriEmoji */,
 				8C7855CE2E491E23000EA06E /* Greatdori Installer */,
@@ -1879,6 +2002,13 @@
 				8C6C0EF02E42301000D1FB0A /* Assets.xcassets in Resources */,
 				8C6C0EF22E4230B800D1FB0A /* AppIcon.icon in Resources */,
 				8CB4D4B52E44938E0085D57A /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C7F6BC22E5949950040C206 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2086,6 +2216,7 @@
 				8CD13FAF2E2FE2BF00673E15 /* Card.swift in Sources */,
 				8C2CCD4F2E3E67B30014189F /* RichContentRendering.swift in Sources */,
 				8C9474432E348D1F003A90B4 /* FrontendMisc.swift in Sources */,
+				8C7F6B9A2E593AFE0040C206 /* DoriOfflineAsset.swift in Sources */,
 				8CD13FBD2E2FE2BF00673E15 /* DoriFrontend.swift in Sources */,
 				8C9474412E345BED003A90B4 /* Misc.swift in Sources */,
 				8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */,
@@ -2161,6 +2292,14 @@
 				8C6C0F0D2E42655000D1FB0A /* Date+.swift in Sources */,
 				8C6C0EEF2E42301000D1FB0A /* GreatdoriWidgetsBundle.swift in Sources */,
 				8C6C0F0B2E425AF500D1FB0A /* NewsWidgets.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C7F6BC02E5949950040C206 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C7F6BE02E594A6C0040C206 /* AssetShims.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2263,6 +2402,31 @@
 			isa = PBXTargetDependency;
 			target = 8C0C995C2E296A4400549B5C /* Greatdori */;
 			targetProxy = 8C7855D52E4925BB000EA06E /* PBXContainerItemProxy */;
+		};
+		8C7F6BC92E5949950040C206 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C7F6BC32E5949950040C206 /* DoriAssetShims */;
+			targetProxy = 8C7F6BC82E5949950040C206 /* PBXContainerItemProxy */;
+		};
+		8C7F6BF52E594EA70040C206 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilters = (
+				ios,
+				maccatalyst,
+				macos,
+			);
+			target = 8C7F6BC32E5949950040C206 /* DoriAssetShims */;
+			targetProxy = 8C7F6BF42E594EA70040C206 /* PBXContainerItemProxy */;
+		};
+		8C7F6C082E59935C0040C206 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilters = (
+				ios,
+				maccatalyst,
+				macos,
+			);
+			target = 8C7F6BC32E5949950040C206 /* DoriAssetShims */;
+			targetProxy = 8C7F6C072E59935C0040C206 /* PBXContainerItemProxy */;
 		};
 		8C9474582E35DE1C003A90B4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2636,16 +2800,19 @@
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2679,6 +2846,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_MODULE = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_MEMORY_SAFETY = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
@@ -2695,16 +2863,19 @@
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3037,16 +3208,19 @@
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3080,6 +3254,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_MODULE = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_MEMORY_SAFETY = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
@@ -3273,16 +3448,19 @@
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3749,6 +3927,198 @@
 				DEVELOPMENT_TEAM = B57D8PP775;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = RelWithoutPreCache;
+		};
+		8C7F6BCE2E5949960040C206 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/clib/libgit2/bin",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriAssetShims;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SYSTEM_HEADER_SEARCH_PATHS = "$(SRCROOT)/clib/libgit2/include";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/DoriAssetShims/include";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		8C7F6BCF2E5949960040C206 /* DebWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/clib/libgit2/bin",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriAssetShims;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SYSTEM_HEADER_SEARCH_PATHS = "$(SRCROOT)/clib/libgit2/include";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/DoriAssetShims/include";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = DebWithoutPreCache;
+		};
+		8C7F6BD02E5949960040C206 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/clib/libgit2/bin",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriAssetShims;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SYSTEM_HEADER_SEARCH_PATHS = "$(SRCROOT)/clib/libgit2/include";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/DoriAssetShims/include";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		8C7F6BD12E5949960040C206 /* RelWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/clib/libgit2/bin",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriAssetShims;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SYSTEM_HEADER_SEARCH_PATHS = "$(SRCROOT)/clib/libgit2/include";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/DoriAssetShims/include";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = RelWithoutPreCache;
 		};
@@ -4370,6 +4740,17 @@
 				8C7855D12E491E24000EA06E /* DebWithoutPreCache */,
 				8C7855D22E491E24000EA06E /* Release */,
 				8C7855D32E491E24000EA06E /* RelWithoutPreCache */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C7F6BCD2E5949960040C206 /* Build configuration list for PBXNativeTarget "DoriAssetShims" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C7F6BCE2E5949960040C206 /* Debug */,
+				8C7F6BCF2E5949960040C206 /* DebWithoutPreCache */,
+				8C7F6BD02E5949960040C206 /* Release */,
+				8C7F6BD12E5949960040C206 /* RelWithoutPreCache */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -39,13 +39,27 @@ struct GreatdoriApp: App {
     #else
     @UIApplicationDelegateAdaptor var appDelegate: AppDelegate
     #endif
+    @Environment(\.openWindow) var openWindow
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
+        .commands {
+            #if DEBUG && os(macOS)
+            CommandGroup(after: .appSettings) {
+                Button("Offline Asset Debug", systemImage: "ant.fill") {
+                    openWindow(id: "OfflineAssetDebugWindow")
+                }
+            }
+            #endif
+        }
         #if os(macOS)
         Settings {
             SettingsView()
+        }
+        
+        Window("Offline Asset Debug", id: "OfflineAssetDebugWindow") {
+            DebugOfflineAssetView()
         }
         #endif
     }

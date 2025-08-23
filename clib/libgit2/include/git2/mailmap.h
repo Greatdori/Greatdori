@@ -13,15 +13,10 @@
 
 /**
  * @file git2/mailmap.h
- * @brief Mailmaps provide alternate email addresses for users
+ * @brief Mailmap parsing routines
  * @defgroup git_mailmap Git mailmap routines
  * @ingroup Git
  * @{
- *
- * A mailmap can be used to specify alternate email addresses for
- * repository committers or authors. This allows systems to map
- * commits made using different email addresses to the same logical
- * person.
  */
 GIT_BEGIN_DECL
 
@@ -117,5 +112,4 @@ GIT_EXTERN(int) git_mailmap_resolve_signature(
 
 /** @} */
 GIT_END_DECL
-
 #endif

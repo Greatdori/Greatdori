@@ -13,8 +13,8 @@
 
 /**
  * @file git2/reflog.h
- * @brief Reference logs store how references change
- * @defgroup git_reflog Reference logs store how references change
+ * @brief Git reflog management routines
+ * @defgroup git_reflog Git reflog management routines
  * @ingroup Git
  * @{
  */
@@ -31,7 +31,7 @@ GIT_BEGIN_DECL
  * git_reflog_free().
  *
  * @param out pointer to reflog
- * @param repo the repository
+ * @param repo the repostiory
  * @param name reference to look up
  * @return 0 or an error code
  */
@@ -167,5 +167,4 @@ GIT_EXTERN(void) git_reflog_free(git_reflog *reflog);
 
 /** @} */
 GIT_END_DECL
-
 #endif

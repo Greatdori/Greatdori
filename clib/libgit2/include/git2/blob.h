@@ -15,13 +15,9 @@
 
 /**
  * @file git2/blob.h
- * @brief A blob represents a file in a git repository.
+ * @brief Git blob load and write routines
  * @defgroup git_blob Git blob load and write routines
  * @ingroup Git
- *
- * A blob represents a file in a git repository. This is the raw data
- * as it is stored in the repository itself. Blobs may be "filtered"
- * to produce the on-disk content.
  * @{
  */
 GIT_BEGIN_DECL
@@ -29,15 +25,12 @@ GIT_BEGIN_DECL
 /**
  * Lookup a blob object from a repository.
  *
- * @param[out] blob pointer to the looked up blob
+ * @param blob pointer to the looked up blob
  * @param repo the repo to use when locating the blob.
  * @param id identity of the blob to locate.
  * @return 0 or an error code
  */
-GIT_EXTERN(int) git_blob_lookup(
-	git_blob **blob,
-	git_repository *repo,
-	const git_oid *id);
+GIT_EXTERN(int) git_blob_lookup(git_blob **blob, git_repository *repo, const git_oid *id);
 
 /**
  * Lookup a blob object from a repository,
@@ -45,7 +38,7 @@ GIT_EXTERN(int) git_blob_lookup(
  *
  * @see git_object_lookup_prefix
  *
- * @param[out] blob pointer to the looked up blob
+ * @param blob pointer to the looked up blob
  * @param repo the repo to use when locating the blob.
  * @param id identity of the blob to locate.
  * @param len the length of the short identifier
@@ -91,7 +84,7 @@ GIT_EXTERN(git_repository *) git_blob_owner(const git_blob *blob);
  * time.
  *
  * @param blob pointer to the blob
- * @return @type `unsigned char *` the pointer, or NULL on error
+ * @return the pointer, or NULL on error
  */
 GIT_EXTERN(const void *) git_blob_rawcontent(const git_blob *blob);
 
@@ -99,14 +92,12 @@ GIT_EXTERN(const void *) git_blob_rawcontent(const git_blob *blob);
  * Get the size in bytes of the contents of a blob
  *
  * @param blob pointer to the blob
- * @return size in bytes
+ * @return size on bytes
  */
 GIT_EXTERN(git_object_size_t) git_blob_rawsize(const git_blob *blob);
 
 /**
  * Flags to control the functionality of `git_blob_filter`.
- *
- * @flags
  */
 typedef enum {
 	/** When set, filters will not be applied to binary files. */
@@ -123,12 +114,6 @@ typedef enum {
 	 * in the HEAD commit.
 	 */
 	GIT_BLOB_FILTER_ATTRIBUTES_FROM_HEAD = (1 << 2),
-
-	/**
-	 * When set, filters will be loaded from a `.gitattributes` file
-	 * in the specified commit.
-	 */
-	GIT_BLOB_FILTER_ATTRIBUTES_FROM_COMMIT = (1 << 3)
 } git_blob_filter_flag_t;
 
 /**
@@ -137,56 +122,16 @@ typedef enum {
  * Initialize with `GIT_BLOB_FILTER_OPTIONS_INIT`. Alternatively, you can
  * use `git_blob_filter_options_init`.
  *
- * @options[version] GIT_BLOB_FILTER_OPTIONS_VERSION
- * @options[init_macro] GIT_BLOB_FILTER_OPTIONS_INIT
- * @options[init_function] git_blob_filter_options_init
  */
 typedef struct {
-	/** Version number of the options structure. */
 	int version;
 
-	/**
-	 * Flags to control the filtering process, see `git_blob_filter_flag_t` above.
-	 *
-	 * @type[flags] git_blob_filter_flag_t
-	 */
+	/** Flags to control the filtering process, see `git_blob_filter_flag_t` above */
 	uint32_t flags;
-
-#ifdef GIT_DEPRECATE_HARD
-	/**
-	 * Unused and reserved for ABI compatibility.
-	 *
-	 * @deprecated this value should not be set
-	 */
-	void *reserved;
-#else
-	/**
-	 * This value is unused and reserved for API compatibility.
-	 *
-	 * @deprecated this value should not be set
-	 */
-	git_oid *commit_id;
-#endif
-
-	/**
-	 * The commit to load attributes from, when
-	 * `GIT_BLOB_FILTER_ATTRIBUTES_FROM_COMMIT` is specified.
-	 */
-	git_oid attr_commit_id;
 } git_blob_filter_options;
 
-/**
- * The current version number for the `git_blob_filter_options` structure ABI.
- */
 #define GIT_BLOB_FILTER_OPTIONS_VERSION 1
-
-/**
- * The default values for `git_blob_filter_options`.
- */
-#define GIT_BLOB_FILTER_OPTIONS_INIT { \
-		GIT_BLOB_FILTER_OPTIONS_VERSION, \
-		GIT_BLOB_FILTER_CHECK_FOR_BINARY \
-	}
+#define GIT_BLOB_FILTER_OPTIONS_INIT {GIT_BLOB_FILTER_OPTIONS_VERSION, GIT_BLOB_FILTER_CHECK_FOR_BINARY}
 
 /**
  * Initialize git_blob_filter_options structure
@@ -195,12 +140,10 @@ typedef struct {
  * to creating an instance with `GIT_BLOB_FILTER_OPTIONS_INIT`.
  *
  * @param opts The `git_blob_filter_options` struct to initialize.
- * @param version The struct version; pass GIT_BLOB_FILTER_OPTIONS_VERSION
+ * @param version The struct version; pass `GIT_BLOB_FILTER_OPTIONS_VERSION`.
  * @return Zero on success; -1 on failure.
  */
-GIT_EXTERN(int) git_blob_filter_options_init(
-	git_blob_filter_options *opts,
-	unsigned int version);
+GIT_EXTERN(int) git_blob_filter_options_init(git_blob_filter_options *opts, unsigned int version);
 
 /**
  * Get a buffer with the filtered content of a blob.
@@ -210,7 +153,7 @@ GIT_EXTERN(int) git_blob_filter_options_init(
  * CRLF filtering or other types of changes depending on the file
  * attributes set for the blob and the content detected in it.
  *
- * The output is written into a `git_buf` which the caller must dispose
+ * The output is written into a `git_buf` which the caller must free
  * when done (via `git_buf_dispose`).
  *
  * If no filters need to be applied, then the `out` buffer will just
@@ -222,7 +165,7 @@ GIT_EXTERN(int) git_blob_filter_options_init(
  * @param blob Pointer to the blob
  * @param as_path Path used for file attribute lookups, etc.
  * @param opts Options to use for filtering the blob
- * @return @type[enum] git_error_code 0 on success or an error code
+ * @return 0 on success or an error code
  */
 GIT_EXTERN(int) git_blob_filter(
 	git_buf *out,
@@ -231,10 +174,10 @@ GIT_EXTERN(int) git_blob_filter(
 	git_blob_filter_options *opts);
 
 /**
- * Read a file from the working folder of a repository and write it
- * to the object database.
+ * Read a file from the working folder of a repository
+ * and write it to the Object Database as a loose blob
  *
- * @param[out] id return the id of the written blob
+ * @param id return the id of the written blob
  * @param repo repository where the blob will be written.
  *	this repository cannot be bare
  * @param relative_path file from which the blob will be created,
@@ -244,23 +187,19 @@ GIT_EXTERN(int) git_blob_filter(
 GIT_EXTERN(int) git_blob_create_from_workdir(git_oid *id, git_repository *repo, const char *relative_path);
 
 /**
- * Read a file from the filesystem (not necessarily inside the
- * working folder of the repository) and write it to the object
- * database.
+ * Read a file from the filesystem and write its content
+ * to the Object Database as a loose blob
  *
- * @param[out] id return the id of the written blob
+ * @param id return the id of the written blob
  * @param repo repository where the blob will be written.
  *	this repository can be bare or not
  * @param path file from which the blob will be created
  * @return 0 or an error code
  */
-GIT_EXTERN(int) git_blob_create_from_disk(
-	git_oid *id,
-	git_repository *repo,
-	const char *path);
+GIT_EXTERN(int) git_blob_create_from_disk(git_oid *id, git_repository *repo, const char *path);
 
 /**
- * Create a stream to write a new blob into the object database.
+ * Create a stream to write a new blob into the object db
  *
  * This function may need to buffer the data on disk and will in
  * general not be the right choice if you know the size of the data
@@ -277,7 +216,7 @@ GIT_EXTERN(int) git_blob_create_from_disk(
  * what git filters should be applied to the object before it is written
  * to the object database.
  *
- * @param[out] out the stream into which to write
+ * @param out the stream into which to write
  * @param repo Repository where the blob will be written.
  *        This repository can be bare or not.
  * @param hintpath If not NULL, will be used to select data filters
@@ -290,11 +229,11 @@ GIT_EXTERN(int) git_blob_create_from_stream(
 	const char *hintpath);
 
 /**
- * Close the stream and finalize writing the blob to the object database.
+ * Close the stream and write the blob to the object db
  *
  * The stream will be closed and freed.
  *
- * @param[out] out the id of the new blob
+ * @param out the id of the new blob
  * @param stream the stream to close
  * @return 0 or an error code
  */
@@ -303,9 +242,9 @@ GIT_EXTERN(int) git_blob_create_from_stream_commit(
 	git_writestream *stream);
 
 /**
- * Write an in-memory buffer to the object database as a blob.
+ * Write an in-memory buffer to the ODB as a blob
  *
- * @param[out] id return the id of the written blob
+ * @param id return the id of the written blob
  * @param repo repository where the blob will be written
  * @param buffer data to be written into the blob
  * @param len length of the data
@@ -315,37 +254,24 @@ GIT_EXTERN(int) git_blob_create_from_buffer(
 	git_oid *id, git_repository *repo, const void *buffer, size_t len);
 
 /**
- * Determine if the blob content is most likely binary or not.
+ * Determine if the blob content is most certainly binary or not.
  *
  * The heuristic used to guess if a file is binary is taken from core git:
  * Searching for NUL bytes and looking for a reasonable ratio of printable
  * to non-printable characters among the first 8000 bytes.
  *
  * @param blob The blob which content should be analyzed
- * @return @type bool 1 if the content of the blob is detected
+ * @return 1 if the content of the blob is detected
  * as binary; 0 otherwise.
  */
 GIT_EXTERN(int) git_blob_is_binary(const git_blob *blob);
 
 /**
- * Determine if the given content is most certainly binary or not;
- * this is the same mechanism used by `git_blob_is_binary` but only
- * looking at raw data.
- *
- * @param data The blob data which content should be analyzed
- * @param len The length of the data
- * @return 1 if the content of the blob is detected
- * as binary; 0 otherwise.
- */
-GIT_EXTERN(int) git_blob_data_is_binary(const char *data, size_t len);
-
-/**
  * Create an in-memory copy of a blob. The copy must be explicitly
  * free'd or it will leak.
  *
- * @param[out] out Pointer to store the copy of the object
+ * @param out Pointer to store the copy of the object
  * @param source Original object to copy
- * @return 0.
  */
 GIT_EXTERN(int) git_blob_dup(git_blob **out, git_blob *source);
 
