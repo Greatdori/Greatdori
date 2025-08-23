@@ -528,7 +528,6 @@ struct EventSearchView: View {
     @State var filter = DoriFrontend.Filter()
     @State var events: [DoriFrontend.Event.PreviewEvent]?
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
-    @State var searchedEventsChunked: [[DoriFrontend.Event.PreviewEvent]]?
     @State var infoIsAvailable = true
     @State var searchedText = ""
     @State var showDetails = true
@@ -627,9 +626,6 @@ struct EventSearchView: View {
                             }
 //                            .padding(sizeClass == .compact ? .bottom: .vertical)
                         }
-                        //                .onChange(of: searchedEvents, {
-                        //                    searchedEventsChunked = searchedEvents.chunked(into: 2)
-                        //                })
                     } else {
                         ContentUnavailableView("Event.search.no-results", systemImage: "magnifyingglass", description: Text("Event.search.no-results.description"))
                     }
@@ -670,9 +666,6 @@ struct EventSearchView: View {
         .task {
             await getEvents()
             searchedEvents = events
-//            if let events {
-                searchedEventsChunked = events?.chunked(into: 2)
-//            }
         }
         .toolbar {
             ToolbarItem {
@@ -692,15 +685,9 @@ struct EventSearchView: View {
                 }
             }
         }
-        .onChange(of: searchedEvents, {
-            if let searchedEvents {
-                searchedEventsChunked = searchedEvents.chunked(into: 2)
-            }
-        })
         .onChange(of: filter, {
             Task {
                 await getEvents()
-                searchedEvents = events
             }
         })
 //        .sheet(isPresented: $showFilterSheet, content: {
@@ -716,6 +703,7 @@ struct EventSearchView: View {
         } .onUpdate {
             if let events = $0 {
                 self.events = events
+                searchedEvents = events
 //                self.events = firstXElements(events, x: 10)
             } else {
                 infoIsAvailable = false
