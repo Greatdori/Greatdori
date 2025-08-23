@@ -18,9 +18,9 @@
 // This file is essential for almost all image.
 // Files not marked with [✓] is not optimized for multiplatform yet (they're from watchOS).
 
-import SwiftUI
 import DoriKit
 import SDWebImageSwiftUI
+import SwiftUI
 
 //MARK: EventCardHomeView [✓]
 struct EventCardHomeView: View {

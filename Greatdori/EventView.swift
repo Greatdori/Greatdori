@@ -658,7 +658,7 @@ struct EventSearchView: View {
         .navigationTitle("Event")
         .wrapIf(searchedEvents != nil, in: { content in
             if #available(iOS 26.0, *) {
-                content.navigationSubtitle(searchedText.isEmpty ? "Event.count.\(searchedEvents!.count)" :  "Event.result.\(searchedEvents!.count)")
+                content.navigationSubtitle((searchedText.isEmpty && !filter.isFiltered) ? "Event.count.\(searchedEvents!.count)" :  "Event.result.\(searchedEvents!.count)")
             } else {
                 content
             }
@@ -697,6 +697,12 @@ struct EventSearchView: View {
                 searchedEventsChunked = searchedEvents.chunked(into: 2)
             }
         })
+        .onChange(of: filter, {
+            Task {
+                await getEvents()
+                searchedEvents = events
+            }
+        })
 //        .sheet(isPresented: $showFilterSheet, content: {
 //            FilterView()
 ////                .sheet
@@ -707,7 +713,7 @@ struct EventSearchView: View {
         infoIsAvailable = true
         DoriCache.withCache(id: "EventList_\(filter.identity)") {
             await DoriFrontend.Event.list(filter: filter)
-        }.onUpdate {
+        } .onUpdate {
             if let events = $0 {
                 self.events = events
 //                self.events = firstXElements(events, x: 10)

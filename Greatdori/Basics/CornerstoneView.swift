@@ -25,6 +25,7 @@ let bannerWidth: CGFloat = isMACOS ? 370 : 420
 let bannerSpacing: CGFloat = isMACOS ? 10 : 15
 let imageButtonSize: CGFloat = isMACOS ? 30 : 35
 let cardThumbnailSideLength: CGFloat = isMACOS ? 64 : 72
+let filterItemHeight: CGFloat = isMACOS ? 25 : 30
 
 //MARK: CustomGroupBox
 struct CustomGroupBox<Content: View>: View {
@@ -389,27 +390,28 @@ struct MultilingualTextForCountdown: View {
     }
 }
 
-
 //MARK: ListItemView
 struct ListItemView<Content1: View, Content2: View>: View {
     let title: Content1
     let value: Content2
-    var compactModeOnly: Bool = true
+    var allowValueLeading: Bool = false
+    var displayMode: ListItemType = .automatic
     var allowTextSelection: Bool = true
     @State private var totalAvailableWidth: CGFloat = 0
     @State private var titleAvailableWidth: CGFloat = 0
     @State private var valueAvailableWidth: CGFloat = 0
     
-    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, compactModeOnly: Bool = true, allowTextSelection: Bool = true) {
+    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, allowValueLeading: Bool = false, displayMode: ListItemType = .automatic, allowTextSelection: Bool = true) {
         self.title = title()
         self.value = value()
-        self.compactModeOnly = compactModeOnly
+        self.allowValueLeading = allowValueLeading
+        self.displayMode = displayMode
         self.allowTextSelection = allowTextSelection
     }
     
     var body: some View {
         Group {
-            if compactModeOnly || (totalAvailableWidth - titleAvailableWidth - valueAvailableWidth) > 5 { // HStack (SHORT)
+            if (displayMode == .compactOnly || (totalAvailableWidth - titleAvailableWidth - valueAvailableWidth) > 5) && displayMode != .expandedOnly { // HStack (SHORT)
                 HStack {
                     title
                         .fixedSize(horizontal: true, vertical: true)
@@ -435,7 +437,9 @@ struct ListItemView<Content1: View, Content2: View>: View {
                             titleAvailableWidth = geometry.size.width
                         })
                     HStack {
-                        Spacer()
+                        if !allowValueLeading {
+                            Spacer()
+                        }
                         value
                             .wrapIf(allowTextSelection, in: { content in
                                 content.textSelection(.enabled)
@@ -445,6 +449,9 @@ struct ListItemView<Content1: View, Content2: View>: View {
                             .onFrameChange(perform: { geometry in
                                 valueAvailableWidth = geometry.size.width
                             })
+                        if allowValueLeading {
+                            Spacer()
+                        }
                     }
                 }
             }

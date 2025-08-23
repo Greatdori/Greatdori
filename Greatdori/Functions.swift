@@ -38,6 +38,14 @@ func getGroupedBackgroundColor() -> Color {
 #endif
 }
 
+func getSecondarySystemBackgroundColor() -> Color {
+#if os(iOS)
+    return Color(UIColor.tertiarySystemGroupedBackground)
+#else
+    return Color(NSColor.secondarySystemBackground)
+#endif
+}
+
 func getPlaceholderColor() -> Color {
 #if os(iOS)
     return Color(UIColor.placeholderText)
@@ -72,3 +80,8 @@ func highlightOccurrences(of keyword: String, in content: String) -> AttributedS
 }
 
 
+enum ListItemType: Hashable, Equatable {
+    case compactOnly
+    case expandedOnly
+    case automatic
+}

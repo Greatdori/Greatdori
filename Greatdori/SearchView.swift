@@ -13,6 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 import DoriKit
+import SDWebImageSwiftUI
 import SwiftUI
 
 
@@ -22,18 +23,105 @@ struct FilterView: View {
     var body: some View {
         Form {
             Section(content: {
+                //MARK: Attribute
                 if includingKeys.contains(.attribute) {
                     ListItemView(title: {
                         Text("Filter.key.attribute")
                             .bold()
+                            .onTapGesture(count: 2, perform: {
+                                withAnimation(.easeInOut(duration: 0.05)) {
+                                    if filter.attribute.isEmpty {
+                                        filter.attribute = Set(DoriAPI.Attribute.allCases)
+                                    } else {
+                                        filter.attribute.removeAll()
+                                    }
+                                }
+                            })
                     }, value: {
                         HStack {
-//                            Button(action: {
-//                                
-//                            }, label: {
-//                                Image()
-//                            })
+                            ForEach(DoriAPI.Attribute.allCases, id: \.self) { attribute in
+                                Button(action: {
+                                    withAnimation(.easeInOut(duration: 0.05)) {
+                                        if filter.attribute.contains(attribute) {
+                                            filter.attribute.remove(attribute)
+                                        } else {
+                                            filter.attribute.insert(attribute)
+                                        }
+                                    }
+                                }, label: {
+                                    ZStack {
+                                            Circle()
+                                                .stroke(.blue, lineWidth: 2)
+                                            //                                            .foregroundStyle(.accent)
+                                                .frame(width: imageButtonSize, height: imageButtonSize)
+                                                .opacity(filter.attribute.contains(attribute) ? 1 : 0)
+                                            //                                            .op
+                                            //                                            .border(Circle)
+                                            //                                            .border(Color.accentColor, width: 2)
+                                        WebImage(url: attribute.iconImageURL)
+//                                            .stroke(.blue, lineWidth: 2)
+                                            .resizable()
+//                                            .frame(width: filterItemHeight, height: filterItemHeight)
+                                            .frame(width: imageButtonSize, height: imageButtonSize)
+                                            .scaleEffect(0.9)
+//                                            .gray
+                                    }
+                                })
+                                .buttonStyle(.plain)
+                            }
+                            
 //                            Button/
+                        }
+                    })
+                }
+                //MARK: Character
+                if includingKeys.contains(.character) {
+                    ListItemView(title: {
+                        Text("Filter.key.character")
+                            .bold()
+                            .onTapGesture(count: 2, perform: {
+                                withAnimation(.easeInOut(duration: 0.05)) {
+                                    if filter.attribute.isEmpty {
+                                        filter.attribute = Set(DoriAPI.Attribute.allCases)
+                                    } else {
+                                        filter.attribute.removeAll()
+                                    }
+                                }
+                            })
+                    }, value: {
+                        HStack {
+                            ForEach(DoriAPI.Attribute.allCases, id: \.self) { attribute in
+                                Button(action: {
+                                    withAnimation(.easeInOut(duration: 0.05)) {
+                                        if filter.attribute.contains(attribute) {
+                                            filter.attribute.remove(attribute)
+                                        } else {
+                                            filter.attribute.insert(attribute)
+                                        }
+                                    }
+                                }, label: {
+                                    ZStack {
+                                        Circle()
+                                            .stroke(.blue, lineWidth: 2)
+                                        //                                            .foregroundStyle(.accent)
+                                            .frame(width: imageButtonSize, height: imageButtonSize)
+                                            .opacity(filter.attribute.contains(attribute) ? 1 : 0)
+                                        //                                            .op
+                                        //                                            .border(Circle)
+                                        //                                            .border(Color.accentColor, width: 2)
+                                        WebImage(url: attribute.iconImageURL)
+                                        //                                            .stroke(.blue, lineWidth: 2)
+                                            .resizable()
+                                        //                                            .frame(width: filterItemHeight, height: filterItemHeight)
+                                            .frame(width: imageButtonSize, height: imageButtonSize)
+                                            .scaleEffect(0.9)
+                                        //                                            .gray
+                                    }
+                                })
+                                .buttonStyle(.plain)
+                            }
+                            
+                            //                            Button/
                         }
                     })
                 }
