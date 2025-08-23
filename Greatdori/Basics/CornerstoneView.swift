@@ -25,7 +25,7 @@ let bannerWidth: CGFloat = isMACOS ? 370 : 420
 let bannerSpacing: CGFloat = isMACOS ? 10 : 15
 let imageButtonSize: CGFloat = isMACOS ? 30 : 35
 let cardThumbnailSideLength: CGFloat = isMACOS ? 64 : 72
-let filterItemHeight: CGFloat = isMACOS ? 25 : 30
+let filterItemHeight: CGFloat = isMACOS ? 30 : 35
 
 //MARK: CustomGroupBox
 struct CustomGroupBox<Content: View>: View {

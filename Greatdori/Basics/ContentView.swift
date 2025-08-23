@@ -45,12 +45,7 @@ struct ContentView: View {
                     }
                     Tab("App.leaderboard", systemImage: "chart.bar", value: .leaderboard) {
 //                        HomeView()
-//                        Text(verbatim: "leaderboard")
-                        NavigationStack {
-                            Text("1")
-                        }
-                            .searchable(text: .constant("1"))
-                        //MARK: UI RESEARCH ONLY!!!
+                        Text(verbatim: "leaderboard")
                     }
                     TabSection(content: {
                         Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {

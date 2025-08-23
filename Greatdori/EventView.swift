@@ -276,6 +276,7 @@ struct EventDetailOverviewView: View {
                                 VStack(alignment: .trailing) {
                                     HStack {
                                         WebImage(url: attribute.attribute.iconImageURL)
+                                            .antialiased(true)
                                             .resizable()
                                             .frame(width: imageButtonSize, height: imageButtonSize)
                                         Text(verbatim: "+\(attribute.percent)%")
@@ -300,6 +301,7 @@ struct EventDetailOverviewView: View {
                                         //TODO: [NAVI785]CharD
                                     }, label: {
                                         WebImage(url: value.iconImageURL)
+                                            .antialiased(true)
                                             .resizable()
                                             .frame(width: imageButtonSize, height: imageButtonSize)
                                     })
@@ -317,6 +319,7 @@ struct EventDetailOverviewView: View {
                                         }, label: {
                                             HStack {
                                                 WebImage(url: value.iconImageURL)
+                                                    .antialiased(true)
                                                     .resizable()
                                                     .frame(width: imageButtonSize, height: imageButtonSize)
                                                 //                                                Text(char.name)
@@ -332,6 +335,7 @@ struct EventDetailOverviewView: View {
                                         })
                                     }, label: {
                                         WebImage(url: value.iconImageURL)
+                                            .antialiased(true)
                                             .resizable()
                                             .frame(width: imageButtonSize, height: imageButtonSize)
                                     })
@@ -364,6 +368,7 @@ struct EventDetailOverviewView: View {
                                                     //TODO: [NAVI785]CharD
                                                 }, label: {
                                                     WebImage(url: char.iconImageURL)
+                                                        .antialiased(true)
                                                         .resizable()
                                                         .frame(width: imageButtonSize, height: imageButtonSize)
                                                 })
@@ -375,6 +380,7 @@ struct EventDetailOverviewView: View {
                                                     }, label: {
                                                         HStack {
                                                             WebImage(url: char.iconImageURL)
+                                                                .antialiased(true)
                                                                 .resizable()
                                                                 .frame(width: imageButtonSize, height: imageButtonSize)
                                                             //                                                Text(char.name)
@@ -384,6 +390,7 @@ struct EventDetailOverviewView: View {
                                                     })
                                                 }, label: {
                                                     WebImage(url: char.iconImageURL)
+                                                        .antialiased(true)
                                                         .resizable()
                                                         .frame(width: imageButtonSize, height: imageButtonSize)
                                                 })
@@ -584,7 +591,6 @@ struct EventSearchView: View {
                                         }
                                     }
                                     .frame(width: bannerWidth * 2 + bannerSpacing)
-                                    //                        .border(.red)
                                     LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
                                         ForEach(resultEvents, id: \.self) { event in
                                             NavigationLink(destination: {
@@ -624,14 +630,17 @@ struct EventSearchView: View {
                                 .animation(.easeInOut(duration: 0.2), value: showDetails)
                                 Spacer(minLength: 0)
                             }
-//                            .padding(sizeClass == .compact ? .bottom: .vertical)
                         }
                     } else {
                         ContentUnavailableView("Event.search.no-results", systemImage: "magnifyingglass", description: Text("Event.search.no-results.description"))
                     }
                 }
                 .searchable(text: $searchedText, prompt: "Event.search.placeholder")
-//                .searc
+                .onSubmit {
+                    if let events {
+                        searchedEvents = events.search(for: searchedText)
+                    }
+                }
                 .onChange(of: searchedText, {
                     if let events {
                         searchedEvents = events.search(for: searchedText)
@@ -650,7 +659,6 @@ struct EventSearchView: View {
             }
         }
         .withSystemBackground()
-//        .background(showDetails ? getGroupedBackgroundColor : getWindowBackgroundColor())
         .navigationTitle("Event")
         .wrapIf(searchedEvents != nil, in: { content in
             if #available(iOS 26.0, *) {
@@ -659,10 +667,6 @@ struct EventSearchView: View {
                 content
             }
         })
-//    }
-    //        .wrapIf(if @available(iOs), in: { content in
-//            
-//        })
         .task {
             await getEvents()
             searchedEvents = events
@@ -681,7 +685,7 @@ struct EventSearchView: View {
                 })
                 .popover(isPresented: $showFilterSheet) {
                     FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
-                        .frame(minWidth: 400, minHeight: 400)
+                        .frame(minWidth: 400, minHeight: 600)
                 }
             }
         }
@@ -690,10 +694,6 @@ struct EventSearchView: View {
                 await getEvents()
             }
         })
-//        .sheet(isPresented: $showFilterSheet, content: {
-//            FilterView()
-////                .sheet
-//        })
     }
     
     func getEvents() async {
@@ -704,7 +704,6 @@ struct EventSearchView: View {
             if let events = $0 {
                 self.events = events
                 searchedEvents = events
-//                self.events = firstXElements(events, x: 10)
             } else {
                 infoIsAvailable = false
             }
@@ -712,31 +711,4 @@ struct EventSearchView: View {
     }
     
 }
-
-
-
-
-/*
- .sheet(isPresented: $isFilterSettingsPresented) {
- Task {
- events = nil
- await getEvents()
- }
- } content: {
- FilterView(filter: $filter, includingKeys: [
- .attribute,
- .character,
- .server,
- .timelineStatus,
- .eventType,
- .sort
- ]) {
- if let events {
- SearchView(items: events, text: $searchInput) { result in
- searchedEvents = result
- }
- }
- }
- }
- */
 
