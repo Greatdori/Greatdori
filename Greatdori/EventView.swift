@@ -542,147 +542,170 @@ struct EventSearchView: View {
     @State var showFilterSheet = false
     @Namespace var eventLists
     var body: some View {
-        Group {
-            if let resultEvents = searchedEvents ?? events {
-                Group {
-                    if !resultEvents.isEmpty {
-                        ScrollView {
-                            HStack {
-                                Spacer(minLength: 0)
-                                ViewThatFits {
-                                    LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
-                                        let events = resultEvents.chunked(into: 2)
-                                        ForEach(events, id: \.self) { eventGroup in
-                                            HStack(spacing: showDetails ? nil : bannerSpacing) {
-                                                ForEach(eventGroup) { event in
-                                                    NavigationLink(destination: {
-                                                        EventDetailView(id: event.id)
-                                                        #if os(iOS)
-                                                            .wrapIf(true, in: { content in
-                                                                if #available(iOS 18.0, macOS 15.0, *) {
-                                                                    content
-                                                                        .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
-                                                                } else {
-                                                                    content
-                                                                }
-                                                            })
-                                                        #endif
-                                                    }, label: {
-                                                        EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
-                                                    })
-                                                    .buttonStyle(.plain)
-                                                    .wrapIf(true, in: { content in
-                                                        if #available(iOS 18.0, macOS 15.0, *) {
-                                                            content
-                                                                .matchedTransitionSource(
-                                                                    id: event.id,
-                                                                    in: eventLists
-                                                                )
-                                                        } else {
-                                                            content
+        NavigationStack {
+            Group {
+                if let resultEvents = searchedEvents ?? events {
+                    Group {
+                        if !resultEvents.isEmpty {
+                            ScrollView {
+                                HStack {
+                                    Spacer(minLength: 0)
+                                    ViewThatFits {
+                                        LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+                                            let events = resultEvents.chunked(into: 2)
+                                            ForEach(events, id: \.self) { eventGroup in
+                                                HStack(spacing: showDetails ? nil : bannerSpacing) {
+                                                    ForEach(eventGroup) { event in
+                                                        NavigationLink(destination: {
+                                                            EventDetailView(id: event.id)
+                                                            #if os(iOS)
+                                                                .wrapIf(true, in: { content in
+                                                                    if #available(iOS 18.0, macOS 15.0, *) {
+                                                                        content
+                                                                            .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
+                                                                    } else {
+                                                                        content
+                                                                    }
+                                                                })
+                                                            #endif
+                                                        }, label: {
+                                                            EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                        })
+                                                        .buttonStyle(.plain)
+                                                        .wrapIf(true, in: { content in
+                                                            if #available(iOS 18.0, macOS 15.0, *) {
+                                                                content
+                                                                    .matchedTransitionSource(
+                                                                        id: event.id,
+                                                                        in: eventLists
+                                                                    )
+                                                            } else {
+                                                                content
+                                                            }
+                                                        })
+                                                        if eventGroup.count == 1 && events[0].count != 1 {
+                                                            Rectangle()
+                                                                .frame(maxWidth: 420, maxHeight: 140)
+                                                                .opacity(0)
                                                         }
-                                                    })
-                                                    if eventGroup.count == 1 && events[0].count != 1 {
-                                                        Rectangle()
-                                                            .frame(maxWidth: 420, maxHeight: 140)
-                                                            .opacity(0)
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                    .frame(width: bannerWidth * 2 + bannerSpacing)
-                                    LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
-                                        ForEach(resultEvents, id: \.self) { event in
-                                            NavigationLink(destination: {
-                                                EventDetailView(id: event.id)
-                                            }, label: {
-                                                EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
-                                                #if os(iOS)
-                                                    .wrapIf(true, in: { content in
-                                                        if #available(iOS 18.0, macOS 15.0, *) {
-                                                            content
-                                                                .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
-                                                        } else {
-                                                            content
-                                                        }
-                                                    })
-                                                #endif
-                                                    .frame(maxWidth: bannerWidth)
-                                            })
-                                            .buttonStyle(.plain)
-                                            .wrapIf(true, in: { content in
-                                                if #available(iOS 18.0, macOS 15.0, *) {
-                                                    content
-                                                        .matchedTransitionSource(
-                                                            id: event.id,
-                                                            in: eventLists
-                                                        )
-                                                } else {
-                                                    content
-                                                }
-                                            })
+                                        .frame(width: bannerWidth * 2 + bannerSpacing)
+                                        LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+                                            ForEach(resultEvents, id: \.self) { event in
+                                                NavigationLink(destination: {
+                                                    EventDetailView(id: event.id)
+                                                }, label: {
+                                                    EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                    #if os(iOS)
+                                                        .wrapIf(true, in: { content in
+                                                            if #available(iOS 18.0, macOS 15.0, *) {
+                                                                content
+                                                                    .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
+                                                            } else {
+                                                                content
+                                                            }
+                                                        })
+                                                    #endif
+                                                        .frame(maxWidth: bannerWidth)
+                                                })
+                                                .buttonStyle(.plain)
+                                                .wrapIf(true, in: { content in
+                                                    if #available(iOS 18.0, macOS 15.0, *) {
+                                                        content
+                                                            .matchedTransitionSource(
+                                                                id: event.id,
+                                                                in: eventLists
+                                                            )
+                                                    } else {
+                                                        content
+                                                    }
+                                                })
+                                            }
                                         }
+                                        .frame(maxWidth: bannerWidth)
                                     }
-                                    .frame(maxWidth: bannerWidth)
+                                    .padding(.horizontal)
+                                    //.animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
+                                    .animation(.easeInOut(duration: 0.2), value: showDetails)
+                                    Spacer(minLength: 0)
                                 }
-                                .padding(.horizontal)
-                                //.animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
-                                .animation(.easeInOut(duration: 0.2), value: showDetails)
-                                Spacer(minLength: 0)
                             }
+                        } else {
+                            ContentUnavailableView("Event.search.no-results", systemImage: "magnifyingglass", description: Text("Event.search.no-results.description"))
+                        }
+                    }
+                    .searchable(text: $searchedText, prompt: "Event.search.placeholder")
+                    .onSubmit {
+                        if let events {
+                            searchedEvents = events.search(for: searchedText)
+                        }
+                    }
+                    .onChange(of: searchedText, {
+                        if let events {
+                            searchedEvents = events.search(for: searchedText)
+                        }
+                    })
+                    
+                } else {
+                    if infoIsAvailable {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
                         }
                     } else {
-                        ContentUnavailableView("Event.search.no-results", systemImage: "magnifyingglass", description: Text("Event.search.no-results.description"))
+                        ContentUnavailableView("Event.search.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Event.unavailable.description"))
                     }
                 }
-                .searchable(text: $searchedText, prompt: "Event.search.placeholder")
-                .onSubmit {
-                    if let events {
-                        searchedEvents = events.search(for: searchedText)
-                    }
-                }
-                .onChange(of: searchedText, {
-                    if let events {
-                        searchedEvents = events.search(for: searchedText)
-                    }
-                })
-            } else {
-                if infoIsAvailable {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
+            }
+            
+            .withSystemBackground()
+            .navigationTitle("Event")
+            .wrapIf(searchedEvents != nil, in: { content in
+                if #available(iOS 26.0, *) {
+                    content.navigationSubtitle((searchedText.isEmpty && !filter.isFiltered) ? "Event.count.\(searchedEvents!.count)" :  "Event.result.\(searchedEvents!.count)")
                 } else {
-                    ContentUnavailableView("Event.search.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Event.unavailable.description"))
+                    content
                 }
+            })
+            .task {
+                await getEvents()
+                searchedEvents = events
             }
-        }
-        
-        .withSystemBackground()
-        .navigationTitle("Event")
-        .wrapIf(searchedEvents != nil, in: { content in
-            if #available(iOS 26.0, *) {
-                content.navigationSubtitle((searchedText.isEmpty && !filter.isFiltered) ? "Event.count.\(searchedEvents!.count)" :  "Event.result.\(searchedEvents!.count)")
-            } else {
-                content
-            }
-        })
-        .task {
-            await getEvents()
-            searchedEvents = events
-        }
-        .inspector(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
-                .presentationBackgroundInteraction(.enabled)
-        }
-        .toolbar {
-            #if os(iOS)
-            ToolbarItem {
-                Menu {
+            
+            .toolbar {
+                #if os(iOS)
+                ToolbarItem {
+                    Menu {
+                        Picker("", selection: $showDetails.animation(.easeInOut(duration: 0.2))) {
+                            Label(title: {
+                                Text("Filter.view.banner-and-details")
+                            }, icon: {
+                                Image(_internalSystemName: "text.below.rectangle")
+                            })
+                            .tag(true)
+                            Label(title: {
+                                Text("Filter.view.banner-only")
+                            }, icon: {
+                                Image(systemName: "rectangle.grid.1x2")
+                            })
+                            .tag(false)
+                        }
+                        .pickerStyle(.inline)
+                        .labelsHidden()
+                    } label: {
+                        if showDetails {
+                            Image(_internalSystemName: "text.below.rectangle")
+                        } else {
+                            Image(systemName: "rectangle.grid.1x2")
+                        }
+                    }
+                }
+                #else
+                ToolbarItem {
                     Picker("", selection: $showDetails) {
                         Label(title: {
                             Text("Filter.view.banner-and-details")
@@ -698,42 +721,16 @@ struct EventSearchView: View {
                         .tag(false)
                     }
                     .pickerStyle(.inline)
-                    .labelsHidden()
-                } label: {
-                    if showDetails {
-                        Image(_internalSystemName: "text.below.rectangle")
-                    } else {
-                        Image(systemName: "rectangle.grid.1x2")
-                    }
                 }
-            }
-            #else
-            ToolbarItem {
-                Picker("", selection: $showDetails) {
-                    Label(title: {
-                        Text("Filter.view.banner-and-details")
-                    }, icon: {
-                        Image(_internalSystemName: "text.below.rectangle")
-                    })
-                    .tag(true)
-                    Label(title: {
-                        Text("Filter.view.banner-only")
-                    }, icon: {
-                        Image(systemName: "rectangle.grid.1x2")
-                    })
-                    .tag(false)
+                #endif
+                
+                if #available(iOS 26.0, macOS 26.0, *) {
+                    ToolbarSpacer()
                 }
-                .pickerStyle(.inline)
-            }
-            #endif
-            
-            if #available(iOS 26.0, macOS 26.0, *) {
-                ToolbarSpacer()
-            }
-            ToolbarItemGroup {
-                Button(action: {
-                    showFilterSheet.toggle()
-                }, label: {
+                ToolbarItemGroup {
+                    Button(action: {
+                        showFilterSheet.toggle()
+                    }, label: {
 //                    if filter.isFiltered {
 //                        Image(systemName: "line.3.horizontal.decrease")
 //                            .foregroundStyle(colorScheme == .light ? .white : .black)
@@ -741,23 +738,30 @@ struct EventSearchView: View {
 //                                Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(1.3)
 //                            }
 //                    } else {
-                    
+                        
                         Image(systemName: "line.3.horizontal.decrease")
 //                    }
-                })
+                    })
 //                .popover(isPresented: $showFilterSheet) {
 //
 //                        .frame(minWidth: 400, minHeight: 600)
 //                }
+                }
+            }
+            .onChange(of: filter) {
+                Task {
+                    await getEvents()
+                }
+            }
+            .onDisappear {
+                showFilterSheet = false
             }
         }
-        .onChange(of: filter) {
-            Task {
-                await getEvents()
-            }
-        }
-        .onDisappear {
-            showFilterSheet = false
+        .inspector(isPresented: $showFilterSheet) {
+            FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+                .presentationBackgroundInteraction(.enabled)
         }
     }
     
