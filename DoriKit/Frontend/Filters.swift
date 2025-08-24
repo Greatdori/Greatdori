@@ -623,6 +623,38 @@ extension DoriFrontend.Filter.Key {
     ///
     /// `items` is a sorted collection of all cases for key.
     ///
+    /// You can iterate over `items` to show a list of selections to users.
+    /// When `type` is `single`:
+    /// ```swift
+    /// let key = DoriFrontend.Filter.Key.band
+    /// ForEach(key.selector.items, id: \.self) { item in
+    ///     Button(action: {
+    ///         filter[key] = item.item.value
+    ///     }, label: {
+    ///         // Show text or image
+    ///     })
+    /// }
+    /// ```
+    ///
+    /// When `type` is multiple:
+    /// ```swift
+    /// let key = DoriFrontend.Filter.Key.band
+    /// ForEach(key.selector.items, id: \.self) { item in
+    ///     Button(action: {
+    ///         if var filterSet = filter[key] as? Set<AnyHashable> {
+    ///             if filterSet.contains(item.item.value) {
+    ///                 filterSet.remove(item.item.value)
+    ///             } else {
+    ///                 filterSet.insert(item.item.value)
+    ///             }
+    ///             filter[key] = filterSet
+    ///         }
+    ///     }, label: {
+    ///         // Show text or image
+    ///     })
+    /// }
+    /// ```
+    ///
     /// - SeeAlso:
     ///     See ``SelectorItem`` to learn more about `items`.
     public var selector: (type: SelectionType, items: [SelectorItem<DoriFrontend.Filter._AnySelectable>]) {
@@ -682,6 +714,13 @@ extension DoriFrontend.Filter.Key {
         }
     }
     
+    /// An item that can be selected for filter.
+    ///
+    /// You don't create this directly, instead, use ``selector`` to get
+    /// all selector items for a key.
+    ///
+    /// - SeeAlso:
+    ///     Use ``text`` and ``imageURL`` to get related description for an item.
     public struct SelectorItem<T: DoriFrontend.Filter._Selectable> {
         public let item: T
         
