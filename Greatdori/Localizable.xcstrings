@@ -206,12 +206,6 @@
         }
       }
     },
-    "Clone" : {
-
-    },
-    "Clone preferred locale basic (check console)" : {
-
-    },
     "Debug.pre-cache-unavailable-alert.dismiss" : {
       "localizations" : {
         "en" : {
@@ -1069,6 +1063,38 @@
         }
       }
     },
+    "Filter.view.banner-and-details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Banner & Title"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "横幅和标题"
+          }
+        }
+      }
+    },
+    "Filter.view.banner-only" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Banner Only"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅横幅"
+          }
+        }
+      }
+    },
     "Greatdori!" : {
       "shouldTranslate" : false
     },
@@ -1296,9 +1322,6 @@
         }
       }
     },
-    "Inspection" : {
-
-    },
     "Message.copy.success" : {
       "localizations" : {
         "en" : {
@@ -1353,7 +1376,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy Unavailable for Countdown"
+            "value" : "Copy Unavailable Here"
           }
         },
         "zh-Hans" : {
@@ -1726,9 +1749,6 @@
       }
     },
     "Offline Asset Debug" : {
-
-    },
-    "Open documents directory" : {
 
     },
     "Settings" : {

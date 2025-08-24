@@ -64,34 +64,7 @@ struct NewsView: View {
 //                        .navigationLinkIndicatorVisibility(.hidden)
                     }
                 }
-                .toolbar {
-                    ToolbarItem(content: {
-                        Menu(content: {
-                            ForEach(0..<filterOptions.count, id: \.self) { filterIndex in
-                                Button(action: {
-                                    filter = filterOptions[filterIndex]
-                                }, label: {
-                                    HStack {
-                                        if filter == filterOptions[filterIndex] {
-                                            Image(systemName: "checkmark")
-                                        }
-                                        Text(filterLocalizedString[filterOptions[filterIndex]]!)
-                                    }
-                                })
-                            }
-                        }, label: {
-                            if filter != nil {
-                                Image(systemName: "line.3.horizontal.decrease")
-                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                    .background {
-                                        Capsule().foregroundStyle(.blue).scaledToFill().scaleEffect(1.3)
-                                    }
-                            } else {
-                                Image(systemName: "line.3.horizontal.decrease")
-                            }
-                        })
-                    })
-                }
+
             } else {
                 ProgressView()
             }
@@ -136,6 +109,59 @@ struct NewsView: View {
             Task {
                 news = await DoriFrontend.News.list(filter: filter)
             }
+        }
+        .toolbar {
+            ToolbarItem(content: {
+                Picker(selection: $filter, content: {
+                    ForEach(0..<filterOptions.count, id: \.self) { filterIndex in
+                        //                                Button(action: {
+                        //                                    filter = filterOptions[filterIndex]
+                        //                                }, label: {
+                        //                                    HStack {
+                        //                                        if filter == filterOptions[filterIndex] {
+                        //                                            Image(systemName: "checkmark")
+                        //                                        }
+                        Text(filterLocalizedString[filterOptions[filterIndex]]!)
+                            .tag(filterOptions[filterIndex])
+                        //                                    }
+                        //                                })
+                    }
+                }, label: {
+                    if filter != nil {
+                        Image(systemName: "line.3.horizontal.decrease")
+                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                            .background {
+                                Capsule().foregroundStyle(.blue).scaledToFill().scaleEffect(1.3)
+                            }
+                    } else {
+                        Image(systemName: "line.3.horizontal.decrease")
+                    }
+                })
+                //                        Menu(content: {
+                //                            ForEach(0..<filterOptions.count, id: \.self) { filterIndex in
+                //                                Button(action: {
+                //                                    filter = filterOptions[filterIndex]
+                //                                }, label: {
+                //                                    HStack {
+                //                                        if filter == filterOptions[filterIndex] {
+                //                                            Image(systemName: "checkmark")
+                //                                        }
+                //                                        Text(filterLocalizedString[filterOptions[filterIndex]]!)
+                //                                    }
+                //                                })
+                //                            }
+                //                        }, label: {
+                //                            if filter != nil {
+                //                                Image(systemName: "line.3.horizontal.decrease")
+                //                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                //                                    .background {
+                //                                        Capsule().foregroundStyle(.blue).scaledToFill().scaleEffect(1.3)
+                //                                    }
+                //                            } else {
+                //                                Image(systemName: "line.3.horizontal.decrease")
+                //                            }
+                //                        })
+            })
         }
     }
 }

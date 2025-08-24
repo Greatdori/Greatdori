@@ -154,7 +154,7 @@ struct SettingsLocaleView: View {
 }
 
 
-let showBirthdayDateDefaultValue = 2
+let showBirthdayDateDefaultValue = 1
 struct SettingsHomeView: View {
     @AppStorage("showBirthdayDate") var showBirthdayDate = showBirthdayDateDefaultValue
     var body: some View {

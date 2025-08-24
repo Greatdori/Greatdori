@@ -532,6 +532,7 @@ struct EventDetailOverviewView: View {
 struct EventSearchView: View {
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.horizontalSizeClass) var sizeClass
+    @Environment(\.colorScheme) var colorScheme
     @State var filter = DoriFrontend.Filter()
     @State var events: [DoriFrontend.Event.PreviewEvent]?
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
@@ -626,7 +627,7 @@ struct EventSearchView: View {
                                     .frame(maxWidth: bannerWidth)
                                 }
                                 .padding(.horizontal)
-                                //                    .animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
+                                //.animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
                                 .animation(.easeInOut(duration: 0.2), value: showDetails)
                                 Spacer(minLength: 0)
                             }
@@ -658,6 +659,7 @@ struct EventSearchView: View {
                 }
             }
         }
+        
         .withSystemBackground()
         .navigationTitle("Event")
         .wrapIf(searchedEvents != nil, in: { content in
@@ -671,29 +673,92 @@ struct EventSearchView: View {
             await getEvents()
             searchedEvents = events
         }
+        .inspector(isPresented: $showFilterSheet) {
+            FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+                .presentationBackgroundInteraction(.enabled)
+        }
         .toolbar {
+            #if os(iOS)
             ToolbarItem {
-                Toggle(isOn: $showDetails, label: {
-                    Image(systemName: "info.circle")
-                })
-            }
-            ToolbarItem {
-                Button(action: {
-                    showFilterSheet = true
-                }, label: {
-                    Image(systemName: "line.3.horizontal.decrease")
-                })
-                .popover(isPresented: $showFilterSheet) {
-                    FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
-                        .frame(minWidth: 400, minHeight: 600)
+                Menu {
+                    Picker("", selection: $showDetails) {
+                        Label(title: {
+                            Text("Filter.view.banner-and-details")
+                        }, icon: {
+                            Image(_internalSystemName: "text.below.rectangle")
+                        })
+                        .tag(true)
+                        Label(title: {
+                            Text("Filter.view.banner-only")
+                        }, icon: {
+                            Image(systemName: "rectangle.grid.1x2")
+                        })
+                        .tag(false)
+                    }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                } label: {
+                    if showDetails {
+                        Image(_internalSystemName: "text.below.rectangle")
+                    } else {
+                        Image(systemName: "rectangle.grid.1x2")
+                    }
                 }
             }
+            #else
+            ToolbarItem {
+                Picker("", selection: $showDetails) {
+                    Label(title: {
+                        Text("Filter.view.banner-and-details")
+                    }, icon: {
+                        Image(_internalSystemName: "text.below.rectangle")
+                    })
+                    .tag(true)
+                    Label(title: {
+                        Text("Filter.view.banner-only")
+                    }, icon: {
+                        Image(systemName: "rectangle.grid.1x2")
+                    })
+                    .tag(false)
+                }
+                .pickerStyle(.inline)
+            }
+            #endif
+            
+            if #available(iOS 26.0, macOS 26.0, *) {
+                ToolbarSpacer()
+            }
+            ToolbarItemGroup {
+                Button(action: {
+                    showFilterSheet.toggle()
+                }, label: {
+//                    if filter.isFiltered {
+//                        Image(systemName: "line.3.horizontal.decrease")
+//                            .foregroundStyle(colorScheme == .light ? .white : .black)
+//                            .background {
+//                                Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(1.3)
+//                            }
+//                    } else {
+                    
+                        Image(systemName: "line.3.horizontal.decrease")
+//                    }
+                })
+//                .popover(isPresented: $showFilterSheet) {
+//
+//                        .frame(minWidth: 400, minHeight: 600)
+//                }
+            }
         }
-        .onChange(of: filter, {
+        .onChange(of: filter) {
             Task {
                 await getEvents()
             }
-        })
+        }
+        .onDisappear {
+            showFilterSheet = false
+        }
     }
     
     func getEvents() async {

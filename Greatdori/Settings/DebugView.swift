@@ -96,14 +96,16 @@ struct DebugOfflineAssetView: View {
         #if os(macOS)
         Form {
             Section {
-                Button("Open documents directory") {
+                Button(action: {
                     NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: NSHomeDirectory() + "/Documents")
-                }
+                }, label: {
+                    Text(verbatim: "Open documents directory")
+                })
             } header: {
-                Text("Inspection")
+                Text(verbatim: "Inspection")
             }
             Section {
-                Button("Clone preferred locale basic (check console)") {
+                Button(action: {
                     Task {
                         do {
                             try await DoriOfflineAsset.shared.downloadResource(of: "basic", in: .cn) { percentage, finished, total in
@@ -113,9 +115,11 @@ struct DebugOfflineAssetView: View {
                             print(error.localizedDescription)
                         }
                     }
-                }
+                }, label: {
+                    Text(verbatim: "Clone preferred locale basic (check console)")
+                })
             } header: {
-                Text("Clone")
+                Text(verbatim: "Clone")
             }
         }
         .formStyle(.grouped)

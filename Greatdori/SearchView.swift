@@ -18,42 +18,23 @@ import SwiftUI
 
 let flowLayoutDefaultVerticalSpacing: CGFloat = 3
 let flowLayoutDefaultHorizontalSpacing: CGFloat = 3
+let capsuleDefaultCornerRadius: CGFloat = isMACOS ? 5 : 10
 
 struct FilterView: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
     @Binding var filter: DoriFrontend.Filter
     var includingKeys: [DoriFrontend.Filter.Key]
     
     @State var lastSelectAllActionIsDeselect: Bool = false
     @State var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key? = nil
-    @State private var timer: Timer? = nil
+    
     var body: some View {
         Form {
             Section(content: {
                 //MARK: Attribute
                 if includingKeys.contains(.attribute) {
                     ListItemView(title: {
-                        ZStack(alignment: .leading) {
-                            Text("Filter.key.attribute")
-                                .opacity(theItemThatShowsSelectAllTips == .attribute ? 0 : 1)
-                                .bold()
-                            Text(lastSelectAllActionIsDeselect ? "Filter.double-tap-tips.unselected" : "Filter.double-tap-tips.selected")
-                                .opacity(theItemThatShowsSelectAllTips == .attribute ? 1 : 0)
-                                .fontWeight(.light)
-                        }
-                        .animation(.easeIn(duration: 0.2), value: theItemThatShowsSelectAllTips)
-//                        .bold()
-                        .onTapGesture(count: 2, perform: {
-                            withAnimation(.easeInOut(duration: 0.05)) {
-                                if filter.attribute.count < DoriFrontend.Filter.Attribute.allCases.count {
-                                    filter.attribute = Set(DoriFrontend.Filter.Attribute.allCases)
-                                    lastSelectAllActionIsDeselect = false
-                                } else {
-                                    lastSelectAllActionIsDeselect = true
-                                    filter.attribute.removeAll()
-                                }
-                            }
-                            theItemThatShowsSelectAllTips = .attribute
-                        })
+                        FilterTitleView(filter: $filter, titleName: "Filter.key.attribute", titleKey: .attribute)
                     }, value: {
                         HStack {
                             ForEach(DoriFrontend.Filter.Attribute.allCases, id: \.self) { item in
@@ -81,7 +62,7 @@ struct FilterView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                    })
+                    }, allowValueLeading: true)
                 }
                 
                 //MARK: Character
@@ -133,7 +114,7 @@ struct FilterView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                    }, displayMode: .expandedOnly)
+                    }, allowValueLeading: true, displayMode: .expandedOnly)
                 }
                 
                 //MARK: Server
@@ -168,7 +149,7 @@ struct FilterView: View {
                             .buttonStyle(.plain)
                             
                         }
-                    })
+                    }, allowValueLeading: true)
                 }
                 
                 //MARK: TimelineStatus
@@ -202,7 +183,7 @@ struct FilterView: View {
                             })
                             .buttonStyle(.plain)
                         }
-                    })
+                    }, allowValueLeading: true)
                 }
                 
                 //MARK: EventType
@@ -236,11 +217,13 @@ struct FilterView: View {
                             })
                             .buttonStyle(.plain)
                         }
-                    })
+                    }, allowValueLeading: true)
                 }
             }, header: {
                 VStack(alignment: .leading) {
-                    Color.clear.frame(height: 10)
+                    if sizeClass == .compact {
+                        Color.clear.frame(height: 10)
+                    }
                     Text("Filter")
                 }
             }, footer: {
@@ -248,18 +231,6 @@ struct FilterView: View {
                     Text("Filter.footer")
                 }
             })
-            .onChange(of: theItemThatShowsSelectAllTips) { newValue in
-                // 先取消旧的 Timer
-                timer?.invalidate()
-                
-                if newValue != nil {
-                    // 新建 Timer
-                    timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
-                        theItemThatShowsSelectAllTips = nil
-                        timer = nil
-                    }
-                }
-            }
             
             Section {
                 Button(action: {
@@ -273,7 +244,7 @@ struct FilterView: View {
     struct FilterSelectionCapsuleView<Content: View>: View {
         var isActive: Bool
         let content: Content
-        let cornerRadius: CGFloat = 10
+        let cornerRadius: CGFloat = capsuleDefaultCornerRadius
         @State var textWidth: CGFloat = 0
         
         init(isActive: Bool, @ViewBuilder content: () -> Content) {
@@ -282,56 +253,71 @@ struct FilterView: View {
         }
         var body: some View {
             ZStack {
-//                Capsule()
-//                    .stroke(Color.accent, lineWidth: 2)
-//                    .frame(width: textWidth, height: filterItemHeight)
-//                Capsule()
-//                    .foregroundStyle(Color.accent.opacity(isActive ? 1 : 0.3))
-//                    .frame(width: textWidth, height: filterItemHeight)
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .foregroundStyle(isActive ? Color.accent : Color.secondary)
                     .frame(width: textWidth, height: filterItemHeight)
                 content
+                    .foregroundStyle(isActive ? .white : .primary)
                     .frame(height: filterItemHeight)
                 //                    .scaleEffect(0.9)
                     .padding(.horizontal)
                     .onFrameChange(perform: { geometry in
                         textWidth = geometry.size.width
                     })
-                //                    .border(.green)
+                    //FIXME: Text padding to much in macOS
             }
         }
     }
     struct FilterTitleView: View {
         @Binding var filter: DoriFrontend.Filter
-        @Binding var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key?
-        @Binding var lastSelectAllActionIsDeselect: Bool
+//        @Binding var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key?
+//        @State var showSelectAllTips = false
+//        @State var showDeselectAllTips = false
+        @State var displayingTipIndex = 0
+        @State private var timer: Timer? = nil
         let titleName: LocalizedStringResource
         let titleKey: DoriFrontend.Filter.Key
         var body: some View {
             ZStack(alignment: .leading) {
                 Text(titleName)
-                    .opacity(theItemThatShowsSelectAllTips == titleKey ? 0 : 1)
+                    .opacity(displayingTipIndex == 0 ? 1 : 0)
                     .bold()
-                Text(lastSelectAllActionIsDeselect ? "Filter.double-tap-tips.unselected" : "Filter.double-tap-tips.selected")
-                    .opacity(theItemThatShowsSelectAllTips == titleKey ? 1 : 0)
+                Text("Filter.double-tap-tips.selected")
+                    .opacity(displayingTipIndex == 1 ? 1 : 0)
+                    .fontWeight(.light)
+                Text("Filter.double-tap-tips.unselected")
+                    .opacity(displayingTipIndex == 2 ? 1 : 0)
                     .fontWeight(.light)
             }
-            .animation(.easeIn(duration: 0.2), value: theItemThatShowsSelectAllTips)
+            .animation(.easeIn(duration: 0.2), value: displayingTipIndex)
             .onTapGesture(count: 2, perform: {
-                //FIXME: [250823] Cannot access `filter` via `titleKey`.
-//                withAnimation(.easeInOut(duration: 0.05)) {
-////                    filter.
-//                    if filter[titleKey].count < titleKey.allCases.count {
-//                        filter.attribute = Set(DoriFrontend.Filter.Attribute.allCases)
-//                        lastSelectAllActionIsDeselect = false
-//                    } else {
-//                        lastSelectAllActionIsDeselect = true
-//                        filter.attribute.removeAll()
+                withAnimation(.easeInOut(duration: 0.05)) {
+                    //FIXME: [250824] Filter type issue
+//                    let iterableBase = filter[titleKey].base as! Set<any CaseIterable>
+//                    let underlyingType = type(of: iterableBase)
+//                    if let filterSet = filter[titleKey] as? Set<AnyHashable> {
+//                        if filterSet.count < underlyingType.allCases.count {
+//                            displayingTipIndex = 1
+//                            filter[titleKey] = Set(underlyingType.allCases as! [AnyHashable])
+//                        } else {
+//                            displayingTipIndex = 2
+//                            if var filterSet = filter[titleKey] as? Set<AnyHashable> {
+//                                filterSet.removeAll()
+//                                filter[titleKey] = filterSet
+//                            }
+//                        }
 //                    }
-//                }
-                theItemThatShowsSelectAllTips = .attribute
+                }
             })
+            .onChange(of: displayingTipIndex) { oldValue, newValue in
+                timer?.invalidate()
+                if newValue != 0 {
+                    timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
+                        displayingTipIndex = 0
+                        timer = nil
+                    }
+                }
+            }
         }
     }
 }
