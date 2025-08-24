@@ -15,7 +15,7 @@
 #if canImport(DoriAssetShims)
 
 import Foundation
-@_implementationOnly import DoriAssetShims
+internal import DoriAssetShims
 
 public final class DoriOfflineAsset: Sendable {
     public static let shared = DoriOfflineAsset()
@@ -27,9 +27,25 @@ public final class DoriOfflineAsset: Sendable {
         AssetShims.shutdown()
     }
     
+    /// Download offline resource with type and locale.
+    ///
+    /// - Parameters:
+    ///   - type: Type of resource, see ``ResourceType`` for more details.
+    ///   - locale: Locale of resource.
+    ///   - onProgressUpdate: A closure to call when downloading progress updates.
+    ///
+    ///     This closure takes 3 arguments, which means downloading progress (0.0~1.0),
+    ///     received objects count, and total objects count, respectively.
+    /// - Returns: Whether downloading is success.
+    ///
+    /// Some other works have to be performed before the first call of `onProgressUpdate`.
+    /// The best practice for progress UI is show some texts like "preparing..."
+    /// before `onProgressUpdate` being called. Actually, Git is contacting the server
+    /// before downloading. You can provide more detailed text to user based on this information.
+    /// Mention `Git` to users is not a good idea, generally.
     @discardableResult
     public func downloadResource(
-        of type: String,
+        of type: ResourceType,
         in locale: DoriAPI.Locale,
         onProgressUpdate: @Sendable @escaping (Double, Int, Int) -> Void
     ) async throws -> Bool {
@@ -47,7 +63,7 @@ public final class DoriOfflineAsset: Sendable {
                         var error: NSError?
                         let success = unsafe AssetShims.downloadResource(
                             inLocale: locale.rawValue,
-                            ofType: type,
+                            ofType: type.rawValue,
                             payload: ptr,
                             error: &error,
                             onProgressUpdate: callback
@@ -60,6 +76,17 @@ public final class DoriOfflineAsset: Sendable {
                     }
                 }
             }
+    }
+    
+    public func fileExists(_ path: String, in locale: DoriAPI.Locale, of type: ResourceType) -> Bool {
+        AssetShims.fileExists(path, inLocale: locale.rawValue, ofType: type.rawValue)
+    }
+    
+    public enum ResourceType: String, Sendable {
+        case basic
+        case movie
+        case sound
+        case unsupported
     }
 }
 

@@ -1,6 +1,6 @@
 //===---*- Greatdori! -*---------------------------------------------------===//
 //
-// AssetShims.h
+// AssetShims+File.h
 //
 // This source file is part of the Greatdori! open source project
 //
@@ -12,7 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#import <Foundation/Foundation.h>
-
 #import "AssetShims.h"
-#import "AssetShims+File.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface AssetShims (File)
+
++(bool)fileExists: (NSString*) path
+         inLocale: (NSString*) locale
+           ofType: (NSString*) type;
+
+@end
+
+NS_ASSUME_NONNULL_END

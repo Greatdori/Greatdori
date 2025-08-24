@@ -92,6 +92,7 @@ struct DebugBirthdayViewUnit: View {
 
 @available(iOS, unavailable)
 struct DebugOfflineAssetView: View {
+    @State var filePath = ""
     var body: some View {
         #if os(macOS)
         Form {
@@ -108,7 +109,7 @@ struct DebugOfflineAssetView: View {
                 Button(action: {
                     Task {
                         do {
-                            try await DoriOfflineAsset.shared.downloadResource(of: "basic", in: .cn) { percentage, finished, total in
+                            try await DoriOfflineAsset.shared.downloadResource(of: .basic, in: .cn) { percentage, finished, total in
                                 print("\(percentage * 100)%, \(finished) / \(total)")
                             }
                         } catch {
@@ -120,6 +121,14 @@ struct DebugOfflineAssetView: View {
                 })
             } header: {
                 Text(verbatim: "Clone")
+            }
+            Section {
+                TextField("File Path", text: $filePath)
+                Button("Exists") {
+                    print(DoriOfflineAsset.shared.fileExists(filePath, in: .cn, of: .basic))
+                }
+            } header: {
+                Text("File")
             }
         }
         .formStyle(.grouped)

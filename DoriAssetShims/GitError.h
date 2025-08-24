@@ -1,6 +1,6 @@
 //===---*- Greatdori! -*---------------------------------------------------===//
 //
-// AssetShims.h
+// GitError.h
 //
 // This source file is part of the Greatdori! open source project
 //
@@ -14,5 +14,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "AssetShims.h"
-#import "AssetShims+File.h"
+#define GitErrorDomain @"GitError"
+
+void nsErrorForGit(int code, NSError** outError);
+const char* refspecOfBranch(NSString* branch);
