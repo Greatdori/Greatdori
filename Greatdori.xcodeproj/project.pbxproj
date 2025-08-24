@@ -99,10 +99,10 @@
 		8C7855A12E48FBF9000EA06E /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855A02E48FBF5000EA06E /* ImageViewer.swift */; };
 		8C7855DA2E4A6994000EA06E /* MiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855D92E4A698D000EA06E /* MiracleTicket.swift */; };
 		8C7855DC2E4A6BFA000EA06E /* FrontendMiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */; };
+		8C7F17602E5AB5910040C206 /* DoriAssetShims.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */; platformFilters = (ios, maccatalyst, macos, ); };
 		8C7F6B152E581BDC0040C206 /* SystemColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F6B142E581BD80040C206 /* SystemColor.swift */; };
 		8C7F6B9A2E593AFE0040C206 /* DoriOfflineAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F6B992E593AFB0040C206 /* DoriOfflineAsset.swift */; };
-		8C7F6BCB2E5949950040C206 /* DoriAssetShims.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8C7F6BD42E5949AE0040C206 /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B922E5922070040C206 /* GSS.framework */; platformFilters = (ios, maccatalyst, macos, xros, ); };
+		8C7F6BD42E5949AE0040C206 /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B922E5922070040C206 /* GSS.framework */; };
 		8C7F6BD52E5949AE0040C206 /* libgssapi_krb5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B8E2E5921990040C206 /* libgssapi_krb5.tbd */; platformFilters = (maccatalyst, macos, ); };
 		8C7F6BD62E5949B40040C206 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B902E5921BB0040C206 /* libiconv.tbd */; };
 		8C7F6BE02E594A6C0040C206 /* AssetShims.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F6BBB2E59478C0040C206 /* AssetShims.m */; };
@@ -110,7 +110,6 @@
 		8C7F6BF62E594EDF0040C206 /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B922E5922070040C206 /* GSS.framework */; platformFilters = (ios, maccatalyst, macos, xros, ); };
 		8C7F6BF72E594EDF0040C206 /* libgssapi_krb5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B8E2E5921990040C206 /* libgssapi_krb5.tbd */; platformFilters = (maccatalyst, macos, ); };
 		8C7F6BF82E594EE60040C206 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B902E5921BB0040C206 /* libiconv.tbd */; };
-		8C7F6C052E59935C0040C206 /* DoriAssetShims.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */; platformFilters = (ios, maccatalyst, macos, ); };
 		8C7F6C0B2E59950C0040C206 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C0A2E59950C0040C206 /* libgit2.xcframework */; };
 		8C7F6C0D2E5995990040C206 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C0C2E5995990040C206 /* libssh2.xcframework */; };
 		8C7F6C112E5996540040C206 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C102E5996540040C206 /* OpenSSL.xcframework */; };
@@ -342,20 +341,6 @@
 			remoteGlobalIDString = 8C0C995C2E296A4400549B5C;
 			remoteInfo = Greatdori;
 		};
-		8C7F6BC82E5949950040C206 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8C7F6BC32E5949950040C206;
-			remoteInfo = DoriAssetShims;
-		};
-		8C7F6BF42E594EA70040C206 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8C7F6BC32E5949950040C206;
-			remoteInfo = DoriAssetShims;
-		};
 		8C7F6C072E59935C0040C206 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
@@ -453,7 +438,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8C7F6BCB2E5949950040C206 /* DoriAssetShims.framework in Embed Frameworks */,
 				8CB4D4802E445F700085D57A /* BuiltinCardCollections.framework in Embed Frameworks */,
 				8C0C99982E296A8C00549B5C /* DoriKit.framework in Embed Frameworks */,
 			);
@@ -853,7 +837,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C7F6C052E59935C0040C206 /* DoriAssetShims.framework in Frameworks */,
+				8C7F17602E5AB5910040C206 /* DoriAssetShims.framework in Frameworks */,
 				8C7F6BF82E594EE60040C206 /* libiconv.tbd in Frameworks */,
 				8C0C99B12E296F3900549B5C /* SwiftyJSON in Frameworks */,
 				8C0C99AE2E296F2D00549B5C /* Alamofire in Frameworks */,
@@ -1600,7 +1584,6 @@
 				8C0C99962E296A8C00549B5C /* PBXTargetDependency */,
 				8C6C0ED92E422F9100D1FB0A /* PBXTargetDependency */,
 				8CB4D47E2E445F700085D57A /* PBXTargetDependency */,
-				8C7F6BC92E5949950040C206 /* PBXTargetDependency */,
 			);
 			name = Greatdori;
 			packageProductDependencies = (
@@ -1652,7 +1635,6 @@
 				8CD13FE62E300BEC00673E15 /* PBXBuildRule */,
 			);
 			dependencies = (
-				8C7F6BF52E594EA70040C206 /* PBXTargetDependency */,
 				8C2CCD422E3E06100014189F /* PBXTargetDependency */,
 				8C7F6C082E59935C0040C206 /* PBXTargetDependency */,
 			);
@@ -1733,7 +1715,6 @@
 				8C7F6BBF2E5949950040C206 /* Headers */,
 				8C7F6BC02E5949950040C206 /* Sources */,
 				8C7F6BC12E5949950040C206 /* Frameworks */,
-				8C7F6BC22E5949950040C206 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -2002,13 +1983,6 @@
 				8C6C0EF02E42301000D1FB0A /* Assets.xcassets in Resources */,
 				8C6C0EF22E4230B800D1FB0A /* AppIcon.icon in Resources */,
 				8CB4D4B52E44938E0085D57A /* Localizable.xcstrings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8C7F6BC22E5949950040C206 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2403,21 +2377,6 @@
 			target = 8C0C995C2E296A4400549B5C /* Greatdori */;
 			targetProxy = 8C7855D52E4925BB000EA06E /* PBXContainerItemProxy */;
 		};
-		8C7F6BC92E5949950040C206 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8C7F6BC32E5949950040C206 /* DoriAssetShims */;
-			targetProxy = 8C7F6BC82E5949950040C206 /* PBXContainerItemProxy */;
-		};
-		8C7F6BF52E594EA70040C206 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			platformFilters = (
-				ios,
-				maccatalyst,
-				macos,
-			);
-			target = 8C7F6BC32E5949950040C206 /* DoriAssetShims */;
-			targetProxy = 8C7F6BF42E594EA70040C206 /* PBXContainerItemProxy */;
-		};
 		8C7F6C082E59935C0040C206 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilters = (
@@ -2715,6 +2674,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 					/Library/Frameworks,
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -2726,7 +2686,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -2769,6 +2729,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 					/Library/Frameworks,
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -2780,7 +2741,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -3141,6 +3102,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 					/Library/Frameworks,
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -3152,7 +3114,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -3379,6 +3341,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 					/Library/Frameworks,
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -3390,7 +3353,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -3957,6 +3920,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/clib/libgit2/bin",
 				);
+				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
@@ -4005,6 +3969,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/clib/libgit2/bin",
 				);
+				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
@@ -4053,6 +4018,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/clib/libgit2/bin",
 				);
+				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
@@ -4101,6 +4067,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/clib/libgit2/bin",
 				);
+				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";

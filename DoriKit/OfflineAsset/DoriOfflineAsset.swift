@@ -15,7 +15,7 @@
 #if canImport(DoriAssetShims)
 
 import Foundation
-import DoriAssetShims
+@_implementationOnly import DoriAssetShims
 
 public final class DoriOfflineAsset: Sendable {
     public static let shared = DoriOfflineAsset()
