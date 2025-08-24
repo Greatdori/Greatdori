@@ -49,8 +49,8 @@ public final class DoriOfflineAsset: Sendable {
         in locale: DoriAPI.Locale,
         onProgressUpdate: @Sendable @escaping (Double, Int, Int) -> Void
     ) async throws -> Bool {
-        let callback: @Sendable @convention(c) (UnsafePointer<_git_indexer_progress>?, UnsafeMutableRawPointer?) -> Int32 = { progress, payload in
-            if let progress = unsafe progress, let updatePayload = unsafe payload?.load(as: ((Double, Int, Int) -> Void).self) {
+        let callback: @Sendable @convention(c) (UnsafePointer<_git_indexer_progress>, UnsafeMutableRawPointer?) -> Int32 = { progress, payload in
+            if let updatePayload = unsafe payload?.load(as: ((Double, Int, Int) -> Void).self) {
                 let percentage = unsafe Double(progress.pointee.indexed_objects) / Double(progress.pointee.total_objects)
                 unsafe updatePayload(percentage, Int(progress.pointee.indexed_objects), Int(progress.pointee.total_objects))
             }

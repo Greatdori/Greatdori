@@ -15,6 +15,8 @@
 #import <Foundation/Foundation.h>
 #import "ExportedGitTypes.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface AssetShims : NSObject
 
 +(void)startup;
@@ -22,13 +24,15 @@
 
 +(bool)downloadResourceInLocale: (NSString*) locale
                          ofType: (NSString*) type
-                        payload: (void*) payload
+                        payload: (void* _Nullable) payload
                           error: (NSError**) outError
-               onProgressUpdate: (int (*)(const _git_indexer_progress *stats, void *payload))progressUpdate;
+               onProgressUpdate: (int (*)(const _git_indexer_progress *stats,  void * _Nullable payload))progressUpdate;
 +(int)updateResourceInLocale: (NSString*) locale
                       ofType: (NSString*) type
-                     payload: (void*) payload
+                     payload: (void* _Nullable) payload
                        error: (NSError**) outError
-            onProgressUpdate: (int (*)(const _git_indexer_progress *stats, void *payload))progressUpdate;
+            onProgressUpdate: (int (*)(const _git_indexer_progress *stats, void * _Nullable payload))progressUpdate;
 
 @end
+
+NS_ASSUME_NONNULL_END

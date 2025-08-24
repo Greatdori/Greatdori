@@ -33,6 +33,9 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
     git_libgit2_shutdown();
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmismatched-parameter-types"
+
 +(bool)downloadResourceInLocale: (NSString*) locale
                          ofType: (NSString*) type
                         payload: (void*) payload
@@ -169,5 +172,7 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
         return 0;
     }
 }
+
+#pragma clang diagnostic pop
 
 @end
