@@ -86,6 +86,10 @@ public final class DoriOfflineAsset: Sendable {
         try AssetShims.contentsOfDirectory(atPath: path, inLocale: locale.rawValue, ofType: type.rawValue)
     }
     
+    public func fileData(forPath path: String, in locale: DoriAPI.Locale, of type: ResourceType) throws -> Data {
+        try AssetShims.fileData(forPath: path, inLocale: locale.rawValue, ofType: type.rawValue)
+    }
+    
     public enum ResourceType: String, Sendable {
         case basic
         case movie

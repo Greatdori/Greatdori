@@ -27,6 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
                                                    ofType: (NSString*) type
                                                     error: (NSError**) outError;
 
++(NSData* _Nullable)fileDataForPath: (NSString*) path
+                           inLocale: (NSString*) locale
+                             ofType: (NSString*) type
+                              error: (NSError**) outError;
+
 @end
 
 NS_ASSUME_NONNULL_END

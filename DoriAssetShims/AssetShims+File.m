@@ -136,4 +136,51 @@
     return result;
 }
 
++(NSData* _Nullable)fileDataForPath: (NSString*) path
+                           inLocale: (NSString*) locale
+                             ofType: (NSString*) type
+                              error: (NSError**) outError {
+    NSString* branch = [[locale stringByAppendingString:@"/"] stringByAppendingString:type];
+    
+    git_repository* repository = NULL;
+    int error = git_repository_open(&repository, [[NSHomeDirectory() stringByAppendingString:@"/Documents/OfflineResource.bundle"] UTF8String]);
+    if (error != 0) goto cleanup;
+    
+    git_reference* ref = NULL;
+    error = git_reference_lookup(&ref, repository, [[@"refs/heads/" stringByAppendingString:branch] UTF8String]);
+    if (error != 0) goto cleanup;
+    
+    const git_oid* oid = git_reference_target(ref);
+    git_commit* commit = NULL;
+    error = git_commit_lookup(&commit, repository, oid);
+    if (error != 0) goto cleanup;
+    
+    git_tree* tree = NULL;
+    error = git_commit_tree(&tree, commit);
+    if (error != 0) goto cleanup;
+    
+    git_tree_entry* entry = NULL;
+    error = git_tree_entry_bypath(&entry, tree, [path UTF8String]);
+    if (error != 0) goto cleanup;
+    
+    if (git_tree_entry_type(entry) != GIT_OBJ_BLOB) {
+        *outError = [NSError errorWithDomain:NSPOSIXErrorDomain code:kPOSIXErrorEISDIR userInfo:nil];
+        git_repository_free(repository);
+        return nil;
+    }
+    
+    git_blob* blob = NULL;
+    error = git_blob_lookup(&blob, repository, git_tree_entry_id(entry));
+    if (error != 0) goto cleanup;
+    
+    const void* content = git_blob_rawcontent(blob);
+    size_t size = git_blob_rawsize(blob);
+    return [NSData dataWithBytes:content length:size];
+    
+cleanup:
+    nsErrorForGit(error, outError);
+    if (repository) git_repository_free(repository);
+    return nil;
+}
+
 @end
