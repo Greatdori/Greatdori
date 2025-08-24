@@ -93,6 +93,7 @@ struct DebugBirthdayViewUnit: View {
 @available(iOS, unavailable)
 struct DebugOfflineAssetView: View {
     @State var filePath = ""
+    @State var contents = [String]()
     var body: some View {
         #if os(macOS)
         Form {
@@ -126,6 +127,18 @@ struct DebugOfflineAssetView: View {
                 TextField("File Path", text: $filePath)
                 Button("Exists") {
                     print(DoriOfflineAsset.shared.fileExists(filePath, in: .cn, of: .basic))
+                }
+                VStack(alignment: .leading) {
+                    Button("Contents") {
+                        do {
+                            contents = try DoriOfflineAsset.shared.contentsOfDirectory(atPath: filePath, in: .cn, of: .basic)
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                    ForEach(contents, id: \.self) { name in
+                        Text(name)
+                    }
                 }
             } header: {
                 Text("File")

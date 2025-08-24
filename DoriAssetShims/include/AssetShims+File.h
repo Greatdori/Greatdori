@@ -22,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
          inLocale: (NSString*) locale
            ofType: (NSString*) type;
 
++(NSArray<NSString*>* _Nullable)contentsOfDirectoryAtPath: (NSString*) path
+                                                 inLocale: (NSString*) locale
+                                                   ofType: (NSString*) type
+                                                    error: (NSError**) outError;
+
 @end
 
 NS_ASSUME_NONNULL_END
