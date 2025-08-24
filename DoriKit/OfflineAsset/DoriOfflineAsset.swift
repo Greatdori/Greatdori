@@ -28,7 +28,11 @@ public final class DoriOfflineAsset: Sendable {
     }
     
     @discardableResult
-    public func downloadResource(of type: String, in locale: DoriAPI.Locale, onProgressUpdate: @escaping (Double, Int, Int) -> Void) -> Bool {
+    public func downloadResource(
+        of type: String,
+        in locale: DoriAPI.Locale,
+        onProgressUpdate: @Sendable @escaping (Double, Int, Int) -> Void
+    ) async throws -> Bool {
         let callback: @Sendable @convention(c) (UnsafePointer<_git_indexer_progress>?, UnsafeMutableRawPointer?) -> Int32 = { progress, payload in
             if let progress = unsafe progress, let updatePayload = unsafe payload?.load(as: ((Double, Int, Int) -> Void).self) {
                 let percentage = unsafe Double(progress.pointee.indexed_objects) / Double(progress.pointee.total_objects)
@@ -36,10 +40,26 @@ public final class DoriOfflineAsset: Sendable {
             }
             return 0
         }
-        var mutableProgressUpdate = onProgressUpdate
-        return unsafe withUnsafeMutablePointer(to: &mutableProgressUpdate) { ptr in
-            unsafe AssetShims.downloadResource(inLocale: locale.rawValue, ofType: type, payload: ptr, onProgressUpdate: callback)
-        }
+        return try await withCheckedThrowingContinuation { continuation in
+                DispatchQueue(label: "com.memz233.DoriKit.OfflineAsset.download-resource", qos: .userInitiated).async {
+                    var mutableProgressUpdate = onProgressUpdate
+                    unsafe withUnsafeMutablePointer(to: &mutableProgressUpdate) { ptr in
+                        var error: NSError?
+                        let success = unsafe AssetShims.downloadResource(
+                            inLocale: locale.rawValue,
+                            ofType: type,
+                            payload: ptr,
+                            error: &error,
+                            onProgressUpdate: callback
+                        )
+                        if let error {
+                            continuation.resume(throwing: error)
+                            return
+                        }
+                        continuation.resume(returning: success)
+                    }
+                }
+            }
     }
 }
 

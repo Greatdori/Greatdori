@@ -18,6 +18,9 @@
 int getCredential(git_credential **out, const char *url, const char *usernameFromURL, unsigned int allowedTypes, void *payload) {
     return git_credential_userpass_plaintext_new(out, "DoriAsset", "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");
 }
+int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, const char *url, void *payload) {
+    return git_remote_create_with_fetchspec(out, repo, name, url, [[[[@"refs/heads/" stringByAppendingString:(__bridge NSString*)payload] stringByAppendingString:@":refs/remotes/origin/"] stringByAppendingString:(__bridge NSString*)payload] UTF8String]);
+}
 
 @implementation AssetShims
 
@@ -29,7 +32,11 @@ int getCredential(git_credential **out, const char *url, const char *usernameFro
     git_libgit2_shutdown();
 }
 
-+(bool)downloadResourceInLocale: (NSString*) locale ofType: (NSString*) type payload: (void*) payload onProgressUpdate: (int (*)(const git_indexer_progress *stats, void *payload))progressUpdate {
++(bool)downloadResourceInLocale: (NSString*) locale
+                         ofType: (NSString*) type
+                        payload: (void*) payload
+                          error: (NSError**) outError
+               onProgressUpdate: (int (*)(const git_indexer_progress *stats, void *payload))progressUpdate {
     git_repository* repository = NULL;
     git_clone_options options = GIT_CLONE_OPTIONS_INIT;
     options.fetch_opts.callbacks.payload = payload;
@@ -38,6 +45,8 @@ int getCredential(git_credential **out, const char *url, const char *usernameFro
     options.checkout_branch = [[[locale stringByAppendingString:@"/"] stringByAppendingString:type] UTF8String];
     options.fetch_opts.download_tags = GIT_REMOTE_DOWNLOAD_TAGS_NONE;
     options.fetch_opts.prune = GIT_FETCH_PRUNE;
+    options.remote_cb_payload = (__bridge void*) [[locale stringByAppendingString:@"/"] stringByAppendingString:type];
+    options.remote_cb = getRemoteCallback;
     
     NSString* destination = [NSHomeDirectory() stringByAppendingString:@"/Documents/OfflineResource.bundle"];
     if (![NSFileManager.defaultManager fileExistsAtPath:destination]) {
@@ -49,7 +58,9 @@ int getCredential(git_credential **out, const char *url, const char *usernameFro
                           [destination UTF8String],
                           &options);
     if (error < 0) {
-        printf("%s\n", giterr_last()->message);
+        NSError* resultError = [NSError errorWithDomain:@"GitError" code:error userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithCString:giterr_last()->message encoding:NSASCIIStringEncoding]}];
+        *outError = resultError;
+        giterr_clear();
         return false;
     }
     git_repository_free(repository);

@@ -104,8 +104,14 @@ struct DebugOfflineAssetView: View {
             }
             Section {
                 Button("Clone preferred locale basic (check console)") {
-                    DoriOfflineAsset.shared.downloadResource(of: "basic", in: .cn) { percentage, finished, total in
-                        print("\(percentage)%, \(finished) / \(total)")
+                    Task {
+                        do {
+                            try await DoriOfflineAsset.shared.downloadResource(of: "basic", in: .cn) { percentage, finished, total in
+                                print("\(percentage * 100)%, \(finished) / \(total)")
+                            }
+                        } catch {
+                            print(error.localizedDescription)
+                        }
                     }
                 }
             } header: {

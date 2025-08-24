@@ -50,6 +50,10 @@ typedef struct _git_indexer_progress {
 +(void)startup;
 +(void)shutdown;
 
-+(bool)downloadResourceInLocale: (NSString*) locale ofType: (NSString*) type payload: (void*) payload onProgressUpdate: (int (*)(const _git_indexer_progress *stats, void *payload))progressUpdate;
++(bool)downloadResourceInLocale: (NSString*) locale
+                         ofType: (NSString*) type
+                        payload: (void*) payload
+                          error: (NSError**) outError
+               onProgressUpdate: (int (*)(const _git_indexer_progress *stats, void *payload))progressUpdate;
 
 @end
