@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8C0C995C2E296A4400549B5C"
-               BuildableName = "Greatdori.app"
+               BuildableName = "Greatdori!.app"
                BlueprintName = "Greatdori"
                ReferencedContainer = "container:Greatdori.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C0C995C2E296A4400549B5C"
-            BuildableName = "Greatdori.app"
+            BuildableName = "Greatdori!.app"
             BlueprintName = "Greatdori"
             ReferencedContainer = "container:Greatdori.xcodeproj">
          </BuildableReference>
@@ -63,7 +63,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C0C995C2E296A4400549B5C"
-            BuildableName = "Greatdori.app"
+            BuildableName = "Greatdori!.app"
             BlueprintName = "Greatdori"
             ReferencedContainer = "container:Greatdori.xcodeproj">
          </BuildableReference>

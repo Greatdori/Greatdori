@@ -110,7 +110,8 @@
         }
         
         if (git_tree_entry_type(entry) != GIT_OBJ_TREE) {
-            *outError = [NSError errorWithDomain:NSPOSIXErrorDomain code:kPOSIXErrorENOTDIR userInfo:nil];
+            *outError = [NSError errorWithDomain:NSPOSIXErrorDomain code:100020 userInfo:nil];
+            //                                                   ENOTDIR ~~~~~~
             git_repository_free(repository);
             return nil;
         }
@@ -164,7 +165,8 @@
     if (error != 0) goto cleanup;
     
     if (git_tree_entry_type(entry) != GIT_OBJ_BLOB) {
-        *outError = [NSError errorWithDomain:NSPOSIXErrorDomain code:kPOSIXErrorEISDIR userInfo:nil];
+        *outError = [NSError errorWithDomain:NSPOSIXErrorDomain code:100021 userInfo:nil];
+        //                                                    EISDIR ~~~~~~
         git_repository_free(repository);
         return nil;
     }
