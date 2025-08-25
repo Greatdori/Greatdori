@@ -70,8 +70,8 @@ struct NewsView: View {
             }
         }
         .navigationTitle("Home.news")
-        .wrapIf(filter != nil, in: { content in
-            if #available(iOS 26.0, macOS 14.0, *) {
+        .wrapIf(filter != nil && !isMACOS, in: { content in
+            if #available(iOS 26.0, *) {
                 content
                     .navigationSubtitle(filterLocalizedString[filter]!)
             } else {
@@ -111,7 +111,40 @@ struct NewsView: View {
             }
         }
         .toolbar {
-            ToolbarItem(content: {
+            #if os(iOS)
+            ToolbarItem {
+                Menu {
+                    Picker("", selection: $filter) {
+                        ForEach(0..<filterOptions.count, id: \.self) { filterIndex in
+                            //                                Button(action: {
+                            //                                    filter = filterOptions[filterIndex]
+                            //                                }, label: {
+                            //                                    HStack {
+                            //                                        if filter == filterOptions[filterIndex] {
+                            //                                            Image(systemName: "checkmark")
+                            //                                        }
+                            Text(filterLocalizedString[filterOptions[filterIndex]]!)
+                                .tag(filterOptions[filterIndex])
+                            //                                    }
+                            //                                })
+                        }
+                    }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                } label: {
+                    if filter != nil {
+                        Image(systemName: "line.3.horizontal.decrease")
+                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                            .background {
+                                Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(1.3)
+                            }
+                    } else {
+                        Image(systemName: "line.3.horizontal.decrease")
+                    }
+                }
+            }
+#else
+            ToolbarItem {
                 Picker(selection: $filter, content: {
                     ForEach(0..<filterOptions.count, id: \.self) { filterIndex in
                         //                                Button(action: {
@@ -131,37 +164,15 @@ struct NewsView: View {
                         Image(systemName: "line.3.horizontal.decrease")
                             .foregroundStyle(colorScheme == .dark ? .white : .black)
                             .background {
-                                Capsule().foregroundStyle(.blue).scaledToFill().scaleEffect(1.3)
+                                Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(1.3)
                             }
                     } else {
                         Image(systemName: "line.3.horizontal.decrease")
                     }
                 })
-                //                        Menu(content: {
-                //                            ForEach(0..<filterOptions.count, id: \.self) { filterIndex in
-                //                                Button(action: {
-                //                                    filter = filterOptions[filterIndex]
-                //                                }, label: {
-                //                                    HStack {
-                //                                        if filter == filterOptions[filterIndex] {
-                //                                            Image(systemName: "checkmark")
-                //                                        }
-                //                                        Text(filterLocalizedString[filterOptions[filterIndex]]!)
-                //                                    }
-                //                                })
-                //                            }
-                //                        }, label: {
-                //                            if filter != nil {
-                //                                Image(systemName: "line.3.horizontal.decrease")
-                //                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
-                //                                    .background {
-                //                                        Capsule().foregroundStyle(.blue).scaledToFill().scaleEffect(1.3)
-                //                                    }
-                //                            } else {
-                //                                Image(systemName: "line.3.horizontal.decrease")
-                //                            }
-                //                        })
-            })
+                .pickerStyle(.menu)
+            }
+#endif
         }
     }
 }

@@ -260,7 +260,7 @@ struct FilterView: View {
                     .foregroundStyle(isActive ? .white : .primary)
                     .frame(height: filterItemHeight)
                 //                    .scaleEffect(0.9)
-                    .padding(.horizontal)
+                    .padding(.horizontal, isMACOS ? 10 : nil)
                     .onFrameChange(perform: { geometry in
                         textWidth = geometry.size.width
                     })
