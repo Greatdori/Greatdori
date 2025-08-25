@@ -106,6 +106,8 @@
 		8C7F176A2E5AFB7C0040C206 /* AssetShims+File.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C7F17672E5AFB7C0040C206 /* AssetShims+File.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C7F176C2E5AFCF70040C206 /* AssetShims.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C7F176B2E5AFCF00040C206 /* AssetShims.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C7F176E2E5AFD490040C206 /* ExportedGitTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C7F176D2E5AFD420040C206 /* ExportedGitTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C7F17702E5C082D0040C206 /* APIData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F176F2E5C082B0040C206 /* APIData.swift */; };
+		8C7F17722E5C149C0040C206 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 8C7F17712E5C149C0040C206 /* SwiftyJSON */; };
 		8C7F6B152E581BDC0040C206 /* SystemColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F6B142E581BD80040C206 /* SystemColor.swift */; };
 		8C7F6B9A2E593AFE0040C206 /* DoriOfflineAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F6B992E593AFB0040C206 /* DoriOfflineAsset.swift */; };
 		8C7F6BD42E5949AE0040C206 /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B922E5922070040C206 /* GSS.framework */; };
@@ -613,6 +615,7 @@
 		8C7F17682E5AFB7C0040C206 /* AssetShims+File.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AssetShims+File.m"; sourceTree = "<group>"; };
 		8C7F176B2E5AFCF00040C206 /* AssetShims.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetShims.h; sourceTree = "<group>"; };
 		8C7F176D2E5AFD420040C206 /* ExportedGitTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExportedGitTypes.h; sourceTree = "<group>"; };
+		8C7F176F2E5C082B0040C206 /* APIData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIData.swift; sourceTree = "<group>"; };
 		8C7F6B142E581BD80040C206 /* SystemColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemColor.swift; sourceTree = "<group>"; };
 		8C7F6B8E2E5921990040C206 /* libgssapi_krb5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libgssapi_krb5.tbd; path = usr/lib/libgssapi_krb5.tbd; sourceTree = SDKROOT; };
 		8C7F6B902E5921BB0040C206 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
@@ -931,6 +934,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C7F17722E5C149C0040C206 /* SwiftyJSON in Frameworks */,
 				8CE186AD2E535324009C1C87 /* ArgumentParser in Frameworks */,
 				8CE186B02E536138009C1C87 /* DoriKit.framework in Frameworks */,
 			);
@@ -1522,6 +1526,7 @@
 				8C0D89BD2E537795004BD1D6 /* LimitedTaskQueue.swift */,
 				8C0D89BB2E53735E004BD1D6 /* Progress.swift */,
 				8C0D89B72E536B8C004BD1D6 /* Generation.swift */,
+				8C7F176F2E5C082B0040C206 /* APIData.swift */,
 			);
 			path = OfflineResBundleGen;
 			sourceTree = "<group>";
@@ -1849,6 +1854,7 @@
 			name = OfflineResBundleGen;
 			packageProductDependencies = (
 				8CE186AC2E535324009C1C87 /* ArgumentParser */,
+				8C7F17712E5C149C0040C206 /* SwiftyJSON */,
 			);
 			productName = OfflineResBundleGen;
 			productReference = 8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */;
@@ -2346,6 +2352,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CE186AA2E5352D1009C1C87 /* CommandLineEntry.swift in Sources */,
+				8C7F17702E5C082D0040C206 /* APIData.swift in Sources */,
 				8C0D89BC2E53735F004BD1D6 /* Progress.swift in Sources */,
 				8C0D89B82E536B8F004BD1D6 /* Generation.swift in Sources */,
 				8C0D89BE2E537799004BD1D6 /* LimitedTaskQueue.swift in Sources */,
@@ -4605,7 +4612,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				ENABLE_HARDENED_RUNTIME = YES;
-				LD_RUNPATH_SEARCH_PATHS = ./;
+				LD_RUNPATH_SEARCH_PATHS = (
+					./,
+					./PackageFrameworks,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -4621,7 +4631,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				ENABLE_HARDENED_RUNTIME = YES;
-				LD_RUNPATH_SEARCH_PATHS = ./;
+				LD_RUNPATH_SEARCH_PATHS = (
+					./,
+					./PackageFrameworks,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -4637,7 +4650,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				ENABLE_HARDENED_RUNTIME = YES;
-				LD_RUNPATH_SEARCH_PATHS = ./;
+				LD_RUNPATH_SEARCH_PATHS = (
+					./,
+					./PackageFrameworks,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -4653,7 +4669,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B57D8PP775;
 				ENABLE_HARDENED_RUNTIME = YES;
-				LD_RUNPATH_SEARCH_PATHS = ./;
+				LD_RUNPATH_SEARCH_PATHS = (
+					./,
+					./PackageFrameworks,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -4888,6 +4907,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C499F8B2E4FD9CE0073FCB6 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
 			productName = SwiftUIIntrospect;
+		};
+		8C7F17712E5C149C0040C206 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C0C99AF2E296F3900549B5C /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 		8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

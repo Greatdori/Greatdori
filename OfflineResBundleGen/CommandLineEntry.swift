@@ -36,7 +36,10 @@ struct CommandLineEntry: AsyncParsableCommand {
         LimitedTaskQueue.shared = .init(limit: maxConnectionCount)
         
         if locale == .all {
+            await generateAPI(to: output)
             try await generate(to: output)
+        } else if locale == .api {
+            await generateAPI(to: output)
         } else {
             print("Generating for \(locale.rawValue.uppercased())...\n")
             let localizedOutput = output.appending(path: locale.rawValue)
@@ -48,6 +51,7 @@ struct CommandLineEntry: AsyncParsableCommand {
     }
     
     enum LocaleFlag: String, EnumerableFlag {
+        case api
         case all
         case jp
         case en
