@@ -53,6 +53,7 @@ There're several schemes in Greatdori! project:
 - **Greatdori Watch Widgets**: Widget extension for **Greatdori Watch App** scheme;
 - **BuiltinCardCollections**: Built-in card collection for widgets;
 - **DoriKit**: The DoriKit framework;
+- **DoriAssetShims** Objective-C shims for offline asset features in DoriKit;
 - **DoriKitTests**: Tests for DoriKit;
 - **DoriEmoji**: Emoji collections for community UI of DoriKit;
 - **Greatdori Installer**: Generates a `pkg` installer for macOS app;
@@ -112,6 +113,7 @@ flowchart TD;
     DKT["DoriKitTests"] --> DK
     DK --> DE["DoriEmoji"]
     DK -.-> PCG["PreCacheGen"]
+    DK -.-> DAS["DoriAssetShims"]
     GI["Greatdori Installer"] --> GA
     CCG["CardCollectionGen"] --> DK
     GL["GreatLyrics"] --> DK
