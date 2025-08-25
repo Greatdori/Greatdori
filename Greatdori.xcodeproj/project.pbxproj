@@ -538,7 +538,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8C0C995D2E296A4400549B5C /* Greatdori.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Greatdori.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C0C995D2E296A4400549B5C /* Greatdori!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Greatdori!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Greatdori Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C0C99802E296A5500549B5C /* GreatdoriApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatdoriApp.swift; sourceTree = "<group>"; };
 		8C0C99862E296A5800549B5C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -971,7 +971,7 @@
 		8C0C995E2E296A4400549B5C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8C0C995D2E296A4400549B5C /* Greatdori.app */,
+				8C0C995D2E296A4400549B5C /* Greatdori!.app */,
 				8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */,
 				8C0C99912E296A8C00549B5C /* DoriKit.framework */,
 				8C9474522E35DE1C003A90B4 /* DoriKitTests.xctest */,
@@ -1613,7 +1613,7 @@
 				8C923D832E304899003AFC0A /* SDWebImageSVGCoder */,
 			);
 			productName = Greatdori;
-			productReference = 8C0C995D2E296A4400549B5C /* Greatdori.app */;
+			productReference = 8C0C995D2E296A4400549B5C /* Greatdori!.app */;
 			productType = "com.apple.product-type.application";
 		};
 		8C0C99692E296A4600549B5C /* Greatdori Watch App */ = {
@@ -2709,7 +2709,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = Greatdori;
+				PRODUCT_NAME = "Greatdori!";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -2764,7 +2765,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = Greatdori;
+				PRODUCT_NAME = "Greatdori!";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -3139,7 +3141,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = Greatdori;
+				PRODUCT_NAME = "Greatdori!";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -3379,7 +3382,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.Greatdori;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = Greatdori;
+				PRODUCT_NAME = "Greatdori!";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
