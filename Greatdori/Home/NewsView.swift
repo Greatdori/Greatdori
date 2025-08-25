@@ -134,7 +134,7 @@ struct NewsView: View {
                 } label: {
                     if filter != nil {
                         Image(systemName: "line.3.horizontal.decrease")
-                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                            .foregroundStyle(.white)
                             .background {
                                 Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(1.3)
                             }
