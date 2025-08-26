@@ -30,12 +30,38 @@ extension URL {
 #endif
 
 extension URL {
-    // FIXME: The referenced file by URL should be checked out to somewhere
-    // FIXME: before URL returns, implement hash and checkout single file
-    // FIXME: in DoriAssetShims first.
     @usableFromInline
     internal func respectOfflineAssetContext() -> URL {
         #if canImport(DoriAssetShims)
+        func checkedOutFileURL(base path: String, in locale: DoriAPI.Locale, of type: DoriOfflineAsset.ResourceType) -> URL? {
+            if let hash = try? DoriOfflineAsset.shared.fileHash(forPath: path, in: locale, of: type) {
+                var sourceExtension = path.split(separator: ".").last ?? ""
+                if sourceExtension.contains("/") {
+                    // Invalid
+                    sourceExtension = ""
+                } else if !sourceExtension.isEmpty {
+                    sourceExtension = "." + sourceExtension
+                }
+                let fileURL = URL(filePath: NSHomeDirectory() + "/tmp/TemporaryOfflineAssetCheckouts/\(hash)\(sourceExtension)")
+                if FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false)) {
+                    // Since a hash of blob is unique, we can elide writing
+                    // if previous checked out file exists.
+                    return fileURL
+                }
+                let fileParentDirectoryURL = fileURL.deletingLastPathComponent()
+                do {
+                    if _slowPath(!FileManager.default.fileExists(atPath: fileParentDirectoryURL.path(percentEncoded: false))) {
+                        try FileManager.default.createDirectory(at: fileParentDirectoryURL, withIntermediateDirectories: true)
+                    }
+                    try DoriOfflineAsset.shared.writeFile(atPath: path, in: locale, of: type, toPath: fileURL.path(percentEncoded: false))
+                    return fileURL
+                } catch {
+                    logger.fault("Failed to write temporary file for local asset; please submit a bug report (https://github.com/WindowsMEMZ/Greatdori/issues/new) [\(error.localizedDescription)]")
+                }
+            }
+            return nil
+        }
+        
         let behavior = DoriOfflineAsset.localBehavior
         if behavior == .disabled { return self }
         
@@ -44,8 +70,8 @@ extension URL {
         let basePath = String(path.dropFirst("https://bestdori.com/".count))
         
         if basePath.hasPrefix("api") {
-            if DoriOfflineAsset.shared.fileExists(basePath, in: .jp, of: .main) {
-                return DoriOfflineAsset.shared.bundleBaseURL.appending(path: basePath)
+            if let url = checkedOutFileURL(base: basePath, in: .jp, of: .main) {
+                return url
             } else if behavior == .enabled {
                 logger.fault("Offline asset context requires using local asset URL, but requested asset is not exist in local, returning a placeholder URL")
                 return placeholderURL
@@ -59,8 +85,8 @@ extension URL {
             guard let locale = DoriAPI.Locale(rawValue: String(separatedPath[1])) else { return self }
             let resourceType = resourceType(from: String(separatedPath[2]), next: separatedPath.dropFirst(3).map { String($0) })
             let localPath = separatedPath.dropFirst().joined(separator: "/") // removes 'assets/'
-            if DoriOfflineAsset.shared.fileExists(localPath, in: locale, of: resourceType) {
-                return DoriOfflineAsset.shared.bundleBaseURL.appending(path: localPath)
+            if let url = checkedOutFileURL(base: localPath, in: locale, of: resourceType) {
+                return url
             } else if behavior == .enabled {
                 logger.fault("Offline asset context requires using local asset URL, but requested asset is not exist in local, returning a placeholder URL")
                 return placeholderURL

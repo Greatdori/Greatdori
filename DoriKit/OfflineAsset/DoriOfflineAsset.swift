@@ -94,6 +94,18 @@ public final class DoriOfflineAsset: Sendable {
         try AssetShims.fileData(forPath: path, inLocale: locale.rawValue, ofType: type.rawValue)
     }
     
+    public func fileHash(forPath path: String, in locale: DoriAPI.Locale, of type: ResourceType) throws -> String {
+        try AssetShims.fileHash(forPath: path, inLocale: locale.rawValue, ofType: type.rawValue)
+    }
+    
+    public func writeFile(atPath path: String, in locale: DoriAPI.Locale, of type: ResourceType, toPath destination: String) throws {
+        // We have to load all file data to memory first
+        // because blobs in git are compressed and can't be read by streaming.
+        // Since most of files in GBP aren't large at all, this won't cost much.
+        let data = try fileData(forPath: path, in: locale, of: type)
+        try data.write(to: URL(filePath: destination))
+    }
+    
     public enum ResourceType: String, Sendable {
         case main
         case basic

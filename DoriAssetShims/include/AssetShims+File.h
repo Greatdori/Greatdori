@@ -32,6 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
                              ofType: (NSString*) type
                               error: (NSError**) outError;
 
++(NSString* _Nullable)fileHashForPath: (NSString*) path
+                             inLocale: (NSString*) locale
+                               ofType: (NSString*) type
+                                error: (NSError**) outError;
+
 @end
 
 NS_ASSUME_NONNULL_END

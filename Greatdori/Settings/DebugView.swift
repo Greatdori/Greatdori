@@ -92,7 +92,7 @@ struct DebugBirthdayViewUnit: View {
 
 @available(iOS, unavailable)
 struct DebugOfflineAssetView: View {
-    @State var filePath = ""
+    @AppStorage("_OfflineAssetDebugFilePath") var filePath = ""
     @State var contents = [String]()
     @State var testCard: DoriAPI.Card.Card?
     var body: some View {
@@ -108,32 +108,34 @@ struct DebugOfflineAssetView: View {
                 Text(verbatim: "Inspection")
             }
             Section {
-                Button(action: {
-                    Task {
-                        do {
-                            try await DoriOfflineAsset.shared.downloadResource(of: .main, in: DoriAPI.preferredLocale) { percentage, finished, total in
-                                print("\(percentage * 100)%, \(finished) / \(total)")
+                HStack {
+                    Button(action: {
+                        Task {
+                            do {
+                                try await DoriOfflineAsset.shared.downloadResource(of: .main, in: DoriAPI.preferredLocale) { percentage, finished, total in
+                                    print("\(percentage * 100)%, \(finished) / \(total)")
+                                }
+                            } catch {
+                                print(error.localizedDescription)
                             }
-                        } catch {
-                            print(error.localizedDescription)
                         }
-                    }
-                }, label: {
-                    Text(verbatim: "Download main")
-                })
-                Button(action: {
-                    Task {
-                        do {
-                            try await DoriOfflineAsset.shared.downloadResource(of: .basic, in: DoriAPI.preferredLocale) { percentage, finished, total in
-                                print("\(percentage * 100)%, \(finished) / \(total)")
+                    }, label: {
+                        Text(verbatim: "Download main")
+                    })
+                    Button(action: {
+                        Task {
+                            do {
+                                try await DoriOfflineAsset.shared.downloadResource(of: .basic, in: DoriAPI.preferredLocale) { percentage, finished, total in
+                                    print("\(percentage * 100)%, \(finished) / \(total)")
+                                }
+                            } catch {
+                                print(error.localizedDescription)
                             }
-                        } catch {
-                            print(error.localizedDescription)
                         }
-                    }
-                }, label: {
-                    Text(verbatim: "Download preferred locale basic")
-                })
+                    }, label: {
+                        Text(verbatim: "Download preferred locale basic")
+                    })
+                }
             } header: {
                 Text(verbatim: "Download")
             } footer: {
@@ -141,8 +143,24 @@ struct DebugOfflineAssetView: View {
             }
             Section {
                 TextField("File Path", text: $filePath)
-                Button("Exists") {
-                    print(DoriOfflineAsset.shared.fileExists(filePath, in: .cn, of: .basic))
+                HStack {
+                    Button("Exists") {
+                        print(DoriOfflineAsset.shared.fileExists(filePath, in: .cn, of: .basic))
+                    }
+                    Button("Print hash") {
+                        do {
+                            print(try DoriOfflineAsset.shared.fileHash(forPath: filePath, in: .cn, of: .basic))
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                    Button("Write to Documents") {
+                        do {
+                            try DoriOfflineAsset.shared.writeFile(atPath: filePath, in: .cn, of: .basic, toPath: NSHomeDirectory() + "/Documents/\(filePath.split(separator: "/").last!)")
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
                 }
                 VStack(alignment: .leading) {
                     Button("Contents") {
@@ -162,6 +180,8 @@ struct DebugOfflineAssetView: View {
             Section {
                 if let testCard {
                     WebImage(url: testCard.coverNormalImageURL.withOfflineAsset())
+                        .resizable()
+                        .scaledToFit()
                     Text(testCard.coverNormalImageURL.absoluteString)
                     Text(testCard.coverNormalImageURL.withOfflineAsset().absoluteString)
                 }

@@ -1769,6 +1769,9 @@
     "Offline Asset Debug" : {
 
     },
+    "Print hash" : {
+
+    },
     "Settings" : {
       "localizations" : {
         "en" : {
@@ -2377,6 +2380,9 @@
           }
         }
       }
+    },
+    "Write to Documents" : {
+
     }
   },
   "version" : "1.1"
