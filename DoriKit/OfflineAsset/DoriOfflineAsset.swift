@@ -27,6 +27,10 @@ public final class DoriOfflineAsset: Sendable {
         AssetShims.shutdown()
     }
     
+    public var bundleBaseURL: URL {
+        .init(filePath: NSHomeDirectory() + "/Documents/OfflineResource.bundle")
+    }
+    
     /// Download offline resource with type and locale.
     ///
     /// - Parameters:
@@ -91,6 +95,7 @@ public final class DoriOfflineAsset: Sendable {
     }
     
     public enum ResourceType: String, Sendable {
+        case main
         case basic
         case movie
         case sound

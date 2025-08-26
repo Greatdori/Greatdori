@@ -206,6 +206,9 @@
         }
       }
     },
+    "Check console for downloading progress" : {
+
+    },
     "Contents" : {
 
     },
@@ -256,6 +259,9 @@
           }
         }
       }
+    },
+    "Dispatcher" : {
+
     },
     "Done" : {
       "localizations" : {

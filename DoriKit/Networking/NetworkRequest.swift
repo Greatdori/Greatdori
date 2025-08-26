@@ -24,6 +24,25 @@ internal func requestJSON(
     interceptor: RequestInterceptor? = nil,
     requestModifier: Session.RequestModifier? = nil
 ) async -> Result<JSON, Void> {
+    switch offlineAssetResult(for: convertible) {
+    case .delegated(let data):
+        if let data {
+            let task = Task.detached(priority: .userInitiated) { () -> Result<JSON, Void> in
+                do {
+                    let json = try JSON(data: data)
+                    return .success(json)
+                } catch {
+                    return .failure(())
+                }
+            }
+            return await task.value
+        } else {
+            return .failure(())
+        }
+    case .useDefault:
+        break
+    }
+    
     let request = AF.request(
         convertible,
         method: method,
@@ -62,6 +81,25 @@ internal func requestJSON<Parameters: Encodable & Sendable>(
     interceptor: RequestInterceptor? = nil,
     requestModifier: Session.RequestModifier? = nil
 ) async -> Result<JSON, Void> {
+    switch offlineAssetResult(for: convertible) {
+    case .delegated(let data):
+        if let data {
+            let task = Task.detached(priority: .userInitiated) { () -> Result<JSON, Void> in
+                do {
+                    let json = try JSON(data: data)
+                    return .success(json)
+                } catch {
+                    return .failure(())
+                }
+            }
+            return await task.value
+        } else {
+            return .failure(())
+        }
+    case .useDefault:
+        break
+    }
+    
     let request = AF.request(
         convertible,
         method: method,

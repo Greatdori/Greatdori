@@ -94,6 +94,7 @@ struct DebugBirthdayViewUnit: View {
 struct DebugOfflineAssetView: View {
     @State var filePath = ""
     @State var contents = [String]()
+    @State var testCard: DoriAPI.Card.Card?
     var body: some View {
         #if os(macOS)
         Form {
@@ -110,7 +111,7 @@ struct DebugOfflineAssetView: View {
                 Button(action: {
                     Task {
                         do {
-                            try await DoriOfflineAsset.shared.downloadResource(of: .basic, in: .cn) { percentage, finished, total in
+                            try await DoriOfflineAsset.shared.downloadResource(of: .main, in: DoriAPI.preferredLocale) { percentage, finished, total in
                                 print("\(percentage * 100)%, \(finished) / \(total)")
                             }
                         } catch {
@@ -118,10 +119,25 @@ struct DebugOfflineAssetView: View {
                         }
                     }
                 }, label: {
-                    Text(verbatim: "Clone preferred locale basic (check console)")
+                    Text(verbatim: "Download main")
+                })
+                Button(action: {
+                    Task {
+                        do {
+                            try await DoriOfflineAsset.shared.downloadResource(of: .basic, in: DoriAPI.preferredLocale) { percentage, finished, total in
+                                print("\(percentage * 100)%, \(finished) / \(total)")
+                            }
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                }, label: {
+                    Text(verbatim: "Download preferred locale basic")
                 })
             } header: {
-                Text(verbatim: "Clone")
+                Text(verbatim: "Download")
+            } footer: {
+                Text("Check console for downloading progress")
             }
             Section {
                 TextField("File Path", text: $filePath)
@@ -143,8 +159,22 @@ struct DebugOfflineAssetView: View {
             } header: {
                 Text("File")
             }
+            Section {
+                if let testCard {
+                    WebImage(url: testCard.coverNormalImageURL.withOfflineAsset())
+                    Text(testCard.coverNormalImageURL.absoluteString)
+                    Text(testCard.coverNormalImageURL.withOfflineAsset().absoluteString)
+                }
+            } header: {
+                Text("Dispatcher")
+            }
         }
         .formStyle(.grouped)
+        .task {
+            await withOfflineAsset {
+                testCard = await DoriAPI.Card.detail(of: 2125)
+            }
+        }
         #else
         preconditionFailure()
         #endif

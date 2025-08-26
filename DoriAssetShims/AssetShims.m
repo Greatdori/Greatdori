@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #import <git2.h>
-#import "GitError.h"
+#import "GitUtils.h"
 #import "AssetShims.h"
 
 int getCredential(git_credential **out, const char *url, const char *usernameFromURL, unsigned int allowedTypes, void *payload) {
@@ -41,26 +41,56 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
                         payload: (void*) payload
                           error: (NSError**) outError
                onProgressUpdate: (int (*)(const git_indexer_progress *stats, void *payload))progressUpdate {
+    git_fetch_options fetchOptions = GIT_FETCH_OPTIONS_INIT;
+    fetchOptions.callbacks.payload = payload;
+    fetchOptions.callbacks.transfer_progress = progressUpdate;
+    fetchOptions.callbacks.credentials = getCredential;
+    fetchOptions.download_tags = GIT_REMOTE_DOWNLOAD_TAGS_NONE;
+    fetchOptions.prune = GIT_FETCH_PRUNE;
+    
+    NSString* repoDestination = [NSHomeDirectory() stringByAppendingString:@"/Documents/OfflineResource.bundle"];
     git_repository* repository = NULL;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:repoDestination]) {
+        if (git_repository_open(&repository, [repoDestination UTF8String]) == 0) {
+            // Repository already exists, we fetch requested branch instead of clone.
+            git_remote* remote = NULL;
+            int error = git_remote_lookup(&remote, repository, "origin");
+            if (error != 0) {
+                nsErrorForGit(error, outError);
+                git_repository_free(repository);
+                return false;
+            }
+            
+            const char* refs = refspecOfBranch(branchNameFromLocaleType(locale, type));
+            git_strarray strarrRefs = { (char**)&refs, 1 };
+            error = git_remote_fetch(remote, &strarrRefs, &fetchOptions, NULL);
+            if (error != 0) {
+                nsErrorForGit(error, outError);
+                git_repository_free(repository);
+                return false;
+            }
+            
+            git_repository_free(repository);
+            return true;
+        } else {
+            giterr_clear();
+        }
+    }
+    
     git_clone_options options = GIT_CLONE_OPTIONS_INIT;
-    options.fetch_opts.callbacks.payload = payload;
-    options.fetch_opts.callbacks.transfer_progress = progressUpdate;
-    options.fetch_opts.callbacks.credentials = getCredential;
-    options.checkout_branch = [[[locale stringByAppendingString:@"/"] stringByAppendingString:type] UTF8String];
+    options.fetch_opts = fetchOptions;
+    options.checkout_branch = [branchNameFromLocaleType(locale, type) UTF8String];
     options.checkout_opts.checkout_strategy = GIT_CHECKOUT_NONE;
-    options.fetch_opts.download_tags = GIT_REMOTE_DOWNLOAD_TAGS_NONE;
-    options.fetch_opts.prune = GIT_FETCH_PRUNE;
-    options.remote_cb_payload = (__bridge void*) [[locale stringByAppendingString:@"/"] stringByAppendingString:type];
+    options.remote_cb_payload = (__bridge void*)branchNameFromLocaleType(locale, type);
     options.remote_cb = getRemoteCallback;
     
-    NSString* destination = [NSHomeDirectory() stringByAppendingString:@"/Documents/OfflineResource.bundle"];
-    if (![NSFileManager.defaultManager fileExistsAtPath:destination]) {
-        [NSFileManager.defaultManager createDirectoryAtPath:destination withIntermediateDirectories:true attributes:nil error:nil];
+    if (![NSFileManager.defaultManager fileExistsAtPath:repoDestination]) {
+        [NSFileManager.defaultManager createDirectoryAtPath:repoDestination withIntermediateDirectories:true attributes:nil error:nil];
     }
     
     int error = git_clone(&repository,
                           "https://github.com/WindowsMEMZ/Greatdori-OfflineResBundle.git",
-                          [destination UTF8String],
+                          [repoDestination UTF8String],
                           &options);
     if (error < 0) {
         nsErrorForGit(error, outError);
@@ -75,7 +105,7 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
                      payload: (void*) payload
                        error: (NSError**) outError
             onProgressUpdate: (int (*)(const git_indexer_progress *stats, void *payload))progressUpdate {
-    NSString* branch = [[locale stringByAppendingString:@"/"] stringByAppendingString:type];
+    NSString* branch = branchNameFromLocaleType(locale, type);
     const char* refs = refspecOfBranch(branch);
     
     git_repository* repository = NULL;
@@ -97,7 +127,7 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
     fetchOptions.callbacks.payload = payload;
     fetchOptions.callbacks.transfer_progress = progressUpdate;
     
-    git_strarray strarrRefs = { (char**)&refs, strlen(refs) };
+    git_strarray strarrRefs = { (char**)&refs, 1 };
     error = git_remote_fetch(remote, &strarrRefs, &fetchOptions, NULL);
     if (error != 0) {
         nsErrorForGit(error, outError);

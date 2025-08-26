@@ -1,6 +1,6 @@
 //===---*- Greatdori! -*---------------------------------------------------===//
 //
-// GitError.h
+// GitUtils.h
 //
 // This source file is part of the Greatdori! open source project
 //
@@ -18,3 +18,4 @@
 
 void nsErrorForGit(int code, NSError** outError);
 const char* refspecOfBranch(NSString* branch);
+NSString* branchNameFromLocaleType(NSString* locale, NSString* type);

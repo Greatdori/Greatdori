@@ -1,6 +1,6 @@
 //===---*- Greatdori! -*---------------------------------------------------===//
 //
-// GitError.m
+// GitUtils.m
 //
 // This source file is part of the Greatdori! open source project
 //
@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #import <git2.h>
-#import "GitError.h"
+#import "GitUtils.h"
 
 void nsErrorForGit(int code, NSError** outError) {
     NSError* resultError = [NSError errorWithDomain:GitErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithCString:giterr_last()->message encoding:NSASCIIStringEncoding]}];
@@ -23,4 +23,12 @@ void nsErrorForGit(int code, NSError** outError) {
 
 const char* refspecOfBranch(NSString* branch) {
     return [[[[@"refs/heads/" stringByAppendingString:branch] stringByAppendingString:@":refs/remotes/origin/"] stringByAppendingString:branch] UTF8String];
+}
+
+NSString* branchNameFromLocaleType(NSString* locale, NSString* type) {
+    if ([type isEqualToString:@"main"]) {
+        return @"main";
+    } else {
+        return [[locale stringByAppendingString:@"/"] stringByAppendingString:type];
+    }
 }

@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #import <git2.h>
-#import "GitError.h"
+#import "GitUtils.h"
 #import "AssetShims+File.h"
 
 @implementation AssetShims (File)
@@ -21,7 +21,7 @@
 +(bool)fileExists: (NSString*) path
          inLocale: (NSString*) locale
            ofType: (NSString*) type {
-    NSString* branch = [[locale stringByAppendingString:@"/"] stringByAppendingString:type];
+    NSString* branch = branchNameFromLocaleType(locale, type);
     
     git_repository* repository = NULL;
     int error = git_repository_open(&repository, [[NSHomeDirectory() stringByAppendingString:@"/Documents/OfflineResource.bundle"] UTF8String]);
@@ -65,7 +65,7 @@
                                                  inLocale: (NSString*) locale
                                                    ofType: (NSString*) type
                                                     error: (NSError**) outError {
-    NSString* branch = [[locale stringByAppendingString:@"/"] stringByAppendingString:type];
+    NSString* branch = branchNameFromLocaleType(locale, type);
     
     git_repository* repository = NULL;
     int error = git_repository_open(&repository, [[NSHomeDirectory() stringByAppendingString:@"/Documents/OfflineResource.bundle"] UTF8String]);
@@ -141,7 +141,7 @@
                            inLocale: (NSString*) locale
                              ofType: (NSString*) type
                               error: (NSError**) outError {
-    NSString* branch = [[locale stringByAppendingString:@"/"] stringByAppendingString:type];
+    NSString* branch = branchNameFromLocaleType(locale, type);
     
     git_repository* repository = NULL;
     int error = git_repository_open(&repository, [[NSHomeDirectory() stringByAppendingString:@"/Documents/OfflineResource.bundle"] UTF8String]);
