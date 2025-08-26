@@ -56,6 +56,7 @@ There're several schemes in Greatdori! project:
 - **DoriAssetShims** Objective-C shims for offline asset features in DoriKit;
 - **DoriKitTests**: Tests for DoriKit;
 - **DoriEmoji**: Emoji collections for community UI of DoriKit;
+- **DoriResource**: Commonly used binary resources for DoriKit;
 - **Greatdori Installer**: Generates a `pkg` installer for macOS app;
 - **CardCollectionGen**: A CLI tool which generates built-in card collections;
 - **GreatLyrics**: A tool for making lyrics file of songs.
@@ -112,6 +113,7 @@ flowchart TD;
     BCC --> DK
     DKT["DoriKitTests"] --> DK
     DK --> DE["DoriEmoji"]
+    DK --> DR["DoriResource"]
     DK -.-> PCG["PreCacheGen"]
     DK -.-> DAS["DoriAssetShims"]
     GI["Greatdori Installer"] --> GA

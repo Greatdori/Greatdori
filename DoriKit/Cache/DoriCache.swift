@@ -84,7 +84,9 @@ public class DoriCache {
         
         let promise: Promise<Result?> = .init()
         
+        #if canImport(DoriAssetShims)
         let offlineAssetBehavior = DoriOfflineAsset.localBehavior
+        #endif
         
         let task = Task.detached(priority: .userInitiated) {
             var cachedResult: Result?
@@ -122,9 +124,13 @@ public class DoriCache {
                 }
             }
             
+            #if canImport(DoriAssetShims)
             // We have to explicitly call `withValue` to keep the localBehavior
             // because we're running in a detached task.
             let result = await DoriOfflineAsset.$localBehavior.withValue(offlineAssetBehavior, operation: invocation)
+            #else
+            let result = await invocation()
+            #endif
             
             // If result is nil but there's data in cache,
             // we don't update value of promise.

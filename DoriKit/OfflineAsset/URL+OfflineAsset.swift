@@ -17,6 +17,8 @@ internal import os
 
 private let placeholderURL = URL(string: "placeholder://nil")!
 
+#if canImport(DoriAssetShims)
+
 extension URL {
     public func withOfflineAsset(_ behavior: OfflineAssetBehavior = .enableIfAvailable) -> URL {
         DoriKit.withOfflineAsset(behavior) {
@@ -25,12 +27,15 @@ extension URL {
     }
 }
 
+#endif
+
 extension URL {
     // FIXME: The referenced file by URL should be checked out to somewhere
     // FIXME: before URL returns, implement hash and checkout single file
     // FIXME: in DoriAssetShims first.
     @usableFromInline
     internal func respectOfflineAssetContext() -> URL {
+        #if canImport(DoriAssetShims)
         let behavior = DoriOfflineAsset.localBehavior
         if behavior == .disabled { return self }
         
@@ -61,10 +66,13 @@ extension URL {
                 return placeholderURL
             }
         }
+        #endif
         
         return self
     }
 }
+
+#if canImport(DoriAssetShims)
 
 private func resourceType(from recognizer: String, next: [String]) -> DoriOfflineAsset.ResourceType {
     switch recognizer {
@@ -81,3 +89,5 @@ private func resourceType(from recognizer: String, next: [String]) -> DoriOfflin
     default: .basic
     }
 }
+
+#endif

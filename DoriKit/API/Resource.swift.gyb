@@ -16,17 +16,22 @@ import SwiftUI
 import Foundation
 private import Builtin
 
+@usableFromInline
+internal let _doriResourceBundle = Bundle(path: #bundle.path(forResource: "DoriResource", ofType: "bundle")!)!
+
 extension DoriAPI.Locale {
     @inlinable
     public var iconImageURL: URL {
-        .init(string: "https://bestdori.com/res/icon/\(self.rawValue).svg")!.respectOfflineAssetContext()
+        _doriResourceBundle.url(forResource: self.rawValue, withExtension: "svg")
+        ?? .init(string: "https://bestdori.com/res/icon/\(self.rawValue).svg")!
     }
 }
 
 extension DoriAPI.Attribute {
     @inlinable
     public var iconImageURL: URL {
-        .init(string: "https://bestdori.com/res/icon/\(self.rawValue).svg")!.respectOfflineAssetContext()
+        _doriResourceBundle.url(forResource: self.rawValue, withExtension: "svg")
+        ?? .init(string: "https://bestdori.com/res/icon/\(self.rawValue).svg")!
     }
 }
 
@@ -64,7 +69,8 @@ extension DoriAPI.Event.${property} {
 extension DoriAPI.Event.EventCharacter {
     @inlinable
     public var iconImageURL: URL {
-        .init(string: "https://bestdori.com/res/icon/chara_icon_\(self.characterID).png")!.respectOfflineAssetContext()
+        _doriResourceBundle.url(forResource: "chara_icon_\(self.characterID)", withExtension: "png")
+        ?? .init(string: "https://bestdori.com/res/icon/chara_icon_\(self.characterID).png")!
     }
 }
 
@@ -92,7 +98,8 @@ extension DoriAPI.Band.Band {
     
     @inlinable
     public var iconImageURL: URL {
-        .init(string: "https://bestdori.com/res/icon/band_\(self.id).svg")!.respectOfflineAssetContext()
+        _doriResourceBundle.url(forResource: "band_\(self.id)", withExtension: "svg")
+        ?? .init(string: "https://bestdori.com/res/icon/band_\(self.id).svg")!
     }
 }
 
@@ -124,7 +131,8 @@ extension DoriAPI.Character.${property} {
     
     @inlinable
     public var iconImageURL: URL {
-        .init(string: "https://bestdori.com/res/icon/chara_icon_\(self.id).png")!.respectOfflineAssetContext()
+        _doriResourceBundle.url(forResource: "chara_icon_\(self.id)", withExtension: "png")
+        ?? .init(string: "https://bestdori.com/res/icon/chara_icon_\(self.id).png")!
     }
 }
 % end
