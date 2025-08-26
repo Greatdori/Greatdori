@@ -205,4 +205,65 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
 
 #pragma clang diagnostic pop
 
++(int)checkForUpdateInLocale: (NSString*) locale
+                      ofType: (NSString*) type
+                       error: (NSError**) outError {
+    NSString* branch = branchNameFromLocaleType(locale, type);
+    const char* refs = refspecOfBranch(branch);
+    
+    git_repository* repository = NULL;
+    int error = git_repository_open(&repository, [[NSHomeDirectory() stringByAppendingString:@"/Documents/OfflineResource.bundle"] UTF8String]);
+    if (error != 0) {
+        nsErrorForGit(error, outError);
+        return -1;
+    }
+    
+    git_remote* remote = NULL;
+    error = git_remote_lookup(&remote, repository, "origin");
+    if (error != 0) {
+        nsErrorForGit(error, outError);
+        git_repository_free(repository);
+        return -1;
+    }
+    error = git_remote_connect(remote, GIT_DIRECTION_FETCH, NULL, NULL, NULL);
+    if (error != 0) {
+        nsErrorForGit(error, outError);
+        git_repository_free(repository);
+        return -1;
+    }
+    
+    size_t count;
+    const git_remote_head** heads;
+    error = git_remote_ls(&heads, &count, remote);
+    if (error != 0) {
+        nsErrorForGit(error, outError);
+        git_remote_disconnect(remote);
+        git_repository_free(repository);
+        return -1;
+    }
+    const git_oid* remoteLatestOID = NULL;
+    for (size_t i = 0; i < count; i++) {
+        if (!strcmp(heads[i]->name, [[@"refs/heads/" stringByAppendingString:branch] UTF8String])) {
+            remoteLatestOID = &heads[i]->oid;
+            break;
+        }
+    }
+    
+    git_reference* localLatestRef = NULL;
+    error = git_repository_head(&localLatestRef, repository);
+    if (error != 0) {
+        nsErrorForGit(error, outError);
+        git_remote_disconnect(remote);
+        git_repository_free(repository);
+        return -1;
+    }
+    const git_oid* localLatestOID = git_reference_target(localLatestRef);
+    
+    if (git_oid_equal(localLatestOID, remoteLatestOID)) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
 @end

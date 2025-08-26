@@ -82,6 +82,63 @@ public final class DoriOfflineAsset: Sendable {
             }
     }
     
+    @discardableResult
+    public func updateResource(
+        of type: ResourceType,
+        in locale: DoriAPI.Locale,
+        onProgressUpdate: @Sendable @escaping (Double, Int, Int) -> Void
+    ) async throws -> Bool {
+        let callback: @Sendable @convention(c) (UnsafePointer<_git_indexer_progress>, UnsafeMutableRawPointer?) -> Int32 = { progress, payload in
+            if let updatePayload = unsafe payload?.load(as: ((Double, Int, Int) -> Void).self) {
+                let percentage = unsafe Double(progress.pointee.indexed_objects) / Double(progress.pointee.total_objects)
+                unsafe updatePayload(percentage, Int(progress.pointee.indexed_objects), Int(progress.pointee.total_objects))
+            }
+            return 0
+        }
+        return try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue(label: "com.memz233.DoriKit.OfflineAsset.update-resource", qos: .userInitiated).async {
+                var mutableProgressUpdate = onProgressUpdate
+                unsafe withUnsafeMutablePointer(to: &mutableProgressUpdate) { ptr in
+                    var error: NSError?
+                    let success = unsafe AssetShims.updateResource(
+                        inLocale: locale.rawValue,
+                        ofType: type.rawValue,
+                        payload: ptr,
+                        error: &error,
+                        onProgressUpdate: callback
+                    )
+                    if let error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    continuation.resume(returning: success >= 0)
+                }
+            }
+        }
+    }
+    
+    public func isUpdateAvailable(in locale: DoriAPI.Locale, of type: ResourceType) async throws -> Bool {
+        try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue(label: "com.memz233.DoriKit.OfflineAsset.is-update-available", qos: .userInitiated).async {
+                var error: NSError?
+                let result = unsafe AssetShims.checkForUpdate(inLocale: locale.rawValue, ofType: type.rawValue, error: &error)
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                switch result {
+                case 0:
+                    continuation.resume(returning: false)
+                case 1:
+                    continuation.resume(returning: true)
+                default:
+                    // Result indicates an error but no errors is written?
+                    continuation.resume(throwing: NSError(domain: "DoriKitError", code: Int(result)))
+                }
+            }
+        }
+    }
+    
     public func fileExists(_ path: String, in locale: DoriAPI.Locale, of type: ResourceType) -> Bool {
         AssetShims.fileExists(path, inLocale: locale.rawValue, ofType: type.rawValue)
     }

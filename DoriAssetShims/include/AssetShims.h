@@ -27,11 +27,16 @@ NS_ASSUME_NONNULL_BEGIN
                         payload: (void* _Nullable) payload
                           error: (NSError**) outError
                onProgressUpdate: (int (*)(const _git_indexer_progress *stats,  void * _Nullable payload))progressUpdate;
+
 +(int)updateResourceInLocale: (NSString*) locale
                       ofType: (NSString*) type
                      payload: (void* _Nullable) payload
                        error: (NSError**) outError
             onProgressUpdate: (int (*)(const _git_indexer_progress *stats, void * _Nullable payload))progressUpdate;
+
++(int)checkForUpdateInLocale: (NSString*) locale
+                      ofType: (NSString*) type
+                       error: (NSError**) outError;
 
 @end
 
