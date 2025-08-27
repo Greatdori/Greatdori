@@ -18,11 +18,34 @@ import Foundation
 public final class DoriCache {
     private init() {}
     
+    /// A type that can be cached by DoriKit.
     public protocol Cacheable: Codable {
+        /// Creates a new instance by decoding from the given cache data.
+        ///
+        /// This initializer returns `nil`if the data read is invalid.
+        ///
+        /// - Parameter cache: The cache data for decoding.
         init?(fromCache cache: Data)
+        
+        /// The data for cache of this value.
         var dataForCache: Data { get }
     }
     
+    /// A promise for result.
+    ///
+    /// You'll get a promise after calling ``withCache(id:trait:invocation:)``
+    /// which provides you data.
+    ///
+    /// Generally, you should register a closure to receive updates
+    /// by ``onUpdate(_:)`` immediately after getting a promise
+    /// to prevent missing updates. If you registers a closure for updates
+    /// after the value updates, it will still be called with the last value,
+    /// but miss values before it.
+    ///
+    /// - IMPORTANT:
+    ///     You should register a closure for update to a promise
+    ///     only **once**. Attempting register multiple closures
+    ///     to one promise instance results in undefined behaviors.
     public final class Promise<Result> {
         @safe nonisolated(unsafe)
         private var _onUpdate: ((Result) -> Void)?
@@ -52,6 +75,19 @@ public final class DoriCache {
             return self
         }
         
+        /// Registers a closure for receiving value updates.
+        ///
+        /// - Parameter action: A closure called when value updates.
+        /// - Returns: The promise itself.
+        ///
+        /// If you registers a closure for updates
+        /// after the value updates, it will still be called with the last value,
+        /// but miss values before it.
+        ///
+        /// - IMPORTANT:
+        ///     You should register a closure for update to a promise
+        ///     only **once**. Attempting register multiple closures
+        ///     to one promise instance results in undefined behaviors.
         @discardableResult
         public func onUpdate(_ action: @escaping (Result) -> Void) -> Self {
             self._onUpdate = action
@@ -61,20 +97,73 @@ public final class DoriCache {
             return self
         }
         
+        /// Cancels the promise.
+        ///
+        /// Canceling a promise also notifies the creator of promise
+        /// to cancel its ongoing tasks for updating data if possible.
+        ///
+        /// A promise can't be "re-enabled" after canceling.
         public func cancel() {
             self._onCancel?()
             self.isCancelled = true
         }
     }
     
+    /// Trait of data for cacheing.
+    ///
+    /// - IMPORTANT:
+    ///     Using ``invocationElidable`` allows DoriKit elide the `invocation`
+    ///     if cached data is new enough, like its name.
     public enum CacheTrait: Sendable {
+        /// Data that changes frequently.
         case realTime
+        /// Data that hardly changes and allows out-of-date one.
+        ///
+        /// - IMPORTANT:
+        ///     Using this trait allows DoriKit elide the `invocation`
+        ///     if cached data is new enough, like its name.
         case invocationElidable
     }
     
     private static let cacheDateEncoder = PropertyListEncoder()
     private static let cacheDateDecoder = PropertyListDecoder()
     
+    /// Get result with automatic cache.
+    ///
+    /// - Parameters:
+    ///   - id: A unique identifier for cache.
+    ///   - trait: Trait of data being cached, see ``CacheTrait`` for more details.
+    ///   - invocation: A closure that returns a result that can be cached.
+    /// - Returns: A ``Promise`` for result.
+    ///
+    /// Call this function with an identifier to get a promise for result,
+    /// then register an `onUpdate` closure for receiving new data:
+    /// ```swift
+    /// DoriCache.withCache(id: "CacheID") {
+    ///     await DoriAPI.Character.Character(id: 39)
+    /// }.onUpdate {
+    ///     let myFavoriteCharacter = $0
+    /// }
+    /// ```
+    ///
+    /// The `onUpdate` closure registered to a promise may be called more than once
+    /// (we call this *return twice*).
+    ///
+    /// If a cache is available on disk, the promise will be update immediately,
+    /// which allows you to get data faster. Then if `invocation` returns a result
+    /// other than `nil`, the promise will be update again with the latest data from `invocation`.
+    ///
+    /// If a cache is available on disk but `invocation` returns `nil`, the promise
+    /// will be update only once with data from cache, and cache on disk won't be update.
+    /// If cache is unavailable and `invocation` returns `nil`, the promise will be updated
+    /// with `nil`.
+    ///
+    /// The mechanism above implies the promise will be update **at least once**
+    /// and may **more than once**.
+    ///
+    /// - Note:
+    ///     You can use the same ID in different places if the result types aren't same.
+    ///     Caches with the same ID but different types will be stored separately.
     public static func withCache<Result: Sendable & Cacheable>(
         id: String,
         trait: CacheTrait = .invocationElidable,
@@ -156,10 +245,19 @@ public final class DoriCache {
         return promise
     }
     
+    /// Invalidates a cache with type and ID.
+    ///
+    /// - Parameters:
+    ///   - type: Type of cache.
+    ///   - id: A unique identifier of cache.
+    ///
+    /// This function has no effects if provided `type` and `id`
+    /// don't match any cache on disk.
     public static func invalidate<T>(_ type: T.Type, withID id: String) {
         let cacheURL = URL(filePath: NSHomeDirectory() + "/Library/Caches/DoriKit_\(type)_\(id).cache")
         try? FileManager.default.removeItem(at: cacheURL)
     }
+    /// Invalidates all cache on disk.
     public static func invalidateAll() {
         let cacheRootPath = NSHomeDirectory() + "/Library/Caches"
         guard let files = try? FileManager.default.contentsOfDirectory(atPath: cacheRootPath) else { return }
