@@ -15,6 +15,7 @@
 // (In Alphabetic Order)
 
 import DoriKit
+import Network
 import SwiftUI
 
 //MARK: Array
@@ -26,18 +27,15 @@ extension Array {
     }
 }
 
-
 //MARK: Int
 extension Int?: @retroactive Identifiable {
     public var id: Int? { self }
 }
 
-
 //MARK: Optional
 extension Optional {
     var id: Self { self }
 }
-
 
 //MARK: View
 public extension View {
@@ -154,6 +152,35 @@ public extension View {
     }
 }
 
+//MARK: NetworkMonitor
+final class NetworkMonitor: Sendable {
+    @MainActor static let shared = NetworkMonitor()
+    
+    private let monitor = NWPathMonitor()
+    private let queue = DispatchQueue(label: "NetworkMonitor")
+    
+    @MainActor private(set) var isConnected: Bool = false
+    @MainActor private(set) var connectionType: NWInterface.InterfaceType?
+    
+    private init() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                self.isConnected = path.status == .satisfied
+                
+                if path.usesInterfaceType(.wifi) {
+                    self.connectionType = .wifi
+                } else if path.usesInterfaceType(.cellular) {
+                    self.connectionType = .cellular
+                } else if path.usesInterfaceType(.wiredEthernet) {
+                    self.connectionType = .wiredEthernet
+                } else {
+                    self.connectionType = nil
+                }
+            }
+        }
+        monitor.start(queue: queue)
+    }
+}
 
 
 

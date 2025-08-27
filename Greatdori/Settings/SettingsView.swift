@@ -18,6 +18,9 @@ import SwiftUI
 import DoriKit
 import WidgetKit
 
+let birthdayTimeZoneNameDict: [BirthdayTimeZone: LocalizedStringResource] = [.adaptive: "Settings.birthday-time-zone.name.adaptive", .JST: "Settings.birthday-time-zone.name.JST", .UTC: "Settings.birthday-time-zone.name.UTC", .CST: "Settings.birthday-time-zone.name.CST", .PT: "Settings.birthday-time-zone.name.PT"]
+let showBirthdayDateDefaultValue = 1
+
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) var sizeClass
@@ -26,34 +29,19 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 SettingsLocaleView()
+                SettingsHomeView()
                 
-                Section(content: {
-                    SettingsHomeView()
-                }, header: {
-                    Text("Settings.home-edit")
-                }, footer: {
-                    Text(sizeClass == .compact ? "Settings.home-edit.footer.compact" : "Settings.home-edit.footer")
-                })
-                
-                #if os(iOS)
-                Section {
-                    SettingsWidgetView()
-                } header: {
-                    Text("Settings.widgets")
-                }
-                #endif
-                
-                #if DEBUG
-                Section(content: {
-                    SettingsDebugView()
-                }, header: {
-                    Text("Settings.debug")
-                })
-                #endif
+#if os(iOS)
+                SettingsWidgetView()
+#endif
+                SettingsOfflineDataView()
+#if DEBUG
+                SettingsDebugView()
+#endif
             }
             .formStyle(.grouped)
             .navigationTitle("Settings")
-            #if !os(macOS)
+#if !os(macOS)
             .wrapIf(usedAsSheet, in: { content in
                 content
                     .toolbar {
@@ -153,26 +141,31 @@ struct SettingsLocaleView: View {
     }
 }
 
-
-let showBirthdayDateDefaultValue = 1
 struct SettingsHomeView: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
     @AppStorage("showBirthdayDate") var showBirthdayDate = showBirthdayDateDefaultValue
     var body: some View {
-        HomeEditEventsPicker(id: 1)
-        HomeEditEventsPicker(id: 2)
-        HomeEditEventsPicker(id: 3)
-        HomeEditEventsPicker(id: 4)
-        Picker(selection: $showBirthdayDate, content: {
-            Text("Home.home.show-current-date.selection.always")
-                .tag(3)
-            Text("Home.home.show-current-date.selection.during-birthday")
-                .tag(2)
-            Text("Home.home.show-current-date.selection.automatic")
-                .tag(1)
-            Text("Home.home.show-current-date.selection.never")
-                .tag(0)
-        }, label: {
-            Text("Home.home.show-current-date")
+        Section(content: {
+            HomeEditEventsPicker(id: 1)
+            HomeEditEventsPicker(id: 2)
+            HomeEditEventsPicker(id: 3)
+            HomeEditEventsPicker(id: 4)
+            Picker(selection: $showBirthdayDate, content: {
+                Text("Home.home.show-current-date.selection.always")
+                    .tag(3)
+                Text("Home.home.show-current-date.selection.during-birthday")
+                    .tag(2)
+                Text("Home.home.show-current-date.selection.automatic")
+                    .tag(1)
+                Text("Home.home.show-current-date.selection.never")
+                    .tag(0)
+            }, label: {
+                Text("Home.home.show-current-date")
+            })
+        }, header: {
+            Text("Settings.home-edit")
+        }, footer: {
+            Text(sizeClass == .compact ? "Settings.home-edit.footer.compact" : "Settings.home-edit.footer")
         })
     }
     
@@ -206,94 +199,126 @@ struct SettingsHomeView: View {
 struct SettingsWidgetView: View {
     @State var cardIDInput = ""
     var body: some View {
-        TextField("Settings.widget.ids", text: $cardIDInput)
-            .submitLabel(.done)
-            .onSubmit {
-                let ids = cardIDInput
-                    .replacingOccurrences(of: " ", with: "")
-                    .components(separatedBy: ",")
-                    .compactMap {
-                        if let direct = Int($0) {
-                            // "2125"
-                            return (id: direct, trained: false)
-                        } else if $0.contains(":") {
-                            // "1954:after"
-                            let separated = $0.components(separatedBy: ":")
-                            guard separated.count == 2 else { return nil }
-                            guard let id = Int(separated[0]) else { return nil }
-                            return (id: id, trained: separated[1] == "after")
-                        } else {
-                            return nil
-                        }
-                    }
-                Task {
-                    if let cards = await DoriAPI.Card.all() {
-                        let relatedCards = cards.compactMap { card in
-                            if ids.map({ $0.id }).contains(card.id) {
-                                (card: card, trained: ids.first(where: { $0.id == card.id })!.trained)
+        Section {
+            TextField("Settings.widget.ids", text: $cardIDInput)
+                .submitLabel(.done)
+                .onSubmit {
+                    let ids = cardIDInput
+                        .replacingOccurrences(of: " ", with: "")
+                        .components(separatedBy: ",")
+                        .compactMap {
+                            if let direct = Int($0) {
+                                // "2125"
+                                return (id: direct, trained: false)
+                            } else if $0.contains(":") {
+                                // "1954:after"
+                                let separated = $0.components(separatedBy: ":")
+                                guard separated.count == 2 else { return nil }
+                                guard let id = Int(separated[0]) else { return nil }
+                                return (id: id, trained: separated[1] == "after")
                             } else {
-                                nil
+                                return nil
                             }
                         }
-                        var descriptors = [CardWidgetDescriptor]()
-                        for (card, trained) in relatedCards {
-                            descriptors.append(
-                                .init(
-                                    cardID: card.id,
-                                    trained: trained,
-                                    localizedName: card.prefix.forPreferredLocale() ?? "",
-                                    imageURL: trained ? (card.coverAfterTrainingImageURL ?? card.coverNormalImageURL) : card.coverNormalImageURL
+                    Task {
+                        if let cards = await DoriAPI.Card.all() {
+                            let relatedCards = cards.compactMap { card in
+                                if ids.map({ $0.id }).contains(card.id) {
+                                    (card: card, trained: ids.first(where: { $0.id == card.id })!.trained)
+                                } else {
+                                    nil
+                                }
+                            }
+                            var descriptors = [CardWidgetDescriptor]()
+                            for (card, trained) in relatedCards {
+                                descriptors.append(
+                                    .init(
+                                        cardID: card.id,
+                                        trained: trained,
+                                        localizedName: card.prefix.forPreferredLocale() ?? "",
+                                        imageURL: trained ? (card.coverAfterTrainingImageURL ?? card.coverNormalImageURL) : card.coverNormalImageURL
+                                    )
                                 )
-                            )
+                            }
+                            let encoder = PropertyListEncoder()
+                            encoder.outputFormat = .binary
+                            let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
+                            try? encoder.encode(descriptors).write(to: URL(filePath: containerPath + "/CardWidgetDescriptors.plist"))
+                            WidgetCenter.shared.reloadTimelines(ofKind: "com.memz233.Greatdori.Widgets.Card")
+                            print("Widget update succeeded")
                         }
-                        let encoder = PropertyListEncoder()
-                        encoder.outputFormat = .binary
-                        let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
-                        try? encoder.encode(descriptors).write(to: URL(filePath: containerPath + "/CardWidgetDescriptors.plist"))
-                        WidgetCenter.shared.reloadTimelines(ofKind: "com.memz233.Greatdori.Widgets.Card")
-                        print("Widget update succeeded")
                     }
                 }
-            }
-            .task {
-                let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
-                let decoder = PropertyListDecoder()
-                if let data = try? Data(contentsOf: URL(filePath: containerPath + "/CardWidgetDescriptors.plist")),
-                   let descriptors = try? decoder.decode([CardWidgetDescriptor].self, from: data) {
-                    cardIDInput = descriptors.map { String($0.cardID) + ($0.trained ? ":after" : ":before") }.joined(separator: ", ")
+                .task {
+                    let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
+                    let decoder = PropertyListDecoder()
+                    if let data = try? Data(contentsOf: URL(filePath: containerPath + "/CardWidgetDescriptors.plist")),
+                       let descriptors = try? decoder.decode([CardWidgetDescriptor].self, from: data) {
+                        cardIDInput = descriptors.map { String($0.cardID) + ($0.trained ? ":after" : ":before") }.joined(separator: ", ")
+                    }
                 }
-            }
+        } header: {
+            Text("Settings.widgets")
+        }
     }
 }
 #endif
+
+struct SettingsOfflineDataView: View {
+    @State var dataSourcePreference: DataSourcePreference = .hybrid
+    var body: some View {
+        Section(content: {
+            Picker("Settings.offline-data.source-preference", selection: $dataSourcePreference, content: {
+                Text("Settings.offline-data.source-preference.selection.internet")
+                    .tag(DataSourcePreference.useInternet)
+                Text("Settings.offline-data.source-preference.selection.hybrid")
+                    .tag(DataSourcePreference.hybrid)
+                Text("Settings.offline-data.source-preference.selection.local")
+                    .tag(DataSourcePreference.useLocal)
+            })
+            .onChange(of: dataSourcePreference, {
+                UserDefaults.standard.setValue(dataSourcePreference.rawValue, forKey: "DataSourcePreference")
+            })
+        }, header: {
+            Text("Settings.offline-data")
+        })
+        .onAppear {
+            dataSourcePreference = DataSourcePreference(rawValue: UserDefaults.standard.string(forKey: "DataSourcePreference") ?? "hybrid") ?? .hybrid
+        }
+    }
+}
 
 struct SettingsDebugView: View {
     @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false
     @AppStorage("isFirstLaunch") var isFirstLaunch = true
     @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
     var body: some View {
-        Toggle(isOn: $debugShowHomeBirthdayDatePicker, label: {
-            Text(verbatim: "debugShowHomeBirthdayDatePicker")
+        Section(content: {
+            Toggle(isOn: $debugShowHomeBirthdayDatePicker, label: {
+                Text(verbatim: "debugShowHomeBirthdayDatePicker")
+                    .fontDesign(.monospaced)
+            })
+            Toggle(isOn: $isFirstLaunch, label: {
+                Text(verbatim: "isFirstLaunch")
+                    .fontDesign(.monospaced)
+            })
+            Toggle(isOn: $isFirstLaunchResettable, label: {
+                Text(verbatim: "isFirstLaunchResettable")
+                    .fontDesign(.monospaced)
+            })
+#if !DORIKIT_ENABLE_PRECACHE
+            Text("Settings.debug.pre-cache-unavailable")
+                .foregroundStyle(.red)
                 .fontDesign(.monospaced)
-        })
-        Toggle(isOn: $isFirstLaunch, label: {
-            Text(verbatim: "isFirstLaunch")
-                .fontDesign(.monospaced)
-        })
-        Toggle(isOn: $isFirstLaunchResettable, label: {
-            Text(verbatim: "isFirstLaunchResettable")
-                .fontDesign(.monospaced)
-        })
-        #if !DORIKIT_ENABLE_PRECACHE
-        Text("Settings.debug.pre-cache-unavailable")
-            .foregroundStyle(.red)
-            .fontDesign(.monospaced)
-        #endif
-        NavigationLink(destination: {
-            DebugBirthdayView()
-        }, label: {
-            Text(verbatim: "DebugBirthdayView")
-                .fontDesign(.monospaced)
+#endif
+            NavigationLink(destination: {
+                DebugBirthdayView()
+            }, label: {
+                Text(verbatim: "DebugBirthdayView")
+                    .fontDesign(.monospaced)
+            })
+        }, header: {
+            Text("Settings.debug")
         })
     }
 }
@@ -306,20 +331,13 @@ enum BirthdayTimeZone: String {
     case PT
 }
 
-
-func getBirthdayTimeZone(from input: BirthdayTimeZone? = nil) -> TimeZone {
-    switch (input != nil ? input! : BirthdayTimeZone(rawValue: UserDefaults.standard.string(forKey: "BirthdayTimeZone") ?? "JST"))! {
-    case .adaptive:
-        return TimeZone.autoupdatingCurrent
-    case .JST:
-        return TimeZone(identifier: "Asia/Tokyo")!
-    case .UTC:
-        return TimeZone.gmt
-    case .CST:
-        return TimeZone(identifier: "Asia/Shanghai")!
-    case .PT:
-        return TimeZone(identifier: "America/Los_Angeles")!
-    }
+enum DataSourcePreference: String, CaseIterable {
+    case useInternet
+    case hybrid
+    case useLocal
 }
 
-let birthdayTimeZoneNameDict: [BirthdayTimeZone: LocalizedStringResource] = [.adaptive: "Settings.birthday-time-zone.name.adaptive", .JST: "Settings.birthday-time-zone.name.JST", .UTC: "Settings.birthday-time-zone.name.UTC", .CST: "Settings.birthday-time-zone.name.CST", .PT: "Settings.birthday-time-zone.name.PT"]
+
+
+
+

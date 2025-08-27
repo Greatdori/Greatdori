@@ -2092,6 +2092,21 @@
         }
       }
     },
+    "Settings.offline-data" : {
+
+    },
+    "Settings.offline-data.source-preference" : {
+
+    },
+    "Settings.offline-data.source-preference.selection.hybrid" : {
+
+    },
+    "Settings.offline-data.source-preference.selection.internet" : {
+
+    },
+    "Settings.offline-data.source-preference.selection.local" : {
+
+    },
     "Settings.servers.primaryLocale" : {
       "localizations" : {
         "en" : {

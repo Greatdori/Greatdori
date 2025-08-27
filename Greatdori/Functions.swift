@@ -20,6 +20,7 @@ import SwiftUI
 import UIKit
 #endif
 
+//MARK: copyStringToClipboard
 func copyStringToClipboard(_ content: String) {
 #if os(macOS)
     let pasteboard = NSPasteboard.general
@@ -30,6 +31,23 @@ func copyStringToClipboard(_ content: String) {
 #endif
 }
 
+//MARK: getBirthdayTimeZone
+func getBirthdayTimeZone(from input: BirthdayTimeZone? = nil) -> TimeZone {
+    switch (input != nil ? input! : BirthdayTimeZone(rawValue: UserDefaults.standard.string(forKey: "BirthdayTimeZone") ?? "JST"))! {
+    case .adaptive:
+        return TimeZone.autoupdatingCurrent
+    case .JST:
+        return TimeZone(identifier: "Asia/Tokyo")!
+    case .UTC:
+        return TimeZone.gmt
+    case .CST:
+        return TimeZone(identifier: "Asia/Shanghai")!
+    case .PT:
+        return TimeZone(identifier: "America/Los_Angeles")!
+    }
+}
+
+//MARK: getPlaceholderColor
 func getPlaceholderColor() -> Color {
 #if os(iOS)
     return Color(UIColor.placeholderText)
@@ -38,7 +56,24 @@ func getPlaceholderColor() -> Color {
 #endif
 }
 
-//MARK:
+//MARK: getProperDataSourceType
+@MainActor func getProperDataSourceType(dataPrefersInternet: Bool = false) -> OfflineAssetBehavior {
+    let dataSourcePreference = DataSourcePreference(rawValue: UserDefaults.standard.string(forKey: "DataSourcePreference") ?? "hybrid") ?? .hybrid
+    switch dataSourcePreference {
+    case .hybrid :
+        if dataPrefersInternet && NetworkMonitor.shared.isConnected {
+            return .disabled
+        } else {
+            return .enableIfAvailable
+        }
+    case .useLocal:
+        return .enabled
+    case .useInternet:
+        return .disabled
+    }
+}
+
+//MARK: highlightOccurrences
 /// Highlights all occurrences of a keyword within a string in blue.
 /// - Parameters:
 ///   - keyword: The substring to highlight within `content`. If empty or only whitespace, no highlighting occurs.
@@ -55,7 +90,7 @@ func highlightOccurrences(of keyword: String, in content: String) -> AttributedS
     return attributedString
 }
 
-
+//MARK: ListItemType
 enum ListItemType: Hashable, Equatable {
     case compactOnly
     case expandedOnly
