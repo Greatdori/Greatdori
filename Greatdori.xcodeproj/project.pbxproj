@@ -128,6 +128,12 @@
 		8C8E43FC2E5DAD1C005590F0 /* DoriResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8C8E43F92E5DAC86005590F0 /* DoriResource.bundle */; };
 		8C8E44002E5DAD49005590F0 /* DoriResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8E43FF2E5DAD46005590F0 /* DoriResource.swift */; };
 		8C8E44762E5EE043005590F0 /* Documentation.docc in Sources */ = {isa = PBXBuildFile; fileRef = 8C8E44752E5EE043005590F0 /* Documentation.docc */; };
+		8C8E44FB2E5F6867005590F0 /* SwiftSyntax in Frameworks */ = {isa = PBXBuildFile; productRef = 8C8E44FA2E5F6867005590F0 /* SwiftSyntax */; };
+		8C8E44FD2E5F6867005590F0 /* SwiftSyntaxMacros in Frameworks */ = {isa = PBXBuildFile; productRef = 8C8E44FC2E5F6867005590F0 /* SwiftSyntaxMacros */; };
+		8C8E45022E5F68E0005590F0 /* SwiftCompilerPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 8C8E45012E5F68E0005590F0 /* SwiftCompilerPlugin */; };
+		8C8E45042E5F68ED005590F0 /* DoriKitMacros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8E45032E5F68EA005590F0 /* DoriKitMacros.swift */; };
+		8C8E45062E5F6C0F005590F0 /* SwiftDiagnostics in Frameworks */ = {isa = PBXBuildFile; productRef = 8C8E45052E5F6C0F005590F0 /* SwiftDiagnostics */; };
+		8C8E45082E5F7649005590F0 /* SwiftSyntaxBuilder in Frameworks */ = {isa = PBXBuildFile; productRef = 8C8E45072E5F7649005590F0 /* SwiftSyntaxBuilder */; };
 		8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift */; };
 		8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */; };
 		8C923D7D2E304882003AFC0A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */; };
@@ -370,6 +376,13 @@
 			remoteGlobalIDString = 8C8E43EF2E5DAC86005590F0;
 			remoteInfo = DoriResource;
 		};
+		8C8E44F72E5F6717005590F0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C8E44ED2E5F66FC005590F0;
+			remoteInfo = DoriKitMacros;
+		};
 		8C9474572E35DE1C003A90B4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
@@ -499,6 +512,15 @@
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C8E44EC2E5F66FC005590F0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 		8CB4D4912E4461450085D57A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -740,6 +762,8 @@
 		8C8E43F92E5DAC86005590F0 /* DoriResource.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DoriResource.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C8E43FF2E5DAD46005590F0 /* DoriResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriResource.swift; sourceTree = "<group>"; };
 		8C8E44752E5EE043005590F0 /* Documentation.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Documentation.docc; sourceTree = "<group>"; };
+		8C8E44EE2E5F66FC005590F0 /* DoriKitMacros */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DoriKitMacros; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C8E45032E5F68EA005590F0 /* DoriKitMacros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriKitMacros.swift; sourceTree = "<group>"; };
 		8C923D772E3034AD003AFC0A /* HomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendCharacter.swift; sourceTree = "<group>"; };
 		8C923D862E304AF1003AFC0A /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
@@ -993,6 +1017,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C8E44EB2E5F66FC005590F0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C8E44FD2E5F6867005590F0 /* SwiftSyntaxMacros in Frameworks */,
+				8C8E45082E5F7649005590F0 /* SwiftSyntaxBuilder in Frameworks */,
+				8C8E45062E5F6C0F005590F0 /* SwiftDiagnostics in Frameworks */,
+				8C8E44FB2E5F6867005590F0 /* SwiftSyntax in Frameworks */,
+				8C8E45022E5F68E0005590F0 /* SwiftCompilerPlugin in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C94744F2E35DE1C003A90B4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1060,6 +1096,7 @@
 				8CB4D48B2E445F870085D57A /* BuiltinCardCollections */,
 				8C0C999E2E296A9000549B5C /* DoriKit */,
 				8C7F6BBC2E59478C0040C206 /* DoriAssetShims */,
+				8C8E44FF2E5F6891005590F0 /* DoriKitMacros */,
 				8C94745D2E35DE6C003A90B4 /* DoriKitTests */,
 				8C2CCD432E3E06910014189F /* DoriEmoji */,
 				8C8E43FB2E5DAD0A005590F0 /* DoriResource */,
@@ -1087,6 +1124,7 @@
 				8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */,
 				8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */,
 				8C8E43F92E5DAC86005590F0 /* DoriResource.bundle */,
+				8C8E44EE2E5F66FC005590F0 /* DoriKitMacros */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1473,6 +1511,14 @@
 			path = git2;
 			sourceTree = "<group>";
 		};
+		8C8E44FF2E5F6891005590F0 /* DoriKitMacros */ = {
+			isa = PBXGroup;
+			children = (
+				8C8E45032E5F68EA005590F0 /* DoriKitMacros.swift */,
+			);
+			path = DoriKitMacros;
+			sourceTree = "<group>";
+		};
 		8C923D852E304AE5003AFC0A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1768,6 +1814,7 @@
 				8CD13FE62E300BEC00673E15 /* PBXBuildRule */,
 			);
 			dependencies = (
+				8C8E44F82E5F6717005590F0 /* PBXTargetDependency */,
 				8C8E43FE2E5DAD28005590F0 /* PBXTargetDependency */,
 				8C2CCD422E3E06100014189F /* PBXTargetDependency */,
 				8C7F6C082E59935C0040C206 /* PBXTargetDependency */,
@@ -1878,6 +1925,30 @@
 			productName = DoriEmoji;
 			productReference = 8C8E43F92E5DAC86005590F0 /* DoriResource.bundle */;
 			productType = "com.apple.product-type.bundle";
+		};
+		8C8E44ED2E5F66FC005590F0 /* DoriKitMacros */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C8E44F62E5F66FC005590F0 /* Build configuration list for PBXNativeTarget "DoriKitMacros" */;
+			buildPhases = (
+				8C8E44EA2E5F66FC005590F0 /* Sources */,
+				8C8E44EB2E5F66FC005590F0 /* Frameworks */,
+				8C8E44EC2E5F66FC005590F0 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DoriKitMacros;
+			packageProductDependencies = (
+				8C8E44FA2E5F6867005590F0 /* SwiftSyntax */,
+				8C8E44FC2E5F6867005590F0 /* SwiftSyntaxMacros */,
+				8C8E45012E5F68E0005590F0 /* SwiftCompilerPlugin */,
+				8C8E45052E5F6C0F005590F0 /* SwiftDiagnostics */,
+				8C8E45072E5F7649005590F0 /* SwiftSyntaxBuilder */,
+			);
+			productName = DoriKitMacros;
+			productReference = 8C8E44EE2E5F66FC005590F0 /* DoriKitMacros */;
+			productType = "com.apple.product-type.tool";
 		};
 		8C9474512E35DE1C003A90B4 /* DoriKitTests */ = {
 			isa = PBXNativeTarget;
@@ -2022,6 +2093,9 @@
 						CreatedOnToolsVersion = 26.0;
 						LastSwiftMigration = 2600;
 					};
+					8C8E44ED2E5F66FC005590F0 = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					8C9474512E35DE1C003A90B4 = {
 						CreatedOnToolsVersion = 26.0;
 					};
@@ -2060,6 +2134,7 @@
 				8C923D7E2E30488E003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */,
 				8C499F8B2E4FD9CE0073FCB6 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				8CE186AB2E535324009C1C87 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+				8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8C0C995E2E296A4400549B5C /* Products */;
@@ -2073,6 +2148,7 @@
 				8CB4D4782E445F700085D57A /* BuiltinCardCollections */,
 				8C0C99902E296A8C00549B5C /* DoriKit */,
 				8C7F6BC32E5949950040C206 /* DoriAssetShims */,
+				8C8E44ED2E5F66FC005590F0 /* DoriKitMacros */,
 				8C9474512E35DE1C003A90B4 /* DoriKitTests */,
 				8C2CCD392E3E058E0014189F /* DoriEmoji */,
 				8C8E43EF2E5DAC86005590F0 /* DoriResource */,
@@ -2466,6 +2542,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C8E44EA2E5F66FC005590F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C8E45042E5F68ED005590F0 /* DoriKitMacros.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C94744E2E35DE1C003A90B4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2582,6 +2666,11 @@
 			isa = PBXTargetDependency;
 			target = 8C8E43EF2E5DAC86005590F0 /* DoriResource */;
 			targetProxy = 8C8E43FD2E5DAD28005590F0 /* PBXContainerItemProxy */;
+		};
+		8C8E44F82E5F6717005590F0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C8E44ED2E5F66FC005590F0 /* DoriKitMacros */;
+			targetProxy = 8C8E44F72E5F6717005590F0 /* PBXContainerItemProxy */;
 		};
 		8C9474582E35DE1C003A90B4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2994,7 +3083,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
@@ -3058,7 +3147,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
@@ -3406,7 +3495,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
@@ -3649,7 +3738,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
@@ -4429,6 +4518,66 @@
 			};
 			name = RelWithoutPreCache;
 		};
+		8C8E44F22E5F66FC005590F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		8C8E44F32E5F66FC005590F0 /* DebWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = DebWithoutPreCache;
+		};
+		8C8E44F42E5F66FC005590F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		8C8E44F52E5F66FC005590F0 /* RelWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = RelWithoutPreCache;
+		};
 		8C94745A2E35DE1C003A90B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5085,6 +5234,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		8C8E44F62E5F66FC005590F0 /* Build configuration list for PBXNativeTarget "DoriKitMacros" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C8E44F22E5F66FC005590F0 /* Debug */,
+				8C8E44F32E5F66FC005590F0 /* DebWithoutPreCache */,
+				8C8E44F42E5F66FC005590F0 /* Release */,
+				8C8E44F52E5F66FC005590F0 /* RelWithoutPreCache */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8C9474592E35DE1C003A90B4 /* Build configuration list for PBXNativeTarget "DoriKitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -5167,6 +5327,14 @@
 				minimumVersion = 1.3.0;
 			};
 		};
+		8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swiftlang/swift-syntax";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 601.0.1;
+			};
+		};
 		8C923D7B2E304882003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
@@ -5213,6 +5381,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C0C99AF2E296F3900549B5C /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		8C8E44FA2E5F6867005590F0 /* SwiftSyntax */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */;
+			productName = SwiftSyntax;
+		};
+		8C8E44FC2E5F6867005590F0 /* SwiftSyntaxMacros */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */;
+			productName = SwiftSyntaxMacros;
+		};
+		8C8E45012E5F68E0005590F0 /* SwiftCompilerPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */;
+			productName = SwiftCompilerPlugin;
+		};
+		8C8E45052E5F6C0F005590F0 /* SwiftDiagnostics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */;
+			productName = SwiftDiagnostics;
+		};
+		8C8E45072E5F7649005590F0 /* SwiftSyntaxBuilder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */;
+			productName = SwiftSyntaxBuilder;
 		};
 		8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
