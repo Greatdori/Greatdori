@@ -18,7 +18,7 @@ import Foundation
 ///
 /// Each methods in ``DoriAPI`` fetches raw data from Bestdori API directly,
 /// makes them Swifty and return them.
-public class DoriAPI {
+public final class DoriAPI {
     private init() {}
     
     @usableFromInline

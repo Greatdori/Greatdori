@@ -15,7 +15,7 @@
 import SwiftUI
 import Foundation
 
-public class DoriCache {
+public final class DoriCache {
     private init() {}
     
     public protocol Cacheable: Codable {
