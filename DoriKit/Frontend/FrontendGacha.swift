@@ -15,7 +15,7 @@
 import Foundation
 
 extension DoriFrontend {
-    public class Gacha {
+    public final class Gacha {
         private init() {}
         
         public static func list(filter: Filter = .init()) async -> [PreviewGacha]? {

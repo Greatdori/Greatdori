@@ -18,7 +18,7 @@ internal import SwiftyJSON
 
 extension DoriAPI {
     /// Request and fetch data about skills in Bandori.
-    public class Skill {
+    public final class Skill {
         private init() {}
         
         /// Get all skills in Bandori.

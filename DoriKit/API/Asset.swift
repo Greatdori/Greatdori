@@ -16,7 +16,7 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
-    public class Asset {
+    public final class Asset {
         private init() {}
         
         public static func info(in locale: Locale) async -> AssetList? {

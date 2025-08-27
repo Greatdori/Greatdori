@@ -17,7 +17,7 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
-    public class Song {
+    public final class Song {
         private init() {}
         
         public static func all() async -> [PreviewSong]? {

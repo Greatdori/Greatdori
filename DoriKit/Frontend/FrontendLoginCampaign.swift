@@ -15,7 +15,7 @@
 import Foundation
 
 extension DoriFrontend {
-    public class LoginCampaign {
+    public final class LoginCampaign {
         private init() {}
         
         public static func list(filter: Filter = .init()) async -> [PreviewCampaign]? {

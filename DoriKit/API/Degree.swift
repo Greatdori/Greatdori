@@ -18,7 +18,7 @@ internal import SwiftyJSON
 
 extension DoriAPI {
     /// Request and fetch data about degree in Bandori.
-    public class Degree {
+    public final class Degree {
         private init() {}
         
         /// Get all degrees in Bandori.

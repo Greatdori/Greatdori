@@ -15,7 +15,7 @@
 import Foundation
 
 extension DoriFrontend {
-    public class Character {
+    public final class Character {
         private init() {}
         
         public static func recentBirthdayCharacters(aroundDate date: Date = .now, timeZone: TimeZone = .init(identifier: "Asia/Tokyo")!) async -> [BirthdayCharacter]? {

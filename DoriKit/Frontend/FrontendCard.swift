@@ -15,7 +15,7 @@
 import Foundation
 
 extension DoriFrontend {
-    public class Card {
+    public final class Card {
         private init() {}
         
         public static func list(filter: Filter = .init()) async -> [CardWithBand]? {

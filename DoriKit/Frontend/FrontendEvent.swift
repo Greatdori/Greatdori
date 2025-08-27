@@ -15,7 +15,7 @@
 import Foundation
 
 extension DoriFrontend {
-    public class Event {
+    public final class Event {
         private init() {}
         
         public static func localizedLatestEvent() async -> DoriAPI.LocalizedData<PreviewEvent>? {

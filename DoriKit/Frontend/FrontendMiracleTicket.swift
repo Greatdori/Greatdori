@@ -15,7 +15,7 @@
 import Foundation
 
 extension DoriFrontend {
-    public class MiracleTicket {
+    public final class MiracleTicket {
         private init() {}
         
         public static func extendedList() async -> [ExtendedMiracleTicket]? {

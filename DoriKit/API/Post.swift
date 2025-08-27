@@ -17,7 +17,7 @@ internal import Alamofire
 internal import SwiftyJSON
 
 extension DoriAPI {
-    public class Post {
+    public final class Post {
         private init() {}
         
         public static func _list(_ request: ListRequest) async -> PagedPosts? {

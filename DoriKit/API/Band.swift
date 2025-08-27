@@ -18,7 +18,7 @@ internal import SwiftyJSON
 
 extension DoriAPI {
     /// Request and fetch data about band in Bandori.
-    public class Band {
+    public final class Band {
         private init() {}
         
         /// Get all main bands in Bandori.

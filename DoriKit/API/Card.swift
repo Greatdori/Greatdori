@@ -18,7 +18,7 @@ internal import SwiftyJSON
 
 extension DoriAPI {
     /// Request and fetch data about card in Bandori.
-    public class Card {
+    public final class Card {
         private init() {}
         
         /// Get all cards in Bandori.

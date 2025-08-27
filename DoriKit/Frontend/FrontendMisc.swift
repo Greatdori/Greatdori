@@ -15,7 +15,7 @@
 import Foundation
 
 extension DoriFrontend {
-    public class Misc {
+    public final class Misc {
         private init() {}
         
         public static func extendedItems<T>(

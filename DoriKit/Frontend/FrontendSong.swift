@@ -16,7 +16,7 @@ import SwiftUI
 import Foundation
 
 extension DoriFrontend {
-    public class Song {
+    public final class Song {
         private init() {}
         
         public static func list(filter: Filter = .init()) async -> [PreviewSong]? {

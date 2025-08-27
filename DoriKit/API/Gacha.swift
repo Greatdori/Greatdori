@@ -18,7 +18,7 @@ internal import SwiftyJSON
 
 extension DoriAPI {
     /// Request and fetch data about gacha in Bandori.
-    public class Gacha {
+    public final class Gacha {
         private init() {}
         
         /// Get all gacha in Bandori.

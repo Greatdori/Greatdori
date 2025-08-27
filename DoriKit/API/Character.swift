@@ -18,7 +18,7 @@ internal import SwiftyJSON
 
 extension DoriAPI {
     /// Request and fetch data about character in Bandori.
-    public class Character {
+    public final class Character {
         private init() {}
         
         /// Get all characters in Bandori.

@@ -19,7 +19,7 @@ import WebKit
 #endif
 
 extension DoriFrontend {
-    public class Costume {
+    public final class Costume {
         private init() {}
         
         public static func list(filter: Filter = .init()) async -> [PreviewCostume]? {

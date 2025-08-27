@@ -16,7 +16,7 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
-    public class Misc {
+    public final class Misc {
         private init() {}
         
         public static func itemTexts() async -> [String: ItemText]? {

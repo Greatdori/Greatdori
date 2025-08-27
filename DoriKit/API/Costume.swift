@@ -18,7 +18,7 @@ internal import SwiftyJSON
 
 extension DoriAPI {
     /// Request and fetch data about costume in Bandori.
-    public class Costume {
+    public final class Costume {
         private init() {}
         
         /// Get all costumes in Bandori.

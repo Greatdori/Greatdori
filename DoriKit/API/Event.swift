@@ -18,7 +18,7 @@ internal import SwiftyJSON
 
 extension DoriAPI {
     /// Request and fetch data about events in Bandori.
-    public class Event {
+    public final class Event {
         private init() {}
         
         /// Get all events in Bandori.

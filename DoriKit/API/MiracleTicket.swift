@@ -16,7 +16,7 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
-    public class MiracleTicket {
+    public final class MiracleTicket {
         private init() {}
         
         public static func all() async -> [MiracleTicket]? {

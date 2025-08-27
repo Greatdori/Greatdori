@@ -16,7 +16,7 @@ import Foundation
 private import Builtin
 
 extension DoriFrontend {
-    public class News {
+    public final class News {
         private init() {}
         
         @inline(never)

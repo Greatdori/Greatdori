@@ -15,7 +15,7 @@
 import Foundation
 
 extension DoriFrontend {
-    public class Comic {
+    public final class Comic {
         private init() {}
         
         public static func list(filter: Filter = .init()) async -> [Comic]? {
