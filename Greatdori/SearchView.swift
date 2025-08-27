@@ -24,6 +24,7 @@ struct FilterView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     @Binding var filter: DoriFrontend.Filter
     var includingKeys: [DoriFrontend.Filter.Key]
+    var charactersAllowSelectAll = false // Super weird.
     
     @State var lastSelectAllActionIsDeselect: Bool = false
     @State var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key? = nil
@@ -68,7 +69,15 @@ struct FilterView: View {
                 //MARK: Character
                 if includingKeys.contains(.character) {
                     ListItemView(title: {
-                        FilterTitleView(filter: $filter, titleName: "Filter.key.character", titleKey: .character)
+                        HStack {
+                            FilterTitleView(filter: $filter, titleName: "Filter.key.character", titleKey: .character)
+                            Spacer()
+                            if charactersAllowSelectAll {
+//                                Button(action: {
+//                                    
+//                                }, label: <#T##() -> View#>)
+                            }
+                        }
                     }, value: {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: filterItemHeight))]/*, spacing: 3*/) {
                             ForEach(DoriFrontend.Filter.Character.allCases, id: \.self) { item in
@@ -254,6 +263,10 @@ struct FilterView: View {
                 }
                 .animation(.easeIn(duration: 0.1), value: displayingTipIndex)
                 .onTapGesture(count: 2, perform: {
+                    
+                })
+                Spacer()
+                Button(action: {
                     withAnimation(.easeInOut(duration: 0.1)) {
                         let allCases = titleKey.selector.items.map { $0.item.value }
                         if let filterSet = filter[titleKey] as? Set<AnyHashable> {
@@ -269,8 +282,20 @@ struct FilterView: View {
                             }
                         }
                     }
+                }, label: {
+                    Group {
+                        let allCases = titleKey.selector.items.map { $0.item.value }
+                        if let filterSet = filter[titleKey] as? Set<AnyHashable> {
+                            if filterSet.count < allCases.count {
+                                Text("Filter.select-all")
+                            } else {
+                                Text("Filter.deselect-all")
+                            }
+                        }
+                    }
+                    .foregroundStyle(.secondary)
                 })
-                Spacer()
+                .buttonStyle(.plain)
             }
             .onChange(of: displayingTipIndex) { oldValue, newValue in
                 timer?.invalidate()

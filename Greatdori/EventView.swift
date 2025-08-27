@@ -637,7 +637,6 @@ struct EventSearchView: View {
                             ContentUnavailableView("Event.search.no-results", systemImage: "magnifyingglass", description: Text("Event.search.no-results.description"))
                         }
                     }
-                    .searchable(text: $searchedText, prompt: "Event.search.placeholder")
                     .onSubmit {
                         if let events {
                             searchedEvents = events.search(for: searchedText)
@@ -661,7 +660,7 @@ struct EventSearchView: View {
                     }
                 }
             }
-            
+            .searchable(text: $searchedText, prompt: "Event.search.placeholder")
             .withSystemBackground()
             .navigationTitle("Event")
             .wrapIf(searchedEvents != nil, in: { content in
@@ -758,7 +757,7 @@ struct EventSearchView: View {
             }
         }
         .inspector(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
+            FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort], charactersAllowSelectAll: true)
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .presentationBackgroundInteraction(.enabled)

@@ -47,7 +47,7 @@ struct GreatdoriApp: App {
         .commands {
             #if DEBUG && os(macOS)
             CommandGroup(after: .appSettings) {
-                Button(String("Offline Asset Debug"), systemImage: "ant.fill") {
+                Button(String("Menu-bar.window.offline-asset-debug"), systemImage: "ant.fill") {
                     openWindow(id: "OfflineAssetDebugWindow")
                 }
             }
@@ -58,7 +58,7 @@ struct GreatdoriApp: App {
             SettingsView()
         }
         
-        Window(String("Offline Asset Debug"), id: "OfflineAssetDebugWindow") {
+        Window(String("Window.offline-asset-debug"), id: "OfflineAssetDebugWindow") {
             DebugOfflineAssetView()
         }
         #endif

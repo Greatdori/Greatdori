@@ -206,12 +206,6 @@
         }
       }
     },
-    "Check console for downloading progress" : {
-
-    },
-    "Contents" : {
-
-    },
     "Debug.pre-cache-unavailable-alert.dismiss" : {
       "localizations" : {
         "en" : {
@@ -261,10 +255,20 @@
       }
     },
     "Details.gacha" : {
-
-    },
-    "Dispatcher" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募"
+          }
+        }
+      }
     },
     "Done" : {
       "localizations" : {
@@ -891,15 +895,6 @@
         }
       }
     },
-    "Exists" : {
-
-    },
-    "File" : {
-
-    },
-    "File Path" : {
-
-    },
     "Filter" : {
       "localizations" : {
         "en" : {
@@ -928,6 +923,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "还原到默认选项"
+          }
+        }
+      }
+    },
+    "Filter.deselect-all" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deselect All"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消全选"
           }
         }
       }
@@ -1080,6 +1091,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "状态"
+          }
+        }
+      }
+    },
+    "Filter.select-all" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select All"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全选"
           }
         }
       }
@@ -1769,12 +1796,6 @@
         }
       }
     },
-    "Offline Asset Debug" : {
-
-    },
-    "Print hash" : {
-
-    },
     "Settings" : {
       "localizations" : {
         "en" : {
@@ -2096,19 +2117,84 @@
       }
     },
     "Settings.offline-data" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local Data"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地数据"
+          }
+        }
+      }
     },
     "Settings.offline-data.source-preference" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data Source Preference"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数据源偏好"
+          }
+        }
+      }
     },
     "Settings.offline-data.source-preference.selection.hybrid" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hybrid"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动"
+          }
+        }
+      }
     },
     "Settings.offline-data.source-preference.selection.internet" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Internet Data"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用互联网数据"
+          }
+        }
+      }
     },
     "Settings.offline-data.source-preference.selection.local" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Local Data"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用本地数据"
+          }
+        }
+      }
     },
     "Settings.servers.primaryLocale" : {
       "localizations" : {
@@ -2398,9 +2484,6 @@
           }
         }
       }
-    },
-    "Write to Documents" : {
-
     }
   },
   "version" : "1.1"

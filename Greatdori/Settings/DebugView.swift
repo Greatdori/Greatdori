@@ -139,43 +139,48 @@ struct DebugOfflineAssetView: View {
             } header: {
                 Text(verbatim: "Download")
             } footer: {
-                Text("Check console for downloading progress")
+                Text(verbatim: "Check console for downloading progress")
             }
             Section {
-                TextField("File Path", text: $filePath)
+                TextField(String("File Path"), text: $filePath)
                 HStack {
-                    Button("Exists") {
+                    Button(String("Exists")) {
                         print(DoriOfflineAsset.shared.fileExists(filePath, in: .cn, of: .basic))
                     }
-                    Button("Print hash") {
+                    Button(action: {
                         do {
                             print(try DoriOfflineAsset.shared.fileHash(forPath: filePath, in: .cn, of: .basic))
                         } catch {
                             print(error.localizedDescription)
                         }
-                    }
-                    Button("Write to Documents") {
+                    }, label: {
+                        Text(verbatim: "Print hash")
+                    })
+                    Button(action: {
                         do {
                             try DoriOfflineAsset.shared.writeFile(atPath: filePath, in: .cn, of: .basic, toPath: NSHomeDirectory() + "/Documents/\(filePath.split(separator: "/").last!)")
                         } catch {
                             print(error.localizedDescription)
                         }
-                    }
+                    }, label: {
+                        Text(verbatim: "Write to Documents")
+                    })
                 }
                 VStack(alignment: .leading) {
-                    Button("Contents") {
+                    Button(action: {
                         do {
                             contents = try DoriOfflineAsset.shared.contentsOfDirectory(atPath: filePath, in: .cn, of: .basic)
                         } catch {
                             print(error.localizedDescription)
-                        }
-                    }
+                        }                    }, label: {
+                        Text(verbatim: "Contentss")
+                    })
                     ForEach(contents, id: \.self) { name in
                         Text(name)
                     }
                 }
             } header: {
-                Text("File")
+                Text(verbatim: "File")
             }
             Section {
                 if let testCard {
@@ -186,7 +191,7 @@ struct DebugOfflineAssetView: View {
                     Text(testCard.coverNormalImageURL.withOfflineAsset().absoluteString)
                 }
             } header: {
-                Text("Dispatcher")
+                Text(verbatim: "Dispatcher")
             }
         }
         .formStyle(.grouped)
