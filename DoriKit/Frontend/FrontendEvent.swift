@@ -43,8 +43,14 @@ extension DoriFrontend {
                     event.attributes.contains { $0.attribute == attribute }
                 }
             }.filter { event in
-                filter.character.contains { character in
-                    event.characters.contains { $0.characterID == character.rawValue }
+                if filter.character.matchAll {
+                    filter.character.allSatisfy { character in
+                        event.characters.contains { $0.characterID == character.rawValue }
+                    }
+                } else {
+                    filter.character.contains { character in
+                        event.characters.contains { $0.characterID == character.rawValue }
+                    }
                 }
             }.filter { event in
                 filter.server.contains { locale in

@@ -359,6 +359,23 @@ extension DoriFrontend.Filter {
         case sort
     }
 }
+extension Set<DoriFrontend.Filter.Character> {
+    nonisolated(unsafe)
+    internal static var _matchAll = [Int: Bool]()
+    private static let _matchingLock = NSLock()
+    public var matchAll: Bool {
+        get {
+            Self._matchingLock.lock()
+            defer { Self._matchingLock.unlock() }
+            return unsafe Self._matchAll[self.hashValue] ?? false
+        }
+        set {
+            Self._matchingLock.lock()
+            defer { Self._matchingLock.unlock() }
+            unsafe Self._matchAll.updateValue(newValue, forKey: self.hashValue)
+        }
+    }
+}
 
 extension DoriFrontend.Filter.Key: Identifiable {
     public var id: Int { self.rawValue }

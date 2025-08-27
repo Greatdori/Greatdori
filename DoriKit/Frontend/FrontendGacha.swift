@@ -42,7 +42,11 @@ extension DoriFrontend {
                         return true
                     }
                     let cards = cards.filter { gacha.newCards.contains($0.id) }
-                    return filter.character.contains { cards.map { $0.characterID }.contains($0.rawValue) }
+                    if filter.character.matchAll {
+                        return filter.character.allSatisfy { cards.map { $0.characterID }.contains($0.rawValue) }
+                    } else {
+                        return filter.character.contains { cards.map { $0.characterID }.contains($0.rawValue) }
+                    }
                 }.filter { gacha in
                     for bool in filter.released {
                         for locale in filter.server {
