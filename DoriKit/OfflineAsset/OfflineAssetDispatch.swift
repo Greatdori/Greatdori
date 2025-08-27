@@ -24,7 +24,7 @@ import Foundation
 ///   - body: A closure with provided offline asset behavior.
 /// - Returns: Result of provided closure.
 ///
-/// This functions let requests in provided closure match the `behavior`.
+/// This function let requests in provided closure match the `behavior`.
 /// You use this function to allow downloaded local assets work with DoriKit.
 ///
 /// Simply wrap an expression that requests data to configure its offline asset behavior:
@@ -125,7 +125,7 @@ public func withOfflineAsset<Result>(
 ///   - body: A closure with provided offline asset behavior.
 /// - Returns: Result of provided closure.
 ///
-/// This functions let requests in provided closure match the `behavior`.
+/// This function let requests in provided closure match the `behavior`.
 /// You use this function to allow downloaded local assets work with DoriKit.
 ///
 /// Simply wrap an expression that requests data to configure its offline asset behavior:
@@ -221,21 +221,25 @@ public func withOfflineAsset<Result>(
 
 /// Behavior of using offline asset in DoriKit.
 ///
-/// - `disabled`: Never use offline asset.
-/// - `enableIfAvailable`: Use offline asset if available.
-/// - `enabled`: Always use offline asset.
-///
 /// The default behavior is `disabled`, unless you use ``withOfflineAsset(_:_:)``
 /// or ``Foundation/URL/withOfflineAsset(_:)`` to change it.
 ///
 /// - IMPORTANT:
-///     `enabled` implies "**never** use online asset",
+///     ``enabled`` implies "**never** use online asset",
 ///     if requested asset isn't available in local, you'll get nil.
-///     Use `enableIfAvailable` to make it flexible.
+///     Use ``enableIfAvailable`` to make it flexible.
 @frozen
 public enum OfflineAssetBehavior: Sendable {
+    /// Never use offline asset.
     case disabled
+    /// Use offline asset if available.
     case enableIfAvailable
+    /// Always use offline asset.
+    ///
+    /// - IMPORTANT:
+    ///     `enabled` implies "**never** use online asset",
+    ///     if requested asset isn't available in local, you'll get nil.
+    ///     Use ``enableIfAvailable`` to make it flexible.
     case enabled
 }
 

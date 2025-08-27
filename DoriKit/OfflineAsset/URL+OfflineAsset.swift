@@ -20,6 +20,23 @@ private let placeholderURL = URL(string: "placeholder://nil")!
 #if canImport(DoriAssetShims)
 
 extension URL {
+    /// Configures a resource URL to match the provided offline asset behavior.
+    ///
+    /// - Parameter behavior: The offline asset behavior for URL,
+    ///       see ``OfflineAssetBehavior`` for more details.
+    /// - Returns: A URL that matches provided offline asset behavior.
+    ///
+    /// This function let the URL match the `behavior`.
+    /// You use this function to allow downloaded local assets work with DoriKit.
+    ///
+    /// - Note:
+    ///     This function has no effect if the URL doesn't refer to a resource.
+    ///
+    /// - IMPORTANT:
+    ///     If the behavior is ``OfflineAssetBehavior/enabled``
+    ///     but local asset referred from the URL doesn't exist,
+    ///     this function returns a placeholder URL and logs the event.
+    ///     Use ``OfflineAssetBehavior/enableIfAvailable`` to make it flexible.
     public func withOfflineAsset(_ behavior: OfflineAssetBehavior = .enableIfAvailable) -> URL {
         DoriKit.withOfflineAsset(behavior) {
             self.respectOfflineAssetContext()
