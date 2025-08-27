@@ -17,9 +17,15 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about songs in Bandori.
     public final class Song {
         private init() {}
         
+        /// Get all songs in Bandori.
+        ///
+        /// The results have guaranteed sorting by ID.
+        ///
+        /// - Returns: Requested songs, nil if failed to fetch data.
         public static func all() async -> [PreviewSong]? {
             // Response example:
             // {
@@ -143,6 +149,8 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get all song meta in Bandori
+        /// - Returns: All song meta, nil if failed to fetch data.
         public static func meta() async -> SongMeta? {
             // Response example:
             // {
@@ -191,6 +199,9 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get detail of a song in Bandori.
+        /// - Parameter id: ID of target song.
+        /// - Returns: Detail data of requested song, nil if failed to fetch.
         public static func detail(of id: Int) async -> Song? {
             // Response example:
             // {
@@ -475,18 +486,31 @@ extension DoriAPI {
 }
 
 extension DoriAPI.Song {
+    /// Represent simplified data of a song.
     public struct PreviewSong: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+        /// A unique ID of song.
         public var id: Int
+        /// Tag of song.
         public var tag: SongTag
+        /// ID of band for this song.
         public var bandID: Int
+        /// Name of jacket image bundle, used for combination of resource URLs.
         public var jacketImage: [String]
+        /// Localized title of music.
         public var musicTitle: DoriAPI.LocalizedData<String>
+        /// Localized publish date of song.
         public var publishedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Localized close date of song.
         public var closedAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+        /// Difficulties of song.
         public var difficulty: [DifficultyType: Difficulty] // {Index: {Difficulty}...}(JSON) -> ~(Swift)
+        /// Length of song, in seconds.
         public var length: Double
+        /// Note count for different difficulties.
         public var notes: [DifficultyType: Int]
+        /// BPMs for different difficulties.
         public var bpm: [DifficultyType: [BPM]]
+        /// Music videos data, if available.
         public var musicVideos: [String: MusicVideoMetadata]? // ["music_video_{Int}": ~]
         
         internal init(
@@ -533,6 +557,7 @@ extension DoriAPI.Song {
         }
     }
     
+    /// Represent detailed data of a song.
     public struct Song: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var bgmID: String

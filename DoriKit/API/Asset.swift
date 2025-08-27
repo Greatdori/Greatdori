@@ -16,9 +16,13 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about assets in Bandori.
     public final class Asset {
         private init() {}
         
+        /// Get asset information of locale.
+        /// - Parameter locale: Target locale.
+        /// - Returns: Asset information of requested locale, nil if failed to fetch.
         public static func info(in locale: Locale) async -> AssetList? {
             let request = await requestJSON("https://bestdori.com/api/explorer/\(locale.rawValue)/assets/_info.json")
             if case let .success(respJSON) = request {
@@ -41,6 +45,9 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get contents of a ``Child/files(_:)`` by path.
+        /// - Parameter path: Path descriptor.
+        /// - Returns: Contents, nil if failed to fetch.
         @inlinable
         public static func contentsOf(_ path: PathDescriptor) async -> [String]? {
             await _contentsOf(path._path, in: path.locale)
