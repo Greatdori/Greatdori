@@ -17,6 +17,7 @@
 import Foundation
 internal import DoriAssetShims
 
+/// Manage offline assets for DoriKit.
 public final class DoriOfflineAsset: Sendable {
     public static let shared = DoriOfflineAsset()
     
@@ -47,6 +48,9 @@ public final class DoriOfflineAsset: Sendable {
     /// before `onProgressUpdate` being called. Actually, Git is contacting the server
     /// before downloading. You can provide more detailed text to user based on this information.
     /// Mention `Git` to users is not a good idea, generally.
+    ///
+    /// This method returns `true` directly if requested asset for `type` and `locale`
+    /// already exists in local and won't call `onProgressUpdate`.
     @discardableResult
     public func downloadResource(
         of type: ResourceType,
@@ -82,6 +86,19 @@ public final class DoriOfflineAsset: Sendable {
             }
     }
     
+    /// Update offline resource with type and locale.
+    /// - Parameters:
+    ///   - type: Type of resource, see ``ResourceType`` for more details.
+    ///   - locale: Locale of resource.
+    ///   - onProgressUpdate: A closure to call when downloading progress updates.
+    ///
+    ///     This closure takes 3 arguments, which means downloading progress (0.0~1.0),
+    ///     received objects count, and total objects count, respectively.
+    /// - Returns: Whether downloading is success.
+    ///
+    /// - SeeAlso:
+    ///     See ``downloadResource(of:in:onProgressUpdate:)`` for more details
+    ///     about method's behavior.
     @discardableResult
     public func updateResource(
         of type: ResourceType,
@@ -117,6 +134,11 @@ public final class DoriOfflineAsset: Sendable {
         }
     }
     
+    /// Check if an update available for offline resource with type and locale.
+    /// - Parameters:
+    ///   - locale: Locale of resource.
+    ///   - type: Type of resource, see ``ResourceType`` for more details.
+    /// - Returns: `true` if an update is available.
     public func isUpdateAvailable(in locale: DoriAPI.Locale, of type: ResourceType) async throws -> Bool {
         try await withCheckedThrowingContinuation { continuation in
             DispatchQueue(label: "com.memz233.DoriKit.OfflineAsset.is-update-available", qos: .userInitiated).async {
@@ -163,6 +185,22 @@ public final class DoriOfflineAsset: Sendable {
         try data.write(to: URL(filePath: destination))
     }
     
+    /// Type of offline asset resources.
+    ///
+    /// We separated resources into different types to reduce disk size usage
+    /// and allow you to download resources that are needed.
+    ///
+    /// - `main`: The most important and useful resources for DoriKit,
+    ///     such as raw representation of data used in ``DoriAPI``.
+    /// - `basic`: Basic resources, such as banner image of an event.
+    /// - `movie`: Movie resources, such as MV of a song.
+    /// - `sound`: Sound and voice resources, such as voices in a story.
+    /// - `unsupported`: Resources that take large spaces and can't be used
+    ///     directly with DoriKit.
+    ///
+    /// - IMPORTANT: While using ``ResourceType`` with ``DoriAPI/Locale``
+    ///     to specify a resource namespace, the `locale` is ignored if `type` is `main`
+    ///     because the `main` resources are shared and not related to locale.
     public enum ResourceType: String, Sendable {
         case main
         case basic
