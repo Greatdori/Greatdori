@@ -245,6 +245,7 @@
 		E9CD3A4A2E58984400BF5EA9 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CD3A492E58984200BF5EA9 /* Functions.swift */; };
 		E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */; };
 		E9EE03812E4F5DB30088843B /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EE03802E4F5DB00088843B /* SearchView.swift */; };
+		E9EFEF1C2E5ED7E800991940 /* ListSectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EFEF1B2E5ED7DA00991940 /* ListSectionsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -842,6 +843,7 @@
 		E9CD3A492E58984200BF5EA9 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		E9EE03802E4F5DB00088843B /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		E9EFEF1B2E5ED7DA00991940 /* ListSectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSectionsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -1650,6 +1652,7 @@
 				E90769CF2E546D5B00C9871C /* ContentView.swift */,
 				E90769D02E546D5B00C9871C /* CornerstoneView.swift */,
 				E90769D22E546D5B00C9871C /* ImagesView.swift */,
+				E9EFEF1B2E5ED7DA00991940 /* ListSectionsView.swift */,
 			);
 			path = Basics;
 			sourceTree = "<group>";
@@ -2307,6 +2310,7 @@
 				E90769D92E546D5B00C9871C /* SettingsView.swift in Sources */,
 				E9EE03812E4F5DB30088843B /* SearchView.swift in Sources */,
 				E9CD3A4A2E58984400BF5EA9 /* Functions.swift in Sources */,
+				E9EFEF1C2E5ED7E800991940 /* ListSectionsView.swift in Sources */,
 				E9CD3A482E58975D00BF5EA9 /* Extensions.swift in Sources */,
 				8C6C0EFF2E42462A00D1FB0A /* OptionsData.swift in Sources */,
 				8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */,
