@@ -292,21 +292,19 @@ struct FilterView: View {
             .animation(.easeIn(duration: 0.2), value: displayingTipIndex)
             .onTapGesture(count: 2, perform: {
                 withAnimation(.easeInOut(duration: 0.05)) {
-                    //FIXME: [250824] Filter type issue
-//                    let iterableBase = filter[titleKey].base as! Set<any CaseIterable>
-//                    let underlyingType = type(of: iterableBase)
-//                    if let filterSet = filter[titleKey] as? Set<AnyHashable> {
-//                        if filterSet.count < underlyingType.allCases.count {
-//                            displayingTipIndex = 1
-//                            filter[titleKey] = Set(underlyingType.allCases as! [AnyHashable])
-//                        } else {
-//                            displayingTipIndex = 2
-//                            if var filterSet = filter[titleKey] as? Set<AnyHashable> {
-//                                filterSet.removeAll()
-//                                filter[titleKey] = filterSet
-//                            }
-//                        }
-//                    }
+                    let allCases = titleKey.selector.items.map { $0.item.value }
+                    if let filterSet = filter[titleKey] as? Set<AnyHashable> {
+                        if filterSet.count < allCases.count {
+                            displayingTipIndex = 1
+                            filter[titleKey] = Set(allCases)
+                        } else {
+                            displayingTipIndex = 2
+                            if var filterSet = filter[titleKey] as? Set<AnyHashable> {
+                                filterSet.removeAll()
+                                filter[titleKey] = filterSet
+                            }
+                        }
+                    }
                 }
             })
             .onChange(of: displayingTipIndex) { oldValue, newValue in
