@@ -35,6 +35,7 @@ struct EventDetailView: View {
                         Spacer()
                         VStack {
                             EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+                            ListGachaView()
                         }
                         .padding()
                         Spacer()
@@ -524,7 +525,6 @@ struct EventDetailOverviewView: View {
             }
         }
     }
-    
 }
 
 

@@ -52,17 +52,26 @@ extension DoriFrontend {
                 }
             }.filter { event in
                 for timelineStatus in filter.timelineStatus {
-                    let result = switch timelineStatus {
+                    switch timelineStatus {
                     case .ended:
-                        (event.endAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 4107477600)) < .now
+                        for singleLocale in DoriAPI.Locale.allCases {
+                            if (event.endAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
+                                return true
+                            }
+                        }
                     case .ongoing:
-                        (event.startAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 4107477600)) < .now
-                        && (event.endAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)) > .now
+                        for singleLocale in DoriAPI.Locale.allCases {
+                            if (event.startAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 4107477600)) < .now
+                                && (event.endAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                                return true
+                            }
+                        }
                     case .upcoming:
-                        (event.startAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)) > .now
-                    }
-                    if result {
-                        return true
+                        for singleLocale in DoriAPI.Locale.allCases {
+                            if (event.startAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                                return true
+                            }
+                        }
                     }
                 }
                 return false

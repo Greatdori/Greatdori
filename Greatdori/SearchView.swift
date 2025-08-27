@@ -18,7 +18,7 @@ import SwiftUI
 
 let flowLayoutDefaultVerticalSpacing: CGFloat = 3
 let flowLayoutDefaultHorizontalSpacing: CGFloat = 3
-let capsuleDefaultCornerRadius: CGFloat = isMACOS ? 5 : 10
+let capsuleDefaultCornerRadius: CGFloat = isMACOS ? 6 : 10
 
 struct FilterView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
@@ -62,31 +62,13 @@ struct FilterView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                    }, allowValueLeading: true)
+                    }, allowValueLeading: true, displayMode: .expandedOnly)
                 }
                 
                 //MARK: Character
                 if includingKeys.contains(.character) {
                     ListItemView(title: {
-                        HStack {
-                            Text("Filter.key.character")
-                                .bold()
-                                .onTapGesture(count: 2, perform: {
-                                    withAnimation(.easeInOut(duration: 0.05)) {
-                                        if filter.character.count < DoriFrontend.Filter.Character.allCases.count {
-                                            filter.character = Set(DoriFrontend.Filter.Character.allCases)
-                                        } else {
-                                            filter.character.removeAll()
-                                        }
-                                    }
-                                })
-                            Spacer()
-                            //FIXME: Keep the comment below
-//                            Text("Filter.key.character.bool-operator-hint.or")
-//                                .onTapGesture {
-////                                    filter.
-//                                }
-                        }
+                        FilterTitleView(filter: $filter, titleName: "Filter.key.character", titleKey: .character)
                     }, value: {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: filterItemHeight))]/*, spacing: 3*/) {
                             ForEach(DoriFrontend.Filter.Character.allCases, id: \.self) { item in
@@ -120,17 +102,7 @@ struct FilterView: View {
                 //MARK: Server
                 if includingKeys.contains(.server) {
                     ListItemView(title: {
-                        Text("Filter.key.server")
-                            .bold()
-                            .onTapGesture(count: 2, perform: {
-                                withAnimation(.easeInOut(duration: 0.05)) {
-                                    if filter.server.count < DoriFrontend.Filter.Server.allCases.count {
-                                        filter.server = Set(DoriFrontend.Filter.Server.allCases)
-                                    } else {
-                                        filter.server.removeAll()
-                                    }
-                                }
-                            })
+                        FilterTitleView(filter: $filter, titleName: "Filter.key.server", titleKey: .server)
                     }, value: {
                         FlowLayout(items: DoriFrontend.Filter.Server.allCases, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
                             Button(action: {
@@ -149,23 +121,13 @@ struct FilterView: View {
                             .buttonStyle(.plain)
                             
                         }
-                    }, allowValueLeading: true)
+                    }, allowValueLeading: true, displayMode: .expandedOnly)
                 }
                 
                 //MARK: TimelineStatus
                 if includingKeys.contains(.timelineStatus) {
                     ListItemView(title: {
-                        Text("Filter.key.timelineStatus")
-                            .bold()
-                            .onTapGesture(count: 2, perform: {
-                                withAnimation(.easeInOut(duration: 0.05)) {
-                                    if filter.timelineStatus.count < DoriFrontend.Filter.TimelineStatus.allCases.count {
-                                        filter.timelineStatus = Set(DoriFrontend.Filter.TimelineStatus.allCases)
-                                    } else {
-                                        filter.timelineStatus.removeAll()
-                                    }
-                                }
-                            })
+                        FilterTitleView(filter: $filter, titleName: "Filter.key.timelineStatus", titleKey: .timelineStatus)
                     }, value: {
                         FlowLayout(items: DoriFrontend.Filter.TimelineStatus.allCases, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
                             Button(action: {
@@ -183,13 +145,13 @@ struct FilterView: View {
                             })
                             .buttonStyle(.plain)
                         }
-                    }, allowValueLeading: true)
+                    }, allowValueLeading: true, displayMode: .expandedOnly)
                 }
                 
                 //MARK: EventType
                 if includingKeys.contains(.eventType) {
                     ListItemView(title: {
-                        Text("Filter.key.eventType")
+                        FilterTitleView(filter: $filter, titleName: "Filter.key.eventType", titleKey: .eventType)
                             .bold()
                             .onTapGesture(count: 2, perform: {
                                 withAnimation(.easeInOut(duration: 0.05)) {
@@ -217,7 +179,7 @@ struct FilterView: View {
                             })
                             .buttonStyle(.plain)
                         }
-                    }, allowValueLeading: true)
+                    }, allowValueLeading: true, displayMode: .expandedOnly)
                 }
             }, header: {
                 VStack(alignment: .leading) {
@@ -278,35 +240,38 @@ struct FilterView: View {
         let titleName: LocalizedStringResource
         let titleKey: DoriFrontend.Filter.Key
         var body: some View {
-            ZStack(alignment: .leading) {
-                Text(titleName)
-                    .opacity(displayingTipIndex == 0 ? 1 : 0)
-                    .bold()
-                Text("Filter.double-tap-tips.selected")
-                    .opacity(displayingTipIndex == 1 ? 1 : 0)
-                    .fontWeight(.light)
-                Text("Filter.double-tap-tips.unselected")
-                    .opacity(displayingTipIndex == 2 ? 1 : 0)
-                    .fontWeight(.light)
-            }
-            .animation(.easeIn(duration: 0.2), value: displayingTipIndex)
-            .onTapGesture(count: 2, perform: {
-                withAnimation(.easeInOut(duration: 0.05)) {
-                    let allCases = titleKey.selector.items.map { $0.item.value }
-                    if let filterSet = filter[titleKey] as? Set<AnyHashable> {
-                        if filterSet.count < allCases.count {
-                            displayingTipIndex = 1
-                            filter[titleKey] = Set(allCases)
-                        } else {
-                            displayingTipIndex = 2
-                            if var filterSet = filter[titleKey] as? Set<AnyHashable> {
-                                filterSet.removeAll()
-                                filter[titleKey] = filterSet
+            HStack {
+                ZStack(alignment: .leading) {
+                    Text(titleName)
+                        .opacity(displayingTipIndex == 0 ? 1 : 0)
+                        .bold()
+                    Text("Filter.double-tap-tips.selected")
+                        .opacity(displayingTipIndex == 1 ? 1 : 0)
+                        .fontWeight(.light)
+                    Text("Filter.double-tap-tips.unselected")
+                        .opacity(displayingTipIndex == 2 ? 1 : 0)
+                        .fontWeight(.light)
+                }
+                .animation(.easeIn(duration: 0.1), value: displayingTipIndex)
+                .onTapGesture(count: 2, perform: {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        let allCases = titleKey.selector.items.map { $0.item.value }
+                        if let filterSet = filter[titleKey] as? Set<AnyHashable> {
+                            if filterSet.count < allCases.count {
+                                displayingTipIndex = 1
+                                filter[titleKey] = Set(allCases)
+                            } else {
+                                displayingTipIndex = 2
+                                if var filterSet = filter[titleKey] as? Set<AnyHashable> {
+                                    filterSet.removeAll()
+                                    filter[titleKey] = filterSet
+                                }
                             }
                         }
                     }
-                }
-            })
+                })
+                Spacer()
+            }
             .onChange(of: displayingTipIndex) { oldValue, newValue in
                 timer?.invalidate()
                 if newValue != 0 {
