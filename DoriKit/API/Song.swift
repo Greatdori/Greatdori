@@ -768,3 +768,18 @@ extension DoriAPI.Song.PreviewSong {
         )
     }
 }
+extension DoriAPI.Song.Song {
+    @inlinable
+    public init?(id: Int) async {
+        if let song = await DoriAPI.Song.detail(of: id) {
+            self = song
+        } else {
+            return nil
+        }
+    }
+    
+    @inlinable
+    public init?(preview: DoriAPI.Song.PreviewSong) async {
+        await self.init(id: preview.id)
+    }
+}

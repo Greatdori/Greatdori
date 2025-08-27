@@ -18,6 +18,9 @@ import Foundation
 internal import DoriAssetShims
 
 /// Manage offline assets for DoriKit.
+///
+/// - SeeAlso:
+///     Use ``withOfflineAsset(_:_:)`` to let DoriKit use local assets for requests.
 public final class DoriOfflineAsset: Sendable {
     public static let shared = DoriOfflineAsset()
     
