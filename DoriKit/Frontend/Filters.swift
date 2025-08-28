@@ -40,6 +40,8 @@ extension DoriFrontend {
         public var eventType: Set<EventType> = .init(EventType.allCases)  { didSet { store() } }
         public var gachaType: Set<GachaType> = .init(GachaType.allCases)  { didSet { store() } }
         public var songType: Set<SongType> = .init(SongType.allCases)  { didSet { store() } }
+        public var loginCampaignType: Set<LoginCampaignType> = .init(LoginCampaignType.allCases) { didSet { store() } }
+        public var comicType: Set<ComicType> = .init(ComicType.allCases) { didSet { store() } }
         public var skill: Skill? = nil  { didSet { store() } }
         public var timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases)  { didSet { store() } }
         public var sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))  { didSet { store() } }
@@ -56,6 +58,8 @@ extension DoriFrontend {
             eventType: Set<EventType> = .init(EventType.allCases),
             gachaType: Set<GachaType> = .init(GachaType.allCases),
             songType: Set<SongType> = .init(SongType.allCases),
+            loginCampaignType: Set<LoginCampaignType> = .init(LoginCampaignType.allCases),
+            comicType: Set<ComicType> = .init(ComicType.allCases),
             skill: Skill? = nil,
             timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases),
             sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))
@@ -71,6 +75,8 @@ extension DoriFrontend {
             self.eventType = eventType
             self.gachaType = gachaType
             self.songType = songType
+            self.loginCampaignType = loginCampaignType
+            self.comicType = comicType
             self.skill = skill
             self.timelineStatus = timelineStatus
             self.sort = sort
@@ -107,6 +113,8 @@ extension DoriFrontend {
             || eventType.count != EventType.allCases.count
             || gachaType.count != GachaType.allCases.count
             || songType.count != SongType.allCases.count
+            || loginCampaignType.count != LoginCampaignType.allCases.count
+            || comicType.count != ComicType.allCases.count
             || skill != nil
             || timelineStatus.count != TimelineStatus.allCases.count
         }
@@ -129,6 +137,8 @@ extension DoriFrontend {
             \(eventType.sorted { $0.rawValue < $1.rawValue })\
             \(gachaType.sorted { $0.rawValue < $1.rawValue })\
             \(songType.sorted { $0.rawValue < $1.rawValue })\
+            \(loginCampaignType.sorted { $0.rawValue < $1.rawValue })\
+            \(comicType.sorted { $0.rawValue < $1.rawValue })\
             \(timelineStatus.sorted { $0.rawValue < $1.rawValue })
             """
             return String(SHA256.hash(data: desc.data(using: .utf8)!).map { $0.description }.joined().prefix(8))
@@ -147,6 +157,8 @@ extension DoriFrontend {
             eventType = .init(EventType.allCases)
             gachaType = .init(GachaType.allCases)
             songType = .init(SongType.allCases)
+            loginCampaignType = .init(LoginCampaignType.allCases)
+            comicType = .init(ComicType.allCases)
             skill = nil
             timelineStatus = .init(TimelineStatus.allCases)
         }
@@ -181,6 +193,7 @@ extension DoriFrontend.Filter {
     public typealias EventType = DoriAPI.Event.EventType
     public typealias GachaType = DoriAPI.Gacha.GachaType
     public typealias SongType = DoriAPI.Song.SongTag
+    public typealias ComicType = DoriAPI.Comic.Comic.ComicType
     public typealias Skill = DoriAPI.Skill.Skill
     
     public enum Band: Int, Sendable, CaseIterable, Hashable, Codable {
@@ -290,6 +303,18 @@ extension DoriFrontend.Filter {
             self == .released
         }
     }
+    public enum LoginCampaignType: String, Sendable, CaseIterable, Hashable, Codable {
+        case normal
+        case event
+        case birthday
+        case rookie
+        case comeback
+        
+        @inline(never)
+        public var localizedString: String {
+            NSLocalizedString("login" + self.rawValue, bundle: #bundle, comment: "")
+        }
+    }
     @frozen
     public enum TimelineStatus: Int, CaseIterable, Hashable, Codable {
         case ended
@@ -379,6 +404,8 @@ extension DoriFrontend.Filter {
         case eventType
         case gachaType
         case songType
+        case loginCampaignType
+        case comicType
         case skill
         case timelineStatus
         case sort
@@ -415,6 +442,8 @@ extension DoriFrontend.Filter.Key {
         case .eventType: String(localized: "FILTER_KEY_EVENT_TYPE", bundle: #bundle)
         case .gachaType: String(localized: "FILTER_KEY_GACHA_TYPE", bundle: #bundle)
         case .songType: String(localized: "FILTER_KEY_SONG_TYPE", bundle: #bundle)
+        case .loginCampaignType: String(localized: "FILTER_KEY_LOGIN_CAMPAIGN_TYPE", bundle: #bundle)
+        case .comicType: String(localized: "FILTER_KEY_COMIC_TYPE", bundle: #bundle)
         case .skill: String(localized: "FILTER_KEY_SKILL", bundle: #bundle)
         case .timelineStatus: String(localized: "FILTER_KEY_TIMELINE_STATUS", bundle: #bundle)
         case .sort: String(localized: "FILTER_KEY_SORT", bundle: #bundle)
@@ -454,6 +483,8 @@ extension DoriFrontend.Filter: MutableCollection {
             case .eventType: self.eventType
             case .gachaType: self.gachaType
             case .songType: self.songType
+            case .loginCampaignType: self.loginCampaignType
+            case .comicType: self.comicType
             case .skill: self.skill
             case .timelineStatus: self.timelineStatus
             case .sort: self.sort
@@ -508,6 +539,10 @@ extension DoriFrontend.Filter: MutableCollection {
             self.gachaType = value as! Set<GachaType>
         case .songType:
             self.songType = value as! Set<SongType>
+        case .loginCampaignType:
+            self.loginCampaignType = value as! Set<LoginCampaignType>
+        case .comicType:
+            self.comicType = value as! Set<ComicType>
         case .skill:
             self.skill = value as! Skill?
         case .timelineStatus:
@@ -622,6 +657,16 @@ extension DoriFrontend.Filter.GachaType: DoriFrontend.Filter._Selectable {
     }
 }
 extension DoriFrontend.Filter.SongType: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.localizedString
+    }
+}
+extension DoriFrontend.Filter.LoginCampaignType: DoriFrontend.Filter._Selectable {
+    public var selectorText: String {
+        self.localizedString
+    }
+}
+extension DoriFrontend.Filter.ComicType: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.localizedString
     }
@@ -742,6 +787,14 @@ extension DoriFrontend.Filter.Key {
             })
         case .songType:
             (.multiple, DoriFrontend.Filter.SongType.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .loginCampaignType:
+            (.multiple, DoriFrontend.Filter.LoginCampaignType.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .comicType:
+            (.multiple, DoriFrontend.Filter.ComicType.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
         case .skill:

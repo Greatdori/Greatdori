@@ -24,6 +24,8 @@ extension DoriFrontend {
             var filteredCampaigns = campaigns
             if filter.isFiltered {
                 filteredCampaigns = campaigns.filter { campaign in
+                    filter.loginCampaignType.contains { campaign.loginBonusType.rawValue == $0.rawValue }
+                }.filter { campaign in
                     filter.server.contains { locale in
                         campaign.publishedAt.availableInLocale(locale)
                     }

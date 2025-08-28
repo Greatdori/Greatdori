@@ -24,6 +24,8 @@ extension DoriFrontend {
             var filteredComics = comics
             if filter.isFiltered {
                 filteredComics = comics.filter { comic in
+                    filter.comicType.contains(comic.type ?? .singleFrame)
+                }.filter { comic in
                     filter.character.contains { comic.characterIDs.contains($0.rawValue) }
                 }.filter { comic in
                     filter.server.contains { locale in
@@ -46,7 +48,7 @@ extension DoriFrontend.Comic {
 
 extension DoriAPI.Comic.Comic {
     @frozen
-    public enum ComicType: String, Hashable {
+    public enum ComicType: String, CaseIterable, Hashable, Codable {
         case singleFrame
         case fourFrame
         

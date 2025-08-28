@@ -99,6 +99,13 @@ extension DoriAPI.Gacha.Gacha.PaymentMethod.Behavior {
     }
 }
 
+extension DoriAPI.LoginCampaign.CampaignType {
+    @inline(never)
+    public var localizedString: String {
+        NSLocalizedString("login" + self.rawValue, bundle: #bundle, comment: "")
+    }
+}
+
 extension DoriAPI.Post.Post.StoryMetadata.AgeRating {
     @inline(never)
     public var localizedString: String {
