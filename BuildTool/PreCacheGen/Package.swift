@@ -6,7 +6,9 @@ import PackageDescription
 let package = Package(
     name: "PreCacheGen",
     platforms: [.macOS(.v14)],
-    products: [.executable(name: "PreCacheGen", targets: ["PreCacheGen"])],
+    products: [
+        .executable(name: "PreCacheGen", targets: ["PreCacheGen"])
+    ],
     dependencies: [.package(path: "../../")],
     targets: [
         .executableTarget(
@@ -14,6 +16,6 @@ let package = Package(
             dependencies: [
                 .productItem(name: "DoriKit", package: "Greatdori", moduleAliases: nil, condition: nil)
             ]
-        ),
+        )
     ]
 )
