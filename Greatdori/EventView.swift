@@ -558,6 +558,9 @@ struct EventSearchView: View {
                                                     ForEach(eventGroup) { event in
                                                         NavigationLink(destination: {
                                                             EventDetailView(id: event.id)
+                                                                .onAppear {
+                                                                    showFilterSheet = false
+                                                                }
                                                             #if os(iOS)
                                                                 .wrapIf(true, in: { content in
                                                                     if #available(iOS 18.0, macOS 15.0, *) {
@@ -597,6 +600,9 @@ struct EventSearchView: View {
                                             ForEach(resultEvents, id: \.self) { event in
                                                 NavigationLink(destination: {
                                                     EventDetailView(id: event.id)
+                                                        .onAppear {
+                                                            showFilterSheet = false
+                                                        }
                                                 }, label: {
                                                     EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                     #if os(iOS)
@@ -628,7 +634,7 @@ struct EventSearchView: View {
                                         .frame(maxWidth: bannerWidth)
                                     }
                                     .padding(.horizontal)
-                                    .animation(.spring(duration: 0.3, bounce: 0.25, blendDuration: 0 ), value: showDetails)
+                                    .animation(.spring(duration: 0.3, bounce: 0.1, blendDuration: 0 ), value: showDetails)
 //                                    .animation(.easeInOut(duration: 0.2), value: showDetails)
                                     Spacer(minLength: 0)
                                 }
@@ -729,21 +735,18 @@ struct EventSearchView: View {
                     Button(action: {
                         showFilterSheet.toggle()
                     }, label: {
-//                    if filter.isFiltered {
-//                        Image(systemName: "line.3.horizontal.decrease")
-//                            .foregroundStyle(colorScheme == .light ? .white : .black)
-//                            .background {
-//                                Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(1.3)
-//                            }
-//                    } else {
-                        
-                        Image(systemName: "line.3.horizontal.decrease")
-//                    }
+                        if filter.isFiltered {
+                            Image(systemName: "line.3.horizontal.decrease")
+//                                .foregroundStyle(colorScheme == .light ? .white : .black)
+                                .foregroundStyle(.white)
+                                .background {
+                                    Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(1.3)
+                                }
+                        } else {
+                            Image(systemName: "line.3.horizontal.decrease")
+                        }
                     })
-//                .popover(isPresented: $showFilterSheet) {
-//
-//                        .frame(minWidth: 400, minHeight: 600)
-//                }
+                    .animation(.easeInOut(duration: 0.2), value: filter.isFiltered)
                 }
             }
             .onChange(of: filter) {
