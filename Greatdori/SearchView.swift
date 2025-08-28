@@ -32,6 +32,7 @@ struct FilterView: View {
         Form {
             Section(content: {
                 //MARK: Attribute
+                FilterItemView
                 if includingKeys.contains(.attribute) {
                     ListItemViewSimplified(title: {
                         FilterTitleView(filter: $filter, titleName: "Filter.key.attribute", titleKey: .attribute)
@@ -230,64 +231,137 @@ struct FilterView: View {
             }
         }
     }
-    struct FilterTitleView: View {
-        @Binding var filter: DoriFrontend.Filter
-        //        @Binding var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key?
-        //        @State var showSelectAllTips = false
-        //        @State var showDeselectAllTips = false
-        //        @State private var timer: Timer? = nil
-        let titleName: LocalizedStringResource
-        let titleKey: DoriFrontend.Filter.Key
-        var body: some View {
-            HStack {
-                ZStack(alignment: .leading) {
-                    Text(titleName)
-                        .bold()
-                }
-                Spacer()
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.1)) {
-                        let allCases = titleKey.selector.items.map { $0.item.value }
-                        if let filterSet = filter[titleKey] as? Set<AnyHashable> {
-                            if filterSet.count < allCases.count {
-                                filter[titleKey] = Set(allCases)
-                            } else {
-                                if var filterSet = filter[titleKey] as? Set<AnyHashable> {
-                                    filterSet.removeAll()
-                                    filter[titleKey] = filterSet
+//    struct FilterTitleView: View {
+//        @Binding var filter: DoriFrontend.Filter
+//        //        @Binding var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key?
+//        //        @State var showSelectAllTips = false
+//        //        @State var showDeselectAllTips = false
+//        //        @State private var timer: Timer? = nil
+//        let titleName: LocalizedStringResource
+//        let titleKey: DoriFrontend.Filter.Key
+//        var body: some View {
+//            
+//            //            .onChange(of: displayingTipIndex) { oldValue, newValue in
+//            //                timer?.invalidate()
+//            //                if newValue != 0 {
+//            //                    timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
+//            //                        displayingTipIndex = 0
+//            //                        timer = nil
+//            //                    }
+//            //                }
+//            //            }
+//        }
+//    }
+}
+
+
+struct FilterItemView: View {
+    @Binding var filter: DoriFrontend.Filter
+//    let titleName: LocalizedStringResource
+    let allKeys: Set<DoriFrontend.Filter.Key>
+    let key: DoriFrontend.Filter.Key
+    
+//    let imagePickerArray: [DoriFrontend.Filter.Key] = [.band, .attribute, .character]
+    var body: some View {
+        if allKeys.contains(key) {
+            VStack(alignment: .leading) {
+                //MARK: Title Part
+                HStack {
+                    VStack {
+                        Text(key.localizedString)
+                            .bold()
+                    }
+                    Spacer()
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.1)) {
+                            let allCases = key.selector.items.map { $0.item.value }
+                            if let filterSet = filter[key] as? Set<AnyHashable> {
+                                if filterSet.count < allCases.count {
+                                    filter[key] = Set(allCases)
+                                } else {
+                                    if var filterSet = filter[key] as? Set<AnyHashable> {
+                                        filterSet.removeAll()
+                                        filter[key] = filterSet
+                                    }
                                 }
                             }
                         }
-                    }
-                }, label: {
-                    Group {
-                        let allCases = titleKey.selector.items.map { $0.item.value }
-                        if let filterSet = filter[titleKey] as? Set<AnyHashable> {
-                            if filterSet.count < allCases.count {
-                                Text("Filter.select-all")
-                            } else {
-                                Text("Filter.deselect-all")
+                    }, label: {
+                        Group {
+                            let allCases = key.selector.items.map { $0.item.value }
+                            if let filterSet = filter[key] as? Set<AnyHashable> {
+                                if filterSet.count < allCases.count {
+                                    Text("Filter.select-all")
+                                } else {
+                                    Text("Filter.deselect-all")
+                                }
                             }
                         }
+                        .foregroundStyle(.secondary)
+                        .font(.subheadline)
+                    })
+                    .buttonStyle(.plain)
+                }
+                
+                //MARK: Picker Part
+                if key.selector.type == .multiple {
+                    // Multiple Selection
+                    if key.selector.items.first?.imageURL != nil {
+                        // Image Selection
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: filterItemHeight))]/*, spacing: 3*/) {
+                            ForEach(key.selector.items, id: \.self) { item in
+                                Button(action: {
+                                    withAnimation(.easeInOut(duration: 0.05)) {
+                                        if var filterSet = filter[key] as? Set<AnyHashable> {
+                                            if filterSet.contains(item.item.value) {
+                                                filterSet.remove(item.item.value)
+                                            } else {
+                                                filterSet.insert(item.item.value)
+                                            }
+                                            filter[key] = filterSet
+                                        }
+                                    }
+                                }, label: {
+                                    ZStack {
+                                        Circle()
+                                            .stroke(Color.accent, lineWidth: 2)
+                                            .frame(width: filterItemHeight, height: filterItemHeight)
+//                                            .opacity((((filter[key] as? Set<AnyHashable>)?.contains(item.item.value))) ? 1 : 0)
+                                        WebImage(url: item.selectorImageURL)
+                                            .antialiased(true)
+                                            .resizable()
+                                            .frame(width: filterItemHeight, height: filterItemHeight)
+                                            .scaleEffect(0.9)
+                                    }
+                                })
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    } else {
+                        FlowLayout(items: DoriFrontend.Filter.EventType.allCases, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
+                            Button(action: {
+                                withAnimation(.easeInOut(duration: 0.05)) {
+                                    if filter.eventType.contains(item) {
+                                        filter.eventType.remove(item)
+                                    } else {
+                                        filter.eventType.insert(item)
+                                    }
+                                }
+                            }, label: {
+                                FilterSelectionCapsuleView(isActive: filter.eventType.contains(item), content: {
+                                    Text(item.selectorText)
+                                })
+                            })
+                            .buttonStyle(.plain)
+                        }
                     }
-                    .foregroundStyle(.secondary)
-                    //                    .font(.headline)
-                    .font(.subheadline)
-                })
-                .buttonStyle(.plain)
+                }
             }
-            //            .onChange(of: displayingTipIndex) { oldValue, newValue in
-            //                timer?.invalidate()
-            //                if newValue != 0 {
-            //                    timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
-            //                        displayingTipIndex = 0
-            //                        timer = nil
-            //                    }
-            //                }
-            //            }
         }
     }
 }
+
+
 
 // You may ask why this View looks so weird and has so many warnings.
 // It becuase it's generated by ChatGPT and it suprisingly works.
@@ -350,3 +424,35 @@ where Data.Element: Hashable {
         //        .offset(x: -horizontalSpacing)wo x
     }
 }
+
+//MARK: FilterItemView
+//struct FilterItemView<Content1: View, Content2: View>: View {
+//    var allowTextSelection: Bool = true
+//    
+//    
+//    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, allowTextSelection: Bool = true) {
+//        self.title = title()
+//        self.value = value()
+//        self.allowTextSelection = allowTextSelection
+//    }
+//    var body: some View {
+//        Group {
+//            VStack(alignment: .leading) {
+//                HStack {
+//                    title
+//                    //                    Spacer()
+//                    //                        .fixedSize(horizontal: true, vertical: true)
+//                }
+//                HStack {
+//                    value
+//                        .wrapIf(allowTextSelection, in: { content in
+//                            content.textSelection(.enabled)
+//                        }, else: { content in
+//                            content.textSelection(.disabled)
+//                        })
+//                    Spacer()
+//                }
+//            }
+//        }
+//    }
+//}

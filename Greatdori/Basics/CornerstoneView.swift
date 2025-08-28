@@ -462,40 +462,6 @@ struct ListItemView<Content1: View, Content2: View>: View {
     }
 }
 
-//MARK: ListItemViewSimplified [TODO]
-struct ListItemViewSimplified<Content1: View, Content2: View>: View {
-    let title: Content1
-    let value: Content2
-    var allowTextSelection: Bool = true
-    
-    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, allowTextSelection: Bool = true) {
-        self.title = title()
-        self.value = value()
-        self.allowTextSelection = allowTextSelection
-    }
-    var body: some View {
-        Group {
-            VStack(alignment: .leading) {
-                HStack {
-                    title
-//                    Spacer()
-                    //                        .fixedSize(horizontal: true, vertical: true)
-                }
-                HStack {
-                    value
-                        .wrapIf(allowTextSelection, in: { content in
-                            content.textSelection(.enabled)
-                        }, else: { content in
-                            content.textSelection(.disabled)
-                        })
-                    Spacer()
-                }
-            }
-            //            }
-        }
-    }
-}
-
 
 //MARK: ListItemWithWrappingView
 struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, T>: View {

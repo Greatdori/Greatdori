@@ -756,7 +756,7 @@ struct EventSearchView: View {
             }
         }
         .inspector(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
+            FilterView(filter: $filter, includingKeys: [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType, .sort])
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .presentationBackgroundInteraction(.enabled)
