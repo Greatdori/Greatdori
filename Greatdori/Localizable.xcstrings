@@ -926,46 +926,6 @@
         }
       }
     },
-    "Filter.footer" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "device" : {
-              "mac" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Tap the title of filter item twice to select or deselect all."
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Click the title or filter item twice to select or deselect all."
-                }
-              }
-            }
-          }
-        },
-        "zh-Hans" : {
-          "variations" : {
-            "device" : {
-              "mac" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "点击两下列筛选项目的标题以全选或取消全选。"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "轻点两下筛选项目的标题以全选或取消全选。"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "Filter.match-all.all-selected" : {
       "localizations" : {
         "en" : {

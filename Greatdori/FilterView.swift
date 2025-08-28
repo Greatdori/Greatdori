@@ -44,10 +44,6 @@ struct FilterView: View {
                     }
                     Text("Filter")
                 }
-            }, footer: {
-                VStack(alignment: .leading) {
-                    Text("Filter.footer")
-                }
             })
             
             Section {
