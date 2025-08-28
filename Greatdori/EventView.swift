@@ -622,6 +622,7 @@ struct EventSearchView: View {
                             }
                             .navigationDestination(item: $presentingEventID) { id in
                                 EventDetailView(id: id)
+                                #if !os(macOS)
                                     .wrapIf(true, in: { content in
                                         if #available(iOS 18.0, macOS 15.0, *) {
                                             content
@@ -630,6 +631,7 @@ struct EventSearchView: View {
                                             content
                                         }
                                     })
+                                #endif
                             }
                         } else {
                             ContentUnavailableView("Event.search.no-results", systemImage: "magnifyingglass", description: Text("Event.search.no-results.description"))

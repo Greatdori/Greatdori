@@ -219,6 +219,10 @@ struct HomeNewsView: View {
 }
 
 struct HomeBirthdayView: View {
+    @Environment(\.scenePhase) var scenePhase
+    #if os(macOS)
+    @Environment(\.appearsActive) var appearsActive
+    #endif
     @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false
     @AppStorage("showBirthdayDate") var showBirthdayDate = showBirthdayDateDefaultValue
     @State var birthdays: [DoriFrontend.Character.BirthdayCharacter]?
@@ -304,12 +308,12 @@ struct HomeBirthdayView: View {
                                         homeNavigate(to: .characterDetail(birthdays[i].id))
                                     }, label: {
                                         HStack {
-#if os(iOS)
+                                            #if os(iOS)
                                             WebImage(url: birthdays[i].iconImageURL)
                                                 .resizable()
                                                 .clipShape(Circle())
                                                 .frame(width: 30, height: 30)
-#endif
+                                            #endif
                                             Text(birthdays[i].characterName.forPreferredLocale() ?? "")
                                         }
                                     })
@@ -317,12 +321,12 @@ struct HomeBirthdayView: View {
                                         homeNavigate(to: .characterDetail(birthdays[i + 1].id))
                                     }, label: {
                                         HStack {
-#if os(iOS)
+                                            #if os(iOS)
                                             WebImage(url: birthdays[i+1].iconImageURL)
                                                 .resizable()
                                                 .clipShape(Circle())
                                                 .frame(width: imageButtonSize, height: imageButtonSize)
-#endif
+                                            #endif
                                             Text(birthdays[i+1].characterName.forPreferredLocale() ?? "")
                                         }
                                     })
@@ -392,13 +396,21 @@ struct HomeBirthdayView: View {
 ////            birthdays =
 //        }
         .onAppear {
-            Task {
-                birthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone())
-                if getBirthdayTimeZone() != TimeZone.autoupdatingCurrent {
-                    systemBirthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone(from: .adaptive))
-                }
+            updateBirthday()
+        }
+        #if os(macOS)
+        .onChange(of: appearsActive) {
+            if appearsActive {
+                updateBirthday()
             }
         }
+        #else
+        .onChange(of: scenePhase) {
+            if case .active = scenePhase {
+                updateBirthday()
+            }
+        }
+        #endif
     }
     func todaysHerBirthday(_ birthday: Date, _ today: Date = Date.now) -> Bool {
         var calendar = Calendar(identifier: .gregorian)
@@ -426,6 +438,15 @@ struct HomeBirthdayView: View {
         let systemDay: Int = systemCalendar.component(.day, from: Date.now)
         
         return (birthdayMonth == systemMonth && birthdayDay == systemDay)
+    }
+    
+    func updateBirthday() {
+        Task {
+            birthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone())
+            if getBirthdayTimeZone() != TimeZone.autoupdatingCurrent {
+                systemBirthdays = await DoriFrontend.Character.recentBirthdayCharacters(timeZone: getBirthdayTimeZone(from: .adaptive))
+            }
+        }
     }
 }
 
