@@ -47,6 +47,7 @@ func getBirthdayTimeZone(from input: BirthdayTimeZone? = nil) -> TimeZone {
     }
 }
 
+
 //MARK: getPlaceholderColor
 func getPlaceholderColor() -> Color {
 #if os(iOS)
@@ -71,6 +72,15 @@ func getPlaceholderColor() -> Color {
     case .useInternet:
         return .disabled
     }
+}
+
+//MARK: getSecondaryBackgroundColor
+func getTertiaryLabelColor() -> Color {
+#if os(iOS)
+    return Color(UIColor.tertiaryLabel)
+#else
+    return Color(NSColor.tertiaryLabelColor)
+#endif
 }
 
 //MARK: highlightOccurrences

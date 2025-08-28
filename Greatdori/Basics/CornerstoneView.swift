@@ -27,6 +27,52 @@ let imageButtonSize: CGFloat = isMACOS ? 30 : 35
 let cardThumbnailSideLength: CGFloat = isMACOS ? 64 : 72
 let filterItemHeight: CGFloat = isMACOS ? 25 : 35
 
+//MARK: CompactToggle
+struct CompactToggle: View {
+    var isLit: Bool?
+    var action: (() -> Void)? = nil
+    var size: CGFloat = isMACOS ? 17 : 20
+    
+    var body: some View {
+        if let action {
+            Button(action: {
+                action()
+            }, label: {
+                CompactToggleLabel(isLit: isLit, size: size)
+            })
+        } else {
+            CompactToggleLabel(isLit: isLit, size: size)
+        }
+    }
+    //MARK: CompactToggle
+    struct CompactToggleLabel: View {
+        var isLit: Bool?
+        var size: CGFloat
+        var body: some View {
+            Group {
+                if isLit != false {
+                    Circle()
+                        .frame(width: size)
+                        .foregroundStyle(.accent)
+                        .inverseMask {
+                            Image(systemName: isLit == true ? "checkmark" : "minus")
+                                .font(.system(size: size*(isLit == true ? 0.5 : 0.6)))
+                                .bold()
+                        }
+                } else {
+                    Circle()
+                        .strokeBorder(Color.accent, lineWidth: isMACOS ? 1.5 : 2)
+                        .frame(width: size, height: size)
+                }
+            }
+                .animation(.easeInOut(duration: 0.05), value: isLit)
+                .contentShape(Circle())
+        }
+    }
+}
+
+
+
 //MARK: CustomGroupBox
 struct CustomGroupBox<Content: View>: View {
     let content: () -> Content

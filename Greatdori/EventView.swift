@@ -628,8 +628,8 @@ struct EventSearchView: View {
                                         .frame(maxWidth: bannerWidth)
                                     }
                                     .padding(.horizontal)
-                                    //.animation(.spring(duration: 0.3, bounce: 0.35, blendDuration: 0), value: showDetails)
-                                    .animation(.easeInOut(duration: 0.2), value: showDetails)
+                                    .animation(.spring(duration: 0.3, bounce: 0.25, blendDuration: 0 ), value: showDetails)
+//                                    .animation(.easeInOut(duration: 0.2), value: showDetails)
                                     Spacer(minLength: 0)
                                 }
                             }

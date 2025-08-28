@@ -39,6 +39,19 @@ extension Optional {
 
 //MARK: View
 public extension View {
+    //MARK: inverseMask
+    public func inverseMask<Mask: View>(
+        @ViewBuilder _ mask: () -> Mask,
+        alignment: Alignment = .center
+    ) -> some View {
+        self.mask {
+            Rectangle()
+                .overlay(alignment: alignment) {
+                    mask().blendMode(.destinationOut)
+                }
+        }
+    }
+    
     //MARK: onFrameChange
     /// Performs action when frame of attached view changes.
     ///
