@@ -30,22 +30,59 @@ struct PreCacheGen {
             exit(EXIT_FAILURE)
         }
         
-        print("Fetching bands...", to: &stderr)
-        let bands = await retryUntilNonNil(perform: DoriAPI.Band.all)
-        print("Fetching main bands...", to: &stderr)
-        let mainBands = await retryUntilNonNil(perform: DoriAPI.Band.main)
-        print("Fetching characters...", to: &stderr)
-        let characters = await retryUntilNonNil(perform: DoriAPI.Character.all)
-        print("Fetching birthday characters...", to: &stderr)
-        let birthdayCharacters = await retryUntilNonNil(perform: DoriAPI.Character.allBirthday)
-        print("Fetching categorized characters...", to: &stderr)
-        let categorizedCharacters = await retryUntilNonNil(perform: DoriFrontend.Character.categorizedCharacters)
+        var bands: [DoriAPI.Band.Band]!
+        LimitedTaskQueue.shared.addTask {
+            DispatchQueue.main.async {
+                print("Fetching bands...", to: &stderr)
+            }
+            bands = await retryUntilNonNil(perform: DoriAPI.Band.all)
+        }
+        var mainBands: [DoriAPI.Band.Band]!
+        LimitedTaskQueue.shared.addTask {
+            DispatchQueue.main.async {
+                print("Fetching main bands...", to: &stderr)
+            }
+            mainBands = await retryUntilNonNil(perform: DoriAPI.Band.main)
+        }
+        var characters: [DoriAPI.Character.PreviewCharacter]!
+        LimitedTaskQueue.shared.addTask {
+            DispatchQueue.main.async {
+                print("Fetching characters...", to: &stderr)
+            }
+            characters = await retryUntilNonNil(perform: DoriAPI.Character.all)
+        }
+        var birthdayCharacters: [DoriAPI.Character.BirthdayCharacter]!
+        LimitedTaskQueue.shared.addTask {
+            DispatchQueue.main.async {
+                print("Fetching birthday characters...", to: &stderr)
+            }
+            birthdayCharacters = await retryUntilNonNil(perform: DoriAPI.Character.allBirthday)
+        }
+        var categorizedCharacters: DoriFrontend.Character.CategorizedCharacters!
+        LimitedTaskQueue.shared.addTask {
+            DispatchQueue.main.async {
+                print("Fetching categorized characters...", to: &stderr)
+            }
+            categorizedCharacters = await retryUntilNonNil(perform: DoriFrontend.Character.categorizedCharacters)
+        }
+        
+        await LimitedTaskQueue.shared.waitUntilAllFinished()
+        
         var characterDetails = [Int: DoriAPI.Character.Character]()
         for (index, character) in characters.enumerated() {
-            print("Fetching character detail for \(character.characterName.jp ?? "\(character.id)")... [\(index + 1)/\(characters.count)]", to: &stderr)
-            let detail = await retryUntilNonNil { await DoriAPI.Character.detail(of: character.id) }
-            characterDetails.updateValue(detail, forKey: character.id)
+            LimitedTaskQueue.shared.addTask {
+                DispatchQueue.main.async {
+                    print("Fetching character detail for \(character.characterName.jp ?? "\(character.id)")... [\(index + 1)/\(characters.count)]", to: &stderr)
+                }
+                let detail = await retryUntilNonNil { await DoriAPI.Character.detail(of: character.id) }
+                DispatchQueue.main.async {
+                    characterDetails.updateValue(detail, forKey: character.id)
+                }
+            }
         }
+        
+        await LimitedTaskQueue.shared.waitUntilAllFinished()
+        try await Task.sleep(for: .seconds(0.5))
         
         let result = CacheResult(
             bands: bands,
