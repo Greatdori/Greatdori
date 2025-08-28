@@ -12,6 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if HAS_BINARY_RESOURCE_BUNDLES
+
 import Foundation
 internal import SwiftyJSON
 
@@ -107,3 +109,5 @@ extension RichContentGroup {
         }
     }
 }
+
+#endif // HAS_BINARY_RESOURCE_BUNDLES

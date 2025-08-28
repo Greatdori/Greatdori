@@ -12,6 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if HAS_BINARY_RESOURCE_BUNDLES
+
 import Foundation
 
 #if os(macOS)
@@ -131,3 +133,5 @@ extension NSImage {
     }
 }
 #endif
+
+#endif // HAS_BINARY_RESOURCE_BUNDLES

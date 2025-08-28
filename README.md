@@ -57,6 +57,8 @@ Then add the dependency to targets you're going to use it:
 ### Features that are not available with Swift Package Manager
 - **Not available**: [Pre-Cache](#pre-cache).
 - **Not available**: Rich content related APIs.
+    Features that contain rich contents are also not availble,
+    such as `DoriAPI.Post`.
 - **Not available**: Built-in binary resources. APIs that use these resources
     will get them online instead.
 - **Not available**: Offline asset APIs.

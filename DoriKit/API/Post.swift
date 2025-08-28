@@ -12,6 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if HAS_BINARY_RESOURCE_BUNDLES
+
 import Foundation
 internal import Alamofire
 internal import SwiftyJSON
@@ -220,3 +222,5 @@ extension DoriAPI.Post {
         case timeDescending = "TIME_DESC"
     }
 }
+
+#endif // HAS_BINARY_RESOURCE_BUNDLES

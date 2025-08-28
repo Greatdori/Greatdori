@@ -12,6 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if HAS_BINARY_RESOURCE_BUNDLES
+
 import SwiftUI
 import Foundation
 
@@ -96,3 +98,5 @@ internal enum ViewContainer {
 internal struct RichContentEnvironment {
     internal var emojiFrame: CGSize = .init(width: 20, height: 20)
 }
+
+#endif // HAS_BINARY_RESOURCE_BUNDLES

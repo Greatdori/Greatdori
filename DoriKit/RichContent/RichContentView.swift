@@ -12,6 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if HAS_BINARY_RESOURCE_BUNDLES
+
 import SwiftUI
 import Foundation
 
@@ -46,3 +48,5 @@ extension RichContentView {
         return mutating
     }
 }
+
+#endif // HAS_BINARY_RESOURCE_BUNDLES
