@@ -16,6 +16,21 @@ Apps in this project show you how to use the DoriKit,
 and provide native experience to Bestdori.
 
 ## Using DoriKit
+> [!IMPORTANT]
+> Greatdori! project is on a **early stage** of development,
+> DO NOT depend on it in any production environment.
+
+### Xcode Project (Recommended)
+1. Clone this project into your project folder:
+    ```sh
+    git clone https://github.com/WindowsMEMZ/Greatdori.git
+    ```
+    Use `git submodule` if you want to manage versions better.
+2. Drag `Greatdori.xcodeproj` and drop it into the project navigator in Xcode.
+3. Go to project editor for your project, select a target,
+    add DoriKit in *Frameworks, Libraries and Embedded Content* section.
+
+### Swift Package Manager
 Add the following dependency to your `Package.swift` file:
 
 ```swift
@@ -33,9 +48,18 @@ Then add the dependency to targets you're going to use it:
 ),
 ```
 
-> [!IMPORTANT]
-> Greatdori! project is on a **early stage** of development,
-> DO NOT depend on it in any production environment.
+> [!NOTE]
+> Some features may not available if you're using DoriKit
+> with Swift Package Manager. Always import it as a Xcode project
+> by the steps described in [Xcode Project](xcode-project-recommended) section when possible.
+> See the next section to learn more about limited features.
+
+### Features that are not available with Swift Package Manager
+- **Not available**: [Pre-Cache](#pre-cache).
+- **Not available**: Rich content related APIs.
+- **Not available**: Built-in binary resources. APIs that use these resources
+    will get them online instead.
+- **Not available**: Offline asset APIs.
 
 ## Building
 Xcode 26.0 (currently beta) and Swift 6.2+ is required for building this project.
@@ -54,6 +78,7 @@ There're several schemes in Greatdori! project:
 - **BuiltinCardCollections**: Built-in card collection for widgets;
 - **DoriKit**: The DoriKit framework;
 - **DoriAssetShims** Objective-C shims for offline asset features in DoriKit;
+- **DoriKitMacros**: Implementations of macros in DoriKit;
 - **DoriKitTests**: Tests for DoriKit;
 - **DoriEmoji**: Emoji collections for community UI of DoriKit;
 - **DoriResource**: Commonly used binary resources for DoriKit;
@@ -114,6 +139,7 @@ flowchart TD;
     DKT["DoriKitTests"] --> DK
     DK --> DE["DoriEmoji"]
     DK --> DR["DoriResource"]
+    DK --> DKM["DoriKitMacros"]
     DK -.-> PCG["PreCacheGen"]
     DK -.-> DAS["DoriAssetShims"]
     GI["Greatdori Installer"] --> GA
