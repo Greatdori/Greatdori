@@ -44,9 +44,9 @@ extension DoriFrontend {
                     costume.publishedAt.availableInLocale(locale)
                 }
             }.filter { costume in
-                for bool in filter.released {
+                for status in filter.released {
                     for locale in filter.server {
-                        if bool {
+                        if status.boolValue {
                             if (costume.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
                                 return true
                             }

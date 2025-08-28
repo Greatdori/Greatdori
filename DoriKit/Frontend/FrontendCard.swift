@@ -47,9 +47,9 @@ extension DoriFrontend {
                     card.prefix.availableInLocale(locale)
                 }
             }.filter { card in
-                for bool in filter.released {
+                for status in filter.released {
                     for locale in filter.server {
-                        if bool {
+                        if status.boolValue {
                             if (card.releasedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
                                 return true
                             }

@@ -29,9 +29,9 @@ extension DoriFrontend {
                 }.filter {
                     filter.band.map { $0.rawValue }.contains($0.bandID)
                 }.filter { song in
-                    for bool in filter.released {
+                    for status in filter.released {
                         for locale in filter.server {
-                            if bool {
+                            if status.boolValue {
                                 if (song.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
                                     return true
                                 }
@@ -44,9 +44,9 @@ extension DoriFrontend {
                     }
                     return false
                 }.filter { song in
-                    for bool in filter.released {
+                    for status in filter.released {
                         for locale in filter.server {
-                            if bool {
+                            if status.boolValue {
                                 if (song.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
                                     return true
                                 }

@@ -33,8 +33,9 @@ extension DoriFrontend {
         public var attribute: Set<Attribute> = .init(Attribute.allCases)  { didSet { store() } }
         public var rarity: Set<Rarity> = [1, 2, 3, 4, 5]  { didSet { store() } }
         public var character: Set<Character> = .init(Character.allCases)  { didSet { store() } }
+        public var characterRequiresMatchAll: Bool = false  { didSet { store() } }
         public var server: Set<Server> = .init(Server.allCases)  { didSet { store() } }
-        public var released: Set<Bool> = [false, true]  { didSet { store() } }
+        public var released: Set<ReleaseStatus> = [false, true]  { didSet { store() } }
         public var cardType: Set<CardType> = .init(CardType.allCases)  { didSet { store() } }
         public var eventType: Set<EventType> = .init(EventType.allCases)  { didSet { store() } }
         public var gachaType: Set<GachaType> = .init(GachaType.allCases)  { didSet { store() } }
@@ -48,8 +49,9 @@ extension DoriFrontend {
             attribute: Set<Attribute> = .init(Attribute.allCases),
             rarity: Set<Rarity> = [1, 2, 3, 4, 5],
             character: Set<Character> = .init(Character.allCases),
+            characterRequiresMatchAll: Bool = false,
             server: Set<Server> = .init(Server.allCases),
-            released: Set<Bool> = [false, true],
+            released: Set<ReleaseStatus> = [false, true],
             cardType: Set<CardType> = .init(CardType.allCases),
             eventType: Set<EventType> = .init(EventType.allCases),
             gachaType: Set<GachaType> = .init(GachaType.allCases),
@@ -62,6 +64,7 @@ extension DoriFrontend {
             self.attribute = attribute
             self.rarity = rarity
             self.character = character
+            self.characterRequiresMatchAll = characterRequiresMatchAll
             self.server = server
             self.released = released
             self.cardType = cardType
@@ -97,6 +100,7 @@ extension DoriFrontend {
             || attribute.count != Attribute.allCases.count
             || rarity.count != 5
             || character.count != Character.allCases.count
+            || characterRequiresMatchAll
             || server.count != Server.allCases.count
             || released.count != 2
             || cardType.count != CardType.allCases.count
@@ -118,8 +122,9 @@ extension DoriFrontend {
             \(attribute.sorted { $0.rawValue < $1.rawValue })\
             \(rarity.sorted { $0 < $1 })\
             \(character.sorted { $0.rawValue < $1.rawValue })\
+            \(characterRequiresMatchAll)\
             \(server.sorted { $0.rawValue < $1.rawValue })\
-            \(released.sorted { $1 })\
+            \(released.sorted { $1.boolValue })\
             \(cardType.sorted { $0.rawValue < $1.rawValue })\
             \(eventType.sorted { $0.rawValue < $1.rawValue })\
             \(gachaType.sorted { $0.rawValue < $1.rawValue })\
@@ -135,6 +140,7 @@ extension DoriFrontend {
             attribute = .init(Attribute.allCases)
             rarity = [1, 2, 3, 4, 5]
             character = .init(Character.allCases)
+            characterRequiresMatchAll = false
             server = .init(Server.allCases)
             released = [false, true]
             cardType = .init(CardType.allCases)
@@ -267,6 +273,24 @@ extension DoriFrontend.Filter {
         }
     }
     @frozen
+    public enum ReleaseStatus: ExpressibleByBooleanLiteral, Codable {
+        case released
+        case notReleased
+        
+        public init(booleanLiteral value: BooleanLiteralType) {
+            self = if value {
+                .released
+            } else {
+                .notReleased
+            }
+        }
+        
+        @inlinable
+        public var boolValue: Bool {
+            self == .released
+        }
+    }
+    @frozen
     public enum TimelineStatus: Int, CaseIterable, Hashable, Codable {
         case ended
         case ongoing
@@ -348,6 +372,7 @@ extension DoriFrontend.Filter {
         case attribute
         case rarity
         case character
+        case characterRequiresMatchAll
         case server
         case released
         case cardType
@@ -357,23 +382,6 @@ extension DoriFrontend.Filter {
         case skill
         case timelineStatus
         case sort
-    }
-}
-extension Set<DoriFrontend.Filter.Character> {
-    nonisolated(unsafe)
-    internal static var _matchAll = [Int: Bool]()
-    private static let _matchingLock = NSLock()
-    public var matchAll: Bool {
-        get {
-            Self._matchingLock.lock()
-            defer { Self._matchingLock.unlock() }
-            return unsafe Self._matchAll[self.hashValue] ?? false
-        }
-        set {
-            Self._matchingLock.lock()
-            defer { Self._matchingLock.unlock() }
-            unsafe Self._matchAll.updateValue(newValue, forKey: self.hashValue)
-        }
     }
 }
 
@@ -400,6 +408,7 @@ extension DoriFrontend.Filter.Key {
         case .attribute: String(localized: "FILTER_KEY_ATTRIBUTE", bundle: #bundle)
         case .rarity: String(localized: "FILTER_KEY_RARITY", bundle: #bundle)
         case .character: String(localized: "FILTER_KEY_CHARACTER", bundle: #bundle)
+        case .characterRequiresMatchAll: String(localized: "FILTER_KEY_CHARACTER_REQUIRES_MATCH_ALL", bundle: #bundle)
         case .server: String(localized: "FILTER_KEY_SERVER", bundle: #bundle)
         case .released: String(localized: "FILTER_KEY_RELEASED", bundle: #bundle)
         case .cardType: String(localized: "FILTER_KEY_CARD_TYPE", bundle: #bundle)
@@ -438,6 +447,7 @@ extension DoriFrontend.Filter: MutableCollection {
             case .attribute: self.attribute
             case .rarity: self.rarity
             case .character: self.character
+            case .characterRequiresMatchAll: self.characterRequiresMatchAll
             case .server: self.server
             case .released: self.released
             case .cardType: self.cardType
@@ -465,7 +475,13 @@ extension DoriFrontend.Filter: MutableCollection {
     public mutating func updateValue(_ value: AnyHashable, forKey key: Key) {
         let expectedValueType = type(of: self[key])
         let valueType = type(of: value)
-        if valueType != expectedValueType {
+        typeCheck: if valueType != expectedValueType {
+            if key == .released && valueType == Bool.self {
+                break typeCheck
+            }
+            if key == .sort && valueType == Sort.Keyword.self {
+                break typeCheck
+            }
             logger.critical("Failed to update value of filter, expected \(expectedValueType), but got \(valueType)")
             return
         }
@@ -478,10 +494,12 @@ extension DoriFrontend.Filter: MutableCollection {
             self.rarity = value as! Set<Rarity>
         case .character:
             self.character = value as! Set<Character>
+        case .characterRequiresMatchAll:
+            self.characterRequiresMatchAll = value as! Bool
         case .server:
             self.server = value as! Set<Server>
         case .released:
-            self.released = value as! Set<Bool>
+            self.released = (value as? Set<ReleaseStatus>) ?? Set([ReleaseStatus(booleanLiteral: value as! Bool)])
         case .cardType:
             self.cardType = value as! Set<CardType>
         case .eventType:
@@ -568,6 +586,12 @@ extension DoriFrontend.Filter.Character: DoriFrontend.Filter._Selectable {
         .init(string: "https://bestdori.com/res/icon/chara_icon_\(self.rawValue).png")!
     }
 }
+extension Bool: DoriFrontend.Filter._Selectable {
+    @inline(never)
+    public var selectorText: String {
+        self ? String(localized: "FILTER_MATCH_ALL", bundle: #bundle) : String(localized: "FILTER_MATCH_ANY", bundle: #bundle)
+    }
+}
 extension DoriFrontend.Filter.Server: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.rawValue.uppercased()
@@ -576,10 +600,10 @@ extension DoriFrontend.Filter.Server: DoriFrontend.Filter._Selectable {
         self.iconImageURL
     }
 }
-extension Bool: DoriFrontend.Filter._Selectable {
+extension DoriFrontend.Filter.ReleaseStatus: DoriFrontend.Filter._Selectable {
     @inline(never)
     public var selectorText: String {
-        self ? String(localized: "FILTER_RELEASED_YES", bundle: #bundle) : String(localized: "FILTER_RELEASED_NO", bundle: #bundle)
+        self.boolValue ? String(localized: "FILTER_RELEASED_YES", bundle: #bundle) : String(localized: "FILTER_RELEASED_NO", bundle: #bundle)
     }
 }
 extension DoriFrontend.Filter.CardType: DoriFrontend.Filter._Selectable {
@@ -692,12 +716,16 @@ extension DoriFrontend.Filter.Key {
             (.multiple, DoriFrontend.Filter.Character.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
+        case .characterRequiresMatchAll:
+            (.single, [false, true].map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
         case .server:
             (.multiple, DoriFrontend.Filter.Server.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
         case .released:
-            (.multiple, [true, false].map {
+            (.multiple, [DoriFrontend.Filter.ReleaseStatus.released, .notReleased].map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
         case .cardType:

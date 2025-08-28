@@ -43,7 +43,7 @@ extension DoriFrontend {
                     event.attributes.contains { $0.attribute == attribute }
                 }
             }.filter { event in
-                if filter.character.matchAll {
+                if filter.characterRequiresMatchAll {
                     filter.character.allSatisfy { character in
                         event.characters.contains { $0.characterID == character.rawValue }
                     }
