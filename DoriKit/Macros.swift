@@ -1,6 +1,6 @@
 //===---*- Greatdori! -*---------------------------------------------------===//
 //
-// DoriKitMacros.swift
+// Macros.swift
 //
 // This source file is part of the Greatdori! open source project
 //
@@ -12,12 +12,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntaxMacros
-import SwiftCompilerPlugin
+#if canImport(DoriAssetShims)
 
-@main
-struct DoriKitMacros: CompilerPlugin {
-    var providingMacros: [any Macro.Type] = [
-        OfflineAssetURLMacro.self
-    ]
-}
+@attached(body)
+public macro OfflineAssetURL(_: OfflineAssetBehavior = .enableIfAvailable) = #externalMacro(module: "DoriKitMacros", type: "OfflineAssetURLMacro")
+
+#endif

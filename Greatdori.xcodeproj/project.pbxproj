@@ -202,6 +202,8 @@
 		8CB4D4F62E44EAEA0085D57A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4F52E44EAEA0085D57A /* Localizable.xcstrings */; };
 		8CB4D4F82E44EAFE0085D57A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8CB4D4F72E44EAFE0085D57A /* Localizable.xcstrings */; };
 		8CB4D4FE2E45A4D30085D57A /* SongDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4D4FD2E45A4CF0085D57A /* SongDetailView.swift */; };
+		8CB76C842E600C1C00229F6F /* OfflineAssetMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB76C832E600C1700229F6F /* OfflineAssetMacro.swift */; };
+		8CB76C862E60171E00229F6F /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB76C852E60171D00229F6F /* Macros.swift */; };
 		8CBC1BCD2E31D3F9004023F7 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */; };
 		8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD02E32B5B6004023F7 /* Constructor.swift */; };
 		8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */; };
@@ -819,6 +821,8 @@
 		8CB4D4F92E4500C70085D57A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8CB4D4FB2E4501060085D57A /* Watch-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Watch-Info.plist"; sourceTree = "<group>"; };
 		8CB4D4FD2E45A4CF0085D57A /* SongDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailView.swift; sourceTree = "<group>"; };
+		8CB76C832E600C1700229F6F /* OfflineAssetMacro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineAssetMacro.swift; sourceTree = "<group>"; };
+		8CB76C852E60171D00229F6F /* Macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macros.swift; sourceTree = "<group>"; };
 		8CBC1BCC2E31D3F4004023F7 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		8CBC1BD02E32B5B6004023F7 /* Constructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constructor.swift; sourceTree = "<group>"; };
 		8CBC1BD22E32B892004023F7 /* InMemoryCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryCaches.swift; sourceTree = "<group>"; };
@@ -1171,6 +1175,7 @@
 				8C8E44752E5EE043005590F0 /* Documentation.docc */,
 				8C0C99B22E29766B00549B5C /* Localizable.xcstrings */,
 				8CBC1BD02E32B5B6004023F7 /* Constructor.swift */,
+				8CB76C852E60171D00229F6F /* Macros.swift */,
 				8CD13FC42E2FE2BF00673E15 /* Internal */,
 				8CD13FC02E2FE2BF00673E15 /* Networking */,
 				8C2CCD312E3DED130014189F /* RichContent */,
@@ -1515,6 +1520,7 @@
 			isa = PBXGroup;
 			children = (
 				8C8E45032E5F68EA005590F0 /* DoriKitMacros.swift */,
+				8CB76C832E600C1700229F6F /* OfflineAssetMacro.swift */,
 			);
 			path = DoriKitMacros;
 			sourceTree = "<group>";
@@ -2465,6 +2471,7 @@
 				8C94744A2E35AB84003A90B4 /* DoriCache.swift in Sources */,
 				8CBC1BD32E32B898004023F7 /* InMemoryCaches.swift in Sources */,
 				8CD13FC52E2FE2BF00673E15 /* Color+.swift in Sources */,
+				8CB76C862E60171E00229F6F /* Macros.swift in Sources */,
 				8CBC1BDF2E3408AB004023F7 /* FrontendCostume.swift in Sources */,
 				8C7855DA2E4A6994000EA06E /* MiracleTicket.swift in Sources */,
 				8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */,
@@ -2547,6 +2554,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C8E45042E5F68ED005590F0 /* DoriKitMacros.swift in Sources */,
+				8CB76C842E600C1C00229F6F /* OfflineAssetMacro.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3083,7 +3091,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -enable-experimental-feature ClosureBodyMacro -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
@@ -3147,7 +3155,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -enable-experimental-feature ClosureBodyMacro -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
@@ -3495,7 +3503,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -enable-experimental-feature ClosureBodyMacro -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;
@@ -3738,7 +3746,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
+				OTHER_SWIFT_FLAGS = "-enable-experimental-feature SymbolLinkageMarkers -enable-experimental-feature BuiltinModule -enable-experimental-feature ClosureBodyMacro -Xfrontend -enable-private-imports -load-plugin-executable $(BUILT_PRODUCTS_DIR)/DoriKitMacros\\#DoriKitMacros";
 				PRODUCT_BUNDLE_IDENTIFIER = com.memz233.DoriKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = auto;

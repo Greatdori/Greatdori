@@ -30,7 +30,8 @@ let package = Package(
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-experimental-feature", "SymbolLinkageMarkers"]),
-                .unsafeFlags(["-enable-experimental-feature", "BuiltinModule"])
+                .unsafeFlags(["-enable-experimental-feature", "BuiltinModule"]),
+                .unsafeFlags(["-enable-experimental-feature", "ClosureBodyMacro"])
             ],
             plugins: [
                 .plugin(name: "Gyb", package: "swift-gyb")
