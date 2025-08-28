@@ -51,7 +51,9 @@ struct ComicListView: View {
             }
         } content: {
             FilterView(filter: $filter, includingKeys: [
+                .comicType,
                 .character,
+                .characterRequiresMatchAll,
                 .server,
                 .sort
             ]) {

@@ -15,6 +15,7 @@
 import OSLog
 import SwiftUI
 import DoriKit
+import SDWebImageSwiftUI
 
 struct FilterView: View {
     @Binding private var filter: DoriFrontend.Filter
@@ -52,11 +53,17 @@ struct FilterView: View {
                 Section {
                     let sortedKeys = includingKeys.sorted()
                     ForEach(sortedKeys) { key in
-                        switch key.selector.type {
-                        case .single:
-                            SingleSelector(filter: $filter, key: key)
-                        case .multiple:
-                            MultipleSelector(filter: $filter, key: key)
+                        if key != .characterRequiresMatchAll {
+                            switch key.selector.type {
+                            case .single:
+                                SingleSelector(filter: $filter, key: key)
+                            case .multiple:
+                                MultipleSelector(
+                                    filter: $filter,
+                                    key: key,
+                                    containsCharacterMatchAll: includingKeys.contains(.characterRequiresMatchAll)
+                                )
+                            }
                         }
                     }
                 }
@@ -171,9 +178,29 @@ struct FilterView: View {
     private struct MultipleSelector: View {
         @Binding var filter: DoriFrontend.Filter
         var key: DoriFrontend.Filter.Key
+        var containsCharacterMatchAll: Bool = false
         var body: some View {
             NavigationLink {
                 List {
+                    if key == .character && containsCharacterMatchAll {
+                        Button(action: {
+                            filter.characterRequiresMatchAll.toggle()
+                        }, label: {
+                            HStack {
+                                Text(false.selectorText)
+                                    .foregroundColor(filter.characterRequiresMatchAll ? .secondary : .primary)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
+                                Spacer(minLength: 0)
+                                Text(verbatim: "|").fontDesign(.rounded)
+                                Spacer(minLength: 0)
+                                Text(true.selectorText)
+                                    .foregroundColor(filter.characterRequiresMatchAll ? .primary : .secondary)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
+                            }
+                        })
+                    }
                     ForEach(key.selector.items, id: \.self) { item in
                         Button(action: {
                             if var filterSet = filter[key] as? Set<AnyHashable> {
@@ -188,6 +215,11 @@ struct FilterView: View {
                             }
                         }, label: {
                             HStack {
+                                if key != .server, let imageURL = item.imageURL {
+                                    WebImage(url: imageURL)
+                                        .resizable()
+                                        .frame(width: 25, height: 25)
+                                }
                                 Text(item.text)
                                 Spacer()
                                 if let filterSet = filter[key] as? Set<AnyHashable> {

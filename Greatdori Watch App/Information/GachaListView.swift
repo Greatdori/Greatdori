@@ -55,6 +55,7 @@ struct GachaListView: View {
             FilterView(filter: $filter, includingKeys: [
                 .attribute,
                 .character,
+                .characterRequiresMatchAll,
                 .server,
                 .timelineStatus,
                 .gachaType,

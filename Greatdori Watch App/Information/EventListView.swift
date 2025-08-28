@@ -55,6 +55,7 @@ struct EventListView: View {
             FilterView(filter: $filter, includingKeys: [
                 .attribute,
                 .character,
+                .characterRequiresMatchAll,
                 .server,
                 .timelineStatus,
                 .eventType,
