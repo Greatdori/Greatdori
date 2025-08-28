@@ -773,7 +773,7 @@ struct EventSearchView: View {
         } .onUpdate {
             if let events = $0 {
                 self.events = events
-                searchedEvents = events
+                searchedEvents = events.search(for: searchedText)
             } else {
                 infoIsAvailable = false
             }
