@@ -1,5 +1,4 @@
 {
-  "originHash" : "7cfa001e72516b8545e590ae6dd379eaa57d219005fc922a7d1f496817f04ce3",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -20,6 +19,15 @@
       }
     },
     {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax",
+      "state" : {
+        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
+        "version" : "601.0.1"
+      }
+    },
+    {
       "identity" : "swiftyjson",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SwiftyJSON/SwiftyJSON",
@@ -29,5 +37,5 @@
       }
     }
   ],
-  "version" : 3
+  "version" : 2
 }
