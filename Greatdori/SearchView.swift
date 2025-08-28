@@ -24,7 +24,6 @@ struct FilterView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     @Binding var filter: DoriFrontend.Filter
     var includingKeys: [DoriFrontend.Filter.Key]
-    var charactersAllowSelectAll = false // Super weird.
     
     @State var lastSelectAllActionIsDeselect: Bool = false
     @State var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key? = nil
@@ -34,7 +33,7 @@ struct FilterView: View {
             Section(content: {
                 //MARK: Attribute
                 if includingKeys.contains(.attribute) {
-                    ListItemView(title: {
+                    ListItemViewSimplified(title: {
                         FilterTitleView(filter: $filter, titleName: "Filter.key.attribute", titleKey: .attribute)
                     }, value: {
                         HStack {
@@ -63,21 +62,13 @@ struct FilterView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                    }, allowValueLeading: true, displayMode: .expandedOnly)
+                    })
                 }
                 
                 //MARK: Character
                 if includingKeys.contains(.character) {
-                    ListItemView(title: {
-                        HStack {
-                            FilterTitleView(filter: $filter, titleName: "Filter.key.character", titleKey: .character)
-                            Spacer()
-                            if charactersAllowSelectAll {
-//                                Button(action: {
-//                                    
-//                                }, label: <#T##() -> View#>)
-                            }
-                        }
+                    ListItemViewSimplified(title: {
+                        FilterTitleView(filter: $filter, titleName: "Filter.key.character", titleKey: .character)
                     }, value: {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: filterItemHeight))]/*, spacing: 3*/) {
                             ForEach(DoriFrontend.Filter.Character.allCases, id: \.self) { item in
@@ -105,12 +96,12 @@ struct FilterView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                    }, allowValueLeading: true, displayMode: .expandedOnly)
+                    })
                 }
                 
                 //MARK: Server
                 if includingKeys.contains(.server) {
-                    ListItemView(title: {
+                    ListItemViewSimplified(title: {
                         FilterTitleView(filter: $filter, titleName: "Filter.key.server", titleKey: .server)
                     }, value: {
                         FlowLayout(items: DoriFrontend.Filter.Server.allCases, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
@@ -130,12 +121,12 @@ struct FilterView: View {
                             .buttonStyle(.plain)
                             
                         }
-                    }, allowValueLeading: true, displayMode: .expandedOnly)
+                    })
                 }
                 
                 //MARK: TimelineStatus
                 if includingKeys.contains(.timelineStatus) {
-                    ListItemView(title: {
+                    ListItemViewSimplified(title: {
                         FilterTitleView(filter: $filter, titleName: "Filter.key.timelineStatus", titleKey: .timelineStatus)
                     }, value: {
                         FlowLayout(items: DoriFrontend.Filter.TimelineStatus.allCases, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
@@ -154,12 +145,12 @@ struct FilterView: View {
                             })
                             .buttonStyle(.plain)
                         }
-                    }, allowValueLeading: true, displayMode: .expandedOnly)
+                    })
                 }
                 
                 //MARK: EventType
                 if includingKeys.contains(.eventType) {
-                    ListItemView(title: {
+                    ListItemViewSimplified(title: {
                         FilterTitleView(filter: $filter, titleName: "Filter.key.eventType", titleKey: .eventType)
                             .bold()
                             .onTapGesture(count: 2, perform: {
@@ -188,7 +179,7 @@ struct FilterView: View {
                             })
                             .buttonStyle(.plain)
                         }
-                    }, allowValueLeading: true, displayMode: .expandedOnly)
+                    })
                 }
             }, header: {
                 VStack(alignment: .leading) {
@@ -235,46 +226,32 @@ struct FilterView: View {
                     .onFrameChange(perform: { geometry in
                         textWidth = geometry.size.width
                     })
-                    //FIXME: Text padding to much in macOS
+                //FIXME: Text padding to much in macOS
             }
         }
     }
     struct FilterTitleView: View {
         @Binding var filter: DoriFrontend.Filter
-//        @Binding var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key?
-//        @State var showSelectAllTips = false
-//        @State var showDeselectAllTips = false
-        @State var displayingTipIndex = 0
-        @State private var timer: Timer? = nil
+        //        @Binding var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key?
+        //        @State var showSelectAllTips = false
+        //        @State var showDeselectAllTips = false
+        //        @State private var timer: Timer? = nil
         let titleName: LocalizedStringResource
         let titleKey: DoriFrontend.Filter.Key
         var body: some View {
             HStack {
                 ZStack(alignment: .leading) {
                     Text(titleName)
-                        .opacity(displayingTipIndex == 0 ? 1 : 0)
                         .bold()
-                    Text("Filter.double-tap-tips.selected")
-                        .opacity(displayingTipIndex == 1 ? 1 : 0)
-                        .fontWeight(.light)
-                    Text("Filter.double-tap-tips.unselected")
-                        .opacity(displayingTipIndex == 2 ? 1 : 0)
-                        .fontWeight(.light)
                 }
-                .animation(.easeIn(duration: 0.1), value: displayingTipIndex)
-                .onTapGesture(count: 2, perform: {
-                    
-                })
                 Spacer()
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.1)) {
                         let allCases = titleKey.selector.items.map { $0.item.value }
                         if let filterSet = filter[titleKey] as? Set<AnyHashable> {
                             if filterSet.count < allCases.count {
-                                displayingTipIndex = 1
                                 filter[titleKey] = Set(allCases)
                             } else {
-                                displayingTipIndex = 2
                                 if var filterSet = filter[titleKey] as? Set<AnyHashable> {
                                     filterSet.removeAll()
                                     filter[titleKey] = filterSet
@@ -294,18 +271,20 @@ struct FilterView: View {
                         }
                     }
                     .foregroundStyle(.secondary)
+                    //                    .font(.headline)
+                    .font(.subheadline)
                 })
                 .buttonStyle(.plain)
             }
-            .onChange(of: displayingTipIndex) { oldValue, newValue in
-                timer?.invalidate()
-                if newValue != 0 {
-                    timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
-                        displayingTipIndex = 0
-                        timer = nil
-                    }
-                }
-            }
+            //            .onChange(of: displayingTipIndex) { oldValue, newValue in
+            //                timer?.invalidate()
+            //                if newValue != 0 {
+            //                    timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { _ in
+            //                        displayingTipIndex = 0
+            //                        timer = nil
+            //                    }
+            //                }
+            //            }
         }
     }
 }
@@ -368,6 +347,6 @@ where Data.Element: Hashable {
                 return Color.clear
             }
         )
-//        .offset(x: -horizontalSpacing)wo x
+        //        .offset(x: -horizontalSpacing)wo x
     }
 }

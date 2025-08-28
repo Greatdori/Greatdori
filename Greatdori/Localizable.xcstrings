@@ -490,23 +490,6 @@
         }
       }
     },
-    "Event.gacha" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gacha"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "招募"
-          }
-        }
-      }
-    },
     "Event.id" : {
       "localizations" : {
         "en" : {
@@ -944,6 +927,7 @@
       }
     },
     "Filter.double-tap-tips.selected" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -960,6 +944,7 @@
       }
     },
     "Filter.double-tap-tips.unselected" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

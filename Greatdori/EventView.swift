@@ -674,7 +674,6 @@ struct EventSearchView: View {
                 await getEvents()
                 searchedEvents = events
             }
-            
             .toolbar {
                 #if os(iOS)
                 ToolbarItem {
@@ -757,7 +756,7 @@ struct EventSearchView: View {
             }
         }
         .inspector(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort], charactersAllowSelectAll: true)
+            FilterView(filter: $filter, includingKeys: [.attribute, .character, .server, .timelineStatus, .eventType, .sort])
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .presentationBackgroundInteraction(.enabled)

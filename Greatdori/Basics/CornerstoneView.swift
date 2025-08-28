@@ -466,71 +466,33 @@ struct ListItemView<Content1: View, Content2: View>: View {
 struct ListItemViewSimplified<Content1: View, Content2: View>: View {
     let title: Content1
     let value: Content2
-    var allowValueLeading: Bool = false
-    var displayMode: ListItemType = .automatic
     var allowTextSelection: Bool = true
-    @State private var totalAvailableWidth: CGFloat = 0
-    @State private var titleAvailableWidth: CGFloat = 0
-    @State private var valueAvailableWidth: CGFloat = 0
     
-    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, allowValueLeading: Bool = false, displayMode: ListItemType = .automatic, allowTextSelection: Bool = true) {
+    init(@ViewBuilder title: () -> Content1, @ViewBuilder value: () -> Content2, allowTextSelection: Bool = true) {
         self.title = title()
         self.value = value()
-        self.allowValueLeading = allowValueLeading
-        self.displayMode = displayMode
         self.allowTextSelection = allowTextSelection
     }
-    
     var body: some View {
         Group {
-            if (displayMode == .compactOnly || (totalAvailableWidth - titleAvailableWidth - valueAvailableWidth) > 5) && displayMode != .expandedOnly { // HStack (SHORT)
+            VStack(alignment: .leading) {
                 HStack {
                     title
-                        .fixedSize(horizontal: true, vertical: true)
-                        .onFrameChange(perform: { geometry in
-                            titleAvailableWidth = geometry.size.width
-                        })
-                    Spacer()
+//                    Spacer()
+                    //                        .fixedSize(horizontal: true, vertical: true)
+                }
+                HStack {
                     value
                         .wrapIf(allowTextSelection, in: { content in
                             content.textSelection(.enabled)
                         }, else: { content in
                             content.textSelection(.disabled)
                         })
-                        .onFrameChange(perform: { geometry in
-                            valueAvailableWidth = geometry.size.width
-                        })
-                }
-            } else { // VStack (LONG)
-                VStack(alignment: .leading) {
-                    title
-                        .fixedSize(horizontal: true, vertical: true)
-                        .onFrameChange(perform: { geometry in
-                            titleAvailableWidth = geometry.size.width
-                        })
-                    HStack {
-                        if !allowValueLeading {
-                            Spacer()
-                        }
-                        value
-                            .wrapIf(allowTextSelection, in: { content in
-                                content.textSelection(.enabled)
-                            }, else: { content in
-                                content.textSelection(.disabled)
-                            })
-                            .onFrameChange(perform: { geometry in
-                                valueAvailableWidth = geometry.size.width
-                            })
-                        if allowValueLeading {
-                            Spacer()
-                        }
-                    }
+                    Spacer()
                 }
             }
+            //            }
         }
-        .onFrameChange(perform: { geometry in
-            totalAvailableWidth = geometry.size.width
-        })
     }
 }
 
