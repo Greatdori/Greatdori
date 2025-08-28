@@ -32,11 +32,11 @@ struct FilterView: View {
         Form {
             Section(content: {
                 //MARK: Attribute
-                FilterItemView
+//                FilterItemView
                 if includingKeys.contains(.attribute) {
-                    ListItemViewSimplified(title: {
-                        FilterTitleView(filter: $filter, titleName: "Filter.key.attribute", titleKey: .attribute)
-                    }, value: {
+//                    ListItemViewSimplified(title: {
+//                        FilterTitleView(filter: $filter, titleName: "Filter.key.attribute", titleKey: .attribute)
+//                    }, value: {
                         HStack {
                             ForEach(DoriFrontend.Filter.Attribute.allCases, id: \.self) { item in
                                 Button(action: {
@@ -63,14 +63,14 @@ struct FilterView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                    })
+//                    })
                 }
                 
                 //MARK: Character
                 if includingKeys.contains(.character) {
-                    ListItemViewSimplified(title: {
-                        FilterTitleView(filter: $filter, titleName: "Filter.key.character", titleKey: .character)
-                    }, value: {
+//                    ListItemViewSimplified(title: {
+//                        FilterTitleView(filter: $filter, titleName: "Filter.key.character", titleKey: .character)
+//                    }, value: {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: filterItemHeight))]/*, spacing: 3*/) {
                             ForEach(DoriFrontend.Filter.Character.allCases, id: \.self) { item in
                                 Button(action: {
@@ -97,14 +97,14 @@ struct FilterView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                    })
+//                    })
                 }
                 
                 //MARK: Server
                 if includingKeys.contains(.server) {
-                    ListItemViewSimplified(title: {
-                        FilterTitleView(filter: $filter, titleName: "Filter.key.server", titleKey: .server)
-                    }, value: {
+//                    ListItemViewSimplified(title: {
+//                        FilterTitleView(filter: $filter, titleName: "Filter.key.server", titleKey: .server)
+//                    }, value: {
                         FlowLayout(items: DoriFrontend.Filter.Server.allCases, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
                             Button(action: {
                                 withAnimation(.easeInOut(duration: 0.05)) {
@@ -122,14 +122,14 @@ struct FilterView: View {
                             .buttonStyle(.plain)
                             
                         }
-                    })
+//                    })
                 }
                 
                 //MARK: TimelineStatus
                 if includingKeys.contains(.timelineStatus) {
-                    ListItemViewSimplified(title: {
-                        FilterTitleView(filter: $filter, titleName: "Filter.key.timelineStatus", titleKey: .timelineStatus)
-                    }, value: {
+//                    ListItemViewSimplified(title: {
+//                        FilterTitleView(filter: $filter, titleName: "Filter.key.timelineStatus", titleKey: .timelineStatus)
+//                    }, value: {
                         FlowLayout(items: DoriFrontend.Filter.TimelineStatus.allCases, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
                             Button(action: {
                                 withAnimation(.easeInOut(duration: 0.05)) {
@@ -146,24 +146,24 @@ struct FilterView: View {
                             })
                             .buttonStyle(.plain)
                         }
-                    })
+//                    })
                 }
                 
                 //MARK: EventType
                 if includingKeys.contains(.eventType) {
-                    ListItemViewSimplified(title: {
-                        FilterTitleView(filter: $filter, titleName: "Filter.key.eventType", titleKey: .eventType)
-                            .bold()
-                            .onTapGesture(count: 2, perform: {
-                                withAnimation(.easeInOut(duration: 0.05)) {
-                                    if filter.eventType.count < DoriFrontend.Filter.EventType.allCases.count {
-                                        filter.eventType = Set(DoriFrontend.Filter.EventType.allCases)
-                                    } else {
-                                        filter.eventType.removeAll()
-                                    }
-                                }
-                            })
-                    }, value: {
+//                    ListItemViewSimplified(title: {
+//                        FilterTitleView(filter: $filter, titleName: "Filter.key.eventType", titleKey: .eventType)
+//                            .bold()
+//                            .onTapGesture(count: 2, perform: {
+//                                withAnimation(.easeInOut(duration: 0.05)) {
+//                                    if filter.eventType.count < DoriFrontend.Filter.EventType.allCases.count {
+//                                        filter.eventType = Set(DoriFrontend.Filter.EventType.allCases)
+//                                    } else {
+//                                        filter.eventType.removeAll()
+//                                    }
+//                                }
+//                            })
+//                    }, value: {
                         FlowLayout(items: DoriFrontend.Filter.EventType.allCases, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
                             Button(action: {
                                 withAnimation(.easeInOut(duration: 0.05)) {
@@ -180,7 +180,7 @@ struct FilterView: View {
                             })
                             .buttonStyle(.plain)
                         }
-                    })
+//                    })
                 }
             }, header: {
                 VStack(alignment: .leading) {
@@ -326,8 +326,8 @@ struct FilterItemView: View {
                                         Circle()
                                             .stroke(Color.accent, lineWidth: 2)
                                             .frame(width: filterItemHeight, height: filterItemHeight)
-//                                            .opacity((((filter[key] as? Set<AnyHashable>)?.contains(item.item.value))) ? 1 : 0)
-                                        WebImage(url: item.selectorImageURL)
+                                            .opacity(((filter[key] as? Set<AnyHashable>)?.contains(item.item.value) == true) ? 1 : 0)
+                                        WebImage(url: item.imageURL)
                                             .antialiased(true)
                                             .resizable()
                                             .frame(width: filterItemHeight, height: filterItemHeight)
@@ -348,9 +348,9 @@ struct FilterItemView: View {
                                     }
                                 }
                             }, label: {
-                                FilterSelectionCapsuleView(isActive: filter.eventType.contains(item), content: {
-                                    Text(item.selectorText)
-                                })
+//                                FilterSelectionCapsuleView(isActive: filter.eventType.contains(item), content: {
+//                                    Text(item.selectorText)
+//                                })
                             })
                             .buttonStyle(.plain)
                         }
