@@ -540,6 +540,7 @@ struct EventSearchView: View {
     @State var searchedText = ""
     @State var showDetails = true
     @State var showFilterSheet = false
+    @State var presentingEventID: Int?
     @Namespace var eventLists
     var body: some View {
         NavigationStack {
@@ -556,21 +557,11 @@ struct EventSearchView: View {
                                             ForEach(events, id: \.self) { eventGroup in
                                                 HStack(spacing: showDetails ? nil : bannerSpacing) {
                                                     ForEach(eventGroup) { event in
-                                                        NavigationLink(destination: {
-                                                            EventDetailView(id: event.id)
-                                                                .onAppear {
-                                                                    showFilterSheet = false
-                                                                }
-                                                            #if os(iOS)
-                                                                .wrapIf(true, in: { content in
-                                                                    if #available(iOS 18.0, macOS 15.0, *) {
-                                                                        content
-                                                                            .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
-                                                                    } else {
-                                                                        content
-                                                                    }
-                                                                })
-                                                            #endif
+                                                        Button(action: {
+                                                            showFilterSheet = false
+                                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                                presentingEventID = event.id
+                                                            }
                                                         }, label: {
                                                             EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                         })
@@ -598,23 +589,13 @@ struct EventSearchView: View {
                                         .frame(width: bannerWidth * 2 + bannerSpacing)
                                         LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
                                             ForEach(resultEvents, id: \.self) { event in
-                                                NavigationLink(destination: {
-                                                    EventDetailView(id: event.id)
-                                                        .onAppear {
-                                                            showFilterSheet = false
-                                                        }
+                                                Button(action: {
+                                                    showFilterSheet = false
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                        presentingEventID = event.id
+                                                    }
                                                 }, label: {
                                                     EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
-                                                    #if os(iOS)
-                                                        .wrapIf(true, in: { content in
-                                                            if #available(iOS 18.0, macOS 15.0, *) {
-                                                                content
-                                                                    .navigationTransition(.zoom(sourceID: event.id, in: eventLists))
-                                                            } else {
-                                                                content
-                                                            }
-                                                        })
-                                                    #endif
                                                         .frame(maxWidth: bannerWidth)
                                                 })
                                                 .buttonStyle(.plain)
@@ -638,6 +619,17 @@ struct EventSearchView: View {
 //                                    .animation(.easeInOut(duration: 0.2), value: showDetails)
                                     Spacer(minLength: 0)
                                 }
+                            }
+                            .navigationDestination(item: $presentingEventID) { id in
+                                EventDetailView(id: id)
+                                    .wrapIf(true, in: { content in
+                                        if #available(iOS 18.0, macOS 15.0, *) {
+                                            content
+                                                .navigationTransition(.zoom(sourceID: id, in: eventLists))
+                                        } else {
+                                            content
+                                        }
+                                    })
                             }
                         } else {
                             ContentUnavailableView("Event.search.no-results", systemImage: "magnifyingglass", description: Text("Event.search.no-results.description"))
@@ -735,16 +727,18 @@ struct EventSearchView: View {
                     Button(action: {
                         showFilterSheet.toggle()
                     }, label: {
-                        if filter.isFiltered {
-                            Image(systemName: "line.3.horizontal.decrease")
-//                                .foregroundStyle(colorScheme == .light ? .white : .black)
-                                .foregroundStyle(.white)
-                                .background {
-                                    Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(1.3)
+                        (filter.isFiltered ? Color.white : .primary)
+                            .scaleEffect(2) // a larger value has no side effects because we're using `mask`
+                            .mask {
+                                // We use `mask` to prevent unexpected blink
+                                // while changing `foregroundStyle`.
+                                Image(systemName: "line.3.horizontal.decrease")
+                            }
+                            .background {
+                                if filter.isFiltered {
+                                    Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(1.65)
                                 }
-                        } else {
-                            Image(systemName: "line.3.horizontal.decrease")
-                        }
+                            }
                     })
                     .animation(.easeInOut(duration: 0.2), value: filter.isFiltered)
                 }
