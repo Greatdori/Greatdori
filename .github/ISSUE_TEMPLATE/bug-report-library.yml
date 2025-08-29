@@ -1,0 +1,64 @@
+# This source file is part of the Greatdori! open source project
+#
+# Copyright (c) 2025 the Greatdori! project authors
+# Licensed under Apache License v2.0
+#
+# See https://greatdori.memz.top/LICENSE.txt for license information
+# See https://greatdori.memz.top/CONTRIBUTORS.txt for the list of Greatdori! project authors
+
+name: 🪲 Report a bug in library
+description: >
+  Report a deviation from expected behavior, but not a crash, in library.
+labels: [bug, library, triage needed]
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: >
+        A concise description of what causes the problem, in human language.
+        Though not required, it may help us to more accurately
+        triage the issue as well as understand a non-trivial test case.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Reproduction
+      description: >
+        Provide a test case, preferably in a Markdown code block, and explain
+        how to build or run it to reproduce the problem.
+        Consider reducing the test case to the smallest amount of code
+        possible — a smaller test case is easier to reason about and more
+        appealing to contributors.
+      value: |
+        ```swift
+        
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: >
+        Describe the behavior you expected.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Environment
+      description: >
+        Provide the library version, tag, or revision.
+        The name and version of build tool and its holder platform.
+      placeholder: |
+        DoriKit 1.0.0
+        $ swiftc -version
+        $ xcodebuild -version
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        Any complementary information that could help others to work around the problem,
+        and us to better understand the problem and its impact.
+    validations:
+      required: false
