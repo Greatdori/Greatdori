@@ -51,7 +51,7 @@ Then add the dependency to targets you're going to use it:
 > [!NOTE]
 > Some features may not available if you're using DoriKit
 > with Swift Package Manager. Always import it as a Xcode project
-> by the steps described in [Xcode Project](xcode-project-recommended) section when possible.
+> by the steps described in [Xcode Project](#xcode-project-recommended) section when possible.
 > See the next section to learn more about limited features.
 
 ### Features that are not available with Swift Package Manager
