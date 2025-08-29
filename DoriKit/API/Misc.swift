@@ -16,6 +16,7 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Other uncatogorized requests in Bandori.
     public final class Misc {
         private init() {}
         

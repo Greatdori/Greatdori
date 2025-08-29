@@ -19,6 +19,12 @@ internal import Alamofire
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about community posts in Bandori.
+    ///
+    /// > Beta API:
+    /// >
+    /// > This API is currently in development and is unstable.
+    /// > It is subject to change, and software implemented with this API should be tested with its stable version.
     public final class Post {
         private init() {}
         

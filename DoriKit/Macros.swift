@@ -14,6 +14,13 @@
 
 #if canImport(DoriAssetShims)
 
+/// Make all resource URLs in a closure or function
+/// respects the given offline asset behavior.
+///
+/// > Beta API:
+/// >
+/// > This API is currently in development and is unstable.
+/// > It is subject to change, and software implemented with this API should be tested with its stable version.
 @attached(body)
 public macro OfflineAssetURL(_: OfflineAssetBehavior = .enableIfAvailable) = #externalMacro(module: "DoriKitMacros", type: "OfflineAssetURLMacro")
 
