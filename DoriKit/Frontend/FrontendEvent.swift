@@ -15,9 +15,13 @@
 import Foundation
 
 extension DoriFrontend {
+    /// Request and fetch data about events in Bandori.
     public final class Event {
         private init() {}
         
+        /// Returns latest events for each locales.
+        ///
+        /// - Returns: Latest events for each locales, nil if failed to fetch.
         public static func localizedLatestEvent() async -> DoriAPI.LocalizedData<PreviewEvent>? {
             guard let allEvents = await DoriAPI.Event.all() else { return nil }
             var result = DoriAPI.LocalizedData<PreviewEvent>(jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
@@ -35,6 +39,24 @@ extension DoriFrontend {
             return result
         }
         
+        /// List all events with a filter.
+        ///
+        /// - Parameter filter: A ``DoriFrontend/Filter`` for filtering result.
+        /// - Returns: All events, nil if failed to fetch.
+        ///
+        /// This function respects these keys in `filter`:
+        ///
+        /// - ``DoriFrontend/Filter/Key/attribute``
+        /// - ``DoriFrontend/Filter/Key/character``
+        /// - ``DoriFrontend/Filter/Key/characterRequiresMatchAll``
+        /// - ``DoriFrontend/Filter/Key/server``
+        /// - ``DoriFrontend/Filter/Key/timelineStatus``
+        /// - ``DoriFrontend/Filter/Key/eventType``
+        /// - ``DoriFrontend/Filter/Key/sort``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/releaseDate(in:)``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
+        ///
+        /// Other keys are ignored.
         public static func list(filter: Filter = .init()) async -> [PreviewEvent]? {
             guard let events = await DoriAPI.Event.all() else { return nil }
             
@@ -100,6 +122,11 @@ extension DoriFrontend {
             return sortedEvents
         }
         
+        /// Get a detailed event with related information.
+        ///
+        /// - Parameter id: The ID of event.
+        /// - Returns: The event of requested ID,
+        ///     with related bands, characters, cards, gacha, songs and degrees.
         public static func extendedInformation(of id: Int) async -> ExtendedEvent? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Event.detail(of: id)
@@ -138,6 +165,18 @@ extension DoriFrontend {
             )
         }
         
+        /// Returns event tracker data.
+        ///
+        /// - Parameters:
+        ///   - event: The event for tracking.
+        ///   - locale: Tracking locale of event.
+        ///   - tier: Tracking tier.
+        ///   - smooth: Whether smooth the results.
+        /// - Returns: The event tracker data for requested event, nil if failed to fetch or arguments are invalid.
+        ///
+        /// - Note:
+        ///     Valid tiers are *20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000 and 30000*.
+        ///     For data of tier 10, see ``DoriAPI/Event/topData(of:in:interval:)``.
         @inlinable
         public static func trackerData(
             for event: PreviewEvent,
@@ -157,6 +196,18 @@ extension DoriFrontend {
                 smooth: smooth
             )
         }
+        /// Returns event tracker data.
+        ///
+        /// - Parameters:
+        ///   - event: The event for tracking.
+        ///   - locale: Tracking locale of event.
+        ///   - tier: Tracking tier.
+        ///   - smooth: Whether smooth the results.
+        /// - Returns: The event tracker data for requested event, nil if failed to fetch or arguments are invalid.
+        ///
+        /// - Note:
+        ///     Valid tiers are *20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000 and 30000*.
+        ///     For data of tier 10, see ``DoriAPI/Event/topData(of:in:interval:)``.
         @inlinable
         public static func trackerData(
             for event: Event,

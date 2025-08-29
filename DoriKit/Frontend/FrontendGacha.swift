@@ -15,9 +15,29 @@
 import Foundation
 
 extension DoriFrontend {
+    /// Request and fetch data about gacha in Bandori.
     public final class Gacha {
         private init() {}
         
+        /// List all gacha with a filter.
+        ///
+        /// - Parameter filter: A ``DoriFrontend/Filter`` for filtering result.
+        /// - Returns: All gacha, nil if failed to fetch.
+        ///
+        /// This function respects these keys in `filter`:
+        ///
+        /// - ``DoriFrontend/Filter/Key/attribute``=
+        /// - ``DoriFrontend/Filter/Key/character``
+        /// - ``DoriFrontend/Filter/Key/characterRequiresMatchAll``
+        /// - ``DoriFrontend/Filter/Key/server``
+        /// - ``DoriFrontend/Filter/Key/released``
+        /// - ``DoriFrontend/Filter/Key/timelineStatus``
+        /// - ``DoriFrontend/Filter/Key/gachaType``
+        /// - ``DoriFrontend/Filter/Key/sort``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/releaseDate(in:)``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
+        ///
+        /// Other keys are ignored.
         public static func list(filter: Filter = .init()) async -> [PreviewGacha]? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Gacha.all()
@@ -96,6 +116,11 @@ extension DoriFrontend {
             }
         }
         
+        /// Get detailed gacha with related information.
+        ///
+        /// - Parameter id: The ID of gacha.
+        /// - Returns: The gacha of requested ID,
+        ///     with related events and cards information.
         public static func extendedInformation(of id: Int) async -> ExtendedGacha? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Gacha.detail(of: id)

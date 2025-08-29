@@ -16,9 +16,26 @@ import SwiftUI
 import Foundation
 
 extension DoriFrontend {
+    /// Request and fetch data about songs in Bandori.
     public final class Song {
         private init() {}
         
+        /// List all songs with a filter.
+        ///
+        /// - Parameter filter: A ``DoriFrontend/Filter`` for filtering result.
+        /// - Returns: All songs, nil if failed to fetch.
+        ///
+        /// This function respects these keys in `filter`:
+        ///
+        /// - ``DoriFrontend/Filter/Key/band``
+        /// - ``DoriFrontend/Filter/Key/server``
+        /// - ``DoriFrontend/Filter/Key/released``
+        /// - ``DoriFrontend/Filter/Key/songType``
+        /// - ``DoriFrontend/Filter/Key/sort``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/releaseDate(in:)``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
+        ///
+        /// Other keys are ignored.
         public static func list(filter: Filter = .init()) async -> [PreviewSong]? {
             guard let songs = await DoriAPI.Song.all() else { return nil }
             
@@ -247,6 +264,11 @@ extension DoriFrontend {
             )
         }
         
+        /// Get a detailed song with related information.
+        ///
+        /// - Parameter id: The ID of song.
+        /// - Returns: The song of requested ID,
+        ///     with related events, band and meta.
         public static func extendedInformation(of id: Int) async -> ExtendedSong? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Song.detail(of: id)

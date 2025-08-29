@@ -15,9 +15,14 @@
 import Foundation
 
 extension DoriFrontend {
+    /// Other uncatogorized requests in Bandori.
     public final class Misc {
         private init() {}
         
+        /// Returns a list of items with related information from given items.
+        ///
+        /// - Parameter items: A collection of items.
+        /// - Returns: Items with related information from given items, nil if failed to fetch.
         public static func extendedItems<T>(
             from items: T
         ) async -> [ExtendedItem]? where T: RandomAccessCollection, T.Element == Item {
@@ -109,6 +114,7 @@ extension DoriFrontend {
 }
 
 extension DoriAPI.Misc.StoryAsset {
+    /// Textual transcript of story.
     public var transcript: [Transcript] {
         var result = [Transcript]()
         for snippet in self.snippets {

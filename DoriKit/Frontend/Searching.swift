@@ -16,6 +16,7 @@ import SwiftUI
 import Foundation
 
 extension DoriFrontend {
+    /// A type that can be searched when in a collection.
     public protocol Searchable: Identifiable {
         var _searchStrings: [String] { get }
         var _searchLocalizedStrings: [DoriAPI.LocalizedData<String>] { get }
@@ -36,6 +37,12 @@ extension DoriFrontend.Searchable {
 }
 
 extension Array where Element: DoriFrontend.Searchable {
+    /// Returns a new array which is filtered by given keyword.
+    ///
+    /// - Parameter keyword: Keyword for searching
+    /// - Returns: A new array which is filtered by given keyword.
+    ///
+    /// This function performs a "smart search" like the one on Bestdori! website.
     public func search(for keyword: String) -> Self {
         let tokens = keyword.split(separator: " ").map { $0.lowercased() }
         guard !tokens.isEmpty else { return self }

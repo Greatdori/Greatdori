@@ -16,6 +16,7 @@ import Foundation
 internal import SwiftyJSON
 
 extension DoriAPI {
+    /// Request and fetch data about miracle tickets in Bandori.
     public final class MiracleTicket {
         private init() {}
         

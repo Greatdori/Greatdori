@@ -15,9 +15,22 @@
 import Foundation
 
 extension DoriFrontend {
+    /// Request and fetch data about character in Bandori.
     public final class Character {
         private init() {}
         
+        /// Returns characters that birthdays are around provided date.
+        ///
+        /// - Parameters:
+        ///   - date: A date for comparing with characters' birthdays.
+        ///   - timeZone: A time zone corresponding to the `date`.
+        /// - Returns: Characters that birthdays are around provided date, nil if failed to fetch.
+        ///
+        /// This function returns 1 character which the birthday is exactly
+        /// match the `date` provided (year, hour, minute and second are ignored)
+        /// if available; otherwise, it returns 2 characters, where the birthday
+        /// of the first one is after provided `date`, and the second one's
+        /// is before provided `date`.
         public static func recentBirthdayCharacters(aroundDate date: Date = .now, timeZone: TimeZone = .init(identifier: "Asia/Tokyo")!) async -> [BirthdayCharacter]? {
             func normalize(_ inputDate: Date, timezone: TimeZone = .init(identifier: "Asia/Tokyo")!) -> Date {
                 var calendar = Calendar(identifier: .gregorian)
@@ -77,6 +90,11 @@ extension DoriFrontend {
             return result
         }
         
+        /// List all characters that are categorized with their bands.
+        ///
+        /// - Returns: All characters that are categorized with their bands, nil if failed to fetch.
+        ///
+        /// Characters without a corresponding band can be accessed by `nil` as key of the result dictionary.
         public static func categorizedCharacters() async -> CategorizedCharacters? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Band.main()
@@ -104,6 +122,11 @@ extension DoriFrontend {
             return result
         }
         
+        /// Get a detailed character with related information.
+        ///
+        /// - Parameter id: The ID of character.
+        /// - Returns: The character of requested ID,
+        ///     with related band, cards, costumes, events and gacha.
         public static func extendedInformation(of id: Int) async -> ExtendedCharacter? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Character.detail(of: id)

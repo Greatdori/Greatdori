@@ -15,9 +15,32 @@
 import Foundation
 
 extension DoriFrontend {
+    /// Request and fetch data about card in Bandori.
     public final class Card {
         private init() {}
         
+        /// List all cards with related information.
+        ///
+        /// - Parameter filter: A ``DoriFrontend/Filter`` for filtering result.
+        /// - Returns: All cards with band information, nil if failed to fetch.
+        ///
+        /// This function respects these keys in `filter`:
+        ///
+        /// - ``DoriFrontend/Filter/Key/band``
+        /// - ``DoriFrontend/Filter/Key/attribute``
+        /// - ``DoriFrontend/Filter/Key/rarity``
+        /// - ``DoriFrontend/Filter/Key/character``
+        /// - ``DoriFrontend/Filter/Key/server``
+        /// - ``DoriFrontend/Filter/Key/released``
+        /// - ``DoriFrontend/Filter/Key/cardType``
+        /// - ``DoriFrontend/Filter/Key/skill``
+        /// - ``DoriFrontend/Filter/Key/sort``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/releaseDate(in:)``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/rarity``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/maximumStat``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
+        ///
+        /// Other keys are ignored.
         public static func list(filter: Filter = .init()) async -> [CardWithBand]? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Card.all()
@@ -100,6 +123,12 @@ extension DoriFrontend {
             }
         }
         
+        /// Get a detailed card with related information.
+        ///
+        /// - Parameter id: The ID of card.
+        /// - Returns: The card of requested ID,
+        ///     with related characters, bands, skill, costumes,
+        ///     events and gacha information.
         public static func extendedInformation(of id: Int) async -> ExtendedCard? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Card.detail(of: id)

@@ -15,9 +15,25 @@
 import Foundation
 
 extension DoriFrontend {
+    /// Request and fetch data about login campaigns in Bandori.
     public final class LoginCampaign {
         private init() {}
         
+        /// List all login campaigns with a filter.
+        ///
+        /// - Parameter filter: A ``DoriFrontend/Filter`` for filtering result.
+        /// - Returns: All login campaigns, nil if failed to fetch.
+        ///
+        /// This function respects these keys in `filter`:
+        ///
+        /// - ``DoriFrontend/Filter/Key/server``
+        /// - ``DoriFrontend/Filter/Key/timelineStatus``
+        /// - ``DoriFrontend/Filter/Key/loginCampaignType``
+        /// - ``DoriFrontend/Filter/Key/sort``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/releaseDate(in:)``
+        ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
+        ///
+        /// Other keys are ignored.
         public static func list(filter: Filter = .init()) async -> [PreviewCampaign]? {
             guard let campaigns = await DoriAPI.LoginCampaign.all() else { return nil }
             
