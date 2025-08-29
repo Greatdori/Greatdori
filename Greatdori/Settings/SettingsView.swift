@@ -269,10 +269,10 @@ struct SettingsOfflineDataView: View {
     var body: some View {
         Section(content: {
             Picker("Settings.offline-data.source-preference", selection: $dataSourcePreference, content: {
-                Text("Settings.offline-data.source-preference.selection.internet")
-                    .tag(DataSourcePreference.useInternet)
                 Text("Settings.offline-data.source-preference.selection.hybrid")
                     .tag(DataSourcePreference.hybrid)
+                Text("Settings.offline-data.source-preference.selection.internet")
+                    .tag(DataSourcePreference.useInternet)
                 Text("Settings.offline-data.source-preference.selection.local")
                     .tag(DataSourcePreference.useLocal)
             })
