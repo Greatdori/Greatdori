@@ -9,6 +9,7 @@
 name: 🪲 Report a bug
 description: >
   Report a deviation from expected behavior, but not a crash, in app.
+labels: [bug, app, triage needed]
 body:
   - type: textarea
     attributes:
