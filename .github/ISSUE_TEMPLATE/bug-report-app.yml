@@ -6,7 +6,7 @@
 # See https://greatdori.memz.top/LICENSE.txt for license information
 # See https://greatdori.memz.top/CONTRIBUTORS.txt for the list of Greatdori! project authors
 
-name: 🪲 Report a bug
+name: 🪲 Report a bug in app
 description: >
   Report a deviation from expected behavior, but not a crash, in app.
 labels: [bug, app, triage needed]
