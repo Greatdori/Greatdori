@@ -559,9 +559,9 @@ struct EventSearchView: View {
                                                     ForEach(eventGroup) { event in
                                                         Button(action: {
                                                             showFilterSheet = false
-                                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                                                 presentingEventID = event.id
-                                                            }
+//                                                            }
                                                         }, label: {
                                                             EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                         })
@@ -569,14 +569,12 @@ struct EventSearchView: View {
                                                         .wrapIf(true, in: { content in
                                                             if #available(iOS 18.0, macOS 15.0, *) {
                                                                 content
-                                                                    .matchedTransitionSource(
-                                                                        id: event.id,
-                                                                        in: eventLists
-                                                                    )
+                                                                    .matchedTransitionSource(id: event.id, in: eventLists)
                                                             } else {
                                                                 content
                                                             }
                                                         })
+                                                        .matchedGeometryEffect(id: event.id, in: eventLists)
                                                         if eventGroup.count == 1 && events[0].count != 1 {
                                                             Rectangle()
                                                                 .frame(maxWidth: 420, maxHeight: 140)
@@ -591,9 +589,9 @@ struct EventSearchView: View {
                                             ForEach(resultEvents, id: \.self) { event in
                                                 Button(action: {
                                                     showFilterSheet = false
-                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                                         presentingEventID = event.id
-                                                    }
+//                                                    }
                                                 }, label: {
                                                     EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                         .frame(maxWidth: bannerWidth)
@@ -602,14 +600,12 @@ struct EventSearchView: View {
                                                 .wrapIf(true, in: { content in
                                                     if #available(iOS 18.0, macOS 15.0, *) {
                                                         content
-                                                            .matchedTransitionSource(
-                                                                id: event.id,
-                                                                in: eventLists
-                                                            )
+                                                            .matchedTransitionSource(id: event.id, in: eventLists)
                                                     } else {
                                                         content
                                                     }
                                                 })
+                                                .matchedGeometryEffect(id: event.id, in: eventLists)
                                             }
                                         }
                                         .frame(maxWidth: bannerWidth)
@@ -661,7 +657,6 @@ struct EventSearchView: View {
                 }
             }
             .searchable(text: $searchedText, prompt: "Event.search.placeholder")
-            .withSystemBackground()
             .navigationTitle("Event")
             .wrapIf(searchedEvents != nil, in: { content in
                 if #available(iOS 26.0, *) {
@@ -753,6 +748,7 @@ struct EventSearchView: View {
             .onDisappear {
                 showFilterSheet = false
             }
+            .withSystemBackground()
         }
         .inspector(isPresented: $showFilterSheet) {
             FilterView(filter: $filter, includingKeys: [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType, .sort])
