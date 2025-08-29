@@ -25,10 +25,26 @@ extension DoriFrontend {
         public static func localizedLatestEvent() async -> DoriAPI.LocalizedData<PreviewEvent>? {
             guard let allEvents = await DoriAPI.Event.all() else { return nil }
             var result = DoriAPI.LocalizedData<PreviewEvent>(jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
+            // Find from latest to earliest.
             let reversedEvents = allEvents.filter { $0.id <= 5000 }.reversed()
             for locale in DoriAPI.Locale.allCases {
                 let availableEvents = reversedEvents.filter { $0.startAt.availableInLocale(locale) }
-                result._set(availableEvents.min(by: { abs($0.startAt.forLocale(locale)!.timeIntervalSinceNow) < abs($1.startAt.forLocale(locale)!.timeIntervalSinceNow) }), forLocale: locale)
+                if let ongoingEvent = availableEvents.first(where: {
+                    $0.startAt.forLocale(locale)! <= .now
+                    && $0.endAt.forLocale(locale)!.timeIntervalSinceNow > 0
+                }) {
+                    // Use ongoing locale firstly
+                    result._set(ongoingEvent, forLocale: locale)
+                } else {
+                    // Otherwise find the event where `startAt` is closest to now
+                    result._set(
+                        availableEvents.min(by: {
+                            abs($0.startAt.forLocale(locale)!.timeIntervalSinceNow)
+                            < abs($1.startAt.forLocale(locale)!.timeIntervalSinceNow)
+                        }),
+                        forLocale: locale
+                    )
+                }
                 if let event = result.forLocale(locale), let endDate = event.endAt.forLocale(locale), endDate < .now {
                     // latest event has ended, but next event is null
                     if let nextEvent = allEvents.first(where: { $0.id == event.id + 1 }) {
