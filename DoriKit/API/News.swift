@@ -18,9 +18,7 @@ internal import SwiftyJSON
 
 extension DoriAPI {
     /// Request and fetch data about news in Bandori.
-    public final class News {
-        private init() {}
-        
+    public enum News {
         /// Get all news about Bestdori.
         ///
         /// The results have guaranteed sorting by ID.

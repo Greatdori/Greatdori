@@ -25,9 +25,7 @@ extension DoriAPI {
     /// >
     /// > This API is currently in development and is unstable.
     /// > It is subject to change, and software implemented with this API should be tested with its stable version.
-    public final class Post {
-        private init() {}
-        
+    public enum Post {
         public static func _list(_ request: ListRequest) async -> PagedPosts? {
             let result = await requestJSON("https://bestdori.com/api/post/list", method: .post, parameters: request, encoder: JSONParameterEncoder.default)
             if case let .success(respJSON) = result {
