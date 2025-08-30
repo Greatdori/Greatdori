@@ -438,12 +438,14 @@ extension DoriAPI.News {
         }
     }
 }
+#if HAS_BINARY_RESOURCE_BUNDLES
 extension Array<DoriAPI.News.Item.Content> {
     @inlinable
     public var forRichRendering: RichContentGroup {
         .init(self)
     }
 }
+#endif
 
 extension DoriAPI.News.PreviewItem {
     public init(_ full: DoriAPI.News.Item) {
