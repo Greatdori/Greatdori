@@ -5,9 +5,6 @@
 
 # Greatdori!
 
-> [!NOTE]
-> Greatdori! project is still working in progress.
-
 Greatdori includes DoriKit library, iOS app and watchOS app.
 DoriKit allows you to fetch data from Bestdori API in Swifty way:
 you can get raw data from the API,
@@ -16,10 +13,6 @@ Apps in this project show you how to use the DoriKit,
 and provide native experience to Bestdori.
 
 ## Using DoriKit
-> [!IMPORTANT]
-> Greatdori! project is on a **early stage** of development,
-> DO NOT depend on it in any production environment.
-
 ### Xcode Project (Recommended)
 1. Clone this project into your project folder:
     ```sh
@@ -29,6 +22,9 @@ and provide native experience to Bestdori.
 2. Drag `Greatdori.xcodeproj` and drop it into the project navigator in Xcode.
 3. Go to project editor for your project, select a target,
     add DoriKit in *Frameworks, Libraries and Embedded Content* section.
+    
+> [!TIP]
+> The ABI of DoriKit is stable when using with the Xcode Project
 
 ### Swift Package Manager
 Add the following dependency to your `Package.swift` file:
