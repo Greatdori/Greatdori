@@ -12,6 +12,19 @@
 //
 //===----------------------------------------------------------------------===//
 
+// MARK: - Internal Macros
+
+@attached(memberAttribute)
+internal macro CopyOnWrite() = #externalMacro(module: "DoriKitMacros", type: "CopyOnWriteMacro")
+@attached(peer, names: arbitrary)
+internal macro _CopyOnWriteVarPeerImpl() = #externalMacro(module: "DoriKitMacros", type: "_CopyOnWriteVarPeerImplMacro")
+@attached(accessor)
+internal macro _CopyOnWriteVarAccessorImpl() = #externalMacro(module: "DoriKitMacros", type: "_CopyOnWriteVarAccessorImplMacro")
+@attached(body)
+internal macro _CopyOnWriteInitializerImpl(_: String) = #externalMacro(module: "DoriKitMacros", type: "_CopyOnWriteInitializerImplMacro")
+
+// MARK: - Public Macros
+
 #if canImport(DoriAssetShims)
 
 /// Make all resource URLs in a closure or function
