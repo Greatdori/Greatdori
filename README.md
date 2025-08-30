@@ -3,6 +3,7 @@
   <img src="Artwork/IconWithText.png" alt="DoriKit logo" height="70">
 </picture>
 <br />
+<br />
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="Artwork/DoriKitIconWithText~dark.png">
   <img src="Artwork/DoriKitIconWithText.png" alt="DoriKit logo" height="70">
