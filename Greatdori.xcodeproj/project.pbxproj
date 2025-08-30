@@ -615,6 +615,14 @@
 		8C499F982E51774F0073FCB6 /* NewsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDetailView.swift; sourceTree = "<group>"; };
 		8C4C89402E620C5F007F1E9F /* CopyOnWrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyOnWrite.swift; sourceTree = "<group>"; };
 		8C4C89422E620EC3007F1E9F /* CopyOnWriteMacro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyOnWriteMacro.swift; sourceTree = "<group>"; };
+		8C59DBD42E62E3C60021317E /* macos.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = macos.json; sourceTree = "<group>"; };
+		8C59DBD72E62E4D70021317E /* ios.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ios.json; sourceTree = "<group>"; };
+		8C59DBD82E62E5650021317E /* watchos.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = watchos.json; sourceTree = "<group>"; };
+		8C59DBD92E62E59E0021317E /* ios.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ios.json; sourceTree = "<group>"; };
+		8C59DBDA2E62E5C20021317E /* watchos.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = watchos.json; sourceTree = "<group>"; };
+		8C59DBDD2E62E9900021317E /* stability-source.swift.expected */ = {isa = PBXFileReference; lastKnownFileType = text; path = "stability-source.swift.expected"; sourceTree = "<group>"; };
+		8C59DBDE2E62E9AD0021317E /* stability-source.swift.expected */ = {isa = PBXFileReference; lastKnownFileType = text; path = "stability-source.swift.expected"; sourceTree = "<group>"; };
+		8C59DBE12E62ED1B0021317E /* macos.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = macos.json; sourceTree = "<group>"; };
 		8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongMetaView.swift; sourceTree = "<group>"; };
 		8C5AD1B72E47317D00E61653 /* .mailmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = .mailmap; sourceTree = "<group>"; };
 		8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStoriesView.swift; sourceTree = "<group>"; };
@@ -1239,6 +1247,53 @@
 			path = GreatLyrics;
 			sourceTree = "<group>";
 		};
+		8C59DBCE2E62E0420021317E /* ABI */ = {
+			isa = PBXGroup;
+			children = (
+				8C59DBD02E62E2EE0021317E /* Debug */,
+				8C59DBD22E62E3200021317E /* Release */,
+			);
+			path = ABI;
+			sourceTree = "<group>";
+		};
+		8C59DBCF2E62E1780021317E /* Baselines */ = {
+			isa = PBXGroup;
+			children = (
+				8C59DBE12E62ED1B0021317E /* macos.json */,
+				8C59DBD92E62E59E0021317E /* ios.json */,
+				8C59DBDA2E62E5C20021317E /* watchos.json */,
+			);
+			path = Baselines;
+			sourceTree = "<group>";
+		};
+		8C59DBD02E62E2EE0021317E /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				8C59DBCF2E62E1780021317E /* Baselines */,
+				8C59DBDD2E62E9900021317E /* stability-source.swift.expected */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		8C59DBD22E62E3200021317E /* Release */ = {
+			isa = PBXGroup;
+			children = (
+				8C59DBD62E62E4240021317E /* Baselines */,
+				8C59DBDE2E62E9AD0021317E /* stability-source.swift.expected */,
+			);
+			path = Release;
+			sourceTree = "<group>";
+		};
+		8C59DBD62E62E4240021317E /* Baselines */ = {
+			isa = PBXGroup;
+			children = (
+				8C59DBD42E62E3C60021317E /* macos.json */,
+				8C59DBD72E62E4D70021317E /* ios.json */,
+				8C59DBD82E62E5650021317E /* watchos.json */,
+			);
+			path = Baselines;
+			sourceTree = "<group>";
+		};
 		8C6C0EEC2E42301000D1FB0A /* Greatdori Widgets */ = {
 			isa = PBXGroup;
 			children = (
@@ -1552,6 +1607,7 @@
 		8C94745D2E35DE6C003A90B4 /* DoriKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				8C59DBCE2E62E0420021317E /* ABI */,
 				8C9474602E35F52C003A90B4 /* DoriKitTests.xctestplan */,
 				8C9474622E360CEB003A90B4 /* Utils.swift */,
 				8C94745C2E35DE6C003A90B4 /* APITests.swift */,
@@ -1809,6 +1865,7 @@
 				8C0C998C2E296A8C00549B5C /* Headers */,
 				8C0C998D2E296A8C00549B5C /* Sources */,
 				8C0C998E2E296A8C00549B5C /* Frameworks */,
+				8C59DBDC2E62E5F10021317E /* Check ABI Stability */,
 				8C0C998F2E296A8C00549B5C /* Resources */,
 				8C7288DF2E3B5CC7002AF70F /* Generate Pre-Cache */,
 			);
@@ -2273,6 +2330,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/libexec/PlistBuddy -c \"Delete :CFBundleExecutable\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Info.plist\"\nexit 0\n";
+		};
+		8C59DBDC2E62E5F10021317E /* Check ABI Stability */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Check ABI Stability";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "ABI_FILE=$(find \"$CODESIGNING_FOLDER_PATH/Modules/DoriKit.swiftmodule/\" -type f -name '*.abi.json' | sort | tail -n 1)\nif [[ \"$CONFIGURATION\" == \"Deb\"* ]]; then\n    ABI_TYPE=\"Debug\"\nelif [[ \"$CONFIGURATION\" == \"Rel\"* ]]; then\n    ABI_TYPE=\"Release\"\nelse\n    echo \"error: unsupported build configuration\"\n    exit 1\nfi\n\nrm -f \"$TARGET_TEMP_DIR/dorikit-abi-changes.txt\"\nrm -f \"$TARGET_TEMP_DIR/stability-source.swift.expected\"\nrm -f \"$TARGET_TEMP_DIR/stability-source.swift.expected.sorted\"\nrm -f \"$TARGET_TEMP_DIR/dorikit-abi-changes.txt.tmp\"\n\nxcrun swift-api-digester -diagnose-sdk -module DoriKit -o \"$TARGET_TEMP_DIR/dorikit-abi-changes.txt\" -abi -avoid-location -v -input-paths \"$SRCROOT/DoriKitTests/ABI/$ABI_TYPE/Baselines/$SWIFT_PLATFORM_TARGET_PREFIX.json\" -input-paths \"$ABI_FILE\" -sdk \"$SDKROOT\"\nclang -E -P -x c \"$SRCROOT/DoriKitTests/ABI/$ABI_TYPE/stability-source.swift.expected\" -o - > \"$TARGET_TEMP_DIR/stability-source.swift.expected\"\nclang -E -P -x c \"$SRCROOT/DoriKitTests/ABI/$ABI_TYPE/stability-source.swift.expected\" -o - | sed '/^\\s*$/d' | sort > \"$TARGET_TEMP_DIR/stability-source.swift.expected.sorted\"\nclang -E -P -x c \"$TARGET_TEMP_DIR/dorikit-abi-changes.txt\" -o - | sed -E -e '/^\\s*$/d' -e 's/ in _[0-9A-F]{32}/ in #UNSTABLE ID#/g' | sed \"/a new API without '@available'\\$/d\" | sort > \"$TARGET_TEMP_DIR/dorikit-abi-changes.txt.tmp\"\nif ! diff -u \"$TARGET_TEMP_DIR/stability-source.swift.expected.sorted\" \"$TARGET_TEMP_DIR/dorikit-abi-changes.txt.tmp\"; then\n    echo \"error: DoriKit ABI stability test failed, check the log for details\"\n    echo \"note: See comments in DoriKitTests/ABI/$ABI_TYPE/stability-source.swift.expected to learn more\"\n    exit 1\nfi\n";
 		};
 		8C7288DF2E3B5CC7002AF70F /* Generate Pre-Cache */ = {
 			isa = PBXShellScriptBuildPhase;
