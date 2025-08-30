@@ -1,6 +1,11 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="Artwork/IconWithText~dark.png">
-  <img src="Artwork/IconWithText.png" alt="Greatdori! logo" height="70">
+  <img src="Artwork/IconWithText.png" alt="DoriKit logo" height="70">
+</picture>
+<br />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="Artwork/DoriKitIconWithText~dark.png">
+  <img src="Artwork/DoriKitIconWithText.png" alt="DoriKit logo" height="70">
 </picture>
 
 # Greatdori!
@@ -24,7 +29,8 @@ and provide native experience to Bestdori.
     add DoriKit in *Frameworks, Libraries and Embedded Content* section.
     
 > [!TIP]
-> The ABI of DoriKit is stable when using with the Xcode Project
+> The ABI of DoriKit is stable between release versions
+> when using with the Xcode Project
 
 ### Swift Package Manager
 Add the following dependency to your `Package.swift` file:
