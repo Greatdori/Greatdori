@@ -108,6 +108,7 @@ struct EventDetailView: View {
                             }
                         }
                     }
+                    InfoTextView(verbatim: "ID", text: String(id))
                 }
                 .listRowBackground(Color.clear)
                 if !information.gacha.isEmpty {
