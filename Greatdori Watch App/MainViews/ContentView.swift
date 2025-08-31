@@ -12,47 +12,101 @@
 //
 //===----------------------------------------------------------------------===//
 
+import DoriKit
 import SwiftUI
 
 struct ContentView: View {
     @State var navigation: NavigationPage? = .home
+    
+    @AppStorage("startUpSucceeded") var startUpSucceeded = true
+    @State var mainAppShouldBeDisplayed = false
+    @State var crashViewShouldBeDisplayed = false
+    @State var lastStartUpWasSuccessful = true
+    @State var showCrashAlert = false
     var body: some View {
-        NavigationSplitView {
-            NavigationListView(navigation: $navigation)
-        } detail: {
-            NavigationStack {
-                switch navigation {
-                case .home:
-                    HomeView()
-                case .post:
-                    CommunityPostsView()
-                case .story:
-                    CommunityStoriesView()
-                case .character:
-                    CharacterListView()
-                case .card:
-                    CardListView()
-                case .costume:
-                    CostumeListView()
-                case .event:
-                    EventListView()
-                case .gacha:
-                    GachaListView()
-                case .song:
-                    SongListView()
-                case .songMeta:
-                    SongMetaView()
-                case .miracleTicket:
-                    MiracleTicketView()
-                case .comic:
-                    ComicListView()
-                case .eventTracker:
-                    EventTrackerView()
-                case .storyViewer:
-                    StoryViewerView()
-                case nil:
-                    EmptyView()
+        if mainAppShouldBeDisplayed {
+            NavigationSplitView {
+                NavigationListView(navigation: $navigation)
+            } detail: {
+                NavigationStack {
+                    switch navigation {
+                    case .home:
+                        HomeView()
+                    case .post:
+                        CommunityPostsView()
+                    case .story:
+                        CommunityStoriesView()
+                    case .character:
+                        CharacterListView()
+                    case .card:
+                        CardListView()
+                    case .costume:
+                        CostumeListView()
+                    case .event:
+                        EventListView()
+                    case .gacha:
+                        GachaListView()
+                    case .song:
+                        SongListView()
+                    case .songMeta:
+                        SongMetaView()
+                    case .miracleTicket:
+                        MiracleTicketView()
+                    case .comic:
+                        ComicListView()
+                    case .eventTracker:
+                        EventTrackerView()
+                    case .storyViewer:
+                        StoryViewerView()
+                    case nil:
+                        EmptyView()
+                    }
                 }
+            }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    startUpSucceeded = true
+                }
+            }
+        } else {
+            if crashViewShouldBeDisplayed {
+                // Crash View pretended to be the same as loading view below.
+                ProgressView()
+                    .onAppear {
+                        NSLog("CRASH VIEW HAD BEEN ENTERED")
+#if DEBUG
+                        showCrashAlert = true
+#else
+                        DoriCache.invalidateAll()
+                        mainAppShouldBeDisplayed = true
+#endif
+                    }
+                    .alert("Debug.crash-detected.title", isPresented: $showCrashAlert, actions: {
+                        Button(action: {
+                            DoriCache.invalidateAll()
+                            mainAppShouldBeDisplayed = true
+                        }, label: {
+                            Text("Debug.crash-detected.invalidate-cache-enter")
+                        })
+                        Button(role: .destructive, action: {
+                            mainAppShouldBeDisplayed = true
+                        }, label: {
+                            Text("Debug.crash-detected.direct-enter")
+                        })
+                    }, message: {
+                        Text("Debug.crash-detected.message")
+                    })
+            } else {
+                ProgressView()
+                    .onAppear {
+                        lastStartUpWasSuccessful = startUpSucceeded
+                        startUpSucceeded = false
+                        if lastStartUpWasSuccessful {
+                            mainAppShouldBeDisplayed = true
+                        } else {
+                            crashViewShouldBeDisplayed = true
+                        }
+                    }
             }
         }
     }

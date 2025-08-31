@@ -172,20 +172,18 @@ struct ContentView: View {
                     }
                     .alert("Debug.crash-detected.title", isPresented: $showCrashAlert, actions: {
                         Button(action: {
+                            DoriCache.invalidateAll()
                             mainAppShouldBeDisplayed = true
                         }, label: {
                             Text("Debug.crash-detected.invalidate-cache-enter")
                         })
                         Button(role: .destructive, action: {
-                            DoriCache.invalidateAll()
                             mainAppShouldBeDisplayed = true
                         }, label: {
                             Text("Debug.crash-detected.direct-enter")
                         })
                     }, message: {
-                        VStack {
-                            Text("Debug.crash-detected.message")
-                        }
+                        Text("Debug.crash-detected.message")
                     })
             } else {
                 ProgressView()
