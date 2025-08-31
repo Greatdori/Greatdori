@@ -140,7 +140,7 @@ extension DoriAPI.Gacha.PreviewGacha {
                 }
             case .upcoming:
                 for singleLocale in DoriAPI.Locale.allCases {
-                    if (self.closedAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                    if (self.publishedAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
                         if self.id == 1652 {
                             print("#1652 upcoming \(singleLocale)")
                         }
