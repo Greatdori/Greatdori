@@ -50,6 +50,9 @@ extension DoriFrontend {
                     }
                 }
             }
+            for locale in DoriAPI.Locale.allCases where !result.availableInLocale(locale) {
+                return nil
+            }
             return result
         }
         
