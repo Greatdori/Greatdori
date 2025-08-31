@@ -206,6 +206,70 @@
         }
       }
     },
+    "Debug.crash-detected.direct-enter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do Nothing & Continue"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不进行操作并继续"
+          }
+        }
+      }
+    },
+    "Debug.crash-detected.invalidate-cache-enter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalidate Cache & Continue"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无效化缓存并继续"
+          }
+        }
+      }
+    },
+    "Debug.crash-detected.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greatdori! ran into an issue when launching   last time. Release version will not show this message."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次启动Greatdori!时发生了意外。Release版本不会显示此消息。"
+          }
+        }
+      }
+    },
+    "Debug.crash-detected.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG] Crash Occurred in Last Launch"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG] 上次未能正常启动"
+          }
+        }
+      }
+    },
     "Debug.pre-cache-unavailable-alert.dismiss" : {
       "localizations" : {
         "en" : {

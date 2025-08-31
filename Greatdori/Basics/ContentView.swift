@@ -28,126 +28,178 @@ struct ContentView: View {
     @Environment(\.platform) var platform
     @AppStorage("isFirstLaunch") var isFirstLaunch = true
     @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
+    @AppStorage("startUpSucceeded") var startUpSucceeded = true
+    @State var mainAppShouldBeDisplayed = false
+    @State var crashViewShouldBeDisplayed = false
+    @State var lastStartUpWasSuccessful = true
     @State var showWelcomeScreen = false
     @State var showPreCacheAlert = false
+    @State var showCrashAlert = false
     
     var body: some View {
-        Group {
-            if #available(macOS 15.0, iOS 18.0, *) {
-                TabView(selection: $selection) {
-                    
-                    Tab("App.home", systemImage: "house", value: .home) {
-                        HomeView()
-                    }
-                    Tab("App.community", systemImage: "at", value: .community) {
-//                        HomeView()
-                        Text(verbatim: "community")
-                    }
-                    Tab("App.leaderboard", systemImage: "chart.bar", value: .leaderboard) {
-//                        HomeView()
-                        Text(verbatim: "leaderboard")
-                    }
-                    TabSection(content: {
-                        Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
-//                            Text(verbatim: "char")
-                            
-                        }
-                        Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
-                            EventSearchView()
-                        }
-                    }, header: {
-                        Text("App.info")
-                    })
-
-                    #if os(iOS)
-                    if sizeClass == .regular {
-                        Tab("App.settings", systemImage: "gear", value: .settings) {
-                            //                        Text("settings")
-                            SettingsView()
-                        }
-                    }
-                    #endif
-                    //                }
-                    //                Tab($selection, tag: .community) { HomeView() }
-                    //                Tab($selection, tag: .leaderboard) { HomeView() }
-                    //                Tab($selection, tag: .info) { HomeView() }
-                    //                Tab($selection, tag: .tools) { HomeView() }
-                }
-                .tabViewStyle(.sidebarAdaptable)
-                .wrapIf(true, in: { content in
-                    if #available(iOS 26.0, macOS 26.0, *) {
-                        content
-                            .tabBarMinimizeBehavior(.automatic)
-                    } else {
-                        content
-                    }
-                })
-            } else {
-                if platform == .mac || sizeClass == .regular {
-                    NavigationSplitView {
-                        List(selection: $selection) {
-                            Label("App.home", systemImage: "house").tag(AppSection.home)
-                            Label("App.community", systemImage: "at").tag(AppSection.community)
-                            Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
-                            Section("App.info", content: {
-                                //                            Label("App.info.characters", systemImage: "person.2").tag(AppSection.info)
-                            })
-                            //                    Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
-                            Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
-#if os(iOS)
-                            Label("App.settings", systemImage: "gear").tag(AppSection.settings)
-#endif
-                        }
-                        .navigationTitle("Greatdori!")
-                    } detail: {
-                        detailView(for: selection)
-                    }
-                } else {
+        if mainAppShouldBeDisplayed {
+            Group {
+                if #available(macOS 15.0, iOS 18.0, *) {
                     TabView(selection: $selection) {
-                        detailView(for: .home)
-                            .tabItem { Label("App.home", systemImage: "house") }
-                            .tag(AppSection.home)
                         
-                        detailView(for: .community)
-                            .tabItem { Label("App.community", systemImage: "at") }
-                            .tag(AppSection.community)
+                        Tab("App.home", systemImage: "house", value: .home) {
+                            HomeView()
+                        }
+                        Tab("App.community", systemImage: "at", value: .community) {
+                            //                        HomeView()
+                            Text(verbatim: "community")
+                        }
+                        Tab("App.leaderboard", systemImage: "chart.bar", value: .leaderboard) {
+                            //                        HomeView()
+                            Text(verbatim: "leaderboard")
+                        }
+                        TabSection(content: {
+                            Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
+                                //                            Text(verbatim: "char")
+                                
+                            }
+                            Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
+                                EventSearchView()
+                            }
+                        }, header: {
+                            Text("App.info")
+                        })
                         
-                        detailView(for: .leaderboard)
-                            .tabItem { Label("App.leaderboard", systemImage: "chart.bar") }
-                            .tag(AppSection.leaderboard)
-                        
-                        detailView(for: .info(.home))
-                            .tabItem { Label("App.info", systemImage: "rectangle.stack") }
-                            .tag(AppSection.info(.home))
-                        
-                        detailView(for: .tools)
-                            .tabItem { Label("App.tools", systemImage: "slider.horizontal.3") }
-                            .tag(AppSection.tools)
+#if os(iOS)
+                        if sizeClass == .regular {
+                            Tab("App.settings", systemImage: "gear", value: .settings) {
+                                //                        Text("settings")
+                                SettingsView()
+                            }
+                        }
+#endif
+                        //                }
+                        //                Tab($selection, tag: .community) { HomeView() }
+                        //                Tab($selection, tag: .leaderboard) { HomeView() }
+                        //                Tab($selection, tag: .info) { HomeView() }
+                        //                Tab($selection, tag: .tools) { HomeView() }
+                    }
+                    .tabViewStyle(.sidebarAdaptable)
+                    .wrapIf(true, in: { content in
+                        if #available(iOS 26.0, macOS 26.0, *) {
+                            content
+                                .tabBarMinimizeBehavior(.automatic)
+                        } else {
+                            content
+                        }
+                    })
+                } else {
+                    if platform == .mac || sizeClass == .regular {
+                        NavigationSplitView {
+                            List(selection: $selection) {
+                                Label("App.home", systemImage: "house").tag(AppSection.home)
+                                Label("App.community", systemImage: "at").tag(AppSection.community)
+                                Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
+                                Section("App.info", content: {
+                                    //                            Label("App.info.characters", systemImage: "person.2").tag(AppSection.info)
+                                })
+                                //                    Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
+                                Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
+#if os(iOS)
+                                Label("App.settings", systemImage: "gear").tag(AppSection.settings)
+#endif
+                            }
+                            .navigationTitle("Greatdori!")
+                        } detail: {
+                            detailView(for: selection)
+                        }
+                    } else {
+                        TabView(selection: $selection) {
+                            detailView(for: .home)
+                                .tabItem { Label("App.home", systemImage: "house") }
+                                .tag(AppSection.home)
+                            
+                            detailView(for: .community)
+                                .tabItem { Label("App.community", systemImage: "at") }
+                                .tag(AppSection.community)
+                            
+                            detailView(for: .leaderboard)
+                                .tabItem { Label("App.leaderboard", systemImage: "chart.bar") }
+                                .tag(AppSection.leaderboard)
+                            
+                            detailView(for: .info(.home))
+                                .tabItem { Label("App.info", systemImage: "rectangle.stack") }
+                                .tag(AppSection.info(.home))
+                            
+                            detailView(for: .tools)
+                                .tabItem { Label("App.tools", systemImage: "slider.horizontal.3") }
+                                .tag(AppSection.tools)
+                        }
                     }
                 }
             }
-        }
-        .onAppear {
-            if isFirstLaunch {
-                showWelcomeScreen = true
-                isFirstLaunch = !isFirstLaunchResettable
-            }
+            .onAppear {
+                if isFirstLaunch {
+                    showWelcomeScreen = true
+                    isFirstLaunch = !isFirstLaunchResettable
+                }
 #if !DORIKIT_ENABLE_PRECACHE
-            showPreCacheAlert = true
+                showPreCacheAlert = true
 #endif
-        }
-        .sheet(isPresented: $showWelcomeScreen, content: {
-            WelcomeView(showWelcomeScreen: $showWelcomeScreen)
-        })
-        .alert("Debug.pre-cache-unavailable-alert.title", isPresented: $showPreCacheAlert, actions: {
-            Button(role: .destructive, action: {}, label: {
-                Text("Debug.pre-cache-unavailable-alert.dismiss")
-            })
-        }, message: {
-            VStack {
-                Text("Debug.pre-cache-unavailable-alert.message")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    startUpSucceeded = true
+                }
             }
-        })
+            .sheet(isPresented: $showWelcomeScreen, content: {
+                WelcomeView(showWelcomeScreen: $showWelcomeScreen)
+            })
+            .alert("Debug.pre-cache-unavailable-alert.title", isPresented: $showPreCacheAlert, actions: {
+                Button(role: .destructive, action: {}, label: {
+                    Text("Debug.pre-cache-unavailable-alert.dismiss")
+                })
+            }, message: {
+                VStack {
+                    Text("Debug.pre-cache-unavailable-alert.message")
+                }
+            })
+        } else {
+            if crashViewShouldBeDisplayed {
+                // Crash View pretended to be the same as loading view below.
+                ProgressView()
+                    .onAppear {
+                        NSLog("CRASH VIEW HAD BEEN ENTERED")
+                        #if DEBUG
+                        showCrashAlert = true
+                        #else
+                        DoriCache.invalidateAll()
+                        mainAppShouldBeDisplayed = true
+                        #endif
+                    }
+                    .alert("Debug.crash-detected.title", isPresented: $showCrashAlert, actions: {
+                        Button(action: {
+                            mainAppShouldBeDisplayed = true
+                        }, label: {
+                            Text("Debug.crash-detected.invalidate-cache-enter")
+                        })
+                        Button(role: .destructive, action: {
+                            DoriCache.invalidateAll()
+                            mainAppShouldBeDisplayed = true
+                        }, label: {
+                            Text("Debug.crash-detected.direct-enter")
+                        })
+                    }, message: {
+                        VStack {
+                            Text("Debug.crash-detected.message")
+                        }
+                    })
+            } else {
+                ProgressView()
+                    .onAppear {
+                        lastStartUpWasSuccessful = startUpSucceeded
+                        startUpSucceeded = false
+                        if lastStartUpWasSuccessful {
+                            mainAppShouldBeDisplayed = true
+                        } else {
+                            crashViewShouldBeDisplayed = true
+                        }
+                    }
+            }
+        }
     }
     
     @ViewBuilder
