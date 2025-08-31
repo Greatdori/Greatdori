@@ -30,6 +30,7 @@ extension DoriFrontend {
     ///     Interact with each keys of a filter by ``Key``, which also allows you to build UI for filter.
     public struct Filter: Sendable, Hashable, Codable {
         public var band: Set<Band> = .init(Band.allCases) { didSet { store() } }
+        public var bandMatchesOthers: Bool = true { didSet { store() } }
         public var attribute: Set<Attribute> = .init(Attribute.allCases)  { didSet { store() } }
         public var rarity: Set<Rarity> = [1, 2, 3, 4, 5]  { didSet { store() } }
         public var character: Set<Character> = .init(Character.allCases)  { didSet { store() } }
@@ -48,6 +49,7 @@ extension DoriFrontend {
         
         public init(
             band: Set<Band> = .init(Band.allCases),
+            bandMatchesOthers: Bool = true,
             attribute: Set<Attribute> = .init(Attribute.allCases),
             rarity: Set<Rarity> = [1, 2, 3, 4, 5],
             character: Set<Character> = .init(Character.allCases),
@@ -65,6 +67,7 @@ extension DoriFrontend {
             sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))
         ) {
             self.band = band
+            self.bandMatchesOthers = bandMatchesOthers
             self.attribute = attribute
             self.rarity = rarity
             self.character = character
@@ -103,6 +106,7 @@ extension DoriFrontend {
         /// Whether this filter actually filters something.
         public var isFiltered: Bool {
             band.count != Band.allCases.count
+            || !bandMatchesOthers
             || attribute.count != Attribute.allCases.count
             || rarity.count != 5
             || character.count != Character.allCases.count
@@ -127,6 +131,7 @@ extension DoriFrontend {
             // We skips `skill` in identity encoding because it's too dynamic.
             let desc = """
             \(band.sorted { $0.rawValue < $1.rawValue })\
+            \(bandMatchesOthers)\
             \(attribute.sorted { $0.rawValue < $1.rawValue })\
             \(rarity.sorted { $0 < $1 })\
             \(character.sorted { $0.rawValue < $1.rawValue })\
@@ -147,6 +152,7 @@ extension DoriFrontend {
         /// Set the filter to initial selections.
         public mutating func clearAll() {
             band = .init(Band.allCases)
+            bandMatchesOthers = false
             attribute = .init(Attribute.allCases)
             rarity = [1, 2, 3, 4, 5]
             character = .init(Character.allCases)
@@ -205,7 +211,7 @@ extension DoriFrontend.Filter {
         case raiseASuilen = 18
         case morfonica = 21
         case mygo = 45
-        case others = -1
+//        case others = -1
         
         @inline(never)
         internal var name: String {
@@ -218,7 +224,7 @@ extension DoriFrontend.Filter {
             case .raiseASuilen: String(localized: "BAND_NAME_RAS", bundle: #bundle)
             case .morfonica: String(localized: "BAND_NAME_MORFONICA", bundle: #bundle)
             case .mygo: String(localized: "BAND_NAME_MYGO", bundle: #bundle)
-            case .others: String(localized: "BAND_NAME_OTHERS", bundle: #bundle)
+//            case .others: String(localized: "BAND_NAME_OTHERS", bundle: #bundle)
             }
         }
     }
@@ -394,6 +400,7 @@ extension DoriFrontend.Filter {
     ///     or use ``updateValue(_:forKey:)`` as an alternative method to modify a filter.
     public enum Key: Int, CaseIterable, Hashable {
         case band
+        case bandMatchesOthers
         case attribute
         case rarity
         case character
@@ -432,6 +439,7 @@ extension DoriFrontend.Filter.Key {
     public var localizedString: String {
         switch self {
         case .band: String(localized: "FILTER_KEY_BAND", bundle: #bundle)
+        case .bandMatchesOthers: String(localized: "FILTER_KEY_BAND_MATCHES_OTHERS", bundle: #bundle)
         case .attribute: String(localized: "FILTER_KEY_ATTRIBUTE", bundle: #bundle)
         case .rarity: String(localized: "FILTER_KEY_RARITY", bundle: #bundle)
         case .character: String(localized: "FILTER_KEY_CHARACTER", bundle: #bundle)
@@ -473,6 +481,7 @@ extension DoriFrontend.Filter: MutableCollection {
         get {
             switch position {
             case .band: self.band
+            case .bandMatchesOthers: self.bandMatchesOthers
             case .attribute: self.attribute
             case .rarity: self.rarity
             case .character: self.character
@@ -519,6 +528,8 @@ extension DoriFrontend.Filter: MutableCollection {
         switch key {
         case .band:
             self.band = value as! Set<Band>
+        case .bandMatchesOthers:
+            self.bandMatchesOthers = value as! Bool
         case .attribute:
             self.attribute = value as! Set<Attribute>
         case .rarity:
@@ -594,7 +605,11 @@ extension DoriFrontend.Filter.Band: DoriFrontend.Filter._Selectable {
         self.name
     }
     public var selectorImageURL: URL? {
-        .init(string: "https://bestdori.com/res/icon/band_\(self.rawValue).svg")!
+        if self.rawValue != -1 {
+            return .init(string: "https://bestdori.com/res/icon/band_\(self.rawValue).svg")!
+        } else {
+            return nil
+        }
     }
 }
 extension DoriFrontend.Filter.Attribute: DoriFrontend.Filter._Selectable {
@@ -747,6 +762,10 @@ extension DoriFrontend.Filter.Key {
         switch self {
         case .band:
             (.multiple, DoriFrontend.Filter.Band.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
+        case .bandMatchesOthers:
+            (.single, [false, true].map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
         case .attribute:

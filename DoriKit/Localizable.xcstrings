@@ -131,6 +131,7 @@
       }
     },
     "BAND_NAME_OTHERS" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3190,6 +3191,9 @@
           }
         }
       }
+    },
+    "FILTER_KEY_BAND_MATCHES_OTHERS" : {
+
     },
     "FILTER_KEY_CARD_TYPE" : {
       "localizations" : {

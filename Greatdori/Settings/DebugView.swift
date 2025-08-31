@@ -208,16 +208,27 @@ struct DebugOfflineAssetView: View {
 
 struct DebugFilterExperimentView: View {
     @State var filter: DoriFrontend.Filter = .init()
-    @State var eventList: [DoriAPI.Event.PreviewEvent] = []
-    @State var eventListFiltered: [DoriAPI.Event.PreviewEvent] = []
-    @State var eventListLegacy: [DoriAPI.Event.PreviewEvent] = []
-    @State var gachaList: [DoriAPI.Gacha.PreviewGacha] = []
-    @State var gachaListFiltered: [DoriAPI.Gacha.PreviewGacha] = []
-    @State var gachaListLegacy: [DoriAPI.Gacha.PreviewGacha] = []
     @State var updating = true
     @State var focusingList: Int = -1
+    
+    // 0 - Event
+    @State var eventList: [DoriAPI.Event.PreviewEvent] = []
+    @State var eventListFiltered: [DoriAPI.Event.PreviewEvent] = []
+    
+    // 1 - Gacha
+    @State var gachaList: [DoriAPI.Gacha.PreviewGacha] = []
+    @State var gachaListFiltered: [DoriAPI.Gacha.PreviewGacha] = []
+    
+    // 2 - Card
+    @State var cardList: [DoriFrontend.Card.CardWithBand] = []
+    @State var cardListFiltered: [DoriFrontend.Card.CardWithBand] = []
+    
     @State var showLegacy = false
-    let lists: [Int: String] = [0: "EVENT", 1: "GACHA"]
+    @State var eventListLegacy: [DoriAPI.Event.PreviewEvent] = []
+    @State var gachaListLegacy: [DoriAPI.Gacha.PreviewGacha] = []
+    
+    
+    let lists: [Int: String] = [0: "EVENT", 1: "GACHA", 2: "CARD"]
 //    @State var result: Array<>? = []
     var body: some View {
         NavigationStack {
@@ -228,6 +239,8 @@ struct DebugFilterExperimentView: View {
                             .tag(0)
                         Text(verbatim: "GACHA")
                             .tag(1)
+                        Text(verbatim: "CARD")
+                            .tag(2)
                     }, label: {
                         Text(verbatim: "List Type")
                     })
@@ -242,12 +255,17 @@ struct DebugFilterExperimentView: View {
                         if focusingList == 0 {
                             Text(verbatim: "Event List Item: \(eventListFiltered.count)/\(eventList.count)")
                             ForEach(eventListFiltered) { element in
-                                Text(verbatim: "#\(element.id) - \(element.eventName.jp)")
+                                Text(verbatim: "#\(element.id) - \(element.eventName.jp ?? "nil")")
                             }
                         } else if focusingList == 1 {
                             Text(verbatim: "Gacha List Item: \(gachaListFiltered.count)/\(gachaList.count)")
                             ForEach(gachaListFiltered) { element in
-                                Text(verbatim: "#\(element.id) - \(element.gachaName.jp)")
+                                Text(verbatim: "#\(element.id) - \(element.gachaName.jp ?? "nil")")
+                            }
+                        } else if focusingList == 2 {
+                            Text(verbatim: "Cards List Item: \(cardListFiltered.count)/\(cardList.count)")
+                            ForEach(cardListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.card.prefix.jp ?? "nil")")
                             }
                         }
                     }
@@ -260,13 +278,15 @@ struct DebugFilterExperimentView: View {
                             if focusingList == 0 {
                                 Text(verbatim: "Event List Item: \(eventListLegacy.count)/\(eventList.count)")
                                 ForEach(eventListLegacy) { element in
-                                    Text(verbatim: "#\(element.id) - \(element.eventName.jp)")
+                                    Text(verbatim: "#\(element.id) - \(element.eventName.jp ?? "nil")")
                                 }
                             } else if focusingList == 1 {
                                 Text(verbatim: "Gacha List Item: \(gachaListLegacy.count)/\(gachaList.count)")
                                 ForEach(gachaListLegacy) { element in
-                                    Text(verbatim: "#\(element.id) - \(element.gachaName.jp)")
+                                    Text(verbatim: "#\(element.id) - \(element.gachaName.jp ?? "nil")")
                                 }
+                            } else {
+                                Text(verbatim: "Not Supported Legacy Type")
                             }
                         }
                     }
@@ -296,6 +316,9 @@ struct DebugFilterExperimentView: View {
                     if showLegacy {
                         gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
                     }
+                } else if focusingList == 2 {
+                    cardList = await DoriFrontend.Card.list()!
+                    cardListFiltered = cardList.filterByDori(with: filter)
                 }
                 updating = false
             }
@@ -303,11 +326,13 @@ struct DebugFilterExperimentView: View {
         .onChange(of: showLegacy, {
             if showLegacy {
                 Task {
+                    updating = true
                     if focusingList == 0 {
                         eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
                     } else if focusingList == 1 {
                         gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
                     }
+                    updating = false
                 }
             }
         })
@@ -327,6 +352,8 @@ struct DebugFilterExperimentView: View {
                         gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
                     }
                 }
+            } else if focusingList == 2 {
+                cardListFiltered = cardList.filterByDori(with: filter)
             }
             updating = false
         }

@@ -978,6 +978,7 @@
       }
     },
     "Filter.deselect-all" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1026,6 +1027,7 @@
       }
     },
     "Filter.select-all" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2158,9 +2160,6 @@
           }
         }
       }
-    },
-    "Show Legacy" : {
-
     },
     "Typography.bold-dot-seperater" : {
       "localizations" : {

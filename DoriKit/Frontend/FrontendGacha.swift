@@ -46,11 +46,7 @@ extension DoriFrontend {
             guard let gacha = groupResult.0 else { return nil }
             guard let cards = groupResult.1 else { return nil }
             
-            Task {
-                await DoriFrontend.FilterCache.shared.writeCardCache(cards)
-//                await filterCache
-//                print("[PreviewCard] Card cache written.")
-            }
+            DoriFrontend.FilterCacheManager.shared.writeCardCache(cards)
             
             var filteredGacha = gacha
             if filter.isFiltered {

@@ -16,8 +16,9 @@
 
 // MARK: This file is root-navigation-related items only.
 
-import SwiftUI
 import DoriKit
+import os
+import SwiftUI
 
 
 //MARK: ContentView
@@ -162,7 +163,7 @@ struct ContentView: View {
                 // Crash View pretended to be the same as loading view below.
                 ProgressView()
                     .onAppear {
-                        NSLog("CRASH VIEW HAD BEEN ENTERED")
+                        os_log("CRASH VIEW HAD BEEN ENTERED")
                         #if DEBUG
                         showCrashAlert = true
                         #else

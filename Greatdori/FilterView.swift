@@ -32,12 +32,17 @@ struct FilterView: View {
         Form {
             Section(content: {
                 // `FilterItemView` will determine whether it should be displayed or not by itself.
+                FilterItemView(filter: $filter, allKeys: includingKeys, key: .band)
                 FilterItemView(filter: $filter, allKeys: includingKeys, key: .attribute)
+                FilterItemView(filter: $filter, allKeys: includingKeys, key: .rarity)
                 FilterItemView(filter: $filter, allKeys: includingKeys, key: .character)
                 FilterItemView(filter: $filter, allKeys: includingKeys, key: .server)
                 FilterItemView(filter: $filter, allKeys: includingKeys, key: .timelineStatus)
+                FilterItemView(filter: $filter, allKeys: includingKeys, key: .released)
                 FilterItemView(filter: $filter, allKeys: includingKeys, key: .eventType)
                 FilterItemView(filter: $filter, allKeys: includingKeys, key: .gachaType)
+                FilterItemView(filter: $filter, allKeys: includingKeys, key: .cardType)
+                FilterItemView(filter: $filter, allKeys: includingKeys, key: .skill)
             }, header: {
                 VStack(alignment: .leading) {
                     if sizeClass == .compact {
@@ -53,6 +58,8 @@ struct FilterView: View {
                 }, label: {
                     Text("Filter.clear-all")
                 })
+                .disabled(!filter.isFiltered)
+//                .buttonStyle(.borderless)
             }
         }
     }
@@ -61,7 +68,7 @@ struct FilterView: View {
 
 struct FilterItemView: View {
     @Binding var filter: DoriFrontend.Filter
-//    let titleName: LocalizedStringResource
+    //    let titleName: LocalizedStringResource
     let allKeys: Set<DoriFrontend.Filter.Key>
     let key: DoriFrontend.Filter.Key
     
@@ -70,104 +77,132 @@ struct FilterItemView: View {
     var body: some View {
         if allKeys.contains(key) {
             VStack(alignment: .leading) {
-                //MARK: Title Part
-                HStack {
-                    VStack {
-                        Text(key.localizedString)
-                            .bold()
-                    }
-                    if key == .character && allKeys.contains(.characterRequiresMatchAll) {
-                        Menu(content: {
-                            Picker(selection: $characterRequiresMatchAll, content: {
-                                Text("Filter.match-all.any-selected")
-                                    .tag(false)
-                                Text("Filter.match-all.all-selected")
-                                    .tag(true)
-                            }, label: {
-                                Text("")
-                            })
-                            .pickerStyle(.inline)
-                            .labelsHidden()
-                            .multilineTextAlignment(.leading)
-                        }, label: {
-                            Text(getAttributedStringForMatchAll(isAllSelected: characterRequiresMatchAll))
-                        })
-                        .menuIndicator(.hidden)
-                        .menuStyle(.borderlessButton)
-                        .buttonStyle(.plain)
-                        .onChange(of: characterRequiresMatchAll, {
-                            filter.characterRequiresMatchAll = characterRequiresMatchAll
-                        })
-                    }
-                    Spacer()
-                    Button(action: {
-                        withAnimation(.easeInOut(duration: 0.05)) {
-                            let allCases = key.selector.items.map { $0.item.value }
-                            if let filterSet = filter[key] as? Set<AnyHashable> {
-                                if filterSet.count == 0 {
-                                    filter[key] = Set(allCases)
-                                } else {
-                                    if var filterSet = filter[key] as? Set<AnyHashable> {
-                                        filterSet.removeAll()
-                                        filter[key] = filterSet
-                                    }
-                                }
-                            }
-                        }
-                    }, label: {
-                        Group {
-                            let allCases = key.selector.items.map { $0.item.value }
-                            if let filterSet = filter[key] as? Set<AnyHashable> {
-                                if false {
-                                    if filterSet.count < allCases.count {
-                                        Text("Filter.select-all")
-                                            .bold()
-                                    } else {
-                                        Text("Filter.deselect-all")
-                                    }
-                                } else {
-                                    CompactToggle(isLit: (filterSet.count == allCases.count) ? true : (filterSet.count == 0 ? false : nil))
-                                }
-                            }
-                        }
-                        .foregroundStyle(.secondary)
-//                        .font(.subheadline)
-                    })
-                    .buttonStyle(.plain)
-//                    .opacity(isMACOS && !isHovering ? 0 : 1)
-                }
-                
-                //MARK: Picker Part
                 if key.selector.type == .multiple {
-                    // Multiple Selection
-                    if key.selector.items.first?.imageURL != nil && key != .server { // `.server` is not expected to use flags in Greatdori!.
-                        // Image Selection
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: filterItemHeight))]/*, spacing: 3*/) {
-                            ForEach(key.selector.items, id: \.self) { item in
-                                Button(action: {
-                                    withAnimation(.easeInOut(duration: 0.05)) {
+                    //MARK: Title Part
+                    HStack {
+                        VStack {
+                            Text(key.localizedString)
+                                .bold()
+                        }
+                        if key == .character && allKeys.contains(.characterRequiresMatchAll) {
+                            Menu(content: {
+                                Picker(selection: $characterRequiresMatchAll, content: {
+                                    Text("Filter.match-all.any-selected")
+                                        .tag(false)
+                                    Text("Filter.match-all.all-selected")
+                                        .tag(true)
+                                }, label: {
+                                    Text("")
+                                })
+                                .pickerStyle(.inline)
+                                .labelsHidden()
+                                .multilineTextAlignment(.leading)
+                            }, label: {
+                                Text(getAttributedStringForMatchAll(isAllSelected: characterRequiresMatchAll))
+                            })
+                            .menuIndicator(.hidden)
+                            .menuStyle(.borderlessButton)
+                            .buttonStyle(.plain)
+                            .onChange(of: characterRequiresMatchAll, {
+                                filter.characterRequiresMatchAll = characterRequiresMatchAll
+                            })
+                        }
+                        Spacer()
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.05)) {
+                                let allCases = key.selector.items.map { $0.item.value }
+                                if let filterSet = filter[key] as? Set<AnyHashable> {
+                                    if filterSet.count == 0 {
+                                        filter[key] = Set(allCases)
+                                        if key == .band && allKeys.contains(.bandMatchesOthers) {
+                                            filter.bandMatchesOthers = true
+                                        }
+                                    } else {
                                         if var filterSet = filter[key] as? Set<AnyHashable> {
-                                            if filterSet.contains(item.item.value) {
-                                                filterSet.remove(item.item.value)
-                                            } else {
-                                                filterSet.insert(item.item.value)
-                                            }
+                                            filterSet.removeAll()
                                             filter[key] = filterSet
+                                            if key == .band && allKeys.contains(.bandMatchesOthers) {
+                                                filter.bandMatchesOthers = false
+                                            }
                                         }
                                     }
-                                }, label: {
-                                    ZStack {
-                                        Circle()
-                                            .stroke(Color.accent, lineWidth: 2)
-                                            .frame(width: filterItemHeight, height: filterItemHeight)
-                                            .opacity(((filter[key] as? Set<AnyHashable>)?.contains(item.item.value) == true) ? 1 : 0)
-                                        WebImage(url: item.imageURL)
-                                            .antialiased(true)
-                                            .resizable()
-                                            .frame(width: filterItemHeight, height: filterItemHeight)
-                                            .scaleEffect(0.9)
+                                }
+                            }
+                        }, label: {
+                            Group {
+                                let allCases = key.selector.items.map { $0.item.value }
+                                if let filterSet = filter[key] as? Set<AnyHashable> {
+                                    if key == .band && allKeys.contains(.bandMatchesOthers) {
+                                        CompactToggle(isLit: (filterSet.count == allCases.count && filter.bandMatchesOthers) ? true : (filterSet.count == 0 && !filter.bandMatchesOthers ? false : nil))
+                                    } else {
+                                        CompactToggle(isLit: (filterSet.count == allCases.count) ? true : (filterSet.count == 0 ? false : nil))
                                     }
-                                })
+                                }
+                            }
+                            .foregroundStyle(.secondary)
+                        })
+                        .buttonStyle(.plain)
+                    }
+                    
+                    //MARK: Picker Part
+                    // Multiple Selection
+                    if key.selector.items.first?.imageURL != nil && key != .server { // `.server` is not expected to use flags in Greatdori!.
+                                                                                     // Image Selection
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: filterItemHeight))]/*, spacing: 3*/) {
+                            ForEach((key == .band && allKeys.contains(.bandMatchesOthers)) ? key.selector.items + [DoriFrontend.Filter.Key.bandMatchesOthers.selector.items.first!] : key.selector.items, id: \.self) { item in
+                                Group {
+                                    if item != DoriFrontend.Filter.Key.bandMatchesOthers.selector.items.first! {
+                                        Button(action: {
+                                            withAnimation(.easeInOut(duration: 0.05)) {
+                                                if var filterSet = filter[key] as? Set<AnyHashable> {
+                                                    if filterSet.contains(item.item.value) {
+                                                        filterSet.remove(item.item.value)
+                                                    } else {
+                                                        filterSet.insert(item.item.value)
+                                                    }
+                                                    filter[key] = filterSet
+                                                }
+                                            }
+                                        }, label: {
+                                            ZStack {
+                                                Circle()
+                                                    .stroke(Color.accent, lineWidth: 2)
+                                                    .frame(width: filterItemHeight, height: filterItemHeight)
+                                                    .opacity(((filter[key] as? Set<AnyHashable>)?.contains(item.item.value) == true) ? 1 : 0)
+                                                WebImage(url: item.imageURL)
+                                                    .antialiased(true)
+                                                    .resizable()
+                                                    .frame(width: filterItemHeight, height: filterItemHeight)
+                                                    .scaleEffect([DoriFrontend.Filter.Key.attribute, DoriFrontend.Filter.Key.character].contains(key) ? 0.9 : 0.75)
+                                            }
+                                            .contentShape(Circle())
+                                        })
+                                    } else {
+                                        Button(action: {
+                                            withAnimation(.easeInOut(duration: 0.05)) {
+                                                filter.bandMatchesOthers.toggle()
+                                            }
+                                        }, label: {
+                                            ZStack {
+                                                Circle()
+                                                    .stroke(Color.accent, lineWidth: 2)
+                                                    .frame(width: filterItemHeight, height: filterItemHeight)
+                                                    .opacity(filter.bandMatchesOthers ? 1 : 0)
+                                                if item.imageURL != nil {
+                                                    WebImage(url: item.imageURL)
+                                                        .antialiased(true)
+                                                        .resizable()
+                                                        .frame(width: filterItemHeight, height: filterItemHeight)
+                                                        .scaleEffect([DoriFrontend.Filter.Key.attribute, DoriFrontend.Filter.Key.character].contains(key) ? 0.9 : 0.75)
+                                                } else {
+                                                    Image(systemName: "person.fill")
+                                                        .frame(width: filterItemHeight*0.95, height: filterItemHeight*0.95)
+                                                }
+                                            }
+                                            .contentShape(Circle())
+                                        })
+                                    }
+                                }
                                 .buttonStyle(.plain)
                                 .accessibilityValue(Text(item.text))
                             }
@@ -175,28 +210,38 @@ struct FilterItemView: View {
                     } else {
                         FlowLayout(items: key.selector.items, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
                             Button(action: {
-//                                withAnimation(.easeInOut(duration: 0.05)) {
-                                    if var filterSet = filter[key] as? Set<AnyHashable> {
-                                        if filterSet.contains(item.item.value) {
-                                            filterSet.remove(item.item.value)
-                                        } else {
-                                            filterSet.insert(item.item.value)
-                                        }
-                                        filter[key] = filterSet
+                                //                                withAnimation(.easeInOut(duration: 0.05)) {
+                                if var filterSet = filter[key] as? Set<AnyHashable> {
+                                    if filterSet.contains(item.item.value) {
+                                        filterSet.remove(item.item.value)
+                                    } else {
+                                        filterSet.insert(item.item.value)
                                     }
-//                                }
+                                    filter[key] = filterSet
+                                }
+                                //                                }
                             }, label: {
                                 FilterSelectionCapsuleView(isActive: ((filter[key] as? Set<AnyHashable>)?.contains(item.item.value) == true), content: {
                                     Text(item.text)
                                 })
-//                                .animation(.easeInOut(duration: 0.05))
+                                //                                .animation(.easeInOut(duration: 0.05))
                             })
                             .buttonStyle(.plain)
                         }
                     }
                 } else {
-                    // Single Selection [TODO]
-                    EmptyView()
+                    // Single Selection
+                    Picker(selection: $filter[key], content: {
+                        ForEach(key.selector.items, id: \.self) { item in
+                            Text(item.text)
+                                .tag(item.item.value)
+                        }
+                    }, label: {
+                        VStack {
+                            Text(key.localizedString)
+                                .bold()
+                        }
+                    })
                 }
             }
             .onHover(perform: { isHovered in

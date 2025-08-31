@@ -51,44 +51,51 @@ extension DoriFrontend {
             guard let characters = groupResult.1 else { return nil }
             guard let bands = groupResult.2 else { return nil }
             
-            let filteredCards = cards.filter { card in
-                filter.band.contains { band in
-                    band.rawValue == characters.first(where: { $0.id == card.characterID })?.bandID
-                }
-            }.filter { card in
-                filter.attribute.contains(card.attribute)
-            }.filter { card in
-                filter.rarity.contains(card.rarity)
-            }.filter { card in
-                filter.character.contains { character in
-                    character.rawValue == card.characterID
-                }
-            }.filter { card in
-                filter.server.contains { locale in
-                    card.prefix.availableInLocale(locale)
-                }
-            }.filter { card in
-                for status in filter.released {
-                    for locale in filter.server {
-                        if status.boolValue {
-                            if (card.releasedAt.forLocale(locale) ?? dateOfYear2100) < .now {
-                                return true
-                            }
-                        } else {
-                            if (card.releasedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 0)) > .now {
-                                return true
+            
+            DoriFrontend.FilterCacheManager.shared.writeBandsList(bands)
+            DoriFrontend.FilterCacheManager.shared.writeCharactersList(characters)
+            
+            var filteredCards = cards
+            if filter.isFiltered {
+                filteredCards = cards.filter { card in
+                    filter.band.contains { band in
+                        band.rawValue == characters.first(where: { $0.id == card.characterID })?.bandID
+                    }
+                }.filter { card in
+                    filter.attribute.contains(card.attribute)
+                }.filter { card in
+                    filter.rarity.contains(card.rarity)
+                }.filter { card in
+                    filter.character.contains { character in
+                        character.rawValue == card.characterID
+                    }
+                }.filter { card in
+                    filter.server.contains { locale in
+                        card.prefix.availableInLocale(locale)
+                    }
+                }.filter { card in
+                    for status in filter.released {
+                        for locale in filter.server {
+                            if status.boolValue {
+                                if (card.releasedAt.forLocale(locale) ?? dateOfYear2100) < .now {
+                                    return true
+                                }
+                            } else {
+                                if (card.releasedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                                    return true
+                                }
                             }
                         }
                     }
-                }
-                return false
-            }.filter { card in
-                filter.cardType.contains(card.type)
-            }.filter { card in
-                if let skill = filter.skill {
-                    skill.id == card.skillID
-                } else {
-                    true
+                    return false
+                }.filter { card in
+                    filter.cardType.contains(card.type)
+                }.filter { card in
+                    if let skill = filter.skill {
+                        skill.id == card.skillID
+                    } else {
+                        true
+                    }
                 }
             }
             let sortedCards = switch filter.sort.keyword {
@@ -178,7 +185,7 @@ extension DoriFrontend.Card {
     public typealias PreviewCard = DoriAPI.Card.PreviewCard
     public typealias Card = DoriAPI.Card.Card
     
-    public struct CardWithBand: Sendable, Hashable, DoriCache.Cacheable {
+    public struct CardWithBand: Sendable, Hashable, DoriCache.Cacheable, DoriFrontend.Filterable {
         public var card: PreviewCard
         public var band: DoriAPI.Band.Band
     }

@@ -14,6 +14,7 @@
 
 import OSLog
 import DoriKit
+import os
 import SwiftUI
 
 struct ContentView: View {
