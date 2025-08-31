@@ -280,6 +280,14 @@ public extension Array where Element: DoriFrontend.Filterable {
             return filter.gachaType.contains { gachaType in
                 element.matches(gachaType, withFilterCache: cacheCopy) ?? true
             }
+        } .filter { element in // Card Types
+            guard filter.cardType != Set(DoriFrontend.Filter.CardType.allCases) else { return true }
+            return filter.cardType.contains { cardType in
+                element.matches(cardType, withFilterCache: cacheCopy) ?? true
+            }
+        } .filter { element in // Skill
+            guard filter.skill != nil else { return true }
+            return element.matches(filter.skill, withFilterCache: cacheCopy) ?? true
         }
         return result
     }
