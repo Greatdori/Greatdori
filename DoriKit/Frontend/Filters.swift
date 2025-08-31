@@ -152,7 +152,7 @@ extension DoriFrontend {
         /// Set the filter to initial selections.
         public mutating func clearAll() {
             band = .init(Band.allCases)
-            bandMatchesOthers = false
+            bandMatchesOthers = true
             attribute = .init(Attribute.allCases)
             rarity = [1, 2, 3, 4, 5]
             character = .init(Character.allCases)
