@@ -31,7 +31,7 @@ and provide native experience to Bestdori.
     
 > [!TIP]
 > The ABI of DoriKit is stable between release versions
-> when using with the Xcode Project
+> when using with the Xcode Project.
 
 ### Swift Package Manager
 Add the following dependency to your `Package.swift` file:
