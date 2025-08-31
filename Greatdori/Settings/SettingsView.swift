@@ -317,6 +317,12 @@ struct SettingsDebugView: View {
                 Text(verbatim: "DebugBirthdayView")
                     .fontDesign(.monospaced)
             })
+            NavigationLink(destination: {
+                DebugFilterExperimentView()
+            }, label: {
+                Text(verbatim: "DebugFilterExperimentView")
+                    .fontDesign(.monospaced)
+            })
         }, header: {
             Text("Settings.debug")
         })

@@ -227,7 +227,7 @@ struct DebugFilterExperimentView: View {
     @State var eventListLegacy: [DoriAPI.Event.PreviewEvent] = []
     @State var gachaListLegacy: [DoriAPI.Gacha.PreviewGacha] = []
     
-    
+    @State var showFilterSheet = false
     let lists: [Int: String] = [0: "EVENT", 1: "GACHA", 2: "CARD"]
 //    @State var result: Array<>? = []
     var body: some View {
@@ -248,6 +248,13 @@ struct DebugFilterExperimentView: View {
                         Text(verbatim: "Show Legacy")
                     })
                     .toggleStyle(.switch)
+                    #if os(iOS)
+                    Button(action: {
+                        showFilterSheet = true
+                    }, label: {
+                        Text(verbatim: "Show Filter Sheet")
+                    })
+                    #endif
                     Text(verbatim: "Updating: \(updating ? "TRUE" : "FALSE")")
                         .bold(updating)
                         .foregroundStyle(updating ? .red : .green)
@@ -295,6 +302,9 @@ struct DebugFilterExperimentView: View {
         }
         .fontDesign(.monospaced)
         .multilineTextAlignment(.leading)
+        .sheet(isPresented: $showFilterSheet, content: {
+            FilterView(filter: $filter, includingKeys: Set(DoriFrontend.Filter.Key.allCases))
+        })
         .inspector(isPresented: .constant(true), content: {
             FilterView(filter: $filter, includingKeys: Set(DoriFrontend.Filter.Key.allCases))
         })
