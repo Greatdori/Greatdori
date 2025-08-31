@@ -255,6 +255,7 @@ struct DebugFilterExperimentView: View {
                 if showLegacy {
                     List {
                         Text(verbatim: "LEGACY")
+                            .bold()
                         Group {
                             if focusingList == 0 {
                                 Text(verbatim: "Event List Item: \(eventListLegacy.count)/\(eventList.count)")
@@ -297,6 +298,17 @@ struct DebugFilterExperimentView: View {
                     }
                 }
                 updating = false
+            }
+        })
+        .onChange(of: showLegacy, {
+            if showLegacy {
+                Task {
+                    if focusingList == 0 {
+                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
+                    } else if focusingList == 1 {
+                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
+                    }
+                }
             }
         })
         .onChange(of: filter) {
