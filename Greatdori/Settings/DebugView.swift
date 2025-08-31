@@ -224,15 +224,15 @@ struct DebugFilterExperimentView: View {
             HStack {
                 List {
                     Picker(selection: $focusingList, content: {
-                        Text("EVENT")
+                        Text(verbatim: "EVENT")
                             .tag(0)
-                        Text("GACHA")
+                        Text(verbatim: "GACHA")
                             .tag(1)
                     }, label: {
                         Text(verbatim: "List Type")
                     })
                     Toggle(isOn: $showLegacy, label: {
-                        Text("Show Legacy")
+                        Text(verbatim: "Show Legacy")
                     })
                     .toggleStyle(.switch)
                     Text(verbatim: "Updating: \(updating ? "TRUE" : "FALSE")")

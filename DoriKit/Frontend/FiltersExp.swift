@@ -198,8 +198,8 @@ public extension Array where Element: DoriFrontend.Filterable {
             }
         } .filter { element in // Gacha Types
             guard filter.gachaType != Set(DoriFrontend.Filter.GachaType.allCases) else { return true }
-            return filter.gachaType.contains { eventType in
-                element.matches(eventType) ?? true
+            return filter.gachaType.contains { gachaType in
+                element.matches(gachaType) ?? true
             }
         }
         return result
