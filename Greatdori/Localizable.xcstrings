@@ -366,6 +366,9 @@
         }
       }
     },
+    "EVENT" : {
+
+    },
     "Event.attribute" : {
       "localizations" : {
         "en" : {
@@ -1069,6 +1072,9 @@
           }
         }
       }
+    },
+    "GACHA" : {
+
     },
     "Greatdori!" : {
       "shouldTranslate" : false
@@ -2152,6 +2158,9 @@
           }
         }
       }
+    },
+    "Show Legacy" : {
+
     },
     "Typography.bold-dot-seperater" : {
       "localizations" : {

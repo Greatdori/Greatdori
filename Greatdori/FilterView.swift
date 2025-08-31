@@ -37,6 +37,7 @@ struct FilterView: View {
                 FilterItemView(filter: $filter, allKeys: includingKeys, key: .server)
                 FilterItemView(filter: $filter, allKeys: includingKeys, key: .timelineStatus)
                 FilterItemView(filter: $filter, allKeys: includingKeys, key: .eventType)
+                FilterItemView(filter: $filter, allKeys: includingKeys, key: .gachaType)
             }, header: {
                 VStack(alignment: .leading) {
                     if sizeClass == .compact {

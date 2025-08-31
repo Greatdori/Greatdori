@@ -47,9 +47,9 @@ extension DoriFrontend {
                     for timelineStatus in filter.timelineStatus {
                         let result = switch timelineStatus {
                         case .ended:
-                            (campaign.closedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 4107477600)) < .now
+                            (campaign.closedAt.forPreferredLocale() ?? dateOfYear2100) < .now
                         case .ongoing:
-                            (campaign.publishedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 4107477600)) < .now
+                            (campaign.publishedAt.forPreferredLocale() ?? dateOfYear2100) < .now
                             && (campaign.closedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)) > .now
                         case .upcoming:
                             (campaign.publishedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)) > .now

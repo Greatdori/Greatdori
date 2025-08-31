@@ -71,7 +71,7 @@ extension DoriFrontend {
                 for status in filter.released {
                     for locale in filter.server {
                         if status.boolValue {
-                            if (card.releasedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
+                            if (card.releasedAt.forLocale(locale) ?? dateOfYear2100) < .now {
                                 return true
                             }
                         } else {

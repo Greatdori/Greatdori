@@ -14,6 +14,8 @@
 
 import Foundation
 
+internal let dateOfYear2100: Date = .init(timeIntervalSince1970: 4107477600)
+
 extension Date {
     private var calendar: Calendar {
         Calendar.autoupdatingCurrent

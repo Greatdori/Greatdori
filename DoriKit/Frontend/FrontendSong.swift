@@ -47,7 +47,7 @@ extension DoriFrontend {
                     for status in filter.released {
                         for locale in filter.server {
                             if status.boolValue {
-                                if (song.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
+                                if (song.publishedAt.forLocale(locale) ?? dateOfYear2100) < .now {
                                     return true
                                 }
                             } else {
@@ -62,7 +62,7 @@ extension DoriFrontend {
                     for status in filter.released {
                         for locale in filter.server {
                             if status.boolValue {
-                                if (song.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
+                                if (song.publishedAt.forLocale(locale) ?? dateOfYear2100) < .now {
                                     return true
                                 }
                             } else {

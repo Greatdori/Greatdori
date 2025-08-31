@@ -100,13 +100,13 @@ extension DoriFrontend {
                     switch timelineStatus {
                     case .ended:
                         for singleLocale in DoriAPI.Locale.allCases {
-                            if (event.endAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
+                            if (event.endAt.forLocale(singleLocale) ?? dateOfYear2100) < .now {
                                 return true
                             }
                         }
                     case .ongoing:
                         for singleLocale in DoriAPI.Locale.allCases {
-                            if (event.startAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 4107477600)) < .now
+                            if (event.startAt.forLocale(singleLocale) ?? dateOfYear2100) < .now
                                 && (event.endAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
                                 return true
                             }

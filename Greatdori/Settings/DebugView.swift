@@ -205,3 +205,118 @@ struct DebugOfflineAssetView: View {
         #endif
     }
 }
+
+struct DebugFilterExperimentView: View {
+    @State var filter: DoriFrontend.Filter = .init()
+    @State var eventList: [DoriAPI.Event.PreviewEvent] = []
+    @State var eventListFiltered: [DoriAPI.Event.PreviewEvent] = []
+    @State var eventListLegacy: [DoriAPI.Event.PreviewEvent] = []
+    @State var gachaList: [DoriAPI.Gacha.PreviewGacha] = []
+    @State var gachaListFiltered: [DoriAPI.Gacha.PreviewGacha] = []
+    @State var gachaListLegacy: [DoriAPI.Gacha.PreviewGacha] = []
+    @State var updating = true
+    @State var focusingList: Int = -1
+    @State var showLegacy = false
+    let lists: [Int: String] = [0: "EVENT", 1: "GACHA"]
+//    @State var result: Array<>? = []
+    var body: some View {
+        NavigationStack {
+            HStack {
+                List {
+                    Picker(selection: $focusingList, content: {
+                        Text("EVENT")
+                            .tag(0)
+                        Text("GACHA")
+                            .tag(1)
+                    }, label: {
+                        Text(verbatim: "List Type")
+                    })
+                    Toggle(isOn: $showLegacy, label: {
+                        Text("Show Legacy")
+                    })
+                    .toggleStyle(.switch)
+                    Text(verbatim: "Updating: \(updating ? "TRUE" : "FALSE")")
+                        .bold(updating)
+                        .foregroundStyle(updating ? .red : .green)
+                    Group {
+                        if focusingList == 0 {
+                            Text(verbatim: "Event List Item: \(eventListFiltered.count)/\(eventList.count)")
+                            ForEach(eventListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.eventName.jp)")
+                            }
+                        } else if focusingList == 1 {
+                            Text(verbatim: "Gacha List Item: \(gachaListFiltered.count)/\(gachaList.count)")
+                            ForEach(gachaListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.gachaName.jp)")
+                            }
+                        }
+                    }
+                }
+                if showLegacy {
+                    List {
+                        Text(verbatim: "LEGACY")
+                        Group {
+                            if focusingList == 0 {
+                                Text(verbatim: "Event List Item: \(eventListLegacy.count)/\(eventList.count)")
+                                ForEach(eventListLegacy) { element in
+                                    Text(verbatim: "#\(element.id) - \(element.eventName.jp)")
+                                }
+                            } else if focusingList == 1 {
+                                Text(verbatim: "Gacha List Item: \(gachaListLegacy.count)/\(gachaList.count)")
+                                ForEach(gachaListLegacy) { element in
+                                    Text(verbatim: "#\(element.id) - \(element.gachaName.jp)")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .fontDesign(.monospaced)
+        .multilineTextAlignment(.leading)
+        .inspector(isPresented: .constant(true), content: {
+            FilterView(filter: $filter, includingKeys: Set(DoriFrontend.Filter.Key.allCases))
+        })
+        .onAppear {
+            focusingList = 0
+        }
+        .onChange(of: focusingList, {
+            updating = true
+            Task {
+                if focusingList == 0 {
+                    eventList = await DoriFrontend.Event.list()!
+                    eventListFiltered = eventList.filterByDori(with: filter)
+                    if showLegacy {
+                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
+                    }
+                } else if focusingList == 1 {
+                    gachaList = await DoriFrontend.Gacha.list()!
+                    gachaListFiltered = gachaList.filterByDori(with: filter)
+                    if showLegacy {
+                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
+                    }
+                }
+                updating = false
+            }
+        })
+        .onChange(of: filter) {
+            updating = true
+            if focusingList == 0 {
+                eventListFiltered = eventList.filterByDori(with: filter)
+                if showLegacy {
+                    Task {
+                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
+                    }
+                }
+            } else if focusingList == 1 {
+                gachaListFiltered = gachaList.filterByDori(with: filter)
+                if showLegacy {
+                    Task {
+                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
+                    }
+                }
+            }
+            updating = false
+        }
+    }
+}
