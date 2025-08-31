@@ -12,6 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import OSLog
 import DoriKit
 import SwiftUI
 
@@ -73,28 +74,28 @@ struct ContentView: View {
                 // Crash View pretended to be the same as loading view below.
                 ProgressView()
                     .onAppear {
-                        NSLog("CRASH VIEW HAD BEEN ENTERED")
-#if DEBUG
+                        unsafe os_log(.error, "CRASH VIEW HAD BEEN ENTERED")
+                        #if DEBUG
                         showCrashAlert = true
-#else
+                        #else
                         DoriCache.invalidateAll()
                         mainAppShouldBeDisplayed = true
-#endif
+                        #endif
                     }
-                    .alert("Debug.crash-detected.title", isPresented: $showCrashAlert, actions: {
+                    .alert("[INTERNAL] 上次未能正常启动", isPresented: $showCrashAlert, actions: {
                         Button(action: {
                             DoriCache.invalidateAll()
                             mainAppShouldBeDisplayed = true
                         }, label: {
-                            Text("Debug.crash-detected.invalidate-cache-enter")
+                            Text("无效化缓存并继续")
                         })
                         Button(role: .destructive, action: {
                             mainAppShouldBeDisplayed = true
                         }, label: {
-                            Text("Debug.crash-detected.direct-enter")
+                            Text("不进行操作并继续")
                         })
                     }, message: {
-                        Text("Debug.crash-detected.message")
+                        Text("上次启动 Greatdori! 时发生了意外。Release 构建不会显示此消息。")
                     })
             } else {
                 ProgressView()

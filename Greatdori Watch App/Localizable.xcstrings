@@ -31,6 +31,16 @@
         }
       }
     },
+    "[INTERNAL] 上次未能正常启动" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[INTERNAL] Crash Occurred in Last Launch"
+          }
+        }
+      }
+    },
     "%@，今天生日" : {
       "comment" : "Accessibility",
       "localizations" : {
@@ -389,12 +399,32 @@
         }
       }
     },
+    "上次启动 Greatdori! 时发生了意外。Release 构建不会显示此消息。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greatdori! ran into an issue when launching last time. Release build will not show this message."
+          }
+        }
+      }
+    },
     "不可用" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unavailable"
+          }
+        }
+      }
+    },
+    "不进行操作并继续" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do Nothing & Continue"
           }
         }
       }
@@ -967,6 +997,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Data Source"
+          }
+        }
+      }
+    },
+    "无效化缓存并继续" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalidate Cache & Continue"
           }
         }
       }
