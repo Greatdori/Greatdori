@@ -172,7 +172,7 @@ struct ContentView: View {
                         #endif
                     }
                     .alert("Debug.crash-detected.title", isPresented: $showCrashAlert, actions: {
-                        Button(action: {
+                        Button(role: .destructive, action: {
                             DoriCache.invalidateAll()
                             mainAppShouldBeDisplayed = true
                         }, label: {

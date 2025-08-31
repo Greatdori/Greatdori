@@ -243,7 +243,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Greatdori! ran into an issue when launching   last time. Release version will not show this message."
+            "value" : "Greatdori! ran into an issue when launching last time. Release version will not show this message."
           }
         },
         "zh-Hans" : {
@@ -365,9 +365,6 @@
           }
         }
       }
-    },
-    "EVENT" : {
-
     },
     "Event.attribute" : {
       "localizations" : {
@@ -977,23 +974,6 @@
         }
       }
     },
-    "Filter.deselect-all" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deselect All"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "取消全选"
-          }
-        }
-      }
-    },
     "Filter.match-all.all-selected" : {
       "localizations" : {
         "en" : {
@@ -1022,23 +1002,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "包含任意"
-          }
-        }
-      }
-    },
-    "Filter.select-all" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select All"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全选"
           }
         }
       }
@@ -1074,9 +1037,6 @@
           }
         }
       }
-    },
-    "GACHA" : {
-
     },
     "Greatdori!" : {
       "shouldTranslate" : false
