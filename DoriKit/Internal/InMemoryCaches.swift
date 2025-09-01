@@ -17,16 +17,44 @@ import Foundation
 internal class InMemoryCache {
     private init() {}
     
-    @safe
-    nonisolated(unsafe)
-    internal static var allSkills = [DoriAPI.Skill.Skill]()
+    nonisolated(unsafe) private static var memorySkills: [DoriAPI.Skill.Skill]?
     
-    internal static func updateAll() async {
-        let groupResult = await withTasksResult {
-            await DoriAPI.Skill.all()
+    nonisolated(unsafe) private static var skillsFileURL: URL = {
+        return URL(filePath: NSHomeDirectory() + "/Documents/SkillCache.json")
+    }()
+    
+    internal static func updateAll() {
+        Task.detached {
+            for _ in 1...5 {
+                let skills = await DoriAPI.Skill.all()
+                
+                if let skills {
+                    unsafe memorySkills = skills
+                    do {
+                        let data = try JSONEncoder().encode(skills)
+                        try unsafe data.write(to: skillsFileURL, options: [.atomic])
+                    } catch {
+                        print("Failed to write skills file: \(error)")
+                    }
+                    break
+                } else {
+                    try? await Task.sleep(nanoseconds: 60 * 1_000_000_000)
+                }
+            }
         }
-        if let skills = groupResult {
-            Self.allSkills = skills
+    }
+
+    
+    internal static func readAll() -> [DoriAPI.Skill.Skill] {
+        if let memorySkills { return memorySkills }
+        
+        do {
+            let data = try unsafe Data(contentsOf: skillsFileURL)
+            let skills = try JSONDecoder().decode([DoriAPI.Skill.Skill].self, from: data)
+            unsafe memorySkills = skills
+            return skills
+        } catch {
+            return []
         }
     }
 }

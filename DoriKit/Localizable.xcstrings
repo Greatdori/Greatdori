@@ -3363,6 +3363,9 @@
         }
       }
     },
+    "FILTER_KEY_LEVEL" : {
+
+    },
     "FILTER_KEY_LOGIN_CAMPAIGN_TYPE" : {
       "localizations" : {
         "en" : {

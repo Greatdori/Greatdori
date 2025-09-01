@@ -292,37 +292,49 @@ struct SettingsDebugView: View {
     @AppStorage("debugShowHomeBirthdayDatePicker") var debugShowHomeBirthdayDatePicker = false
     @AppStorage("isFirstLaunch") var isFirstLaunch = true
     @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
+    @AppStorage("startUpSucceeded") var startUpSucceeded = true
     var body: some View {
         Section(content: {
-            Toggle(isOn: $debugShowHomeBirthdayDatePicker, label: {
-                Text(verbatim: "debugShowHomeBirthdayDatePicker")
-                    .fontDesign(.monospaced)
-            })
-            Toggle(isOn: $isFirstLaunch, label: {
-                Text(verbatim: "isFirstLaunch")
-                    .fontDesign(.monospaced)
-            })
-            Toggle(isOn: $isFirstLaunchResettable, label: {
-                Text(verbatim: "isFirstLaunchResettable")
-                    .fontDesign(.monospaced)
-            })
+            Group {
+                Toggle(isOn: $debugShowHomeBirthdayDatePicker, label: {
+                    Text(verbatim: "debugShowHomeBirthdayDatePicker")
+                        .fontDesign(.monospaced)
+                })
+                Toggle(isOn: $isFirstLaunch, label: {
+                    Text(verbatim: "isFirstLaunch")
+                        .fontDesign(.monospaced)
+                })
+                Toggle(isOn: $isFirstLaunchResettable, label: {
+                    Text(verbatim: "isFirstLaunchResettable")
+                    
+                })
+                Toggle(isOn: $startUpSucceeded, label: {
+                    Text(verbatim: "startUpSucceeded")
+                    
+                })
 #if !DORIKIT_ENABLE_PRECACHE
-            Text("Settings.debug.pre-cache-unavailable")
-                .foregroundStyle(.red)
-                .fontDesign(.monospaced)
+                Text("Settings.debug.pre-cache-unavailable")
+                    .foregroundStyle(.red)
+                    .fontDesign(.monospaced)
 #endif
-            NavigationLink(destination: {
-                DebugBirthdayView()
-            }, label: {
-                Text(verbatim: "DebugBirthdayView")
-                    .fontDesign(.monospaced)
-            })
-            NavigationLink(destination: {
-                DebugFilterExperimentView()
-            }, label: {
-                Text(verbatim: "DebugFilterExperimentView")
-                    .fontDesign(.monospaced)
-            })
+                NavigationLink(destination: {
+                    DebugBirthdayView()
+                }, label: {
+                    Text(verbatim: "DebugBirthdayView")
+                        .fontDesign(.monospaced)
+                })
+                NavigationLink(destination: {
+                    DebugFilterExperimentView()
+                }, label: {
+                    Text(verbatim: "DebugFilterExperimentView")
+                })
+                Button(role: .destructive, action: {
+                    DoriCache.invalidateAll()
+                }, label: {
+                    Text("Settings.debug.clear-cache")
+                })
+            }
+            .fontDesign(.monospaced)
         }, header: {
             Text("Settings.debug")
         })

@@ -130,7 +130,7 @@ extension DoriAPI {
 
 extension DoriAPI.Skill {
     /// Represent a skill of card.
-    public struct Skill: Sendable, Identifiable, Equatable, Hashable, DoriCache.Cacheable {
+    public struct Skill: Sendable, Identifiable, Equatable, Hashable, Codable, DoriCache.Cacheable {
         /// A unique ID of skill.
         public var id: Int
         /// Localized simple description of skill.
@@ -184,7 +184,7 @@ extension DoriAPI.Skill {
         /// Once effect of skill, if available.
         public var onceEffect: OnceEffect?
         
-        public struct ActivationEffect: Sendable, Equatable, Hashable, DoriCache.Cacheable {
+        public struct ActivationEffect: Sendable, Equatable, Hashable, Codable, DoriCache.Cacheable {
             public var unificationActivateEffectValue: Int?
             public var unificationActivateConditionType: ActivateConditionType?
             public var unificationActivateConditionBandID: Int?
@@ -202,7 +202,7 @@ extension DoriAPI.Skill {
                 self.activateEffectTypes = activateEffectTypes
             }
             
-            public enum ActivateConditionType: String, Sendable, Hashable, DoriCache.Cacheable {
+            public enum ActivateConditionType: String, Sendable, Hashable, Codable, DoriCache.Cacheable {
                 case pure = "PURE"
                 case cool = "COOL"
                 case happy = "HAPPY"
@@ -210,7 +210,7 @@ extension DoriAPI.Skill {
             }
             
             public typealias Effects = [ActivateEffectType: ActivateEffect]
-            public enum ActivateEffectType: String, Sendable, Hashable, DoriCache.Cacheable {
+            public enum ActivateEffectType: String, Sendable, Hashable, Codable, DoriCache.Cacheable {
                 case score
                 case judge
                 case scoreOverLife = "score_over_life"
@@ -222,7 +222,7 @@ extension DoriAPI.Skill {
                 case damage
                 case neverDie = "never_die"
             }
-            public struct ActivateEffect: Sendable, Equatable, Hashable, DoriCache.Cacheable {
+            public struct ActivateEffect: Sendable, Equatable, Hashable, Codable, DoriCache.Cacheable {
                 public var activateEffectValue: [Int]
                 public var activateEffectValueType: ValueType
                 public var activateCondition: ActivateCondition
@@ -240,31 +240,31 @@ extension DoriAPI.Skill {
                     self.activateConditionLife = activateConditionLife
                 }
                 
-                public enum ValueType: String, Sendable, Hashable, DoriCache.Cacheable {
+                public enum ValueType: String, Sendable, Hashable, Codable, DoriCache.Cacheable {
                     case rate
                     case realValue = "real_value"
                 }
-                public enum ActivateCondition: String, Sendable, Hashable, DoriCache.Cacheable {
+                public enum ActivateCondition: String, Sendable, Hashable, Codable, DoriCache.Cacheable {
                     case none
                     case good
                     case perfect
                 }
             }
         }
-        public struct OnceEffect: Sendable, Equatable, Hashable, DoriCache.Cacheable {
+        public struct OnceEffect: Sendable, Equatable, Hashable, Codable, DoriCache.Cacheable {
             public var onceEffectType: OnceEffectType
             public var onceEffectValueType: ValueType
             public var onceEffectConditionLifeType: ConditionLifeType
             public var onceEffectConditionLife: Int
             public var onceEffectValue: [Int]
             
-            public enum OnceEffectType: String, Sendable, Hashable, DoriCache.Cacheable {
+            public enum OnceEffectType: String, Sendable, Hashable, Codable, DoriCache.Cacheable {
                 case life
             }
-            public enum ValueType: String, Sendable, Hashable, DoriCache.Cacheable {
+            public enum ValueType: String, Sendable, Hashable, Codable, DoriCache.Cacheable {
                 case realValue = "real_value"
             }
-            public enum ConditionLifeType: String, Sendable, Hashable, DoriCache.Cacheable {
+            public enum ConditionLifeType: String, Sendable, Hashable, Codable, DoriCache.Cacheable {
                 case underLife = "under_life"
             }
         }

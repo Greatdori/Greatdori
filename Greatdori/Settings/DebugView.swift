@@ -208,7 +208,7 @@ struct DebugOfflineAssetView: View {
 
 struct DebugFilterExperimentView: View {
     @State var filter: DoriFrontend.Filter = .init()
-    @State var updating = true
+    @State var updating = false
     @State var focusingList: Int = -1
     
     // 0 - Event
@@ -222,6 +222,10 @@ struct DebugFilterExperimentView: View {
     // 2 - Card
     @State var cardList: [DoriFrontend.Card.CardWithBand] = []
     @State var cardListFiltered: [DoriFrontend.Card.CardWithBand] = []
+    
+    // 3 - Song
+    @State var songList: [DoriFrontend.Song.PreviewSong] = []
+    @State var songListFiltered: [DoriFrontend.Song.PreviewSong] = []
     
     @State var showLegacy = false
     @State var eventListLegacy: [DoriAPI.Event.PreviewEvent] = []
@@ -241,6 +245,8 @@ struct DebugFilterExperimentView: View {
                             .tag(1)
                         Text(verbatim: "CARD")
                             .tag(2)
+                        Text(verbatim: "SONG")
+                            .tag(3)
                     }, label: {
                         Text(verbatim: "List Type")
                     })
@@ -260,12 +266,12 @@ struct DebugFilterExperimentView: View {
                         .foregroundStyle(updating ? .red : .green)
                     Group {
                         if focusingList == 0 {
-                            Text(verbatim: "Event List Item: \(eventListFiltered.count)/\(eventList.count)")
+                            Text(verbatim: "Events List Item: \(eventListFiltered.count)/\(eventList.count)")
                             ForEach(eventListFiltered) { element in
                                 Text(verbatim: "#\(element.id) - \(element.eventName.jp ?? "nil")")
                             }
                         } else if focusingList == 1 {
-                            Text(verbatim: "Gacha List Item: \(gachaListFiltered.count)/\(gachaList.count)")
+                            Text(verbatim: "Gachas List Item: \(gachaListFiltered.count)/\(gachaList.count)")
                             ForEach(gachaListFiltered) { element in
                                 Text(verbatim: "#\(element.id) - \(element.gachaName.jp ?? "nil")")
                             }
@@ -273,6 +279,17 @@ struct DebugFilterExperimentView: View {
                             Text(verbatim: "Cards List Item: \(cardListFiltered.count)/\(cardList.count)")
                             ForEach(cardListFiltered) { element in
                                 Text(verbatim: "#\(element.id) - \(element.card.prefix.jp ?? "nil")")
+                            }
+                        } else if focusingList == 3 {
+                            Text(verbatim: "Songs List Item: \(songListFiltered.count)/\(songList.count)")
+                            ForEach(songListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.musicTitle.jp ?? "nil")")
+                                ForEach(DoriAPI.Locale.allCases, id: \.self) { item in
+                                    if let closedAt = element.closedAt.forLocale(item), closedAt < Calendar.current.date(from: DateComponents(year: 2090, month: 1, day: 1))! {
+                                        Text(verbatim: "[\(item.rawValue.uppercased())] \(closedAt)")
+                                            .foregroundStyle(.red)
+                                    }
+                                }
                             }
                         }
                     }
@@ -309,41 +326,31 @@ struct DebugFilterExperimentView: View {
             FilterView(filter: $filter, includingKeys: Set(DoriFrontend.Filter.Key.allCases))
         })
         .onAppear {
-            focusingList = 0
+//            focusingList = 0
         }
         .onChange(of: focusingList, {
             updating = true
             Task {
                 if focusingList == 0 {
-                    eventList = await DoriFrontend.Event.list()!
+                    eventList = await DoriFrontend.Event.list() ?? []
                     eventListFiltered = eventList.filterByDori(with: filter)
                     if showLegacy {
                         eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
                     }
                 } else if focusingList == 1 {
-                    gachaList = await DoriFrontend.Gacha.list()!
+                    gachaList = await DoriFrontend.Gacha.list() ?? []
                     gachaListFiltered = gachaList.filterByDori(with: filter)
                     if showLegacy {
                         gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
                     }
                 } else if focusingList == 2 {
-                    cardList = await DoriFrontend.Card.list()!
+                    cardList = await DoriFrontend.Card.list() ?? []
                     cardListFiltered = cardList.filterByDori(with: filter)
+                } else if focusingList == 3 {
+                    songList = await DoriFrontend.Song.list() ?? []
+                    songListFiltered = songList.filterByDori(with: filter)
                 }
                 updating = false
-            }
-        })
-        .onChange(of: showLegacy, {
-            if showLegacy {
-                Task {
-                    updating = true
-                    if focusingList == 0 {
-                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
-                    } else if focusingList == 1 {
-                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
-                    }
-                    updating = false
-                }
             }
         })
         .onChange(of: filter) {
@@ -364,8 +371,23 @@ struct DebugFilterExperimentView: View {
                 }
             } else if focusingList == 2 {
                 cardListFiltered = cardList.filterByDori(with: filter)
+            } else if focusingList == 3 {
+                songListFiltered = songList.filterByDori(with: filter)
             }
             updating = false
         }
+        .onChange(of: showLegacy, {
+            if showLegacy {
+                Task {
+                    updating = true
+                    if focusingList == 0 {
+                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
+                    } else if focusingList == 1 {
+                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
+                    }
+                    updating = false
+                }
+            }
+        })
     }
 }

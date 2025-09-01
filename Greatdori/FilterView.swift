@@ -28,21 +28,27 @@ struct FilterView: View {
     @State var lastSelectAllActionIsDeselect: Bool = false
     @State var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key? = nil
     
+    let filterKeysOrder: [DoriFrontend.Filter.Key] = [.band, .attribute, .rarity, .character, .server, .timelineStatus, .released, .eventType, .gachaType, .songType, .skill]
+    
     var body: some View {
         Form {
             Section(content: {
                 // `FilterItemView` will determine whether it should be displayed or not by itself.
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .band)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .attribute)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .rarity)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .character)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .server)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .timelineStatus)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .released)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .eventType)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .gachaType)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .cardType)
-                FilterItemView(filter: $filter, allKeys: includingKeys, key: .skill)
+                ForEach(filterKeysOrder, id: \.self) { key in
+                    FilterItemView(filter: $filter, allKeys: includingKeys, key: key)
+                }
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .band)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .attribute)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .rarity)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .character)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .server)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .timelineStatus)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .released)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .eventType)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .gachaType)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .cardType)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .songType)
+//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .skill)
             }, header: {
                 VStack(alignment: .leading) {
                     if sizeClass == .compact {
@@ -68,12 +74,14 @@ struct FilterView: View {
 
 struct FilterItemView: View {
     @Binding var filter: DoriFrontend.Filter
-    //    let titleName: LocalizedStringResource
     let allKeys: Set<DoriFrontend.Filter.Key>
     let key: DoriFrontend.Filter.Key
     
     @State var isHovering = false
     @State var characterRequiresMatchAll = false
+    @State var skill: DoriAPI.Skill.Skill? = nil
+    @State var levelSliderIsEnabled = false
+    @State var level: Int = 5
     var body: some View {
         if allKeys.contains(key) {
             VStack(alignment: .leading) {
@@ -146,8 +154,9 @@ struct FilterItemView: View {
                     
                     //MARK: Picker Part
                     // Multiple Selection
-                    if key.selector.items.first?.imageURL != nil && key != .server { // `.server` is not expected to use flags in Greatdori!.
-                                                                                     // Image Selection
+                    if key.selector.items.first?.imageURL != nil && key != .server {
+                        // `.server` is not expected to use flags in Greatdori!.
+                        //MARK: Image Selection
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: filterItemHeight))]/*, spacing: 3*/) {
                             ForEach((key == .band && allKeys.contains(.bandMatchesOthers)) ? key.selector.items + [DoriFrontend.Filter.Key.bandMatchesOthers.selector.items.first!] : key.selector.items, id: \.self) { item in
                                 Group {
@@ -208,6 +217,7 @@ struct FilterItemView: View {
                             }
                         }
                     } else {
+                        //MARK: Text Selection
                         FlowLayout(items: key.selector.items, verticalSpacing: flowLayoutDefaultVerticalSpacing, horizontalSpacing: flowLayoutDefaultHorizontalSpacing) { item in
                             Button(action: {
                                 //                                withAnimation(.easeInOut(duration: 0.05)) {
@@ -230,23 +240,56 @@ struct FilterItemView: View {
                         }
                     }
                 } else {
-                    // Single Selection
-                    Picker(selection: $filter[key], content: {
-                        ForEach(key.selector.items, id: \.self) { item in
-                            Text(item.text)
-                                .tag(item.item.value)
+                    //MARK: Single Selection
+                    if key == .skill {
+                        Picker(key.localizedString, selection: $skill) {
+                            // Optional "Any" to clear the filter
+                            Text("Filter.skill.any")
+                                .tag(Optional<DoriFrontend.Filter.Skill>.none)
+                            
+                            //                            Text("\(key.selector.items)")
+                            ForEach(key.selector.items, id: \.self) { item in
+                                // Extract the concrete Skill from AnyHashable
+                                if let value = item.item.value as? DoriFrontend.Filter.Skill {
+                                    Text(item.text)
+                                        .tag(Optional(value))
+                                }
+                            }
                         }
-                    }, label: {
-                        VStack {
-                            Text(key.localizedString)
-                                .bold()
+                        .onChange(of: skill) { newValue in
+                            filter.skill = newValue
                         }
-                    })
+                    } else if key == .level {
+                        Slider(value: $level, in: 0...100) {
+                            
+                        }
+                        .onChange(of: level) { newValue in
+                            filter.level = level
+                        }
+                    }
                 }
             }
             .onHover(perform: { isHovered in
                 isHovering = isHovered
             })
+            .onAppear {
+                if skill == nil {
+                    skill = filter.skill
+                }
+                if level == nil {
+                    level = filter.level ?? 5
+                }
+            }
+            .onChange(of: filter.skill) {
+                if skill == nil {
+                    skill = filter.skill
+                }
+            }
+            .onChange(of: filter.level) {
+                if level == nil {
+                    level = filter.level ?? 5
+                }
+            }
         }
     }
     struct FilterSelectionCapsuleView<Content: View>: View {

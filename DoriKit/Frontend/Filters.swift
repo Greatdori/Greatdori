@@ -43,6 +43,7 @@ extension DoriFrontend {
         public var songType: Set<SongType> = .init(SongType.allCases)  { didSet { store() } }
         public var loginCampaignType: Set<LoginCampaignType> = .init(LoginCampaignType.allCases) { didSet { store() } }
         public var comicType: Set<ComicType> = .init(ComicType.allCases) { didSet { store() } }
+        public var level: Int? = nil  { didSet { store() } }
         public var skill: Skill? = nil  { didSet { store() } }
         public var timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases)  { didSet { store() } }
         public var sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))  { didSet { store() } }
@@ -62,6 +63,7 @@ extension DoriFrontend {
             songType: Set<SongType> = .init(SongType.allCases),
             loginCampaignType: Set<LoginCampaignType> = .init(LoginCampaignType.allCases),
             comicType: Set<ComicType> = .init(ComicType.allCases),
+            level: Int? = nil,
             skill: Skill? = nil,
             timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases),
             sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))
@@ -80,6 +82,7 @@ extension DoriFrontend {
             self.songType = songType
             self.loginCampaignType = loginCampaignType
             self.comicType = comicType
+            self.level = level
             self.skill = skill
             self.timelineStatus = timelineStatus
             self.sort = sort
@@ -119,6 +122,7 @@ extension DoriFrontend {
             || songType.count != SongType.allCases.count
             || loginCampaignType.count != LoginCampaignType.allCases.count
             || comicType.count != ComicType.allCases.count
+            || level != nil
             || skill != nil
             || timelineStatus.count != TimelineStatus.allCases.count
         }
@@ -144,7 +148,8 @@ extension DoriFrontend {
             \(songType.sorted { $0.rawValue < $1.rawValue })\
             \(loginCampaignType.sorted { $0.rawValue < $1.rawValue })\
             \(comicType.sorted { $0.rawValue < $1.rawValue })\
-            \(timelineStatus.sorted { $0.rawValue < $1.rawValue })
+            \(timelineStatus.sorted { $0.rawValue < $1.rawValue })\
+            \(level, default: "nil")
             """
             return String(SHA256.hash(data: desc.data(using: .utf8)!).map { $0.description }.joined().prefix(8))
         }
@@ -165,6 +170,7 @@ extension DoriFrontend {
             songType = .init(SongType.allCases)
             loginCampaignType = .init(LoginCampaignType.allCases)
             comicType = .init(ComicType.allCases)
+            level = nil
             skill = nil
             timelineStatus = .init(TimelineStatus.allCases)
         }
@@ -193,6 +199,7 @@ extension DoriFrontend {
 
 extension DoriFrontend.Filter {
     public typealias Attribute = DoriAPI.Attribute
+    public typealias BandMatchesOthers = Bool
     public typealias Rarity = Int
     public typealias Server = DoriAPI.Locale
     public typealias CardType = DoriAPI.Card.CardType
@@ -200,6 +207,7 @@ extension DoriFrontend.Filter {
     public typealias GachaType = DoriAPI.Gacha.GachaType
     public typealias SongType = DoriAPI.Song.SongTag
     public typealias ComicType = DoriAPI.Comic.Comic.ComicType
+    public typealias Level = Int
     public typealias Skill = DoriAPI.Skill.Skill
     
     public enum Band: Int, Sendable, CaseIterable, Hashable, Codable {
@@ -413,6 +421,7 @@ extension DoriFrontend.Filter {
         case songType
         case loginCampaignType
         case comicType
+        case level
         case skill
         case timelineStatus
         case sort
@@ -452,6 +461,7 @@ extension DoriFrontend.Filter.Key {
         case .songType: String(localized: "FILTER_KEY_SONG_TYPE", bundle: #bundle)
         case .loginCampaignType: String(localized: "FILTER_KEY_LOGIN_CAMPAIGN_TYPE", bundle: #bundle)
         case .comicType: String(localized: "FILTER_KEY_COMIC_TYPE", bundle: #bundle)
+        case .level: String(localized: "FILTER_KEY_LEVEL", bundle: #bundle)
         case .skill: String(localized: "FILTER_KEY_SKILL", bundle: #bundle)
         case .timelineStatus: String(localized: "FILTER_KEY_TIMELINE_STATUS", bundle: #bundle)
         case .sort: String(localized: "FILTER_KEY_SORT", bundle: #bundle)
@@ -494,6 +504,7 @@ extension DoriFrontend.Filter: MutableCollection {
             case .songType: self.songType
             case .loginCampaignType: self.loginCampaignType
             case .comicType: self.comicType
+            case .level: self.level
             case .skill: self.skill
             case .timelineStatus: self.timelineStatus
             case .sort: self.sort
@@ -554,6 +565,8 @@ extension DoriFrontend.Filter: MutableCollection {
             self.loginCampaignType = value as! Set<LoginCampaignType>
         case .comicType:
             self.comicType = value as! Set<ComicType>
+        case .level:
+            self.level = value as! Int?
         case .skill:
             self.skill = value as! Skill?
         case .timelineStatus:
@@ -816,8 +829,12 @@ extension DoriFrontend.Filter.Key {
             (.multiple, DoriFrontend.Filter.ComicType.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
+        case .level:
+            (.single, InMemoryCache.readAll().map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
         case .skill:
-            (.single, InMemoryCache.allSkills.map {
+            (.single, InMemoryCache.readAll().map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
         case .timelineStatus:

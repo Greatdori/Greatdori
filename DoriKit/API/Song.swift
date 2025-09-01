@@ -485,7 +485,7 @@ extension DoriAPI {
 
 extension DoriAPI.Song {
     /// Represent simplified data of a song.
-    public struct PreviewSong: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+    public struct PreviewSong: Sendable, Identifiable, Hashable, DoriCache.Cacheable, DoriFrontend.Filterable {
         /// A unique ID of song.
         public var id: Int
         /// Tag of song.

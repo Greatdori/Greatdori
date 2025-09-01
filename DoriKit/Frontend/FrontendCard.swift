@@ -57,11 +57,11 @@ extension DoriFrontend {
             
             var filteredCards = cards
             if filter.isFiltered {
-                filteredCards = cards.filter { card in
+                filteredCards = cards/*.filter { card in
                     filter.band.contains { band in
                         band.rawValue == characters.first(where: { $0.id == card.characterID })?.bandID
                     }
-                }.filter { card in
+                }*/.filter { card in
                     filter.attribute.contains(card.attribute)
                 }.filter { card in
                     filter.rarity.contains(card.rarity)
@@ -119,6 +119,7 @@ extension DoriFrontend {
                     filter.sort.compare(lhs.id, rhs.id)
                 }
             }
+//            return sorted
             return sortedCards.compactMap { card in
                 if let band = bands.first(where: { $0.id == characters.first { $0.id == card.characterID }?.bandID }) {
                     .init(card: card, band: band)

@@ -35,35 +35,46 @@ extension DoriFrontend {
         nonisolated(unsafe) private var allCache: FilterCache = FilterCache()
         private let lock = NSLock()
         
+        func writeCardCache(_ cardsList: [DoriAPI.Card.PreviewCard]?) {
+            lock.lock()
+            defer { lock.unlock() }
+            if cardsList != nil {
+                unsafe allCache.cardsList = cardsList
+                unsafe allCache.cardsDict.removeAll()
+                if let cards = cardsList {
+                    for card in cards {
+                        unsafe allCache.cardsDict[card.id] = card
+                    }
+                }
+            }
+        }
+        
+        func writeBandsList(_ bandsList: [DoriAPI.Band.Band]?) {
+            lock.lock()
+            defer { lock.unlock() }
+            if bandsList != nil {
+                unsafe allCache.bandsList = bandsList
+            }
+        }
+        
+        func writeCharactersList(_ charactersList: [DoriAPI.Character.PreviewCharacter]?) {
+            lock.lock()
+            defer { lock.unlock() }
+            if charactersList != nil {
+                unsafe allCache.charactersList = charactersList
+            }
+        }
+        
         func read() -> FilterCache {
             lock.lock()
             defer { lock.unlock() }
             return unsafe allCache
         }
         
-        func writeCardCache(_ cardsList: [DoriAPI.Card.PreviewCard]?) {
+        func erase() {
             lock.lock()
             defer { lock.unlock() }
-            unsafe allCache.cardsList = cardsList
-            unsafe allCache.cardsDict.removeAll()
-            if let cards = cardsList {
-                for card in cards {
-                    unsafe allCache.cardsDict[card.id] = card
-                }
-            }
-            
-        }
-        
-        func writeBandsList(_ bandsList: [DoriAPI.Band.Band]?) {
-            lock.lock()
-            defer { lock.unlock() }
-            unsafe allCache.bandsList = bandsList
-        }
-        
-        func writeCharactersList(_ charactersList: [DoriAPI.Character.PreviewCharacter]?) {
-            lock.lock()
-            defer { lock.unlock() }
-            unsafe allCache.charactersList = charactersList
+            unsafe allCache = .init()
         }
     }
     
@@ -181,15 +192,10 @@ extension DoriAPI.Gacha.PreviewGacha {
 }
 
 //MARK: extension CardWithBand
-// Band, Attribute, Rarity, Character, Server, Availability, Card Type
-// Filter Cache Required
+// Band, Attribute, Rarity, Character, Server, Availability, Card Type, Skill
 extension DoriFrontend.Card.CardWithBand {
     public func matches<ValueType>(_ value: ValueType, withFilterCache cache: DoriFrontend.FilterCache?) -> Bool? { // Band
-        if let band = value as? DoriFrontend.Filter.Band {
-            guard let characters = cache?.charactersList else {
-                os_log("[Filter][Gacha] Found `nil` while trying to read card cache.")
-                return nil
-            }
+        if let band = value as? DoriFrontend.Filter.Band { // Band
             return self.band.id == band.rawValue
         } else if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
             return self.card.attribute.rawValue.contains(attribute.rawValue)
@@ -214,7 +220,7 @@ extension DoriFrontend.Card.CardWithBand {
             return false
         } else if let cardType = value as? DoriFrontend.Filter.CardType { // Card Type
             return self.card.type == cardType
-        } else if let skill = value as? DoriFrontend.Filter.Skill {
+        } else if let skill = value as? DoriFrontend.Filter.Skill { // Skill
             return self.card.skillID == skill.id
         } else {
             return nil // Unexpected: unexpected value type
@@ -222,6 +228,62 @@ extension DoriFrontend.Card.CardWithBand {
     }
 }
 
+//MARK: extension PreviewSong
+// Band, Band Mathces Others, Server, Timeline Status, Song Type
+extension DoriAPI.Song.PreviewSong {
+    public func matches<ValueType>(_ value: ValueType, withFilterCache cache: DoriFrontend.FilterCache?) -> Bool? { // Band
+        if let band = value as? DoriFrontend.Filter.Band { // Band
+            return self.bandID == band.rawValue
+        } else if let bandMatchesOthers = value as? DoriFrontend.Filter.BandMatchesOthers { // Band Matches Others
+            return (!DoriFrontend.Filter.Band.allCases.map { $0.rawValue }.contains(self.bandID)) && bandMatchesOthers
+        } else if let server = value as? DoriFrontend.Filter.Server { // Server
+            return (self.publishedAt.forLocale(server) ?? dateOfYear2100) < .now
+//        } else if let availabilityWithServers = value as? DoriFrontend.AvailabilityWithServers { // Availability
+//            // Consider Remove
+//            for locale in availabilityWithServers.servers {
+//                if availabilityWithServers.releaseStatus.boolValue {
+//                    if (self.publishedAt.forLocale(locale) ?? dateOfYear2100) < .now {
+//                        return true
+//                    }
+//                } else {
+//                    if (self.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 0)) > .now {
+//                        return true
+//                    }
+//                }
+//            }
+//            return false
+        } else if let timelineStatusWithServers = value as? DoriFrontend.TimelineStatusWithServers { // Timeline Status
+            switch timelineStatusWithServers.timelineStatus {
+            case .ended:
+                for singleLocale in timelineStatusWithServers.servers {
+                    if (self.closedAt.forLocale(singleLocale) ?? dateOfYear2100) < .now {
+                        return true
+                    }
+                }
+            case .ongoing:
+                for singleLocale in timelineStatusWithServers.servers {
+                    if (self.publishedAt.forLocale(singleLocale) ?? dateOfYear2100) < .now
+                        && (self.closedAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                        return true
+                    }
+                }
+            case .upcoming:
+                for singleLocale in timelineStatusWithServers.servers {
+                    if (self.publishedAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                        return true
+                    }
+                }
+            }
+            return false
+        } else if let songType = value as? DoriFrontend.Filter.SongType { // Song Type
+            return self.tag == songType
+        } else {
+            return nil // Unexpected: unexpected value type
+        }
+    }
+}
+
+//MARK: extension Array
 public extension Array where Element: DoriFrontend.Filterable {
     public func filterByDori(with filter: DoriFrontend.Filter) -> [Element] {
         var result: [Element] = self
@@ -284,6 +346,11 @@ public extension Array where Element: DoriFrontend.Filterable {
             guard filter.cardType != Set(DoriFrontend.Filter.CardType.allCases) else { return true }
             return filter.cardType.contains { cardType in
                 element.matches(cardType, withFilterCache: cacheCopy) ?? true
+            }
+        } .filter { element in // Song Types
+            guard filter.songType != Set(DoriFrontend.Filter.SongType.allCases) else { return true }
+            return filter.songType.contains { songType in
+                element.matches(songType, withFilterCache: cacheCopy) ?? true
             }
         } .filter { element in // Skill
             guard filter.skill != nil else { return true }
