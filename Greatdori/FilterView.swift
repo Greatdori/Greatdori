@@ -259,14 +259,14 @@ struct FilterItemView: View {
                         .onChange(of: skill) { newValue in
                             filter.skill = newValue
                         }
-                    } else if key == .level {
+                    }/* else if key == .level {
                         Slider(value: $level, in: 0...100) {
-                            
+                            Text("1")
                         }
-                        .onChange(of: level) { newValue in
-                            filter.level = level
-                        }
-                    }
+//                        .onChange(of: level) { newValue in
+//                            filter.level = level
+//                        }
+                    }*/
                 }
             }
             .onHover(perform: { isHovered in
@@ -276,20 +276,20 @@ struct FilterItemView: View {
                 if skill == nil {
                     skill = filter.skill
                 }
-                if level == nil {
-                    level = filter.level ?? 5
-                }
+//                if level == 5 {
+//                    level = filter.level ?? 5
+//                }
             }
             .onChange(of: filter.skill) {
                 if skill == nil {
                     skill = filter.skill
                 }
             }
-            .onChange(of: filter.level) {
-                if level == nil {
-                    level = filter.level ?? 5
-                }
-            }
+//            .onChange(of: filter.level) {
+//                if level == 5 {
+//                    level = filter.level ?? 5
+//                }
+//            }
         }
     }
     struct FilterSelectionCapsuleView<Content: View>: View {
