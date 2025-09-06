@@ -166,12 +166,12 @@ struct ContentView: View {
                 ProgressView()
                     .onAppear {
                         os_log("CRASH VIEW HAD BEEN ENTERED")
-                        #if DEBUG
-                        showCrashAlert = true
-                        #else
-                        DoriCache.invalidateAll()
-                        mainAppShouldBeDisplayed = true
-                        #endif
+                        if AppFlag.DEBUG {
+                            showCrashAlert = true
+                        } else {
+                            DoriCache.invalidateAll()
+                            mainAppShouldBeDisplayed = true
+                        }
                     }
                     .alert("Debug.crash-detected.title", isPresented: $showCrashAlert, actions: {
                         Button(role: .destructive, action: {

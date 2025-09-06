@@ -45,15 +45,17 @@ struct GreatdoriApp: App {
             ContentView()
         }
         .commands {
-            #if DEBUG && os(macOS)
-            CommandGroup(after: .appSettings) {
-                Button(String("Menu-bar.window.offline-asset-debug"), systemImage: "ant.fill") {
-                    openWindow(id: "OfflineAssetDebugWindow")
+            #if os(macOS)
+            if AppFlag.DEBUG {
+                CommandGroup(after: .appSettings) {
+                    Button(String("Menu-bar.window.offline-asset-debug"), systemImage: "ant.fill") {
+                        openWindow(id: "OfflineAssetDebugWindow")
+                    }
                 }
-            }
-            CommandGroup(after: .appSettings) {
-                Button(String("Menu-bar.window.filter-experiment-debug"), systemImage: "ant.fill") {
-                    openWindow(id: "FilterExperimentDebugWindow")
+                CommandGroup(after: .appSettings) {
+                    Button(String("Menu-bar.window.filter-experiment-debug"), systemImage: "ant.fill") {
+                        openWindow(id: "FilterExperimentDebugWindow")
+                    }
                 }
             }
             #endif
@@ -95,6 +97,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //            isFirstLaunch = false
 //        }
     }
+    
+    func application(_ application: NSApplication, open urls: [URL]) {
+        if let url = urls.first {
+            handleURL(url)
+        }
+    }
 }
 #else
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -121,5 +129,29 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         return true
     }
+    
+    func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+    ) -> Bool {
+        handleURL(url)
+        return true
+    }
 }
 #endif
+
+private func handleURL(_ url: URL) {
+    guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
+    switch components.host {
+    case "flag":
+        if let items = components.queryItems {
+            for item in items {
+                if let value = item.value {
+                    AppFlag.set((Int(value) ?? (value == "true" ? 1 : 0)) != 0, forKey: item.name)
+                }
+            }
+        }
+    default: break
+    }
+}

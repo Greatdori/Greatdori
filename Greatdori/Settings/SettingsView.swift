@@ -35,9 +35,9 @@ struct SettingsView: View {
                 SettingsWidgetView()
 #endif
                 SettingsOfflineDataView()
-#if DEBUG
-                SettingsDebugView()
-#endif
+                if AppFlag.DEBUG {
+                    SettingsDebugView()
+                }
             }
             .formStyle(.grouped)
             .navigationTitle("Settings")
