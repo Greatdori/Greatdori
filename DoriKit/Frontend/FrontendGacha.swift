@@ -41,7 +41,6 @@ extension DoriFrontend {
                 await DoriAPI.Gacha.all()
             } _: {
                 await DoriAPI.Card.all()
-                
             }
             guard let gacha = groupResult.0 else { return nil }
             guard let cards = groupResult.1 else { return nil }

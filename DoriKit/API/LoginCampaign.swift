@@ -62,7 +62,7 @@ extension DoriAPI {
                                 cn: value["assetBundleName"][3].string,
                                 kr: value["assetBundleName"][4].string
                             ),
-                            caption: .init( 
+                            caption: .init(
                                 jp: value["caption"][0].string,
                                 en: value["caption"][1].string,
                                 tw: value["caption"][2].string,

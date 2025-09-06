@@ -245,15 +245,15 @@ extension DoriFrontend.Filter {
         case others = -1 // `others` MUST be the last.
         
         public init(id: Int) {
-            if DoriFrontend.Filter.FullBand.allCases.map({$0.rawValue}).dropLast().contains(id) {
-                self = FullBand(rawValue: id)!
+            if Self.allCases.map({$0.rawValue}).dropLast().contains(id) {
+                self = .init(rawValue: id)!
             } else {
                 self = .others
             }
         }
     }
     @frozen
-    public enum BandMatchesOthers: Codable {
+    public enum BandMatchesOthers: Codable, Hashable {
         case includeOthers
         case excludeOthers
     }
@@ -655,9 +655,6 @@ extension DoriFrontend.Filter.Band: DoriFrontend.Filter._Selectable {
             return nil
         }
     }
-    internal func asFullBand() -> DoriFrontend.Filter.FullBand {
-        return DoriFrontend.Filter.FullBand(rawValue: self.rawValue)!
-    }
 }
 extension DoriFrontend.Filter.Attribute: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
@@ -877,7 +874,11 @@ extension DoriFrontend.Filter.Key {
             })
         case .songAvailability:
             (.multiple, DoriFrontend.Filter.TimelineStatus.allCases.map {
-                SelectorItem(DoriFrontend.Filter._AnySelectable($0, selectorText: [DoriFrontend.Filter.TimelineStatus.upcoming: String(localized: "SONG_AVAILABILITY_UPCOMING", bundle: #bundle), DoriFrontend.Filter.TimelineStatus.ongoing: String(localized: "SONGS_AVAILABILITY_AVAILABLE", bundle: #bundle), DoriFrontend.Filter.TimelineStatus.ended: String(localized: "SONG_AVAILABILITY_REMOVED", bundle: #bundle)][$0]!))
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0, selectorText: [
+                    DoriFrontend.Filter.TimelineStatus.upcoming: String(localized: "SONG_AVAILABILITY_UPCOMING", bundle: #bundle),
+                    DoriFrontend.Filter.TimelineStatus.ongoing: String(localized: "SONGS_AVAILABILITY_AVAILABLE", bundle: #bundle),
+                    DoriFrontend.Filter.TimelineStatus.ended: String(localized: "SONG_AVAILABILITY_REMOVED", bundle: #bundle)
+                ][$0]!))
             }.reversed())
         case .sort:
             (.single, DoriFrontend.Filter.Sort.Keyword.allCases.map {
@@ -916,3 +917,9 @@ extension DoriFrontend.Filter.Key {
 }
 extension DoriFrontend.Filter.Key.SelectorItem: Equatable where T: Equatable {}
 extension DoriFrontend.Filter.Key.SelectorItem: Hashable where T: Hashable {}
+
+extension DoriFrontend.Filter.Band {
+    internal func asFullBand() -> DoriFrontend.Filter.FullBand {
+        return DoriFrontend.Filter.FullBand(rawValue: self.rawValue)!
+    }
+}
