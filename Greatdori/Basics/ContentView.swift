@@ -60,7 +60,9 @@ struct ContentView: View {
                                 
                             }
                             Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
-                                EventSearchView()
+                                NavigationStack {
+                                    EventSearchView()
+                                }
                             }
                         }, header: {
                             Text("App.info")

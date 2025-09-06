@@ -1057,6 +1057,9 @@
     "Greatdori!" : {
       "shouldTranslate" : false
     },
+    "Hello, world!" : {
+
+    },
     "Home.birthday" : {
       "localizations" : {
         "en" : {

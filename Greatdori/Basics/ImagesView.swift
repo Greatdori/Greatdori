@@ -68,6 +68,7 @@ struct EventCardHomeView: View {
             
             if showsCountdown { // Accually Title & Countdown
                 Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                    .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
                     .bold()
                     .font(.title3)
                 Group {
@@ -158,6 +159,7 @@ struct EventCardView: View {
                                 //                                attributedString = highlightKeyword(in: , keyword: searchedKeyword)
                                 attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
                             }
+                            .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
                             .onChange(of: searchedKeyword, {
                                 attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
                             })
@@ -549,7 +551,6 @@ struct CardIconView: View {
         .wrapIf(showNavigationHints, in: { content in
             #if os(iOS)
             content
-            //TODO: Optimize for macOS
                 .contextMenu(menuItems: {
                     VStack {
                         Button(action: {

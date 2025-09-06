@@ -544,7 +544,7 @@ struct EventSearchView: View {
     @State var presentingEventID: Int?
     @Namespace var eventLists
     var body: some View {
-        NavigationStack {
+        Group {
             Group {
                 if let resultEvents = searchedEvents ?? events {
                     Group {
@@ -653,7 +653,7 @@ struct EventSearchView: View {
                             Spacer()
                         }
                     } else {
-                        ContentUnavailableView("Event.search.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Event.unavailable.description"))
+                        ContentUnavailableView("Event.search.unavailable", systemImage: "line.horizontal.star.fill.line.horizontal", description: Text("Event.unavailable.description"))
                     }
                 }
             }
