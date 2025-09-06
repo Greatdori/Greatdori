@@ -145,7 +145,7 @@ extension DoriAPI {
     
 extension DoriAPI.Costume {
     /// Represent simplified data of a costume.
-    public struct PreviewCostume: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+    public struct PreviewCostume: Sendable, Identifiable, Hashable, DoriCache.Cacheable, DoriFrontend.Filterable {
         /// A unique ID of costume.
         public var id: Int
         /// ID of related character to this costume.

@@ -333,6 +333,40 @@ extension DoriAPI.Comic.Comic {
     }
 }
 
+//MARK: extension PreviewCostume
+// Band, Character, Server, Availability
+// Filter Cache Required
+extension DoriFrontend.Costume.PreviewCostume {
+    public func matches<ValueType>(_ value: ValueType, withFilterCache cache: DoriFrontend.FilterCache?) -> Bool? {
+        if let band = value as? DoriFrontend.Filter.FullBand { // Band - Full
+            guard let characters = cache?.charactersList else {
+                unsafe os_log("[Filter][Costume] Found `nil` while trying to read characters cache.")
+                return nil
+            }
+            return band.rawValue == characters.first(where: { $0.id == self.characterID })?.bandID
+        } else if let character = value as? DoriFrontend.Filter.Character { // Character
+            return self.characterID == characterID
+        } else if let server = value as? DoriFrontend.Filter.Server { // Server
+            return self.description.availableInLocale(server)
+        } else if let availabilityWithServers = value as? DoriFrontend.AvailabilityWithServers { // Availability
+            for locale in availabilityWithServers.servers {
+                if availabilityWithServers.releaseStatus.boolValue {
+                    if (self.publishedAt.forLocale(locale) ?? dateOfYear2100) < .now {
+                        return true
+                    }
+                } else {
+                    if (self.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                        return true
+                    }
+                }
+            }
+            return false
+        } else {
+            return nil 
+        }
+    }
+}
+
 //MARK: extension Array
 public extension Array where Element: DoriFrontend.Filterable {
     func filterByDori(with filter: DoriFrontend.Filter) -> [Element] {

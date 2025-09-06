@@ -235,6 +235,10 @@ struct DebugFilterExperimentView: View {
     @State var campaignList: [DoriAPI.LoginCampaign.PreviewCampaign] = []
     @State var campaignListFiltered: [DoriAPI.LoginCampaign.PreviewCampaign] = []
     
+    // 6 - Costume
+    @State var costumeList: [DoriAPI.Costume.PreviewCostume] = []
+    @State var costumeListFiltered: [DoriAPI.Costume.PreviewCostume] = []
+    
     @State var showLegacy = false
     @State var eventListLegacy: [DoriAPI.Event.PreviewEvent] = []
     @State var gachaListLegacy: [DoriAPI.Gacha.PreviewGacha] = []
@@ -261,6 +265,8 @@ struct DebugFilterExperimentView: View {
                             .tag(4)
                         Text(verbatim: "CAMPAIGN")
                             .tag(5)
+                        Text(verbatim: "COSTUME")
+                            .tag(6)
                     }, label: {
                         Text(verbatim: "List Type")
                     })
@@ -314,6 +320,11 @@ struct DebugFilterExperimentView: View {
                             Text(verbatim: "Campaign List Item: \(campaignListFiltered.count)/\(campaignList.count)")
                             ForEach(campaignListFiltered) { element in
                                 Text(verbatim: "#\(element.id) - \(element.caption.jp ?? "nil")")
+                            }
+                        } else if focusingList == 6 {
+                            Text(verbatim: "Costume List Item: \(costumeListFiltered.count)/\(costumeList.count)")
+                            ForEach(costumeListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.description.jp ?? "nil")")
                             }
                         }
                     }
@@ -379,6 +390,9 @@ struct DebugFilterExperimentView: View {
                 } else if focusingList == 5 {
                     campaignList = await DoriFrontend.LoginCampaign.list() ?? []
                     campaignListFiltered = campaignList.filterByDori(with: filter)
+                } else if focusingList == 6 {
+                    costumeList = await DoriFrontend.Costume.list() ?? []
+                    costumeListFiltered = costumeList.filterByDori(with: filter)
                 }
                 updating = false
             }
@@ -407,6 +421,8 @@ struct DebugFilterExperimentView: View {
                 comicListFiltered = comicList.filterByDori(with: filter)
             } else if focusingList == 5 {
                 campaignListFiltered = campaignList.filterByDori(with: filter)
+            } else if focusingList == 6 {
+                costumeListFiltered = costumeList.filterByDori(with: filter)
             }
             updating = false
         }

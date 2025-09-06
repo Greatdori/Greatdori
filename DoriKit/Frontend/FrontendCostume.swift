@@ -46,6 +46,9 @@ extension DoriFrontend {
             guard let costumes = groupResult.0 else { return nil }
             guard let characters = groupResult.1 else { return nil }
             
+//            DoriFrontend.FilterCacheManager().writeCharactersList(characters)
+            DoriFrontend.FilterCacheManager.shared.writeCharactersList(characters)
+            
             let filteredCostumes = costumes.filter { costume in
                 filter.band.contains { band in
                     band.rawValue == characters.first(where: { $0.id == costume.characterID })?.bandID
