@@ -397,7 +397,7 @@ extension DoriFrontend.Costume.PreviewCostume: DoriFrontend.Filterable {
 
 // MARK: extension Array
 extension Array where Element: DoriFrontend.Filterable {
-    public func filterByDori(with filter: DoriFrontend.Filter) -> [Element] {
+    public func filter(withDoriFilter filter: DoriFrontend.Filter) -> [Element] {
         var result: [Element] = self
         guard filter.isFiltered else { return result }
         let cacheCopy: DoriFrontend._FilterCache = FilterCacheManager.shared.read()
