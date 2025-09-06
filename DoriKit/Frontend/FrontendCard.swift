@@ -52,8 +52,8 @@ extension DoriFrontend {
             guard let bands = groupResult.2 else { return nil }
             
             
-            DoriFrontend.FilterCacheManager.shared.writeBandsList(bands)
-            DoriFrontend.FilterCacheManager.shared.writeCharactersList(characters)
+            FilterCacheManager.shared.writeBandsList(bands)
+            FilterCacheManager.shared.writeCharactersList(characters)
             
             var filteredCards = cards
             if filter.isFiltered {

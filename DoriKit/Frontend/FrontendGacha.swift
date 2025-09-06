@@ -46,7 +46,7 @@ extension DoriFrontend {
             guard let gacha = groupResult.0 else { return nil }
             guard let cards = groupResult.1 else { return nil }
             
-            DoriFrontend.FilterCacheManager.shared.writeCardCache(cards)
+            FilterCacheManager.shared.writeCardCache(cards)
             
             var filteredGacha = gacha
             if filter.isFiltered {
