@@ -627,7 +627,7 @@ extension DoriFrontend.Filter {
         public init<T: _Selectable>(_ value: T) {
             self.init(erasing: value)
         }
-        public init<T: _Selectable>(_ value: T, selectorText: String, selectorImageURL: URL? = nil) {
+        internal init<T: _Selectable>(_ value: T, selectorText: String, selectorImageURL: URL? = nil) {
             self._selectorText = selectorText
             self._selectorImageURL = selectorImageURL
             self.value = value
