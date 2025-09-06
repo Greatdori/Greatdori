@@ -16,14 +16,13 @@ import Foundation
 internal import os
 
 extension DoriFrontend {
-    // MARK: protocol Filterable
-    public protocol _Filterable {
+    public protocol Filterable {
+        static var applicableKeys: [DoriFrontend.Filter.Key] { get }
+        
         // `matches` only handle single value.
         // Please keep in mind that it does handle values like any `Array` or `characterRequiresMatchAll`.
         // Unexpected value type or cache reading failure will lead to `nil` return.
         func _matches<ValueType>(_ value: ValueType, withCache: _FilterCache?) -> Bool?
-        
-//        var applicableKeys: [DoriFrontend.Filter.Key] { get }
     }
     
     public struct _FilterCache {
@@ -105,7 +104,12 @@ internal final class FilterCacheManager: Sendable {
 
 // MARK: extension PreviewEvent
 // Attribute, Character, Server, Timeline Status, Event Type
-extension DoriAPI.Event.PreviewEvent: DoriFrontend._Filterable {
+extension DoriAPI.Event.PreviewEvent: DoriFrontend.Filterable {
+    @inlinable
+    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+        [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType]
+    }
+    
     public func _matches<ValueType>(_ value: ValueType, withCache: DoriFrontend._FilterCache? = nil) -> Bool? {
         if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
             return self.attributes.contains { $0.attribute == attribute }
@@ -147,7 +151,12 @@ extension DoriAPI.Event.PreviewEvent: DoriFrontend._Filterable {
 // MARK: extension PreviewGacha
 // Attribute, Character, Server, Timeline Status, Gacha Type
 // Filter Cache Required
-extension DoriAPI.Gacha.PreviewGacha: DoriFrontend._Filterable {
+extension DoriAPI.Gacha.PreviewGacha: DoriFrontend.Filterable {
+    @inlinable
+    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+        [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .gachaType]
+    }
+    
     public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? {
         if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
             guard let cards = cache?.cardsDict else {
@@ -198,7 +207,12 @@ extension DoriAPI.Gacha.PreviewGacha: DoriFrontend._Filterable {
 
 // MARK: extension CardWithBand
 // Band, Attribute, Rarity, Character, Server, Availability, Card Type, Skill
-extension DoriFrontend.Card.CardWithBand: DoriFrontend._Filterable {
+extension DoriFrontend.Card.CardWithBand: DoriFrontend.Filterable {
+    @inlinable
+    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+        [.band, .attribute, .rarity, .character, .server, .released, .cardType, .skill]
+    }
+    
     public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? { // Band
         if let band = value as? DoriFrontend.Filter.FullBand { // Band - Full
             return plainBandID(from: self.band.id) == band.rawValue
@@ -235,7 +249,12 @@ extension DoriFrontend.Card.CardWithBand: DoriFrontend._Filterable {
 
 // MARK: extension PreviewSong
 // Band, Server, Timeline Status, Song Type, Level
-extension DoriAPI.Song.PreviewSong: DoriFrontend._Filterable {
+extension DoriAPI.Song.PreviewSong: DoriFrontend.Filterable {
+    @inlinable
+    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+        [.band, .server, .timelineStatus, .songType, .level]
+    }
+    
     public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? {
         if let band = value as? DoriFrontend.Filter.FullBand { // Band - Full
             return plainBandID(from: self.bandID) == band.rawValue
@@ -276,7 +295,12 @@ extension DoriAPI.Song.PreviewSong: DoriFrontend._Filterable {
 
 // MARK: extension PreivewCampaign
 // Server, Timeline Status, Login Campaign Type
-extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend._Filterable {
+extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend.Filterable {
+    @inlinable
+    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+        [.server, .timelineStatus, .loginCampaignType]
+    }
+    
     public func _matches<ValueType>(_ value: ValueType, withCache: DoriFrontend._FilterCache?) -> Bool? {
         if let server = value as? DoriFrontend.Filter.Server { // Server
             return self.publishedAt.availableInLocale(server)
@@ -313,7 +337,12 @@ extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend._Filterable {
 
 // MARK: extension Comic
 // Character, Server, Comic Type
-extension DoriAPI.Comic.Comic: DoriFrontend._Filterable {
+extension DoriAPI.Comic.Comic: DoriFrontend.Filterable {
+    @inlinable
+    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+        [.character, .characterRequiresMatchAll, .server, .comicType]
+    }
+    
     public func _matches<ValueType>(_ value: ValueType, withCache: DoriFrontend._FilterCache?) -> Bool? {
         if let character = value as? DoriFrontend.Filter.Character { // Character
             return self.characterIDs.contains(character.rawValue)
@@ -330,7 +359,12 @@ extension DoriAPI.Comic.Comic: DoriFrontend._Filterable {
 // MARK: extension PreviewCostume
 // Band, Character, Server, Availability
 // Filter Cache Required
-extension DoriFrontend.Costume.PreviewCostume: DoriFrontend._Filterable {
+extension DoriFrontend.Costume.PreviewCostume: DoriFrontend.Filterable {
+    @inlinable
+    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+        [.band, .character, .server, .released]
+    }
+    
     public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? {
         if let band = value as? DoriFrontend.Filter.FullBand { // Band - Full
             guard let characters = cache?.charactersList else {
@@ -362,7 +396,7 @@ extension DoriFrontend.Costume.PreviewCostume: DoriFrontend._Filterable {
 }
 
 // MARK: extension Array
-extension Array where Element: DoriFrontend._Filterable {
+extension Array where Element: DoriFrontend.Filterable {
     public func filterByDori(with filter: DoriFrontend.Filter) -> [Element] {
         var result: [Element] = self
         guard filter.isFiltered else { return result }
