@@ -368,31 +368,31 @@ struct DebugFilterExperimentView: View {
             Task {
                 if focusingList == 0 {
                     eventList = await DoriFrontend.Event.list() ?? []
-                    eventListFiltered = eventList.filterByDori(with: filter)
+                    eventListFiltered = eventList.filter(withDoriFilter: filter)
                     if showLegacy {
                         eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
                     }
                 } else if focusingList == 1 {
                     gachaList = await DoriFrontend.Gacha.list() ?? []
-                    gachaListFiltered = gachaList.filterByDori(with: filter)
+                    gachaListFiltered = gachaList.filter(withDoriFilter: filter)
                     if showLegacy {
                         gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
                     }
                 } else if focusingList == 2 {
                     cardList = await DoriFrontend.Card.list() ?? []
-                    cardListFiltered = cardList.filterByDori(with: filter)
+                    cardListFiltered = cardList.filter(withDoriFilter: filter)
                 } else if focusingList == 3 {
                     songList = await DoriFrontend.Song.list() ?? []
-                    songListFiltered = songList.filterByDori(with: filter)
+                    songListFiltered = songList.filter(withDoriFilter: filter)
                 } else if focusingList == 4 {
                     comicList = await DoriFrontend.Comic.list() ?? []
-                    comicListFiltered = comicList.filterByDori(with: filter)
+                    comicListFiltered = comicList.filter(withDoriFilter: filter)
                 } else if focusingList == 5 {
                     campaignList = await DoriFrontend.LoginCampaign.list() ?? []
-                    campaignListFiltered = campaignList.filterByDori(with: filter)
+                    campaignListFiltered = campaignList.filter(withDoriFilter: filter)
                 } else if focusingList == 6 {
                     costumeList = await DoriFrontend.Costume.list() ?? []
-                    costumeListFiltered = costumeList.filterByDori(with: filter)
+                    costumeListFiltered = costumeList.filter(withDoriFilter: filter)
                 }
                 updating = false
             }
@@ -400,29 +400,29 @@ struct DebugFilterExperimentView: View {
         .onChange(of: filter) {
             updating = true
             if focusingList == 0 {
-                eventListFiltered = eventList.filterByDori(with: filter)
+                eventListFiltered = eventList.filter(withDoriFilter: filter)
                 if showLegacy {
                     Task {
                         eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
                     }
                 }
             } else if focusingList == 1 {
-                gachaListFiltered = gachaList.filterByDori(with: filter)
+                gachaListFiltered = gachaList.filter(withDoriFilter: filter)
                 if showLegacy {
                     Task {
                         gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
                     }
                 }
             } else if focusingList == 2 {
-                cardListFiltered = cardList.filterByDori(with: filter)
+                cardListFiltered = cardList.filter(withDoriFilter: filter)
             } else if focusingList == 3 {
-                songListFiltered = songList.filterByDori(with: filter)
+                songListFiltered = songList.filter(withDoriFilter: filter)
             } else if focusingList == 4 {
-                comicListFiltered = comicList.filterByDori(with: filter)
+                comicListFiltered = comicList.filter(withDoriFilter: filter)
             } else if focusingList == 5 {
-                campaignListFiltered = campaignList.filterByDori(with: filter)
+                campaignListFiltered = campaignList.filter(withDoriFilter: filter)
             } else if focusingList == 6 {
-                costumeListFiltered = costumeList.filterByDori(with: filter)
+                costumeListFiltered = costumeList.filter(withDoriFilter: filter)
             }
             updating = false
         }
