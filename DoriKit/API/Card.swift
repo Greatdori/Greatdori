@@ -115,11 +115,11 @@ extension DoriAPI {
                                 kr: value["prefix"][4].string
                             ),
                             releasedAt: .init(
-                                jp: value["releasedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["releasedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["releasedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["releasedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["releasedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["releasedAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["releasedAt"][0].string),
+                                en: .init(apiTimeInterval: value["releasedAt"][1].string),
+                                tw: .init(apiTimeInterval: value["releasedAt"][2].string),
+                                cn: .init(apiTimeInterval: value["releasedAt"][3].string),
+                                kr: .init(apiTimeInterval: value["releasedAt"][4].string)
                             ),
                             skillID: value["skillId"].intValue,
                             type: .init(rawValue: value["type"].stringValue) ?? .others,
@@ -376,11 +376,11 @@ extension DoriAPI {
                             kr: respJSON["prefix"][4].string
                         ),
                         releasedAt: .init(
-                            jp: respJSON["releasedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["releasedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["releasedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["releasedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["releasedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["releasedAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["releasedAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["releasedAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["releasedAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["releasedAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["releasedAt"][4].string)
                         ),
                         skillName: .init(
                             jp: respJSON["skillName"][0].string,

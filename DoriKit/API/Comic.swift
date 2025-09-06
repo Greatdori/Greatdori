@@ -70,11 +70,11 @@ extension DoriAPI {
                                 kr: value["subTitle"][4].string
                             ),
                             publicStartAt: .init(
-                                jp: value["publicStartAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publicStartAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["publicStartAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publicStartAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["publicStartAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publicStartAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["publicStartAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publicStartAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["publicStartAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publicStartAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["publicStartAt"][0].string),
+                                en: .init(apiTimeInterval: value["publicStartAt"][1].string),
+                                tw: .init(apiTimeInterval: value["publicStartAt"][2].string),
+                                cn: .init(apiTimeInterval: value["publicStartAt"][3].string),
+                                kr: .init(apiTimeInterval: value["publicStartAt"][4].string)
                             ),
                             characterIDs: value["characterId"].map { $0.1.intValue }
                         ))

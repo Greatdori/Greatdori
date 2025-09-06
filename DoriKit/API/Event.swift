@@ -86,18 +86,18 @@ extension DoriAPI {
                             assetBundleName: value["assetBundleName"].stringValue,
                             bannerAssetBundleName: value["bannerAssetBundleName"].stringValue,
                             startAt: .init(
-                                jp: value["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["startAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["startAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["startAt"][0].string),
+                                en: .init(apiTimeInterval: value["startAt"][1].string),
+                                tw: .init(apiTimeInterval: value["startAt"][2].string),
+                                cn: .init(apiTimeInterval: value["startAt"][3].string),
+                                kr: .init(apiTimeInterval: value["startAt"][4].string)
                             ),
                             endAt: .init(
-                                jp: value["endAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["endAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["endAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["endAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["endAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["endAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["endAt"][0].string),
+                                en: .init(apiTimeInterval: value["endAt"][1].string),
+                                tw: .init(apiTimeInterval: value["endAt"][2].string),
+                                cn: .init(apiTimeInterval: value["endAt"][3].string),
+                                kr: .init(apiTimeInterval: value["endAt"][4].string)
                             ),
                             attributes: value["attributes"].map {
                                 EventAttribute(
@@ -422,62 +422,62 @@ extension DoriAPI {
                         assetBundleName: respJSON["assetBundleName"].stringValue,
                         bannerAssetBundleName: respJSON["bannerAssetBundleName"].stringValue,
                         startAt: .init(
-                            jp: respJSON["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["startAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["startAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["startAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["startAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["startAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["startAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["startAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["startAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["startAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["startAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["startAt"][4].string)
                         ),
                         endAt: .init(
-                            jp: respJSON["endAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["endAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["endAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["endAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["endAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["endAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["endAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["endAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["endAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["endAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["endAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["endAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["endAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["endAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["endAt"][4].string)
                         ),
                         publicStartAt: .init(
-                            jp: respJSON["publicStartAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicStartAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["publicStartAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicStartAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["publicStartAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicStartAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["publicStartAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicStartAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["publicStartAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicStartAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["publicStartAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["publicStartAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["publicStartAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["publicStartAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["publicStartAt"][4].string)
                         ),
                         publicEndAt: .init(
-                            jp: respJSON["publicEndAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicEndAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["publicEndAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicEndAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["publicEndAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicEndAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["publicEndAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicEndAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["publicEndAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publicEndAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["publicEndAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["publicEndAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["publicEndAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["publicEndAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["publicEndAt"][4].string)
                         ),
                         distributionStartAt: .init(
-                            jp: respJSON["distributionStartAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionStartAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["distributionStartAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionStartAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["distributionStartAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionStartAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["distributionStartAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionStartAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["distributionStartAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionStartAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["distributionStartAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["distributionStartAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["distributionStartAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["distributionStartAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["distributionStartAt"][4].string)
                         ),
                         distributionEndAt: .init(
-                            jp: respJSON["distributionEndAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionEndAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["distributionEndAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionEndAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["distributionEndAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionEndAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["distributionEndAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionEndAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["distributionEndAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["distributionEndAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["distributionEndAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["distributionEndAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["distributionEndAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["distributionEndAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["distributionEndAt"][4].string)
                         ),
                         bgmAssetBundleName: respJSON["bgmAssetBundleName"].stringValue,
                         bgmFileName: respJSON["bgmFileName"].stringValue,
                         aggregateEndAt: .init(
-                            jp: respJSON["aggregateEndAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["aggregateEndAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["aggregateEndAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["aggregateEndAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["aggregateEndAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["aggregateEndAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["aggregateEndAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["aggregateEndAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["aggregateEndAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["aggregateEndAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["aggregateEndAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["aggregateEndAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["aggregateEndAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["aggregateEndAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["aggregateEndAt"][4].string)
                         ),
                         exchangeEndAt: .init(
-                            jp: respJSON["exchangeEndAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["exchangeEndAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["exchangeEndAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["exchangeEndAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["exchangeEndAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["exchangeEndAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["exchangeEndAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["exchangeEndAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["exchangeEndAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["exchangeEndAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["exchangeEndAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["exchangeEndAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["exchangeEndAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["exchangeEndAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["exchangeEndAt"][4].string)
                         ),
                         pointRewards: pointRewards,
                         rankingRewards: rankingRewards,

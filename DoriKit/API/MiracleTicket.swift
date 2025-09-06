@@ -69,18 +69,18 @@ extension DoriAPI {
                                 kr: value["ids"][4][0].int != nil ? value["ids"][4].map { $0.1.intValue } : nil
                             ),
                             exchangeStartAt: .init(
-                                jp: value["exchangeStartAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeStartAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["exchangeStartAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeStartAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["exchangeStartAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeStartAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["exchangeStartAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeStartAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["exchangeStartAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeStartAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["exchangeStartAt"][0].string),
+                                en: .init(apiTimeInterval: value["exchangeStartAt"][1].string),
+                                tw: .init(apiTimeInterval: value["exchangeStartAt"][2].string),
+                                cn: .init(apiTimeInterval: value["exchangeStartAt"][3].string),
+                                kr: .init(apiTimeInterval: value["exchangeStartAt"][4].string)
                             ),
                             exchangeEndAt: .init(
-                                jp: value["exchangeEndAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeEndAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["exchangeEndAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeEndAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["exchangeEndAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeEndAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["exchangeEndAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeEndAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["exchangeEndAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["exchangeEndAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["exchangeEndAt"][0].string),
+                                en: .init(apiTimeInterval: value["exchangeEndAt"][1].string),
+                                tw: .init(apiTimeInterval: value["exchangeEndAt"][2].string),
+                                cn: .init(apiTimeInterval: value["exchangeEndAt"][3].string),
+                                kr: .init(apiTimeInterval: value["exchangeEndAt"][4].string)
                             )
                         ))
                     }

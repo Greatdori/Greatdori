@@ -87,29 +87,29 @@ extension DoriAPI {
                                 kr: value["musicTitle"][4].string
                             ),
                             publishedAt: .init(
-                                jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["publishedAt"][0].string),
+                                en: .init(apiTimeInterval: value["publishedAt"][1].string),
+                                tw: .init(apiTimeInterval: value["publishedAt"][2].string),
+                                cn: .init(apiTimeInterval: value["publishedAt"][3].string),
+                                kr: .init(apiTimeInterval: value["publishedAt"][4].string)
                             ),
                             closedAt: .init(
-                                jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["closedAt"][0].string),
+                                en: .init(apiTimeInterval: value["closedAt"][1].string),
+                                tw: .init(apiTimeInterval: value["closedAt"][2].string),
+                                cn: .init(apiTimeInterval: value["closedAt"][3].string),
+                                kr: .init(apiTimeInterval: value["closedAt"][4].string)
                             ),
                             difficulty: value["difficulty"].map {
                                 (key: DifficultyType(rawValue: Int($0.0) ?? 0) ?? .easy,
                                  value: PreviewSong.Difficulty(
                                     playLevel: $0.1["playLevel"].intValue,
                                     publishedAt: $0.1["publishedAt"].null == nil ? .init(
-                                        jp: $0.1["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                                        en: $0.1["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                                        tw: $0.1["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                                        cn: $0.1["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                                        kr: $0.1["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                                        jp: .init(apiTimeInterval: $0.1["publishedAt"][0].string),
+                                        en: .init(apiTimeInterval: $0.1["publishedAt"][1].string),
+                                        tw: .init(apiTimeInterval: $0.1["publishedAt"][2].string),
+                                        cn: .init(apiTimeInterval: $0.1["publishedAt"][3].string),
+                                        kr: .init(apiTimeInterval: $0.1["publishedAt"][4].string)
                                     ) : nil
                                  ))
                             }.reduce(into: [DifficultyType: PreviewSong.Difficulty]()) {
@@ -122,17 +122,11 @@ extension DoriAPI {
                                 (key: $0.0,
                                  value: MusicVideoMetadata(
                                     startAt: .init(
-                                        jp: $0.1["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][0].stringValue.dropLast(3))!)) : nil,
-                                        en: $0.1["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][1].stringValue.dropLast(3))!)) : nil,
-                                        tw: $0.1["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][2].stringValue.dropLast(3))!)) : nil,
-                                        cn: $0.1["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][3].stringValue.dropLast(3))!)) : nil,
-                                        kr: $0.1["startAt"][4].string != nil ? Date(
-                                            timeIntervalSince1970: Double(
-                                                Int(
-                                                    $0.1["startAt"][4].stringValue.dropLast(3)
-                                                )!
-                                            )
-                                        ) : nil
+                                        jp: .init(apiTimeInterval: $0.1["startAt"][0].string),
+                                        en: .init(apiTimeInterval: $0.1["startAt"][1].string),
+                                        tw: .init(apiTimeInterval: $0.1["startAt"][2].string),
+                                        cn: .init(apiTimeInterval: $0.1["startAt"][3].string),
+                                        kr: .init(apiTimeInterval: $0.1["startAt"][4].string)
                                     )
                                  ))
                             }.reduce(into: [String: MusicVideoMetadata]()) {
@@ -395,18 +389,18 @@ extension DoriAPI {
                             kr: respJSON["howToGet"][4].string
                         ),
                         publishedAt: .init(
-                            jp: respJSON["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["publishedAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["publishedAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["publishedAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["publishedAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["publishedAt"][4].string)
                         ),
                         closedAt: .init(
-                            jp: respJSON["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["closedAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["closedAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["closedAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["closedAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["closedAt"][4].string)
                         ),
                         description: .init(
                             jp: respJSON["description"][0].string,
@@ -419,11 +413,11 @@ extension DoriAPI {
                             var publishedAt: DoriAPI.LocalizedData<Date>?
                             if $0.1["publishedAt"].exists() {
                                 publishedAt = .init(
-                                    jp: $0.1["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                                    en: $0.1["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                                    tw: $0.1["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                                    cn: $0.1["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                                    kr: $0.1["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                                    jp: .init(apiTimeInterval: $0.1["publishedAt"][0].string),
+                                    en: .init(apiTimeInterval: $0.1["publishedAt"][1].string),
+                                    tw: .init(apiTimeInterval: $0.1["publishedAt"][2].string),
+                                    cn: .init(apiTimeInterval: $0.1["publishedAt"][3].string),
+                                    kr: .init(apiTimeInterval: $0.1["publishedAt"][4].string)
                                 )
                             }
                             return (
@@ -464,11 +458,11 @@ extension DoriAPI {
                             (key: $0.0,
                              value: MusicVideoMetadata(
                                 startAt: .init(
-                                    jp: $0.1["startAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][0].stringValue.dropLast(3))!)) : nil,
-                                    en: $0.1["startAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][1].stringValue.dropLast(3))!)) : nil,
-                                    tw: $0.1["startAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][2].stringValue.dropLast(3))!)) : nil,
-                                    cn: $0.1["startAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][3].stringValue.dropLast(3))!)) : nil,
-                                    kr: $0.1["startAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int($0.1["startAt"][4].stringValue.dropLast(3))!)) : nil
+                                    jp: .init(apiTimeInterval: $0.1["startAt"][0].string),
+                                    en: .init(apiTimeInterval: $0.1["startAt"][1].string),
+                                    tw: .init(apiTimeInterval: $0.1["startAt"][2].string),
+                                    cn: .init(apiTimeInterval: $0.1["startAt"][3].string),
+                                    kr: .init(apiTimeInterval: $0.1["startAt"][4].string)
                                 )
                              ))
                         }.reduce(into: [String: MusicVideoMetadata]()) {

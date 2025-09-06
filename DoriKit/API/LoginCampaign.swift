@@ -70,18 +70,18 @@ extension DoriAPI {
                                 kr: value["caption"][4].string
                             ),
                             publishedAt: .init(
-                                jp: value["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["publishedAt"][0].string),
+                                en: .init(apiTimeInterval: value["publishedAt"][1].string),
+                                tw: .init(apiTimeInterval: value["publishedAt"][2].string),
+                                cn: .init(apiTimeInterval: value["publishedAt"][3].string),
+                                kr: .init(apiTimeInterval: value["publishedAt"][4].string)
                             ),
                             closedAt: .init(
-                                jp: value["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                                en: value["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                                tw: value["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                                cn: value["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                                kr: value["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(value["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                                jp: .init(apiTimeInterval: value["closedAt"][0].string),
+                                en: .init(apiTimeInterval: value["closedAt"][1].string),
+                                tw: .init(apiTimeInterval: value["closedAt"][2].string),
+                                cn: .init(apiTimeInterval: value["closedAt"][3].string),
+                                kr: .init(apiTimeInterval: value["closedAt"][4].string)
                             )
                         ))
                     }
@@ -174,18 +174,18 @@ extension DoriAPI {
                             kr: respJSON["caption"][4].string
                         ),
                         publishedAt: .init(
-                            jp: respJSON["publishedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["publishedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["publishedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["publishedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["publishedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["publishedAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["publishedAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["publishedAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["publishedAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["publishedAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["publishedAt"][4].string)
                         ),
                         closedAt: .init(
-                            jp: respJSON["closedAt"][0].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][0].stringValue.dropLast(3))!)) : nil,
-                            en: respJSON["closedAt"][1].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][1].stringValue.dropLast(3))!)) : nil,
-                            tw: respJSON["closedAt"][2].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][2].stringValue.dropLast(3))!)) : nil,
-                            cn: respJSON["closedAt"][3].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][3].stringValue.dropLast(3))!)) : nil,
-                            kr: respJSON["closedAt"][4].string != nil ? Date(timeIntervalSince1970: Double(Int(respJSON["closedAt"][4].stringValue.dropLast(3))!)) : nil
+                            jp: .init(apiTimeInterval: respJSON["closedAt"][0].string),
+                            en: .init(apiTimeInterval: respJSON["closedAt"][1].string),
+                            tw: .init(apiTimeInterval: respJSON["closedAt"][2].string),
+                            cn: .init(apiTimeInterval: respJSON["closedAt"][3].string),
+                            kr: .init(apiTimeInterval: respJSON["closedAt"][4].string)
                         ),
                         details: .init(
                             jp: bonus(for: 0),

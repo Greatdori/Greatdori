@@ -125,3 +125,14 @@ extension Date {
         )
     }
 }
+
+extension Date {
+    internal init?(apiTimeInterval interval: String?) {
+        guard let _interval = interval else { return nil }
+        guard let interval = Double(_interval) else { return nil }
+        // We divide the interval by 1,000 because time interval
+        // from the API is in millisecond but it's in second
+        // in Foundation API.
+        self.init(timeIntervalSince1970: interval / 1000)
+    }
+}
