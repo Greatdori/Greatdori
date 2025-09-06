@@ -16,8 +16,9 @@
 
 // MARK: This file is root-navigation-related items only.
 
-import SwiftUI
 import DoriKit
+import os
+import SwiftUI
 
 
 //MARK: ContentView
@@ -59,7 +60,9 @@ struct ContentView: View {
                                 
                             }
                             Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
-                                EventSearchView()
+                                NavigationStack {
+                                    EventSearchView()
+                                }
                             }
                         }, header: {
                             Text("App.info")
@@ -162,7 +165,7 @@ struct ContentView: View {
                 // Crash View pretended to be the same as loading view below.
                 ProgressView()
                     .onAppear {
-                        NSLog("CRASH VIEW HAD BEEN ENTERED")
+                        os_log("CRASH VIEW HAD BEEN ENTERED")
                         #if DEBUG
                         showCrashAlert = true
                         #else
@@ -171,7 +174,7 @@ struct ContentView: View {
                         #endif
                     }
                     .alert("Debug.crash-detected.title", isPresented: $showCrashAlert, actions: {
-                        Button(action: {
+                        Button(role: .destructive, action: {
                             DoriCache.invalidateAll()
                             mainAppShouldBeDisplayed = true
                         }, label: {

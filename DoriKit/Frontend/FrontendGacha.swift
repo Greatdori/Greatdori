@@ -45,6 +45,8 @@ extension DoriFrontend {
             guard let gacha = groupResult.0 else { return nil }
             guard let cards = groupResult.1 else { return nil }
             
+            FilterCacheManager.shared.writeCardCache(cards)
+            
             var filteredGacha = gacha
             if filter.isFiltered {
                 filteredGacha = gacha.filter {
@@ -69,7 +71,7 @@ extension DoriFrontend {
                     for status in filter.released {
                         for locale in filter.server {
                             if status.boolValue {
-                                if (gacha.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
+                                if (gacha.publishedAt.forLocale(locale) ?? dateOfYear2100) < .now {
                                     return true
                                 }
                             } else {
@@ -84,9 +86,9 @@ extension DoriFrontend {
                     for timelineStatus in filter.timelineStatus {
                         let result = switch timelineStatus {
                         case .ended:
-                            (gacha.closedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 4107477600)) < .now
+                            (gacha.closedAt.forPreferredLocale() ?? dateOfYear2100) < .now
                         case .ongoing:
-                            (gacha.publishedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 4107477600)) < .now
+                            (gacha.publishedAt.forPreferredLocale() ?? dateOfYear2100) < .now
                             && (gacha.closedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)) > .now
                         case .upcoming:
                             (gacha.publishedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)) > .now

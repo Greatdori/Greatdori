@@ -52,7 +52,7 @@ public final class DoriAPI {
         }
     }
     
-    /// Represent a specific country or region which localized in BanG Dream.
+    /// Represent a specific country or region which localized in GBP.
     @frozen
     public enum Locale: String, CaseIterable, DoriCache.Cacheable {
         case jp
@@ -212,6 +212,16 @@ extension DoriAPI.Locale {
         case .tw: return 2
         case .cn: return 3
         case .kr: return 4
+        }
+    }
+    
+    public func nsLocale() -> Locale {
+        switch self {
+        case .jp: return Locale(identifier: "ja")
+        case .en: return Locale(identifier: "en")
+        case .tw: return Locale(identifier: "zh-Hant")
+        case .cn: return Locale(identifier: "zh-Hans")
+        case .kr: return Locale(identifier: "ko")
         }
     }
 }

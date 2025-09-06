@@ -46,6 +46,8 @@ extension DoriFrontend {
             guard let costumes = groupResult.0 else { return nil }
             guard let characters = groupResult.1 else { return nil }
             
+            FilterCacheManager.shared.writeCharactersList(characters)
+            
             let filteredCostumes = costumes.filter { costume in
                 filter.band.contains { band in
                     band.rawValue == characters.first(where: { $0.id == costume.characterID })?.bandID
@@ -62,7 +64,7 @@ extension DoriFrontend {
                 for status in filter.released {
                     for locale in filter.server {
                         if status.boolValue {
-                            if (costume.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
+                            if (costume.publishedAt.forLocale(locale) ?? dateOfYear2100) < .now {
                                 return true
                             }
                         } else {

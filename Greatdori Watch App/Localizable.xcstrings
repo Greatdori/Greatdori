@@ -264,6 +264,18 @@
     "Date" : {
       "shouldTranslate" : false
     },
+    "Debug.crash-detected.direct-enter" : {
+
+    },
+    "Debug.crash-detected.invalidate-cache-enter" : {
+
+    },
+    "Debug.crash-detected.message" : {
+
+    },
+    "Debug.crash-detected.title" : {
+
+    },
     "Ep" : {
       "shouldTranslate" : false
     },

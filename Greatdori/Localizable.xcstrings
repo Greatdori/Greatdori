@@ -206,6 +206,15 @@
         }
       }
     },
+    "Character" : {
+
+    },
+    "Character.search.unavailable" : {
+
+    },
+    "Character.unavailable.description" : {
+
+    },
     "Debug.crash-detected.direct-enter" : {
       "localizations" : {
         "en" : {
@@ -243,7 +252,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Greatdori! ran into an issue when launching   last time. Release version will not show this message."
+            "value" : "Greatdori! ran into an issue when launching last time. Release version will not show this message."
           }
         },
         "zh-Hans" : {
@@ -974,22 +983,6 @@
         }
       }
     },
-    "Filter.deselect-all" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deselect All"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "取消全选"
-          }
-        }
-      }
-    },
     "Filter.match-all.all-selected" : {
       "localizations" : {
         "en" : {
@@ -1022,18 +1015,18 @@
         }
       }
     },
-    "Filter.select-all" : {
+    "Filter.skill.any" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Select All"
+            "value" : "Any"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全选"
+            "value" : "任意"
           }
         }
       }
@@ -1925,6 +1918,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "调试"
+          }
+        }
+      }
+    },
+    "Settings.debug.clear-cache" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Cache"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清除缓存"
           }
         }
       }

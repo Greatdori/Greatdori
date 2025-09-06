@@ -77,51 +77,54 @@ extension DoriFrontend {
         public static func list(filter: Filter = .init()) async -> [PreviewEvent]? {
             guard let events = await DoriAPI.Event.all() else { return nil }
             
-            let filteredEvents = events.filter { event in
-                filter.attribute.contains { attribute in
-                    event.attributes.contains { $0.attribute == attribute }
-                }
-            }.filter { event in
-                if filter.characterRequiresMatchAll {
-                    filter.character.allSatisfy { character in
-                        event.characters.contains { $0.characterID == character.rawValue }
+            var filteredEvents = events
+            if filter.isFiltered {
+                filteredEvents = events.filter { event in
+                    filter.attribute.contains { attribute in
+                        event.attributes.contains { $0.attribute == attribute }
                     }
-                } else {
-                    filter.character.contains { character in
-                        event.characters.contains { $0.characterID == character.rawValue }
-                    }
-                }
-            }.filter { event in
-                filter.server.contains { locale in
-                    event.startAt.availableInLocale(locale)
-                }
-            }.filter { event in
-                for timelineStatus in filter.timelineStatus {
-                    switch timelineStatus {
-                    case .ended:
-                        for singleLocale in DoriAPI.Locale.allCases {
-                            if (event.endAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 4107477600)) < .now {
-                                return true
-                            }
+                }.filter { event in
+                    if filter.characterRequiresMatchAll {
+                        filter.character.allSatisfy { character in
+                            event.characters.contains { $0.characterID == character.rawValue }
                         }
-                    case .ongoing:
-                        for singleLocale in DoriAPI.Locale.allCases {
-                            if (event.startAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 4107477600)) < .now
-                                && (event.endAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
-                                return true
-                            }
-                        }
-                    case .upcoming:
-                        for singleLocale in DoriAPI.Locale.allCases {
-                            if (event.startAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
-                                return true
-                            }
+                    } else {
+                        filter.character.contains { character in
+                            event.characters.contains { $0.characterID == character.rawValue }
                         }
                     }
+                }.filter { event in
+                    filter.server.contains { locale in
+                        event.startAt.availableInLocale(locale)
+                    }
+                }.filter { event in
+                    for timelineStatus in filter.timelineStatus {
+                        switch timelineStatus {
+                        case .ended:
+                            for singleLocale in DoriAPI.Locale.allCases {
+                                if (event.endAt.forLocale(singleLocale) ?? dateOfYear2100) < .now {
+                                    return true
+                                }
+                            }
+                        case .ongoing:
+                            for singleLocale in DoriAPI.Locale.allCases {
+                                if (event.startAt.forLocale(singleLocale) ?? dateOfYear2100) < .now
+                                    && (event.endAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                                    return true
+                                }
+                            }
+                        case .upcoming:
+                            for singleLocale in DoriAPI.Locale.allCases {
+                                if (event.startAt.forLocale(singleLocale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                    return false
+                }.filter { event in
+                    filter.eventType.contains(event.eventType)
                 }
-                return false
-            }.filter { event in
-                filter.eventType.contains(event.eventType)
             }
             let sortedEvents = switch filter.sort.keyword {
             case .releaseDate(let locale):

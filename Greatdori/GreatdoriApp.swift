@@ -51,6 +51,11 @@ struct GreatdoriApp: App {
                     openWindow(id: "OfflineAssetDebugWindow")
                 }
             }
+            CommandGroup(after: .appSettings) {
+                Button(String("Menu-bar.window.filter-experiment-debug"), systemImage: "ant.fill") {
+                    openWindow(id: "FilterExperimentDebugWindow")
+                }
+            }
             #endif
         }
         #if os(macOS)
@@ -60,6 +65,9 @@ struct GreatdoriApp: App {
         
         Window(String("Window.offline-asset-debug"), id: "OfflineAssetDebugWindow") {
             DebugOfflineAssetView()
+        }
+        Window(String("Window.filter-experiment-debug"), id: "FilterExperimentDebugWindow") {
+            DebugFilterExperimentView()
         }
         #endif
     }

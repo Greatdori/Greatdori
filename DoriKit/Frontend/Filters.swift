@@ -30,6 +30,7 @@ extension DoriFrontend {
     ///     Interact with each keys of a filter by ``Key``, which also allows you to build UI for filter.
     public struct Filter: Sendable, Hashable, Codable {
         public var band: Set<Band> = .init(Band.allCases) { didSet { store() } }
+        public var bandMatchesOthers: BandMatchesOthers = .includeOthers { didSet { store() } }
         public var attribute: Set<Attribute> = .init(Attribute.allCases)  { didSet { store() } }
         public var rarity: Set<Rarity> = [1, 2, 3, 4, 5]  { didSet { store() } }
         public var character: Set<Character> = .init(Character.allCases)  { didSet { store() } }
@@ -42,12 +43,14 @@ extension DoriFrontend {
         public var songType: Set<SongType> = .init(SongType.allCases)  { didSet { store() } }
         public var loginCampaignType: Set<LoginCampaignType> = .init(LoginCampaignType.allCases) { didSet { store() } }
         public var comicType: Set<ComicType> = .init(ComicType.allCases) { didSet { store() } }
+        public var level: Int? = nil  { didSet { store() } }
         public var skill: Skill? = nil  { didSet { store() } }
         public var timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases)  { didSet { store() } }
         public var sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))  { didSet { store() } }
         
         public init(
             band: Set<Band> = .init(Band.allCases),
+            bandMatchesOthers: BandMatchesOthers = .includeOthers,
             attribute: Set<Attribute> = .init(Attribute.allCases),
             rarity: Set<Rarity> = [1, 2, 3, 4, 5],
             character: Set<Character> = .init(Character.allCases),
@@ -60,11 +63,13 @@ extension DoriFrontend {
             songType: Set<SongType> = .init(SongType.allCases),
             loginCampaignType: Set<LoginCampaignType> = .init(LoginCampaignType.allCases),
             comicType: Set<ComicType> = .init(ComicType.allCases),
+            level: Int? = nil,
             skill: Skill? = nil,
             timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases),
             sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))
         ) {
             self.band = band
+            self.bandMatchesOthers = bandMatchesOthers
             self.attribute = attribute
             self.rarity = rarity
             self.character = character
@@ -77,6 +82,7 @@ extension DoriFrontend {
             self.songType = songType
             self.loginCampaignType = loginCampaignType
             self.comicType = comicType
+            self.level = level
             self.skill = skill
             self.timelineStatus = timelineStatus
             self.sort = sort
@@ -103,6 +109,7 @@ extension DoriFrontend {
         /// Whether this filter actually filters something.
         public var isFiltered: Bool {
             band.count != Band.allCases.count
+            || bandMatchesOthers == .excludeOthers
             || attribute.count != Attribute.allCases.count
             || rarity.count != 5
             || character.count != Character.allCases.count
@@ -115,6 +122,7 @@ extension DoriFrontend {
             || songType.count != SongType.allCases.count
             || loginCampaignType.count != LoginCampaignType.allCases.count
             || comicType.count != ComicType.allCases.count
+            || level != nil
             || skill != nil
             || timelineStatus.count != TimelineStatus.allCases.count
         }
@@ -127,6 +135,7 @@ extension DoriFrontend {
             // We skips `skill` in identity encoding because it's too dynamic.
             let desc = """
             \(band.sorted { $0.rawValue < $1.rawValue })\
+            \(bandMatchesOthers)\
             \(attribute.sorted { $0.rawValue < $1.rawValue })\
             \(rarity.sorted { $0 < $1 })\
             \(character.sorted { $0.rawValue < $1.rawValue })\
@@ -139,7 +148,8 @@ extension DoriFrontend {
             \(songType.sorted { $0.rawValue < $1.rawValue })\
             \(loginCampaignType.sorted { $0.rawValue < $1.rawValue })\
             \(comicType.sorted { $0.rawValue < $1.rawValue })\
-            \(timelineStatus.sorted { $0.rawValue < $1.rawValue })
+            \(timelineStatus.sorted { $0.rawValue < $1.rawValue })\
+            \(level, default: "nil")
             """
             return String(SHA256.hash(data: desc.data(using: .utf8)!).map { $0.description }.joined().prefix(8))
         }
@@ -147,6 +157,7 @@ extension DoriFrontend {
         /// Set the filter to initial selections.
         public mutating func clearAll() {
             band = .init(Band.allCases)
+            bandMatchesOthers = .includeOthers
             attribute = .init(Attribute.allCases)
             rarity = [1, 2, 3, 4, 5]
             character = .init(Character.allCases)
@@ -159,6 +170,7 @@ extension DoriFrontend {
             songType = .init(SongType.allCases)
             loginCampaignType = .init(LoginCampaignType.allCases)
             comicType = .init(ComicType.allCases)
+            level = nil
             skill = nil
             timelineStatus = .init(TimelineStatus.allCases)
         }
@@ -194,6 +206,7 @@ extension DoriFrontend.Filter {
     public typealias GachaType = DoriAPI.Gacha.GachaType
     public typealias SongType = DoriAPI.Song.SongTag
     public typealias ComicType = DoriAPI.Comic.Comic.ComicType
+    public typealias Level = Int
     public typealias Skill = DoriAPI.Skill.Skill
     
     public enum Band: Int, Sendable, CaseIterable, Hashable, Codable {
@@ -205,7 +218,6 @@ extension DoriFrontend.Filter {
         case raiseASuilen = 18
         case morfonica = 21
         case mygo = 45
-        case others = -1
         
         @inline(never)
         internal var name: String {
@@ -218,9 +230,32 @@ extension DoriFrontend.Filter {
             case .raiseASuilen: String(localized: "BAND_NAME_RAS", bundle: #bundle)
             case .morfonica: String(localized: "BAND_NAME_MORFONICA", bundle: #bundle)
             case .mygo: String(localized: "BAND_NAME_MYGO", bundle: #bundle)
-            case .others: String(localized: "BAND_NAME_OTHERS", bundle: #bundle)
             }
         }
+    }
+    internal enum FullBand: Int, Sendable, CaseIterable, Hashable, Codable {
+        case poppinParty = 1
+        case afterglow
+        case helloHappyWorld
+        case pastelPalettes
+        case roselia
+        case raiseASuilen = 18
+        case morfonica = 21
+        case mygo = 45
+        case others = -1 // `others` MUST be the last.
+        
+        public init(id: Int) {
+            if Self.allCases.map({$0.rawValue}).dropLast().contains(id) {
+                self = .init(rawValue: id)!
+            } else {
+                self = .others
+            }
+        }
+    }
+    @frozen
+    public enum BandMatchesOthers: Codable, Hashable {
+        case includeOthers
+        case excludeOthers
     }
     public enum Character: Int, Sendable, CaseIterable, Hashable, Codable {
         // Poppin'Party
@@ -394,6 +429,7 @@ extension DoriFrontend.Filter {
     ///     or use ``updateValue(_:forKey:)`` as an alternative method to modify a filter.
     public enum Key: Int, CaseIterable, Hashable {
         case band
+        case bandMatchesOthers
         case attribute
         case rarity
         case character
@@ -406,8 +442,10 @@ extension DoriFrontend.Filter {
         case songType
         case loginCampaignType
         case comicType
+        case level
         case skill
         case timelineStatus
+        case songAvailability
         case sort
     }
 }
@@ -432,6 +470,7 @@ extension DoriFrontend.Filter.Key {
     public var localizedString: String {
         switch self {
         case .band: String(localized: "FILTER_KEY_BAND", bundle: #bundle)
+        case .bandMatchesOthers: String(localized: "FILTER_KEY_BAND_MATCHES_OTHERS", bundle: #bundle)
         case .attribute: String(localized: "FILTER_KEY_ATTRIBUTE", bundle: #bundle)
         case .rarity: String(localized: "FILTER_KEY_RARITY", bundle: #bundle)
         case .character: String(localized: "FILTER_KEY_CHARACTER", bundle: #bundle)
@@ -444,8 +483,10 @@ extension DoriFrontend.Filter.Key {
         case .songType: String(localized: "FILTER_KEY_SONG_TYPE", bundle: #bundle)
         case .loginCampaignType: String(localized: "FILTER_KEY_LOGIN_CAMPAIGN_TYPE", bundle: #bundle)
         case .comicType: String(localized: "FILTER_KEY_COMIC_TYPE", bundle: #bundle)
+        case .level: String(localized: "FILTER_KEY_LEVEL", bundle: #bundle)
         case .skill: String(localized: "FILTER_KEY_SKILL", bundle: #bundle)
         case .timelineStatus: String(localized: "FILTER_KEY_TIMELINE_STATUS", bundle: #bundle)
+        case .songAvailability: String(localized: "FILTER_KEY_SONG_AVAILABILITY", bundle: #bundle)
         case .sort: String(localized: "FILTER_KEY_SORT", bundle: #bundle)
         }
     }
@@ -473,6 +514,7 @@ extension DoriFrontend.Filter: MutableCollection {
         get {
             switch position {
             case .band: self.band
+            case .bandMatchesOthers: self.bandMatchesOthers
             case .attribute: self.attribute
             case .rarity: self.rarity
             case .character: self.character
@@ -485,8 +527,10 @@ extension DoriFrontend.Filter: MutableCollection {
             case .songType: self.songType
             case .loginCampaignType: self.loginCampaignType
             case .comicType: self.comicType
+            case .level: self.level
             case .skill: self.skill
             case .timelineStatus: self.timelineStatus
+            case .songAvailability: self.timelineStatus
             case .sort: self.sort
             }
         }
@@ -519,6 +563,8 @@ extension DoriFrontend.Filter: MutableCollection {
         switch key {
         case .band:
             self.band = value as! Set<Band>
+        case .bandMatchesOthers:
+            self.bandMatchesOthers = value as! BandMatchesOthers
         case .attribute:
             self.attribute = value as! Set<Attribute>
         case .rarity:
@@ -543,9 +589,13 @@ extension DoriFrontend.Filter: MutableCollection {
             self.loginCampaignType = value as! Set<LoginCampaignType>
         case .comicType:
             self.comicType = value as! Set<ComicType>
+        case .level:
+            self.level = value as! Int?
         case .skill:
             self.skill = value as! Skill?
         case .timelineStatus:
+            self.timelineStatus = value as! Set<TimelineStatus>
+        case .songAvailability:
             self.timelineStatus = value as! Set<TimelineStatus>
         case .sort:
             if let sort = value as? Sort {
@@ -577,6 +627,11 @@ extension DoriFrontend.Filter {
         public init<T: _Selectable>(_ value: T) {
             self.init(erasing: value)
         }
+        internal init<T: _Selectable>(_ value: T, selectorText: String, selectorImageURL: URL? = nil) {
+            self._selectorText = selectorText
+            self._selectorImageURL = selectorImageURL
+            self.value = value
+        }
         
         public var selectorText: String { _selectorText }
         public var selectorImageURL: URL? { _selectorImageURL }
@@ -594,7 +649,11 @@ extension DoriFrontend.Filter.Band: DoriFrontend.Filter._Selectable {
         self.name
     }
     public var selectorImageURL: URL? {
-        .init(string: "https://bestdori.com/res/icon/band_\(self.rawValue).svg")!
+        if self.rawValue != -1 {
+            return .init(string: "https://bestdori.com/res/icon/band_\(self.rawValue).svg")!
+        } else {
+            return nil
+        }
     }
 }
 extension DoriFrontend.Filter.Attribute: DoriFrontend.Filter._Selectable {
@@ -749,6 +808,10 @@ extension DoriFrontend.Filter.Key {
             (.multiple, DoriFrontend.Filter.Band.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
+        case .bandMatchesOthers:
+            (.single, [false, true].map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
         case .attribute:
             (.multiple, DoriFrontend.Filter.Attribute.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
@@ -797,14 +860,26 @@ extension DoriFrontend.Filter.Key {
             (.multiple, DoriFrontend.Filter.ComicType.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
+        case .level:
+            (.single, InMemoryCache.readAll().map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
+            })
         case .skill:
-            (.single, InMemoryCache.allSkills.map {
+            (.single, InMemoryCache.readAll().map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
         case .timelineStatus:
             (.multiple, DoriFrontend.Filter.TimelineStatus.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
+        case .songAvailability:
+            (.multiple, DoriFrontend.Filter.TimelineStatus.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0, selectorText: [
+                    DoriFrontend.Filter.TimelineStatus.upcoming: String(localized: "SONG_AVAILABILITY_UPCOMING", bundle: #bundle),
+                    DoriFrontend.Filter.TimelineStatus.ongoing: String(localized: "SONGS_AVAILABILITY_AVAILABLE", bundle: #bundle),
+                    DoriFrontend.Filter.TimelineStatus.ended: String(localized: "SONG_AVAILABILITY_REMOVED", bundle: #bundle)
+                ][$0]!))
+            }.reversed())
         case .sort:
             (.single, DoriFrontend.Filter.Sort.Keyword.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
@@ -842,3 +917,9 @@ extension DoriFrontend.Filter.Key {
 }
 extension DoriFrontend.Filter.Key.SelectorItem: Equatable where T: Equatable {}
 extension DoriFrontend.Filter.Key.SelectorItem: Hashable where T: Hashable {}
+
+extension DoriFrontend.Filter.Band {
+    internal func asFullBand() -> DoriFrontend.Filter.FullBand {
+        return DoriFrontend.Filter.FullBand(rawValue: self.rawValue)!
+    }
+}

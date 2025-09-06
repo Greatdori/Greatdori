@@ -192,6 +192,7 @@ struct MultilingualText: View {
                         Text(localeValue)
                             .multilineTextAlignment(.trailing)
                             .textSelection(.enabled)
+                            .typesettingLanguage(.explicit((shownLocaleValueDict[localeValue]?.nsLocale().language) ?? Locale.current.language))
                     })
                 }
             }, label: {
@@ -224,6 +225,8 @@ struct MultilingualText: View {
                     VStack(alignment: .trailing) {
                         ForEach(allLocaleTexts, id: \.self) { text in
                             Text(text)
+                                .typesettingLanguage(.explicit((shownLocaleValueDict[text]?.nsLocale().language) ?? Locale.current.language))
+//                                .typesettingLanguage(.explicit(DoriAPI.Locale(rawValue: localeValue)?.nsLocale()))
                         }
                     }
                     .padding()
@@ -241,45 +244,54 @@ struct MultilingualText: View {
             VStack(alignment: .trailing) {
                 if let sourceInPrimaryLocale = source.forPreferredLocale(allowsFallback: false) {
                     Text("\(sourceInPrimaryLocale)\(showLocaleKey ? " (\(DoriAPI.preferredLocale.rawValue.uppercased()))" : "")")
+                        .typesettingLanguage(.explicit((DoriAPI.preferredLocale.nsLocale().language)))
                         .onAppear {
                             primaryDisplayString = sourceInPrimaryLocale
                         }
                 } else if let sourceInSecondaryLocale = source.forSecondaryLocale(allowsFallback: false) {
                     Text("\(sourceInSecondaryLocale)\(showLocaleKey ? " (\(DoriAPI.secondaryLocale.rawValue.uppercased()))" : "")")
+                        .typesettingLanguage(.explicit((DoriAPI.secondaryLocale.nsLocale().language)))
                         .onAppear {
                             primaryDisplayString = sourceInSecondaryLocale
                         }
                 } else if let sourceInJP = source.jp {
                     Text("\(sourceInJP)\(showLocaleKey ? " (JP)" : "")")
+                        .typesettingLanguage(.explicit((DoriAPI.Locale.jp.nsLocale().language)))
                         .onAppear {
                             primaryDisplayString = sourceInJP
                         }
                 } else if let sourceInWhateverLocale = source.en {
                     Text("\(sourceInWhateverLocale)\(showLocaleKey ? " (EN)" : "")")
+                        .typesettingLanguage(.explicit((DoriAPI.Locale.en.nsLocale().language)))
                         .onAppear {
                             primaryDisplayString = sourceInWhateverLocale
                         }
                 } else if let sourceInWhateverLocale = source.tw {
                     Text("\(sourceInWhateverLocale)\(showLocaleKey ? " (TW)" : "")")
+                        .typesettingLanguage(.explicit((DoriAPI.Locale.tw.nsLocale().language)))
                         .onAppear {
                             primaryDisplayString = sourceInWhateverLocale
                         }
                 } else if let sourceInWhateverLocale = source.cn {
                     Text("\(sourceInWhateverLocale)\(showLocaleKey ? " (CN)" : "")")
+                        .typesettingLanguage(.explicit((DoriAPI.Locale.cn.nsLocale().language)))
                         .onAppear {
                             primaryDisplayString = sourceInWhateverLocale
                         }
                 } else if let sourceInWhateverLocale = source.kr {
                     Text("\(sourceInWhateverLocale)\(showLocaleKey ? " (KR)" : "")")
+                        .typesettingLanguage(.explicit((DoriAPI.Locale.kr.nsLocale().language)))
                         .onAppear {
                             primaryDisplayString = sourceInWhateverLocale
                         }
                 }
                 if let secondarySourceInSecondaryLang = source.forSecondaryLocale(allowsFallback: false), secondarySourceInSecondaryLang != primaryDisplayString {
                     Text("\(secondarySourceInSecondaryLang)\(showLocaleKey ? " (\(DoriAPI.secondaryLocale.rawValue.uppercased()))" : "")")
+                        .typesettingLanguage(.explicit((DoriAPI.secondaryLocale.nsLocale().language)))
                         .foregroundStyle(.secondary)
                 } else if let secondarySourceInJP = source.jp, secondarySourceInJP != primaryDisplayString {
                     Text("\(secondarySourceInJP)\(showLocaleKey ? " (JP)" : "")")
+                        .typesettingLanguage(.explicit((DoriAPI.Locale.jp.nsLocale().language)))
                         .foregroundStyle(.secondary)
                 }
             }

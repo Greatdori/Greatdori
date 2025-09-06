@@ -205,3 +205,239 @@ struct DebugOfflineAssetView: View {
         #endif
     }
 }
+
+struct DebugFilterExperimentView: View {
+    @State var filter: DoriFrontend.Filter = .init()
+    @State var updating = false
+    @State var focusingList: Int = -1
+    
+    // 0 - Event
+    @State var eventList: [DoriAPI.Event.PreviewEvent] = []
+    @State var eventListFiltered: [DoriAPI.Event.PreviewEvent] = []
+    
+    // 1 - Gacha
+    @State var gachaList: [DoriAPI.Gacha.PreviewGacha] = []
+    @State var gachaListFiltered: [DoriAPI.Gacha.PreviewGacha] = []
+    
+    // 2 - Card
+    @State var cardList: [DoriFrontend.Card.CardWithBand] = []
+    @State var cardListFiltered: [DoriFrontend.Card.CardWithBand] = []
+    
+    // 3 - Song
+    @State var songList: [DoriFrontend.Song.PreviewSong] = []
+    @State var songListFiltered: [DoriFrontend.Song.PreviewSong] = []
+    
+    // 4 - Comic
+    @State var comicList: [DoriAPI.Comic.Comic] = []
+    @State var comicListFiltered: [DoriAPI.Comic.Comic] = []
+    
+    // 5 - Campaign
+    @State var campaignList: [DoriAPI.LoginCampaign.PreviewCampaign] = []
+    @State var campaignListFiltered: [DoriAPI.LoginCampaign.PreviewCampaign] = []
+    
+    // 6 - Costume
+    @State var costumeList: [DoriAPI.Costume.PreviewCostume] = []
+    @State var costumeListFiltered: [DoriAPI.Costume.PreviewCostume] = []
+    
+    @State var showLegacy = false
+    @State var eventListLegacy: [DoriAPI.Event.PreviewEvent] = []
+    @State var gachaListLegacy: [DoriAPI.Gacha.PreviewGacha] = []
+    
+    @State var showFilterSheet = false
+    let lists: [Int: String] = [0: "EVENT", 1: "GACHA", 2: "CARD"]
+//    @State var result: Array<>? = []
+    var body: some View {
+        NavigationStack {
+            HStack {
+                List {
+                    Picker(selection: $focusingList, content: {
+                        Text(verbatim: "Select")
+                            .tag(-1)
+                        Text(verbatim: "EVENT")
+                            .tag(0)
+                        Text(verbatim: "GACHA")
+                            .tag(1)
+                        Text(verbatim: "CARD")
+                            .tag(2)
+                        Text(verbatim: "SONG")
+                            .tag(3)
+                        Text(verbatim: "COMIC")
+                            .tag(4)
+                        Text(verbatim: "CAMPAIGN")
+                            .tag(5)
+                        Text(verbatim: "COSTUME")
+                            .tag(6)
+                    }, label: {
+                        Text(verbatim: "List Type")
+                    })
+                    Toggle(isOn: $showLegacy, label: {
+                        Text(verbatim: "Show Legacy")
+                    })
+                    .toggleStyle(.switch)
+                    #if os(iOS)
+                    Button(action: {
+                        showFilterSheet = true
+                    }, label: {
+                        Text(verbatim: "Show Filter Sheet")
+                    })
+                    #endif
+                    Text(verbatim: "Updating: \(updating ? "TRUE" : "FALSE")")
+                        .bold(updating)
+                        .foregroundStyle(updating ? .red : .green)
+                    Group {
+                        if focusingList == 0 {
+                            Text(verbatim: "Events List Item: \(eventListFiltered.count)/\(eventList.count)")
+                            ForEach(eventListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.eventName.jp ?? "nil")")
+                            }
+                        } else if focusingList == 1 {
+                            Text(verbatim: "Gachas List Item: \(gachaListFiltered.count)/\(gachaList.count)")
+                            ForEach(gachaListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.gachaName.jp ?? "nil")")
+                            }
+                        } else if focusingList == 2 {
+                            Text(verbatim: "Cards List Item: \(cardListFiltered.count)/\(cardList.count)")
+                            ForEach(cardListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.card.prefix.jp ?? "nil")")
+                            }
+                        } else if focusingList == 3 {
+                            Text(verbatim: "Songs List Item: \(songListFiltered.count)/\(songList.count)")
+                            ForEach(songListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.musicTitle.jp ?? "nil")")
+                                ForEach(DoriAPI.Locale.allCases, id: \.self) { item in
+                                    if let closedAt = element.closedAt.forLocale(item), closedAt < Calendar.current.date(from: DateComponents(year: 2090, month: 1, day: 1))! {
+                                        Text(verbatim: "[\(item.rawValue.uppercased())] \(closedAt)")
+                                            .foregroundStyle(.red)
+                                    }
+                                }
+                            }
+                        } else if focusingList == 4 {
+                            Text(verbatim: "Comic List Item: \(comicListFiltered.count)/\(comicList.count)")
+                            ForEach(comicListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.title.jp ?? "nil")")
+                            }
+                        } else if focusingList == 5 {
+                            Text(verbatim: "Campaign List Item: \(campaignListFiltered.count)/\(campaignList.count)")
+                            ForEach(campaignListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.caption.jp ?? "nil")")
+                            }
+                        } else if focusingList == 6 {
+                            Text(verbatim: "Costume List Item: \(costumeListFiltered.count)/\(costumeList.count)")
+                            ForEach(costumeListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.description.jp ?? "nil")")
+                            }
+                        }
+                    }
+                }
+                if showLegacy {
+                    List {
+                        Text(verbatim: "LEGACY")
+                            .bold()
+                        Group {
+                            if focusingList == 0 {
+                                Text(verbatim: "Event List Item: \(eventListLegacy.count)/\(eventList.count)")
+                                ForEach(eventListLegacy) { element in
+                                    Text(verbatim: "#\(element.id) - \(element.eventName.jp ?? "nil")")
+                                }
+                            } else if focusingList == 1 {
+                                Text(verbatim: "Gacha List Item: \(gachaListLegacy.count)/\(gachaList.count)")
+                                ForEach(gachaListLegacy) { element in
+                                    Text(verbatim: "#\(element.id) - \(element.gachaName.jp ?? "nil")")
+                                }
+                            } else {
+                                Text(verbatim: "Not Supported Legacy Type")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .fontDesign(.monospaced)
+        .multilineTextAlignment(.leading)
+        .sheet(isPresented: $showFilterSheet, content: {
+            FilterView(filter: $filter, includingKeys: Set(DoriFrontend.Filter.Key.allCases))
+        })
+        .inspector(isPresented: .constant(true), content: {
+            FilterView(filter: $filter, includingKeys: Set(DoriFrontend.Filter.Key.allCases))
+        })
+        .onAppear {
+//            focusingList = 0
+        }
+        .onChange(of: focusingList, {
+            updating = true
+            Task {
+                if focusingList == 0 {
+                    eventList = await DoriFrontend.Event.list() ?? []
+                    eventListFiltered = eventList.filter(withDoriFilter: filter)
+                    if showLegacy {
+                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
+                    }
+                } else if focusingList == 1 {
+                    gachaList = await DoriFrontend.Gacha.list() ?? []
+                    gachaListFiltered = gachaList.filter(withDoriFilter: filter)
+                    if showLegacy {
+                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
+                    }
+                } else if focusingList == 2 {
+                    cardList = await DoriFrontend.Card.list() ?? []
+                    cardListFiltered = cardList.filter(withDoriFilter: filter)
+                } else if focusingList == 3 {
+                    songList = await DoriFrontend.Song.list() ?? []
+                    songListFiltered = songList.filter(withDoriFilter: filter)
+                } else if focusingList == 4 {
+                    comicList = await DoriFrontend.Comic.list() ?? []
+                    comicListFiltered = comicList.filter(withDoriFilter: filter)
+                } else if focusingList == 5 {
+                    campaignList = await DoriFrontend.LoginCampaign.list() ?? []
+                    campaignListFiltered = campaignList.filter(withDoriFilter: filter)
+                } else if focusingList == 6 {
+                    costumeList = await DoriFrontend.Costume.list() ?? []
+                    costumeListFiltered = costumeList.filter(withDoriFilter: filter)
+                }
+                updating = false
+            }
+        })
+        .onChange(of: filter) {
+            updating = true
+            if focusingList == 0 {
+                eventListFiltered = eventList.filter(withDoriFilter: filter)
+                if showLegacy {
+                    Task {
+                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
+                    }
+                }
+            } else if focusingList == 1 {
+                gachaListFiltered = gachaList.filter(withDoriFilter: filter)
+                if showLegacy {
+                    Task {
+                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
+                    }
+                }
+            } else if focusingList == 2 {
+                cardListFiltered = cardList.filter(withDoriFilter: filter)
+            } else if focusingList == 3 {
+                songListFiltered = songList.filter(withDoriFilter: filter)
+            } else if focusingList == 4 {
+                comicListFiltered = comicList.filter(withDoriFilter: filter)
+            } else if focusingList == 5 {
+                campaignListFiltered = campaignList.filter(withDoriFilter: filter)
+            } else if focusingList == 6 {
+                costumeListFiltered = costumeList.filter(withDoriFilter: filter)
+            }
+            updating = false
+        }
+        .onChange(of: showLegacy, {
+            if showLegacy {
+                Task {
+                    updating = true
+                    if focusingList == 0 {
+                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
+                    } else if focusingList == 1 {
+                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
+                    }
+                    updating = false
+                }
+            }
+        })
+    }
+}
