@@ -345,7 +345,7 @@ extension DoriFrontend.Costume.PreviewCostume {
             }
             return band.rawValue == characters.first(where: { $0.id == self.characterID })?.bandID
         } else if let character = value as? DoriFrontend.Filter.Character { // Character
-            return self.characterID == characterID
+            return self.characterID == character.rawValue
         } else if let server = value as? DoriFrontend.Filter.Server { // Server
             return self.description.availableInLocale(server)
         } else if let availabilityWithServers = value as? DoriFrontend.AvailabilityWithServers { // Availability
