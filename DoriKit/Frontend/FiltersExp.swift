@@ -280,7 +280,7 @@ extension DoriAPI.Song.PreviewSong {
     }
 }
 
-//MARK: extension Preivew Campaign
+//MARK: extension PreivewCampaign
 // Server, Timeline Status, Login Campaign Type
 extension DoriFrontend.LoginCampaign.PreviewCampaign {
     public func matches<ValueType>(_ value: ValueType, withFilterCache: DoriFrontend.FilterCache?) -> Bool? {
