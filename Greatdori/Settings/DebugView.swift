@@ -227,6 +227,14 @@ struct DebugFilterExperimentView: View {
     @State var songList: [DoriFrontend.Song.PreviewSong] = []
     @State var songListFiltered: [DoriFrontend.Song.PreviewSong] = []
     
+    // 4 - Comic
+    @State var comicList: [DoriAPI.Comic.Comic] = []
+    @State var comicListFiltered: [DoriAPI.Comic.Comic] = []
+    
+    // 5 - Campaign
+    @State var campaignList: [DoriAPI.LoginCampaign.PreviewCampaign] = []
+    @State var campaignListFiltered: [DoriAPI.LoginCampaign.PreviewCampaign] = []
+    
     @State var showLegacy = false
     @State var eventListLegacy: [DoriAPI.Event.PreviewEvent] = []
     @State var gachaListLegacy: [DoriAPI.Gacha.PreviewGacha] = []
@@ -239,6 +247,8 @@ struct DebugFilterExperimentView: View {
             HStack {
                 List {
                     Picker(selection: $focusingList, content: {
+                        Text(verbatim: "Select")
+                            .tag(-1)
                         Text(verbatim: "EVENT")
                             .tag(0)
                         Text(verbatim: "GACHA")
@@ -247,6 +257,10 @@ struct DebugFilterExperimentView: View {
                             .tag(2)
                         Text(verbatim: "SONG")
                             .tag(3)
+                        Text(verbatim: "COMIC")
+                            .tag(4)
+                        Text(verbatim: "CAMPAIGN")
+                            .tag(5)
                     }, label: {
                         Text(verbatim: "List Type")
                     })
@@ -290,6 +304,16 @@ struct DebugFilterExperimentView: View {
                                             .foregroundStyle(.red)
                                     }
                                 }
+                            }
+                        } else if focusingList == 4 {
+                            Text(verbatim: "Comic List Item: \(comicListFiltered.count)/\(comicList.count)")
+                            ForEach(comicListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.title.jp ?? "nil")")
+                            }
+                        } else if focusingList == 5 {
+                            Text(verbatim: "Campaign List Item: \(campaignListFiltered.count)/\(campaignList.count)")
+                            ForEach(campaignListFiltered) { element in
+                                Text(verbatim: "#\(element.id) - \(element.caption.jp ?? "nil")")
                             }
                         }
                     }
@@ -349,6 +373,12 @@ struct DebugFilterExperimentView: View {
                 } else if focusingList == 3 {
                     songList = await DoriFrontend.Song.list() ?? []
                     songListFiltered = songList.filterByDori(with: filter)
+                } else if focusingList == 4 {
+                    comicList = await DoriFrontend.Comic.list() ?? []
+                    comicListFiltered = comicList.filterByDori(with: filter)
+                } else if focusingList == 5 {
+                    campaignList = await DoriFrontend.LoginCampaign.list() ?? []
+                    campaignListFiltered = campaignList.filterByDori(with: filter)
                 }
                 updating = false
             }
@@ -373,6 +403,10 @@ struct DebugFilterExperimentView: View {
                 cardListFiltered = cardList.filterByDori(with: filter)
             } else if focusingList == 3 {
                 songListFiltered = songList.filterByDori(with: filter)
+            } else if focusingList == 4 {
+                comicListFiltered = comicList.filterByDori(with: filter)
+            } else if focusingList == 5 {
+                campaignListFiltered = campaignList.filterByDori(with: filter)
             }
             updating = false
         }

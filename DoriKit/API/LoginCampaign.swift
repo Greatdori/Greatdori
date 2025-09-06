@@ -62,7 +62,7 @@ extension DoriAPI {
                                 cn: value["assetBundleName"][3].string,
                                 kr: value["assetBundleName"][4].string
                             ),
-                            caption: .init(
+                            caption: .init( 
                                 jp: value["caption"][0].string,
                                 en: value["caption"][1].string,
                                 tw: value["caption"][2].string,
@@ -205,7 +205,7 @@ extension DoriAPI {
 
 extension DoriAPI.LoginCampaign {
     /// Represent simplified data of login campaign.
-    public struct PreviewCampaign: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+    public struct PreviewCampaign: Sendable, Identifiable, Hashable, DoriCache.Cacheable, DoriFrontend.Filterable {
         /// A unique ID of login campaign.
         public var id: Int
         /// Type of login campaign.

@@ -803,6 +803,7 @@ extension DoriAPI.Event {
         public var limitBreaks: [EventLimitBreak]
         /// IDs of cards that can be gotten by participating this event.
         public var rewardCards: [Int]
+//        public var applicableKeys: [DoriFrontend.Filter.Key] = [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType]
     }
     
     /// Represent detailed data of an event.

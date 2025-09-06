@@ -30,7 +30,7 @@ extension DoriFrontend {
     ///     Interact with each keys of a filter by ``Key``, which also allows you to build UI for filter.
     public struct Filter: Sendable, Hashable, Codable {
         public var band: Set<Band> = .init(Band.allCases) { didSet { store() } }
-        public var bandMatchesOthers: Bool = true { didSet { store() } }
+        public var bandMatchesOthers: BandMatchesOthers = .includeOthers { didSet { store() } }
         public var attribute: Set<Attribute> = .init(Attribute.allCases)  { didSet { store() } }
         public var rarity: Set<Rarity> = [1, 2, 3, 4, 5]  { didSet { store() } }
         public var character: Set<Character> = .init(Character.allCases)  { didSet { store() } }
@@ -50,7 +50,7 @@ extension DoriFrontend {
         
         public init(
             band: Set<Band> = .init(Band.allCases),
-            bandMatchesOthers: Bool = true,
+            bandMatchesOthers: BandMatchesOthers = .includeOthers,
             attribute: Set<Attribute> = .init(Attribute.allCases),
             rarity: Set<Rarity> = [1, 2, 3, 4, 5],
             character: Set<Character> = .init(Character.allCases),
@@ -109,7 +109,7 @@ extension DoriFrontend {
         /// Whether this filter actually filters something.
         public var isFiltered: Bool {
             band.count != Band.allCases.count
-            || !bandMatchesOthers
+            || bandMatchesOthers == .excludeOthers
             || attribute.count != Attribute.allCases.count
             || rarity.count != 5
             || character.count != Character.allCases.count
@@ -157,7 +157,7 @@ extension DoriFrontend {
         /// Set the filter to initial selections.
         public mutating func clearAll() {
             band = .init(Band.allCases)
-            bandMatchesOthers = true
+            bandMatchesOthers = .includeOthers
             attribute = .init(Attribute.allCases)
             rarity = [1, 2, 3, 4, 5]
             character = .init(Character.allCases)
@@ -199,7 +199,7 @@ extension DoriFrontend {
 
 extension DoriFrontend.Filter {
     public typealias Attribute = DoriAPI.Attribute
-    public typealias BandMatchesOthers = Bool
+//    public typealias BandMatchesOthers = Bool
     public typealias Rarity = Int
     public typealias Server = DoriAPI.Locale
     public typealias CardType = DoriAPI.Card.CardType
@@ -235,6 +235,37 @@ extension DoriFrontend.Filter {
 //            case .others: String(localized: "BAND_NAME_OTHERS", bundle: #bundle)
             }
         }
+//        public init(id: Int) {
+//            if DoriFrontend.Filter.Band.allCases.map({$0.rawValue}).dropLast().contains(id) {
+//                self = Band(rawValue: id)!
+//            } else {
+//                self = .others
+//            }
+//        }
+    }
+    internal enum FullBand: Int, Sendable, CaseIterable, Hashable, Codable {
+        case poppinParty = 1
+        case afterglow
+        case helloHappyWorld
+        case pastelPalettes
+        case roselia
+        case raiseASuilen = 18
+        case morfonica = 21
+        case mygo = 45
+        case others = -1 // `others` MUST be the last.
+        
+        public init(id: Int) {
+            if DoriFrontend.Filter.FullBand.allCases.map({$0.rawValue}).dropLast().contains(id) {
+                self = FullBand(rawValue: id)!
+            } else {
+                self = .others
+            }
+        }
+    }
+    @frozen
+    public enum BandMatchesOthers: Codable {
+        case includeOthers
+        case excludeOthers
     }
     public enum Character: Int, Sendable, CaseIterable, Hashable, Codable {
         // Poppin'Party
@@ -424,6 +455,7 @@ extension DoriFrontend.Filter {
         case level
         case skill
         case timelineStatus
+        case songAvailability
         case sort
     }
 }
@@ -464,6 +496,7 @@ extension DoriFrontend.Filter.Key {
         case .level: String(localized: "FILTER_KEY_LEVEL", bundle: #bundle)
         case .skill: String(localized: "FILTER_KEY_SKILL", bundle: #bundle)
         case .timelineStatus: String(localized: "FILTER_KEY_TIMELINE_STATUS", bundle: #bundle)
+        case .songAvailability: String(localized: "FILTER_KEY_SONG_AVAILABILITY", bundle: #bundle)
         case .sort: String(localized: "FILTER_KEY_SORT", bundle: #bundle)
         }
     }
@@ -507,6 +540,7 @@ extension DoriFrontend.Filter: MutableCollection {
             case .level: self.level
             case .skill: self.skill
             case .timelineStatus: self.timelineStatus
+            case .songAvailability: self.timelineStatus
             case .sort: self.sort
             }
         }
@@ -540,7 +574,7 @@ extension DoriFrontend.Filter: MutableCollection {
         case .band:
             self.band = value as! Set<Band>
         case .bandMatchesOthers:
-            self.bandMatchesOthers = value as! Bool
+            self.bandMatchesOthers = value as! BandMatchesOthers
         case .attribute:
             self.attribute = value as! Set<Attribute>
         case .rarity:
@@ -570,6 +604,8 @@ extension DoriFrontend.Filter: MutableCollection {
         case .skill:
             self.skill = value as! Skill?
         case .timelineStatus:
+            self.timelineStatus = value as! Set<TimelineStatus>
+        case .songAvailability:
             self.timelineStatus = value as! Set<TimelineStatus>
         case .sort:
             if let sort = value as? Sort {
@@ -601,6 +637,11 @@ extension DoriFrontend.Filter {
         public init<T: _Selectable>(_ value: T) {
             self.init(erasing: value)
         }
+        public init<T: _Selectable>(_ value: T, selectorText: String, selectorImageURL: URL? = nil) {
+            self._selectorText = selectorText
+            self._selectorImageURL = selectorImageURL
+            self.value = value
+        }
         
         public var selectorText: String { _selectorText }
         public var selectorImageURL: URL? { _selectorImageURL }
@@ -623,6 +664,9 @@ extension DoriFrontend.Filter.Band: DoriFrontend.Filter._Selectable {
         } else {
             return nil
         }
+    }
+    internal func asFullBand() -> DoriFrontend.Filter.FullBand {
+        return DoriFrontend.Filter.FullBand(rawValue: self.rawValue)!
     }
 }
 extension DoriFrontend.Filter.Attribute: DoriFrontend.Filter._Selectable {
@@ -841,6 +885,10 @@ extension DoriFrontend.Filter.Key {
             (.multiple, DoriFrontend.Filter.TimelineStatus.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
+        case .songAvailability:
+            (.multiple, DoriFrontend.Filter.TimelineStatus.allCases.map {
+                SelectorItem(DoriFrontend.Filter._AnySelectable($0, selectorText: [DoriFrontend.Filter.TimelineStatus.upcoming: String(localized: "SONG_AVAILABILITY_UPCOMING", bundle: #bundle), DoriFrontend.Filter.TimelineStatus.ongoing: String(localized: "SONGS_AVAILABILITY_AVAILABLE", bundle: #bundle), DoriFrontend.Filter.TimelineStatus.ended: String(localized: "SONG_AVAILABILITY_REMOVED", bundle: #bundle)][$0]!))
+            }.reversed())
         case .sort:
             (.single, DoriFrontend.Filter.Sort.Keyword.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))

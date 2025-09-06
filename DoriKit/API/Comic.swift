@@ -90,7 +90,7 @@ extension DoriAPI {
 
 extension DoriAPI.Comic {
     /// Represent general data of a comic
-    public struct Comic: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+    public struct Comic: Sendable, Identifiable, Hashable, DoriCache.Cacheable, DoriFrontend.Filterable {
         /// A unique ID of comic.
         public var id: Int
         /// Name of resource bundle, used for combination of resource URLs.

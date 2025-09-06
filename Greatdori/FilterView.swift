@@ -28,27 +28,17 @@ struct FilterView: View {
     @State var lastSelectAllActionIsDeselect: Bool = false
     @State var theItemThatShowsSelectAllTips: DoriFrontend.Filter.Key? = nil
     
-    let filterKeysOrder: [DoriFrontend.Filter.Key] = [.band, .attribute, .rarity, .character, .server, .timelineStatus, .released, .eventType, .gachaType, .songType, .skill]
+    let filterKeysOrder: [DoriFrontend.Filter.Key] = [.band, .attribute, .rarity, .character, .server, .timelineStatus, .songAvailability, .released, .cardType, .eventType, .gachaType, .songType, .loginCampaignType, .comicType, .skill, .level]
     
     var body: some View {
         Form {
             Section(content: {
-                // `FilterItemView` will determine whether it should be displayed or not by itself.
+                // Some keys should be displayed indirectly, hence we don't traverse `includingKeys`.
                 ForEach(filterKeysOrder, id: \.self) { key in
-                    FilterItemView(filter: $filter, allKeys: includingKeys, key: key)
+                    if includingKeys.contains(key) {
+                        FilterItemView(filter: $filter, allKeys: includingKeys, key: key)
+                    }
                 }
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .band)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .attribute)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .rarity)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .character)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .server)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .timelineStatus)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .released)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .eventType)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .gachaType)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .cardType)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .songType)
-//                FilterItemView(filter: $filter, allKeys: includingKeys, key: .skill)
             }, header: {
                 VStack(alignment: .leading) {
                     if sizeClass == .compact {
@@ -79,11 +69,10 @@ struct FilterItemView: View {
     
     @State var isHovering = false
     @State var characterRequiresMatchAll = false
-    @State var skill: DoriAPI.Skill.Skill? = nil
+    @State var skill: DoriFrontend.Filter.Skill? = nil
     @State var levelSliderIsEnabled = false
-    @State var level: Int = 5
+    @State var level: Double = 5
     var body: some View {
-        if allKeys.contains(key) {
             VStack(alignment: .leading) {
                 if key.selector.type == .multiple {
                     //MARK: Title Part
@@ -123,14 +112,14 @@ struct FilterItemView: View {
                                     if filterSet.count == 0 {
                                         filter[key] = Set(allCases)
                                         if key == .band && allKeys.contains(.bandMatchesOthers) {
-                                            filter.bandMatchesOthers = true
+                                            filter.bandMatchesOthers = .includeOthers
                                         }
                                     } else {
                                         if var filterSet = filter[key] as? Set<AnyHashable> {
                                             filterSet.removeAll()
                                             filter[key] = filterSet
                                             if key == .band && allKeys.contains(.bandMatchesOthers) {
-                                                filter.bandMatchesOthers = false
+                                                filter.bandMatchesOthers = .excludeOthers
                                             }
                                         }
                                     }
@@ -141,7 +130,7 @@ struct FilterItemView: View {
                                 let allCases = key.selector.items.map { $0.item.value }
                                 if let filterSet = filter[key] as? Set<AnyHashable> {
                                     if key == .band && allKeys.contains(.bandMatchesOthers) {
-                                        CompactToggle(isLit: (filterSet.count == allCases.count && filter.bandMatchesOthers) ? true : (filterSet.count == 0 && !filter.bandMatchesOthers ? false : nil))
+                                        CompactToggle(isLit: (filterSet.count == allCases.count && filter.bandMatchesOthers == .includeOthers) ? true : (filterSet.count == 0 && filter.bandMatchesOthers == .excludeOthers ? false : nil))
                                     } else {
                                         CompactToggle(isLit: (filterSet.count == allCases.count) ? true : (filterSet.count == 0 ? false : nil))
                                     }
@@ -189,14 +178,18 @@ struct FilterItemView: View {
                                     } else {
                                         Button(action: {
                                             withAnimation(.easeInOut(duration: 0.05)) {
-                                                filter.bandMatchesOthers.toggle()
+                                                if filter.bandMatchesOthers == .includeOthers {
+                                                    filter.bandMatchesOthers = .excludeOthers
+                                                } else {
+                                                    filter.bandMatchesOthers = .includeOthers
+                                                }
                                             }
                                         }, label: {
                                             ZStack {
                                                 Circle()
                                                     .stroke(Color.accent, lineWidth: 2)
                                                     .frame(width: filterItemHeight, height: filterItemHeight)
-                                                    .opacity(filter.bandMatchesOthers ? 1 : 0)
+                                                    .opacity(filter.bandMatchesOthers == .includeOthers ? 1 : 0)
                                                 if item.imageURL != nil {
                                                     WebImage(url: item.imageURL)
                                                         .antialiased(true)
@@ -242,55 +235,152 @@ struct FilterItemView: View {
                 } else {
                     //MARK: Single Selection
                     if key == .skill {
-                        Picker(key.localizedString, selection: $skill) {
+                        #if os(macOS)
+                        Picker(selection: $skill, content: {
                             // Optional "Any" to clear the filter
                             Text("Filter.skill.any")
                                 .tag(Optional<DoriFrontend.Filter.Skill>.none)
                             
-                            //                            Text("\(key.selector.items)")
                             ForEach(key.selector.items, id: \.self) { item in
-                                // Extract the concrete Skill from AnyHashable
                                 if let value = item.item.value as? DoriFrontend.Filter.Skill {
+                                    // Use the skill's simpleDescription (localized) instead of selectorText
+//                                    let label = value.simpleDescription.forPreferredLocale() ?? ""
+//                                    let label = value.description.forPreferredLocale() ?? ""
                                     Text(item.text)
                                         .tag(Optional(value))
                                 }
                             }
-                        }
-                        .onChange(of: skill) { newValue in
+                        }, label: {
+                            Text(key.localizedString)
+                                .bold()
+                                .lineLimit(nil)
+                        })
+                        .pickerStyle(.menu)
+                        .onChange(of: skill) { _, newValue in
                             filter.skill = newValue
                         }
-                    }/* else if key == .level {
-                        Slider(value: $level, in: 0...100) {
-                            Text("1")
+                        #else
+                        HStack {
+                            Text(key.localizedString)
+                                .bold()
+                            Spacer()
+                            Menu(content: {
+                                // Optional "Any" to clear the filter
+                                Button(action: {
+                                    skill = nil
+                                }, label: {
+                                    Text("Filter.skill.any")
+                                })
+                                
+                                ForEach(key.selector.items, id: \.self) { item in
+                                    if let value = item.item.value as? DoriFrontend.Filter.Skill {
+                                        Button(action: {
+                                            skill = value
+                                        }, label: {
+                                            Text(item.text)
+                                        })
+                                        // Use the skill's simpleDescription (localized) instead of selectorText
+                                        //                                    let label = value.simpleDescription.forPreferredLocale() ?? ""
+                                        //                                    let label = value.description.forPreferredLocale() ?? ""
+                                        //                                        Text(item.text)
+                                        //                                            .tag(Optional(value))
+                                    }
+                                }
+                            }, label: {
+                                Text(skill?.selectorText ?? String(localized: "Filter.skill.any"))
+                                //                                    .bold()
+                                    .multilineTextAlignment(.trailing)
+                                    .foregroundStyle(.secondary)
+                                VStack {
+                                    Image(systemName: "chevron.up")
+                                    Image(systemName: "chevron.down")
+                                }
+                                .foregroundStyle(.secondary)
+                                .font(.caption)
+                                //                                .lineLimit(nil)
+                            })
+                            .foregroundStyle(.primary)
                         }
-//                        .onChange(of: level) { newValue in
-//                            filter.level = level
+                        .onChange(of: skill) { _, newValue in
+                            filter.skill = newValue
+                        }
+                        #endif
+                    } else if key == .level {
+                        VStack {
+                            Toggle(isOn: $levelSliderIsEnabled, label: {
+                                HStack {
+                                    Text(key.localizedString)
+                                        .bold()
+                                    Spacer()
+                                    if levelSliderIsEnabled {
+                                        Text("\(Int(level))")
+//                                            .contentTransition(.numericText())
+//                                            .animation(.default, value: level)
+                                        Stepper("", value: $level, in: 5...35, step: 1, onEditingChanged: { value in
+                                            filter.level = Int(level)
+                                        })
+                                        .labelsHidden()
+                                    }
+                                    
+                                }
+                            })
+                            .toggleStyle(.switch)
+                            .tint(Color.accent)
+//                            .foregroundStyle(Color.tint)
+                            if levelSliderIsEnabled {
+                                Slider(value: $level, in: 5...35, step: 1, label: {
+                                    Text("")
+                                }, onEditingChanged: { value in
+                                    if !value {
+                                        filter.level = Int(level)
+                                    }
+                                })
+//                                Slider(value: $level, in: 5...35, step: 1, label: {
+//                                    Text("")
+//                                })
+//                                .onSubmit {
+//                                    print("SUBMITTED!")
+//                                    filter.level = Int(level)
+//                                }
+                                .labelsHidden()
+                                .disabled(!levelSliderIsEnabled)
+                            }
+                        }
+//                        .onChange(of: level) { _, newValue in
+//                            filter.level = Int(newValue)
 //                        }
-                    }*/
+                        .onChange(of: levelSliderIsEnabled) { _, isEnabledNow in
+                            if isEnabledNow {
+                                filter.level = Int(level)
+                            } else {
+                                filter.level = nil
+                            }
+                        }
+                    }
                 }
             }
             .onHover(perform: { isHovered in
                 isHovering = isHovered
             })
             .onAppear {
-                if skill == nil {
-                    skill = filter.skill
+                skill = filter.skill
+                if let filterLevel = filter.level {
+                    levelSliderIsEnabled = true
+                    level = Double(filterLevel)
+                } else {
+                    levelSliderIsEnabled = false
                 }
-//                if level == 5 {
-//                    level = filter.level ?? 5
-//                }
             }
             .onChange(of: filter.skill) {
                 if skill == nil {
                     skill = filter.skill
                 }
             }
-//            .onChange(of: filter.level) {
-//                if level == 5 {
-//                    level = filter.level ?? 5
-//                }
-//            }
-        }
+            .onChange(of: filter.level) {
+                if filter.level == nil {
+                    levelSliderIsEnabled = false
+                }
+            }
     }
     struct FilterSelectionCapsuleView<Content: View>: View {
         @Environment(\.horizontalSizeClass) var sizeClass
@@ -332,6 +422,7 @@ struct FilterItemView: View {
 
 // You may ask why this View looks so weird and has so many warnings.
 // It becuase it's generated by ChatGPT and it suprisingly works.
+// (P.S. It's super weird that I wanted to add a comment every time I see this.)
 // --@ThreeManager785
 struct FlowLayout<Data: RandomAccessCollection, Content: View>: View
 where Data.Element: Hashable {
@@ -391,3 +482,4 @@ where Data.Element: Hashable {
         //        .offset(x: -horizontalSpacing)wo x
     }
 }
+
