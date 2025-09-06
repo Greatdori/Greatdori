@@ -206,6 +206,15 @@
         }
       }
     },
+    "Character" : {
+
+    },
+    "Character.search.unavailable" : {
+
+    },
+    "Character.unavailable.description" : {
+
+    },
     "Debug.crash-detected.direct-enter" : {
       "localizations" : {
         "en" : {
@@ -1056,9 +1065,6 @@
     },
     "Greatdori!" : {
       "shouldTranslate" : false
-    },
-    "Hello, world!" : {
-
     },
     "Home.birthday" : {
       "localizations" : {

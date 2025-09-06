@@ -199,7 +199,6 @@ extension DoriFrontend {
 
 extension DoriFrontend.Filter {
     public typealias Attribute = DoriAPI.Attribute
-//    public typealias BandMatchesOthers = Bool
     public typealias Rarity = Int
     public typealias Server = DoriAPI.Locale
     public typealias CardType = DoriAPI.Card.CardType
@@ -219,7 +218,6 @@ extension DoriFrontend.Filter {
         case raiseASuilen = 18
         case morfonica = 21
         case mygo = 45
-//        case others = -1
         
         @inline(never)
         internal var name: String {
@@ -232,16 +230,8 @@ extension DoriFrontend.Filter {
             case .raiseASuilen: String(localized: "BAND_NAME_RAS", bundle: #bundle)
             case .morfonica: String(localized: "BAND_NAME_MORFONICA", bundle: #bundle)
             case .mygo: String(localized: "BAND_NAME_MYGO", bundle: #bundle)
-//            case .others: String(localized: "BAND_NAME_OTHERS", bundle: #bundle)
             }
         }
-//        public init(id: Int) {
-//            if DoriFrontend.Filter.Band.allCases.map({$0.rawValue}).dropLast().contains(id) {
-//                self = Band(rawValue: id)!
-//            } else {
-//                self = .others
-//            }
-//        }
     }
     internal enum FullBand: Int, Sendable, CaseIterable, Hashable, Codable {
         case poppinParty = 1

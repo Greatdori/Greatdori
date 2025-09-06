@@ -775,7 +775,7 @@ extension DoriAPI {
 
 extension DoriAPI.Event {
     /// Represent simplified data of an event.
-    public struct PreviewEvent: Sendable, Identifiable, Hashable, DoriCache.Cacheable, DoriFrontend.Filterable {
+    public struct PreviewEvent: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of event.
         public var id: Int
         /// Type of event.

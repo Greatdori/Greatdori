@@ -16,17 +16,17 @@ import Foundation
 import Playgrounds
 internal import os
 
-//MARK: [IMPORTANT] This file has incorrect internal protection settings. Check ALL before merging.
+// MARK: [IMPORTANT] This file has incorrect internal protection settings. Check ALL before merging.
 // The message above should be removed before merging into `main`.
 
-//MARK: extension DoriFrontend
+// MARK: extension DoriFrontend
 extension DoriFrontend {
     //MARK: protocol Filterable
-    public protocol Filterable {
+    public protocol _Filterable {
         // `matches` only handle single value.
         // Please keep in mind that it does handle values like any `Array` or `characterRequiresMatchAll`.
         // Unexpected value type or cache reading failure will lead to `nil` return.
-        func matches<ValueType>(_ value: ValueType, withFilterCache: FilterCache?) -> Bool?
+        func _matches<ValueType>(_ value: ValueType, withFilterCache: FilterCache?) -> Bool?
         
 //        var applicableKeys: [DoriFrontend.Filter.Key] { get }
     }
@@ -107,11 +107,10 @@ extension DoriFrontend {
     }
 }
 
-
-//MARK: extension PreviewEvent
+// MARK: extension PreviewEvent
 // Attribute, Character, Server, Timeline Status, Event Type
-extension DoriAPI.Event.PreviewEvent {
-    public func matches<ValueType>(_ value: ValueType, withFilterCache: DoriFrontend.FilterCache? = nil) -> Bool? {
+extension DoriAPI.Event.PreviewEvent: DoriFrontend._Filterable {
+    public func _matches<ValueType>(_ value: ValueType, withFilterCache: DoriFrontend.FilterCache? = nil) -> Bool? {
         if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
             return self.attributes.contains { $0.attribute == attribute }
         } else if let character = value as? DoriFrontend.Filter.Character { // Character
@@ -149,11 +148,11 @@ extension DoriAPI.Event.PreviewEvent {
     }
 }
 
-//MARK: extension PreviewGacha
+// MARK: extension PreviewGacha
 // Attribute, Character, Server, Timeline Status, Gacha Type
 // Filter Cache Required
-extension DoriAPI.Gacha.PreviewGacha {
-    public func matches<ValueType>(_ value: ValueType, withFilterCache cache: DoriFrontend.FilterCache?) -> Bool? {
+extension DoriAPI.Gacha.PreviewGacha: DoriFrontend._Filterable {
+    public func _matches<ValueType>(_ value: ValueType, withFilterCache cache: DoriFrontend.FilterCache?) -> Bool? {
         if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
             guard let cards = cache?.cardsDict else {
                 unsafe os_log("[Filter][Gacha] Found `nil` while trying to read card cache.")
@@ -201,13 +200,12 @@ extension DoriAPI.Gacha.PreviewGacha {
     }
 }
 
-//MARK: extension CardWithBand
+// MARK: extension CardWithBand
 // Band, Attribute, Rarity, Character, Server, Availability, Card Type, Skill
-extension DoriFrontend.Card.CardWithBand {
-    public func matches<ValueType>(_ value: ValueType, withFilterCache cache: DoriFrontend.FilterCache?) -> Bool? { // Band
+extension DoriFrontend.Card.CardWithBand: DoriFrontend._Filterable {
+    public func _matches<ValueType>(_ value: ValueType, withFilterCache cache: DoriFrontend.FilterCache?) -> Bool? { // Band
         if let band = value as? DoriFrontend.Filter.FullBand { // Band - Full
             return DoriFrontend.getPlainedBandID(self.band.id) == band.rawValue
-//            return DoriFrontend.Filter.FullBand(id: self.band.id) == band
         } else if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
             return self.card.attribute.rawValue.contains(attribute.rawValue)
         } else if let rarity = value as? DoriFrontend.Filter.Rarity { // Rarity
@@ -239,10 +237,10 @@ extension DoriFrontend.Card.CardWithBand {
     }
 }
 
-//MARK: extension PreviewSong
+// MARK: extension PreviewSong
 // Band, Server, Timeline Status, Song Type, Level
-extension DoriAPI.Song.PreviewSong {
-    public func matches<ValueType>(_ value: ValueType, withFilterCache cache: DoriFrontend.FilterCache?) -> Bool? {
+extension DoriAPI.Song.PreviewSong: DoriFrontend._Filterable {
+    public func _matches<ValueType>(_ value: ValueType, withFilterCache cache: DoriFrontend.FilterCache?) -> Bool? {
         if let band = value as? DoriFrontend.Filter.FullBand { // Band - Full
             return DoriFrontend.getPlainedBandID(self.bandID) == band.rawValue
         } else if let server = value as? DoriFrontend.Filter.Server { // Server
@@ -280,10 +278,10 @@ extension DoriAPI.Song.PreviewSong {
     }
 }
 
-//MARK: extension PreivewCampaign
+// MARK: extension PreivewCampaign
 // Server, Timeline Status, Login Campaign Type
-extension DoriFrontend.LoginCampaign.PreviewCampaign {
-    public func matches<ValueType>(_ value: ValueType, withFilterCache: DoriFrontend.FilterCache?) -> Bool? {
+extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend._Filterable {
+    public func _matches<ValueType>(_ value: ValueType, withFilterCache: DoriFrontend.FilterCache?) -> Bool? {
         if let server = value as? DoriFrontend.Filter.Server { // Server
             return self.publishedAt.availableInLocale(server)
         } else if let timelineStatusWithServers = value as? DoriFrontend.TimelineStatusWithServers { // Timeline Status with Servers
@@ -317,10 +315,10 @@ extension DoriFrontend.LoginCampaign.PreviewCampaign {
     }
 }
 
-//MARK: extension Comic
+// MARK: extension Comic
 // Character, Server, Comic Type
-extension DoriAPI.Comic.Comic {
-    public func matches<ValueType>(_ value: ValueType, withFilterCache: DoriFrontend.FilterCache?) -> Bool? {
+extension DoriAPI.Comic.Comic: DoriFrontend._Filterable {
+    public func _matches<ValueType>(_ value: ValueType, withFilterCache: DoriFrontend.FilterCache?) -> Bool? {
         if let character = value as? DoriFrontend.Filter.Character { // Character
             return self.characterIDs.contains(character.rawValue)
         } else if let server = value as? DoriFrontend.Filter.Server { // Server
@@ -333,7 +331,7 @@ extension DoriAPI.Comic.Comic {
     }
 }
 
-//MARK: extension PreviewCostume
+// MARK: extension PreviewCostume
 // Band, Character, Server, Availability
 // Filter Cache Required
 extension DoriFrontend.Costume.PreviewCostume {
@@ -367,9 +365,9 @@ extension DoriFrontend.Costume.PreviewCostume {
     }
 }
 
-//MARK: extension Array
-public extension Array where Element: DoriFrontend.Filterable {
-    func filterByDori(with filter: DoriFrontend.Filter) -> [Element] {
+// MARK: extension Array
+extension Array where Element: DoriFrontend._Filterable {
+    public func filterByDori(with filter: DoriFrontend.Filter) -> [Element] {
         var result: [Element] = self
         guard filter.isFiltered else { return result }
         let cacheCopy: DoriFrontend.FilterCache = DoriFrontend.FilterCacheManager.shared.read()
@@ -382,83 +380,83 @@ public extension Array where Element: DoriFrontend.Filterable {
                 allBands.insert(.others)
             }
             return allBands.contains { band in
-                element.matches(band, withFilterCache: cacheCopy) ?? true
+                element._matches(band, withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Attribute
+        }.filter { element in // Attribute
             guard filter.attribute != Set(DoriFrontend.Filter.Attribute.allCases) else { return true }
             return filter.attribute.contains { attribute in
-                element.matches(attribute, withFilterCache: cacheCopy) ?? true
+                element._matches(attribute, withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Rarity
+        }.filter { element in // Rarity
             guard filter.rarity != Set([1, 2, 3, 4, 5]) else { return true }
             return filter.rarity.contains { rarity in
-                element.matches(rarity, withFilterCache: cacheCopy) ?? true
+                element._matches(rarity, withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Character
+        }.filter { element in // Character
             if filter.characterRequiresMatchAll {
                 return filter.character.allSatisfy { character in
-                    element.matches(character, withFilterCache: cacheCopy) ?? true
+                    element._matches(character, withFilterCache: cacheCopy) ?? true
                 }
             } else {
                 guard filter.character != Set(DoriFrontend.Filter.Character.allCases) else { return true }
                 return filter.character.contains { character in
-                    element.matches(character, withFilterCache: cacheCopy) ?? true
+                    element._matches(character, withFilterCache: cacheCopy) ?? true
                 }
             }
         }
         result = result.filter { element in // Timeline Status with Servers
             guard filter.timelineStatus != Set(DoriFrontend.Filter.TimelineStatus.allCases) else { return true }
             return filter.timelineStatus.contains { timelineStatus in
-                element.matches(DoriFrontend.TimelineStatusWithServers(timelineStatus: timelineStatus, servers: filter.server), withFilterCache: cacheCopy) ?? true
+                element._matches(DoriFrontend.TimelineStatusWithServers(timelineStatus: timelineStatus, servers: filter.server), withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Availability with Servers
+        }.filter { element in // Availability with Servers
             guard filter.released != Set([true, false]) else { return true }
             return filter.released.contains { releaseStatus in
-                element.matches(DoriFrontend.AvailabilityWithServers(releaseStatus: releaseStatus, servers: filter.server), withFilterCache: cacheCopy) ?? true
+                element._matches(DoriFrontend.AvailabilityWithServers(releaseStatus: releaseStatus, servers: filter.server), withFilterCache: cacheCopy) ?? true
             }
         }
         result = result.filter { element in // Server
             guard filter.server != Set(DoriFrontend.Filter.Server.allCases) else { return true }
             return filter.server.contains { server in
-                element.matches(server, withFilterCache: cacheCopy) ?? true
+                element._matches(server, withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Event Types
+        }.filter { element in // Event Types
             guard filter.eventType != Set(DoriFrontend.Filter.EventType.allCases) else { return true }
             return filter.eventType.contains { eventType in
-                element.matches(eventType, withFilterCache: cacheCopy) ?? true
+                element._matches(eventType, withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Gacha Types
+        }.filter { element in // Gacha Types
             guard filter.gachaType != Set(DoriFrontend.Filter.GachaType.allCases) else { return true }
             return filter.gachaType.contains { gachaType in
-                element.matches(gachaType, withFilterCache: cacheCopy) ?? true
+                element._matches(gachaType, withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Card Types
+        }.filter { element in // Card Types
             guard filter.cardType != Set(DoriFrontend.Filter.CardType.allCases) else { return true }
             return filter.cardType.contains { cardType in
-                element.matches(cardType, withFilterCache: cacheCopy) ?? true
+                element._matches(cardType, withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Song Types
+        }.filter { element in // Song Types
             guard filter.songType != Set(DoriFrontend.Filter.SongType.allCases) else { return true }
             return filter.songType.contains { songType in
-                element.matches(songType, withFilterCache: cacheCopy) ?? true
+                element._matches(songType, withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Login Campaign Types
+        }.filter { element in // Login Campaign Types
             guard filter.loginCampaignType != Set(DoriFrontend.Filter.LoginCampaignType.allCases) else { return true }
             return filter.loginCampaignType.contains { loginCampaignType in
-                element.matches(loginCampaignType, withFilterCache: cacheCopy) ?? true
+                element._matches(loginCampaignType, withFilterCache: cacheCopy) ?? true
             }
-        } .filter { element in // Comic Types
+        }.filter { element in // Comic Types
             guard filter.comicType != Set(DoriFrontend.Filter.ComicType.allCases) else { return true }
             return filter.comicType.contains { comicType in
-                element.matches(comicType, withFilterCache: cacheCopy) ?? true
+                element._matches(comicType, withFilterCache: cacheCopy) ?? true
             }
         }
         result = result.filter { element in // Skill
             guard filter.skill != nil else { return true }
-            return element.matches(filter.skill, withFilterCache: cacheCopy) ?? true
-        } .filter { element in // Level
+            return element._matches(filter.skill, withFilterCache: cacheCopy) ?? true
+        }.filter { element in // Level
             guard filter.level != nil else { return true }
-            return element.matches(filter.level, withFilterCache: cacheCopy) ?? true
+            return element._matches(filter.level, withFilterCache: cacheCopy) ?? true
         }
         return result
     }

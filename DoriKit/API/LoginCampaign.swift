@@ -205,7 +205,7 @@ extension DoriAPI {
 
 extension DoriAPI.LoginCampaign {
     /// Represent simplified data of login campaign.
-    public struct PreviewCampaign: Sendable, Identifiable, Hashable, DoriCache.Cacheable, DoriFrontend.Filterable {
+    public struct PreviewCampaign: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         /// A unique ID of login campaign.
         public var id: Int
         /// Type of login campaign.
