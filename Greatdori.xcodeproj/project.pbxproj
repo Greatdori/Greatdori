@@ -217,6 +217,7 @@
 		8CBC1BDF2E3408AB004023F7 /* FrontendCostume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BDE2E3408A7004023F7 /* FrontendCostume.swift */; };
 		8CBC1BE12E340AD8004023F7 /* CostumeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBC1BE02E340AD4004023F7 /* CostumeListView.swift */; };
 		8CC046DC2E6C8F63009FDC13 /* AppFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC046DB2E6C8F5D009FDC13 /* AppFlags.swift */; };
+		8CC047572E6D62CD009FDC13 /* DoriFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC047562E6D62C9009FDC13 /* DoriFilter.swift */; };
 		8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13F742E2FDC4700673E15 /* NavigationListView.swift */; };
 		8CD13FAE2E2FE2BF00673E15 /* Band.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA12E2FE2BF00673E15 /* Band.swift */; };
 		8CD13FAF2E2FE2BF00673E15 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FA22E2FE2BF00673E15 /* Card.swift */; };
@@ -839,6 +840,7 @@
 		8CBC1BDE2E3408A7004023F7 /* FrontendCostume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendCostume.swift; sourceTree = "<group>"; };
 		8CBC1BE02E340AD4004023F7 /* CostumeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostumeListView.swift; sourceTree = "<group>"; };
 		8CC046DB2E6C8F5D009FDC13 /* AppFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlags.swift; sourceTree = "<group>"; };
+		8CC047562E6D62C9009FDC13 /* DoriFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriFilter.swift; sourceTree = "<group>"; };
 		8CD13F742E2FDC4700673E15 /* NavigationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationListView.swift; sourceTree = "<group>"; };
 		8CD13FA12E2FE2BF00673E15 /* Band.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Band.swift; sourceTree = "<group>"; };
 		8CD13FA22E2FE2BF00673E15 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -1191,6 +1193,7 @@
 				8C2CCD312E3DED130014189F /* RichContent */,
 				8CD13FAD2E2FE2BF00673E15 /* API */,
 				8CD13FBC2E2FE2BF00673E15 /* Frontend */,
+				8CC047552E6D62C0009FDC13 /* Filter */,
 				8C9474482E35AB60003A90B4 /* Cache */,
 				8C7F6B832E591AC60040C206 /* OfflineAsset */,
 			);
@@ -1652,6 +1655,14 @@
 				8CB4D4E12E449D150085D57A /* Assets.xcassets */,
 			);
 			path = "Greatdori Watch Widgets";
+			sourceTree = "<group>";
+		};
+		8CC047552E6D62C0009FDC13 /* Filter */ = {
+			isa = PBXGroup;
+			children = (
+				8CC047562E6D62C9009FDC13 /* DoriFilter.swift */,
+			);
+			path = Filter;
 			sourceTree = "<group>";
 		};
 		8CD13FAD2E2FE2BF00673E15 /* API */ = {
@@ -2588,6 +2599,7 @@
 				8CD13FC12E2FE2BF00673E15 /* NetworkRequest.swift in Sources */,
 				8C923D972E30A1BC003AFC0A /* LocalizedStrings.swift in Sources */,
 				8CD13FE72E300D2300673E15 /* FrontendNews.swift.gyb in Sources */,
+				8CC047572E6D62CD009FDC13 /* DoriFilter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
