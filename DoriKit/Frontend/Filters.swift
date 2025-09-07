@@ -28,6 +28,7 @@ extension DoriFrontend {
     ///
     /// - SeeAlso:
     ///     Interact with each keys of a filter by ``Key``, which also allows you to build UI for filter.
+    @available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
     public struct Filter: Sendable, Hashable, Codable {
         public var band: Set<Band> = .init(Band.allCases) { didSet { store() } }
         public var bandMatchesOthers: BandMatchesOthers = .includeOthers { didSet { store() } }
@@ -197,6 +198,7 @@ extension DoriFrontend {
     }
 }
 
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter {
     public typealias Attribute = DoriAPI.Attribute
     public typealias Rarity = Int
@@ -450,21 +452,25 @@ extension DoriFrontend.Filter {
     }
 }
 
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Key: Identifiable {
     public var id: Int { self.rawValue }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension Set<DoriFrontend.Filter.Key> {
     @inlinable
     public func sorted() -> [DoriFrontend.Filter.Key] {
         self.sorted { $0.rawValue < $1.rawValue }
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension Array<DoriFrontend.Filter.Key> {
     @inlinable
     public func sorted() -> [DoriFrontend.Filter.Key] {
         self.sorted { $0.rawValue < $1.rawValue }
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Key {
     @inline(never)
     public var localizedString: String {
@@ -492,12 +498,14 @@ extension DoriFrontend.Filter.Key {
     }
 }
 
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Key: Comparable {
     @inlinable
     public static func < (lhs: DoriFrontend.Filter.Key, rhs: DoriFrontend.Filter.Key) -> Bool {
         lhs.rawValue < rhs.rawValue
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter: MutableCollection {
     public typealias Element = AnyHashable
     
@@ -607,6 +615,7 @@ extension DoriFrontend.Filter: MutableCollection {
     }
 }
 
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter {
     @_typeEraser(_AnySelectable)
     public protocol _Selectable: Hashable {
@@ -637,6 +646,7 @@ extension DoriFrontend.Filter {
         public var selectorImageURL: URL? { _selectorImageURL }
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter._Selectable {
     public var selectorImageURL: URL? { nil }
     
@@ -644,6 +654,7 @@ extension DoriFrontend.Filter._Selectable {
         self.selectorText == selectable.selectorText
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Band: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.name
@@ -656,6 +667,7 @@ extension DoriFrontend.Filter.Band: DoriFrontend.Filter._Selectable {
         }
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Attribute: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.rawValue.uppercased()
@@ -664,6 +676,7 @@ extension DoriFrontend.Filter.Attribute: DoriFrontend.Filter._Selectable {
         .init(string: "https://bestdori.com/res/icon/\(self.rawValue).svg")!
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Rarity: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         String(self)
@@ -672,6 +685,7 @@ extension DoriFrontend.Filter.Rarity: DoriFrontend.Filter._Selectable {
         .init(string: "https://bestdori.com/res/icon/star_\(self).png")!
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Character: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.name
@@ -680,12 +694,14 @@ extension DoriFrontend.Filter.Character: DoriFrontend.Filter._Selectable {
         .init(string: "https://bestdori.com/res/icon/chara_icon_\(self.rawValue).png")!
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension Bool: DoriFrontend.Filter._Selectable {
     @inline(never)
     public var selectorText: String {
         self ? String(localized: "FILTER_MATCH_ALL", bundle: #bundle) : String(localized: "FILTER_MATCH_ANY", bundle: #bundle)
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Server: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.rawValue.uppercased()
@@ -694,47 +710,56 @@ extension DoriFrontend.Filter.Server: DoriFrontend.Filter._Selectable {
         self.iconImageURL
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.ReleaseStatus: DoriFrontend.Filter._Selectable {
     @inline(never)
     public var selectorText: String {
         self.boolValue ? String(localized: "FILTER_RELEASED_YES", bundle: #bundle) : String(localized: "FILTER_RELEASED_NO", bundle: #bundle)
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.CardType: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.localizedString
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.EventType: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.localizedString
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.GachaType: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.localizedString
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.SongType: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.localizedString
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.LoginCampaignType: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.localizedString
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.ComicType: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.localizedString
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Skill: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.maximumDescription.forPreferredLocale() ?? ""
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension Optional<DoriFrontend.Filter.Skill>: DoriFrontend.Filter._Selectable {
     @inline(never)
     public var selectorText: String {
@@ -745,21 +770,25 @@ extension Optional<DoriFrontend.Filter.Skill>: DoriFrontend.Filter._Selectable {
         }
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.TimelineStatus: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.localizedString
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Sort.Keyword: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.localizedString
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Sort: DoriFrontend.Filter._Selectable {
     public var selectorText: String {
         self.keyword.localizedString
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Key {
     /// Get a selector for key.
     ///
@@ -915,9 +944,12 @@ extension DoriFrontend.Filter.Key {
         case multiple
     }
 }
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Key.SelectorItem: Equatable where T: Equatable {}
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Key.SelectorItem: Hashable where T: Hashable {}
 
+@available(*, deprecated, message: "Use filters conform to DoriFilter instead.")
 extension DoriFrontend.Filter.Band {
     internal func asFullBand() -> DoriFrontend.Filter.FullBand {
         return DoriFrontend.Filter.FullBand(rawValue: self.rawValue)!

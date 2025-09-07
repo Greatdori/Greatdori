@@ -24,13 +24,6 @@ extension DoriFrontend {
         // Unexpected value type or cache reading failure will lead to `nil` return.
         func _matches<ValueType>(_ value: ValueType, withCache: _FilterCache?) -> Bool?
     }
-    
-    public struct _FilterCache {
-        fileprivate var cardsList: [DoriAPI.Card.PreviewCard]?
-        fileprivate var cardsDict: [Int: DoriAPI.Card.PreviewCard] = [:]
-        fileprivate var bandsList: [DoriAPI.Band.Band]?
-        fileprivate var charactersList: [DoriAPI.Character.PreviewCharacter]?
-    }
 }
 
 // MARK: - Supporting Types
@@ -52,56 +45,6 @@ private func plainBandID(from bandID: Int) -> Int {
     }
 }
 
-// MARK: - Filter Cache Manager
-internal final class FilterCacheManager: Sendable {
-    internal static let shared = FilterCacheManager()
-    
-    nonisolated(unsafe) private var allCache = DoriFrontend._FilterCache()
-    private let lock = NSLock()
-    
-    internal func writeCardCache(_ cardsList: [DoriAPI.Card.PreviewCard]?) {
-        lock.lock()
-        defer { lock.unlock() }
-        if cardsList != nil {
-            unsafe allCache.cardsList = cardsList
-            unsafe allCache.cardsDict.removeAll()
-            if let cards = cardsList {
-                for card in cards {
-                    unsafe allCache.cardsDict[card.id] = card
-                }
-            }
-        }
-    }
-    
-    internal func writeBandsList(_ bandsList: [DoriAPI.Band.Band]?) {
-        lock.lock()
-        defer { lock.unlock() }
-        if bandsList != nil {
-            unsafe allCache.bandsList = bandsList
-        }
-    }
-    
-    internal func writeCharactersList(_ charactersList: [DoriAPI.Character.PreviewCharacter]?) {
-        lock.lock()
-        defer { lock.unlock() }
-        if charactersList != nil {
-            unsafe allCache.charactersList = charactersList
-        }
-    }
-    
-    internal func read() -> DoriFrontend._FilterCache {
-        lock.lock()
-        defer { lock.unlock() }
-        return unsafe allCache
-    }
-    
-    internal func erase() {
-        lock.lock()
-        defer { lock.unlock() }
-        unsafe allCache = .init()
-    }
-}
-
 // MARK: extension PreviewEvent
 // Attribute, Character, Server, Timeline Status, Event Type
 extension DoriAPI.Event.PreviewEvent: DoriFrontend.Filterable {
@@ -110,7 +53,7 @@ extension DoriAPI.Event.PreviewEvent: DoriFrontend.Filterable {
         [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType]
     }
     
-    public func _matches<ValueType>(_ value: ValueType, withCache: DoriFrontend._FilterCache? = nil) -> Bool? {
+    public func _matches<ValueType>(_ value: ValueType, withCache: _FilterCache? = nil) -> Bool? {
         if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
             return self.attributes.contains { $0.attribute == attribute }
         } else if let character = value as? DoriFrontend.Filter.Character { // Character
@@ -157,7 +100,7 @@ extension DoriAPI.Gacha.PreviewGacha: DoriFrontend.Filterable {
         [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .gachaType]
     }
     
-    public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? {
+    public func _matches<ValueType>(_ value: ValueType, withCache cache: _FilterCache?) -> Bool? {
         if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
             guard let cards = cache?.cardsDict else {
                 unsafe os_log("[Filter][Gacha] Found `nil` while trying to read card cache.")
@@ -213,7 +156,7 @@ extension DoriFrontend.Card.CardWithBand: DoriFrontend.Filterable {
         [.band, .attribute, .rarity, .character, .server, .released, .cardType, .skill]
     }
     
-    public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? { // Band
+    public func _matches<ValueType>(_ value: ValueType, withCache cache: _FilterCache?) -> Bool? { // Band
         if let band = value as? DoriFrontend.Filter.FullBand { // Band - Full
             return plainBandID(from: self.band.id) == band.rawValue
         } else if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
@@ -255,7 +198,7 @@ extension DoriAPI.Song.PreviewSong: DoriFrontend.Filterable {
         [.band, .server, .timelineStatus, .songType, .level]
     }
     
-    public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? {
+    public func _matches<ValueType>(_ value: ValueType, withCache cache: _FilterCache?) -> Bool? {
         if let band = value as? DoriFrontend.Filter.FullBand { // Band - Full
             return plainBandID(from: self.bandID) == band.rawValue
         } else if let server = value as? DoriFrontend.Filter.Server { // Server
@@ -301,7 +244,7 @@ extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend.Filterable {
         [.server, .timelineStatus, .loginCampaignType]
     }
     
-    public func _matches<ValueType>(_ value: ValueType, withCache: DoriFrontend._FilterCache?) -> Bool? {
+    public func _matches<ValueType>(_ value: ValueType, withCache: _FilterCache?) -> Bool? {
         if let server = value as? DoriFrontend.Filter.Server { // Server
             return self.publishedAt.availableInLocale(server)
         } else if let timelineStatusWithServers = value as? TimelineStatusWithServers { // Timeline Status with Servers
@@ -343,7 +286,7 @@ extension DoriAPI.Comic.Comic: DoriFrontend.Filterable {
         [.character, .characterRequiresMatchAll, .server, .comicType]
     }
     
-    public func _matches<ValueType>(_ value: ValueType, withCache: DoriFrontend._FilterCache?) -> Bool? {
+    public func _matches<ValueType>(_ value: ValueType, withCache: _FilterCache?) -> Bool? {
         if let character = value as? DoriFrontend.Filter.Character { // Character
             return self.characterIDs.contains(character.rawValue)
         } else if let server = value as? DoriFrontend.Filter.Server { // Server
@@ -365,7 +308,7 @@ extension DoriFrontend.Costume.PreviewCostume: DoriFrontend.Filterable {
         [.band, .character, .server, .released]
     }
     
-    public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? {
+    public func _matches<ValueType>(_ value: ValueType, withCache cache: _FilterCache?) -> Bool? {
         if let band = value as? DoriFrontend.Filter.FullBand { // Band - Full
             guard let characters = cache?.charactersList else {
                 unsafe os_log("[Filter][Costume] Found `nil` while trying to read characters cache.")
@@ -400,7 +343,7 @@ extension Array where Element: DoriFrontend.Filterable {
     public func filter(withDoriFilter filter: DoriFrontend.Filter) -> [Element] {
         var result: [Element] = self
         guard filter.isFiltered else { return result }
-        let cacheCopy: DoriFrontend._FilterCache = FilterCacheManager.shared.read()
+        let cacheCopy = FilterCacheManager.shared.read()
         
         // Breaking them up for type-check. Annoying. --@ThreeManager785
         result = result.filter { element in // Band
