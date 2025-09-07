@@ -244,14 +244,16 @@ struct DebugFilterExperimentView: View {
     @State var gachaListLegacy: [DoriAPI.Gacha.PreviewGacha] = []
     
     @State var showFilterSheet = false
-    let lists: [Int: String] = [0: "EVENT", 1: "GACHA", 2: "CARD"]
+    @State var showOptimizedFilter = false
+    @State var optimizedKeys: [Int: [DoriFrontend.Filter.Key]] = [:]
+//    @State var allKeys = Set(DoriFrontend.Filter.Key.allCases)
 //    @State var result: Array<>? = []
     var body: some View {
         NavigationStack {
             HStack {
                 List {
                     Picker(selection: $focusingList, content: {
-                        Text(verbatim: "Select")
+                        Text(verbatim: "Select...")
                             .tag(-1)
                         Text(verbatim: "EVENT")
                             .tag(0)
@@ -261,10 +263,10 @@ struct DebugFilterExperimentView: View {
                             .tag(2)
                         Text(verbatim: "SONG")
                             .tag(3)
-                        Text(verbatim: "COMIC")
-                            .tag(4)
                         Text(verbatim: "CAMPAIGN")
                             .tag(5)
+                        Text(verbatim: "COMIC")
+                            .tag(4)
                         Text(verbatim: "COSTUME")
                             .tag(6)
                     }, label: {
@@ -272,6 +274,10 @@ struct DebugFilterExperimentView: View {
                     })
                     Toggle(isOn: $showLegacy, label: {
                         Text(verbatim: "Show Legacy")
+                    })
+                    .toggleStyle(.switch)
+                    Toggle(isOn: $showOptimizedFilter, label: {
+                        Text(verbatim: "Use Optimized Filter")
                     })
                     .toggleStyle(.switch)
                     #if os(iOS)
@@ -355,13 +361,30 @@ struct DebugFilterExperimentView: View {
         .fontDesign(.monospaced)
         .multilineTextAlignment(.leading)
         .sheet(isPresented: $showFilterSheet, content: {
-            FilterView(filter: $filter, includingKeys: Set(DoriFrontend.Filter.Key.allCases))
+            FilterView(filter: $filter, includingKeys: showOptimizedFilter ? Set(optimizedKeys[focusingList]!) : Set(DoriFrontend.Filter.Key.allCases))
         })
         .inspector(isPresented: .constant(true), content: {
-            FilterView(filter: $filter, includingKeys: Set(DoriFrontend.Filter.Key.allCases))
+            FilterView(filter: $filter, includingKeys: showOptimizedFilter ? Set(optimizedKeys[focusingList]!) : Set(DoriFrontend.Filter.Key.allCases))
         })
         .onAppear {
 //            focusingList = 0
+            for i in 0...6 {
+                if i == 0 {
+                    optimizedKeys.updateValue(DoriAPI.Event.PreviewEvent.applicableKeys, forKey: i)
+                } else if i == 1 {
+                    optimizedKeys.updateValue(DoriAPI.Gacha.PreviewGacha.applicableKeys, forKey: i)
+                } else if i == 2 {
+                    optimizedKeys.updateValue(DoriFrontend.Card.CardWithBand.applicableKeys, forKey: i)
+                } else if i == 3 {
+                    optimizedKeys.updateValue(DoriAPI.Song.PreviewSong.applicableKeys, forKey: i)
+                } else if i == 4 {
+                    optimizedKeys.updateValue(DoriAPI.Comic.Comic.applicableKeys, forKey: i)
+                } else if i == 5 {
+                    optimizedKeys.updateValue(DoriAPI.LoginCampaign.PreviewCampaign.applicableKeys, forKey: i)
+                } else if i == 6 {
+                    optimizedKeys.updateValue(DoriFrontend.Costume.PreviewCostume.applicableKeys, forKey: i)
+                }
+            }
         }
         .onChange(of: focusingList, {
             updating = true
