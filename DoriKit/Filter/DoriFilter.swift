@@ -14,11 +14,18 @@
 
 import Foundation
 
-public protocol DoriFilter {
+public protocol DoriFilter: Equatable, Hashable {
+    init()
+    
     associatedtype Element
     func filter(_ elements: [Element]) -> [Element]
     
     associatedtype Key: DoriFilterKey
+}
+extension DoriFilter {
+    public var isFiltered: Bool {
+        self == .init()
+    }
 }
 
 public protocol DoriFilterKey: RawRepresentable, CaseIterable, Comparable, Hashable {
