@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
-			<string>None</string>
+			<string>Viewer</string>
 			<key>CFBundleURLName</key>
 			<string>com.memz233.Greatdori.main-url-scheme</string>
 			<key>CFBundleURLSchemes</key>
