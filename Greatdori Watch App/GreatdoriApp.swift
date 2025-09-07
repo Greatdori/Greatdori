@@ -20,9 +20,13 @@ import SDWebImageSVGCoder
 @main
 struct GreatdoriWatchApp: App {
     @WKApplicationDelegateAdaptor var appDelegate: AppDelegate
+    @Environment(\.locale) var defaultLocale
+    @AppStorage("AppLanguage") var appLanguage = ""
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.locale, appLanguage.isEmpty ? defaultLocale : Locale(identifier: appLanguage))
+                .typesettingLanguage(.init(identifier: appLanguage), isEnabled: !appLanguage.isEmpty)
         }
     }
 }

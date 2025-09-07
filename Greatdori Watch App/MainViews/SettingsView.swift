@@ -18,6 +18,7 @@ import WidgetKit
 import AuthenticationServices
 
 struct SettingsView: View {
+    @AppStorage("AppLanguage") var appLanguage = ""
     @State var preferredLocale = DoriAPI.preferredLocale
     var body: some View {
         List {
@@ -30,7 +31,15 @@ struct SettingsView: View {
                 .onChange(of: preferredLocale) {
                     DoriAPI.preferredLocale = preferredLocale
                     DoriCache.invalidateAll()
+                    if !appLanguage.isEmpty {
+                        appLanguage = preferredLocale.nsLocale().identifier
+                    }
                 }
+                Toggle("界面使用首选服务器对应的语言", isOn: .init {
+                    !appLanguage.isEmpty
+                } set: {
+                    appLanguage = $0 ? preferredLocale.nsLocale().identifier : ""
+                })
             }
             Section {
                 NavigationLink(destination: { AboutView() }) {
