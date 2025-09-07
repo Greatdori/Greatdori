@@ -185,11 +185,12 @@ public final class DoriAPI {
     }
     
     /// Attribute of cards
+    @frozen
     public enum Attribute: String, Sendable, CaseIterable, Hashable, DoriCache.Cacheable {
-        case pure
+        case powerful
         case cool
         case happy
-        case powerful
+        case pure
     }
 }
 
