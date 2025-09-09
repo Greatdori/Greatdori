@@ -85,12 +85,12 @@ public extension View {
     //MARK: withSystemBackground
     @ViewBuilder
     func withSystemBackground() -> some View {
-#if os(iOS)
+        #if os(iOS)
         self
             .background(Color(.systemGroupedBackground))
-#else
+        #else
         self
-#endif
+        #endif
     }
     
     //MARK: wrapIf

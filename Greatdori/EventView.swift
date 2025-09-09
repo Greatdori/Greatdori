@@ -749,14 +749,16 @@ struct EventSearchView: View {
             .onDisappear {
                 showFilterSheet = false
             }
-            .withSystemBackground()
         }
+        .withSystemBackground()
         .inspector(isPresented: $showFilterSheet) {
             FilterView(filter: $filter, includingKeys: [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType, .sort])
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .presentationBackgroundInteraction(.enabled)
         }
+        .withSystemBackground() // This modifier MUST be placed BOTH before
+                                // and after `inspector` to make it work as expected
     }
     
     func getEvents() async {
