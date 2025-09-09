@@ -28,17 +28,17 @@ struct EventDetailView: View {
     @State var latestEventID: Int = 0
     @State var showSubtitle: Bool = false
     var body: some View {
-        Group {
+        EmptyContainer {
             if let information {
                 ScrollView {
                     HStack {
-                        Spacer()
+                        Spacer(minLength: 0)
                         VStack {
                             EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
                             ListGachaView()
                         }
                         .padding()
-                        Spacer()
+                        Spacer(minLength: 0)
                     }
                 }
             } else {
@@ -72,18 +72,16 @@ struct EventDetailView: View {
             Text("\(id)")
         })
         .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Event") : "")"))
-#if os(iOS)
+        #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
-//                if showSubtitle {
-                    content
-                        .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(eventID)" : "")
-//                }
+                content
+                    .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(eventID)" : "")
             } else {
                 content
             }
         }
-#endif
+        #endif
         .onAppear {
             Task {
                 DoriCache.withCache(id: "Event_LatestEvent_JP_ID", trait: .realTime) {
@@ -183,7 +181,7 @@ struct EventDetailOverviewView: View {
     @Binding var cardNavigationDestinationID: Int?
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
-        NavigationStack {
+        VStack {
             Group {
                 //MARK: Title Image
                 Group {
