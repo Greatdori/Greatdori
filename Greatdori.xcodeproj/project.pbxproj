@@ -882,6 +882,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		8C085ACA2E71968C00447B05 /* ci_scripts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ci_scripts;
+			sourceTree = "<group>";
+		};
 		8C2EE3A92E702DF300EDDD0D /* clib */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = clib;
@@ -1035,6 +1040,7 @@
 				8C9474442E34DE85003A90B4 /* .editorconfig */,
 				8C9474452E34DF5F003A90B4 /* .gitattributes */,
 				8C5AD1B72E47317D00E61653 /* .mailmap */,
+				8C085ACA2E71968C00447B05 /* ci_scripts */,
 				8CD13FE32E300ACE00673E15 /* BuildTool */,
 				8C923D982E30AF1E003AFC0A /* AppShared */,
 				8C2EE3A92E702DF300EDDD0D /* clib */,
