@@ -1,0 +1,9 @@
+[submodule "clib/libgit2"]
+	path = clib/libgit2
+	url = https://github.com/libgit2/libgit2.git
+[submodule "clib/openssl"]
+	path = clib/openssl
+	url = https://github.com/openssl/openssl.git
+[submodule "clib/libssh2"]
+	path = clib/libssh2
+	url = https://github.com/libssh2/libssh2.git

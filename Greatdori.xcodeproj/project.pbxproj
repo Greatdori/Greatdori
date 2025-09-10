@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		8C2E8F042E702A7400EDDD0D /* libgit2 */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 8C2E8F092E702A7400EDDD0D /* Build configuration list for PBXAggregateTarget "libgit2" */;
+			buildPhases = (
+				8C085AC62E71637F00447B05 /* Check CMake Availability */,
+				8C085AC72E71641C00447B05 /* Build OpenSSL */,
+				8C085AC82E71659700447B05 /* Build LibSSH2 */,
+				8C2E8F0A2E702A7800EDDD0D /* Build LibGit2 */,
+				8C085AC92E7166FD00447B05 /* Merge Libraries */,
+			);
+			dependencies = (
+			);
+			name = libgit2;
+			packageProductDependencies = (
+			);
+			productName = libgit2;
+		};
 		8C7855CE2E491E23000EA06E /* Greatdori Installer */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 8C7855CF2E491E24000EA06E /* Build configuration list for PBXAggregateTarget "Greatdori Installer" */;
@@ -49,6 +66,7 @@
 		8C2CCD4F2E3E67B30014189F /* RichContentRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2CCD4E2E3E67AC0014189F /* RichContentRendering.swift */; };
 		8C2CCD512E3F0D850014189F /* PagedContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2CCD502E3F0D820014189F /* PagedContent.swift */; };
 		8C2CCD532E3F43E90014189F /* CommunityPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2CCD522E3F43E00014189F /* CommunityPostsView.swift */; };
+		8C2EE3AC2E704A3400EDDD0D /* libgit2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2EE3AA2E70498800EDDD0D /* libgit2.a */; };
 		8C3264042E3B760100081F4F /* PreCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264032E3B75FF00081F4F /* PreCache.swift */; };
 		8C3264062E3C69C900081F4F /* FrontendGacha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264052E3C69C000081F4F /* FrontendGacha.swift */; };
 		8C3264082E3C724900081F4F /* GachaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264072E3C723F00081F4F /* GachaListView.swift */; };
@@ -120,9 +138,6 @@
 		8C7F6BF62E594EDF0040C206 /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B922E5922070040C206 /* GSS.framework */; platformFilters = (ios, maccatalyst, macos, xros, ); };
 		8C7F6BF72E594EDF0040C206 /* libgssapi_krb5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B8E2E5921990040C206 /* libgssapi_krb5.tbd */; platformFilters = (maccatalyst, macos, ); };
 		8C7F6BF82E594EE60040C206 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6B902E5921BB0040C206 /* libiconv.tbd */; };
-		8C7F6C0B2E59950C0040C206 /* libgit2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C0A2E59950C0040C206 /* libgit2.xcframework */; };
-		8C7F6C0D2E5995990040C206 /* libssh2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C0C2E5995990040C206 /* libssh2.xcframework */; };
-		8C7F6C112E5996540040C206 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C102E5996540040C206 /* OpenSSL.xcframework */; };
 		8C7F6C132E5996AB0040C206 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6C122E5996A70040C206 /* libz.tbd */; };
 		8C8E43EA2E5D2AC4005590F0 /* OfflineAssetDispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8E43E92E5D2ABB005590F0 /* OfflineAssetDispatch.swift */; };
 		8C8E43EC2E5D3118005590F0 /* OfflineNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8E43EB2E5D3110005590F0 /* OfflineNetworking.swift */; };
@@ -340,6 +355,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8C2CCD392E3E058E0014189F;
 			remoteInfo = DoriEmoji;
+		};
+		8C2EE3AD2E704AB300EDDD0D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C2E8F042E702A7400EDDD0D;
+			remoteInfo = libgit2;
 		};
 		8C3FA2632E4BA6EA001526F2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -597,6 +619,7 @@
 		8C2CCD4E2E3E67AC0014189F /* RichContentRendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichContentRendering.swift; sourceTree = "<group>"; };
 		8C2CCD502E3F0D820014189F /* PagedContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagedContent.swift; sourceTree = "<group>"; };
 		8C2CCD522E3F43E00014189F /* CommunityPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityPostsView.swift; sourceTree = "<group>"; };
+		8C2EE3AA2E70498800EDDD0D /* libgit2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgit2.a; path = "../../../Library/Developer/Xcode/DerivedData/Greatdori-aghqtexjlhuxqfcowlzrriajcttj/Build/Products/Debug/libgit2.a"; sourceTree = "<group>"; };
 		8C3264032E3B75FF00081F4F /* PreCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreCache.swift; sourceTree = "<group>"; };
 		8C3264052E3C69C000081F4F /* FrontendGacha.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendGacha.swift; sourceTree = "<group>"; };
 		8C3264072E3C723F00081F4F /* GachaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaListView.swift; sourceTree = "<group>"; };
@@ -671,97 +694,7 @@
 		8C7F6BF22E594E870040C206 /* libDoriAssetShims */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDoriAssetShims; path = "../../../Library/Developer/Xcode/DerivedData/Greatdori-aghqtexjlhuxqfcowlzrriajcttj/Build/Products/Debug/DoriAssetShims.framework/Versions/A/libDoriAssetShims"; sourceTree = "<group>"; };
 		8C7F6C002E5975790040C206 /* libboringssl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libboringssl.tbd; path = usr/lib/libboringssl.tbd; sourceTree = SDKROOT; };
 		8C7F6C042E59922C0040C206 /* libDoriAssetShims */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDoriAssetShims; path = "../../../Library/Developer/Xcode/DerivedData/Greatdori-aghqtexjlhuxqfcowlzrriajcttj/Build/Products/Debug-iphoneos/DoriAssetShims.framework/libDoriAssetShims"; sourceTree = "<group>"; };
-		8C7F6C0A2E59950C0040C206 /* libgit2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libgit2.xcframework; sourceTree = "<group>"; };
-		8C7F6C0C2E5995990040C206 /* libssh2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libssh2.xcframework; sourceTree = "<group>"; };
-		8C7F6C102E5996540040C206 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenSSL.xcframework; sourceTree = "<group>"; };
 		8C7F6C122E5996A70040C206 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		8C7F6C142E5997830040C206 /* git2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = git2.h; sourceTree = "<group>"; };
-		8C7F6C152E5997830040C206 /* alloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = alloc.h; sourceTree = "<group>"; };
-		8C7F6C162E5997830040C206 /* commit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commit.h; sourceTree = "<group>"; };
-		8C7F6C172E5997830040C206 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		8C7F6C182E5997830040C206 /* cred.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cred.h; sourceTree = "<group>"; };
-		8C7F6C192E5997830040C206 /* credential.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credential.h; sourceTree = "<group>"; };
-		8C7F6C1A2E5997830040C206 /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
-		8C7F6C1B2E5997830040C206 /* filter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filter.h; sourceTree = "<group>"; };
-		8C7F6C1C2E5997830040C206 /* hashsig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hashsig.h; sourceTree = "<group>"; };
-		8C7F6C1D2E5997830040C206 /* index.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = index.h; sourceTree = "<group>"; };
-		8C7F6C1E2E5997830040C206 /* mempack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mempack.h; sourceTree = "<group>"; };
-		8C7F6C1F2E5997830040C206 /* merge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = merge.h; sourceTree = "<group>"; };
-		8C7F6C202E5997830040C206 /* odb_backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = odb_backend.h; sourceTree = "<group>"; };
-		8C7F6C212E5997830040C206 /* openssl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = openssl.h; sourceTree = "<group>"; };
-		8C7F6C222E5997830040C206 /* path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = path.h; sourceTree = "<group>"; };
-		8C7F6C232E5997830040C206 /* refdb_backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refdb_backend.h; sourceTree = "<group>"; };
-		8C7F6C242E5997830040C206 /* reflog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reflog.h; sourceTree = "<group>"; };
-		8C7F6C252E5997830040C206 /* refs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refs.h; sourceTree = "<group>"; };
-		8C7F6C262E5997830040C206 /* repository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = repository.h; sourceTree = "<group>"; };
-		8C7F6C272E5997830040C206 /* stream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stream.h; sourceTree = "<group>"; };
-		8C7F6C282E5997830040C206 /* transport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = transport.h; sourceTree = "<group>"; };
-		8C7F6C2A2E5997830040C206 /* annotated_commit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = annotated_commit.h; sourceTree = "<group>"; };
-		8C7F6C2B2E5997830040C206 /* apply.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = apply.h; sourceTree = "<group>"; };
-		8C7F6C2C2E5997830040C206 /* attr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = attr.h; sourceTree = "<group>"; };
-		8C7F6C2D2E5997830040C206 /* blame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blame.h; sourceTree = "<group>"; };
-		8C7F6C2E2E5997830040C206 /* blob.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blob.h; sourceTree = "<group>"; };
-		8C7F6C2F2E5997830040C206 /* branch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = branch.h; sourceTree = "<group>"; };
-		8C7F6C302E5997830040C206 /* buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = buffer.h; sourceTree = "<group>"; };
-		8C7F6C312E5997830040C206 /* cert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cert.h; sourceTree = "<group>"; };
-		8C7F6C322E5997830040C206 /* checkout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = checkout.h; sourceTree = "<group>"; };
-		8C7F6C332E5997830040C206 /* cherrypick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cherrypick.h; sourceTree = "<group>"; };
-		8C7F6C342E5997830040C206 /* clone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clone.h; sourceTree = "<group>"; };
-		8C7F6C352E5997830040C206 /* commit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commit.h; sourceTree = "<group>"; };
-		8C7F6C362E5997830040C206 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
-		8C7F6C372E5997830040C206 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		8C7F6C382E5997830040C206 /* cred_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cred_helpers.h; sourceTree = "<group>"; };
-		8C7F6C392E5997830040C206 /* credential.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credential.h; sourceTree = "<group>"; };
-		8C7F6C3A2E5997830040C206 /* credential_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = credential_helpers.h; sourceTree = "<group>"; };
-		8C7F6C3B2E5997830040C206 /* deprecated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deprecated.h; sourceTree = "<group>"; };
-		8C7F6C3C2E5997830040C206 /* describe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = describe.h; sourceTree = "<group>"; };
-		8C7F6C3D2E5997830040C206 /* diff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = diff.h; sourceTree = "<group>"; };
-		8C7F6C3E2E5997830040C206 /* errors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
-		8C7F6C3F2E5997830040C206 /* filter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filter.h; sourceTree = "<group>"; };
-		8C7F6C402E5997830040C206 /* global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = global.h; sourceTree = "<group>"; };
-		8C7F6C412E5997830040C206 /* graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = graph.h; sourceTree = "<group>"; };
-		8C7F6C422E5997830040C206 /* ignore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ignore.h; sourceTree = "<group>"; };
-		8C7F6C432E5997830040C206 /* index.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = index.h; sourceTree = "<group>"; };
-		8C7F6C442E5997830040C206 /* indexer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = indexer.h; sourceTree = "<group>"; };
-		8C7F6C452E5997830040C206 /* mailmap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mailmap.h; sourceTree = "<group>"; };
-		8C7F6C462E5997830040C206 /* merge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = merge.h; sourceTree = "<group>"; };
-		8C7F6C472E5997830040C206 /* message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = message.h; sourceTree = "<group>"; };
-		8C7F6C482E5997830040C206 /* net.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = net.h; sourceTree = "<group>"; };
-		8C7F6C492E5997830040C206 /* notes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = notes.h; sourceTree = "<group>"; };
-		8C7F6C4A2E5997830040C206 /* object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = object.h; sourceTree = "<group>"; };
-		8C7F6C4B2E5997830040C206 /* odb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = odb.h; sourceTree = "<group>"; };
-		8C7F6C4C2E5997830040C206 /* odb_backend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = odb_backend.h; sourceTree = "<group>"; };
-		8C7F6C4D2E5997830040C206 /* oid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oid.h; sourceTree = "<group>"; };
-		8C7F6C4E2E5997830040C206 /* oidarray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oidarray.h; sourceTree = "<group>"; };
-		8C7F6C4F2E5997830040C206 /* pack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pack.h; sourceTree = "<group>"; };
-		8C7F6C502E5997830040C206 /* patch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = patch.h; sourceTree = "<group>"; };
-		8C7F6C512E5997830040C206 /* pathspec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pathspec.h; sourceTree = "<group>"; };
-		8C7F6C522E5997830040C206 /* proxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = proxy.h; sourceTree = "<group>"; };
-		8C7F6C532E5997830040C206 /* rebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rebase.h; sourceTree = "<group>"; };
-		8C7F6C542E5997830040C206 /* refdb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refdb.h; sourceTree = "<group>"; };
-		8C7F6C552E5997830040C206 /* reflog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reflog.h; sourceTree = "<group>"; };
-		8C7F6C562E5997830040C206 /* refs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refs.h; sourceTree = "<group>"; };
-		8C7F6C572E5997830040C206 /* refspec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = refspec.h; sourceTree = "<group>"; };
-		8C7F6C582E5997830040C206 /* remote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = remote.h; sourceTree = "<group>"; };
-		8C7F6C592E5997830040C206 /* repository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = repository.h; sourceTree = "<group>"; };
-		8C7F6C5A2E5997830040C206 /* reset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = reset.h; sourceTree = "<group>"; };
-		8C7F6C5B2E5997830040C206 /* revert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = revert.h; sourceTree = "<group>"; };
-		8C7F6C5C2E5997830040C206 /* revparse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = revparse.h; sourceTree = "<group>"; };
-		8C7F6C5D2E5997830040C206 /* revwalk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = revwalk.h; sourceTree = "<group>"; };
-		8C7F6C5E2E5997830040C206 /* signature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = signature.h; sourceTree = "<group>"; };
-		8C7F6C5F2E5997830040C206 /* stash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stash.h; sourceTree = "<group>"; };
-		8C7F6C602E5997830040C206 /* status.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = status.h; sourceTree = "<group>"; };
-		8C7F6C612E5997830040C206 /* stdint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stdint.h; sourceTree = "<group>"; };
-		8C7F6C622E5997830040C206 /* strarray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = strarray.h; sourceTree = "<group>"; };
-		8C7F6C632E5997830040C206 /* submodule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = submodule.h; sourceTree = "<group>"; };
-		8C7F6C642E5997830040C206 /* tag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tag.h; sourceTree = "<group>"; };
-		8C7F6C652E5997830040C206 /* trace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = trace.h; sourceTree = "<group>"; };
-		8C7F6C662E5997830040C206 /* transaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = transaction.h; sourceTree = "<group>"; };
-		8C7F6C672E5997830040C206 /* transport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = transport.h; sourceTree = "<group>"; };
-		8C7F6C682E5997830040C206 /* tree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tree.h; sourceTree = "<group>"; };
-		8C7F6C692E5997830040C206 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		8C7F6C6A2E5997830040C206 /* version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
-		8C7F6C6B2E5997830040C206 /* worktree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = worktree.h; sourceTree = "<group>"; };
 		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 		8C8E43E92E5D2ABB005590F0 /* OfflineAssetDispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineAssetDispatch.swift; sourceTree = "<group>"; };
 		8C8E43EB2E5D3110005590F0 /* OfflineNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineNetworking.swift; sourceTree = "<group>"; };
@@ -949,6 +882,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		8C2EE3A92E702DF300EDDD0D /* clib */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = clib;
+			sourceTree = "<group>";
+		};
 		8C8E43FB2E5DAD0A005590F0 /* DoriResource */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -1019,13 +957,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C7F6C112E5996540040C206 /* OpenSSL.xcframework in Frameworks */,
+				8C2EE3AC2E704A3400EDDD0D /* libgit2.a in Frameworks */,
 				8C7F6BD62E5949B40040C206 /* libiconv.tbd in Frameworks */,
 				8C7F6C132E5996AB0040C206 /* libz.tbd in Frameworks */,
 				8C7F6BD42E5949AE0040C206 /* GSS.framework in Frameworks */,
-				8C7F6C0D2E5995990040C206 /* libssh2.xcframework in Frameworks */,
 				8C7F6BD52E5949AE0040C206 /* libgssapi_krb5.tbd in Frameworks */,
-				8C7F6C0B2E59950C0040C206 /* libgit2.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1101,7 +1037,7 @@
 				8C5AD1B72E47317D00E61653 /* .mailmap */,
 				8CD13FE32E300ACE00673E15 /* BuildTool */,
 				8C923D982E30AF1E003AFC0A /* AppShared */,
-				8C7F6B162E5917C50040C206 /* clib */,
+				8C2EE3A92E702DF300EDDD0D /* clib */,
 				8C0C99812E296A5500549B5C /* Greatdori */,
 				8C6C0EEC2E42301000D1FB0A /* Greatdori Widgets */,
 				8C0C99882E296A5800549B5C /* Greatdori Watch App */,
@@ -1200,6 +1136,7 @@
 		8C0C99A12E296B3E00549B5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C2EE3AA2E70498800EDDD0D /* libgit2.a */,
 				8C7F6C122E5996A70040C206 /* libz.tbd */,
 				8C7F6C042E59922C0040C206 /* libDoriAssetShims */,
 				8C7F6C002E5975790040C206 /* libboringssl.tbd */,
@@ -1403,42 +1340,6 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
-		8C7F6B162E5917C50040C206 /* clib */ = {
-			isa = PBXGroup;
-			children = (
-				8C7F6B172E5917D00040C206 /* libgit2 */,
-			);
-			path = clib;
-			sourceTree = "<group>";
-		};
-		8C7F6B172E5917D00040C206 /* libgit2 */ = {
-			isa = PBXGroup;
-			children = (
-				8C7F6B782E5918340040C206 /* bin */,
-				8C7F6B182E5917F70040C206 /* include */,
-			);
-			path = libgit2;
-			sourceTree = "<group>";
-		};
-		8C7F6B182E5917F70040C206 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				8C7F6C6C2E5997830040C206 /* git2 */,
-				8C7F6C142E5997830040C206 /* git2.h */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		8C7F6B782E5918340040C206 /* bin */ = {
-			isa = PBXGroup;
-			children = (
-				8C7F6C0A2E59950C0040C206 /* libgit2.xcframework */,
-				8C7F6C0C2E5995990040C206 /* libssh2.xcframework */,
-				8C7F6C102E5996540040C206 /* OpenSSL.xcframework */,
-			);
-			path = bin;
-			sourceTree = "<group>";
-		};
 		8C7F6B832E591AC60040C206 /* OfflineAsset */ = {
 			isa = PBXGroup;
 			children = (
@@ -1470,107 +1371,6 @@
 				8C7F17672E5AFB7C0040C206 /* AssetShims+File.h */,
 			);
 			path = include;
-			sourceTree = "<group>";
-		};
-		8C7F6C292E5997830040C206 /* sys */ = {
-			isa = PBXGroup;
-			children = (
-				8C7F6C152E5997830040C206 /* alloc.h */,
-				8C7F6C162E5997830040C206 /* commit.h */,
-				8C7F6C172E5997830040C206 /* config.h */,
-				8C7F6C182E5997830040C206 /* cred.h */,
-				8C7F6C192E5997830040C206 /* credential.h */,
-				8C7F6C1A2E5997830040C206 /* diff.h */,
-				8C7F6C1B2E5997830040C206 /* filter.h */,
-				8C7F6C1C2E5997830040C206 /* hashsig.h */,
-				8C7F6C1D2E5997830040C206 /* index.h */,
-				8C7F6C1E2E5997830040C206 /* mempack.h */,
-				8C7F6C1F2E5997830040C206 /* merge.h */,
-				8C7F6C202E5997830040C206 /* odb_backend.h */,
-				8C7F6C212E5997830040C206 /* openssl.h */,
-				8C7F6C222E5997830040C206 /* path.h */,
-				8C7F6C232E5997830040C206 /* refdb_backend.h */,
-				8C7F6C242E5997830040C206 /* reflog.h */,
-				8C7F6C252E5997830040C206 /* refs.h */,
-				8C7F6C262E5997830040C206 /* repository.h */,
-				8C7F6C272E5997830040C206 /* stream.h */,
-				8C7F6C282E5997830040C206 /* transport.h */,
-			);
-			path = sys;
-			sourceTree = "<group>";
-		};
-		8C7F6C6C2E5997830040C206 /* git2 */ = {
-			isa = PBXGroup;
-			children = (
-				8C7F6C292E5997830040C206 /* sys */,
-				8C7F6C2A2E5997830040C206 /* annotated_commit.h */,
-				8C7F6C2B2E5997830040C206 /* apply.h */,
-				8C7F6C2C2E5997830040C206 /* attr.h */,
-				8C7F6C2D2E5997830040C206 /* blame.h */,
-				8C7F6C2E2E5997830040C206 /* blob.h */,
-				8C7F6C2F2E5997830040C206 /* branch.h */,
-				8C7F6C302E5997830040C206 /* buffer.h */,
-				8C7F6C312E5997830040C206 /* cert.h */,
-				8C7F6C322E5997830040C206 /* checkout.h */,
-				8C7F6C332E5997830040C206 /* cherrypick.h */,
-				8C7F6C342E5997830040C206 /* clone.h */,
-				8C7F6C352E5997830040C206 /* commit.h */,
-				8C7F6C362E5997830040C206 /* common.h */,
-				8C7F6C372E5997830040C206 /* config.h */,
-				8C7F6C382E5997830040C206 /* cred_helpers.h */,
-				8C7F6C392E5997830040C206 /* credential.h */,
-				8C7F6C3A2E5997830040C206 /* credential_helpers.h */,
-				8C7F6C3B2E5997830040C206 /* deprecated.h */,
-				8C7F6C3C2E5997830040C206 /* describe.h */,
-				8C7F6C3D2E5997830040C206 /* diff.h */,
-				8C7F6C3E2E5997830040C206 /* errors.h */,
-				8C7F6C3F2E5997830040C206 /* filter.h */,
-				8C7F6C402E5997830040C206 /* global.h */,
-				8C7F6C412E5997830040C206 /* graph.h */,
-				8C7F6C422E5997830040C206 /* ignore.h */,
-				8C7F6C432E5997830040C206 /* index.h */,
-				8C7F6C442E5997830040C206 /* indexer.h */,
-				8C7F6C452E5997830040C206 /* mailmap.h */,
-				8C7F6C462E5997830040C206 /* merge.h */,
-				8C7F6C472E5997830040C206 /* message.h */,
-				8C7F6C482E5997830040C206 /* net.h */,
-				8C7F6C492E5997830040C206 /* notes.h */,
-				8C7F6C4A2E5997830040C206 /* object.h */,
-				8C7F6C4B2E5997830040C206 /* odb.h */,
-				8C7F6C4C2E5997830040C206 /* odb_backend.h */,
-				8C7F6C4D2E5997830040C206 /* oid.h */,
-				8C7F6C4E2E5997830040C206 /* oidarray.h */,
-				8C7F6C4F2E5997830040C206 /* pack.h */,
-				8C7F6C502E5997830040C206 /* patch.h */,
-				8C7F6C512E5997830040C206 /* pathspec.h */,
-				8C7F6C522E5997830040C206 /* proxy.h */,
-				8C7F6C532E5997830040C206 /* rebase.h */,
-				8C7F6C542E5997830040C206 /* refdb.h */,
-				8C7F6C552E5997830040C206 /* reflog.h */,
-				8C7F6C562E5997830040C206 /* refs.h */,
-				8C7F6C572E5997830040C206 /* refspec.h */,
-				8C7F6C582E5997830040C206 /* remote.h */,
-				8C7F6C592E5997830040C206 /* repository.h */,
-				8C7F6C5A2E5997830040C206 /* reset.h */,
-				8C7F6C5B2E5997830040C206 /* revert.h */,
-				8C7F6C5C2E5997830040C206 /* revparse.h */,
-				8C7F6C5D2E5997830040C206 /* revwalk.h */,
-				8C7F6C5E2E5997830040C206 /* signature.h */,
-				8C7F6C5F2E5997830040C206 /* stash.h */,
-				8C7F6C602E5997830040C206 /* status.h */,
-				8C7F6C612E5997830040C206 /* stdint.h */,
-				8C7F6C622E5997830040C206 /* strarray.h */,
-				8C7F6C632E5997830040C206 /* submodule.h */,
-				8C7F6C642E5997830040C206 /* tag.h */,
-				8C7F6C652E5997830040C206 /* trace.h */,
-				8C7F6C662E5997830040C206 /* transaction.h */,
-				8C7F6C672E5997830040C206 /* transport.h */,
-				8C7F6C682E5997830040C206 /* tree.h */,
-				8C7F6C692E5997830040C206 /* types.h */,
-				8C7F6C6A2E5997830040C206 /* version.h */,
-				8C7F6C6B2E5997830040C206 /* worktree.h */,
-			);
-			path = git2;
 			sourceTree = "<group>";
 		};
 		8C8E44FF2E5F6891005590F0 /* DoriKitMacros */ = {
@@ -1968,6 +1768,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8C2EE3AE2E704AB300EDDD0D /* PBXTargetDependency */,
 			);
 			name = DoriAssetShims;
 			packageProductDependencies = (
@@ -2148,6 +1949,9 @@
 						CreatedOnToolsVersion = 26.0;
 						LastSwiftMigration = 2600;
 					};
+					8C2E8F042E702A7400EDDD0D = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					8C3FA2482E4B9EBF001526F2 = {
 						CreatedOnToolsVersion = 26.0;
 					};
@@ -2224,6 +2028,7 @@
 				8CB4D4922E4461450085D57A /* CardCollectionGen */,
 				8C3FA2482E4B9EBF001526F2 /* GreatLyrics */,
 				8CE1869C2E53529A009C1C87 /* OfflineResBundleGen */,
+				8C2E8F042E702A7400EDDD0D /* libgit2 */,
 			);
 		};
 /* End PBXProject section */
@@ -2321,6 +2126,86 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		8C085AC62E71637F00447B05 /* Check CMake Availability */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Check CMake Availability";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif ! command -v cmake >/dev/null 2>&1; then\n    echo \"error: CMake could not be found\"\nfi\n";
+		};
+		8C085AC72E71641C00447B05 /* Build OpenSSL */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/clib/openssl/**",
+			);
+			name = "Build OpenSSL";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/lib/libssl.a",
+				"$(BUILT_PRODUCTS_DIR)/lib/libcrypto.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\n# Determine target platform\ncase $PLATFORM_NAME in\n    iphoneos) TARGET_PLATFORM=\"iphoneos\";;\n    iphonesimulator) TARGET_PLATFORM=\"iphonesimulator\";;\n    macosx)\n        case $EFFECTIVE_PLATFORM_NAME in\n            \"\") TARGET_PLATFORM=\"macosx\";;\n            -maccatalyst) TARGET_PLATFORM=\"maccatalyst\";;\n            *) echo \"error: Unknown EFFECTIVE_PLATFORM_NAME=$EFFECTIVE_PLATFORM_NAME\"; exit 1;;\n        esac;;\n    *) echo \"error: Unknown PLATFORM_NAME=$PLATFORM_NAME\"; exit 1;;\nesac\n\ncase $TARGET_PLATFORM in\n    \"iphoneos\")\n        ARCH=arm64\n        SYSROOT=$(xcrun --sdk iphoneos --show-sdk-path);;\n    \"iphonesimulator\")\n        ARCHS_LIST=($ARCHS)\n        ARCH=${ARCHS_LIST[0]}\n        SYSROOT=$(xcrun --sdk iphonesimulator --show-sdk-path);;\n    \"maccatalyst\")\n        ARCHS_LIST=($ARCHS)\n        ARCH=${ARCHS_LIST[0]}\n        SYSROOT=$(xcrun --sdk macosx --show-sdk-path);;\n    \"macosx\")\n        ARCHS_LIST=($ARCHS)\n        ARCH=${ARCHS_LIST[0]}\n        SYSROOT=$(xcrun --sdk macosx --show-sdk-path);;\n    *) echo \"error: Unsupported platform: $PLATFORM\"; exit 1;;\nesac\n\nif ! [ -d \"$SRCROOT/clib/openssl\" ]; then\n    echo \"error: OpenSSL source could not be found\"\n    exit 1\nfi\nrm -rf \"$BUILT_PRODUCTS_DIR/lib/libssl.a\"\nrm -rf \"$BUILT_PRODUCTS_DIR/lib/libcrypto.a\"\nrm -rf \"$BUILT_PRODUCTS_DIR/openssl\"\ncp -rf \"$SRCROOT/clib/openssl\" \"$BUILT_PRODUCTS_DIR/openssl\"\ncd \"$BUILT_PRODUCTS_DIR/openssl\"\nif [[ -n \"$ARCHS_LIST\" ]]; then\n    # simulator, macos, catalyst\n    FAT_SSL_LIBS=()\n    FAT_CRYPTO_LIBS=()\n    for ARCH in \"${ARCHS_LIST[@]}\"; do\n        case $TARGET_PLATFORM in\n            \"iphonesimulator\") TARGET_OS=iossimulator-xcrun\\ -mios-simulator-version-min=17.0; export CFLAGS=\"-isysroot $SYSROOT -arch $ARCH\";;\n            \"maccatalyst\") TARGET_OS=darwin64-$ARCH-cc; export CFLAGS=\"-isysroot $SYSROOT -target $ARCH-apple-ios17.0-macabi\";;\n            \"macosx\") TARGET_OS=darwin64-$ARCH-cc\\ -mmacosx-version-min=14.0; export CFLAGS=\"-isysroot $SYSROOT -arch $ARCH\";;\n        esac\n        ./Configure --prefix=\"$BUILT_PRODUCTS_DIR\" --openssldir=\"$BUILT_PRODUCTS_DIR\" $TARGET_OS no-shared no-dso no-hw no-engine\n        make -j$(sysctl -n hw.ncpu) && make -j$(sysctl -n hw.ncpu) install_sw install_ssldirs\n        mv \"$BUILT_PRODUCTS_DIR/lib/libssl.a\" \"$BUILT_PRODUCTS_DIR/lib/libssl-$ARCH.a\"\n        FAT_SSL_LIBS+=(\"$BUILT_PRODUCTS_DIR/lib/libssl-$ARCH.a\")\n        mv \"$BUILT_PRODUCTS_DIR/lib/libcrypto.a\" \"$BUILT_PRODUCTS_DIR/lib/libcrypto-$ARCH.a\"\n        FAT_CRYPTO_LIBS+=(\"$BUILT_PRODUCTS_DIR/lib/libcrypto-$ARCH.a\")\n        make clean\n    done\n    lipo -create \"${FAT_SSL_LIBS[@]}\" -output \"$BUILT_PRODUCTS_DIR/lib/libssl.a\"\n    lipo -create \"${FAT_CRYPTO_LIBS[@]}\" -output \"$BUILT_PRODUCTS_DIR/lib/libcrypto.a\"\n    for ARCH in \"${ARCHS_LIST[@]}\"; do\n        rm -rf \"$BUILT_PRODUCTS_DIR/lib/\"*-$ARCH.a\n    done\nelse\n    # iphoneos\n    TARGET_OS=ios64-cross\n    export CFLAGS=\"-isysroot $SYSROOT -arch $ARCH\"\n    ./Configure --prefix=\"$BUILT_PRODUCTS_DIR\" --openssldir=\"$BUILT_PRODUCTS_DIR\" -miphoneos-version-min=17.0 $TARGET_OS no-shared no-dso no-hw no-engine\n    make -j$(sysctl -n hw.ncpu) && make -j$(sysctl -n hw.ncpu) install_sw install_ssldirs\nfi\nexport -n CFLAGS\n";
+		};
+		8C085AC82E71659700447B05 /* Build LibSSH2 */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/clib/libssh2/**",
+			);
+			name = "Build LibSSH2";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/lib/libssh2.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\n# Determine target platform\ncase $PLATFORM_NAME in\n    iphoneos) TARGET_PLATFORM=\"iphoneos\";;\n    iphonesimulator) TARGET_PLATFORM=\"iphonesimulator\";;\n    macosx)\n        case $EFFECTIVE_PLATFORM_NAME in\n            \"\") TARGET_PLATFORM=\"macosx\";;\n            -maccatalyst) TARGET_PLATFORM=\"maccatalyst\";;\n            *) echo \"error: Unknown EFFECTIVE_PLATFORM_NAME=$EFFECTIVE_PLATFORM_NAME\"; exit 1;;\n        esac;;\n    *) echo \"error: Unknown PLATFORM_NAME=$PLATFORM_NAME\"; exit 1;;\nesac\n\nCMAKE_ARGS=(-DBUILD_SHARED_LIBS=NO -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER_WORKS=ON -DCMAKE_CXX_COMPILER_WORKS=ON -DCMAKE_INSTALL_PREFIX=\"$BUILT_PRODUCTS_DIR\")\ncase $TARGET_PLATFORM in\n    \"iphoneos\")\n        ARCH=arm64\n        SYSROOT=$(xcrun --sdk iphoneos --show-sdk-path)\n        CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=$ARCH -DCMAKE_OSX_SYSROOT=$SYSROOT);;\n    \"iphonesimulator\")\n        ARCHS_LIST=($ARCHS)\n        ARCH=${ARCHS_LIST[0]}\n        SYSROOT=$(xcrun --sdk iphonesimulator --show-sdk-path)\n        CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"${ARCHS_LIST// /;}\" -DCMAKE_OSX_SYSROOT=$SYSROOT);;\n    \"maccatalyst\")\n        ARCHS_LIST=($ARCHS)\n        ARCH=${ARCHS_LIST[0]}\n        SYSROOT=$(xcrun --sdk macosx --show-sdk-path)\n        CMAKE_ARGS+=(-DCMAKE_C_FLAGS=-target\\ $ARCH-apple-ios17.0-macabi);;\n    \"macosx\")\n        ARCHS_LIST=($ARCHS)\n        ARCH=${ARCHS_LIST[0]}\n        SYSROOT=$(xcrun --sdk macosx --show-sdk-path)\n        CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"${ARCHS_LIST// /;}\");;\n    *) echo \"error: Unsupported platform: $PLATFORM\"; exit 1;;\nesac\n\nif ! [ -d \"$SRCROOT/clib/libssh2\" ]; then\n    echo \"error: libssh2 source could not be found\"\n    exit 1\nfi\nrm -rf \"$BUILT_PRODUCTS_DIR/lib/libssh2.a\"\nrm -rf \"$BUILT_PRODUCTS_DIR/libssh2\"\ncp -rf \"$SRCROOT/clib/libssh2\" \"$BUILT_PRODUCTS_DIR/libssh2\"\nif [[ -n \"$ARCHS_LIST\" ]]; then\n    # simulator, macos, catalyst\n    FAT_SSH_LIBS=()\n    for ARCH in \"${ARCHS_LIST[@]}\"; do\n        rm -rf \"$BUILT_PRODUCTS_DIR/libssh2/build\"\n        mkdir \"$BUILT_PRODUCTS_DIR/libssh2/build\"\n        cd \"$BUILT_PRODUCTS_DIR/libssh2/build\"\n        CMAKE_ARGS=(-DBUILD_SHARED_LIBS=NO -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER_WORKS=ON -DCMAKE_CXX_COMPILER_WORKS=ON -DCMAKE_INSTALL_PREFIX=\"$BUILT_PRODUCTS_DIR\")\n        case $TARGET_PLATFORM in\n            \"iphonesimulator\") CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"$ARCH\" -DCMAKE_OSX_SYSROOT=$SYSROOT);;\n            \"maccatalyst\") CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"$ARCH\" -DCMAKE_C_FLAGS=-target\\ $ARCH-apple-ios17.0-macabi);;\n            \"macosx\") CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"$ARCH\" -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0);;\n        esac\n        CMAKE_ARGS+=(-DCRYPTO_BACKEND=OpenSSL -DOPENSSL_ROOT_DIR=\"$BUILT_PRODUCTS_DIR\" -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF)\n        cmake \"${CMAKE_ARGS[@]}\" ..\n        cmake --build . -j $(sysctl -n hw.ncpu) --target install\n        mv \"$BUILT_PRODUCTS_DIR/lib/libssh2.a\" \"$BUILT_PRODUCTS_DIR/lib/libssh2-$ARCH.a\"\n        FAT_SSH_LIBS+=(\"$BUILT_PRODUCTS_DIR/lib/libssh2-$ARCH.a\")\n    done\n    lipo -create \"${FAT_SSH_LIBS[@]}\" -output \"$BUILT_PRODUCTS_DIR/lib/libssh2.a\"\n    for ARCH in \"${ARCHS_LIST[@]}\"; do\n        rm -rf \"$BUILT_PRODUCTS_DIR/lib/\"*-$ARCH.a\n    done\nelse\n    # iphoneos\n    mkdir \"$BUILT_PRODUCTS_DIR/libssh2/build\"\n    cd \"$BUILT_PRODUCTS_DIR/libssh2/build\"\n    CMAKE_ARGS+=(-DCRYPTO_BACKEND=OpenSSL -DOPENSSL_ROOT_DIR=\"$BUILT_PRODUCTS_DIR\" -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF)\n    cmake \"${CMAKE_ARGS[@]}\" ..\n    cmake --build . -j $(sysctl -n hw.ncpu) --target install\nfi\n";
+		};
+		8C085AC92E7166FD00447B05 /* Merge Libraries */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/lib/*.a",
+			);
+			name = "Merge Libraries";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/libgit2.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "libtool -static -o \"$BUILT_PRODUCTS_DIR/libgit2.a\" \"$BUILT_PRODUCTS_DIR/lib/\"*.a\n";
+		};
 		8C2CCD582E3F81BB0014189F /* Fix Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -2339,6 +2224,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/libexec/PlistBuddy -c \"Delete :CFBundleExecutable\" \"$BUILT_PRODUCTS_DIR/$CONTENTS_FOLDER_PATH/Info.plist\"\nexit 0\n";
+		};
+		8C2E8F0A2E702A7800EDDD0D /* Build LibGit2 */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/clib/libgit2/**",
+			);
+			name = "Build LibGit2";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/lib/libgit2.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\n# Determine target platform\ncase $PLATFORM_NAME in\n    iphoneos) TARGET_PLATFORM=\"iphoneos\";;\n    iphonesimulator) TARGET_PLATFORM=\"iphonesimulator\";;\n    macosx)\n        case $EFFECTIVE_PLATFORM_NAME in\n            \"\") TARGET_PLATFORM=\"macosx\";;\n            -maccatalyst) TARGET_PLATFORM=\"maccatalyst\";;\n            *) echo \"error: Unknown EFFECTIVE_PLATFORM_NAME=$EFFECTIVE_PLATFORM_NAME\"; exit 1;;\n        esac;;\n    *) echo \"error: Unknown PLATFORM_NAME=$PLATFORM_NAME\"; exit 1;;\nesac\n\nCMAKE_ARGS=(-DBUILD_SHARED_LIBS=NO -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER_WORKS=ON -DCMAKE_CXX_COMPILER_WORKS=ON -DCMAKE_INSTALL_PREFIX=\"$BUILT_PRODUCTS_DIR\")\ncase $TARGET_PLATFORM in\n    \"iphoneos\")\n        ARCH=arm64\n        SYSROOT=$(xcrun --sdk iphoneos --show-sdk-path)\n        CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=$ARCH -DCMAKE_OSX_SYSROOT=$SYSROOT);;\n    \"iphonesimulator\")\n        ARCHS_LIST=($ARCHS)\n        ARCH=${ARCHS_LIST[0]}\n        SYSROOT=$(xcrun --sdk iphonesimulator --show-sdk-path)\n        CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"${ARCHS_LIST// /;}\" -DCMAKE_OSX_SYSROOT=$SYSROOT);;\n    \"maccatalyst\")\n        ARCHS_LIST=($ARCHS)\n        ARCH=${ARCHS_LIST[0]}\n        SYSROOT=$(xcrun --sdk macosx --show-sdk-path)\n        CMAKE_ARGS+=(-DCMAKE_C_FLAGS=-target\\ $ARCH-apple-ios17.0-macabi);;\n    \"macosx\")\n        ARCHS_LIST=($ARCHS)\n        ARCH=${ARCHS_LIST[0]}\n        SYSROOT=$(xcrun --sdk macosx --show-sdk-path)\n        CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"${ARCHS_LIST// /;}\");;\n    *) echo \"error: Unsupported platform: $PLATFORM\"; exit 1;;\nesac\n\nif ! [ -d \"$SRCROOT/clib/libgit2\" ]; then\n    echo \"error: libgit2 source could not be found\"\n    exit 1\nfi\nrm -rf \"$BUILT_PRODUCTS_DIR/lib/libgit2.a\"\nrm -rf \"$BUILT_PRODUCTS_DIR/libgit2\"\ncp -rf \"$SRCROOT/clib/libgit2\" \"$BUILT_PRODUCTS_DIR/libgit2\"\nif [[ -n \"$ARCHS_LIST\" ]]; then\n    # simulator, macos, catalyst\n    FAT_GIT_LIBS=()\n    for ARCH in \"${ARCHS_LIST[@]}\"; do\n        rm -rf \"$BUILT_PRODUCTS_DIR/libgit2/build\"\n        mkdir \"$BUILT_PRODUCTS_DIR/libgit2/build\"\n        cd \"$BUILT_PRODUCTS_DIR/libgit2/build\"\n        CMAKE_ARGS=(-DBUILD_SHARED_LIBS=NO -DLINK_WITH_STATIC_LIBRARIES=1 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=\"$BUILT_PRODUCTS_DIR\")\n        case $TARGET_PLATFORM in\n            \"iphonesimulator\") CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"$ARCH\" -DCMAKE_OSX_SYSROOT=$SYSROOT);;\n            \"maccatalyst\") CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"$ARCH\" -DCMAKE_C_FLAGS=-target\\ $ARCH-apple-ios17.0-macabi);;\n            \"macosx\") CMAKE_ARGS+=(-DCMAKE_OSX_ARCHITECTURES=\"$ARCH\" -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0);;\n        esac\n        CMAKE_ARGS+=(-DBUILD_TESTS=OFF -DUSE_SSH=ON -DLIBSSH2_FOUND=YES -DLIBSSH2_INCLUDE_DIRS=\"$BUILT_PRODUCTS_DIR/include\" -DCMAKE_EXE_LINKER_FLAGS=\"-L$BUILT_PRODUCTS_DIR/lib -lssh2 -lcrypto -lssl -liconv\")\n        cmake \"${CMAKE_ARGS[@]}\" ..\n        cmake --build . -j $(sysctl -n hw.ncpu) --target install\n        mv \"$BUILT_PRODUCTS_DIR/lib/libgit2.a\" \"$BUILT_PRODUCTS_DIR/lib/libgit2-$ARCH.a\"\n        FAT_GIT_LIBS+=(\"$BUILT_PRODUCTS_DIR/lib/libgit2-$ARCH.a\")\n    done\n    lipo -create \"${FAT_GIT_LIBS[@]}\" -output \"$BUILT_PRODUCTS_DIR/lib/libgit2.a\"\n    for ARCH in \"${ARCHS_LIST[@]}\"; do\n        rm -rf \"$BUILT_PRODUCTS_DIR/lib/\"*-$ARCH.a\n    done\nelse\n    # iphoneos\n    mkdir \"$BUILT_PRODUCTS_DIR/libgit2/build\"\n    cd \"$BUILT_PRODUCTS_DIR/libgit2/build\"\n    CMAKE_ARGS+=(-DBUILD_CLAR=NO -DOPENSSL_ROOT_DIR=\"$BUILT_PRODUCTS_DIR\" -DBUILD_TESTS=OFF -DUSE_SSH=ON -DLIBSSH2_FOUND=YES -DLIBSSH2_INCLUDE_DIRS=\"$BUILT_PRODUCTS_DIR/include\" -DCMAKE_EXE_LINKER_FLAGS=\"-L$BUILT_PRODUCTS_DIR/lib -lssh2 -lcrypto -lssl\")\n    cmake \"${CMAKE_ARGS[@]}\" ..\n    cmake --build . -j $(sysctl -n hw.ncpu) --target install\nfi\n";
 		};
 		8C59DBDC2E62E5F10021317E /* Check ABI Stability */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2720,6 +2625,11 @@
 			isa = PBXTargetDependency;
 			target = 8C2CCD392E3E058E0014189F /* DoriEmoji */;
 			targetProxy = 8C2CCD412E3E06100014189F /* PBXContainerItemProxy */;
+		};
+		8C2EE3AE2E704AB300EDDD0D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C2E8F042E702A7400EDDD0D /* libgit2 */;
+			targetProxy = 8C2EE3AD2E704AB300EDDD0D /* PBXContainerItemProxy */;
 		};
 		8C3FA2642E4BA6EA001526F2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3386,6 +3296,62 @@
 				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 				WRAPPER_EXTENSION = bundle;
 				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = RelWithoutPreCache;
+		};
+		8C2E8F052E702A7400EDDD0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SUPPORTS_MACCATALYST = YES;
+			};
+			name = Debug;
+		};
+		8C2E8F062E702A7400EDDD0D /* DebWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SUPPORTS_MACCATALYST = YES;
+			};
+			name = DebWithoutPreCache;
+		};
+		8C2E8F072E702A7400EDDD0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SUPPORTS_MACCATALYST = YES;
+			};
+			name = Release;
+		};
+		8C2E8F082E702A7400EDDD0D /* RelWithoutPreCache */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B57D8PP775;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SUPPORTS_MACCATALYST = YES;
 			};
 			name = RelWithoutPreCache;
 		};
@@ -4305,7 +4271,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/clib/libgit2/bin",
+					"$(BUILT_PRODUCTS_DIR)",
 				);
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -4357,7 +4323,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/clib/libgit2/bin",
+					"$(BUILT_PRODUCTS_DIR)",
 				);
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -4409,7 +4375,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/clib/libgit2/bin",
+					"$(BUILT_PRODUCTS_DIR)",
 				);
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -4460,7 +4426,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/clib/libgit2/bin",
+					"$(BUILT_PRODUCTS_DIR)",
 				);
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -5272,6 +5238,17 @@
 				8C2CCD3C2E3E058E0014189F /* DebWithoutPreCache */,
 				8C2CCD3D2E3E058E0014189F /* Release */,
 				8C2CCD3E2E3E058E0014189F /* RelWithoutPreCache */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C2E8F092E702A7400EDDD0D /* Build configuration list for PBXAggregateTarget "libgit2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C2E8F052E702A7400EDDD0D /* Debug */,
+				8C2E8F062E702A7400EDDD0D /* DebWithoutPreCache */,
+				8C2E8F072E702A7400EDDD0D /* Release */,
+				8C2E8F082E702A7400EDDD0D /* RelWithoutPreCache */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
