@@ -11,3 +11,5 @@
 # See https://greatdori.memz.top/CONTRIBUTORS.txt for the list of Greatdori! project authors
 #
 #===-----------------------------------------------------------------------===#
+
+brew install cmake
