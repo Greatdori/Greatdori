@@ -25,8 +25,17 @@ and provide native experience to Bestdori.
     git clone https://github.com/WindowsMEMZ/Greatdori.git
     ```
     Use `git submodule` if you want to manage versions better.
-2. Drag `Greatdori.xcodeproj` and drop it into the project navigator in Xcode.
-3. Go to project editor for your project, select a target,
+2. Update submodules for Greatdori! project:
+    ```sh
+    cd Greatdori
+    git submodule update --init --recursive
+    ```
+3. Install CMake if you don't have:
+    ```sh
+    brew install cmake
+    ```
+4. Drag `Greatdori.xcodeproj` and drop it into the project navigator in Xcode.
+5. Go to project editor for your project, select a target,
     add DoriKit in *Frameworks, Libraries and Embedded Content* section.
     
 > [!TIP]
@@ -67,7 +76,14 @@ Then add the dependency to targets you're going to use it:
 - **Not available**: Offline asset APIs.
 
 ## Building
-Xcode 26.0 (currently beta) and Swift 6.2+ is required for building this project.
+Xcode 26.0 and Swift 6.2+ is required for building this project.
+
+CMake is required for building from Xcode Project,
+you can install it by Homebrew if you don't have one:
+
+```sh
+brew install cmake
+```
 
 Open `Greatdori.xcodeproj`, then select a scheme you want to build.
 You can also use `swift build` to build DoriKit from Package.swift.
@@ -90,6 +106,7 @@ There're several schemes in Greatdori! project:
 - **Greatdori Installer**: Generates a `pkg` installer for macOS app;
 - **CardCollectionGen**: A CLI tool which generates built-in card collections;
 - **GreatLyrics**: A tool for making lyrics file of songs.
+- **libgit2**: LibGit2 and its dependencies, required for *DoriAssetShims*.
 
 Besides, some targets have a corresponding *Without Pre-Cache* scheme,
 which builds the target without [pre-cache](#pre-cache) for DoriKit.
