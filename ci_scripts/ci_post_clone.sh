@@ -11,8 +11,3 @@
 # See https://greatdori.memz.top/CONTRIBUTORS.txt for the list of Greatdori! project authors
 #
 #===-----------------------------------------------------------------------===#
-
-# Since the folder name is also Swift Package name for Greatdori,
-# it must be renamed to make PreCacheGen can be resolved.
-mv /Volumes/workspace/repository /Volumes/workspace/Greatdori
-cd /Volumes/workspace/Greatdori

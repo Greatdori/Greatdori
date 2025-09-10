@@ -9,12 +9,12 @@ let package = Package(
     products: [
         .executable(name: "PreCacheGen", targets: ["PreCacheGen"])
     ],
-    dependencies: [.package(path: "../../")],
+    dependencies: [.package(name: "Greatdori", path: "../../")],
     targets: [
         .executableTarget(
             name: "PreCacheGen",
             dependencies: [
-                .productItem(name: "DoriKit", package: "Greatdori", moduleAliases: nil, condition: nil)
+                .product(name: "DoriKit", package: "Greatdori")
             ]
         )
     ]
