@@ -18,6 +18,7 @@ import SDWebImageSVGCoder
 import SwiftUI
 #if os(iOS)
 import UIKit
+import BackgroundTasks
 #else
 import AppKit
 #endif
@@ -108,6 +109,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 class AppDelegate: NSObject, UIApplicationDelegate {
     @Environment(\.locale) var locale
     @AppStorage("IsFirstLaunch") var isFirstLaunch = true
+    
+    func application(
+        _ application: UIApplication,
+        willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+    ) -> Bool {
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.memz233.Greatdori.background.news-notification", using: nil) { task in
+            _handleNewsNotificationRefresh(task: task as! BGAppRefreshTask)
+        }
+        
+        return true
+    }
     
     func application(
         _ application: UIApplication,
