@@ -112,17 +112,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(
         _ application: UIApplication,
-        willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
-    ) -> Bool {
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.memz233.Greatdori.background.news-notification", using: nil) { task in
-            _handleNewsNotificationRefresh(task: task as! BGAppRefreshTask)
-        }
-        
-        return true
-    }
-    
-    func application(
-        _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
         SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
@@ -139,6 +128,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 //            isFirstLaunch = false
 //        }
         
+        UIApplication.shared.registerForRemoteNotifications()
+        
         return true
     }
     
@@ -149,6 +140,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     ) -> Bool {
         handleURL(url)
         return true
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        UserDefaults.standard.set(deviceToken, forKey: "RemoteNotifDeviceToken")
     }
 }
 #endif

@@ -43,7 +43,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		8C088EF42E728DB200447B05 /* BackgroundNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C088EF32E728DAB00447B05 /* BackgroundNotification.swift */; };
+		8C0872BB2E72FCDA00447B05 /* DoriNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0872BA2E72FCD600447B05 /* DoriNotification.swift */; };
 		8C0C996B2E296A4600549B5C /* Greatdori Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8C0C99842E296A5500549B5C /* GreatdoriApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99802E296A5500549B5C /* GreatdoriApp.swift */; };
 		8C0C99892E296A5800549B5C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0C99862E296A5800549B5C /* ContentView.swift */; };
@@ -597,7 +597,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8C088EF32E728DAB00447B05 /* BackgroundNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundNotification.swift; sourceTree = "<group>"; };
+		8C0872BA2E72FCD600447B05 /* DoriNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriNotification.swift; sourceTree = "<group>"; };
 		8C0C995D2E296A4400549B5C /* Greatdori!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Greatdori!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C0C996A2E296A4600549B5C /* Greatdori Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Greatdori Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C0C99802E296A5500549B5C /* GreatdoriApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreatdoriApp.swift; sourceTree = "<group>"; };
@@ -1033,6 +1033,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C0872B92E72FCAE00447B05 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				8C0872BA2E72FCD600447B05 /* DoriNotification.swift */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
 		8C0C99542E296A4400549B5C = {
 			isa = PBXGroup;
 			children = (
@@ -1095,7 +1103,6 @@
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				E9CD3A472E58975900BF5EA9 /* Extensions.swift */,
 				E9CD3A492E58984200BF5EA9 /* Functions.swift */,
-				8C088EF32E728DAB00447B05 /* BackgroundNotification.swift */,
 				E90769D42E546D5B00C9871C /* Basics */,
 				E90769CC2E546D5500C9871C /* Home */,
 				E9BD6C4F2E547A7200D56E55 /* Settings */,
@@ -1138,6 +1145,7 @@
 				8CD13FBC2E2FE2BF00673E15 /* Frontend */,
 				8C9474482E35AB60003A90B4 /* Cache */,
 				8C7F6B832E591AC60040C206 /* OfflineAsset */,
+				8C0872B92E72FCAE00447B05 /* Notification */,
 			);
 			path = DoriKit;
 			sourceTree = "<group>";
@@ -2385,7 +2393,6 @@
 				E9412A5E2E6C0C3D0043EC2C /* CharacterView.swift in Sources */,
 				E90769D72E546D5B00C9871C /* DebugView.swift in Sources */,
 				E90769D82E546D5B00C9871C /* ImagesView.swift in Sources */,
-				8C088EF42E728DB200447B05 /* BackgroundNotification.swift in Sources */,
 				E90769D92E546D5B00C9871C /* SettingsView.swift in Sources */,
 				E9EE03812E4F5DB30088843B /* FilterView.swift in Sources */,
 				E9CD3A4A2E58984400BF5EA9 /* Functions.swift in Sources */,
@@ -2494,6 +2501,7 @@
 				8C3264062E3C69C900081F4F /* FrontendGacha.swift in Sources */,
 				8C2CCD332E3DED1F0014189F /* RichContent.swift in Sources */,
 				8CD13FB72E2FE2BF00673E15 /* Resource.swift.gyb in Sources */,
+				8C0872BB2E72FCDA00447B05 /* DoriNotification.swift in Sources */,
 				8CD13FB82E2FE2BF00673E15 /* Skill.swift in Sources */,
 				8CD13FB92E2FE2BF00673E15 /* Song.swift in Sources */,
 				8C7855992E48C68F000EA06E /* Comic.swift in Sources */,

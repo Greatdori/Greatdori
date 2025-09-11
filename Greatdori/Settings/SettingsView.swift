@@ -17,6 +17,7 @@
 import SwiftUI
 import DoriKit
 import WidgetKit
+import UserNotifications
 
 let birthdayTimeZoneNameDict: [BirthdayTimeZone: LocalizedStringResource] = [.adaptive: "Settings.birthday-time-zone.name.adaptive", .JST: "Settings.birthday-time-zone.name.JST", .UTC: "Settings.birthday-time-zone.name.UTC", .CST: "Settings.birthday-time-zone.name.CST", .PT: "Settings.birthday-time-zone.name.PT"]
 let showBirthdayDateDefaultValue = 1
@@ -30,10 +31,10 @@ struct SettingsView: View {
             Form {
                 SettingsLocaleView()
                 SettingsHomeView()
-                
-#if os(iOS)
+                SettingsNotificationView()
+                #if os(iOS)
                 SettingsWidgetView()
-#endif
+                #endif
                 SettingsOfflineDataView()
                 if AppFlag.DEBUG {
                     SettingsDebugView()
@@ -41,7 +42,7 @@ struct SettingsView: View {
             }
             .formStyle(.grouped)
             .navigationTitle("Settings")
-#if !os(macOS)
+            #if !os(macOS)
             .wrapIf(usedAsSheet, in: { content in
                 content
                     .toolbar {
@@ -191,6 +192,92 @@ struct SettingsHomeView: View {
             }, label: {
                 Text("Home.servers.slot.\(id)")
             })
+        }
+    }
+}
+
+struct SettingsNotificationView: View {
+    @Environment(\.openURL) var openURL
+    @AppStorage("IsNewsNotifEnabled") var isNewsNotificationEnabled = false
+    @State var isAuthorized = false
+    @State var isDetermined = false
+    var body: some View {
+        Section {
+            if isAuthorized {
+                Toggle("新闻更新", isOn: .init {
+                    isNewsNotificationEnabled
+                } set: {
+                    isNewsNotificationEnabled = $0
+                    if $0 {
+                        if let token = UserDefaults.standard.data(forKey: "RemoteNotifDeviceToken") {
+                            Task {
+                                if let id = await DoriNotification.registerRemoteNewsNotification(deviceToken: token) {
+                                    UserDefaults.standard.set(id.uuidString, forKey: "NewsNotifID")
+                                } else {
+                                    isNewsNotificationEnabled = false
+                                }
+                            }
+                        } else {
+                            isNewsNotificationEnabled = false
+                        }
+                    } else {
+                        if let id = UserDefaults.standard.string(forKey: "NewsNotifID"),
+                           let uuid = UUID(uuidString: id) {
+                            Task {
+                                let success = await DoriNotification.unregisterRemoteNewsNotification(id: uuid)
+                                if !success {
+                                    isNewsNotificationEnabled = true
+                                }
+                            }
+                        }
+                    }
+                })
+            } else {
+                Button("启用通知") {
+                    if !isDetermined {
+                        // We can request in-app
+                        Task {
+                            do {
+                                let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
+                                isAuthorized = granted
+                                isDetermined = true
+                                if let token = UserDefaults.standard.data(forKey: "RemoteNotifDeviceToken") {
+                                    isNewsNotificationEnabled = true
+                                    Task {
+                                        if let id = await DoriNotification.registerRemoteNewsNotification(deviceToken: token) {
+                                            UserDefaults.standard.set(id.uuidString, forKey: "NewsNotifID")
+                                        } else {
+                                            isNewsNotificationEnabled = false
+                                        }
+                                    }
+                                }
+                            } catch {
+                                print(error)
+                            }
+                        }
+                    } else {
+                        // Users have to go to settings
+                        #if os(iOS)
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            openURL(url)
+                        }
+                        #else
+                        openURL(.init(string: "x-apple.systempreferences:com.apple.preference.notifications")!)
+                        #endif
+                    }
+                }
+            }
+        } header: {
+            Text(verbatim: "通知")
+                .task {
+                    let settings = await UNUserNotificationCenter.current().notificationSettings()
+                    isAuthorized = settings.authorizationStatus == .authorized
+                    isDetermined = settings.authorizationStatus != .notDetermined
+                }
+        } footer: {
+            if !isAuthorized {
+                Text(verbatim: "启用通知以接收来自 Greatdori! 的最新信息。")
+            }
         }
     }
 }
