@@ -12,6 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftUI
 import DoriKit
 import EventKit
 import Foundation
@@ -28,6 +29,8 @@ func updateBirthdayCalendar() async throws {
     
     let calendar = EKCalendar(for: .event, eventStore: store)
     calendar.title = "GBP Birthdays"
+    calendar.source = store.sources.first(where: { $0.sourceType == .local || $0.sourceType == .calDAV })
+    calendar.cgColor = Color.accentColor.resolve(in: .init()).cgColor
     UserDefaults.standard.set(calendar.calendarIdentifier, forKey: "BirthdaysCalendarID")
     try store.saveCalendar(calendar, commit: false)
     
@@ -39,6 +42,7 @@ func updateBirthdayCalendar() async throws {
         let birthdayComponents = birthdaySourceCalendar.dateComponents([.month, .day], from: character.birthday)
         
         let event = EKEvent(eventStore: store)
+        event.title = String(localized: "\(character.characterName.forPreferredLocale()!) 的生日")
         event.calendar = calendar
         event.isAllDay = true
         event.startDate = userCalendar.date(
@@ -61,19 +65,23 @@ func updateBirthdayCalendar() async throws {
                 second: 59
             )
         )!
-        event.recurrenceRules = [.init(
-            recurrenceWith: .yearly,
-            interval: 1,
-            daysOfTheWeek: nil,
-            daysOfTheMonth: nil,
-            monthsOfTheYear: [birthdayComponents.month! as NSNumber],
-            weeksOfTheYear: nil,
-            daysOfTheYear: [birthdayComponents.day! as NSNumber],
-            setPositions: nil,
-            end: nil
-        )]
+        event.alarms = [
+            .init(relativeOffset: -1.0 * 60 * 60 * 15), // the previous day, 9 AM
+            .init(relativeOffset: 60.0 * 60 * 9)
+        ]
+        event.recurrenceRules = [.init(recurrenceWith: .yearly, interval: 1, end: nil)]
         try store.save(event, span: .futureEvents, commit: false)
     }
     
     try store.commit()
+}
+
+func removeBirthdayCalendar() throws {
+    let store = EKEventStore()
+    
+    if let id = UserDefaults.standard.string(forKey: "BirthdaysCalendarID"),
+       let calendar = store.calendar(withIdentifier: id) {
+        try store.removeCalendar(calendar, commit: true)
+        UserDefaults.standard.removeObject(forKey: "BirthdaysCalendarID")
+    }
 }

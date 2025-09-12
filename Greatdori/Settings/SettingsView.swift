@@ -16,6 +16,7 @@
 
 import SwiftUI
 import DoriKit
+import EventKit
 import WidgetKit
 import UserNotifications
 
@@ -32,7 +33,7 @@ struct SettingsView: View {
                 SettingsLocaleView()
                 SettingsHomeView()
                 SettingsNotificationView()
-                
+                SettingsCalendarView()
                 #if os(iOS)
                 SettingsWidgetView()
                 #endif
@@ -278,6 +279,66 @@ struct SettingsNotificationView: View {
         } footer: {
             if !isAuthorized {
                 Text(verbatim: "启用通知以接收来自 Greatdori! 的最新信息。")
+            }
+        }
+    }
+}
+
+// FIXME: Style of texts in this view should be reviewed
+struct SettingsCalendarView: View {
+    @Environment(\.openURL) var openURL
+    @AppStorage("BirthdaysCalendarID") var birthdaysCalendarID = ""
+    @State var isAuthorized = false
+    @State var isDetermined = false
+    var body: some View {
+        Section {
+            if isAuthorized {
+                Toggle("生日日历", isOn: .init {
+                    !birthdaysCalendarID.isEmpty
+                } set: {
+                    if $0 {
+                        Task {
+                            try? await updateBirthdayCalendar()
+                        }
+                    } else {
+                        try? removeBirthdayCalendar()
+                    }
+                })
+            } else {
+                Button("允许访问") {
+                    if !isDetermined {
+                        // We can request in-app
+                        Task {
+                            do {
+                                let granted = try await EKEventStore().requestFullAccessToEvents()
+                                isAuthorized = granted
+                                isDetermined = true
+                            } catch {
+                                print(error)
+                            }
+                        }
+                    } else {
+                        // Users have to go to settings
+                        #if os(iOS)
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            openURL(url)
+                        }
+                        #else
+                        openURL(.init(string: "x-apple.systempreferences:com.apple.preference.general")!)
+                        #endif
+                    }
+                }
+            }
+        } header: {
+            Text(verbatim: "日程")
+                .task {
+                    let status = EKEventStore.authorizationStatus(for: .event)
+                    isAuthorized = status == .fullAccess
+                    isDetermined = status != .notDetermined
+                }
+        } footer: {
+            if !isAuthorized {
+                Text(verbatim: "允许 Greatdori! 访问日程以添加重要日期。")
             }
         }
     }

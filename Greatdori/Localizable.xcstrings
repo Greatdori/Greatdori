@@ -15,9 +15,6 @@
     "(%@)" : {
       "shouldTranslate" : false
     },
-    "[INTERNAL] Prepare Birthday" : {
-
-    },
     "#%@" : {
       "shouldTranslate" : false
     },
@@ -26,6 +23,9 @@
     },
     "%@" : {
       "shouldTranslate" : false
+    },
+    "%@ 的生日" : {
+
     },
     "%@%@" : {
       "localizations" : {
@@ -3166,10 +3166,16 @@
         }
       }
     },
+    "允许访问" : {
+
+    },
     "启用通知" : {
 
     },
     "新闻更新" : {
+
+    },
+    "生日日历" : {
 
     }
   },
