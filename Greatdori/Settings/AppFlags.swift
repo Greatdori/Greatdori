@@ -23,6 +23,6 @@ struct AppFlag {
     }
     
     static func set(_ value: Bool, forKey key: String) {
-        UserDefaults.standard.set(value, forKey: "AppFlag_\(key))")
+        UserDefaults.standard.set(value, forKey: "AppFlag_\(key)")
     }
 }
