@@ -483,3 +483,56 @@ where Data.Element: Hashable {
     }
 }
 
+struct SorterPickerView: View {
+    @Binding var sorter: DoriFrontend.Sorter
+    var allOptions: [DoriFrontend.Sorter.Keyword] = DoriFrontend.Sorter.Keyword.allCases
+    var sortingItemsHaveEndingDate = false
+    var body: some View {
+        Menu(content: {
+            Section {
+                ForEach(DoriFrontend.Sorter.Keyword.allCases, id: \.self) { item in
+                    if allOptions.contains(item) {
+                        Button(action: {
+                            sorter.keyword = item
+                        }, label: {
+                            Label(title: {
+                                Text(item.localizedString(hasEndingDate: sortingItemsHaveEndingDate))
+                            }, icon: {
+                                if sorter.keyword == item {
+                                    Image(systemName: "checkmark")
+                                }
+                            })
+                        })
+                    }
+                }
+            }
+            Section {
+                Button(action: {
+                    sorter.direction = .ascending
+                }, label: {
+                    Label(title: {
+                        Text(verbatim: "Ascending")
+                    }, icon: {
+                        if sorter.direction == .ascending {
+                            Image(systemName: "checkmark")
+                        }
+                    })
+                })
+                Button(action: {
+                    sorter.direction = .descending
+                }, label: {
+                    Label(title: {
+                        Text(verbatim: "Descending")
+                    }, icon: {
+                        if sorter.direction == .descending {
+                            Image(systemName: "checkmark")
+                        }
+                    })
+                })
+
+            }
+        }, label: {
+            Label("Sort", systemImage: "arrow.up.arrow.down")
+        })
+    }
+}

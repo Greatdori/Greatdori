@@ -3588,7 +3588,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sort by"
+            "value" : "Sort By"
           }
         },
         "ja" : {
@@ -3779,6 +3779,34 @@
         }
       }
     },
+    "FILTER_SORT_KEYWORD_DIFFICULTY_RELEASE_DATE_IN_%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Difficulty Release Date (%@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "難易度実装日付 (%@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "难度发布日期 (%@)"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "難度實裝時間 (%@)"
+          }
+        }
+      }
+    },
     "FILTER_SORT_KEYWORD_ID" : {
       "localizations" : {
         "en" : {
@@ -3807,12 +3835,40 @@
         }
       }
     },
+    "FILTER_SORT_KEYWORD_LEVEL_FOR_%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Level (%@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "難易度 (%@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等级 (%@)"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等級 (%@)"
+          }
+        }
+      }
+    },
     "FILTER_SORT_KEYWORD_MAXIMUM_STAT" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Max power"
+            "value" : "Max Power"
           }
         },
         "ja" : {
@@ -3831,6 +3887,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最大總合力"
+          }
+        }
+      }
+    },
+    "FILTER_SORT_KEYWORD_MV_RELEASE_DATE_IN_%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MV Release Date (%@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MVリリース時間 (%@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MV发布日期 (%@)"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MV實裝時間 (%@)"
           }
         }
       }
@@ -3868,7 +3952,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Release date (%@)"
+            "value" : "Release Date (%@)"
           }
         },
         "ja" : {
@@ -3880,13 +3964,41 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "发布时间 (%@)"
+            "value" : "发布日期 (%@)"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "實裝時間 (%@)"
+          }
+        }
+      }
+    },
+    "FILTER_SORT_KEYWORD_START_DATE_IN_%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Date (%@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始時間 (%@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始日期 (%@)"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始時間 (%@)"
           }
         }
       }
@@ -4174,7 +4286,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "★3+ Guaranteed, Maximum 1 times"
+            "value" : "★3+ Guaranteed, Maximum 1 Time"
           }
         },
         "ja" : {

@@ -760,6 +760,16 @@ extension DoriAPI.Song.DifficultyType {
         default: return nil
         }
     }
+    
+    var rawStringValue: String {
+        switch self {
+        case .easy: return "easy"
+        case .normal: return "normal"
+        case .hard: return "hard"
+        case .expert: return "expert"
+        case .special: return "special"
+        }
+    }
 }
 
 extension DoriAPI.Song.PreviewSong {

@@ -208,6 +208,7 @@ struct DebugOfflineAssetView: View {
 
 struct DebugFilterExperimentView: View {
     @State var filter: DoriFrontend.Filter = .init()
+    @State var sorter: DoriFrontend.Sorter = DoriFrontend.Sorter(direction: .ascending, keyword: .id)
     @State var updating = false
     @State var focusingList: Int = -1
     
@@ -239,13 +240,10 @@ struct DebugFilterExperimentView: View {
     @State var costumeList: [DoriAPI.Costume.PreviewCostume] = []
     @State var costumeListFiltered: [DoriAPI.Costume.PreviewCostume] = []
     
-    @State var showLegacy = false
-    @State var eventListLegacy: [DoriAPI.Event.PreviewEvent] = []
-    @State var gachaListLegacy: [DoriAPI.Gacha.PreviewGacha] = []
-    
     @State var showFilterSheet = false
     @State var showOptimizedFilter = false
     @State var optimizedKeys: [Int: [DoriFrontend.Filter.Key]] = [:]
+    @State var optimizedSortingTypes: [Int: [DoriFrontend.Sorter.Keyword]] = [:] // WIP
 //    @State var allKeys = Set(DoriFrontend.Filter.Key.allCases)
 //    @State var result: Array<>? = []
     var body: some View {
@@ -272,10 +270,6 @@ struct DebugFilterExperimentView: View {
                     }, label: {
                         Text(verbatim: "List Type")
                     })
-                    Toggle(isOn: $showLegacy, label: {
-                        Text(verbatim: "Show Legacy")
-                    })
-                    .toggleStyle(.switch)
                     Toggle(isOn: $showOptimizedFilter, label: {
                         Text(verbatim: "Use Optimized Filter")
                     })
@@ -335,27 +329,6 @@ struct DebugFilterExperimentView: View {
                         }
                     }
                 }
-                if showLegacy {
-                    List {
-                        Text(verbatim: "LEGACY")
-                            .bold()
-                        Group {
-                            if focusingList == 0 {
-                                Text(verbatim: "Event List Item: \(eventListLegacy.count)/\(eventList.count)")
-                                ForEach(eventListLegacy) { element in
-                                    Text(verbatim: "#\(element.id) - \(element.eventName.jp ?? "nil")")
-                                }
-                            } else if focusingList == 1 {
-                                Text(verbatim: "Gacha List Item: \(gachaListLegacy.count)/\(gachaList.count)")
-                                ForEach(gachaListLegacy) { element in
-                                    Text(verbatim: "#\(element.id) - \(element.gachaName.jp ?? "nil")")
-                                }
-                            } else {
-                                Text(verbatim: "Not Supported Legacy Type")
-                            }
-                        }
-                    }
-                }
             }
         }
         .fontDesign(.monospaced)
@@ -391,16 +364,10 @@ struct DebugFilterExperimentView: View {
             Task {
                 if focusingList == 0 {
                     eventList = await DoriFrontend.Event.list() ?? []
-                    eventListFiltered = eventList.filter(withDoriFilter: filter)
-                    if showLegacy {
-                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
-                    }
+                    eventListFiltered = eventList.sorted(withDoriSorter: sorter).filter(withDoriFilter: filter)
                 } else if focusingList == 1 {
                     gachaList = await DoriFrontend.Gacha.list() ?? []
                     gachaListFiltered = gachaList.filter(withDoriFilter: filter)
-                    if showLegacy {
-                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
-                    }
                 } else if focusingList == 2 {
                     cardList = await DoriFrontend.Card.list() ?? []
                     cardListFiltered = cardList.filter(withDoriFilter: filter)
@@ -424,18 +391,8 @@ struct DebugFilterExperimentView: View {
             updating = true
             if focusingList == 0 {
                 eventListFiltered = eventList.filter(withDoriFilter: filter)
-                if showLegacy {
-                    Task {
-                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
-                    }
-                }
             } else if focusingList == 1 {
                 gachaListFiltered = gachaList.filter(withDoriFilter: filter)
-                if showLegacy {
-                    Task {
-                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
-                    }
-                }
             } else if focusingList == 2 {
                 cardListFiltered = cardList.filter(withDoriFilter: filter)
             } else if focusingList == 3 {
@@ -449,18 +406,29 @@ struct DebugFilterExperimentView: View {
             }
             updating = false
         }
-        .onChange(of: showLegacy, {
-            if showLegacy {
-                Task {
-                    updating = true
-                    if focusingList == 0 {
-                        eventListLegacy = await DoriFrontend.Event.list(filter: filter)!
-                    } else if focusingList == 1 {
-                        gachaListLegacy = await DoriFrontend.Gacha.list(filter: filter)!
-                    }
-                    updating = false
-                }
+        .onChange(of: sorter) {
+            updating = true
+            if focusingList == 0 {
+                eventListFiltered = eventList.sorted(withDoriSorter: sorter).filter(withDoriFilter: filter)
+            } else if focusingList == 1 {
+//                gachaListFiltered = gachaList.filter(withDoriFilter: filter)
+            } else if focusingList == 2 {
+//                cardListFiltered = cardList.filter(withDoriFilter: filter)
+            } else if focusingList == 3 {
+//                songListFiltered = songList.filter(withDoriFilter: filter)
+            } else if focusingList == 4 {
+//                comicListFiltered = comicList.filter(withDoriFilter: filter)
+            } else if focusingList == 5 {
+//                campaignListFiltered = campaignList.filter(withDoriFilter: filter)
+            } else if focusingList == 6 {
+//                costumeListFiltered = costumeList.filter(withDoriFilter: filter)
             }
-        })
+            updating = false
+        }
+        .toolbar {
+            ToolbarItem {
+                SorterPickerView(sorter: $sorter)
+            }
+        }
     }
 }
