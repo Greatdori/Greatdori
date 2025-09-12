@@ -1561,44 +1561,6 @@
         }
       }
     },
-    "News.time-mark.will-end-after.one" : {
-      "comment" : "For remote notifications, don’t vary by plural",
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Is Ending in %@ Day"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "将在%@天后结束"
-          }
-        }
-      }
-    },
-    "News.time-mark.will-end-after.other" : {
-      "comment" : "For remote notifications, don’t vary by plural",
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Is Ending in %@ Days"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "将在%@天后结束"
-          }
-        }
-      }
-    },
     "News.time-mark.will-end-today" : {
       "localizations" : {
         "en" : {
@@ -1639,44 +1601,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "将在%lld天后开始"
-          }
-        }
-      }
-    },
-    "News.time-mark.will-start-after.one" : {
-      "comment" : "For remote notifications, don’t vary by plural",
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Is Starting in %@ Day"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "将在%@天后开始"
-          }
-        }
-      }
-    },
-    "News.time-mark.will-start-after.other" : {
-      "comment" : "For remote notifications, don’t vary by plural",
-      "extractionState" : "manual",
-      "generatesSymbol" : false,
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Is Starting in %@ Days"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "将在%@天后开始"
           }
         }
       }
@@ -1773,6 +1697,766 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "歌曲"
+          }
+        }
+      }
+    },
+    "Notif.news.article.time-mark.has-ended" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Article • Has Ended"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章 • 已结束"
+          }
+        }
+      }
+    },
+    "Notif.news.article.time-mark.has-ended.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Article (%@) • Has Ended"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章(%@) • 已结束"
+          }
+        }
+      }
+    },
+    "Notif.news.article.time-mark.has-published" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Article • Has Published"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章 • 已发布"
+          }
+        }
+      }
+    },
+    "Notif.news.article.time-mark.has-published.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Article (%@) • Has Published"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章(%@) • 已发布"
+          }
+        }
+      }
+    },
+    "Notif.news.article.time-mark.will-end-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Article • Is Ending Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章 • 将在今天结束"
+          }
+        }
+      }
+    },
+    "Notif.news.article.time-mark.will-end-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Article (%@) • Is Ending Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章(%@) • 将在今天结束"
+          }
+        }
+      }
+    },
+    "Notif.news.article.time-mark.will-start-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Article • Is Publishing Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章 • 将在今天发布"
+          }
+        }
+      }
+    },
+    "Notif.news.article.time-mark.will-start-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Article (%@) • Is Publishing Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章(%@) • 将在今天发布"
+          }
+        }
+      }
+    },
+    "Notif.news.event.time-mark.has-ended" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event • Has Ended"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动 • 已结束"
+          }
+        }
+      }
+    },
+    "Notif.news.event.time-mark.has-ended.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event (%@) • Has Ended"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动(%@) • 已结束"
+          }
+        }
+      }
+    },
+    "Notif.news.event.time-mark.has-published" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event • Has Started"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动 • 已开始"
+          }
+        }
+      }
+    },
+    "Notif.news.event.time-mark.has-published.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event (%@) • Has Started"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动(%@) • 已开始"
+          }
+        }
+      }
+    },
+    "Notif.news.event.time-mark.will-end-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event • Is Ending Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动 • 将在今天结束"
+          }
+        }
+      }
+    },
+    "Notif.news.event.time-mark.will-end-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event (%@) • Is Ending Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动(%@) • 将在今天结束"
+          }
+        }
+      }
+    },
+    "Notif.news.event.time-mark.will-start-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event • Is Starting Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动 • 将在今天开始"
+          }
+        }
+      }
+    },
+    "Notif.news.event.time-mark.will-start-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event (%@) • Is Starting Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动(%@) • 将在今天开始"
+          }
+        }
+      }
+    },
+    "Notif.news.gacha.time-mark.has-ended" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha • Has Ended"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募 • 已结束"
+          }
+        }
+      }
+    },
+    "Notif.news.gacha.time-mark.has-ended.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha (%@) • Has Ended"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募(%@) • 已结束"
+          }
+        }
+      }
+    },
+    "Notif.news.gacha.time-mark.has-published" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha • Has Started"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募 • 已开始"
+          }
+        }
+      }
+    },
+    "Notif.news.gacha.time-mark.has-published.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha (%@) • Has Started"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募(%@) • 已开始"
+          }
+        }
+      }
+    },
+    "Notif.news.gacha.time-mark.will-end-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha • Is Ending Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募 • 将在今天结束"
+          }
+        }
+      }
+    },
+    "Notif.news.gacha.time-mark.will-end-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha (%@) • Is Ending Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募(%@) • 将在今天结束"
+          }
+        }
+      }
+    },
+    "Notif.news.gacha.time-mark.will-start-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha • Is Starting Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募 • 将在今天开始"
+          }
+        }
+      }
+    },
+    "Notif.news.gacha.time-mark.will-start-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha (%@) • Is Starting Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募(%@) • 将在今天开始"
+          }
+        }
+      }
+    },
+    "Notif.news.loginCampaign.time-mark.has-ended" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Campaign • Has Ended"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录奖励 • 已结束"
+          }
+        }
+      }
+    },
+    "Notif.news.loginCampaign.time-mark.has-ended.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Campaign (%@) • Has Ended"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录奖励(%@) • 已结束"
+          }
+        }
+      }
+    },
+    "Notif.news.loginCampaign.time-mark.has-published" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Campaign • Has Started"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录奖励 • 已开始"
+          }
+        }
+      }
+    },
+    "Notif.news.loginCampaign.time-mark.has-published.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Campaign (%@) • Has Started"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录奖励(%@) • 已开始"
+          }
+        }
+      }
+    },
+    "Notif.news.loginCampaign.time-mark.will-end-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Campaign • Is Ending Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录奖励 • 将在今天结束"
+          }
+        }
+      }
+    },
+    "Notif.news.loginCampaign.time-mark.will-end-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Campaign (%@) • Is Ending Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录奖励(%@) • 将在今天结束"
+          }
+        }
+      }
+    },
+    "Notif.news.loginCampaign.time-mark.will-start-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Campaign • Is Starting Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录奖励 • 将在今天开始"
+          }
+        }
+      }
+    },
+    "Notif.news.loginCampaign.time-mark.will-start-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login Campaign (%@) • Is Starting Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录奖励(%@) • 将在今天开始"
+          }
+        }
+      }
+    },
+    "Notif.news.song.time-mark.has-ended" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song • Has Removed"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲 • 已移除"
+          }
+        }
+      }
+    },
+    "Notif.news.song.time-mark.has-ended.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song (%@) • Has Removed"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲(%@) • 已移除"
+          }
+        }
+      }
+    },
+    "Notif.news.song.time-mark.has-published" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song • Has Released"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲 • 已发布"
+          }
+        }
+      }
+    },
+    "Notif.news.song.time-mark.has-published.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song (%@) • Has Released"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲(%@) • 已发布"
+          }
+        }
+      }
+    },
+    "Notif.news.song.time-mark.will-end-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song • Is Removing Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲 • 将在今天移除"
+          }
+        }
+      }
+    },
+    "Notif.news.song.time-mark.will-end-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song (%@) • Is Removing Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲(%@) • 将在今天移除"
+          }
+        }
+      }
+    },
+    "Notif.news.song.time-mark.will-start-today" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song • Is Releasing Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲 • 将在今天发布"
+          }
+        }
+      }
+    },
+    "Notif.news.song.time-mark.will-start-today.with-locale" : {
+      "comment" : "For remote notification",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song (%@) • Is Releasing Today"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲(%@) • 将在今天发布"
           }
         }
       }
