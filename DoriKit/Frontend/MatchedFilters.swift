@@ -17,7 +17,7 @@ internal import os
 
 extension DoriFrontend {
     public protocol Filterable {
-        static var applicableKeys: [DoriFrontend.Filter.Key] { get }
+        static var applicableFilteringKeys: [DoriFrontend.Filter.Key] { get }
         
         // `matches` only handle single value.
         // Please keep in mind that it does handle values like any `Array` or `characterRequiresMatchAll`.
@@ -106,7 +106,7 @@ internal final class FilterCacheManager: Sendable {
 // Attribute, Character, Server, Timeline Status, Event Type
 extension DoriAPI.Event.PreviewEvent: DoriFrontend.Filterable {
     @inlinable
-    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+    public static var applicableFilteringKeys: [DoriFrontend.Filter.Key] {
         [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType]
     }
     
@@ -153,7 +153,7 @@ extension DoriAPI.Event.PreviewEvent: DoriFrontend.Filterable {
 // Filter Cache Required
 extension DoriAPI.Gacha.PreviewGacha: DoriFrontend.Filterable {
     @inlinable
-    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+    public static var applicableFilteringKeys: [DoriFrontend.Filter.Key] {
         [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .gachaType]
     }
     
@@ -209,7 +209,7 @@ extension DoriAPI.Gacha.PreviewGacha: DoriFrontend.Filterable {
 // Band, Attribute, Rarity, Character, Server, Availability, Card Type, Skill
 extension DoriFrontend.Card.CardWithBand: DoriFrontend.Filterable {
     @inlinable
-    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+    public static var applicableFilteringKeys: [DoriFrontend.Filter.Key] {
         [.band, .attribute, .rarity, .character, .server, .released, .cardType, .skill]
     }
     
@@ -251,7 +251,7 @@ extension DoriFrontend.Card.CardWithBand: DoriFrontend.Filterable {
 // Band, Server, Timeline Status, Song Type, Level
 extension DoriAPI.Song.PreviewSong: DoriFrontend.Filterable {
     @inlinable
-    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+    public static var applicableFilteringKeys: [DoriFrontend.Filter.Key] {
         [.band, .server, .timelineStatus, .songType, .level]
     }
     
@@ -297,7 +297,7 @@ extension DoriAPI.Song.PreviewSong: DoriFrontend.Filterable {
 // Server, Timeline Status, Login Campaign Type
 extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend.Filterable {
     @inlinable
-    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+    public static var applicableFilteringKeys: [DoriFrontend.Filter.Key] {
         [.server, .timelineStatus, .loginCampaignType]
     }
     
@@ -339,7 +339,7 @@ extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend.Filterable {
 // Character, Server, Comic Type
 extension DoriAPI.Comic.Comic: DoriFrontend.Filterable {
     @inlinable
-    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+    public static var applicableFilteringKeys: [DoriFrontend.Filter.Key] {
         [.character, .characterRequiresMatchAll, .server, .comicType]
     }
     
@@ -361,7 +361,7 @@ extension DoriAPI.Comic.Comic: DoriFrontend.Filterable {
 // Filter Cache Required
 extension DoriFrontend.Costume.PreviewCostume: DoriFrontend.Filterable {
     @inlinable
-    public static var applicableKeys: [DoriFrontend.Filter.Key] {
+    public static var applicableFilteringKeys: [DoriFrontend.Filter.Key] {
         [.band, .character, .server, .released]
     }
     

@@ -40,6 +40,7 @@ struct GreatdoriApp: App {
     @UIApplicationDelegateAdaptor var appDelegate: AppDelegate
     #endif
     @Environment(\.openWindow) var openWindow
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

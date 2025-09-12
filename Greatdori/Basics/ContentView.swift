@@ -30,6 +30,7 @@ struct ContentView: View {
     @AppStorage("isFirstLaunch") var isFirstLaunch = true
     @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
     @AppStorage("startUpSucceeded") var startUpSucceeded = true
+    @AppStorage("lastDebugPassword") var lastDebugPassword = ""
     @State var mainAppShouldBeDisplayed = false
     @State var crashViewShouldBeDisplayed = false
     @State var lastStartUpWasSuccessful = true
@@ -146,6 +147,10 @@ struct ContentView: View {
 #endif
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     startUpSucceeded = true
+                }
+                
+                if lastDebugPassword != correctDebugPassword {
+                    AppFlag.set(false, forKey: "DEBUG")
                 }
             }
             .sheet(isPresented: $showWelcomeScreen, content: {

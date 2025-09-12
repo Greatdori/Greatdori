@@ -207,7 +207,14 @@
       }
     },
     "Character" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "角色"
+          }
+        }
+      }
     },
     "Character.search.unavailable" : {
 
@@ -1918,6 +1925,66 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "调试"
+          }
+        }
+      }
+    },
+    "Settings.debug.activate-alert.cancel" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        }
+      }
+    },
+    "Settings.debug.activate-alert.confirm" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认"
+          }
+        }
+      }
+    },
+    "Settings.debug.activate-alert.message" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "伟大的键盘手曾说过六个点……"
+          }
+        }
+      }
+    },
+    "Settings.debug.activate-alert.prompt" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "键入代码"
+          }
+        }
+      }
+    },
+    "Settings.debug.activate-alert.succeed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG] 验证成功"
+          }
+        }
+      }
+    },
+    "Settings.debug.activate-alert.title" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG] 验证"
           }
         }
       }

@@ -62,6 +62,11 @@ struct SettingsLocaleView: View {
     @State var secondaryLocale = "en"
     @State var server: String = "jp"
     @State var birthdayTimeZone: BirthdayTimeZone = .JST
+    @State var showDebugVerificationAlert = false
+    
+    @State var password = ""
+    @State var showDebugUnlockAlert = false
+    @AppStorage("lastDebugPassword") var lastDebugPassword = ""
     var body: some View {
         Section(content: {
             Group {
@@ -137,6 +142,32 @@ struct SettingsLocaleView: View {
             Text("Settings.locale")
         }, footer: {
             Text("Settings.birthday-time-zone.footer.\(String(localized: birthdayTimeZoneNameDict[birthdayTimeZone]!))")
+                .onTapGesture(count: 3, perform: {
+                    showDebugVerificationAlert = true
+                })
+                .alert("Settings.debug.activate-alert.title", isPresented: $showDebugVerificationAlert, actions: {
+                    TextField("Settings.debug.activate-alert.prompt", text: $password)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                    Button(action: {
+                        if password == correctDebugPassword {
+                            lastDebugPassword = password
+                            AppFlag.set(true, forKey: "DEBUG")
+                            showDebugVerificationAlert = false
+                            showDebugUnlockAlert = true
+                        }
+                        password = ""
+                    }, label: {
+                        Text("Settings.debug.activate-alert.confirm")
+                    })
+                    .keyboardShortcut(.defaultAction)
+                    Button(role: .cancel, action: {}, label: {
+                        Text("Settings.debug.activate-alert.cancel")
+                    })
+                }, message: {
+                    Text("Settings.debug.activate-alert.message")
+                })
+                .alert("Settings.debug.activate-alert.succeed", isPresented: $showDebugUnlockAlert, actions: {})
         })
     }
 }
@@ -293,6 +324,7 @@ struct SettingsDebugView: View {
     @AppStorage("isFirstLaunch") var isFirstLaunch = true
     @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
     @AppStorage("startUpSucceeded") var startUpSucceeded = true
+    @State var showDebugOffAlert = false
     var body: some View {
         Section(content: {
             Group {

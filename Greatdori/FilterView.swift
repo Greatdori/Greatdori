@@ -511,7 +511,7 @@ struct SorterPickerView: View {
                     sorter.direction = .ascending
                 }, label: {
                     Label(title: {
-                        Text(verbatim: "Ascending")
+                        Text(sorter.getLocalizedSortingDirectionName(direction: .ascending))
                     }, icon: {
                         if sorter.direction == .ascending {
                             Image(systemName: "checkmark")
@@ -522,7 +522,7 @@ struct SorterPickerView: View {
                     sorter.direction = .descending
                 }, label: {
                     Label(title: {
-                        Text(verbatim: "Descending")
+                        Text(sorter.getLocalizedSortingDirectionName(direction: .descending))
                     }, icon: {
                         if sorter.direction == .descending {
                             Image(systemName: "checkmark")
