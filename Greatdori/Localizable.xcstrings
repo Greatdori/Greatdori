@@ -1558,6 +1558,44 @@
         }
       }
     },
+    "News.time-mark.will-end-after.one" : {
+      "comment" : "For remote notifications, don’t vary by plural",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is Ending in %@ Day"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将在%@天后结束"
+          }
+        }
+      }
+    },
+    "News.time-mark.will-end-after.other" : {
+      "comment" : "For remote notifications, don’t vary by plural",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is Ending in %@ Days"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将在%@天后结束"
+          }
+        }
+      }
+    },
     "News.time-mark.will-end-today" : {
       "localizations" : {
         "en" : {
@@ -1598,6 +1636,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "将在%lld天后开始"
+          }
+        }
+      }
+    },
+    "News.time-mark.will-start-after.one" : {
+      "comment" : "For remote notifications, don’t vary by plural",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is Starting in %@ Day"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将在%@天后开始"
+          }
+        }
+      }
+    },
+    "News.time-mark.will-start-after.other" : {
+      "comment" : "For remote notifications, don’t vary by plural",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is Starting in %@ Days"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将在%@天后开始"
           }
         }
       }
