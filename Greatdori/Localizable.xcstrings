@@ -15,6 +15,9 @@
     "(%@)" : {
       "shouldTranslate" : false
     },
+    "[INTERNAL] Prepare Birthday" : {
+
+    },
     "#%@" : {
       "shouldTranslate" : false
     },

@@ -32,6 +32,7 @@ struct SettingsView: View {
                 SettingsLocaleView()
                 SettingsHomeView()
                 SettingsNotificationView()
+                
                 #if os(iOS)
                 SettingsWidgetView()
                 #endif
