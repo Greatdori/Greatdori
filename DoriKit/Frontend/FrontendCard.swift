@@ -39,7 +39,7 @@ extension DoriFrontend {
         ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
         ///
         /// Other keys are ignored.
-        public static func list(filter: Filter = .init()) async -> [CardWithBand]? {
+        public static func list() async -> [CardWithBand]? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Card.all()
             } _: {
@@ -55,70 +55,7 @@ extension DoriFrontend {
             FilterCacheManager.shared.writeBandsList(bands)
             FilterCacheManager.shared.writeCharactersList(characters)
             
-            var filteredCards = cards
-            if filter.isFiltered {
-                filteredCards = cards.filter { card in
-                    filter.band.contains { band in
-                        band.rawValue == characters.first(where: { $0.id == card.characterID })?.bandID
-                    }
-                }.filter { card in
-                    filter.attribute.contains(card.attribute)
-                }.filter { card in
-                    filter.rarity.contains(card.rarity)
-                }.filter { card in
-                    filter.character.contains { character in
-                        character.rawValue == card.characterID
-                    }
-                }.filter { card in
-                    filter.server.contains { locale in
-                        card.prefix.availableInLocale(locale)
-                    }
-                }.filter { card in
-                    for status in filter.released {
-                        for locale in filter.server {
-                            if status.boolValue {
-                                if (card.releasedAt.forLocale(locale) ?? dateOfYear2100) < .now {
-                                    return true
-                                }
-                            } else {
-                                if (card.releasedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 0)) > .now {
-                                    return true
-                                }
-                            }
-                        }
-                    }
-                    return false
-                }.filter { card in
-                    filter.cardType.contains(card.type)
-                }.filter { card in
-                    if let skill = filter.skill {
-                        skill.id == card.skillID
-                    } else {
-                        true
-                    }
-                }
-            }
-            let sortedCards = switch filter.sort.keyword {
-            case .releaseDate(let locale):
-                filteredCards.sorted { lhs, rhs in
-                    filter.sort.compare(
-                        lhs.releasedAt.forLocale(locale) ?? lhs.releasedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0),
-                        rhs.releasedAt.forLocale(locale) ?? rhs.releasedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)
-                    )
-                }
-            case .rarity:
-                filteredCards.sorted { lhs, rhs in
-                    filter.sort.compare(lhs.rarity, rhs.rarity)
-                }
-            case .maximumStat:
-                filteredCards.sorted { lhs, rhs in
-                    return filter.sort.compare(lhs.stat.forMaximumLevel()?.total ?? 0, rhs.stat.forMaximumLevel()?.total ?? 0)
-                }
-            case .id:
-                filteredCards.sorted { lhs, rhs in
-                    filter.sort.compare(lhs.id, rhs.id)
-                }
-            }
+            
             return sortedCards.compactMap { card in
                 if let band = bands.first(where: { $0.id == characters.first { $0.id == card.characterID }?.bandID }) {
                     .init(card: card, band: band)
