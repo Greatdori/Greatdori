@@ -217,10 +217,20 @@
       }
     },
     "Character.search.unavailable" : {
-
-    },
-    "Character.unavailable.description" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Character Search Unavailable"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "角色搜索不可用"
+          }
+        }
+      }
     },
     "Debug.crash-detected.direct-enter" : {
       "localizations" : {
@@ -854,46 +864,6 @@
         }
       }
     },
-    "Event.unavailable.description" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "device" : {
-              "mac" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Check your Internet connection and try again later. Click to retry now."
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Check your Internet connection and try again later. Tap to retry now."
-                }
-              }
-            }
-          }
-        },
-        "zh-Hans" : {
-          "variations" : {
-            "device" : {
-              "mac" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "请尝试检查你的互联网连接并稍后重试。点击任意处立即重试。"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "请尝试检查你的互联网连接并稍后重试。轻点任意处立即重试。"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "Events.countdown.end-at.%@.%@" : {
       "localizations" : {
         "en" : {
@@ -1141,14 +1111,14 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "When Differences Occur Between Time Zones"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "系统和生日时区内容发生差异时"
+            "value" : "时区不协调时"
           }
         }
       }
@@ -1689,6 +1659,46 @@
         }
       }
     },
+    "Search.unavailable.description" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Check your Internet connection and try again later. Click to retry now."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Check your Internet connection and try again later. Tap to retry now."
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "variations" : {
+            "device" : {
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "请尝试检查你的互联网连接并稍后重试。点击任意处立即重试。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "请尝试检查你的互联网连接并稍后重试。轻点任意处立即重试。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Settings" : {
       "localizations" : {
         "en" : {
@@ -1833,6 +1843,22 @@
         }
       }
     },
+    "Settings.birthday-time-zone.selection.adaptive.abbr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Follow System"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统时区"
+          }
+        }
+      }
+    },
     "Settings.birthday-time-zone.selection.CST" : {
       "localizations" : {
         "en" : {
@@ -1849,6 +1875,22 @@
         }
       }
     },
+    "Settings.birthday-time-zone.selection.CST.abbr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CST"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CST"
+          }
+        }
+      }
+    },
     "Settings.birthday-time-zone.selection.JST" : {
       "localizations" : {
         "en" : {
@@ -1861,6 +1903,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "日本标准时间 (UTC+9)"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.selection.JST.abbr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JST"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JST"
+          }
+        }
+      }
+    },
+    "Settings.birthday-time-zone.selection.PT.abbr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PT"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PT"
           }
         }
       }
@@ -1913,6 +1987,22 @@
         }
       }
     },
+    "Settings.birthday-time-zone.selection.UTC.abbr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UTC"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UTC"
+          }
+        }
+      }
+    },
     "Settings.debug" : {
       "localizations" : {
         "en" : {
@@ -1931,6 +2021,12 @@
     },
     "Settings.debug.activate-alert.cancel" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1941,6 +2037,12 @@
     },
     "Settings.debug.activate-alert.confirm" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1951,16 +2053,28 @@
     },
     "Settings.debug.activate-alert.message" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A great keyboardist once said three points…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "伟大的键盘手曾说过六个点……"
+            "value" : "一个伟大的键盘手曾说过六个点……"
           }
         }
       }
     },
     "Settings.debug.activate-alert.prompt" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter Key"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1971,6 +2085,12 @@
     },
     "Settings.debug.activate-alert.succeed" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG] Verification Passed"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1981,6 +2101,12 @@
     },
     "Settings.debug.activate-alert.title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG] Verification"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2001,6 +2127,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "清除缓存"
+          }
+        }
+      }
+    },
+    "Settings.debug.disable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn DEBUG Off"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭DEBUG"
+          }
+        }
+      }
+    },
+    "Settings.debug.disable.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG] Turn DEBUG Off"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[DEBUG] 关闭DEBUG"
+          }
+        }
+      }
+    },
+    "Settings.debug.disable.turn-off" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn Off"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
           }
         }
       }
@@ -2230,7 +2404,14 @@
       }
     },
     "Sort" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "排序"
+          }
+        }
+      }
     },
     "Typography.bold-dot-seperater" : {
       "localizations" : {

@@ -149,7 +149,8 @@ struct ContentView: View {
                     startUpSucceeded = true
                 }
                 
-                if lastDebugPassword != correctDebugPassword {
+                if !lastDebugPassword.isEmpty && lastDebugPassword != correctDebugPassword {
+                    lastDebugPassword = ""
                     AppFlag.set(false, forKey: "DEBUG")
                 }
             }

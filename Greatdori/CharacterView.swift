@@ -34,7 +34,7 @@ struct CharacterSearchView: View {
                             Spacer()
                         }
                     } else {
-                        ContentUnavailableView("Character.search.unavailable", systemImage: "person.2.fill", description: Text("Character.unavailable.description"))
+                        ContentUnavailableView("Character.search.unavailable", systemImage: "person.2.fill", description: Text("Search.unavailable.description"))
                     }
                 }
             }

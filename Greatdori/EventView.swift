@@ -58,7 +58,7 @@ struct EventDetailView: View {
                             Spacer()
                             HStack {
                                 Spacer()
-                                ContentUnavailableView("Event.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Event.unavailable.description"))
+                                ContentUnavailableView("Event.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
                                 Spacer()
                             }
                             Spacer()
@@ -651,7 +651,7 @@ struct EventSearchView: View {
                             Spacer()
                         }
                     } else {
-                        ContentUnavailableView("Event.search.unavailable", systemImage: "line.horizontal.star.fill.line.horizontal", description: Text("Event.unavailable.description"))
+                        ContentUnavailableView("Event.search.unavailable", systemImage: "line.horizontal.star.fill.line.horizontal", description: Text("Search.unavailable.description"))
                     }
                 }
             }

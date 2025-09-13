@@ -235,76 +235,69 @@ struct FilterItemView: View {
                 } else {
                     //MARK: Single Selection
                     if key == .skill {
-                        #if os(macOS)
-                        Picker(selection: $skill, content: {
-                            // Optional "Any" to clear the filter
-                            Text("Filter.skill.any")
-                                .tag(Optional<DoriFrontend.Filter.Skill>.none)
-                            
-                            ForEach(key.selector.items, id: \.self) { item in
-                                if let value = item.item.value as? DoriFrontend.Filter.Skill {
-                                    // Use the skill's simpleDescription (localized) instead of selectorText
-//                                    let label = value.simpleDescription.forPreferredLocale() ?? ""
-//                                    let label = value.description.forPreferredLocale() ?? ""
-                                    Text(item.text)
-                                        .tag(Optional(value))
+//                        #if os(macOS)
+                        Group {
+                            if #available(iOS 18.0, *) {
+                                VStack(alignment: .leading) {
+                                    Text(key.localizedString)
+                                        .bold()
+//                                        .offset(y: 5)
+                                    Picker(selection: $skill, content: {
+                                        // Optional "Any" to clear the filter
+                                        Text("Filter.skill.any")
+                                            .tag(Optional<DoriFrontend.Filter.Skill>.none)
+                                        
+                                        ForEach(key.selector.items, id: \.self) { item in
+                                            if let value = item.item.value as? DoriFrontend.Filter.Skill {
+                                                // Use the skill's simpleDescription (localized) instead of selectorText
+                                                //                                    let label = value.simpleDescription.forPreferredLocale() ?? ""
+                                                //                                    let label = value.description.forPreferredLocale() ?? ""
+                                                Text(item.text)
+                                                    .tag(Optional(value))
+                                            }
+                                        }
+                                    }, label: {
+                                        Text(key.localizedString)
+                                            .bold()
+                                    }, currentValueLabel: {
+                                        HStack {
+                                            Text(skill?.selectorText ?? String(localized: "Filter.skill.any"))
+                                            Spacer()
+//                                                .multilineTextAlignment(.trailing)
+                                        }
+                                    })
+                                    .labelsHidden()
+                                    .padding(.vertical, -4)
+                                    .padding(.leading, -5)
+//                                    .border(.red)
+                                    .offset(y: -5)
                                 }
+                            } else {
+                                Picker(selection: $skill, content: {
+                                    // Optional "Any" to clear the filter
+                                    Text("Filter.skill.any")
+                                        .tag(Optional<DoriFrontend.Filter.Skill>.none)
+                                    
+                                    ForEach(key.selector.items, id: \.self) { item in
+                                        if let value = item.item.value as? DoriFrontend.Filter.Skill {
+                                            // Use the skill's simpleDescription (localized) instead of selectorText
+                                            //                                    let label = value.simpleDescription.forPreferredLocale() ?? ""
+                                            //                                    let label = value.description.forPreferredLocale() ?? ""
+                                            Text(item.text)
+                                                .tag(Optional(value))
+                                        }
+                                    }
+                                }, label: {
+                                    Text(key.localizedString)
+                                        .bold()
+                                        .lineLimit(nil)
+                                })
                             }
-                        }, label: {
-                            Text(key.localizedString)
-                                .bold()
-                                .lineLimit(nil)
-                        })
+                        }
                         .pickerStyle(.menu)
                         .onChange(of: skill) { _, newValue in
                             filter.skill = newValue
                         }
-                        #else
-                        HStack {
-                            Text(key.localizedString)
-                                .bold()
-                            Spacer()
-                            Menu(content: {
-                                // Optional "Any" to clear the filter
-                                Button(action: {
-                                    skill = nil
-                                }, label: {
-                                    Text("Filter.skill.any")
-                                })
-                                
-                                ForEach(key.selector.items, id: \.self) { item in
-                                    if let value = item.item.value as? DoriFrontend.Filter.Skill {
-                                        Button(action: {
-                                            skill = value
-                                        }, label: {
-                                            Text(item.text)
-                                        })
-                                        // Use the skill's simpleDescription (localized) instead of selectorText
-                                        //                                    let label = value.simpleDescription.forPreferredLocale() ?? ""
-                                        //                                    let label = value.description.forPreferredLocale() ?? ""
-                                        //                                        Text(item.text)
-                                        //                                            .tag(Optional(value))
-                                    }
-                                }
-                            }, label: {
-                                Text(skill?.selectorText ?? String(localized: "Filter.skill.any"))
-                                //                                    .bold()
-                                    .multilineTextAlignment(.trailing)
-                                    .foregroundStyle(.secondary)
-                                VStack {
-                                    Image(systemName: "chevron.up")
-                                    Image(systemName: "chevron.down")
-                                }
-                                .foregroundStyle(.secondary)
-                                .font(.caption)
-                                //                                .lineLimit(nil)
-                            })
-                            .foregroundStyle(.primary)
-                        }
-                        .onChange(of: skill) { _, newValue in
-                            filter.skill = newValue
-                        }
-                        #endif
                     } else if key == .level {
                         VStack {
                             Toggle(isOn: $levelSliderIsEnabled, label: {
@@ -489,6 +482,9 @@ struct SorterPickerView: View {
     var sortingItemsHaveEndingDate = false
     var body: some View {
         Menu(content: {
+            //TODO: [250913] Optimize for iOS
+            // The code below is the final version for macOS.
+            // Please try to keep macOS version's the same after edititng. お願いします。
             Section {
                 ForEach(DoriFrontend.Sorter.Keyword.allCases, id: \.self) { item in
                     if allOptions.contains(item) {
