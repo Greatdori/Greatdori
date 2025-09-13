@@ -46,7 +46,6 @@ extension DoriFrontend {
         public var level: Int? = nil  { didSet { store() } }
         public var skill: Skill? = nil  { didSet { store() } }
         public var timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases)  { didSet { store() } }
-        public var sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))  { didSet { store() } }
         
         public init(
             band: Set<Band> = .init(Band.allCases),
@@ -65,8 +64,7 @@ extension DoriFrontend {
             comicType: Set<ComicType> = .init(ComicType.allCases),
             level: Int? = nil,
             skill: Skill? = nil,
-            timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases),
-            sort: Sort = .init(direction: .descending, keyword: .releaseDate(in: .jp))
+            timelineStatus: Set<TimelineStatus> = .init(TimelineStatus.allCases)
         ) {
             self.band = band
             self.bandMatchesOthers = bandMatchesOthers
@@ -85,7 +83,6 @@ extension DoriFrontend {
             self.level = level
             self.skill = skill
             self.timelineStatus = timelineStatus
-            self.sort = sort
         }
         
         private var recoveryID: String?
@@ -367,58 +364,6 @@ extension DoriFrontend.Filter {
         }
     }
     
-    public struct Sort: Sendable, Equatable, Hashable, Codable {
-        public var direction: Direction
-        public var keyword: Keyword
-        
-        public init(direction: Direction, keyword: Keyword) {
-            self.direction = direction
-            self.keyword = keyword
-        }
-        
-        @frozen
-        public enum Direction: Equatable, Hashable, Codable {
-            case ascending
-            case descending
-        }
-        public enum Keyword: CaseIterable, Sendable, Equatable, Hashable, Codable {
-            case releaseDate(in: DoriAPI.Locale)
-            case rarity
-            case maximumStat
-            case id
-            
-            public static let allCases: [Self] = [
-                .releaseDate(in: .jp),
-                .releaseDate(in: .en),
-                .releaseDate(in: .tw),
-                .releaseDate(in: .cn),
-                .releaseDate(in: .kr),
-                .rarity,
-                .maximumStat,
-                .id
-            ]
-            
-            /// Localized description text for keyword.
-            @inline(never)
-            internal var localizedString: String {
-                switch self {
-                case .releaseDate(let locale):
-                    String(localized: "FILTER_SORT_KEYWORD_RELEASE_DATE_IN_\(locale.rawValue.uppercased())", bundle: #bundle)
-                case .rarity: String(localized: "FILTER_SORT_KEYWORD_RARITY", bundle: #bundle)
-                case .maximumStat: String(localized: "FILTER_SORT_KEYWORD_MAXIMUM_STAT", bundle: #bundle)
-                case .id: String(localized: "FILTER_SORT_KEYWORD_ID", bundle: #bundle)
-                }
-            }
-        }
-        
-        internal func compare<T: Comparable>(_ lhs: T, _ rhs: T) -> Bool {
-            switch direction {
-            case .ascending: lhs < rhs
-            case .descending: lhs > rhs
-            }
-        }
-    }
-    
     /// Key for filter.
     ///
     /// `Key` allows you to read and modify a filter dynamically,
@@ -446,7 +391,6 @@ extension DoriFrontend.Filter {
         case skill
         case timelineStatus
         case songAvailability
-        case sort
     }
 }
 
@@ -487,7 +431,6 @@ extension DoriFrontend.Filter.Key {
         case .skill: String(localized: "FILTER_KEY_SKILL", bundle: #bundle)
         case .timelineStatus: String(localized: "FILTER_KEY_TIMELINE_STATUS", bundle: #bundle)
         case .songAvailability: String(localized: "FILTER_KEY_SONG_AVAILABILITY", bundle: #bundle)
-        case .sort: String(localized: "FILTER_KEY_SORT", bundle: #bundle)
         }
     }
 }
@@ -504,7 +447,7 @@ extension DoriFrontend.Filter: MutableCollection {
     @inlinable
     public var startIndex: Key { .band }
     @inlinable
-    public var endIndex: Key { .sort }
+    public var endIndex: Key { .songAvailability }
     @inlinable
     public func index(after i: Key) -> Key {
         .init(rawValue: i.rawValue + 1)!
@@ -531,7 +474,6 @@ extension DoriFrontend.Filter: MutableCollection {
             case .skill: self.skill
             case .timelineStatus: self.timelineStatus
             case .songAvailability: self.timelineStatus
-            case .sort: self.sort
             }
         }
         set {
@@ -552,9 +494,6 @@ extension DoriFrontend.Filter: MutableCollection {
         let valueType = type(of: value)
         typeCheck: if valueType != expectedValueType {
             if key == .released && valueType == Bool.self {
-                break typeCheck
-            }
-            if key == .sort && valueType == Sort.Keyword.self {
                 break typeCheck
             }
             logger.critical("Failed to update value of filter, expected \(expectedValueType), but got \(valueType)")
@@ -597,12 +536,6 @@ extension DoriFrontend.Filter: MutableCollection {
             self.timelineStatus = value as! Set<TimelineStatus>
         case .songAvailability:
             self.timelineStatus = value as! Set<TimelineStatus>
-        case .sort:
-            if let sort = value as? Sort {
-                self.sort = sort
-            } else {
-                self.sort.keyword = value as! Sort.Keyword
-            }
         }
     }
 }
@@ -750,16 +683,6 @@ extension DoriFrontend.Filter.TimelineStatus: DoriFrontend.Filter._Selectable {
         self.localizedString
     }
 }
-extension DoriFrontend.Filter.Sort.Keyword: DoriFrontend.Filter._Selectable {
-    public var selectorText: String {
-        self.localizedString
-    }
-}
-extension DoriFrontend.Filter.Sort: DoriFrontend.Filter._Selectable {
-    public var selectorText: String {
-        self.keyword.localizedString
-    }
-}
 extension DoriFrontend.Filter.Key {
     /// Get a selector for key.
     ///
@@ -880,10 +803,6 @@ extension DoriFrontend.Filter.Key {
                     DoriFrontend.Filter.TimelineStatus.ended: String(localized: "SONG_AVAILABILITY_REMOVED", bundle: #bundle)
                 ][$0]!))
             }.reversed())
-        case .sort:
-            (.single, DoriFrontend.Filter.Sort.Keyword.allCases.map {
-                SelectorItem(DoriFrontend.Filter._AnySelectable($0))
-            })
         }
     }
     
