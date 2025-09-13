@@ -3584,6 +3584,7 @@
       }
     },
     "FILTER_KEY_SORT" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

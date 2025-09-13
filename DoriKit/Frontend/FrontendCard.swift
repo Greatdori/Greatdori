@@ -51,12 +51,10 @@ extension DoriFrontend {
             guard let characters = groupResult.1 else { return nil }
             guard let bands = groupResult.2 else { return nil }
             
-            
             FilterCacheManager.shared.writeBandsList(bands)
             FilterCacheManager.shared.writeCharactersList(characters)
             
-            
-            return sortedCards.compactMap { card in
+            return cards.compactMap { card in
                 if let band = bands.first(where: { $0.id == characters.first { $0.id == card.characterID }?.bandID }) {
                     .init(card: card, band: band)
                 } else {
