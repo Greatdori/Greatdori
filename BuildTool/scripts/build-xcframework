@@ -17,8 +17,10 @@
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 cd $SCRIPT_PATH/../..
 
-rm -rf ./build
-mkdir build
+rm -rf ./build >/dev/null 2>&1
+mkdir build >/dev/null 2>&1
+
+set -euo pipefail
 
 BUILD_MACOS_START=$(date +%s%N)
 xcodebuild -project Greatdori.xcodeproj -scheme DoriKit -configuration Release -derivedDataPath ./build -destination "platform=macOS" build
