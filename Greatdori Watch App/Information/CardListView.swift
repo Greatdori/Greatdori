@@ -17,6 +17,7 @@ import DoriKit
 
 struct CardListView: View {
     @State var filter = DoriFrontend.Filter.recoverable(id: "CardList")
+    @State var sorter = DoriFrontend.Sorter.recoverable(id: "CardList")
     @State var cards: [DoriFrontend.Card.CardWithBand]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
@@ -50,7 +51,7 @@ struct CardListView: View {
                 await getCards()
             }
         } content: {
-            FilterView(filter: $filter, includingKeys: [
+            FilterView(filter: $filter, sorter: $sorter, includingKeys: [
                 .band,
                 .attribute,
                 .rarity,
@@ -59,6 +60,15 @@ struct CardListView: View {
                 .released,
                 .cardType,
                 .skill
+            ], includingKeywords: [
+                .releaseDate(in: .jp),
+                .releaseDate(in: .en),
+                .releaseDate(in: .tw),
+                .releaseDate(in: .cn),
+                .releaseDate(in: .kr),
+                .rarity,
+                .maximumStat,
+                .id
             ]) {
                 if let cards {
                     SearchView(items: cards, text: $searchInput) { result in
@@ -84,8 +94,10 @@ struct CardListView: View {
     
     func getCards() async {
         availability = true
-        DoriCache.withCache(id: "CardList_\(filter.identity)") {
-            await DoriFrontend.Card.list()
+        DoriCache.withCache(id: "CardList_\(filter.identity)_\(sorter.identity)") {
+            await DoriFrontend.Card.list()?
+                .filter(withDoriFilter: filter)
+                .sorted(withDoriSorter: sorter)
         }.onUpdate {
             if let cards = $0 {
                 self.cards = cards

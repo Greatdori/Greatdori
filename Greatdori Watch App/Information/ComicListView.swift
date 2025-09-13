@@ -17,6 +17,7 @@ import DoriKit
 
 struct ComicListView: View {
     @State var filter = DoriFrontend.Filter.recoverable(id: "ComicList")
+    @State var sorter = DoriFrontend.Sorter.recoverable(id: "ComicList")
     @State var comics: [DoriFrontend.Comic.Comic]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
@@ -50,11 +51,13 @@ struct ComicListView: View {
                 await getComics()
             }
         } content: {
-            FilterView(filter: $filter, includingKeys: [
+            FilterView(filter: $filter, sorter: $sorter, includingKeys: [
                 .comicType,
                 .character,
                 .characterRequiresMatchAll,
                 .server
+            ], includingKeywords: [
+                .id
             ]) {
                 if let comics {
                     SearchView(items: comics, text: $searchInput) { result in
@@ -80,8 +83,10 @@ struct ComicListView: View {
     
     func getComics() async {
         availability = true
-        DoriCache.withCache(id: "ComicList_\(filter.identity)") {
-            await DoriFrontend.Comic.list()
+        DoriCache.withCache(id: "ComicList_\(filter.identity)_\(sorter.identity)") {
+            await DoriFrontend.Comic.list()?
+                .filter(withDoriFilter: filter)
+                .sorted(withDoriSorter: sorter)
         }.onUpdate {
             if let comics = $0 {
                 self.comics = comics

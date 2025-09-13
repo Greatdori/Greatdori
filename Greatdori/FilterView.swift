@@ -528,7 +528,7 @@ struct SorterPickerView: View {
                     sorter.direction = .ascending
                 }, label: {
                     Label(title: {
-                        Text(sorter.getLocalizedSortingDirectionName(direction: .ascending))
+                        Text(sorter.localizedDirectionName(direction: .ascending))
                     }, icon: {
                         if sorter.direction == .ascending {
                             Image(systemName: "checkmark")
@@ -539,7 +539,7 @@ struct SorterPickerView: View {
                     sorter.direction = .descending
                 }, label: {
                     Label(title: {
-                        Text(sorter.getLocalizedSortingDirectionName(direction: .descending))
+                        Text(sorter.localizedDirectionName(direction: .descending))
                     }, icon: {
                         if sorter.direction == .descending {
                             Image(systemName: "checkmark")
@@ -568,7 +568,7 @@ struct SorterPickerView: View {
                         if allOptions.contains(item) {
                             Text(getPickerLabelAttributedString(
                                 title: item.localizedString(hasEndingDate: sortingItemsHaveEndingDate),
-                                order: item == sorter.keyword ? sorter.getLocalizedSortingDirectionName(direction: sorter.direction) : nil)
+                                order: item == sorter.keyword ? sorter.localizedDirectionName(direction: sorter.direction) : nil)
                             )
                             .tag(item)
                         }

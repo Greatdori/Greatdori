@@ -24,6 +24,7 @@ struct CardSelector: View {
     @State private var isSelectorPresented = false
     @State private var isFilterSettingsPresented = false
     @State private var filter = DoriFrontend.Filter.recoverable(id: "CardSelector")
+    @State private var sorter = DoriFrontend.Sorter.recoverable(id: "CardSelector")
     @State private var searchInput = ""
     var body: some View {
         Button(action: {
@@ -64,7 +65,7 @@ struct CardSelector: View {
                             await getCards()
                         }
                     } content: {
-                        FilterView(filter: $filter, includingKeys: [
+                        FilterView(filter: $filter, sorter: $sorter, includingKeys: [
                             .band,
                             .attribute,
                             .rarity,
@@ -73,6 +74,15 @@ struct CardSelector: View {
                             .released,
                             .cardType,
                             .skill
+                        ], includingKeywords: [
+                            .releaseDate(in: .jp),
+                            .releaseDate(in: .en),
+                            .releaseDate(in: .tw),
+                            .releaseDate(in: .cn),
+                            .releaseDate(in: .kr),
+                            .rarity,
+                            .maximumStat,
+                            .id
                         ]) {
                             SearchView(items: cardList, text: $searchInput) { result in
                                 searchedCardList = result
@@ -104,7 +114,9 @@ struct CardSelector: View {
     private func getCards() async {
         availability = true
         DoriCache.withCache(id: "CardList_\(filter.identity)") {
-            await DoriFrontend.Card.list()
+            await DoriFrontend.Card.list()?
+                .filter(withDoriFilter: filter)
+                .sorted(withDoriSorter: sorter)
         }.onUpdate {
             if let cards = $0 {
                 self.cardList = cards

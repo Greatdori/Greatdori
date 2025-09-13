@@ -17,6 +17,7 @@ import DoriKit
 
 struct EventListView: View {
     @State var filter = DoriFrontend.Filter.recoverable(id: "EventList")
+    @State var sorter = DoriFrontend.Sorter.recoverable(id: "EventList")
     @State var events: [DoriFrontend.Event.PreviewEvent]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
@@ -52,13 +53,20 @@ struct EventListView: View {
                 await getEvents()
             }
         } content: {
-            FilterView(filter: $filter, includingKeys: [
+            FilterView(filter: $filter, sorter: $sorter, includingKeys: [
                 .attribute,
                 .character,
                 .characterRequiresMatchAll,
                 .server,
                 .timelineStatus,
                 .eventType
+            ], includingKeywords: [
+                .releaseDate(in: .jp),
+                .releaseDate(in: .en),
+                .releaseDate(in: .tw),
+                .releaseDate(in: .cn),
+                .releaseDate(in: .kr),
+                .id
             ]) {
                 if let events {
                     SearchView(items: events, text: $searchInput) { result in
@@ -84,8 +92,10 @@ struct EventListView: View {
     
     func getEvents() async {
         availability = true
-        DoriCache.withCache(id: "EventList_\(filter.identity)") {
-            await DoriFrontend.Event.list()
+        DoriCache.withCache(id: "EventList_\(filter.identity)_\(sorter.identity)") {
+            await DoriFrontend.Event.list()?
+                .filter(withDoriFilter: filter)
+                .sorted(withDoriSorter: sorter)
         }.onUpdate {
             if let events = $0 {
                 self.events = events

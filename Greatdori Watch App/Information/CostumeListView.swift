@@ -17,6 +17,7 @@ import DoriKit
 
 struct CostumeListView: View {
     @State var filter = DoriFrontend.Filter.recoverable(id: "CostumeList")
+    @State var sorter = DoriFrontend.Sorter.recoverable(id: "CostumeList")
     @State var costumes: [DoriFrontend.Costume.PreviewCostume]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
@@ -50,11 +51,18 @@ struct CostumeListView: View {
                 await getCostumes()
             }
         } content: {
-            FilterView(filter: $filter, includingKeys: [
+            FilterView(filter: $filter, sorter: $sorter, includingKeys: [
                 .band,
                 .character,
                 .server,
                 .released,
+            ], includingKeywords: [
+                .releaseDate(in: .jp),
+                .releaseDate(in: .en),
+                .releaseDate(in: .tw),
+                .releaseDate(in: .cn),
+                .releaseDate(in: .kr),
+                .id
             ]) {
                 if let costumes {
                     SearchView(items: costumes, text: $searchInput) { result in
@@ -80,8 +88,10 @@ struct CostumeListView: View {
     
     func getCostumes() async {
         availability = true
-        DoriCache.withCache(id: "CostumeList_\(filter.identity)") {
-            await DoriFrontend.Costume.list(filter: filter)
+        DoriCache.withCache(id: "CostumeList_\(filter.identity)_\(sorter.identity)") {
+            await DoriFrontend.Costume.list(filter: filter)?
+                .filter(withDoriFilter: filter)
+                .sorted(withDoriSorter: sorter)
         }.onUpdate {
             if let costumes = $0 {
                 self.costumes = costumes

@@ -19,23 +19,33 @@ import SDWebImageSwiftUI
 
 struct FilterView: View {
     @Binding private var filter: DoriFrontend.Filter
+    @Binding private var sorter: DoriFrontend.Sorter
     private var includingKeys: Set<DoriFrontend.Filter.Key>
+    private var includingKeywords: Set<DoriFrontend.Sorter.Keyword>
     private var searchView: AnyView?
     
     init(
         filter: Binding<DoriFrontend.Filter>,
-        includingKeys: Set<DoriFrontend.Filter.Key>
+        sorter: Binding<DoriFrontend.Sorter> = .constant(.init()),
+        includingKeys: Set<DoriFrontend.Filter.Key>,
+        includingKeywords: Set<DoriFrontend.Sorter.Keyword> = []
     ) {
         self._filter = filter
+        self._sorter = sorter
         self.includingKeys = includingKeys
+        self.includingKeywords = includingKeywords
     }
     init<V: View>(
         filter: Binding<DoriFrontend.Filter>,
+        sorter: Binding<DoriFrontend.Sorter> = .constant(.init()),
         includingKeys: Set<DoriFrontend.Filter.Key>,
+        includingKeywords: Set<DoriFrontend.Sorter.Keyword> = [],
         @ViewBuilder searchView: () -> V
     ) {
         self._filter = filter
+        self._sorter = sorter
         self.includingKeys = includingKeys
+        self.includingKeywords = includingKeywords
         self.searchView = AnyView(searchView())
     }
     
@@ -65,6 +75,9 @@ struct FilterView: View {
                                 )
                             }
                         }
+                    }
+                    if !includingKeywords.isEmpty {
+                        SorterSelector(sorter: $sorter, keywords: includingKeywords.sorted())
                     }
                 }
             }
@@ -112,41 +125,6 @@ struct FilterView: View {
                             }
                         })
                     }
-//                    else if key == .sort {
-//                        let sort = filter[key] as! DoriFrontend.Filter.Sort
-//                        Section {
-//                            Button(action: {
-//                                var sort = sort
-//                                sort.direction = .ascending
-//                                filter[key] = sort
-//                            }, label: {
-//                                HStack {
-//                                    Text("升序")
-//                                    Spacer()
-//                                    if sort.direction == .ascending {
-//                                        Image(systemName: "checkmark")
-//                                            .foregroundStyle(.accent)
-//                                    }
-//                                }
-//                            })
-//                            Button(action: {
-//                                var sort = sort
-//                                sort.direction = .descending
-//                                filter[key] = sort
-//                            }, label: {
-//                                HStack {
-//                                    Text("降序")
-//                                    Spacer()
-//                                    if sort.direction == .descending {
-//                                        Image(systemName: "checkmark")
-//                                            .foregroundStyle(.accent)
-//                                    }
-//                                }
-//                            })
-//                        } header: {
-//                            Text("顺序")
-//                        }
-//                    }
                     ForEach(key.selector.items, id: \.self) { item in
                         Button(action: {
                             filter[key] = item.item.value
@@ -262,6 +240,50 @@ struct FilterView: View {
                             .lineLimit(1)
                             .opacity(0.6)
                     }
+                }
+            }
+        }
+    }
+    private struct SorterSelector: View {
+        @Binding var sorter: DoriFrontend.Sorter
+        var keywords: [DoriFrontend.Sorter.Keyword]
+        var body: some View {
+            NavigationLink {
+                List {
+                    Section {
+                        ForEach(keywords, id: \.rawValue) { keyword in
+                            Button(action: {
+                                if sorter.keyword != keyword {
+                                    sorter.keyword = keyword
+                                } else {
+                                    sorter.direction = sorter.direction == .ascending ? .descending : .ascending
+                                }
+                            }, label: {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(keyword.localizedString)
+                                        if sorter.keyword == keyword {
+                                            Text(sorter.localizedDirectionName())
+                                                .font(.system(size: 14))
+                                                .opacity(0.6)
+                                        }
+                                    }
+                                    Spacer()
+                                    if sorter.keyword == keyword {
+                                        Image(systemName: "checkmark")
+                                            .foregroundStyle(.accent)
+                                    }
+                                }
+                            })
+                        }
+                    }
+                }
+            } label: {
+                VStack(alignment: .leading) {
+                    Text("排序")
+                    Text(verbatim: "\(sorter.keyword.localizedString), \(sorter.localizedDirectionName())")
+                        .font(.system(size: 14))
+                        .opacity(0.6)
                 }
             }
         }

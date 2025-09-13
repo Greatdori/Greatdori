@@ -13,6 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+internal import CryptoKit
 
 // MARK: extension DoriFrontend
 extension DoriFrontend {
@@ -23,12 +24,62 @@ extension DoriFrontend {
     }
     
     public struct Sorter: Sendable, Equatable, Hashable, Codable {
-        public var direction: Direction
-        public var keyword: Keyword
+        public var direction: Direction { didSet { store() } }
+        public var keyword: Keyword { didSet { store() } }
         
         public init(direction: Direction = .descending, keyword: Keyword = .id) {
             self.direction = direction
             self.keyword = keyword
+        }
+        
+        private var recoveryID: String?
+        
+        /// Create a sorter which can restore to its latest selections across sessions.
+        /// - Parameter id: An identifier for restoration.
+        /// - Returns: A sorter which stores its selections automaticlly and can be restore by provided ID.
+        public static func recoverable(id: String) -> Self {
+            let storageURL = URL(filePath: NSHomeDirectory() + "/Documents/DoriKit_Sorter_Status.plist")
+            let decoder = PropertyListDecoder()
+            var result: Self = if let _data = try? Data(contentsOf: storageURL),
+                                  let storage = try? decoder.decode([String: Sorter].self, from: _data) {
+                storage[id] ?? .init()
+            } else {
+                .init()
+            }
+            result.recoveryID = id
+            return result
+        }
+        
+        /// A string identity of the sorter.
+        ///
+        /// This allows you to identify whether two sorters have the same effect,
+        /// which is useful when working with ``DoriCache``.
+        public var identity: String {
+            let desc = """
+            \(direction)\
+            \(keyword.rawValue)
+            """
+            return String(SHA256.hash(data: desc.data(using: .utf8)!).map { $0.description }.joined().prefix(8))
+        }
+        
+        private static let _storageLock = NSLock()
+        private func store() {
+            guard let recoveryID else { return }
+            DispatchQueue(label: "com.memz233.DoriKit.Sorter-Store", qos: .utility).async {
+                Self._storageLock.lock()
+                let storageURL = URL(filePath: NSHomeDirectory() + "/Documents/DoriKit_Sorter_Status.plist")
+                let decoder = PropertyListDecoder()
+                let encoder = PropertyListEncoder()
+                if let _data = try? Data(contentsOf: storageURL),
+                   var storage = try? decoder.decode([String: Sorter].self, from: _data) {
+                    storage.updateValue(self, forKey: recoveryID)
+                    try? encoder.encode(storage).write(to: storageURL)
+                } else {
+                    let storage = [recoveryID: self]
+                    try? encoder.encode(storage).write(to: storageURL)
+                }
+                Self._storageLock.unlock()
+            }
         }
         
         @frozen
@@ -47,7 +98,7 @@ extension DoriFrontend {
                 self = self.reversed
             }
         }
-        public enum Keyword: CaseIterable, Sendable, Equatable, Hashable, Codable {
+        public enum Keyword: RawRepresentable, CaseIterable, Sendable, Equatable, Hashable, Codable {
             case releaseDate(in: DoriAPI.Locale)
             case difficultyReleaseDate(in: DoriAPI.Locale)
             case mvReleaseDate(in: DoriAPI.Locale)
@@ -81,6 +132,73 @@ extension DoriFrontend {
                 .maximumStat,
                 .id
             ]
+            
+            public init?(rawValue: UInt32) {
+                let high = UInt16(rawValue >> 16 & 0xFFFF)
+                let low = UInt16(rawValue & 0xFFFF)
+                switch high {
+                case 1 << 0:
+                    if let locale = DoriAPI.Locale(rawIntValue: Int(low)) {
+                        self = .releaseDate(in: locale)
+                    } else {
+                        return nil
+                    }
+                case 1 << 1:
+                    if let locale = DoriAPI.Locale(rawIntValue: Int(low)) {
+                        self = .difficultyReleaseDate(in: locale)
+                    } else {
+                        return nil
+                    }
+                case 1 << 2:
+                    if let locale = DoriAPI.Locale(rawIntValue: Int(low)) {
+                        self = .mvReleaseDate(in: locale)
+                    } else {
+                        return nil
+                    }
+                case 1 << 3:
+                    if let difficulty = DoriAPI.Song.DifficultyType(rawValue: Int(low)) {
+                        self = .level(for: difficulty)
+                    } else {
+                        return nil
+                    }
+                case 1 << 4:
+                    self = .rarity
+                case 1 << 5:
+                    self = .maximumStat
+                case 1 << 6:
+                    self = .id
+                default: return nil
+                }
+            }
+            
+            public var rawValue: UInt32 {
+                let high: UInt16
+                let low: UInt16
+                switch self {
+                case .releaseDate(let locale):
+                    high = 1 << 0
+                    low = UInt16(locale.rawIntValue)
+                case .difficultyReleaseDate(let locale):
+                    high = 1 << 1
+                    low = UInt16(locale.rawIntValue)
+                case .mvReleaseDate(let locale):
+                    high = 1 << 2
+                    low = UInt16(locale.rawIntValue)
+                case .level(let difficulty):
+                    high = 1 << 3
+                    low = UInt16(difficulty.rawValue)
+                case .rarity:
+                    high = 1 << 4
+                    low = 0
+                case .maximumStat:
+                    high = 1 << 5
+                    low = 0
+                case .id:
+                    high = 1 << 6
+                    low = 0
+                }
+                return UInt32(high) << 16 | UInt32(low)
+            }
             
             /// Localized description text for keyword.
             @inline(never)
@@ -117,7 +235,7 @@ extension DoriFrontend {
             }
         }
         
-        public func getLocalizedSortingDirectionName(keyword: Keyword? = nil, direction: Direction? = nil) -> String {
+        public func localizedDirectionName(keyword: Keyword? = nil, direction: Direction? = nil) -> String {
             let isAscending: Bool = (direction ?? self.direction) == .ascending
             switch keyword ?? self.keyword {
             case .releaseDate:
@@ -132,7 +250,7 @@ extension DoriFrontend {
                 return isAscending ? String(localized: "FILTER_SORT_ORDER_ASCENDING", bundle: #bundle) : String(localized: "FILTER_SORT_ORDER_DESCENDING", bundle: #bundle)
             case .maximumStat:
                 return isAscending ? String(localized: "FILTER_SORT_ORDER_ASCENDING", bundle: #bundle) : String(localized: "FILTER_SORT_ORDER_DESCENDING", bundle: #bundle)
-            case .id: String(localized: "FILTER_SORT_KEYWORD_ID", bundle: #bundle)
+            case .id:
                 return isAscending ? String(localized: "FILTER_SORT_ORDER_ASCENDING", bundle: #bundle) : String(localized: "FILTER_SORT_ORDER_DESCENDING", bundle: #bundle)
             }
         }
@@ -149,6 +267,13 @@ extension DoriFrontend {
                 return lhs! > rhs!
             }
         }
+    }
+}
+
+extension Set<DoriFrontend.Sorter.Keyword> {
+    @inlinable
+    public func sorted() -> [DoriFrontend.Sorter.Keyword] {
+        self.sorted { $0.rawValue < $1.rawValue }
     }
 }
 

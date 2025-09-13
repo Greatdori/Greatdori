@@ -17,6 +17,7 @@ import DoriKit
 
 struct GachaListView: View {
     @State var filter = DoriFrontend.Filter.recoverable(id: "GachaList")
+    @State var sorter = DoriFrontend.Sorter.recoverable(id: "GachaList")
     @State var gacha: [DoriFrontend.Gacha.PreviewGacha]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
@@ -52,13 +53,20 @@ struct GachaListView: View {
                 await getGacha()
             }
         } content: {
-            FilterView(filter: $filter, includingKeys: [
+            FilterView(filter: $filter, sorter: $sorter, includingKeys: [
                 .attribute,
                 .character,
                 .characterRequiresMatchAll,
                 .server,
                 .timelineStatus,
                 .gachaType
+            ], includingKeywords: [
+                .releaseDate(in: .jp),
+                .releaseDate(in: .en),
+                .releaseDate(in: .tw),
+                .releaseDate(in: .cn),
+                .releaseDate(in: .kr),
+                .id
             ]) {
                 if let gacha {
                     SearchView(items: gacha, text: $searchInput) { result in
@@ -84,8 +92,10 @@ struct GachaListView: View {
     
     func getGacha() async {
         availability = true
-        DoriCache.withCache(id: "GachaList_\(filter.identity)") {
-            await DoriFrontend.Gacha.list(filter: filter)
+        DoriCache.withCache(id: "GachaList_\(filter.identity)_\(sorter.identity)") {
+            await DoriFrontend.Gacha.list()?
+                .filter(withDoriFilter: filter)
+                .sorted(withDoriSorter: sorter)
         }.onUpdate {
             if let gacha = $0 {
                 self.gacha = gacha

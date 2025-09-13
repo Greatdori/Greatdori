@@ -20,7 +20,7 @@ extension DoriFrontend {
         /// List all gacha.
         ///
         /// - Returns: All gacha, nil if failed to fetch.
-        public static func list(filter: Filter = .init()) async -> [PreviewGacha]? {
+        public static func list() async -> [PreviewGacha]? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Gacha.all()
             } _: {

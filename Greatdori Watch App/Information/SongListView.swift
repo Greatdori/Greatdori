@@ -17,6 +17,7 @@ import DoriKit
 
 struct SongListView: View {
     @State var filter = DoriFrontend.Filter.recoverable(id: "SongList")
+    @State var sorter = DoriFrontend.Sorter.recoverable(id: "SongList")
     @State var songs: [DoriFrontend.Song.PreviewSong]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
@@ -50,11 +51,33 @@ struct SongListView: View {
                 await getSongs()
             }
         } content: {
-            FilterView(filter: $filter, includingKeys: [
+            FilterView(filter: $filter, sorter: $sorter, includingKeys: [
                 .songType,
                 .band,
                 .server,
                 .released
+            ], includingKeywords: [
+                .releaseDate(in: .jp),
+                .releaseDate(in: .en),
+                .releaseDate(in: .tw),
+                .releaseDate(in: .cn),
+                .releaseDate(in: .kr),
+                .difficultyReleaseDate(in: .jp),
+                .difficultyReleaseDate(in: .en),
+                .difficultyReleaseDate(in: .tw),
+                .difficultyReleaseDate(in: .cn),
+                .difficultyReleaseDate(in: .kr),
+                .mvReleaseDate(in: .jp),
+                .mvReleaseDate(in: .en),
+                .mvReleaseDate(in: .tw),
+                .mvReleaseDate(in: .cn),
+                .mvReleaseDate(in: .kr),
+                .level(for: .easy),
+                .level(for: .normal),
+                .level(for: .hard),
+                .level(for: .expert),
+                .level(for: .special),
+                .id
             ]) {
                 if let songs {
                     SearchView(items: songs, text: $searchInput) { result in
@@ -80,8 +103,10 @@ struct SongListView: View {
     
     func getSongs() async {
         availability = true
-        DoriCache.withCache(id: "SongList_\(filter.identity)") {
-            await DoriFrontend.Song.list()
+        DoriCache.withCache(id: "SongList_\(filter.identity)_\(sorter.identity)") {
+            await DoriFrontend.Song.list()?
+                .filter(withDoriFilter: filter)
+                .sorted(withDoriSorter: sorter)
         }.onUpdate {
             if let songs = $0 {
                 self.songs = songs
