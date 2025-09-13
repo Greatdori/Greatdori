@@ -237,7 +237,8 @@ struct FilterItemView: View {
                     if key == .skill {
 //                        #if os(macOS)
                         Group {
-                            if #available(iOS 18.0, *) {
+                            if #available(iOS 18.0, macOS 15.0, *) {
+                                #if os(iOS)
                                 VStack(alignment: .leading) {
                                     Text(key.localizedString)
                                         .bold()
@@ -272,6 +273,27 @@ struct FilterItemView: View {
 //                                    .border(.red)
                                     .offset(y: -5)
                                 }
+                                #else
+                                Picker(selection: $skill, content: {
+                                    // Optional "Any" to clear the filter
+                                    Text("Filter.skill.any")
+                                        .tag(Optional<DoriFrontend.Filter.Skill>.none)
+                                    
+                                    ForEach(key.selector.items, id: \.self) { item in
+                                        if let value = item.item.value as? DoriFrontend.Filter.Skill {
+                                            // Use the skill's simpleDescription (localized) instead of selectorText
+                                            //                                    let label = value.simpleDescription.forPreferredLocale() ?? ""
+                                            //                                    let label = value.description.forPreferredLocale() ?? ""
+                                            Text(item.text)
+                                                .tag(Optional(value))
+                                        }
+                                    }
+                                }, label: {
+                                    Text(key.localizedString)
+                                        .bold()
+                                        .lineLimit(nil)
+                                })
+                                #endif
                             } else {
                                 Picker(selection: $skill, content: {
                                     // Optional "Any" to clear the filter

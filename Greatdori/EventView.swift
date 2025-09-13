@@ -732,7 +732,7 @@ struct EventSearchView: View {
                             }
                             .background {
                                 if filter.isFiltered {
-                                    Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1 : 1.65)
+                                    Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1.1 : 1.65)
                                 }
                             }
                     })

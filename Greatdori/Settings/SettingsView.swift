@@ -115,7 +115,7 @@ struct SettingsLocaleView: View {
                     DoriAPI.secondaryLocale = localeFromStringDict[secondaryLocale] ?? .en
                 })
                 Group {
-                    if #available(iOS 18.0, *) {
+                    if #available(iOS 18.0, macOS 15.0, *) {
                         Picker("Settings.birthday-time-zone", selection: $birthdayTimeZone, content: {
                             Text("Settings.birthday-time-zone.selection.adaptive")
                                 .tag(BirthdayTimeZone.adaptive)
@@ -176,10 +176,17 @@ struct SettingsLocaleView: View {
                     showDebugVerificationAlert = true
                 })
                 .alert("Settings.debug.activate-alert.title", isPresented: $showDebugVerificationAlert, actions: {
+                    #if os(iOS)
                     TextField("Settings.debug.activate-alert.prompt", text: $password)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .fontDesign(.monospaced)
+                    #else
+                    TextField("Settings.debug.activate-alert.prompt", text: $password)
+                        .autocorrectionDisabled()
+//                        .textInputSuggestions(nil)
+                        .fontDesign(.monospaced)
+                    #endif
                     Button(action: {
                         if password == correctDebugPassword {
                             lastDebugPassword = password
