@@ -502,11 +502,10 @@ struct SorterPickerView: View {
     @Binding var sorter: DoriFrontend.Sorter
     var allOptions: [DoriFrontend.Sorter.Keyword] = DoriFrontend.Sorter.Keyword.allCases
     var sortingItemsHaveEndingDate = false
+    @State var isMenuPresented = false // iOS only
     var body: some View {
+        #if os(macOS)
         Menu(content: {
-            //TODO: [250913] Optimize for iOS
-            // The code below is the final version for macOS.
-            // Please try to keep macOS version's the same after edititng. お願いします。
             Section {
                 ForEach(DoriFrontend.Sorter.Keyword.allCases, id: \.self) { item in
                     if allOptions.contains(item) {
@@ -552,5 +551,68 @@ struct SorterPickerView: View {
         }, label: {
             Label("Sort", systemImage: "arrow.up.arrow.down")
         })
+        #else
+        Button(action: {
+            isMenuPresented = true
+        }, label: {
+            Label("Sort", systemImage: "arrow.up.arrow.down")
+        })
+        .popover(isPresented: $isMenuPresented) {
+            ScrollView {
+                VStack {
+                    ForEach(DoriFrontend.Sorter.Keyword.allCases, id: \.self) { item in
+                        if allOptions.contains(item) {
+                            Button(action: {
+                                if sorter.keyword != item {
+                                    sorter.keyword = item
+                                } else {
+                                    sorter.direction = sorter.direction == .ascending ? .descending : .ascending
+                                }
+                            }, label: {
+                                HStack {
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 8, weight: .bold))
+                                        .opacity(sorter.keyword == item ? 1 : 0)
+                                        .padding(.trailing, 3)
+                                    VStack(alignment: .leading) {
+                                        Text(item.localizedString(hasEndingDate: sortingItemsHaveEndingDate))
+                                            .fontWeight(.regular)
+                                        if sorter.keyword == item {
+                                            Text(sorter.getLocalizedSortingDirectionName(direction: sorter.direction))
+                                                .font(.caption)
+                                                .opacity(0.6)
+                                        }
+                                    }
+                                    Spacer()
+                                }
+                                .foregroundStyle(Color.primary)
+                                .padding(.trailing)
+                                .contentShape(Rectangle())
+                            })
+                            .buttonStyle(MenuButtonStyle())
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
+            .frame(maxHeight: 500)
+            .presentationCompactAdaptation(.popover)
+        }
+        #endif
+    }
+}
+
+private struct MenuButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            .background {
+                if configuration.isPressed {
+                    Capsule()
+                        .fill(Color.gray.opacity(0.2))
+                }
+            }
+            .padding(.vertical, -3)
     }
 }

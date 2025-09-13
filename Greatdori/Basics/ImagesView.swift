@@ -639,27 +639,6 @@ struct CardIconView: View {
             }
         }
     }
-    
-    #if os(macOS)
-    /// Hi, what happened?
-    /// We NEED this to workaround a bug (maybe of SwiftUI?)
-    struct HereTheWorld<each T, V: View>: NSViewRepresentable {
-        private var controller: NSViewController
-        private var viewBuilder: (repeat each T) -> V
-        init(arguments: (repeat each T), @ViewBuilder view: @escaping (repeat each T) -> V) {
-            self.controller = NSHostingController(rootView: view(repeat each arguments))
-            self.viewBuilder = view
-        }
-        func makeNSView(context: Context) -> some NSView {
-            self.controller.view
-        }
-        func updateNSView(_ nsView: NSViewType, context: Context) {}
-        func updateArguments(_ arguments: (repeat each T)) {
-            let newView = viewBuilder(repeat each arguments)
-            controller.view = NSHostingView(rootView: newView)
-        }
-    }
-    #endif
 }
 
 //MARK: ThumbCostumeCardView
