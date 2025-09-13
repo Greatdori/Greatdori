@@ -15,7 +15,9 @@
 #===-----------------------------------------------------------------------===#
 
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-cd $SCRIPT_PATH/../..
+SRCROOT="$SCRIPT_PATH/../.."
+cd "$SRCROOT"
+SRCROOT=$(pwd -P)
 
 rm -rf ./build >/dev/null 2>&1
 mkdir build >/dev/null 2>&1
@@ -44,13 +46,13 @@ BUILD_END=$(date +%s%N)
 
 # Generate XCFramework
 xcodebuild -create-xcframework \
-    -framework "./build/Build/Products/Release/DoriKit.framework" -debug-symbols "./build/Build/Products/Release/DoriKit.framework.dSYM" \
-    -framework "./build/Build/Products/Release-maccatalyst/DoriKit.framework" -debug-symbols "./build/Build/Products/Release-maccatalyst/DoriKit.framework.dSYM" \
-    -framework "./build/Build/Products/Release-iphoneos/DoriKit.framework" -debug-symbols "./build/Build/Products/Release-iphoneos/DoriKit.framework.dSYM" \
-    -framework "./build/Build/Products/Release-iphonesimulator/DoriKit.framework" -debug-symbols "./build/Build/Products/Release-iphonesimulator/DoriKit.framework.dSYM" \
-    -framework "./build/Build/Products/Release-watchos/DoriKit.framework" -debug-symbols "./build/Build/Products/Release-watchos/DoriKit.framework.dSYM" \
-    -framework "./build/Build/Products/Release-watchsimulator/DoriKit.framework" -debug-symbols "./build/Build/Products/Release-watchsimulator/DoriKit.framework.dSYM" \
-    -output "./build/DoriKit.xcframework"
+    -framework "$SRCROOT/build/Build/Products/Release/DoriKit.framework" -debug-symbols "$SRCROOT/build/Build/Products/Release/DoriKit.framework.dSYM" \
+    -framework "$SRCROOT/build/Build/Products/Release-maccatalyst/DoriKit.framework" -debug-symbols "$SRCROOT/build/Build/Products/Release-maccatalyst/DoriKit.framework.dSYM" \
+    -framework "$SRCROOT/build/Build/Products/Release-iphoneos/DoriKit.framework" -debug-symbols "$SRCROOT/build/Build/Products/Release-iphoneos/DoriKit.framework.dSYM" \
+    -framework "$SRCROOT/build/Build/Products/Release-iphonesimulator/DoriKit.framework" -debug-symbols "$SRCROOT/build/Build/Products/Release-iphonesimulator/DoriKit.framework.dSYM" \
+    -framework "$SRCROOT/build/Build/Products/Release-watchos/DoriKit.framework" -debug-symbols "$SRCROOT/build/Build/Products/Release-watchos/DoriKit.framework.dSYM" \
+    -framework "$SRCROOT/build/Build/Products/Release-watchsimulator/DoriKit.framework" -debug-symbols "$SRCROOT/build/Build/Products/Release-watchsimulator/DoriKit.framework.dSYM" \
+    -output "$SRCROOT/build/DoriKit.xcframework"
 
 BUILD_MACOS_DURATION=$(awk "BEGIN {printf \"%.2f\", $((BUILD_MAC_CATALYST_START - BUILD_MACOS_START))/1000000000}")
 BUILD_MAC_CATALYST_DURATION=$(awk "BEGIN {printf \"%.2f\", $((BUILD_IOS_SIMULATOR_START - BUILD_MAC_CATALYST_START))/1000000000}")
