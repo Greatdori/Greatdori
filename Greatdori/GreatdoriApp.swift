@@ -41,6 +41,7 @@ struct GreatdoriApp: App {
     @UIApplicationDelegateAdaptor var appDelegate: AppDelegate
     #endif
     @Environment(\.openWindow) var openWindow
+    @Environment(\.scenePhase) var scenePhase
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -60,6 +61,19 @@ struct GreatdoriApp: App {
                 }
             }
             #endif
+        }
+        .onChange(of: scenePhase) {
+            switch scenePhase {
+            case .background:
+                break
+            case .inactive:
+                break
+            case .active:
+                #if os(iOS)
+                UIApplication.shared.registerForRemoteNotifications()
+                #endif
+            @unknown default: break
+            }
         }
         #if os(macOS)
         Settings {
@@ -127,8 +141,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 //            }
 //            isFirstLaunch = false
 //        }
-        
-        UIApplication.shared.registerForRemoteNotifications()
         
         return true
     }
