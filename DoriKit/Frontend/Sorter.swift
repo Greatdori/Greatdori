@@ -32,9 +32,20 @@ extension DoriFrontend {
         }
         
         @frozen
-        public enum Direction: Equatable, Hashable, Codable {
-            case ascending
-            case descending
+        public enum Direction: String, Equatable, Hashable, Codable {
+            case ascending = "ascending"
+            case descending = "descending"
+            
+            public var reversed: Self {
+                switch self {
+                case .ascending: .descending
+                case .descending: .ascending
+                }
+            }
+            
+            public mutating func reverse() {
+                self = self.reversed
+            }
         }
         public enum Keyword: CaseIterable, Sendable, Equatable, Hashable, Codable {
             case releaseDate(in: DoriAPI.Locale)

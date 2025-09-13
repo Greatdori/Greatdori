@@ -1707,46 +1707,6 @@
         }
       }
     },
-    "Search.unavailable.description" : {
-        "localizations" : {
-            "en" : {
-                "variations" : {
-                    "device" : {
-                        "mac" : {
-                            "stringUnit" : {
-                                "state" : "translated",
-                                "value" : "Check your Internet connection and try again later. Click to retry now."
-                            }
-                        },
-                        "other" : {
-                            "stringUnit" : {
-                                "state" : "translated",
-                                "value" : "Check your Internet connection and try again later. Tap to retry now."
-                            }
-                        }
-                    }
-                }
-            },
-            "zh-Hans" : {
-                "variations" : {
-                    "device" : {
-                        "mac" : {
-                            "stringUnit" : {
-                                "state" : "translated",
-                                "value" : "请尝试检查你的互联网连接并稍后重试。点击任意处立即重试。"
-                            }
-                        },
-                        "other" : {
-                            "stringUnit" : {
-                                "state" : "translated",
-                                "value" : "请尝试检查你的互联网连接并稍后重试。轻点任意处立即重试。"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
     "Notif.news.article.time-mark.has-ended" : {
       "comment" : "For remote notification",
       "extractionState" : "manual",
@@ -2503,6 +2463,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "歌曲(%@) • 将在今天发布"
+          }
+        }
+      }
+    },
+    "Search.unavailable.description" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Check your Internet connection and try again later. Click to retry now."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Check your Internet connection and try again later. Tap to retry now."
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "variations" : {
+            "device" : {
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "请尝试检查你的互联网连接并稍后重试。点击任意处立即重试。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "请尝试检查你的互联网连接并稍后重试。轻点任意处立即重试。"
+                }
+              }
+            }
           }
         }
       }
