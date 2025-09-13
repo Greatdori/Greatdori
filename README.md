@@ -89,6 +89,18 @@ Open `Greatdori.xcodeproj`, then select a scheme you want to build.
 You can also use `swift build` to build DoriKit from Package.swift.
 However, functionality of DoriKit is limited if it's built as a Swift Package.
 
+### Build XCFramework
+A XCFramework allows you to use DoriKit in your project easily.
+Generally, we attach a `DoriKit.xcframework` with each releases.
+You can build a XCFramework of DoriKit by your own using `build-xcframework`
+script like the following:
+
+```sh
+$ ./BuildTool/build-xcframework
+```
+
+Once the build succeeded, you can find `DoriKit.xcframework` in the `build/` folder.
+
 ### Schemes
 There're several schemes in Greatdori! project:
 
