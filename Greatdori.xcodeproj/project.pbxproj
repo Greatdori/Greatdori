@@ -882,6 +882,14 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		8C0841F52E74671300447B05 /* scripts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			explicitFileTypes = {
+				"build-xcframework" = text.script.sh;
+			};
+			path = scripts;
+			sourceTree = "<group>";
+		};
 		8C085ACA2E71968C00447B05 /* ci_scripts */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ci_scripts;
@@ -1534,6 +1542,7 @@
 		8CD13FE32E300ACE00673E15 /* BuildTool */ = {
 			isa = PBXGroup;
 			children = (
+				8C0841F52E74671300447B05 /* scripts */,
 				8CD13FE42E300AE700673E15 /* gyb.py */,
 				8C0CAF972E3B69B2002FF47F /* PreCacheGen */,
 			);
