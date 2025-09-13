@@ -31,26 +31,9 @@ extension DoriFrontend {
         ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
         ///
         /// Other keys are ignored.
-        public static func list(filter: Filter = .init()) async -> [Comic]? {
+        public static func list() async -> [Comic]? {
             guard let comics = await DoriAPI.Comic.all() else { return nil }
-            
-            var filteredComics = comics
-            if filter.isFiltered {
-                filteredComics = comics.filter { comic in
-                    filter.comicType.contains(comic.type ?? .singleFrame)
-                }.filter { comic in
-                    filter.character.contains { comic.characterIDs.contains($0.rawValue) }
-                }.filter { comic in
-                    filter.server.contains { locale in
-                        comic.publicStartAt.availableInLocale(locale)
-                    }
-                }
-            }
-            
-            // Comics can only be sorted by ID.
-            return filteredComics.sorted { lhs, rhs in
-                filter.sort.compare(lhs.id, rhs.id)
-            }
+            return comics
         }
     }
 }
