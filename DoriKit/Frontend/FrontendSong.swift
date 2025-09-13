@@ -34,7 +34,7 @@ extension DoriFrontend {
         ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
         ///
         /// Other keys are ignored.
-        public static func list(filter: Filter = .init()) async -> [PreviewSong]? {
+        public static func list() async -> [PreviewSong]? {
             guard let songs = await DoriAPI.Song.all() else { return nil }
             return songs
         }
