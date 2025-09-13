@@ -813,6 +813,10 @@
 		E9412A5D2E6C0C390043EC2C /* CharacterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterView.swift; sourceTree = "<group>"; };
 		E9CD3A472E58975900BF5EA9 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E9CD3A492E58984200BF5EA9 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
+		E9D96AA42E752BE7005E0F2C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		E9D96AA52E752C60005E0F2C /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		E9D96AA62E752C60005E0F2C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E9D96AA72E752C61005E0F2C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		E9EE03802E4F5DB00088843B /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		E9EFEF1B2E5ED7DA00991940 /* ListSectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSectionsView.swift; sourceTree = "<group>"; };
@@ -1047,6 +1051,7 @@
 			isa = PBXGroup;
 			children = (
 				8C923DA22E31664B003AFC0A /* Package.swift */,
+				E9D96AA32E752BE7005E0F2C /* InfoPlist.strings */,
 				8C818D722E2E671A00D0DD69 /* README.md */,
 				8C0C99C22E2E664900549B5C /* LICENSE.txt */,
 				8C9474442E34DE85003A90B4 /* .editorconfig */,
@@ -2754,6 +2759,20 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		E9D96AA32E752BE7005E0F2C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E9D96AA42E752BE7005E0F2C /* zh-Hans */,
+				E9D96AA52E752C60005E0F2C /* zh-Hant */,
+				E9D96AA62E752C60005E0F2C /* en */,
+				E9D96AA72E752C61005E0F2C /* ja */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		8C0C99752E296A4700549B5C /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2976,7 +2995,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "Create character birthday calendar.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = Privacy.usage.calendar;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -3035,7 +3054,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "Create character birthday calendar.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = Privacy.usage.calendar;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -3479,7 +3498,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "Create character birthday calendar.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = Privacy.usage.calendar;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -3726,7 +3745,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Greatdori!";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "Create character birthday calendar.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = Privacy.usage.calendar;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 the Greatdori! project authors.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

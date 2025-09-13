@@ -28,21 +28,22 @@ func updateBirthdayCalendar() async throws {
     }
     
     let calendar = EKCalendar(for: .event, eventStore: store)
-    calendar.title = "GBP Birthdays"
+    calendar.title = String(localized: "Birthday-calendar.title")
     calendar.source = store.sources.first(where: { $0.sourceType == .local || $0.sourceType == .calDAV })
     calendar.cgColor = Color.accentColor.resolve(in: .init()).cgColor
     UserDefaults.standard.set(calendar.calendarIdentifier, forKey: "BirthdaysCalendarID")
     try store.saveCalendar(calendar, commit: false)
     
     var birthdaySourceCalendar = Calendar(identifier: .gregorian)
-    birthdaySourceCalendar.timeZone = .init(identifier: "Asia/Tokyo")!
+    birthdaySourceCalendar.timeZone = getBirthdayTimeZone(from: BirthdayTimeZone(rawValue: UserDefaults.standard.string(forKey: "BirthdayTimeZone") ?? "JST") ?? .JST)
+//    birthdaySourceCalendar.timeZone = .init(identifier: "Asia/Tokyo")!
     let userCalendar = Calendar.current
     
     for character in characters {
         let birthdayComponents = birthdaySourceCalendar.dateComponents([.month, .day], from: character.birthday)
         
         let event = EKEvent(eventStore: store)
-        event.title = String(localized: "\(character.characterName.forPreferredLocale()!) 的生日")
+        event.title = String(localized: "Birthday-calendar.birthday.\(character.characterName.forPreferredLocale()!.replacingOccurrences(of: " ", with: ""))")
         event.calendar = calendar
         event.isAllDay = true
         event.startDate = userCalendar.date(

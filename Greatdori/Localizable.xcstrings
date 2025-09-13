@@ -24,9 +24,6 @@
     "%@" : {
       "shouldTranslate" : false
     },
-    "%@ 的生日" : {
-
-    },
     "%@%@" : {
       "localizations" : {
         "zh-Hans" : {
@@ -171,6 +168,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "工具"
+          }
+        }
+      }
+    },
+    "Birthday-calendar.birthday.%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@’s Birthday"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@的生日"
+          }
+        }
+      }
+    },
+    "Birthday-calendar.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GBP Birthdays"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GBP生日"
           }
         }
       }
@@ -2797,6 +2826,158 @@
         }
       }
     },
+    "Settings.notifications" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications & Calendar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知和日历"
+          }
+        }
+      }
+    },
+    "Settings.notifications.authorization-required" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Some features may require content access. Click here to open Settings."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Some features may require content access. Tap here to open Settings."
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "variations" : {
+            "device" : {
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "部分功能可能需要授权权限才能工作。点击此处以打开设置。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "部分功能可能需要授权权限才能工作。轻点此处以打开设置。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Settings.notifications.birthday-calendar" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Character Birthdays"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加角色生日"
+          }
+        }
+      }
+    },
+    "Settings.notifications.birthday-calendar.enable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Calendar…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用日历…"
+          }
+        }
+      }
+    },
+    "Settings.notifications.news" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Receive News Notifications"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "接受新闻通知"
+          }
+        }
+      }
+    },
+    "Settings.notifications.news.enable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Notifications…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用通知…"
+          }
+        }
+      }
+    },
+    "Settings.notifications.news.error-alert.message.%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed applying new settings. (%lld)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未能应用新设置。(%lld)"
+          }
+        }
+      }
+    },
+    "Settings.notifications.news.error-alert.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An Error Occurred While Editing Notification Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改通知设置时发生错误"
+          }
+        }
+      }
+    },
     "Settings.offline-data" : {
       "localizations" : {
         "en" : {
@@ -3165,18 +3346,6 @@
           }
         }
       }
-    },
-    "允许访问" : {
-
-    },
-    "启用通知" : {
-
-    },
-    "新闻更新" : {
-
-    },
-    "生日日历" : {
-
     }
   },
   "version" : "1.1"

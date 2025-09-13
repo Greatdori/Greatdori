@@ -33,7 +33,6 @@ struct SettingsView: View {
                 SettingsLocaleView()
                 SettingsHomeView()
                 SettingsNotificationView()
-                SettingsCalendarView()
                 #if os(iOS)
                 SettingsWidgetView()
                 #endif
@@ -201,48 +200,76 @@ struct SettingsHomeView: View {
 struct SettingsNotificationView: View {
     @Environment(\.openURL) var openURL
     @AppStorage("IsNewsNotifEnabled") var isNewsNotificationEnabled = false
-    @State var isAuthorized = false
-    @State var isDetermined = false
+    @AppStorage("BirthdaysCalendarID") var birthdaysCalendarID = ""
+    @State var birthdatCalendarIsEnabled = false
+    @State var notificationIsAuthorized = false
+    @State var notificationIsRejected = false
+    @State var showErrorAlert = false
+    @State var errorCode = 0
+    @State var calendarIsAuthorized = false
+    @State var calendarIsRejected = false
     var body: some View {
-        Section {
-            if isAuthorized {
-                Toggle("新闻更新", isOn: .init {
-                    isNewsNotificationEnabled
-                } set: {
-                    isNewsNotificationEnabled = $0
-                    if $0 {
-                        if let token = UserDefaults.standard.data(forKey: "RemoteNotifDeviceToken") {
-                            Task {
-                                if let id = await DoriNotification.registerRemoteNewsNotification(deviceToken: token) {
-                                    UserDefaults.standard.set(id.uuidString, forKey: "NewsNotifID")
-                                } else {
-                                    isNewsNotificationEnabled = false
+        Section(content: {
+            Group {
+                if notificationIsAuthorized || notificationIsRejected {
+                    Toggle(isOn: $isNewsNotificationEnabled, label: {
+                        Text("Settings.notifications.news")
+                            .foregroundStyle((!notificationIsAuthorized && notificationIsRejected) ? .secondary : .primary)
+                            .onTapGesture {
+                                if (!notificationIsAuthorized && notificationIsRejected) {
+#if os(iOS)
+                                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                                        openURL(url)
+                                    }
+#else
+                                    openURL(.init(string: "x-apple.systempreferences:com.apple.preference.notifications")!)
+#endif
                                 }
                             }
+                    })
+                    .onChange(of: isNewsNotificationEnabled) {
+                        isNewsNotificationEnabled = $0
+                        if $0 {
+                            if let token = UserDefaults.standard.data(forKey: "RemoteNotifDeviceToken") {
+                                Task {
+                                    if let id = await DoriNotification.registerRemoteNewsNotification(deviceToken: token) {
+                                        UserDefaults.standard.set(id.uuidString, forKey: "NewsNotifID")
+                                    } else {
+                                        isNewsNotificationEnabled = false
+                                        errorCode = -401
+                                        showErrorAlert = true
+                                    }
+                                }
+                            } else {
+                                isNewsNotificationEnabled = false
+                                errorCode = -402
+                                showErrorAlert = true
+                            }
                         } else {
-                            isNewsNotificationEnabled = false
-                        }
-                    } else {
-                        if let id = UserDefaults.standard.string(forKey: "NewsNotifID"),
-                           let uuid = UUID(uuidString: id) {
-                            Task {
-                                let success = await DoriNotification.unregisterRemoteNewsNotification(id: uuid)
-                                if !success {
-                                    isNewsNotificationEnabled = true
+                            if let id = UserDefaults.standard.string(forKey: "NewsNotifID"),
+                               let uuid = UUID(uuidString: id) {
+                                Task {
+                                    let success = await DoriNotification.unregisterRemoteNewsNotification(id: uuid)
+                                    if !success {
+                                        isNewsNotificationEnabled = true
+                                        errorCode = -403
+                                        showErrorAlert = true
+                                    }
                                 }
                             }
                         }
                     }
-                })
-            } else {
-                Button("启用通知") {
-                    if !isDetermined {
-                        // We can request in-app
+                    .disabled(!notificationIsAuthorized && notificationIsRejected)
+                    .alert("Settings.notifications.news.error-alert.title", isPresented: $showErrorAlert, actions: {}, message: {
+                        Text("Settings.notifications.news.error-alert.message.\(errorCode)")
+                    })
+                } else {
+                    Button(action: {
                         Task {
                             do {
                                 let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
-                                isAuthorized = granted
-                                isDetermined = true
+                                notificationIsAuthorized = granted
+                                notificationIsRejected = true
                                 if let token = UserDefaults.standard.data(forKey: "RemoteNotifDeviceToken") {
                                     isNewsNotificationEnabled = true
                                     Task {
@@ -257,92 +284,90 @@ struct SettingsNotificationView: View {
                                 print(error)
                             }
                         }
-                    } else {
-                        // Users have to go to settings
-                        #if os(iOS)
-                        if let url = URL(string: UIApplication.openSettingsURLString) {
-                            openURL(url)
-                        }
-                        #else
-                        openURL(.init(string: "x-apple.systempreferences:com.apple.preference.notifications")!)
-                        #endif
-                    }
+                    }, label: {
+                        Text("Settings.notifications.news.enable")
+                    })
                 }
             }
-        } header: {
-            Text(verbatim: "通知")
-                .task {
-                    let settings = await UNUserNotificationCenter.current().notificationSettings()
-                    isAuthorized = settings.authorizationStatus == .authorized
-                    isDetermined = settings.authorizationStatus != .notDetermined
-                }
-        } footer: {
-            if !isAuthorized {
-                Text(verbatim: "启用通知以接收来自 Greatdori! 的最新信息。")
-            }
-        }
-    }
-}
-
-// FIXME: Style of texts in this view should be reviewed
-struct SettingsCalendarView: View {
-    @Environment(\.openURL) var openURL
-    @AppStorage("BirthdaysCalendarID") var birthdaysCalendarID = ""
-    @State var isAuthorized = false
-    @State var isDetermined = false
-    var body: some View {
-        Section {
-            if isAuthorized {
-                Toggle("生日日历", isOn: .init {
-                    !birthdaysCalendarID.isEmpty
-                } set: {
-                    if $0 {
-                        Task {
-                            try? await updateBirthdayCalendar()
+            Group {
+                if calendarIsAuthorized || calendarIsRejected {
+                    Toggle(isOn: $birthdatCalendarIsEnabled, label: {
+                        Text("Settings.notifications.birthday-calendar")
+                            .foregroundStyle((!calendarIsAuthorized && calendarIsRejected) ? .secondary : .primary)
+                            .onTapGesture {
+                                if (!calendarIsAuthorized && calendarIsRejected) {
+#if os(iOS)
+                                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                                        openURL(url)
+                                    }
+#else
+                                    openURL(.init(string: "x-apple.systempreferences:com.apple.preference.general")!)
+#endif
+                                }
+                            }
+                    })
+                    .onChange(of: birthdatCalendarIsEnabled) {
+                        if $0 {
+                            Task {
+                                try? await updateBirthdayCalendar()
+                            }
+                        } else {
+                            try? removeBirthdayCalendar()
                         }
-                    } else {
-                        try? removeBirthdayCalendar()
                     }
-                })
-            } else {
-                Button("允许访问") {
-                    if !isDetermined {
-                        // We can request in-app
+                    .disabled(!calendarIsAuthorized && calendarIsRejected)
+                } else {
+                    Button(action: {
                         Task {
                             do {
                                 let granted = try await EKEventStore().requestFullAccessToEvents()
-                                isAuthorized = granted
-                                isDetermined = true
+                                calendarIsAuthorized = granted
+                                calendarIsRejected = true
                             } catch {
                                 print(error)
                             }
                         }
-                    } else {
-                        // Users have to go to settings
-                        #if os(iOS)
+                    }, label: {
+                        Text("Settings.notifications.birthday-calendar.enable")
+                    })
+                }
+            }
+        }, header: {
+            Text("Settings.notifications")
+        }, footer: {
+            if !notificationIsAuthorized || !calendarIsAuthorized {
+                Text("Settings.notifications.authorization-required")
+                    .onTapGesture {
+#if os(iOS)
                         if let url = URL(string: UIApplication.openSettingsURLString) {
                             openURL(url)
                         }
-                        #else
+#else
                         openURL(.init(string: "x-apple.systempreferences:com.apple.preference.general")!)
-                        #endif
+#endif
                     }
-                }
             }
-        } header: {
-            Text(verbatim: "日程")
-                .task {
-                    let status = EKEventStore.authorizationStatus(for: .event)
-                    isAuthorized = status == .fullAccess
-                    isDetermined = status != .notDetermined
-                }
-        } footer: {
-            if !isAuthorized {
-                Text(verbatim: "允许 Greatdori! 访问日程以添加重要日期。")
+        })
+        .task {
+            let notificationStatus = await UNUserNotificationCenter.current().notificationSettings()
+            notificationIsAuthorized = notificationStatus.authorizationStatus == .authorized
+            notificationIsRejected = notificationStatus.authorizationStatus != .notDetermined
+            
+            let calendarStatus = EKEventStore.authorizationStatus(for: .event)
+            calendarIsAuthorized = calendarStatus == .fullAccess
+            calendarIsRejected = calendarStatus != .notDetermined
+            
+            if notificationIsRejected {
+                isNewsNotificationEnabled = false
             }
+            if calendarIsRejected {
+                birthdatCalendarIsEnabled = false
+            }
+            birthdatCalendarIsEnabled = !birthdaysCalendarID.isEmpty
         }
     }
 }
+
 
 #if os(iOS)
 struct SettingsWidgetView: View {
@@ -496,6 +521,8 @@ enum BirthdayTimeZone: String {
     case UTC
     case CST
     case PT
+    
+    
 }
 
 enum DataSourcePreference: String, CaseIterable {
