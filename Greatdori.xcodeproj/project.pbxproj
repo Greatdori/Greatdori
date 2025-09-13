@@ -93,6 +93,7 @@
 		8C4C89432E620EC9007F1E9F /* CopyOnWriteMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4C89422E620EC3007F1E9F /* CopyOnWriteMacro.swift */; };
 		8C59DBCD2E6296D60021317E /* SwiftOperators in Frameworks */ = {isa = PBXBuildFile; productRef = 8C59DBCC2E6296D60021317E /* SwiftOperators */; };
 		8C5AD1B02E46F96700E61653 /* SongMetaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */; };
+		8C6B8FC42E75373F00452D7B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9D96AA32E752BE7005E0F2C /* InfoPlist.strings */; };
 		8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */; };
 		8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */; };
 		8C6C0ECD2E422F9000D1FB0A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */; };
@@ -1059,7 +1060,6 @@
 			isa = PBXGroup;
 			children = (
 				8C923DA22E31664B003AFC0A /* Package.swift */,
-				E9D96AA32E752BE7005E0F2C /* InfoPlist.strings */,
 				8C818D722E2E671A00D0DD69 /* README.md */,
 				8C0C99C22E2E664900549B5C /* LICENSE.txt */,
 				8C9474442E34DE85003A90B4 /* .editorconfig */,
@@ -1114,7 +1114,7 @@
 			children = (
 				8C6C0EF92E423C8E00D1FB0A /* Greatdori.entitlements */,
 				8CB4D4F92E4500C70085D57A /* Info.plist */,
-				E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */,
+				8C6B8FC32E75372000452D7B /* Localization */,
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				E9CD3A472E58975900BF5EA9 /* Extensions.swift */,
 				E9CD3A492E58984200BF5EA9 /* Functions.swift */,
@@ -1269,6 +1269,15 @@
 				8C59DBD82E62E5650021317E /* watchos.json */,
 			);
 			path = Baselines;
+			sourceTree = "<group>";
+		};
+		8C6B8FC32E75372000452D7B /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				E9E3C0592E35D0150059BCE8 /* Localizable.xcstrings */,
+				E9D96AA32E752BE7005E0F2C /* InfoPlist.strings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		8C6C0EEC2E42301000D1FB0A /* Greatdori Widgets */ = {
@@ -2074,6 +2083,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */,
+				8C6B8FC42E75373F00452D7B /* InfoPlist.strings in Resources */,
 				8C6C0F032E42533900D1FB0A /* Assets.xcassets in Resources */,
 				8C94744D2E35DA49003A90B4 /* AppIcon.icon in Resources */,
 			);
