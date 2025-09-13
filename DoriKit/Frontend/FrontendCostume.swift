@@ -48,48 +48,7 @@ extension DoriFrontend {
             
             FilterCacheManager.shared.writeCharactersList(characters)
             
-            let filteredCostumes = costumes.filter { costume in
-                filter.band.contains { band in
-                    band.rawValue == characters.first(where: { $0.id == costume.characterID })?.bandID
-                }
-            }.filter { costume in
-                filter.character.contains { character in
-                    character.rawValue == costume.characterID
-                }
-            }.filter { costume in
-                filter.server.contains { locale in
-                    costume.publishedAt.availableInLocale(locale)
-                }
-            }.filter { costume in
-                for status in filter.released {
-                    for locale in filter.server {
-                        if status.boolValue {
-                            if (costume.publishedAt.forLocale(locale) ?? dateOfYear2100) < .now {
-                                return true
-                            }
-                        } else {
-                            if (costume.publishedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 0)) > .now {
-                                return true
-                            }
-                        }
-                    }
-                }
-                return false
-            }
-            let sortedCostumes = switch filter.sort.keyword {
-            case .releaseDate(let locale):
-                filteredCostumes.sorted { lhs, rhs in
-                    filter.sort.compare(
-                        lhs.publishedAt.forLocale(locale) ?? lhs.publishedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0),
-                        rhs.publishedAt.forLocale(locale) ?? rhs.publishedAt.forPreferredLocale() ?? .init(timeIntervalSince1970: 0)
-                    )
-                }
-            default:
-                filteredCostumes.sorted { lhs, rhs in
-                    filter.sort.compare(lhs.id, rhs.id)
-                }
-            }
-            return sortedCostumes
+            return costumes
         }
         
         #if !os(watchOS)
