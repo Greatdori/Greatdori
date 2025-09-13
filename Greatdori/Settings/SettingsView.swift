@@ -64,6 +64,11 @@ struct SettingsLocaleView: View {
     @State var secondaryLocale = "en"
     @State var server: String = "jp"
     @State var birthdayTimeZone: BirthdayTimeZone = .JST
+    @State var showDebugVerificationAlert = false
+    
+    @State var password = ""
+    @State var showDebugUnlockAlert = false
+    @AppStorage("lastDebugPassword") var lastDebugPassword = ""
     var body: some View {
         Section(content: {
             Group {
@@ -111,20 +116,50 @@ struct SettingsLocaleView: View {
                 .onChange(of: secondaryLocale, {
                     DoriAPI.secondaryLocale = localeFromStringDict[secondaryLocale] ?? .en
                 })
-                Picker(selection: $birthdayTimeZone, content: {
-                    Text("Settings.birthday-time-zone.selection.adaptive")
-                        .tag(BirthdayTimeZone.adaptive)
-                    Text("Settings.birthday-time-zone.selection.JST")
-                        .tag(BirthdayTimeZone.JST)
-                    Text("Settings.birthday-time-zone.selection.UTC")
-                        .tag(BirthdayTimeZone.UTC)
-                    Text("Settings.birthday-time-zone.selection.CST")
-                        .tag(BirthdayTimeZone.CST)
-                    Text(TimeZone(identifier: "America/Los_Angeles")!.isDaylightSavingTime() ? "Settings.birthday-time-zone.selection.PT.PDT" : "Settings.birthday-time-zone.selection.PT.PST")
-                        .tag(BirthdayTimeZone.PT)
-                }, label: {
-                    Text("Settings.birthday-time-zone")
-                })
+                Group {
+                    if #available(iOS 18.0, macOS 15.0, *) {
+                        Picker("Settings.birthday-time-zone", selection: $birthdayTimeZone, content: {
+                            Text("Settings.birthday-time-zone.selection.adaptive")
+                                .tag(BirthdayTimeZone.adaptive)
+                            Text("Settings.birthday-time-zone.selection.JST")
+                                .tag(BirthdayTimeZone.JST)
+                            Text("Settings.birthday-time-zone.selection.UTC")
+                                .tag(BirthdayTimeZone.UTC)
+                            Text("Settings.birthday-time-zone.selection.CST")
+                                .tag(BirthdayTimeZone.CST)
+                            Text(TimeZone(identifier: "America/Los_Angeles")!.isDaylightSavingTime() ? "Settings.birthday-time-zone.selection.PT.PDT" : "Settings.birthday-time-zone.selection.PT.PST")
+                                .tag(BirthdayTimeZone.PT)
+                        }, currentValueLabel: {
+                            switch birthdayTimeZone {
+                            case .adaptive:
+                                Text("Settings.birthday-time-zone.selection.adaptive.abbr")
+                            case .JST:
+                                Text("Settings.birthday-time-zone.selection.JST.abbr")
+                            case .UTC:
+                                Text("Settings.birthday-time-zone.selection.UTC.abbr")
+                            case .CST:
+                                Text("Settings.birthday-time-zone.selection.CST.abbr")
+                            case .PT:
+                                Text("Settings.birthday-time-zone.selection.PT.abbr")
+                            }
+                        })
+                    } else {
+                        Picker(selection: $birthdayTimeZone, content: {
+                            Text("Settings.birthday-time-zone.selection.adaptive")
+                                .tag(BirthdayTimeZone.adaptive)
+                            Text("Settings.birthday-time-zone.selection.JST")
+                                .tag(BirthdayTimeZone.JST)
+                            Text("Settings.birthday-time-zone.selection.UTC")
+                                .tag(BirthdayTimeZone.UTC)
+                            Text("Settings.birthday-time-zone.selection.CST")
+                                .tag(BirthdayTimeZone.CST)
+                            Text(TimeZone(identifier: "America/Los_Angeles")!.isDaylightSavingTime() ? "Settings.birthday-time-zone.selection.PT.PDT" : "Settings.birthday-time-zone.selection.PT.PST")
+                                .tag(BirthdayTimeZone.PT)
+                        }, label: {
+                            Text("Settings.birthday-time-zone")
+                        })
+                    }
+                }
                 .onChange(of: birthdayTimeZone, {
                     UserDefaults.standard.setValue(birthdayTimeZone.rawValue, forKey: "BirthdayTimeZone")
                 })
@@ -139,6 +174,40 @@ struct SettingsLocaleView: View {
             Text("Settings.locale")
         }, footer: {
             Text("Settings.birthday-time-zone.footer.\(String(localized: birthdayTimeZoneNameDict[birthdayTimeZone]!))")
+                .onTapGesture(count: 3, perform: {
+                    showDebugVerificationAlert = true
+                })
+                .alert("Settings.debug.activate-alert.title", isPresented: $showDebugVerificationAlert, actions: {
+                    #if os(iOS)
+                    TextField("Settings.debug.activate-alert.prompt", text: $password)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .fontDesign(.monospaced)
+                    #else
+                    TextField("Settings.debug.activate-alert.prompt", text: $password)
+                        .autocorrectionDisabled()
+//                        .textInputSuggestions(nil)
+                        .fontDesign(.monospaced)
+                    #endif
+                    Button(action: {
+                        if password == correctDebugPassword {
+                            lastDebugPassword = password
+                            AppFlag.set(true, forKey: "DEBUG")
+                            showDebugVerificationAlert = false
+                            showDebugUnlockAlert = true
+                        }
+                        password = ""
+                    }, label: {
+                        Text("Settings.debug.activate-alert.confirm")
+                    })
+                    .keyboardShortcut(.defaultAction)
+                    Button(role: .cancel, action: {}, label: {
+                        Text("Settings.debug.activate-alert.cancel")
+                    })
+                }, message: {
+                    Text("Settings.debug.activate-alert.message")
+                })
+                .alert("Settings.debug.activate-alert.succeed", isPresented: $showDebugUnlockAlert, actions: {})
         })
     }
 }
@@ -467,6 +536,7 @@ struct SettingsDebugView: View {
     @AppStorage("isFirstLaunch") var isFirstLaunch = true
     @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
     @AppStorage("startUpSucceeded") var startUpSucceeded = true
+    @State var showDebugDisactivationAlert = false
     var body: some View {
         Section(content: {
             Group {
@@ -507,6 +577,19 @@ struct SettingsDebugView: View {
                 }, label: {
                     Text("Settings.debug.clear-cache")
                 })
+                Button(role: .destructive, action: {
+                    showDebugDisactivationAlert = true
+                }, label: {
+                    Text("Settings.debug.disable")
+                })
+                .alert("Settings.debug.disable.title", isPresented: $showDebugDisactivationAlert, actions: {
+                    Button(role: .destructive, action: {
+                        AppFlag.set(false, forKey: "DEBUG")
+                        showDebugDisactivationAlert = false
+                    }, label: {
+                        Text("Settings.debug.disable.turn-off")
+                    })
+                })
             }
             .fontDesign(.monospaced)
         }, header: {
@@ -515,7 +598,7 @@ struct SettingsDebugView: View {
     }
 }
 
-enum BirthdayTimeZone: String {
+enum BirthdayTimeZone: String, CaseIterable {
     case adaptive
     case JST
     case UTC

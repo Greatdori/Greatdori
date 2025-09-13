@@ -71,18 +71,23 @@ struct EventCardHomeView: View {
                     .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
                     .bold()
                     .font(.title3)
+                    .multilineTextAlignment(.center)
                 Group {
                     if let startDate = locale != nil ? startAt.forLocale(locale!) : startAt.forPreferredLocale(),
                        let endDate = locale != nil ? endAt.forLocale(locale!) : startAt.forPreferredLocale() {
                         if startDate > .now {
                             Text("Events.countdown.start-at.\(Text(startDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                                .multilineTextAlignment(.center)
                         } else if endDate > .now {
                             Text("Events.countdown.end-at.\(Text(endDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                                .multilineTextAlignment(.center)
                         } else {
                             Text("Events.countdown.ended.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                                .multilineTextAlignment(.center)
                         }
                     } else {
                         Text("Events.countdown.unstarted.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                            .multilineTextAlignment(.center)
                     }
                 }
             }
@@ -634,27 +639,6 @@ struct CardIconView: View {
             }
         }
     }
-    
-    #if os(macOS)
-    /// Hi, what happened?
-    /// We NEED this to workaround a bug (maybe of SwiftUI?)
-    struct HereTheWorld<each T, V: View>: NSViewRepresentable {
-        private var controller: NSViewController
-        private var viewBuilder: (repeat each T) -> V
-        init(arguments: (repeat each T), @ViewBuilder view: @escaping (repeat each T) -> V) {
-            self.controller = NSHostingController(rootView: view(repeat each arguments))
-            self.viewBuilder = view
-        }
-        func makeNSView(context: Context) -> some NSView {
-            self.controller.view
-        }
-        func updateNSView(_ nsView: NSViewType, context: Context) {}
-        func updateArguments(_ arguments: (repeat each T)) {
-            let newView = viewBuilder(repeat each arguments)
-            controller.view = NSHostingView(rootView: newView)
-        }
-    }
-    #endif
 }
 
 //MARK: ThumbCostumeCardView
