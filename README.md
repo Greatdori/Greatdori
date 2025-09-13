@@ -42,6 +42,14 @@ and provide native experience to Bestdori.
 > The ABI of DoriKit is stable between release versions
 > when using with the Xcode Project.
 
+### XCFramework
+Download the `DoriKit.xcframework` from
+[releases](https://github.com/WindowsMEMZ/Greatdori/releases/latest)
+then link it to your project.
+
+Or you can build an XCFramework by your own as described
+in the [Build XCFramework](#build-xcframework) section.
+
 ### Swift Package Manager
 Add the following dependency to your `Package.swift` file:
 
@@ -90,7 +98,7 @@ You can also use `swift build` to build DoriKit from Package.swift.
 However, functionality of DoriKit is limited if it's built as a Swift Package.
 
 ### Build XCFramework
-A XCFramework allows you to use DoriKit in your project easily.
+An XCFramework allows you to use DoriKit in your project easily.
 Generally, we attach a `DoriKit.xcframework` with each releases.
 You can build a XCFramework of DoriKit by your own using `build-xcframework`
 script like the following:
