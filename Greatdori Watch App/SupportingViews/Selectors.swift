@@ -72,8 +72,7 @@ struct CardSelector: View {
                             .server,
                             .released,
                             .cardType,
-                            .skill,
-                            .sort
+                            .skill
                         ]) {
                             SearchView(items: cardList, text: $searchInput) { result in
                                 searchedCardList = result
@@ -105,7 +104,7 @@ struct CardSelector: View {
     private func getCards() async {
         availability = true
         DoriCache.withCache(id: "CardList_\(filter.identity)") {
-            await DoriFrontend.Card.list(filter: filter)
+            await DoriFrontend.Card.list()
         }.onUpdate {
             if let cards = $0 {
                 self.cardList = cards

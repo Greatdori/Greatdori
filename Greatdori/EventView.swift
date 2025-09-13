@@ -750,7 +750,7 @@ struct EventSearchView: View {
         }
         .withSystemBackground()
         .inspector(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType, .sort])
+            FilterView(filter: $filter, includingKeys: [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType])
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .presentationBackgroundInteraction(.enabled)
@@ -762,7 +762,7 @@ struct EventSearchView: View {
     func getEvents() async {
         infoIsAvailable = true
         DoriCache.withCache(id: "EventList_\(filter.identity)") {
-            await DoriFrontend.Event.list(filter: filter)
+            await DoriFrontend.Event.list()
         } .onUpdate {
             if let events = $0 {
                 self.events = events

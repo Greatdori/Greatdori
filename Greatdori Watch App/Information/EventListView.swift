@@ -58,8 +58,7 @@ struct EventListView: View {
                 .characterRequiresMatchAll,
                 .server,
                 .timelineStatus,
-                .eventType,
-                .sort
+                .eventType
             ]) {
                 if let events {
                     SearchView(items: events, text: $searchInput) { result in
@@ -86,7 +85,7 @@ struct EventListView: View {
     func getEvents() async {
         availability = true
         DoriCache.withCache(id: "EventList_\(filter.identity)") {
-            await DoriFrontend.Event.list(filter: filter)
+            await DoriFrontend.Event.list()
         }.onUpdate {
             if let events = $0 {
                 self.events = events

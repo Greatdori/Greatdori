@@ -111,41 +111,42 @@ struct FilterView: View {
                                 }
                             }
                         })
-                    } else if key == .sort {
-                        let sort = filter[key] as! DoriFrontend.Filter.Sort
-                        Section {
-                            Button(action: {
-                                var sort = sort
-                                sort.direction = .ascending
-                                filter[key] = sort
-                            }, label: {
-                                HStack {
-                                    Text("升序")
-                                    Spacer()
-                                    if sort.direction == .ascending {
-                                        Image(systemName: "checkmark")
-                                            .foregroundStyle(.accent)
-                                    }
-                                }
-                            })
-                            Button(action: {
-                                var sort = sort
-                                sort.direction = .descending
-                                filter[key] = sort
-                            }, label: {
-                                HStack {
-                                    Text("降序")
-                                    Spacer()
-                                    if sort.direction == .descending {
-                                        Image(systemName: "checkmark")
-                                            .foregroundStyle(.accent)
-                                    }
-                                }
-                            })
-                        } header: {
-                            Text("顺序")
-                        }
                     }
+//                    else if key == .sort {
+//                        let sort = filter[key] as! DoriFrontend.Filter.Sort
+//                        Section {
+//                            Button(action: {
+//                                var sort = sort
+//                                sort.direction = .ascending
+//                                filter[key] = sort
+//                            }, label: {
+//                                HStack {
+//                                    Text("升序")
+//                                    Spacer()
+//                                    if sort.direction == .ascending {
+//                                        Image(systemName: "checkmark")
+//                                            .foregroundStyle(.accent)
+//                                    }
+//                                }
+//                            })
+//                            Button(action: {
+//                                var sort = sort
+//                                sort.direction = .descending
+//                                filter[key] = sort
+//                            }, label: {
+//                                HStack {
+//                                    Text("降序")
+//                                    Spacer()
+//                                    if sort.direction == .descending {
+//                                        Image(systemName: "checkmark")
+//                                            .foregroundStyle(.accent)
+//                                    }
+//                                }
+//                            })
+//                        } header: {
+//                            Text("顺序")
+//                        }
+//                    }
                     ForEach(key.selector.items, id: \.self) { item in
                         Button(action: {
                             filter[key] = item.item.value

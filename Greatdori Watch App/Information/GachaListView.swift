@@ -58,8 +58,7 @@ struct GachaListView: View {
                 .characterRequiresMatchAll,
                 .server,
                 .timelineStatus,
-                .gachaType,
-                .sort
+                .gachaType
             ]) {
                 if let gacha {
                     SearchView(items: gacha, text: $searchInput) { result in

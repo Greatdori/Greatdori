@@ -55,7 +55,6 @@ struct CostumeListView: View {
                 .character,
                 .server,
                 .released,
-                .sort
             ]) {
                 if let costumes {
                     SearchView(items: costumes, text: $searchInput) { result in

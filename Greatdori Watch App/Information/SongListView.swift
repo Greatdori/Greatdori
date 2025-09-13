@@ -54,8 +54,7 @@ struct SongListView: View {
                 .songType,
                 .band,
                 .server,
-                .released,
-                .sort
+                .released
             ]) {
                 if let songs {
                     SearchView(items: songs, text: $searchInput) { result in
@@ -82,7 +81,7 @@ struct SongListView: View {
     func getSongs() async {
         availability = true
         DoriCache.withCache(id: "SongList_\(filter.identity)") {
-            await DoriFrontend.Song.list(filter: filter)
+            await DoriFrontend.Song.list()
         }.onUpdate {
             if let songs = $0 {
                 self.songs = songs

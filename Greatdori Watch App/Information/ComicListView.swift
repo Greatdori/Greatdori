@@ -54,8 +54,7 @@ struct ComicListView: View {
                 .comicType,
                 .character,
                 .characterRequiresMatchAll,
-                .server,
-                .sort
+                .server
             ]) {
                 if let comics {
                     SearchView(items: comics, text: $searchInput) { result in
@@ -82,7 +81,7 @@ struct ComicListView: View {
     func getComics() async {
         availability = true
         DoriCache.withCache(id: "ComicList_\(filter.identity)") {
-            await DoriFrontend.Comic.list(filter: filter)
+            await DoriFrontend.Comic.list()
         }.onUpdate {
             if let comics = $0 {
                 self.comics = comics

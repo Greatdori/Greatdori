@@ -1276,6 +1276,7 @@
       }
     },
     "升序" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3520,6 +3521,7 @@
       }
     },
     "降序" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3630,6 +3632,7 @@
       }
     },
     "顺序" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
