@@ -77,7 +77,7 @@ format_time() {
     echo "$result"
 }
 
-echo "\n"
+echo -e "\n"
 echo "--- Build Analyzer ---"
 echo "Build Phase: Build Duration (sec)"
 echo "================================="
