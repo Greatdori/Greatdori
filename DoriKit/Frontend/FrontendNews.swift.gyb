@@ -22,10 +22,6 @@ extension DoriFrontend {
         ///
         /// - Parameter filter: A filter for filtering result, nil means don't filter.
         /// - Returns: All news, nil if failed to fetch.
-        ///
-        /// - Note:
-        ///     In contrast with other `list` function in DoriFrontend,
-        ///     this function uses ``ListFilter`` instead of ``DoriFrontend/Filter``.
         @inline(never)
         public static func list(filter: ListFilter? = nil) async -> [ListItem]? {
             // list = news + recent

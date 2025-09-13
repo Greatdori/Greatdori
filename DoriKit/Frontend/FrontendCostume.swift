@@ -21,22 +21,9 @@ import WebKit
 extension DoriFrontend {
     /// Request and fetch data about costume in Bandori.
     public enum Costume {
-        /// List all costumes with a filter.
+        /// List all costumes.
         ///
-        /// - Parameter filter: A ``DoriFrontend/Filter`` for filtering result.
         /// - Returns: All costumes, nil if failed to fetch.
-        ///
-        /// This function respects these keys in `filter`:
-        ///
-        /// - ``DoriFrontend/Filter/Key/band``
-        /// - ``DoriFrontend/Filter/Key/character``
-        /// - ``DoriFrontend/Filter/Key/server``
-        /// - ``DoriFrontend/Filter/Key/released``
-        /// - ``DoriFrontend/Filter/Key/sort``
-        ///     - ``DoriFrontend/Filter/Sort/Keyword/releaseDate(in:)``
-        ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
-        ///
-        /// Other keys are ignored.
         public static func list(filter: Filter = .init()) async -> [PreviewCostume]? {
             let groupResult = await withTasksResult {
                 await DoriAPI.Costume.all()

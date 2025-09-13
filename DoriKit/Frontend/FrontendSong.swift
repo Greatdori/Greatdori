@@ -18,22 +18,9 @@ import Foundation
 extension DoriFrontend {
     /// Request and fetch data about songs in Bandori.
     public enum Song {
-        /// List all songs with a filter.
+        /// List all songs.
         ///
-        /// - Parameter filter: A ``DoriFrontend/Filter`` for filtering result.
         /// - Returns: All songs, nil if failed to fetch.
-        ///
-        /// This function respects these keys in `filter`:
-        ///
-        /// - ``DoriFrontend/Filter/Key/band``
-        /// - ``DoriFrontend/Filter/Key/server``
-        /// - ``DoriFrontend/Filter/Key/released``
-        /// - ``DoriFrontend/Filter/Key/songType``
-        /// - ``DoriFrontend/Filter/Key/sort``
-        ///     - ``DoriFrontend/Filter/Sort/Keyword/releaseDate(in:)``
-        ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
-        ///
-        /// Other keys are ignored.
         public static func list() async -> [PreviewSong]? {
             guard let songs = await DoriAPI.Song.all() else { return nil }
             return songs
