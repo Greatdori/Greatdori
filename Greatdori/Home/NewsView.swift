@@ -243,6 +243,8 @@ struct NewsPreview: View {
                         Text("News.time-mark.has-ended")
                     case .hasPublished:
                         Text("News.time-mark.has-published")
+                    case .willStartToday:
+                        Text("News.time-mark.will-start-today")
                     @unknown default:
                         //                    Text("")
                         EmptyView()
