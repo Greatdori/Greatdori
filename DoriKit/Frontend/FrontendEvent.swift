@@ -74,7 +74,7 @@ extension DoriFrontend {
         ///     - ``DoriFrontend/Filter/Sort/Keyword/id``
         ///
         /// Other keys are ignored.
-        public static func list(filter: Filter = .init()) async -> [PreviewEvent]? {
+        public static func list() async -> [PreviewEvent]? {
             guard let events = await DoriAPI.Event.all() else { return nil }
             return events
         }
