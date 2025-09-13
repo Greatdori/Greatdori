@@ -15,6 +15,9 @@
 import DoriKit
 import SDWebImageSwiftUI
 import SwiftUI
+#if os(iOS)
+import UIKit
+#endif
 
 let flowLayoutDefaultVerticalSpacing: CGFloat = 3
 let flowLayoutDefaultHorizontalSpacing: CGFloat = 3
@@ -546,55 +549,77 @@ struct SorterPickerView: View {
                         }
                     })
                 })
-                
+
             }
         }, label: {
             Label("Sort", systemImage: "arrow.up.arrow.down")
         })
-#else
-        if #available(iOS 18.0, *) {
-            Menu(content: {
-                Picker(selection: .init(get: {
-                    sorter.keyword
-                }, set: { value in
-                    //            print(value)
-                    if sorter.keyword == value {
-                        sorter.direction.reverse()
-                    } else {
-                        sorter.keyword = value
-                    }
-                }), content: {
+        #else
+        Button(action: {
+            isMenuPresented = true
+        }, label: {
+            Label("Sort", systemImage: "arrow.up.arrow.down")
+        })
+        .popover(isPresented: $isMenuPresented) {
+            ScrollView {
+                VStack {
                     ForEach(DoriFrontend.Sorter.Keyword.allCases, id: \.self) { item in
                         if allOptions.contains(item) {
-                            Text(getPickerLabelAttributedString(
-                                title: item.localizedString(hasEndingDate: sortingItemsHaveEndingDate),
-                                order: item == sorter.keyword ? sorter.localizedDirectionName(direction: sorter.direction) : nil)
-                            )
-                            .tag(item)
+                            Button(action: {
+                                if sorter.keyword != item {
+                                    sorter.keyword = item
+                                } else {
+                                    sorter.direction.reverse()
+                                }
+                                isMenuPresented = false
+                            }, label: {
+                                HStack {
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 8, weight: .bold))
+//                                        .bold()
+                                        .opacity(sorter.keyword == item ? 1 : 0)
+                                        .padding(.trailing, 3)
+                                    VStack(alignment: .leading) {
+                                        Text(item.localizedString(hasEndingDate: sortingItemsHaveEndingDate))
+//                                            .bold(false)
+                                            .font(.body)
+                                        if sorter.keyword == item {
+                                            Text(sorter.getLocalizedSortingDirectionName(direction: sorter.direction))
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                    Spacer()
+                                }
+//                                .foregroundStyle(Color.primary)
+                                .padding(.trailing)
+                                .contentShape(Rectangle())
+                            })
+                            .buttonStyle(MenuButtonStyle())
                         }
                     }
-                    
-                }, label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                })
-            }, label: {
-                Image(systemName: "arrow.up.arrow.down")
-            })
+                }
+                .padding(.vertical)
+                .padding(.horizontal, 7)
+            }
+            .frame(maxHeight: 500)
+            .presentationCompactAdaptation(.popover)
         }
         #endif
     }
-    func getPickerLabelAttributedString(title: String, order: String?) -> AttributedString {
-        var result = AttributedString(title)
-        if let order = order {
-            result.append(AttributedString("\n"))
-            var secondLine = AttributedString(order)
-            secondLine.font = .caption
-            secondLine.foregroundColor = .secondary
-            result.append(secondLine)
-        }
-        return result
-    }
 }
 
-
-
+private struct MenuButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            .background {
+                if configuration.isPressed {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color.gray.opacity(0.2))
+                }
+            }
+            .padding(.vertical, -3)
+    }
+}
