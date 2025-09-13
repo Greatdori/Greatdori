@@ -6,4 +6,4 @@
   
 */
 
-"Privacy.usage.calendar" = "Allow calendar access to allow Greatdori! manage birthdays. No events other than character birthday events will be accessed.";
+"NSCalendarsUsageDescription" = "Allow calendar access to allow Greatdori! manage birthdays. No events other than character birthday events will be accessed.";

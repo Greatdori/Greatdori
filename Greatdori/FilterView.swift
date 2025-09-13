@@ -575,7 +575,7 @@ struct SorterPickerView: View {
                             }, label: {
                                 HStack {
                                     Image(systemName: "checkmark")
-                                        .font(.system(size: 8, weight: .bold))
+                                        .font(.system(size: 10, weight: .bold))
 //                                        .bold()
                                         .opacity(sorter.keyword == item ? 1 : 0)
                                         .padding(.trailing, 3)
@@ -584,7 +584,7 @@ struct SorterPickerView: View {
 //                                            .bold(false)
                                             .font(.body)
                                         if sorter.keyword == item {
-                                            Text(sorter.getLocalizedSortingDirectionName(direction: sorter.direction))
+                                            Text(sorter.localizedDirectionName(direction: sorter.direction))
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
                                         }
