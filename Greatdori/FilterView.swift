@@ -507,25 +507,33 @@ struct SorterPickerView: View {
     var sortingItemsHaveEndingDate = false
     @State var isMenuPresented = false // iOS only
     var body: some View {
-#if os(macOS)
         Menu(content: {
             Section {
                 ForEach(DoriFrontend.Sorter.Keyword.allCases, id: \.self) { item in
                     if allOptions.contains(item) {
                         Button(action: {
-                            sorter.keyword = item
+                            if sorter.keyword == item && !isMACOS {
+                                sorter.direction.reverse()
+                            } else {
+                                sorter.keyword = item
+                            }
                         }, label: {
                             Label(title: {
                                 Text(item.localizedString(hasEndingDate: sortingItemsHaveEndingDate))
                             }, icon: {
                                 if sorter.keyword == item {
-                                    Image(systemName: "checkmark")
+                                    if isMACOS {
+                                        Image(systemName: "checkmark")
+                                    } else {
+                                        Image(systemName: sorter.direction == .ascending ? "chevron.up" : "chevron.down")
+                                    }
                                 }
                             })
                         })
                     }
                 }
             }
+            #if os(macOS)
             Section {
                 Button(action: {
                     sorter.direction = .ascending
@@ -551,75 +559,9 @@ struct SorterPickerView: View {
                 })
 
             }
+            #endif
         }, label: {
             Label("Sort", systemImage: "arrow.up.arrow.down")
         })
-        #else
-        Button(action: {
-            isMenuPresented = true
-        }, label: {
-            Label("Sort", systemImage: "arrow.up.arrow.down")
-        })
-        .popover(isPresented: $isMenuPresented) {
-            ScrollView {
-                VStack {
-                    ForEach(DoriFrontend.Sorter.Keyword.allCases, id: \.self) { item in
-                        if allOptions.contains(item) {
-                            Button(action: {
-                                if sorter.keyword != item {
-                                    sorter.keyword = item
-                                } else {
-                                    sorter.direction.reverse()
-                                }
-                                isMenuPresented = false
-                            }, label: {
-                                HStack {
-                                    Image(systemName: "checkmark")
-                                        .font(.system(size: 10, weight: .bold))
-//                                        .bold()
-                                        .opacity(sorter.keyword == item ? 1 : 0)
-                                        .padding(.trailing, 3)
-                                    VStack(alignment: .leading) {
-                                        Text(item.localizedString(hasEndingDate: sortingItemsHaveEndingDate))
-//                                            .bold(false)
-                                            .font(.body)
-                                        if sorter.keyword == item {
-                                            Text(sorter.localizedDirectionName(direction: sorter.direction))
-                                                .font(.caption)
-                                                .foregroundStyle(.secondary)
-                                        }
-                                    }
-                                    Spacer()
-                                }
-//                                .foregroundStyle(Color.primary)
-                                .padding(.trailing)
-                                .contentShape(Rectangle())
-                            })
-                            .buttonStyle(MenuButtonStyle())
-                        }
-                    }
-                }
-                .padding(.vertical)
-                .padding(.horizontal, 7)
-            }
-            .frame(maxHeight: 500)
-            .presentationCompactAdaptation(.popover)
-        }
-        #endif
-    }
-}
-
-private struct MenuButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding(.horizontal)
-            .padding(.vertical, 10)
-            .background {
-                if configuration.isPressed {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.gray.opacity(0.2))
-                }
-            }
-            .padding(.vertical, -3)
     }
 }

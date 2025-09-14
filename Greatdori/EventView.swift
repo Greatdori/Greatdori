@@ -533,6 +533,7 @@ struct EventSearchView: View {
     @Environment(\.colorScheme) var colorScheme
 //    @State var filterClass: DoriFrontend.EventsFilter
     @State var filter = DoriFrontend.Filter()
+    @State var sorter = DoriFrontend.Sorter(direction: .descending, keyword: .releaseDate(in: .jp))
     @State var events: [DoriFrontend.Event.PreviewEvent]?
     @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
     @State var infoIsAvailable = true
@@ -637,12 +638,6 @@ struct EventSearchView: View {
                             searchedEvents = events.search(for: searchedText)
                         }
                     }
-                    .onChange(of: searchedText, {
-                        if let events {
-                            searchedEvents = events.search(for: searchedText)
-                        }
-                    })
-                    
                 } else {
                     if infoIsAvailable {
                         HStack {
@@ -664,10 +659,6 @@ struct EventSearchView: View {
                     content
                 }
             })
-            .task {
-                await getEvents()
-                searchedEvents = events
-            }
             .toolbar {
                 #if os(iOS)
                 ToolbarItem {
@@ -715,7 +706,6 @@ struct EventSearchView: View {
                     .pickerStyle(.inline)
                 }
                 #endif
-                
                 if #available(iOS 26.0, macOS 26.0, *) {
                     ToolbarSpacer()
                 }
@@ -737,11 +727,7 @@ struct EventSearchView: View {
                             }
                     })
                     .animation(.easeInOut(duration: 0.2), value: filter.isFiltered)
-                }
-            }
-            .onChange(of: filter) {
-                Task {
-                    await getEvents()
+                    SorterPickerView(sorter: $sorter, allOptions: DoriFrontend.Event.PreviewEvent.applicableSortingTypes)
                 }
             }
             .onDisappear {
@@ -757,6 +743,26 @@ struct EventSearchView: View {
         }
         .withSystemBackground() // This modifier MUST be placed BOTH before
                                 // and after `inspector` to make it work as expected
+        .task {
+            await getEvents()
+            searchedEvents = events
+        }
+        .onChange(of: filter) {
+            if let events {
+                searchedEvents = events.filter(withDoriFilter: filter).search(for: searchedText)
+            }
+        }
+        .onChange(of: sorter) {
+            if let oldEvents = events {
+                events = oldEvents.sorted(withDoriSorter: sorter)
+                searchedEvents = events!.filter(withDoriFilter: filter).search(for: searchedText)
+            }
+        }
+        .onChange(of: searchedText, {
+            if let events {
+                searchedEvents = events.filter(withDoriFilter: filter).search(for: searchedText)
+            }
+        })
     }
     
     func getEvents() async {
@@ -765,8 +771,8 @@ struct EventSearchView: View {
             await DoriFrontend.Event.list()
         } .onUpdate {
             if let events = $0 {
-                self.events = events
-                searchedEvents = events.search(for: searchedText)
+                self.events = events.sorted(withDoriSorter: sorter)
+                searchedEvents = events
             } else {
                 infoIsAvailable = false
             }
