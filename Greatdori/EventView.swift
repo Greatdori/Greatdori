@@ -640,13 +640,22 @@ struct EventSearchView: View {
                     }
                 } else {
                     if infoIsAvailable {
-                        HStack {
+                        VStack {
                             Spacer()
-                            ProgressView()
+                            HStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }
                             Spacer()
                         }
                     } else {
                         ContentUnavailableView("Event.search.unavailable", systemImage: "line.horizontal.star.fill.line.horizontal", description: Text("Search.unavailable.description"))
+                            .onTapGesture {
+                                Task {
+                                    await getEvents()
+                                }
+                            }
                     }
                 }
             }
@@ -736,6 +745,7 @@ struct EventSearchView: View {
         }
         .withSystemBackground()
         .inspector(isPresented: $showFilterSheet) {
+            
             FilterView(filter: $filter, includingKeys: [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType])
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)

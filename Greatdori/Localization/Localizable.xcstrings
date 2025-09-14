@@ -240,6 +240,12 @@
     },
     "Character" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Characters"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1008,6 +1014,22 @@
         }
       }
     },
+    "Filter.match-all.all-selected.abbr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部"
+          }
+        }
+      }
+    },
     "Filter.match-all.any-selected" : {
       "localizations" : {
         "en" : {
@@ -1020,6 +1042,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "包含任意"
+          }
+        }
+      }
+    },
+    "Filter.match-all.any-selected.abbr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Any"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "任意"
           }
         }
       }
@@ -1143,8 +1181,8 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "When Differences Occur Between Time Zones"
+            "state" : "translated",
+            "value" : "When Time Zone Differs"
           }
         },
         "zh-Hans" : {
@@ -3365,6 +3403,12 @@
     },
     "Sort" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",

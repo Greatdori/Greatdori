@@ -98,7 +98,10 @@ struct FilterItemView: View {
                                 .labelsHidden()
                                 .multilineTextAlignment(.leading)
                             }, label: {
-                                Text(getAttributedStringForMatchAll(isAllSelected: characterRequiresMatchAll))
+                                ViewThatFits {
+                                    Text(getAttributedStringForMatchAll(isAllSelected: characterRequiresMatchAll))
+                                    Text(getAttributedStringForMatchAll(isAllSelected: characterRequiresMatchAll, isCompact: true))
+                                }
                             })
                             .menuIndicator(.hidden)
                             .menuStyle(.borderlessButton)
@@ -428,8 +431,13 @@ struct FilterItemView: View {
             .animation(.easeInOut(duration: 0.05), value: isActive)
         }
     }
-    func getAttributedStringForMatchAll(isAllSelected: Bool = false) -> AttributedString {
-        var attrString = AttributedString(String(localized: isAllSelected ? "Filter.match-all.all-selected" : "Filter.match-all.any-selected"))
+    func getAttributedStringForMatchAll(isAllSelected: Bool = false, isCompact: Bool = false) -> AttributedString {
+        var attrString = AttributedString()
+        if isCompact {
+            attrString = AttributedString(String(localized: isAllSelected ? "Filter.match-all.all-selected.abbr" : "Filter.match-all.any-selected.abbr"))
+        } else {
+            attrString = AttributedString(String(localized: isAllSelected ? "Filter.match-all.all-selected" : "Filter.match-all.any-selected"))
+        }
         attrString.font = .system(.body, weight: .thin)
         attrString.foregroundColor = .secondary
         return attrString

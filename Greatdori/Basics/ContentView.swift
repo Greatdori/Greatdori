@@ -58,6 +58,9 @@ struct ContentView: View {
                         TabSection(content: {
                             Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
                                 //                            Text(verbatim: "char")
+                                NavigationStack {
+                                    CharacterSearchView()
+                                }
                                 
                             }
                             Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
