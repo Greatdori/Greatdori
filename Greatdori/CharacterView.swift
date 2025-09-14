@@ -20,6 +20,7 @@ fileprivate let bandLogoScaleFactor: CGFloat = 1.2
 fileprivate let charVisualImageCornerRadius: CGFloat = 10
 
 struct CharacterSearchView: View {
+    @Namespace var detailNavigation
     @State var charactersDict: DoriFrontend.Character.CategorizedCharacters?
     @State var bandArray: [DoriAPI.Band.Band?] = []
     @State var infoIsAvailable = true
@@ -38,7 +39,30 @@ struct CharacterSearchView: View {
                                         .frame(width: 160*bandLogoScaleFactor, height: 82*bandLogoScaleFactor)
                                     HStack {
                                         ForEach(charactersDict![band]!, id: \.self) { char in
-                                            CharacterImageView(character: char)
+                                            NavigationLink(destination: {
+                                                CharacterDetailView(id: char.id, allCharacters: $charactersDict)
+                                                #if !os(macOS)
+                                                    .wrapIf(true, in: { content in
+                                                        if #available(iOS 18.0, *) {
+                                                            content
+                                                                .navigationTransition(.zoom(sourceID: char.id, in: detailNavigation))
+                                                        } else {
+                                                            content
+                                                        }
+                                                    })
+                                                #endif
+                                            }, label: {
+                                                CharacterImageView(character: char)
+                                            })
+                                            .buttonStyle(.plain)
+                                            .wrapIf(true, in: { content in
+                                                if #available(iOS 18.0, macOS 15.0, *) {
+                                                    content
+                                                        .matchedTransitionSource(id: char.id, in: detailNavigation)
+                                                } else {
+                                                    content
+                                                }
+                                            })
                                         }
                                     }
                                     Rectangle()
@@ -145,8 +169,9 @@ struct CharacterSearchView: View {
 
 
 struct CharacterDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     var id: Int
+    @Binding var allCharacters: DoriFrontend.Character.CategorizedCharacters?
+    @Environment(\.horizontalSizeClass) var sizeClass
     @State var currentID: Int = 0
     @State var informationLoadPromise: DoriCache.Promise<DoriFrontend.Character.ExtendedCharacter?>?
     @State var information: DoriFrontend.Character.ExtendedCharacter?
@@ -199,7 +224,7 @@ struct CharacterDetailView: View {
             Text("\(id)")
         })
         .navigationTitle(Text(information?.character.characterName.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Character") : "")"))
-#if os(iOS)
+        #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
                 content
@@ -208,7 +233,7 @@ struct CharacterDetailView: View {
                 content
             }
         }
-#endif
+        #endif
         .onAppear {
             Task {
                 DoriCache.withCache(id: "Character_Last_JP_ID", trait: .realTime) {
@@ -230,37 +255,39 @@ struct CharacterDetailView: View {
         }
         .toolbar {
             ToolbarItemGroup(content: {
-                if sizeClass == .regular {
-                    HStack(spacing: 0) {
-                        Button(action: {
-                            if currentID > 1 {
+                if sizeClass == .regular, let allCharacters {
+                    let flatMainCharacters = allCharacters.compactMap { key, value in
+                        // only *main* characters
+                        key != nil ? value : nil
+                    }.flatMap { $0 }
+                    if let currentIndex = flatMainCharacters.firstIndex(where: { $0.id == currentID }) {
+                        HStack(spacing: 0) {
+                            Button(action: {
                                 information = nil
-                                currentID -= 1
-                            }
-                        }, label: {
-                            Label("Character.previous", systemImage: "arrow.backward")
-                        })
-                        .disabled(currentID <= 1 || currentID > lastAvaialbleID)
-                        NavigationLink(destination: {
-                            EventSearchView()
-                        }, label: {
-                            Text("#\(String(currentID))")
-                                .fontDesign(.monospaced)
-                                .bold()
-                        })
-                        Button(action: {
-                            if currentID < lastAvaialbleID {
+                                currentID = flatMainCharacters[currentIndex - 1].id
+                            }, label: {
+                                Label("Character.previous", systemImage: "arrow.backward")
+                            })
+                            .disabled(currentIndex - 1 < 0)
+                            NavigationLink(destination: {
+                                EventSearchView()
+                            }, label: {
+                                Text("#\(String(currentID))")
+                                    .fontDesign(.monospaced)
+                                    .bold()
+                            })
+                            Button(action: {
                                 information = nil
-                                currentID += 1
-                            }
-                        }, label: {
-                            Label("Character.next", systemImage: "arrow.forward")
-                        })
-                        .disabled(lastAvaialbleID <= currentID)
-                    }
-                    .disabled(lastAvaialbleID == 0 || currentID == 0)
-                    .onAppear {
-                        showSubtitle = false
+                                currentID = flatMainCharacters[currentIndex + 1].id
+                            }, label: {
+                                Label("Character.next", systemImage: "arrow.forward")
+                            })
+                            .disabled(currentIndex + 1 >= flatMainCharacters.count)
+                        }
+                        .disabled(lastAvaialbleID == 0 || currentID == 0)
+                        .onAppear {
+                            showSubtitle = false
+                        }
                     }
                 } else {
                     NavigationLink(destination: {
