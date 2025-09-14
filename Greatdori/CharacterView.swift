@@ -169,6 +169,8 @@ struct CharacterSearchView: View {
 
 
 struct CharacterDetailView: View {
+    private let randomCardScalingFactor: CGFloat = 1.2
+    
     var id: Int
     @Binding var allCharacters: DoriFrontend.Character.CategorizedCharacters?
     @Environment(\.horizontalSizeClass) var sizeClass
@@ -187,6 +189,12 @@ struct CharacterDetailView: View {
                     HStack {
                         Spacer(minLength: 0)
                         VStack {
+//                            Text()
+                            if let randomCard, information.band != nil {
+                                CardCardView(randomCard, band: information.band!)
+//                                    .scaledToFit()
+                                    .frame(maxWidth: 480*randomCardScalingFactor, maxHeight: 320*randomCardScalingFactor)
+                            }
 //                            CharacterDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
                         }
                         .padding()

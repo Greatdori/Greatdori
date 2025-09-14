@@ -54,6 +54,7 @@ struct ContentView: View {
                         Tab("App.leaderboard", systemImage: "chart.bar", value: .leaderboard) {
                             //                        HomeView()
                             Text(verbatim: "leaderboard")
+//                            ThumbCardCardView(DoriFrontend.Card.PreviewCard(<#T##full: DoriAPI.Card.Card##DoriAPI.Card.Card#>), band: <#T##DoriAPI.Band.Band#>)
                         }
                         TabSection(content: {
                             Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {

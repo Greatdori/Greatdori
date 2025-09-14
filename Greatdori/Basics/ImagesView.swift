@@ -227,6 +227,7 @@ struct CardCardView: View {
     
     var body: some View {
         ZStack {
+            // MARK: Card Content
             if let trainedBackgroundImageURL {
                 if ![.others, .campaign, .birthday].contains(cardType) {
                     HStack(spacing: 0) {
@@ -283,6 +284,8 @@ struct CardCardView: View {
                 .antialiased(true)
                 .cornerRadius(2)
             }
+            
+            // MARK: Border
             if rarity != 1 {
                 Image("CardBorder\(rarity)")
                     .resizable()
@@ -290,6 +293,9 @@ struct CardCardView: View {
                 Image("CardBorder\(rarity)\(attribute.rawValue.prefix(1).uppercased() + attribute.rawValue.dropFirst())")
                     .resizable()
             }
+            
+            // MARK: Visualized Card Information
+            // This includes information like `attributes` and `rarity`.
             VStack {
                 HStack {
                     WebImage(url: bandIconImageURL)
@@ -317,9 +323,10 @@ struct CardCardView: View {
                 }
             }
         }
+        .scaledToFit()
 //        .frame(width: screenBounds.width - 5, height: (screenBounds.width - 5) * 0.7511244378)
-        .listRowBackground(Color.clear)
-        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+//        .listRowBackground(Color.clear)
+//        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }
 
