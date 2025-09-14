@@ -254,6 +254,12 @@
         }
       }
     },
+    "Character.next" : {
+
+    },
+    "Character.previous" : {
+
+    },
     "Character.search.unavailable" : {
       "localizations" : {
         "en" : {
@@ -269,6 +275,9 @@
           }
         }
       }
+    },
+    "Character.unavailable" : {
+
     },
     "Debug.crash-detected.direct-enter" : {
       "localizations" : {

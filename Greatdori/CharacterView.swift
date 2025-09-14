@@ -52,6 +52,16 @@ struct CharacterSearchView: View {
                                                             .scaledToFill()
                                                     }
                                                     .frame(width: 122, height: 480)
+                                                } else {
+                                                    RoundedRectangle(cornerRadius: charVisualImageCornerRadius)
+                                                        .foregroundStyle(char.color ?? .gray)
+                                                        .aspectRatio(122 / 480, contentMode: .fill)
+                                                        .overlay {
+                                                            WebImage(url: char.keyVisualImageURL)
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .clipped()
+                                                        }
                                                 }
                                             }
                                             .mask {
