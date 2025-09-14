@@ -20,7 +20,6 @@ fileprivate let bandLogoScaleFactor: CGFloat = 1.2
 fileprivate let charVisualImageCornerRadius: CGFloat = 10
 
 struct CharacterSearchView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     @State var charactersDict: DoriFrontend.Character.CategorizedCharacters?
     @State var bandArray: [DoriAPI.Band.Band?] = []
     @State var infoIsAvailable = true
@@ -37,37 +36,9 @@ struct CharacterSearchView: View {
                                     WebImage(url: band.logoImageURL)
                                         .resizable()
                                         .frame(width: 160*bandLogoScaleFactor, height: 82*bandLogoScaleFactor)
-//                                        .border(.red)
-//                                        .scaleEffect(1.5)
                                     HStack {
                                         ForEach(charactersDict![band]!, id: \.self) { char in
-                                            Group {
-                                                if sizeClass == .regular {
-                                                    ZStack {
-                                                        RoundedRectangle(cornerRadius: charVisualImageCornerRadius)
-                                                            .foregroundStyle(char.color ?? .gray)
-                                                        WebImage(url: char.keyVisualImageURL)
-                                                            .resizable()
-//                                                        croppedWebImage(WebImage(url: char.keyVisualImageURL))
-                                                            .scaledToFill()
-                                                    }
-                                                    .frame(width: 122, height: 480)
-                                                } else {
-                                                    RoundedRectangle(cornerRadius: charVisualImageCornerRadius)
-                                                        .foregroundStyle(char.color ?? .gray)
-                                                        .aspectRatio(122 / 480, contentMode: .fill)
-                                                        .overlay {
-                                                            WebImage(url: char.keyVisualImageURL)
-                                                                .resizable()
-                                                                .scaledToFill()
-                                                                .clipped()
-                                                        }
-                                                }
-                                            }
-                                            .mask {
-                                                RoundedRectangle(cornerRadius: charVisualImageCornerRadius)
-                                                    .aspectRatio(122/480, contentMode: .fill)
-                                            }
+                                            CharacterImageView(character: char)
                                         }
                                     }
                                     Rectangle()
@@ -127,6 +98,47 @@ struct CharacterSearchView: View {
             } else {
                 infoIsAvailable = false
             }
+        }
+    }
+    
+    struct CharacterImageView: View {
+        var character: DoriFrontend.Character.PreviewCharacter
+        @Environment(\.horizontalSizeClass) var sizeClass
+        @State var isHovering = false
+        var body: some View {
+            Group {
+                if sizeClass == .regular {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: charVisualImageCornerRadius)
+                            .foregroundStyle(character.color ?? .gray)
+                        WebImage(url: character.keyVisualImageURL)
+                            .resizable()
+                            .scaledToFill()
+                            .scaleEffect(isHovering ? 1.05 : 1)
+                    }
+                    .frame(width: 122, height: 480)
+                } else {
+                    RoundedRectangle(cornerRadius: charVisualImageCornerRadius)
+                        .foregroundStyle(character.color ?? .gray)
+                        .aspectRatio(122 / 480, contentMode: .fill)
+                        .overlay {
+                            WebImage(url: character.keyVisualImageURL)
+                                .resizable()
+                                .scaledToFill()
+                                .clipped()
+                                .scaleEffect(isHovering ? 1.05 : 1)
+                        }
+                }
+            }
+            .mask {
+                RoundedRectangle(cornerRadius: charVisualImageCornerRadius)
+                    .aspectRatio(122/480, contentMode: .fill)
+            }
+            .animation(.spring(duration: 0.3, bounce: 0.1, blendDuration: 0), value: isHovering)
+            .onHover { hovering in
+                isHovering = hovering
+            }
+            .contentShape(RoundedRectangle(cornerRadius: charVisualImageCornerRadius))
         }
     }
 }
@@ -282,7 +294,7 @@ struct CharacterDetailView: View {
 }
 
 
-//MARK: EventDetailOverviewView
+//MARK: CharacterDetailOverviewView
 struct CharacterDetailOverviewView: View {
     let information: DoriFrontend.Event.ExtendedEvent
     @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
