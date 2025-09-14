@@ -250,5 +250,12 @@ struct HereTheWorld<each T, V: View>: UIViewRepresentable {
 }
 #endif
 
-
+extension MutableCollection {
+    @_transparent
+    func swappedAt(_ i: Self.Index, _ j: Self.Index) -> Self {
+        var copy = self
+        copy.swapAt(i, j)
+        return copy
+    }
+}
 

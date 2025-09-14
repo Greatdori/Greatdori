@@ -38,7 +38,7 @@ struct CharacterSearchView: View {
                                         .resizable()
                                         .frame(width: 160*bandLogoScaleFactor, height: 82*bandLogoScaleFactor)
                                     HStack {
-                                        ForEach(charactersDict![band]!, id: \.self) { char in
+                                        ForEach(charactersDict![band]!.swappedAt(0, 3).swappedAt(2, 3), id: \.self) { char in
                                             NavigationLink(destination: {
                                                 CharacterDetailView(id: char.id, allCharacters: $charactersDict)
                                                 #if !os(macOS)
