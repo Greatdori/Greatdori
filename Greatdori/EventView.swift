@@ -745,7 +745,6 @@ struct EventSearchView: View {
                                 // and after `inspector` to make it work as expected
         .task {
             await getEvents()
-            searchedEvents = events
         }
         .onChange(of: filter) {
             if let events {
@@ -771,8 +770,8 @@ struct EventSearchView: View {
             await DoriFrontend.Event.list()
         } .onUpdate {
             if let events = $0 {
-                self.events = events.sorted(withDoriSorter: sorter)
-                searchedEvents = events
+                self.events = events
+                searchedEvents = events.sorted(withDoriSorter: sorter)
             } else {
                 infoIsAvailable = false
             }
