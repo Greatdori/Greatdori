@@ -225,74 +225,89 @@ struct CardCardView: View {
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 113)
     
+    private let cardCornerRadius: CGFloat = 5
+    
     var body: some View {
         ZStack {
             // MARK: Card Content
-            if let trainedBackgroundImageURL {
-                if ![.others, .campaign, .birthday].contains(cardType) {
-                    HStack(spacing: 0) {
-                        WebImage(url: normalBackgroundImageURL) { image in
-                            image
-                        } placeholder: {
-                            RoundedRectangle(cornerRadius: 10)
-//                                .fill(Color.gray.opacity(0.15))
-                                .fill(getPlaceholderColor())
+            Group {
+                if let trainedBackgroundImageURL {
+                    if ![.others, .campaign, .birthday].contains(cardType) {
+                        HStack(spacing: 0) {
+                            WebImage(url: normalBackgroundImageURL) { image in
+                                image
+                            } placeholder: {
+                                RoundedRectangle(cornerRadius: 10)
+                                //                                .fill(Color.gray.opacity(0.15))
+                                    .fill(getPlaceholderColor())
+                            }
+                            .resizable()
+                            .interpolation(.high)
+                            .antialiased(true)
+                            .scaledToFill()
+                            //                        .frame(width: (screenBounds.width - 5) / 2)
+                            .clipped()
+                            WebImage(url: trainedBackgroundImageURL) { image in
+                                image
+                            } placeholder: {
+                                RoundedRectangle(cornerRadius: 10)
+                                //                                .fill(Color.gray.opacity(0.15))
+                                    .fill(getPlaceholderColor())
+                            }
+                            .resizable()
+                            .interpolation(.high)
+                            .antialiased(true)
+                            .scaledToFill()
+                            //                        .frame(width: (screenBounds.width - 5) / 2)
+                            .clipped()
                         }
-                        .resizable()
-                        .interpolation(.high)
-                        .antialiased(true)
-                        .scaledToFill()
-//                        .frame(width: (screenBounds.width - 5) / 2)
-                        .clipped()
+                    } else {
                         WebImage(url: trainedBackgroundImageURL) { image in
                             image
                         } placeholder: {
                             RoundedRectangle(cornerRadius: 10)
-//                                .fill(Color.gray.opacity(0.15))
+                            //                            .fill(Color.gray.opacity(0.15))
                                 .fill(getPlaceholderColor())
                         }
                         .resizable()
                         .interpolation(.high)
                         .antialiased(true)
-                        .scaledToFill()
-//                        .frame(width: (screenBounds.width - 5) / 2)
-                        .clipped()
+                        .cornerRadius(cardCornerRadius)
                     }
                 } else {
-                    WebImage(url: trainedBackgroundImageURL) { image in
+                    WebImage(url: normalBackgroundImageURL) { image in
                         image
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
-//                            .fill(Color.gray.opacity(0.15))
+                        //                        .fill(Color.gray.opacity(0.15))
                             .fill(getPlaceholderColor())
                     }
                     .resizable()
                     .interpolation(.high)
                     .antialiased(true)
-                    .cornerRadius(2)
+                    .cornerRadius(cardCornerRadius)
                 }
-            } else {
-                WebImage(url: normalBackgroundImageURL) { image in
-                    image
-                } placeholder: {
-                    RoundedRectangle(cornerRadius: 10)
-//                        .fill(Color.gray.opacity(0.15))
-                        .fill(getPlaceholderColor())
-                }
-                .resizable()
-                .interpolation(.high)
-                .antialiased(true)
-                .cornerRadius(2)
+            }
+            .mask {
+                // FIXME: Mask not working as expected.
+                RoundedRectangle(cornerRadius: cardCornerRadius)
+                    .aspectRatio(480/326, contentMode: .fill)
             }
             
             // MARK: Border
-            if rarity != 1 {
-                Image("CardBorder\(rarity)")
-                    .resizable()
-            } else {
-                Image("CardBorder\(rarity)\(attribute.rawValue.prefix(1).uppercased() + attribute.rawValue.dropFirst())")
-                    .resizable()
+            Group {
+                if rarity != 1 {
+                    Image("CardBorder\(rarity)")
+                        .resizable()
+                } else {
+                    Image("CardBorder\(rarity)\(attribute.rawValue.prefix(1).uppercased() + attribute.rawValue.dropFirst())")
+                        .resizable()
+                }
             }
+            .aspectRatio(480/326, contentMode: .fit)
+            // The Image may not be in expected ratio. Gosh.
+            // Why the heck will the image has a different ratio with the border???
+            // --@ThreeManager785
             
             // MARK: Visualized Card Information
             // This includes information like `attributes` and `rarity`.
