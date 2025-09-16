@@ -225,7 +225,10 @@ struct CardCardView: View {
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 113)
     
-    private let cardCornerRadius: CGFloat = 5
+    private let cardCornerRadius: CGFloat = 15
+    private let cardWidth: CGFloat = 480
+    private let cardHeight: CGFloat = 326
+    private let cardExpectedRatio: CGFloat = 480/326
     
     var body: some View {
         ZStack {
@@ -244,8 +247,8 @@ struct CardCardView: View {
                             .resizable()
                             .interpolation(.high)
                             .antialiased(true)
-                            .scaledToFill()
-                            //                        .frame(width: (screenBounds.width - 5) / 2)
+                            .scaledToFit()
+//                                                    .frame(width: (screenBounds.width - 5) / 2)
                             .clipped()
                             WebImage(url: trainedBackgroundImageURL) { image in
                                 image
@@ -257,7 +260,7 @@ struct CardCardView: View {
                             .resizable()
                             .interpolation(.high)
                             .antialiased(true)
-                            .scaledToFill()
+                            .scaledToFit()
                             //                        .frame(width: (screenBounds.width - 5) / 2)
                             .clipped()
                         }
@@ -286,13 +289,24 @@ struct CardCardView: View {
                     .interpolation(.high)
                     .antialiased(true)
                     .cornerRadius(cardCornerRadius)
+                    .scaledToFit()
                 }
             }
+//            .clipShape(Rectangle)
+//            .aspectRatio(cardExpectedRatio, contentMode: .fill)
             .mask {
-                // FIXME: Mask not working as expected.
                 RoundedRectangle(cornerRadius: cardCornerRadius)
-                    .aspectRatio(480/326, contentMode: .fill)
+                    .aspectRatio(cardExpectedRatio, contentMode: .fit)
             }
+//            .clipped()
+            .scaleEffect(0.97)
+//            .clipped()
+            .clipped()
+            .border(.green)
+            // FIXME: [250917] The Image Cover has an area which is out of the border's bound. The outer part had been hidden by `mask` as expected, but the size has not been resized, which leads to two empty spaces on the top & bottom part of view.
+            // [250917] Reproduction: Go into CharacterView (anyone's okay), and see the red border.
+            // [250917] The red border is the Image Cover's. The blue is the Card Border's (expected ratio).
+            // [250917] Please try not to use constant values for sizes since this view should be dynamicly-resized to adapt it's size and parental view.
             
             // MARK: Border
             Group {
@@ -304,7 +318,10 @@ struct CardCardView: View {
                         .resizable()
                 }
             }
-            .aspectRatio(480/326, contentMode: .fit)
+            .aspectRatio(cardExpectedRatio, contentMode: .fit)
+            .clipped()
+            .border(.blue)
+            
             // The Image may not be in expected ratio. Gosh.
             // Why the heck will the image has a different ratio with the border???
             // --@ThreeManager785
@@ -317,28 +334,39 @@ struct CardCardView: View {
                         .resizable()
                         .interpolation(.high)
                         .antialiased(true)
-                        .frame(width: 25, height: 25)
+                        .frame(width: 51, height: 52/*, alignment: .topLeading*/)
+//                    Spacer()
                     Spacer()
                     WebImage(url: attribute.iconImageURL)
                         .resizable()
                         .interpolation(.high)
                         .antialiased(true)
-                        .frame(width: 23, height: 23)
+                        .frame(width: 51, height: 52/*, alignment: .topTrailing*/)
+                        .offset(x: -1)
                 }
+//                .frame(width: 23, height: 23)
                 Spacer()
-                HStack {
-                    VStack(alignment: .leading, spacing: 0) {
-                        ForEach(1...rarity, id: \.self) { _ in
-                            Image(rarity >= 4 ? .trainedStar : .star)
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                        }
-                    }
-                    Spacer()
-                }
+//                HStack {
+//                    VStack(alignment: .leading, spacing: 0) {
+//                        ForEach(1...rarity, id: \.self) { _ in
+//                            Image(rarity >= 4 ? .trainedStar : .star)
+//                                .resizable()
+////                                .frame(width: 16, height: 16)
+//                        }
+//                    }
+//                    Spacer()
+//                }
+//                .hidden()
             }
+//            .scaledToFit()
+            .aspectRatio(cardExpectedRatio, contentMode: .fit)
         }
-        .scaledToFit()
+//        .scaledToFit()
+//        .aspectRatio()
+//        .aspectRatio(cardExpectedRatio, contentMode: .fit)
+//        .mask(RoundedRectangle(cornerRadius: cardCornerRadius))
+//        .clipped()
+//        .clipShape
 //        .frame(width: screenBounds.width - 5, height: (screenBounds.width - 5) * 0.7511244378)
 //        .listRowBackground(Color.clear)
 //        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -544,7 +572,7 @@ struct CardIconView: View {
                     .frame(width: sideLength, height: sideLength)
             }
             
-            //Icons
+            // Icons
             VStack(spacing: 0) {
                 HStack {
                     WebImage(url: bandIconImageURL)
