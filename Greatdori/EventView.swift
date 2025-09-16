@@ -611,11 +611,12 @@ struct EventSearchView: View {
                                         .frame(maxWidth: bannerWidth)
                                     }
                                     .padding(.horizontal)
-                                    .animation(.spring(duration: 0.3, bounce: 0.1, blendDuration: 0 ), value: showDetails)
+                                    .animation(.spring(duration: 0.3, bounce: 0.1, blendDuration: 0), value: showDetails)
 //                                    .animation(.easeInOut(duration: 0.2), value: showDetails)
                                     Spacer(minLength: 0)
                                 }
                             }
+                            .geometryGroup()
                             .navigationDestination(item: $presentingEventID) { id in
                                 EventDetailView(id: id)
                                 #if !os(macOS)
@@ -745,7 +746,6 @@ struct EventSearchView: View {
         }
         .withSystemBackground()
         .inspector(isPresented: $showFilterSheet) {
-            
             FilterView(filter: $filter, includingKeys: [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .eventType])
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)

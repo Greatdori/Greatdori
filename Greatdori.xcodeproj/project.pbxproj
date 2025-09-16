@@ -2223,6 +2223,8 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/clib/libssh2/**",
+				"$(BUILT_PRODUCTS_DIR)/lib/libssl.a",
+				"$(BUILT_PRODUCTS_DIR)/lib/libcrypto.a",
 			);
 			name = "Build LibSSH2";
 			outputFileListPaths = (
@@ -2282,6 +2284,9 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/clib/libgit2/**",
+				"$(BUILT_PRODUCTS_DIR)/lib/libssl.a",
+				"$(BUILT_PRODUCTS_DIR)/lib/libcrypto.a",
+				"$(BUILT_PRODUCTS_DIR)/lib/libssh2.a",
 			);
 			name = "Build LibGit2";
 			outputFileListPaths = (
@@ -5241,7 +5246,7 @@
 					"@executable_path/../",
 					"@executable_path/PackageFrameworks/../",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
@@ -5265,7 +5270,7 @@
 					"@executable_path/../",
 					"@executable_path/PackageFrameworks/../",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
@@ -5289,7 +5294,7 @@
 					"@executable_path/../",
 					"@executable_path/PackageFrameworks/../",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
@@ -5313,7 +5318,7 @@
 					"@executable_path/../",
 					"@executable_path/PackageFrameworks/../",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;

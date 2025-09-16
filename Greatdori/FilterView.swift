@@ -61,6 +61,7 @@ struct FilterView: View {
 //                .buttonStyle(.borderless)
             }
         }
+        .geometryGroup()
     }
 }
 
