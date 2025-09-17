@@ -202,16 +202,16 @@ struct CharacterDetailView: View {
                                         }, else: { content in
                                             content
                                             //[250917-c]
-//                                                .scaledToFill()
+                                            //.scaledToFill()
                                         })
-                                    Button(action: {
-                                        randomCard = information.randomCard()!
-                                    }, label: {
-                                        Label("Character.random-card", systemImage: "arrow.clockwise")
-                                    })
-                                    .buttonStyle(.bordered)
-                                    .buttonBorderShape(.capsule)
                                 }
+                                Button(action: {
+                                    randomCard = information.randomCard()!
+                                }, label: {
+                                    Label("Character.random-card", systemImage: "arrow.clockwise")
+                                })
+                                .buttonStyle(.bordered)
+                                .buttonBorderShape(.capsule)
                                 
                                 //                            CharacterDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
                             }
