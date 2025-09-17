@@ -91,6 +91,11 @@ public final class DoriAPI {
             self.kr = kr
         }
         
+        @inlinable
+        public init(_jp: T?, en: T?, tw: T?, cn: T?, kr: T?) {
+            self.init(jp: _jp, en: en, tw: tw, cn: cn, kr: kr)
+        }
+        
         /// Get localized data for locale.
         /// - Parameter locale: required locale for data.
         /// - Returns: localized data, nil if not available.
