@@ -36,7 +36,7 @@ jobs:
       - name: Create build folder
         run: mkdir build
       - name: Build
-        run: xcodebuild -project Greatdori.xcodeproj -scheme "Greatdori Watch App" -configuration Release -derivedDataPath ./build -destination "platform=${{ matrix.destination }}" build
+        run: xcodebuild -project Greatdori.xcodeproj -scheme "Greatdori Watch App" -configuration Release -derivedDataPath ./build -destination "generic/platform=${{ matrix.destination }}" build
       - name: Upload build result
         uses: actions/upload-artifact@v4.6.2
         with:
