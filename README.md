@@ -18,6 +18,12 @@ or let DoriKit to process data from the API for you.
 Apps in this project show you how to use the DoriKit,
 and provide native experience to Bestdori.
 
+| **Target** | **Status** |
+|---:|:---:|
+| DoriKit             | ![DoriKit Build Status](https://img.shields.io/github/actions/workflow/status/WindowsMEMZ/Greatdori/build-dorikit.yml)|
+| Greatdori           | ![Greatdori Build Status](https://img.shields.io/github/actions/workflow/status/WindowsMEMZ/Greatdori/build-greatdori.yml)|
+| Greatdori Watch App | ![Greatdori Watch App Build Status](https://img.shields.io/github/actions/workflow/status/WindowsMEMZ/Greatdori/build-greatdori-watch.yml)|
+
 ## Using DoriKit
 ### Xcode Project (Recommended)
 1. Clone this project into your project folder:
