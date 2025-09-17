@@ -23,6 +23,7 @@ fileprivate let bandLogoScaleFactor: CGFloat = 1.2
 fileprivate let charVisualImageCornerRadius: CGFloat = 10
 
 struct CharacterSearchView: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
     @Namespace var detailNavigation
     @State var charactersDict: DoriFrontend.Character.CategorizedCharacters?
     @State var bandArray: [DoriAPI.Band.Band?] = []
@@ -39,7 +40,7 @@ struct CharacterSearchView: View {
                                 if let band {
                                     WebImage(url: band.logoImageURL)
                                         .resizable()
-                                        .frame(width: 160*bandLogoScaleFactor, height: 82*bandLogoScaleFactor)
+                                        .frame(width: 160*bandLogoScaleFactor, height: 76*bandLogoScaleFactor)
                                     HStack {
                                         ForEach(charactersDict![band]!.swappedAt(0, 3).swappedAt(2, 3), id: \.self) { char in
                                             NavigationLink(destination: {
@@ -68,8 +69,10 @@ struct CharacterSearchView: View {
                                             })
                                         }
                                     }
-                                    Rectangle()
-                                        .frame(width: 0, height: 20)
+                                    if sizeClass == .regular {
+                                        Rectangle()
+                                            .frame(width: 0, height: 20)
+                                    }
                                 }
                             }
                         }
@@ -185,6 +188,7 @@ struct CharacterDetailView: View {
     @State var lastAvaialbleID: Int = 0
     @State var randomCard: DoriAPI.Card.PreviewCard?
     @State var showSubtitle: Bool = false
+    @State var randomCardHadUpdatedOnce = false
     var body: some View {
         EmptyContainer {
             if let information {
@@ -341,7 +345,10 @@ struct CharacterDetailView: View {
         }.onUpdate {
             if let information = $0 {
                 self.information = information
-                randomCard = information.randomCard()
+                if !randomCardHadUpdatedOnce {
+                    randomCard = information.randomCard()
+                    randomCardHadUpdatedOnce = true
+                }
             } else {
                 infoIsAvailable = false
             }
