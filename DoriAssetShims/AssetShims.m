@@ -205,17 +205,16 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
 
 #pragma clang diagnostic pop
 
-+(int)checkForUpdateInLocale: (NSString*) locale
-                      ofType: (NSString*) type
-                       error: (NSError**) outError {
++(AssetUpdateCheckerResult* _Nullable)checkForUpdateInLocale: (NSString*) locale
+                                                      ofType: (NSString*) type
+                                                       error: (NSError**) outError {
     NSString* branch = branchNameFromLocaleType(locale, type);
-    const char* refs = refspecOfBranch(branch);
     
     git_repository* repository = NULL;
     int error = git_repository_open(&repository, [[NSHomeDirectory() stringByAppendingString:@"/Documents/OfflineResource.bundle"] UTF8String]);
     if (error != 0) {
         nsErrorForGit(error, outError);
-        return -1;
+        return nil;
     }
     
     git_remote* remote = NULL;
@@ -223,13 +222,13 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
     if (error != 0) {
         nsErrorForGit(error, outError);
         git_repository_free(repository);
-        return -1;
+        return nil;
     }
     error = git_remote_connect(remote, GIT_DIRECTION_FETCH, NULL, NULL, NULL);
     if (error != 0) {
         nsErrorForGit(error, outError);
         git_repository_free(repository);
-        return -1;
+        return nil;
     }
     
     size_t count;
@@ -239,7 +238,7 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
         nsErrorForGit(error, outError);
         git_remote_disconnect(remote);
         git_repository_free(repository);
-        return -1;
+        return nil;
     }
     const git_oid* remoteLatestOID = NULL;
     for (size_t i = 0; i < count; i++) {
@@ -255,14 +254,26 @@ int getRemoteCallback(git_remote **out, git_repository *repo, const char *name, 
         nsErrorForGit(error, outError);
         git_remote_disconnect(remote);
         git_repository_free(repository);
-        return -1;
+        return nil;
     }
     const git_oid* localLatestOID = git_reference_target(localLatestRef);
     
-    if (git_oid_equal(localLatestOID, remoteLatestOID)) {
-        return 0;
+    if (!git_oid_equal(localLatestOID, remoteLatestOID)) {
+        AssetUpdateCheckerResult* result = malloc(sizeof(AssetUpdateCheckerResult));
+        *result = (AssetUpdateCheckerResult){
+            true,
+            [[NSString stringWithCString:git_oid_tostr_s(localLatestOID) encoding:NSUTF8StringEncoding] UTF8String],
+            [[NSString stringWithCString:git_oid_tostr_s(remoteLatestOID) encoding:NSUTF8StringEncoding] UTF8String]
+        };
+        return result;
     } else {
-        return 1;
+        AssetUpdateCheckerResult* result = malloc(sizeof(AssetUpdateCheckerResult));
+        *result = (AssetUpdateCheckerResult){
+            false,
+            [[NSString stringWithCString:git_oid_tostr_s(localLatestOID) encoding:NSUTF8StringEncoding] UTF8String],
+            [[NSString stringWithCString:git_oid_tostr_s(remoteLatestOID) encoding:NSUTF8StringEncoding] UTF8String]
+        };
+        return result;
     }
 }
 

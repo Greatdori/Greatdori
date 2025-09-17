@@ -17,6 +17,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef struct AssetUpdateCheckerResult {
+    bool isUpdateAvailable;
+    const char* localSHA;
+    const char* remoteSHA;
+} AssetUpdateCheckerResult;
+
 @interface AssetShims : NSObject
 
 +(void)startup;
@@ -34,9 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
                        error: (NSError**) outError
             onProgressUpdate: (int (*)(const _git_indexer_progress *stats, void * _Nullable payload))progressUpdate;
 
-+(int)checkForUpdateInLocale: (NSString*) locale
-                      ofType: (NSString*) type
-                       error: (NSError**) outError;
++(AssetUpdateCheckerResult* _Nullable)checkForUpdateInLocale: (NSString*) locale
+                                                      ofType: (NSString*) type
+                                                       error: (NSError**) outError;
 
 @end
 

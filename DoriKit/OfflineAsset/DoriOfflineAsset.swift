@@ -142,23 +142,21 @@ public final class DoriOfflineAsset: Sendable {
     ///   - locale: Locale of resource.
     ///   - type: Type of resource, see ``ResourceType`` for more details.
     /// - Returns: `true` if an update is available.
-    public func isUpdateAvailable(in locale: DoriAPI.Locale, of type: ResourceType) async throws -> Bool {
+    public func isUpdateAvailable(in locale: DoriAPI.Locale, of type: ResourceType) async throws -> UpdateCheckerResult {
         try await withCheckedThrowingContinuation { continuation in
             DispatchQueue(label: "com.memz233.DoriKit.OfflineAsset.is-update-available", qos: .userInitiated).async {
-                var error: NSError?
-                let result = unsafe AssetShims.checkForUpdate(inLocale: locale.rawValue, ofType: type.rawValue, error: &error)
-                if let error {
+                do {
+                    let result = try AssetShims.checkForUpdate(inLocale: locale.rawValue, ofType: type.rawValue)
+                    unsafe continuation.resume(
+                        returning: .init(
+                            isUpdateAvailable: result.pointee.isUpdateAvailable,
+                            localSHA: .init(cString: result.pointee.localSHA),
+                            remoteSHA: .init(cString: result.pointee.remoteSHA)
+                        )
+                    )
+                    unsafe result.deallocate()
+                } catch {
                     continuation.resume(throwing: error)
-                    return
-                }
-                switch result {
-                case 0:
-                    continuation.resume(returning: false)
-                case 1:
-                    continuation.resume(returning: true)
-                default:
-                    // Result indicates an error but no errors is written?
-                    continuation.resume(throwing: NSError(domain: "DoriKitError", code: Int(result)))
                 }
             }
         }
@@ -210,6 +208,12 @@ public final class DoriOfflineAsset: Sendable {
         case movie
         case sound
         case unsupported
+    }
+    
+    public struct UpdateCheckerResult: Sendable {
+        public let isUpdateAvailable: Bool
+        public let localSHA: String
+        public let remoteSHA: String
     }
 }
 

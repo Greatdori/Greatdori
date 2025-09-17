@@ -97,6 +97,7 @@ struct DebugOfflineAssetView: View {
     @AppStorage("_OfflineAssetDebugFilePath") var filePath = ""
     @State var contents = [String]()
     @State var testCard: DoriAPI.Card.Card?
+    @State var updateCheckerResult: DoriOfflineAsset.UpdateCheckerResult?
     var body: some View {
         #if os(macOS)
         Form {
@@ -137,6 +138,37 @@ struct DebugOfflineAssetView: View {
                     }, label: {
                         Text(verbatim: "Download preferred locale basic")
                     })
+                }
+                VStack(alignment: .leading) {
+                    HStack {
+                        Button(action: {
+                            Task {
+                                do {
+                                    updateCheckerResult = try await DoriOfflineAsset.shared.isUpdateAvailable(in: DoriAPI.preferredLocale, of: .basic)
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                        }, label: {
+                            Text(verbatim: "Check for Update")
+                        })
+                        Button(action: {
+                            Task {
+                                do {
+                                    try await DoriOfflineAsset.shared.updateResource(of: .basic, in: DoriAPI.preferredLocale) { percentage, finished, total in
+                                        print("\(percentage * 100)%, \(finished) / \(total)")
+                                    }
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                        }, label: {
+                            Text(verbatim: "Update preferred locale basic")
+                        })
+                    }
+                    if let result = updateCheckerResult {
+                        Text(verbatim: "Status: \(result.isUpdateAvailable)\nLocal: \(result.localSHA)\nRemote: \(result.remoteSHA)")
+                    }
                 }
             } header: {
                 Text(verbatim: "Download")
