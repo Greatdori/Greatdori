@@ -332,3 +332,14 @@ extension DoriFrontend.Event {
         }
     }
 }
+
+extension DoriFrontend.Event.ExtendedEvent {
+    @inlinable
+    public init?(id: Int) async {
+        if let event = await DoriFrontend.Event.extendedInformation(of: id) {
+            self = event
+        } else {
+            return nil
+        }
+    }
+}

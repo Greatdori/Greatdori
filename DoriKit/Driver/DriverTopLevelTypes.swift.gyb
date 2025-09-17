@@ -1,0 +1,120 @@
+//===---*- Greatdori! -*---------------------------------------------------===//
+//
+// DriverTopLevelTypes.swift
+//
+// This source file is part of the Greatdori! open source project
+//
+// Copyright (c) 2025 the Greatdori! project authors
+// Licensed under Apache License v2.0
+//
+// See https://greatdori.memz.top/LICENSE.txt for license information
+// See https://greatdori.memz.top/CONTRIBUTORS.txt for the list of Greatdori! project authors
+//
+//===----------------------------------------------------------------------===//
+
+// MARK: - API
+
+// MARK: Login Campaign
+public typealias LoginCampaign = DoriAPI.LoginCampaign.Campaign
+public typealias PreviewLoginCampaign = DoriAPI.LoginCampaign.PreviewCampaign
+
+extension LoginCampaign {
+    @inlinable
+    public static func all() async -> [PreviewLoginCampaign]? {
+        await DoriAPI.LoginCampaign.all()
+    }
+}
+extension PreviewLoginCampaign {
+    @inlinable
+    public static func all() async -> [Self]? {
+        await DoriAPI.LoginCampaign.all()
+    }
+}
+
+// MARK: News
+public typealias NewsItem = DoriAPI.News.Item
+public typealias PreviewNewsItem = DoriAPI.News.PreviewItem
+public typealias RecentNewsItems = DoriAPI.News.RecentItems
+
+extension NewsItem {
+    @inlinable
+    public static func all() async -> [PreviewNewsItem]? {
+        await DoriAPI.News.all()
+    }
+}
+extension PreviewNewsItem {
+    @inlinable
+    public static func all() async -> [Self]? {
+        await DoriAPI.News.all()
+    }
+}
+extension RecentNewsItems {
+    @inlinable
+    public static func all() async -> Self? {
+        await DoriAPI.News.recent()
+    }
+}
+
+// MARK: Types with preview
+%{
+    baseNames = ["Card", "Character", "Costume", "Event", "Gacha", "Song"]
+}%
+% for baseName in baseNames:
+public typealias ${baseName} = DoriAPI.${baseName}.${baseName}
+public typealias Preview${baseName} = DoriAPI.${baseName}.Preview${baseName}
+
+extension ${baseName} {
+    @inlinable
+    public static func all() async -> [Preview${baseName}]? {
+        await DoriAPI.${baseName}.all()
+    }
+}
+extension Preview${baseName} {
+    @inlinable
+    public static func all() async -> [Self]? {
+        await DoriAPI.${baseName}.all()
+    }
+}
+% end
+
+// MARK: Types without preview
+%{
+    baseNames = ["Band", "Comic", "Degree", "Skill", "MiracleTicket"]
+}%
+% for baseName in baseNames:
+public typealias ${baseName} = DoriAPI.${baseName}.${baseName}
+
+extension ${baseName} {
+    @inlinable
+    public static func all() async -> [Self]? {
+        await DoriAPI.${baseName}.all()
+    }
+}
+% end
+
+// MARK: Band
+extension Band {
+    @inlinable
+    public static func main() async -> [Self]? {
+        await DoriAPI.Band.main()
+    }
+}
+
+// MARK: Character
+public typealias BirthdayCharacter = DoriAPI.Character.BirthdayCharacter
+
+extension BirthdayCharacter {
+    @inlinable
+    public static func all() async -> [Self]? {
+        await DoriAPI.Character.allBirthday()
+    }
+}
+
+// MARK: - Frontend
+
+%{
+    baseNames = ["Card", "Character", "Event", "Gacha"]
+}%
+% for baseName in baseNames:
+public typealias Extended${baseName} = DoriFrontend.${baseName}.Extended${baseName}
+% end

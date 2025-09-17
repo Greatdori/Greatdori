@@ -96,3 +96,14 @@ extension DoriFrontend.Gacha {
         public var cardDetails: [Int: [DoriAPI.Card.PreviewCard]] // [Rarity: [Card]]
     }
 }
+
+extension DoriFrontend.Gacha.ExtendedGacha {
+    @inlinable
+    public init?(id: Int) async {
+        if let gacha = await DoriFrontend.Gacha.extendedInformation(of: id) {
+            self = gacha
+        } else {
+            return nil
+        }
+    }
+}

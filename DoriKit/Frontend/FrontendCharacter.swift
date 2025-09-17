@@ -203,6 +203,17 @@ extension DoriFrontend.Character {
 }
 
 extension DoriFrontend.Character.ExtendedCharacter {
+    @inlinable
+    public init?(id: Int) async {
+        if let character = await DoriFrontend.Character.extendedInformation(of: id) {
+            self = character
+        } else {
+            return nil
+        }
+    }
+}
+
+extension DoriFrontend.Character.ExtendedCharacter {
     public func randomCard() -> DoriAPI.Card.PreviewCard? {
         self.cards.randomElement()
     }

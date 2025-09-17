@@ -123,6 +123,7 @@
 		8C7855A12E48FBF9000EA06E /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855A02E48FBF5000EA06E /* ImageViewer.swift */; };
 		8C7855DA2E4A6994000EA06E /* MiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855D92E4A698D000EA06E /* MiracleTicket.swift */; };
 		8C7855DC2E4A6BFA000EA06E /* FrontendMiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */; };
+		8C7B4A042E7AA38200EE0C89 /* DriverTopLevelTypes.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B4A032E7AA37A00EE0C89 /* DriverTopLevelTypes.swift.gyb */; };
 		8C7F17602E5AB5910040C206 /* DoriAssetShims.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */; platformFilters = (ios, maccatalyst, macos, ); };
 		8C7F17642E5AEB7C0040C206 /* GitUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C7F17632E5AEB740040C206 /* GitUtils.h */; };
 		8C7F17662E5AEB890040C206 /* GitUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7F17652E5AEB870040C206 /* GitUtils.m */; };
@@ -682,6 +683,7 @@
 		8C7855A02E48FBF5000EA06E /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		8C7855D92E4A698D000EA06E /* MiracleTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiracleTicket.swift; sourceTree = "<group>"; };
 		8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendMiracleTicket.swift; sourceTree = "<group>"; };
+		8C7B4A032E7AA37A00EE0C89 /* DriverTopLevelTypes.swift.gyb */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = DriverTopLevelTypes.swift.gyb; sourceTree = "<group>"; };
 		8C7F17632E5AEB740040C206 /* GitUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GitUtils.h; sourceTree = "<group>"; };
 		8C7F17652E5AEB870040C206 /* GitUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GitUtils.m; sourceTree = "<group>"; };
 		8C7F17672E5AFB7C0040C206 /* AssetShims+File.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AssetShims+File.h"; sourceTree = "<group>"; };
@@ -1162,6 +1164,7 @@
 				8CD13FAD2E2FE2BF00673E15 /* API */,
 				8CD13FBC2E2FE2BF00673E15 /* Frontend */,
 				8C9474482E35AB60003A90B4 /* Cache */,
+				8C7B4A022E7AA34500EE0C89 /* Driver */,
 				8C7F6B832E591AC60040C206 /* OfflineAsset */,
 				8C0872B92E72FCAE00447B05 /* Notification */,
 			);
@@ -1382,6 +1385,14 @@
 				8C94746A2E3ADE21003A90B4 /* StoryViewerView.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		8C7B4A022E7AA34500EE0C89 /* Driver */ = {
+			isa = PBXGroup;
+			children = (
+				8C7B4A032E7AA37A00EE0C89 /* DriverTopLevelTypes.swift.gyb */,
+			);
+			path = Driver;
 			sourceTree = "<group>";
 		};
 		8C7F6B832E591AC60040C206 /* OfflineAsset */ = {
@@ -2520,6 +2531,7 @@
 				8C8E44762E5EE043005590F0 /* Documentation.docc in Sources */,
 				8C4C89412E620C63007F1E9F /* CopyOnWrite.swift in Sources */,
 				8C2CCD4D2E3E66C90014189F /* RichContentView.swift in Sources */,
+				8C7B4A042E7AA38200EE0C89 /* DriverTopLevelTypes.swift.gyb in Sources */,
 				8C78559B2E48C94D000EA06E /* FrontendComic.swift in Sources */,
 				8C2CCD512E3F0D850014189F /* PagedContent.swift in Sources */,
 				8C7855DC2E4A6BFA000EA06E /* FrontendMiracleTicket.swift in Sources */,

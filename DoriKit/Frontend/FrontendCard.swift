@@ -134,3 +134,14 @@ extension DoriFrontend.Card.CardWithBand: DoriFrontend.Searchable {
         self.card._searchAttributes
     }
 }
+
+extension DoriFrontend.Card.ExtendedCard {
+    @inlinable
+    public init?(id: Int) async {
+        if let card = await DoriFrontend.Card.extendedInformation(of: id) {
+            self = card
+        } else {
+            return nil
+        }
+    }
+}
