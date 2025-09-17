@@ -1,0 +1,45 @@
+#===---*- Greatdori! -*----------------------------------------------------===#
+#
+# build-greatdori-watch.yml
+#
+# This source file is part of the Greatdori! open source project
+#
+# Copyright (c) 2025 the Greatdori! project authors
+# Licensed under Apache License v2.0
+#
+# See https://greatdori.memz.top/LICENSE.txt for license information
+# See https://greatdori.memz.top/CONTRIBUTORS.txt for the list of Greatdori! project authors
+#
+#===-----------------------------------------------------------------------===#
+
+name: Build Greatdori Watch App
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    name: Build
+    runs-on: macos-26
+    strategy:
+      matrix:
+        destination: ["watchOS Simulator", "watchOS"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+      - name: Update submodules
+        run: git submodule update --init --recursive
+      - name: Set Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_26.0.app
+      - name: Create build folder
+        run: mkdir build
+      - name: Build
+        run: xcodebuild -project Greatdori.xcodeproj -scheme "Greatdori Watch App" -configuration Release -derivedDataPath ./build -destination "platform=${{ matrix.destination }}" build
+      - name: Upload build result
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: Greatdori-Watch-App-${{ matrix.destination }}.app
+          path: ./build/Build/Products/*/Greatdori Watch App.app
+          if-no-files-found: error
