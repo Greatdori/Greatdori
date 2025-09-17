@@ -235,8 +235,6 @@ struct CardCardView: View {
     private let standardCardWidth: CGFloat = 480
     private let standardCardHeight: CGFloat = 320
     private let expectedCardRatio: CGFloat = 480/320
-    @State var currentCardWidth: CGFloat = 0
-    @State var currentCardHeight: CGFloat = 0
     
     @State var normalCardIsOnHover = false
     @State var trainedCardIsOnHover = false
@@ -276,7 +274,7 @@ struct CardCardView: View {
                                     .interpolation(.high)
                                     .antialiased(true)
                                     .scaledToFill()
-                                    .frame(width: currentCardWidth * CGFloat(normalCardIsOnHover ? 0.75 : (trainedCardIsOnHover ? 0.25 : 0.5)))
+                                    .frame(width: proxy.size.width * CGFloat(normalCardIsOnHover ? 0.75 : (trainedCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
                                     .onTapGesture {
                                         withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
@@ -310,7 +308,7 @@ struct CardCardView: View {
                                     .interpolation(.high)
                                     .antialiased(true)
                                     .scaledToFill()
-                                    .frame(width: currentCardWidth * CGFloat(trainedCardIsOnHover ? 0.75 : (normalCardIsOnHover ? 0.25 : 0.5)))
+                                    .frame(width: proxy.size.width * CGFloat(trainedCardIsOnHover ? 0.75 : (normalCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
                                     .onTapGesture {
                                         withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
@@ -372,46 +370,42 @@ struct CardCardView: View {
             
             // MARK: Visualized Card Information
             // This includes information like `attributes` and `rarity`.
-            VStack {
-                HStack {
-                    WebImage(url: bandIconImageURL)
-                        .resizable()
-                        .interpolation(.high)
-                        .antialiased(true)
-                    //51:480 = ?:currentWidth
-                    //? = currentWidth*51/480
-                        .frame(width: 51/standardCardWidth*currentCardWidth, height: 51/standardCardHeight*currentCardHeight, alignment: .topLeading)
-                        .offset(x: currentCardWidth*0.005, y: currentCardHeight*0.01)
-//                    Spacer()
-                    Spacer()
-                    WebImage(url: attribute.iconImageURL)
-                        .resizable()
-                        .interpolation(.high)
-                        .antialiased(true)
-                        .frame(width: 51/standardCardWidth*currentCardWidth, height: 51/standardCardHeight*currentCardHeight, alignment: .topLeading)
-                        .offset(x: currentCardWidth*(-0.015), y: currentCardHeight*0.015)
-                }
-//                .frame(width: 23, height: 23)
-                Spacer()
-                HStack {
-                    VStack(alignment: .leading, spacing: 0) {
-                        ForEach(1...rarity, id: \.self) { _ in
-                            Image(rarity >= 4 ? .trainedStar : .star)
-                                .resizable()
-                                .frame(width: 40/standardCardWidth*currentCardWidth, height: 40/standardCardHeight*currentCardHeight, alignment: .topLeading)
-                                .padding(.top, -1)
-                        }
+            GeometryReader { proxy in
+                VStack {
+                    HStack {
+                        WebImage(url: bandIconImageURL)
+                            .resizable()
+                            .interpolation(.high)
+                            .antialiased(true)
+                        //51:480 = ?:currentWidth
+                        //? = currentWidth*51/480
+                            .frame(width: 51/standardCardWidth*proxy.size.width, height: 51/standardCardHeight*proxy.size.height, alignment: .topLeading)
+                            .offset(x: proxy.size.width*0.005, y: proxy.size.height*0.01)
+                        //                    Spacer()
+                        Spacer()
+                        WebImage(url: attribute.iconImageURL)
+                            .resizable()
+                            .interpolation(.high)
+                            .antialiased(true)
+                            .frame(width: 51/standardCardWidth*proxy.size.width, height: 51/standardCardHeight*proxy.size.height, alignment: .topLeading)
+                            .offset(x: proxy.size.width*(-0.015), y: proxy.size.height*0.015)
                     }
                     Spacer()
+                    HStack {
+                        VStack(alignment: .leading, spacing: 0) {
+                            ForEach(1...rarity, id: \.self) { _ in
+                                Image(rarity >= 4 ? .trainedStar : .star)
+                                    .resizable()
+                                    .frame(width: 40/standardCardWidth*proxy.size.width, height: 40/standardCardHeight*proxy.size.height, alignment: .topLeading)
+                                    .padding(.top, -1)
+                            }
+                        }
+                        Spacer()
+                    }
                 }
             }
-//            .scaledToFit()
             .aspectRatio(expectedCardRatio, contentMode: .fit)
         }
-        .onFrameChange(perform: { geometry in
-            currentCardWidth = geometry.size.width
-            currentCardHeight = geometry.size.height
-        })
         .cornerRadius(cardCornerRadius)
         .wrapIf(showNavigationHints, in: { content in
 #if os(iOS)
