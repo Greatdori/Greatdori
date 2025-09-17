@@ -249,6 +249,7 @@ struct CardCardView: View {
             }
             .aspectRatio(expectedCardRatio, contentMode: .fit)
             .clipped()
+            .allowsHitTesting(false)
             .background {
                 // MARK: Card Content
                 GeometryReader { proxy in
@@ -266,10 +267,10 @@ struct CardCardView: View {
                                     .interpolation(.high)
                                     .antialiased(true)
                                     .scaledToFill()
-                                    .frame(width: currentCardWidth * CGFloat(normalCardIsOnHover ? 3/4 : (trainedCardIsOnHover ? 1/4 : 1/2)))
+                                    .frame(width: currentCardWidth * CGFloat(normalCardIsOnHover ? 0.75 : (trainedCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
                                     .onHover { isHovering in
-                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                        withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
                                             if isHovering {
                                                 normalCardIsOnHover = true
                                                 trainedCardIsOnHover = false
@@ -278,8 +279,8 @@ struct CardCardView: View {
                                             }
                                         }
                                     }
-                                    //MARK: [250917-b]
-                                
+                                    .contentShape(Rectangle())
+                                    
                                     WebImage(url: trainedBackgroundImageURL) { image in
                                         image
                                     } placeholder: {
@@ -290,10 +291,10 @@ struct CardCardView: View {
                                     .interpolation(.high)
                                     .antialiased(true)
                                     .scaledToFill()
-                                    .frame(width: currentCardWidth * CGFloat(trainedCardIsOnHover ? 3/4 : (normalCardIsOnHover ? 1/4 : 1/2)))
+                                    .frame(width: currentCardWidth * CGFloat(trainedCardIsOnHover ? 0.75 : (normalCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
                                     .onHover { isHovering in
-                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                        withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
                                             if isHovering {
                                                 normalCardIsOnHover = false
                                                 trainedCardIsOnHover = true
@@ -302,7 +303,9 @@ struct CardCardView: View {
                                             }
                                         }
                                     }
+                                    .contentShape(Rectangle())
                                 }
+                                .allowsHitTesting(true)
                             } else {
                                 WebImage(url: trainedBackgroundImageURL) { image in
                                     image
