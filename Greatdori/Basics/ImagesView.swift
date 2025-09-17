@@ -232,82 +232,6 @@ struct CardCardView: View {
     
     var body: some View {
         ZStack {
-            // MARK: Card Content
-            Group {
-                if let trainedBackgroundImageURL {
-                    if ![.others, .campaign, .birthday].contains(cardType) {
-                        HStack(spacing: 0) {
-                            WebImage(url: normalBackgroundImageURL) { image in
-                                image
-                            } placeholder: {
-                                RoundedRectangle(cornerRadius: 10)
-                                //                                .fill(Color.gray.opacity(0.15))
-                                    .fill(getPlaceholderColor())
-                            }
-                            .resizable()
-                            .interpolation(.high)
-                            .antialiased(true)
-                            .scaledToFit()
-//                                                    .frame(width: (screenBounds.width - 5) / 2)
-                            .clipped()
-                            WebImage(url: trainedBackgroundImageURL) { image in
-                                image
-                            } placeholder: {
-                                RoundedRectangle(cornerRadius: 10)
-                                //                                .fill(Color.gray.opacity(0.15))
-                                    .fill(getPlaceholderColor())
-                            }
-                            .resizable()
-                            .interpolation(.high)
-                            .antialiased(true)
-                            .scaledToFit()
-                            //                        .frame(width: (screenBounds.width - 5) / 2)
-                            .clipped()
-                        }
-                    } else {
-                        WebImage(url: trainedBackgroundImageURL) { image in
-                            image
-                        } placeholder: {
-                            RoundedRectangle(cornerRadius: 10)
-                            //                            .fill(Color.gray.opacity(0.15))
-                                .fill(getPlaceholderColor())
-                        }
-                        .resizable()
-                        .interpolation(.high)
-                        .antialiased(true)
-                        .cornerRadius(cardCornerRadius)
-                    }
-                } else {
-                    WebImage(url: normalBackgroundImageURL) { image in
-                        image
-                    } placeholder: {
-                        RoundedRectangle(cornerRadius: 10)
-                        //                        .fill(Color.gray.opacity(0.15))
-                            .fill(getPlaceholderColor())
-                    }
-                    .resizable()
-                    .interpolation(.high)
-                    .antialiased(true)
-                    .cornerRadius(cardCornerRadius)
-                    .scaledToFit()
-                }
-            }
-//            .clipShape(Rectangle)
-//            .aspectRatio(cardExpectedRatio, contentMode: .fill)
-            .mask {
-                RoundedRectangle(cornerRadius: cardCornerRadius)
-                    .aspectRatio(cardExpectedRatio, contentMode: .fit)
-            }
-//            .clipped()
-            .scaleEffect(0.97)
-//            .clipped()
-            .clipped()
-            .border(.green)
-            // FIXME: [250917] The Image Cover has an area which is out of the border's bound. The outer part had been hidden by `mask` as expected, but the size has not been resized, which leads to two empty spaces on the top & bottom part of view.
-            // [250917] Reproduction: Go into CharacterView (anyone's okay), and see the red border.
-            // [250917] The red border is the Image Cover's. The blue is the Card Border's (expected ratio).
-            // [250917] Please try not to use constant values for sizes since this view should be dynamicly-resized to adapt it's size and parental view.
-            
             // MARK: Border
             Group {
                 if rarity != 1 {
@@ -321,6 +245,63 @@ struct CardCardView: View {
             .aspectRatio(cardExpectedRatio, contentMode: .fit)
             .clipped()
             .border(.blue)
+            .background {
+                // MARK: Card Content
+                GeometryReader { proxy in
+                    Group {
+                        if let trainedBackgroundImageURL {
+                            if ![.others, .campaign, .birthday].contains(cardType) {
+                                HStack(spacing: 0) {
+                                    WebImage(url: normalBackgroundImageURL) { image in
+                                        image
+                                    } placeholder: {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(getPlaceholderColor())
+                                    }
+                                    .resizable()
+                                    .interpolation(.high)
+                                    .antialiased(true)
+                                    WebImage(url: trainedBackgroundImageURL) { image in
+                                        image
+                                    } placeholder: {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(getPlaceholderColor())
+                                    }
+                                    .resizable()
+                                    .interpolation(.high)
+                                    .antialiased(true)
+                                }
+                            } else {
+                                WebImage(url: trainedBackgroundImageURL) { image in
+                                    image
+                                } placeholder: {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(getPlaceholderColor())
+                                }
+                                .resizable()
+                                .interpolation(.high)
+                                .antialiased(true)
+                            }
+                        } else {
+                            WebImage(url: normalBackgroundImageURL) { image in
+                                image
+                            } placeholder: {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(getPlaceholderColor())
+                            }
+                            .resizable()
+                            .interpolation(.high)
+                            .antialiased(true)
+                        }
+                    }
+                    .cornerRadius(cardCornerRadius)
+                    .scaledToFill()
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+                    .clipped()
+                    .scaleEffect(0.97)
+                    .border(.green)
+                }
+            }
             
             // The Image may not be in expected ratio. Gosh.
             // Why the heck will the image has a different ratio with the border???
