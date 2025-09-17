@@ -169,7 +169,7 @@ struct CharacterSearchView: View {
 
 
 struct CharacterDetailView: View {
-    private let randomCardScalingFactor: CGFloat = 1.2
+    private let randomCardScalingFactor: CGFloat = 1
     
     var id: Int
     @Binding var allCharacters: DoriFrontend.Character.CategorizedCharacters?
@@ -181,7 +181,6 @@ struct CharacterDetailView: View {
     @State var cardNavigationDestinationID: Int?
     @State var lastAvaialbleID: Int = 0
     @State var randomCard: DoriAPI.Card.PreviewCard?
-    @State var cardForDebug: DoriFrontend.Card.Card?
     @State var showSubtitle: Bool = false
     var body: some View {
         EmptyContainer {
@@ -191,19 +190,14 @@ struct CharacterDetailView: View {
                         Spacer(minLength: 0)
                         VStack {
 //                            Text()
-//                            if let randomCard, information.band != nil {
-//                                CardCardView(randomCard, band: information.band!)
-//                                    .scaledToFit()
-//                                    .frame(maxWidth: 480*randomCardScalingFactor, maxHeight: 320*randomCardScalingFactor)
-                            // MARK: DEBUG ONLY
-                            if let cardForDebug {
-                                CardCardView(cardForDebug, band: information.band!)
-                                    .border(.red)
+                            if let randomCard, information.band != nil {
+                                CardCardView(randomCard, band: information.band!)
+                                    .frame(maxWidth: 480*randomCardScalingFactor, maxHeight: 320*randomCardScalingFactor)
                             }
                             Button(action: {
                                 randomCard = information.randomCard()!
                             }, label: {
-                                Text(verbatim: "Random Card")
+                                Text(verbatim: "#\(randomCard?.id)")
                             })
 //                            CharacterDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
                         }
@@ -323,7 +317,6 @@ struct CharacterDetailView: View {
     
     func getInformation(id: Int) async {
         infoIsAvailable = true
-        cardForDebug = await DoriFrontend.Card.Card(id: 2020)
         informationLoadPromise?.cancel()
         
         informationLoadPromise = DoriCache.withCache(id: "CharacterDetail_\(id)") {
@@ -331,7 +324,7 @@ struct CharacterDetailView: View {
         }.onUpdate {
             if let information = $0 {
                 self.information = information
-//                randomCard = information.randomCard()
+                randomCard = information.randomCard()
             } else {
                 infoIsAvailable = false
             }

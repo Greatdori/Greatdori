@@ -196,7 +196,7 @@ struct EventCardView: View {
     }
 }
 
-//MARK: CardCardView
+//MARK: CardCardView [✓]
 struct CardCardView: View {
     private var normalBackgroundImageURL: URL
     private var trainedBackgroundImageURL: URL?
@@ -226,9 +226,14 @@ struct CardCardView: View {
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 113)
     
     private let cardCornerRadius: CGFloat = 15
-    private let cardWidth: CGFloat = 480
-    private let cardHeight: CGFloat = 326
-    private let cardExpectedRatio: CGFloat = 480/326
+    private let standardCardWidth: CGFloat = 480
+    private let standardCardHeight: CGFloat = 320
+    private let expectedCardRatio: CGFloat = 480/320
+    @State var currentCardWidth: CGFloat = 0
+    @State var currentCardHeight: CGFloat = 0
+    
+    @State var normalCardIsOnHover = false
+    @State var trainedCardIsOnHover = false
     
     var body: some View {
         ZStack {
@@ -242,9 +247,8 @@ struct CardCardView: View {
                         .resizable()
                 }
             }
-            .aspectRatio(cardExpectedRatio, contentMode: .fit)
+            .aspectRatio(expectedCardRatio, contentMode: .fit)
             .clipped()
-            .border(.blue)
             .background {
                 // MARK: Card Content
                 GeometryReader { proxy in
@@ -255,27 +259,55 @@ struct CardCardView: View {
                                     WebImage(url: normalBackgroundImageURL) { image in
                                         image
                                     } placeholder: {
-                                        RoundedRectangle(cornerRadius: 10)
+                                        RoundedRectangle(cornerRadius: 0)
                                             .fill(getPlaceholderColor())
                                     }
                                     .resizable()
                                     .interpolation(.high)
                                     .antialiased(true)
+                                    .scaledToFill()
+                                    .frame(width: currentCardWidth * CGFloat(normalCardIsOnHover ? 3/4 : (trainedCardIsOnHover ? 1/4 : 1/2)))
+                                    .clipped()
+                                    .onHover { isHovering in
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            if isHovering {
+                                                normalCardIsOnHover = true
+                                                trainedCardIsOnHover = false
+                                            } else {
+                                                normalCardIsOnHover = false
+                                            }
+                                        }
+                                    }
+                                    //MARK: [250917-b]
+                                
                                     WebImage(url: trainedBackgroundImageURL) { image in
                                         image
                                     } placeholder: {
-                                        RoundedRectangle(cornerRadius: 10)
+                                        RoundedRectangle(cornerRadius: 0)
                                             .fill(getPlaceholderColor())
                                     }
                                     .resizable()
                                     .interpolation(.high)
                                     .antialiased(true)
+                                    .scaledToFill()
+                                    .frame(width: currentCardWidth * CGFloat(trainedCardIsOnHover ? 3/4 : (normalCardIsOnHover ? 1/4 : 1/2)))
+                                    .clipped()
+                                    .onHover { isHovering in
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            if isHovering {
+                                                normalCardIsOnHover = false
+                                                trainedCardIsOnHover = true
+                                            } else {
+                                                trainedCardIsOnHover = false
+                                            }
+                                        }
+                                    }
                                 }
                             } else {
                                 WebImage(url: trainedBackgroundImageURL) { image in
                                     image
                                 } placeholder: {
-                                    RoundedRectangle(cornerRadius: 10)
+                                    RoundedRectangle(cornerRadius: cardCornerRadius)
                                         .fill(getPlaceholderColor())
                                 }
                                 .resizable()
@@ -286,7 +318,7 @@ struct CardCardView: View {
                             WebImage(url: normalBackgroundImageURL) { image in
                                 image
                             } placeholder: {
-                                RoundedRectangle(cornerRadius: 10)
+                                RoundedRectangle(cornerRadius: cardCornerRadius)
                                     .fill(getPlaceholderColor())
                             }
                             .resizable()
@@ -299,7 +331,6 @@ struct CardCardView: View {
                     .frame(width: proxy.size.width, height: proxy.size.height)
                     .clipped()
                     .scaleEffect(0.97)
-                    .border(.green)
                 }
             }
             
@@ -315,33 +346,40 @@ struct CardCardView: View {
                         .resizable()
                         .interpolation(.high)
                         .antialiased(true)
-                        .frame(width: 51, height: 52/*, alignment: .topLeading*/)
+                    //51:480 = ?:currentWidth
+                    //? = currentWidth*51/480
+                        .frame(width: 51/standardCardWidth*currentCardWidth, height: 51/standardCardHeight*currentCardHeight, alignment: .topLeading)
+                        .offset(x: currentCardWidth*0.005, y: currentCardHeight*0.01)
 //                    Spacer()
                     Spacer()
                     WebImage(url: attribute.iconImageURL)
                         .resizable()
                         .interpolation(.high)
                         .antialiased(true)
-                        .frame(width: 51, height: 52/*, alignment: .topTrailing*/)
-                        .offset(x: -1)
+                        .frame(width: 51/standardCardWidth*currentCardWidth, height: 51/standardCardHeight*currentCardHeight, alignment: .topLeading)
+                        .offset(x: currentCardWidth*(-0.015), y: currentCardHeight*0.015)
                 }
 //                .frame(width: 23, height: 23)
                 Spacer()
-//                HStack {
-//                    VStack(alignment: .leading, spacing: 0) {
-//                        ForEach(1...rarity, id: \.self) { _ in
-//                            Image(rarity >= 4 ? .trainedStar : .star)
-//                                .resizable()
-////                                .frame(width: 16, height: 16)
-//                        }
-//                    }
-//                    Spacer()
-//                }
-//                .hidden()
+                HStack {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(1...rarity, id: \.self) { _ in
+                            Image(rarity >= 4 ? .trainedStar : .star)
+                                .resizable()
+                                .frame(width: 40/standardCardWidth*currentCardWidth, height: 40/standardCardHeight*currentCardHeight, alignment: .topLeading)
+                                .padding(.top, -1)
+                        }
+                    }
+                    Spacer()
+                }
             }
 //            .scaledToFit()
-            .aspectRatio(cardExpectedRatio, contentMode: .fit)
+            .aspectRatio(expectedCardRatio, contentMode: .fit)
         }
+        .onFrameChange(perform: { geometry in
+            currentCardWidth = geometry.size.width
+            currentCardHeight = geometry.size.height
+        })
 //        .scaledToFit()
 //        .aspectRatio()
 //        .aspectRatio(cardExpectedRatio, contentMode: .fit)
