@@ -3170,10 +3170,6 @@
 					"@loader_path/Frameworks",
 					/Library/Frameworks,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/clib/libgit2/bin",
-				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
@@ -3234,10 +3230,6 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 					/Library/Frameworks,
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/clib/libgit2/bin",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -3651,10 +3643,6 @@
 					"@loader_path/Frameworks",
 					/Library/Frameworks,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/clib/libgit2/bin",
-				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
@@ -3898,10 +3886,6 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 					/Library/Frameworks,
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/clib/libgit2/bin",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
