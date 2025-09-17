@@ -196,14 +196,13 @@ struct CharacterDetailView: View {
                                 //                            Text()
                                 if var randomCard, information.band != nil {
                                     CardCardView(randomCard, band: information.band!)
-                                        .wrapIf(sizeClass == .regular, in: { content in
+                                        .wrapIf(sizeClass == .regular) { content in
                                             content
                                                 .frame(maxWidth: 480*randomCardScalingFactor, maxHeight: 320*randomCardScalingFactor)
-                                        }, else: { content in
+                                        } else: { content in
                                             content
-                                            //[250917-c]
-                                            //.scaledToFill()
-                                        })
+                                                .padding(.horizontal, -15)
+                                        }
                                 }
                                 Button(action: {
                                     randomCard = information.randomCard()!
