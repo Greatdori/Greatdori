@@ -15,6 +15,9 @@
 import DoriKit
 import SDWebImageSwiftUI
 import SwiftUI
+#if os(iOS)
+import UIKit
+#endif
 
 fileprivate let bandLogoScaleFactor: CGFloat = 1.2
 fileprivate let charVisualImageCornerRadius: CGFloat = 10
@@ -186,24 +189,39 @@ struct CharacterDetailView: View {
         EmptyContainer {
             if let information {
                 ScrollView {
-                    HStack {
-                        Spacer(minLength: 0)
-                        VStack {
-//                            Text()
-                            if let randomCard, information.band != nil {
-                                CardCardView(randomCard, band: information.band!)
-                                    .frame(maxWidth: 480*randomCardScalingFactor, maxHeight: 320*randomCardScalingFactor)
+                    VStack {
+                        HStack {
+                            Spacer(minLength: 0)
+                            VStack {
+                                //                            Text()
+                                if var randomCard, information.band != nil {
+                                    CardCardView(randomCard, band: information.band!)
+                                        .wrapIf(sizeClass == .regular, in: { content in
+                                            content
+                                                .frame(maxWidth: 480*randomCardScalingFactor, maxHeight: 320*randomCardScalingFactor)
+                                        }, else: { content in
+                                            content
+                                            //[250917-c]
+//                                                .scaledToFill()
+                                        })
+                                    Button(action: {
+                                        randomCard = information.randomCard()!
+                                    }, label: {
+                                        Label("Character.random-card", systemImage: "arrow.clockwise")
+                                    })
+                                    .buttonStyle(.bordered)
+                                    .buttonBorderShape(.capsule)
+                                }
+                                
+                                //                            CharacterDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
                             }
-                            Button(action: {
-                                randomCard = information.randomCard()!
-                            }, label: {
-                                Text(verbatim: "#\(randomCard?.id)")
-                            })
-//                            CharacterDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+                            .padding()
+                            Spacer(minLength: 0)
                         }
-                        .padding()
-                        Spacer(minLength: 0)
+                        CharacterDetailOverviewView(information: information)
+                        Spacer()
                     }
+                    .padding()
                 }
             } else {
                 if infoIsAvailable {
@@ -335,320 +353,216 @@ struct CharacterDetailView: View {
 
 //MARK: CharacterDetailOverviewView
 struct CharacterDetailOverviewView: View {
-    let information: DoriFrontend.Event.ExtendedEvent
-    @State var eventCharacterPercentageDict: [Int: [DoriAPI.Event.EventCharacter]] = [:]
-    @State var eventCharacterNameDict: [Int: DoriAPI.LocalizedData<String>] = [:]
-    @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
-    @State var cardsArraySeperated: [[DoriFrontend.Card.PreviewCard?]] = []
-    @State var cardsPercentage: Int = -100
-    @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
-    @State var cardsTitleWidth: CGFloat = 0 // Fixed
-    @State var cardsPercentageWidth: CGFloat = 0 // Fixed
-    @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
-    @State var cardsFixedWidth: CGFloat = 0 //Fixed
-    @State var cardsUseCompactLayout = true
-    @Binding var cardNavigationDestinationID: Int?
-    var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
+    let information: DoriFrontend.Character.ExtendedCharacter
+    var dateFormatter: DateFormatter {
+        let df = DateFormatter()
+        df.timeZone = .init(identifier: "Asia/Tokyo")!
+        df.setLocalizedDateFormatFromTemplate("MMM d")
+        return df
+    }
     var body: some View {
         VStack {
             Group {
-                //MARK: Title Image
-                Group {
-                    Rectangle()
-                        .opacity(0)
-                        .frame(height: 2)
-                    WebImage(url: information.event.bannerImageURL) { image in
-                        image
-                            .antialiased(true)
-                            .resizable()
-                            .aspectRatio(3.0, contentMode: .fit)
-                            .frame(maxWidth: bannerWidth, maxHeight: bannerWidth/3)
-                    } placeholder: {
-                        RoundedRectangle(cornerRadius: 10)
-                        //                            .fill(Color.gray.opacity(0.15))
-                            .fill(getPlaceholderColor())
-                            .aspectRatio(3.0, contentMode: .fit)
-                            .frame(maxWidth: bannerWidth, maxHeight: bannerWidth/3)
-                    }
-                    .interpolation(.high)
-                    .cornerRadius(10)
-                    Rectangle()
-                        .opacity(0)
-                        .frame(height: 2)
-                }
-                
                 //MARK: Info
                 Group {
-                    //MARK: Title
+                    //MARK: Name
                     Group {
                         ListItemView(title: {
-                            Text("Event.title")
+                            Text("Character.name")
                                 .bold()
                         }, value: {
-                            MultilingualText(source: information.event.eventName)
+                            MultilingualText(source: information.character.characterName)
                         })
                         Divider()
                     }
                     
-                    //MARK: Type
-                    Group {
-                        ListItemView(title: {
-                            Text("Event.type")
-                                .bold()
-                        }, value: {
-                            Text(information.event.eventType.localizedString)
-                        })
-                        Divider()
-                    }
-                    
-                    //MARK: Countdown
-                    Group {
-                        ListItemView(title: {
-                            Text("Event.countdown")
-                                .bold()
-                        }, value: {
-                            MultilingualTextForCountdown(source: information.event)
-                        })
-                        Divider()
-                    }
-                    
-                    //MARK: Start Date
-                    Group {
-                        ListItemView(title: {
-                            Text("Event.start-date")
-                                .bold()
-                        }, value: {
-                            MultilingualText(source: information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                        })
-                        Divider()
-                    }
-                    
-                    //MARK: End Date
-                    Group {
-                        ListItemView(title: {
-                            Text("Event.end-date")
-                                .bold()
-                        }, value: {
-                            MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                        })
-                        Divider()
-                    }
-                    
-                    //MARK: Attribute
-                    Group {
-                        ListItemView(title: {
-                            Text("Event.attribute")
-                                .bold()
-                        }, value: {
-                            ForEach(information.event.attributes, id: \.attribute.rawValue) { attribute in
-                                VStack(alignment: .trailing) {
-                                    HStack {
-                                        WebImage(url: attribute.attribute.iconImageURL)
-                                            .antialiased(true)
-                                            .resizable()
-                                            .frame(width: imageButtonSize, height: imageButtonSize)
-                                        Text(verbatim: "+\(attribute.percent)%")
-                                    }
-                                }
-                            }
-                        })
-                        Divider()
-                    }
-                    
-                    //MARK: Character
-                    Group {
-                        if let firstKey = eventCharacterPercentageDict.keys.first, let valueArray = eventCharacterPercentageDict[firstKey], eventCharacterPercentageDict.keys.count == 1 {
-                            ListItemWithWrappingView(title: {
-                                Text("Event.character")
-                                    .bold()
-                                    .fixedSize(horizontal: true, vertical: true)
-                            }, element: { value in
-#if os(macOS)
-                                if let value = value {
-                                    NavigationLink(destination: {
-                                        //TODO: [NAVI785]CharD
-                                    }, label: {
-                                        WebImage(url: value.iconImageURL)
-                                            .antialiased(true)
-                                            .resizable()
-                                            .frame(width: imageButtonSize, height: imageButtonSize)
-                                    })
-                                    .buttonStyle(.plain)
-                                } else {
-                                    Rectangle()
-                                        .opacity(0)
-                                        .frame(width: 0, height: 0)
-                                }
-#else
-                                if let value = value {
-                                    Menu(content: {
-                                        NavigationLink(destination: {
-                                            //TODO: [NAVI785]CharD
-                                        }, label: {
-                                            HStack {
-                                                WebImage(url: value.iconImageURL)
-                                                    .antialiased(true)
-                                                    .resizable()
-                                                    .frame(width: imageButtonSize, height: imageButtonSize)
-                                                //                                                Text(char.name)
-                                                if let name = eventCharacterNameDict[value.characterID]?.forPreferredLocale() {
-                                                    Text(name)
-                                                } else {
-                                                    Text(verbatim: "Lorum Ipsum")
-                                                        .foregroundStyle(Color(UIColor.placeholderText))
-                                                        .redacted(reason: .placeholder)
-                                                }
-                                                Spacer()
-                                            }
-                                        })
-                                    }, label: {
-                                        WebImage(url: value.iconImageURL)
-                                            .antialiased(true)
-                                            .resizable()
-                                            .frame(width: imageButtonSize, height: imageButtonSize)
-                                    })
-                                } else {
-                                    Rectangle()
-                                        .opacity(0)
-                                        .frame(width: 0, height: 0)
-                                }
-#endif
-                            }, caption: {
-                                Text("+\(firstKey)%")
-                                    .lineLimit(1)
-                                    .fixedSize(horizontal: true, vertical: true)
-                            }, contentArray: valueArray, columnNumbers: 5, elementWidth: imageButtonSize)
-                        } else {
+                    if !(information.character.nickname.jp ?? "").isEmpty {
+                        //MARK: Nickname
+                        Group {
                             ListItemView(title: {
-                                Text("Event.character")
+                                Text("Character.nickname")
                                     .bold()
-                                    .fixedSize(horizontal: true, vertical: true)
-                                //                                Text("*")
                             }, value: {
-                                VStack(alignment: .trailing) {
-                                    let keys = eventCharacterPercentageDict.keys.sorted()
-                                    ForEach(keys, id: \.self) { percentage in
-                                        HStack {
-                                            Spacer()
-                                            ForEach(eventCharacterPercentageDict[percentage]!, id: \.self) { char in
-#if os(macOS)
-                                                NavigationLink(destination: {
-                                                    //TODO: [NAVI785]CharD
-                                                }, label: {
-                                                    WebImage(url: char.iconImageURL)
-                                                        .antialiased(true)
-                                                        .resizable()
-                                                        .frame(width: imageButtonSize, height: imageButtonSize)
-                                                })
-                                                .buttonStyle(.plain)
-#else
-                                                Menu(content: {
-                                                    NavigationLink(destination: {
-                                                        //TODO: [NAVI785]CharD
-                                                    }, label: {
-                                                        HStack {
-                                                            WebImage(url: char.iconImageURL)
-                                                                .antialiased(true)
-                                                                .resizable()
-                                                                .frame(width: imageButtonSize, height: imageButtonSize)
-                                                            //                                                Text(char.name)
-                                                            Text(eventCharacterNameDict[char.characterID]?.forPreferredLocale() ?? "Unknown")
-                                                            Spacer()
-                                                        }
-                                                    })
-                                                }, label: {
-                                                    WebImage(url: char.iconImageURL)
-                                                        .antialiased(true)
-                                                        .resizable()
-                                                        .frame(width: imageButtonSize, height: imageButtonSize)
-                                                })
-#endif
-                                            }
-                                            Text("+\(percentage)%")
-                                                .fixedSize(horizontal: true, vertical: true)
-                                        }
-                                    }
-                                }
+                                MultilingualText(source: information.character.nickname)
                             })
+                            Divider()
                         }
-                        Divider()
                     }
                     
-                    //MARK: Parameter
-                    if let paramters = information.event.eventCharacterParameterBonus, paramters.total > 0 {
-                        ListItemView(title: {
-                            Text("Event.parameter")
-                                .bold()
-                        }, value: {
-                            VStack(alignment: .trailing) {
-                                if paramters.performance > 0 {
-                                    HStack {
-                                        Text("Event.parameter.performance")
-                                        Text("+\(paramters.performance)%")
-                                    }
-                                }
-                                if paramters.technique > 0 {
-                                    HStack {
-                                        Text("Event.parameter.technique")
-                                        Text("+\(paramters.technique)%")
-                                    }
-                                }
-                                if paramters.visual > 0 {
-                                    HStack {
-                                        Text("Event.parameter.visual")
-                                        Text("+\(paramters.visual)%")
-                                    }
-                                }
-                            }
-                        })
-                        Divider()
-                    }
-                    
-                    //MARK: Card
-                    if !cardsArray.isEmpty {
-                        ListItemWithWrappingView(title: {
-                            Text("Event.card")
-                                .bold()
-                        }, element: { value in
-                            NavigationLink(destination: {
-                                //TODO: [NAVI785]CardD
-                                Text("\(value)")
-                            }, label: {
-                                CardIconView(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                    if let profile = information.character.profile {
+                        //MARK: Character Voice
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.character-voice")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(source: profile.characterVoice)
                             })
-                            .buttonStyle(.plain)
-                        }, caption: {
-                            Text("+\(cardsPercentage)%")
-                                .lineLimit(1, reservesSpace: true)
-                                .fixedSize(horizontal: true, vertical: true)
-                        }, contentArray: cardsArray, columnNumbers: 3, elementWidth: cardThumbnailSideLength)
-                        Divider()
+                            Divider()
+                        }
                     }
                     
-                    //MARK: Rewards
-                    if !rewardsArray.isEmpty {
-                        ListItemView(title: {
-                            Text("Event.rewards")
-                                .bold()
-                        }, value: {
-                            ForEach(rewardsArray) { card in
-                                NavigationLink(destination: {
-                                    
-                                }, label: {
-                                    CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                                })
-                                .contentShape(Rectangle())
-                                .buttonStyle(.plain)
-                                
-                            }
-                        })
-                        Divider()
+                    if let color = information.character.color {
+                        //MARK: Color
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.color")
+                                    .bold()
+                            }, value: {
+                                Text(color.toHex() ?? "")
+                                    .fontDesign(.monospaced)
+                                RoundedRectangle(cornerRadius: 7)
+                                //                                    .aspectRatio(1, contentMode: .fit)
+                                    .frame(width: 30, height: 30)
+                                    .foregroundStyle(color)
+                            })
+                            Divider()
+                        }
                     }
+                    
+                    if let bandID = information.character.bandID {
+                        //MARK: Band
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.band")
+                                    .bold()
+                            }, value: {
+                                Text(DoriCache.preCache.mainBands.first{$0.id == bandID}?.bandName.forPreferredLocale(allowsFallback: true) ?? "Unknown")
+                                WebImage(url: DoriCache.preCache.mainBands.first{$0.id == bandID}?.iconImageURL)
+                                    .resizable()
+                                    .interpolation(.high)
+                                    .antialiased(true)
+//                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                
+                            })
+                            Divider()
+                        }
+                    }
+                    
+                    if let profile = information.character.profile {
+                        //MARK: Role
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.role")
+                                    .bold()
+                            }, value: {
+                                Text(profile.part.localizedString)
+                            })
+                            Divider()
+                        }
+                        
+                        //MARK: Role
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.birthday")
+                                    .bold()
+                            }, value: {
+                                Text(dateFormatter.string(from: profile.birthday))
+                            })
+                            Divider()
+                        }
+                        
+                        //MARK: Constellation
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.constellation")
+                                    .bold()
+                            }, value: {
+                                Text(profile.constellation.localizedString)
+                            })
+                            Divider()
+                        }
+                        
+                        //MARK: Height
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.height")
+                                    .bold()
+                            }, value: {
+                                Text(verbatim: "\(profile.height) cm")
+                            })
+                            Divider()
+                        }
+                        
+                        //MARK: School
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.school")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(source: profile.school)
+                            })
+                            Divider()
+                        }
+                        
+                        //MARK: Favorite Food
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.year-class")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(source: {
+                                    var localizedContent = DoriAPI.LocalizedData<String>.init(_jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
+                                    for locale in DoriAPI.Locale.allCases {
+                                        localizedContent._set("\(profile.schoolYear.forLocale(locale) ?? "nil") - \(profile.schoolClass.forLocale(locale) ?? "nil")", forLocale: locale)
+                                    }
+                                    return localizedContent
+                                }())
+                            })
+                            Divider()
+                        }
+                        
+                        //MARK: Favorite Food
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.favorite-food")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(source: profile.favoriteFood)
+                            })
+                            Divider()
+                        }
+                        
+                        //MARK: Disliked Food
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.disliked-food")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(source: profile.hatedFood)
+                            })
+                            Divider()
+                        }
+                        
+                        //MARK: Hobby
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.hobby")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(source: profile.hobby)
+                            })
+                            Divider()
+                        }
+                        
+                        //MARK: Introduction
+                        Group {
+                            ListItemView(title: {
+                                Text("Character.introduction")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(source: profile.selfIntroduction, showSecondaryText: false)
+                            }, displayMode: .compactOnly)
+                            Divider()
+                        }
+                    }
+                    
                     
                     //MARK: ID
                     Group {
                         ListItemView(title: {
-                            Text("Event.id")
+                            Text("ID")
                                 .bold()
                         }, value: {
                             Text("\(String(information.id))")
@@ -658,38 +572,41 @@ struct CharacterDetailOverviewView: View {
             }
         }
         .frame(maxWidth: 600)
-        .onAppear {
-            eventCharacterPercentageDict = [:]
-            rewardsArray = []
-            cardsArray = []
-            let eventCharacters = information.event.characters
-            for char in eventCharacters {
-                eventCharacterPercentageDict.updateValue(((eventCharacterPercentageDict[char.percent] ?? []) + [char]), forKey: char.percent)
-                Task {
-                    if let allCharacters = await DoriAPI.Character.all() {
-                        if let character = allCharacters.first(where: { $0.id == char.characterID }) {
-                            eventCharacterNameDict.updateValue(character.characterName, forKey: char.characterID)
-                        }
-                    }
-                    
-                }
-            }
-            for card in information.cards {
-                if information.event.rewardCards.contains(card.id) {
-                    rewardsArray.append(card)
-                } else {
-                    cardsArray.append(card)
-                    if cardsPercentage == -100 {
-                        cardsPercentage = information.event.members.first(where: { $0.situationID == card.id })?.percent ?? -200
-                    }
-                }
-            }
-            cardsArraySeperated = cardsArray.chunked(into: 3)
-            for i in 0..<cardsArraySeperated.count {
-                while cardsArraySeperated[i].count < 3 {
-                    cardsArraySeperated[i].insert(nil, at: 0)
-                }
-            }
+        .onAppear {}
+    }
+}
+
+
+extension Color {
+    /// 转换为十六进制字符串 (#RRGGBB)
+    func toHex() -> String? {
+#if os(macOS)
+        let nativeColor = NSColor(self).usingColorSpace(.deviceRGB)
+        guard let color = nativeColor else { return nil }
+#else
+        let color = UIColor(self)
+#endif
+        
+//        guard let color = nativeColor else { return nil }
+        
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+#if os(macOS)
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+#else
+        guard color.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return nil
         }
+#endif
+        
+        return String(
+            format: "#%02lX%02lX%02lX",
+            lroundf(Float(red * 255)),
+            lroundf(Float(green * 255)),
+            lroundf(Float(blue * 255))
+        )
     }
 }

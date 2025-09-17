@@ -204,28 +204,34 @@ struct CardCardView: View {
     private var attribute: DoriAPI.Attribute
     private var rarity: Int
     private var bandIconImageURL: URL
+    private var showNavigationHints: Bool
+    private var cardID: Int
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
-    init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band) {
+    init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band, showNavigationHints: Bool = true) {
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
         self.bandIconImageURL = band.iconImageURL
+        self.showNavigationHints = showNavigationHints
+        self.cardID = card.id
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
-    init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band) {
+    init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band, showNavigationHints: Bool = true) {
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
         self.bandIconImageURL = band.iconImageURL
+        self.showNavigationHints = showNavigationHints
+        self.cardID = card.id
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 113)
     
-    private let cardCornerRadius: CGFloat = 15
+    private let cardCornerRadius: CGFloat = 10
     private let standardCardWidth: CGFloat = 480
     private let standardCardHeight: CGFloat = 320
     private let expectedCardRatio: CGFloat = 480/320
@@ -235,6 +241,9 @@ struct CardCardView: View {
     @State var normalCardIsOnHover = false
     @State var trainedCardIsOnHover = false
     
+    @State var cardTitle: DoriAPI.LocalizedData<String>?
+    @State var cardCharacterName: DoriAPI.LocalizedData<String>?
+    @State var isHovering: Bool = false
     var body: some View {
         ZStack {
             // MARK: Border
@@ -269,6 +278,16 @@ struct CardCardView: View {
                                     .scaledToFill()
                                     .frame(width: currentCardWidth * CGFloat(normalCardIsOnHover ? 0.75 : (trainedCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
+                                    .onTapGesture {
+                                        withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
+                                            if !normalCardIsOnHover {
+                                                normalCardIsOnHover = true
+                                                trainedCardIsOnHover = false
+                                            } else {
+                                                normalCardIsOnHover = false
+                                            }
+                                        }
+                                    }
                                     .onHover { isHovering in
                                         withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
                                             if isHovering {
@@ -293,6 +312,16 @@ struct CardCardView: View {
                                     .scaledToFill()
                                     .frame(width: currentCardWidth * CGFloat(trainedCardIsOnHover ? 0.75 : (normalCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
+                                    .onTapGesture {
+                                        withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
+                                            if !trainedCardIsOnHover {
+                                                normalCardIsOnHover = false
+                                                trainedCardIsOnHover = true
+                                            } else {
+                                                trainedCardIsOnHover = false
+                                            }
+                                        }
+                                    }
                                     .onHover { isHovering in
                                         withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
                                             if isHovering {
@@ -333,7 +362,7 @@ struct CardCardView: View {
                     .scaledToFill()
                     .frame(width: proxy.size.width, height: proxy.size.height)
                     .clipped()
-                    .scaleEffect(0.97)
+//                    .scaleEffect(0.97)
                 }
             }
             
@@ -383,15 +412,94 @@ struct CardCardView: View {
             currentCardWidth = geometry.size.width
             currentCardHeight = geometry.size.height
         })
-//        .scaledToFit()
-//        .aspectRatio()
-//        .aspectRatio(cardExpectedRatio, contentMode: .fit)
-//        .mask(RoundedRectangle(cornerRadius: cardCornerRadius))
-//        .clipped()
-//        .clipShape
-//        .frame(width: screenBounds.width - 5, height: (screenBounds.width - 5) * 0.7511244378)
-//        .listRowBackground(Color.clear)
-//        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+        .cornerRadius(cardCornerRadius)
+        .wrapIf(showNavigationHints, in: { content in
+#if os(iOS)
+            content
+                .contextMenu(menuItems: {
+                    VStack {
+                        Button(action: {
+//                            cardNavigationDestinationID = cardID
+                        }, label: {
+                            if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+                                Group {
+                                    Text(title)
+                                    Group {
+                                        Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text("#\(String(cardID))")
+                                    }
+                                    .font(.caption)
+                                }
+                            } else {
+                                Group {
+                                    Text(verbatim: "Lorem ipsum dolor")
+                                    //                                        .foregroundStyle(.secondary)
+                                    Text(verbatim: "Lorem ipsum")
+                                        .font(.caption)
+                                    //                                        .foregroundStyle(.tertiary)
+                                }
+                                .redacted(reason: .placeholder)
+                                
+                            }
+                        })
+                        .disabled(cardTitle?.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
+                    }
+                })
+#else
+            content
+            /*
+            // Very weird code cuz SwiftUI has very weird refreshing logic.
+            // Don't touch without complete-understaning
+            let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
+                VStack {
+                    if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+                        Group {
+                            Text(title)
+                            Group {
+                                Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
+                            }
+                            .font(.caption)
+                        }
+                    } else {
+                        Group {
+                            Text(verbatim: "Lorem ipsum dolor")
+                                .foregroundStyle(getPlaceholderColor())
+                            //                                .fill()
+                            Text(verbatim: "Lorem ipsum")
+                                .foregroundStyle(.tertiary)
+                        }
+                        .redacted(reason: .placeholder)
+                        
+                    }
+                }
+                .padding()
+            }
+            content
+                .onHover { isHovering in
+                    self.isHovering = isHovering
+                }
+                .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+                    sumimi
+                }
+                .onChange(of: cardTitle) {
+                    sumimi.updateArguments((cardTitle, cardCharacterName))
+                }
+                .onChange(of: cardCharacterName) {
+                    sumimi.updateArguments((cardTitle, cardCharacterName))
+                }
+             */
+#endif
+        })
+        .task {
+            let fullCard = await DoriAPI.Card.Card(id: cardID)
+            DispatchQueue.main.async {
+                cardTitle = fullCard?.prefix
+            }
+            if let cardCharacterID = fullCard?.characterID,
+               let name = DoriCache.preCache.characterDetails[cardCharacterID]?.characterName {
+                self.cardCharacterName = name
+//                isCardInfoAvailable = true
+            }
+        }
     }
 }
 

@@ -540,6 +540,7 @@ extension DoriAPI.Character {
                 case drum
                 case violin
                 case dj
+                // To those who're confusing: "base" was given by Bestdori. --@ThreeManager785
             }
         }
     }

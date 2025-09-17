@@ -479,7 +479,7 @@ struct EventDetailOverviewView: View {
                     //MARK: ID
                     Group {
                         ListItemView(title: {
-                            Text("Event.id")
+                            Text("ID")
                                 .bold()
                         }, value: {
                             Text("\(String(information.id))")
