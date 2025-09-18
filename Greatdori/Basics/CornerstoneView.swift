@@ -504,9 +504,7 @@ struct ListItemView<Content1: View, Content2: View>: View {
                         .onFrameChange(perform: { geometry in
                             titleAvailableWidth = geometry.size.width
                         })
-                    Rectangle()
-                        .opacity(0)
-                        .frame(width: 0, height: 1)
+                        .padding(.vertical, 1)
                     HStack {
                         if !allowValueLeading {
                             Spacer()

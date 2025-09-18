@@ -35,7 +35,7 @@ struct EventDetailView: View {
                         Spacer(minLength: 0)
                         VStack {
                             EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
-                            ListGachaView()
+//                            ListGachaView()
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -593,7 +593,7 @@ struct EventSearchView: View {
                                                         presentingEventID = event.id
 //                                                    }
                                                 }, label: {
-                                                    EventInfo(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                    EventInfo(event, preferHeavierFonts: true, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                         .frame(maxWidth: bannerWidth)
                                                 })
                                                 .buttonStyle(.plain)

@@ -237,7 +237,11 @@ struct CharacterDetailView: View {
                         Rectangle()
                             .opacity(0)
                             .frame(height: 30)
-                        DetailsCardSection(cards: information.cards.sorted{ $0.id > $1.id })
+                        DetailsCardsSection(cards: information.cards.sorted{ compare($0.releasedAt.jp,$1.releasedAt.jp) })
+                        Rectangle()
+                            .opacity(0)
+                            .frame(height: 30)
+                        DetailsEventsSection(events: information.events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp))))
                         Spacer()
                     }
                     .padding()
@@ -614,43 +618,5 @@ struct CharacterDetailOverviewView: View {
             }
         }
         .frame(maxWidth: 600)
-    }
-}
-
-
-//MARK: DetailsCardSection
-struct DetailsCardSection: View {
-    var cards: [PreviewCard]
-    @State var showAll = false
-    var body: some View {
-        LazyVStack(pinnedViews: .sectionHeaders) {
-            Section(content: {
-                ForEach((showAll ? cards : Array(cards.prefix(3))), id: \.self) { card in
-                    NavigationLink(destination: {
-//                        [NAVI785]
-                    }, label: {
-                        CardInfo(card)
-                    })
-                    .buttonStyle(.plain)
-                }
-                .frame(maxWidth: 600)
-            }, header: {
-                HStack {
-                    Text("Details.cards")
-                        .font(.title2)
-                        .bold()
-                    Spacer()
-                    Button(action: {
-                        showAll.toggle()
-                    }, label: {
-                        Text(showAll ? "Details.show-less" : "Details.show-all.\(cards.count)")
-                            .foregroundStyle(.secondary)
-                            .font(.caption)
-                    })
-                    .buttonStyle(.plain)
-                }
-                .frame(maxWidth: 615)
-            })
-        }
     }
 }

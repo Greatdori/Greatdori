@@ -102,6 +102,8 @@ struct EventInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
     @State var attributedType: AttributedString = AttributedString("")
+    
+    private var preferHeavierFonts: Bool = true
     private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
     private var eventID: Int
@@ -112,7 +114,8 @@ struct EventInfo: View {
 //    @State var imageHeight: CGFloat = 100
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ event: DoriAPI.Event.PreviewEvent, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
+        self.preferHeavierFonts = preferHeavierFonts
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
         self.eventID = event.id
@@ -123,7 +126,8 @@ struct EventInfo: View {
         self._searchedKeyword = searchedKeyword
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showDetails: Bool = false, showID: Bool = true,  searchedKeyword: Binding<String> = .constant("")) {
+    init(_ event: DoriAPI.Event.Event, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = true,  searchedKeyword: Binding<String> = .constant("")) {
+        self.preferHeavierFonts = preferHeavierFonts
         self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = event.eventName
         self.eventID = event.id
@@ -133,65 +137,83 @@ struct EventInfo: View {
         self.showID = showID
         self._searchedKeyword = searchedKeyword
     }
+    
+    let lighterVersionBannerScaleFactor: CGFloat = 0.85
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
     
     var body: some View {
         CustomGroupBox(showGroupBox: showDetails) {
-            VStack {
-                WebImage(url: eventImageURL) { image in
-                    image
-                        .resizable()
-                        .antialiased(true)
-                    //                        .scaledToFit()
-                        .aspectRatio(3.0, contentMode: .fit)
-                        .frame(maxWidth: 420, maxHeight: 140)
-                } placeholder: {
-                    RoundedRectangle(cornerRadius: 10)
-//                        .fill(Color.gray.opacity(0.15))
-                        .fill(getPlaceholderColor())
-                        .aspectRatio(3.0, contentMode: .fit)
-                        .frame(maxWidth: 420, maxHeight: 140)
+            HStack {
+                if !preferHeavierFonts {
+                    Spacer(minLength: 0)
                 }
-                .interpolation(.high)
-                .cornerRadius(10)
-                
-                if showDetails {
-                    VStack { // Accually Title & Countdown
-                        //                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
-                        Text(attributedTitle)
-                            .multilineTextAlignment(.center)
-                            .bold()
-                            .font(.title3)
-                            .onAppear {
-                                //                                attributedString = highlightKeyword(in: , keyword: searchedKeyword)
-                                attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
-                            }
-                            .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
-                            .onChange(of: searchedKeyword, {
-                                attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
-                            })
-                        Group {
-//                            if !searchedKeyword.isEmpty {
-//                                Text("#\(eventID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
-                                HStack {
-                                    Text(attributedType)
-                                    if showID {
-                                        Text("#\(String(eventID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .secondary)
-                                    }
+                VStack {
+                    WebImage(url: eventImageURL) { image in
+                        image
+                            .resizable()
+                            .antialiased(true)
+                        //                        .scaledToFit()
+                            .aspectRatio(3.0, contentMode: .fit)
+                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                    } placeholder: {
+                        RoundedRectangle(cornerRadius: 10)
+                        //                        .fill(Color.gray.opacity(0.15))
+                            .fill(getPlaceholderColor())
+                            .aspectRatio(3.0, contentMode: .fit)
+                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                    }
+                    .interpolation(.high)
+                    .cornerRadius(10)
+                    
+                    if showDetails {
+                        VStack { // Accually Title & Countdown
+                                 //                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                            Text(attributedTitle)
+                                .multilineTextAlignment(.center)
+                                .bold()
+                                .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+                                .onAppear {
+                                    //                                attributedString = highlightKeyword(in: , keyword: searchedKeyword)
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
                                 }
-//                            } else {
-//                                Text(eventType.localizedString)
-//                            }
-                        }
-                        .onAppear {
-                            attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
-                        }
-                        .onChange(of: eventType.localizedString, {
+                                .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
+                                .onChange(of: searchedKeyword, {
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                                })
+                            Group {
+                                //                            if !searchedKeyword.isEmpty {
+                                //                                Text("#\(eventID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
+                                if preferHeavierFonts {
+                                    HStack {
+                                        Text(attributedType)
+                                        if showID {
+                                            Text("#\(String(eventID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .secondary)
+                                        }
+                                    }
+                                } else {
+                                    Group {
+                                        Text(attributedType) + Text(verbatim: " • ").bold() + Text("#\(String(eventID))").fontDesign(.monospaced)
+                                    }
+                                    .foregroundStyle(.secondary)
+//                                    .font(.caption)
+                                }
+                                //                            } else {
+                                //                                Text(eventType.localizedString)
+                                //                            }
+                            }
+                            .onAppear {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
+                            }
+                            .onChange(of: eventType.localizedString, {
                                 attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
                             })
+                        }
+                        .frame(height: showDetails ? nil : 0)
+                        .opacity(showDetails ? 1 : 0)
                     }
-                    .frame(height: showDetails ? nil : 0)
-                    .opacity(showDetails ? 1 : 0)
+                }
+                if !preferHeavierFonts {
+                    Spacer(minLength: 0)
                 }
             }
         }
@@ -429,7 +451,7 @@ struct CardCoverImage: View {
                                 Group {
                                     Text(title)
                                     Group {
-                                        Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text("#\(String(cardID))")
+                                        Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text(cardType.localizedString)
                                     }
                                     .font(.caption)
                                 }
@@ -503,6 +525,9 @@ struct CardCoverImage: View {
 
 //MARK: CardInfo [✓]
 struct CardInfo: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
+    
+    private var preferHeavierFonts: Bool = true
     private var thumbNormalImageURL: URL
     private var thumbTrainedImageURL: URL?
     private var cardType: DoriAPI.Card.CardType
@@ -517,7 +542,8 @@ struct CardInfo: View {
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.PreviewCard/*, band: DoriAPI.Band.Band*/) {
+    init(_ card: DoriAPI.Card.PreviewCard, preferHeavierFonts: Bool = false) {
+        self.preferHeavierFonts = preferHeavierFonts
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
@@ -531,7 +557,8 @@ struct CardInfo: View {
         self.previewCard = card
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.Card/*, band: DoriAPI.Band.Band*/) {
+    init(_ card: DoriAPI.Card.Card, preferHeavierFonts: Bool = false) {
+        self.preferHeavierFonts = preferHeavierFonts
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
@@ -549,22 +576,26 @@ struct CardInfo: View {
     var body: some View {
         CustomGroupBox {
             HStack {
-                HStack(spacing: 3) {
+                HStack(spacing: 5) {
                     CardPreviewImage(previewCard, cardNavigationDestinationID: .constant(nil))
                     if thumbTrainedImageURL != nil {
                         CardPreviewImage(previewCard, showTrainedVersion: true, cardNavigationDestinationID: .constant(nil))
                     }
                 }
-                .frame(maxWidth: 200)
+                .wrapIf(sizeClass == .regular, in: { content in
+                    content.frame(maxWidth: 200)
+                })
+//                .frame(maxWidth: 200)
                 VStack(alignment: .leading) {
                     Text(prefix.forPreferredLocale() ?? "nil")
                         .bold()
-                        .font(.title3)
+                        .font(isMACOS ? .title3 : .body)
                     Group {
-                        Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text("\(cardType.localizedString)") + Text(verbatim: " • ").bold() + Text("#\(String(cardID))")
+                        Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text("\(cardType.localizedString)")
                     }
                     .foregroundStyle(.secondary)
                     .font(isMACOS ? .body : .caption)
+                
 //                    .font(.caption)
                 }
                 Spacer()
@@ -706,7 +737,7 @@ struct CardPreviewImage: View {
                                 Group {
                                     Text(title)
                                     Group {
-                                        Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text("#\(String(cardID))")
+                                        Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text(cardType.localizedString)
                                     }
                                     .font(.caption)
                                 }
@@ -734,7 +765,7 @@ struct CardPreviewImage: View {
                         Group {
                             Text(title)
                             Group {
-                                Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
+                                Text("\(character)") + Text(verbatim: " • ").bold() +  Text(cardType.localizedString)
                             }
                             .font(.caption)
                         }

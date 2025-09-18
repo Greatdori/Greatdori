@@ -20,6 +20,21 @@ import SwiftUI
 import UIKit
 #endif
 
+// MARK: compare
+func compare<T: Comparable>(_ lhs: T?, _ rhs: T?, ascending: Bool = true) -> Bool {
+    if lhs == nil {
+        return false
+    } else if rhs == nil {
+        return true
+    } else {
+        if ascending {
+            return lhs! > rhs!
+        } else {
+            return lhs! < rhs!
+        }
+    }
+}
+
 //MARK: copyStringToClipboard
 func copyStringToClipboard(_ content: String) {
 #if os(macOS)
