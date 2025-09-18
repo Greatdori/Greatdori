@@ -273,6 +273,7 @@ struct CharacterDetailView: View {
                 }
             }
         }
+        .withSystemBackground()
         .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
             Text("\(id)")
         })
@@ -407,212 +408,214 @@ struct CharacterDetailOverviewView: View {
         return df
     }
     var body: some View {
-        VStack {
-            Group {
-                //MARK: Info
+        CustomGroupBox(cornerRadius: 20) {
+            VStack {
                 Group {
-                    //MARK: Name
+                    //MARK: Info
                     Group {
-                        ListItemView(title: {
-                            Text("Character.name")
-                                .bold()
-                        }, value: {
-                            MultilingualText(source: information.character.characterName)
-                        })
-                        Divider()
-                    }
-                    
-                    if !(information.character.nickname.jp ?? "").isEmpty {
-                        //MARK: Nickname
+                        //MARK: Name
                         Group {
                             ListItemView(title: {
-                                Text("Character.nickname")
+                                Text("Character.name")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.character.nickname)
-                            })
-                            Divider()
-                        }
-                    }
-                    
-                    if let profile = information.character.profile {
-                        //MARK: Character Voice
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.character-voice")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(source: profile.characterVoice)
-                            })
-                            Divider()
-                        }
-                    }
-                    
-                    if let color = information.character.color {
-                        //MARK: Color
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.color")
-                                    .bold()
-                            }, value: {
-                                Text(color.toHex() ?? "")
-                                    .fontDesign(.monospaced)
-                                RoundedRectangle(cornerRadius: 7)
-                                //                                    .aspectRatio(1, contentMode: .fit)
-                                    .frame(width: 30, height: 30)
-                                    .foregroundStyle(color)
-                            })
-                            Divider()
-                        }
-                    }
-                    
-                    if let bandID = information.character.bandID {
-                        //MARK: Band
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.band")
-                                    .bold()
-                            }, value: {
-                                Text(DoriCache.preCache.mainBands.first{$0.id == bandID}?.bandName.forPreferredLocale(allowsFallback: true) ?? "Unknown")
-                                WebImage(url: DoriCache.preCache.mainBands.first{$0.id == bandID}?.iconImageURL)
-                                    .resizable()
-                                    .interpolation(.high)
-                                    .antialiased(true)
-//                                    .scaledToFit()
-                                    .frame(width: 30, height: 30)
-                                
-                            })
-                            Divider()
-                        }
-                    }
-                    
-                    if let profile = information.character.profile {
-                        //MARK: Role
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.role")
-                                    .bold()
-                            }, value: {
-                                Text(profile.part.localizedString)
+                                MultilingualText(source: information.character.characterName)
                             })
                             Divider()
                         }
                         
-                        //MARK: Role
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.birthday")
-                                    .bold()
-                            }, value: {
-                                Text(dateFormatter.string(from: profile.birthday))
-                            })
-                            Divider()
+                        if !(information.character.nickname.jp ?? "").isEmpty {
+                            //MARK: Nickname
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.nickname")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: information.character.nickname)
+                                })
+                                Divider()
+                            }
                         }
                         
-                        //MARK: Constellation
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.constellation")
-                                    .bold()
-                            }, value: {
-                                Text(profile.constellation.localizedString)
-                            })
-                            Divider()
+                        if let profile = information.character.profile {
+                            //MARK: Character Voice
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.character-voice")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: profile.characterVoice)
+                                })
+                                Divider()
+                            }
                         }
                         
-                        //MARK: Height
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.height")
-                                    .bold()
-                            }, value: {
-                                Text(verbatim: "\(profile.height) cm")
-                            })
-                            Divider()
+                        if let color = information.character.color {
+                            //MARK: Color
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.color")
+                                        .bold()
+                                }, value: {
+                                    Text(color.toHex() ?? "")
+                                        .fontDesign(.monospaced)
+                                    RoundedRectangle(cornerRadius: 7)
+                                    //                                    .aspectRatio(1, contentMode: .fit)
+                                        .frame(width: 30, height: 30)
+                                        .foregroundStyle(color)
+                                })
+                                Divider()
+                            }
                         }
                         
-                        //MARK: School
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.school")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(source: profile.school)
-                            })
-                            Divider()
+                        if let bandID = information.character.bandID {
+                            //MARK: Band
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.band")
+                                        .bold()
+                                }, value: {
+                                    Text(DoriCache.preCache.mainBands.first{$0.id == bandID}?.bandName.forPreferredLocale(allowsFallback: true) ?? "Unknown")
+                                    WebImage(url: DoriCache.preCache.mainBands.first{$0.id == bandID}?.iconImageURL)
+                                        .resizable()
+                                        .interpolation(.high)
+                                        .antialiased(true)
+                                    //                                    .scaledToFit()
+                                        .frame(width: 30, height: 30)
+                                    
+                                })
+                                Divider()
+                            }
                         }
                         
-                        //MARK: Favorite Food
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.year-class")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(source: {
-                                    var localizedContent = DoriAPI.LocalizedData<String>.init(_jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
-                                    for locale in DoriAPI.Locale.allCases {
-                                        localizedContent._set("\(profile.schoolYear.forLocale(locale) ?? "nil") - \(profile.schoolClass.forLocale(locale) ?? "nil")", forLocale: locale)
-                                    }
-                                    return localizedContent
-                                }())
-                            })
-                            Divider()
+                        if let profile = information.character.profile {
+                            //MARK: Role
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.role")
+                                        .bold()
+                                }, value: {
+                                    Text(profile.part.localizedString)
+                                })
+                                Divider()
+                            }
+                            
+                            //MARK: Role
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.birthday")
+                                        .bold()
+                                }, value: {
+                                    Text(dateFormatter.string(from: profile.birthday))
+                                })
+                                Divider()
+                            }
+                            
+                            //MARK: Constellation
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.constellation")
+                                        .bold()
+                                }, value: {
+                                    Text(profile.constellation.localizedString)
+                                })
+                                Divider()
+                            }
+                            
+                            //MARK: Height
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.height")
+                                        .bold()
+                                }, value: {
+                                    Text(verbatim: "\(profile.height) cm")
+                                })
+                                Divider()
+                            }
+                            
+                            //MARK: School
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.school")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: profile.school)
+                                })
+                                Divider()
+                            }
+                            
+                            //MARK: Favorite Food
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.year-class")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: {
+                                        var localizedContent = DoriAPI.LocalizedData<String>.init(_jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
+                                        for locale in DoriAPI.Locale.allCases {
+                                            localizedContent._set("\(profile.schoolYear.forLocale(locale) ?? "nil") - \(profile.schoolClass.forLocale(locale) ?? "nil")", forLocale: locale)
+                                        }
+                                        return localizedContent
+                                    }())
+                                })
+                                Divider()
+                            }
+                            
+                            //MARK: Favorite Food
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.favorite-food")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: profile.favoriteFood)
+                                })
+                                Divider()
+                            }
+                            
+                            //MARK: Disliked Food
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.disliked-food")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: profile.hatedFood)
+                                })
+                                Divider()
+                            }
+                            
+                            //MARK: Hobby
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.hobby")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: profile.hobby)
+                                })
+                                Divider()
+                            }
+                            
+                            //MARK: Introduction
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.introduction")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: profile.selfIntroduction, showSecondaryText: false, allowPopover: false)
+                                }, displayMode: sizeClass == .regular ? .compactOnly : .automatic)
+                                Divider()
+                            }
                         }
                         
-                        //MARK: Favorite Food
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.favorite-food")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(source: profile.favoriteFood)
-                            })
-                            Divider()
-                        }
                         
-                        //MARK: Disliked Food
+                        //MARK: ID
                         Group {
                             ListItemView(title: {
-                                Text("Character.disliked-food")
+                                Text("ID")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: profile.hatedFood)
+                                Text("\(String(information.id))")
                             })
-                            Divider()
                         }
-                        
-                        //MARK: Hobby
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.hobby")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(source: profile.hobby)
-                            })
-                            Divider()
-                        }
-                        
-                        //MARK: Introduction
-                        Group {
-                            ListItemView(title: {
-                                Text("Character.introduction")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(source: profile.selfIntroduction, showSecondaryText: false, allowPopover: false)
-                            }, displayMode: sizeClass == .regular ? .compactOnly : .automatic)
-                            Divider()
-                        }
-                    }
-                    
-                    
-                    //MARK: ID
-                    Group {
-                        ListItemView(title: {
-                            Text("ID")
-                                .bold()
-                        }, value: {
-                            Text("\(String(information.id))")
-                        })
                     }
                 }
             }

@@ -76,9 +76,11 @@ struct CompactToggle: View {
 //MARK: CustomGroupBox
 struct CustomGroupBox<Content: View>: View {
     let content: () -> Content
+    var cornerRadius: CGFloat = 15
     var showGroupBox: Bool = true
-    init(showGroupBox: Bool = true, @ViewBuilder content: @escaping () -> Content) {
+    init(showGroupBox: Bool = true, cornerRadius: CGFloat = 15, @ViewBuilder content: @escaping () -> Content) {
         self.showGroupBox = showGroupBox
+        self.cornerRadius = cornerRadius
         self.content = content
     }
     var body: some View {
@@ -91,7 +93,7 @@ struct CustomGroupBox<Content: View>: View {
         //            .padding(.all, showGroupBox ? nil : 0)
             .background {
                 if showGroupBox {
-                    RoundedRectangle(cornerRadius: 15)
+                    RoundedRectangle(cornerRadius: cornerRadius)
 #if !os(macOS)
                         .foregroundStyle(Color(.secondarySystemGroupedBackground))
 #else

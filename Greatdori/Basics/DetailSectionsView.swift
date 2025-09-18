@@ -71,7 +71,7 @@ struct DetailsCardsSection: View {
                     
                 }
                 .frame(maxWidth: 615)
-                .shadow(radius: 10)
+//                .shadow(radius: 10)
                 //            .border(.red)
             })
         }
