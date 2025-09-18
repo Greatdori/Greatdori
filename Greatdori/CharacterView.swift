@@ -37,42 +37,44 @@ struct CharacterSearchView: View {
                 ScrollView {
                     HStack {
                         Spacer(minLength: 0)
-                        ForEach(bandArray, id: \.self) { band in
-                            if let band {
-                                WebImage(url: band.logoImageURL)
-                                    .resizable()
-                                    .frame(width: 160*bandLogoScaleFactor, height: 76*bandLogoScaleFactor)
-                                HStack {
-                                    ForEach(charactersDict![band]!.swappedAt(0, 3).swappedAt(2, 3), id: \.self) { char in
-                                        NavigationLink(destination: {
-                                            CharacterDetailView(id: char.id, allCharacters: allCharacters)
-                                            #if !os(macOS)
-                                                .wrapIf(true, in: { content in
-                                                    if #available(iOS 18.0, *) {
-                                                        content
-                                                            .navigationTransition(.zoom(sourceID: char.id, in: detailNavigation))
-                                                    } else {
-                                                        content
-                                                    }
-                                                })
-                                            #endif
-                                        }, label: {
-                                            CharacterImageView(character: char)
-                                        })
-                                        .buttonStyle(.plain)
-                                        .wrapIf(true, in: { content in
-                                            if #available(iOS 18.0, macOS 15.0, *) {
-                                                content
-                                                    .matchedTransitionSource(id: char.id, in: detailNavigation)
-                                            } else {
-                                                content
-                                            }
-                                        })
+                        VStack {
+                            ForEach(bandArray, id: \.self) { band in
+                                if let band {
+                                    WebImage(url: band.logoImageURL)
+                                        .resizable()
+                                        .frame(width: 160*bandLogoScaleFactor, height: 76*bandLogoScaleFactor)
+                                    HStack {
+                                        ForEach(charactersDict![band]!.swappedAt(0, 3).swappedAt(2, 3), id: \.self) { char in
+                                            NavigationLink(destination: {
+                                                CharacterDetailView(id: char.id, allCharacters: allCharacters)
+                                                #if !os(macOS)
+                                                    .wrapIf(true, in: { content in
+                                                        if #available(iOS 18.0, *) {
+                                                            content
+                                                                .navigationTransition(.zoom(sourceID: char.id, in: detailNavigation))
+                                                        } else {
+                                                            content
+                                                        }
+                                                    })
+                                                #endif
+                                            }, label: {
+                                                CharacterImageView(character: char)
+                                            })
+                                            .buttonStyle(.plain)
+                                            .wrapIf(true, in: { content in
+                                                if #available(iOS 18.0, macOS 15.0, *) {
+                                                    content
+                                                        .matchedTransitionSource(id: char.id, in: detailNavigation)
+                                                } else {
+                                                    content
+                                                }
+                                            })
+                                        }
                                     }
-                                }
-                                if sizeClass == .regular {
-                                    Rectangle()
-                                        .frame(width: 0, height: 20)
+                                    if sizeClass == .regular {
+                                        Rectangle()
+                                            .frame(width: 0, height: 20)
+                                    }
                                 }
                             }
                         }
