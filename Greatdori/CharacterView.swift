@@ -623,35 +623,34 @@ struct DetailsCardSection: View {
     var cards: [PreviewCard]
     @State var showAll = false
     var body: some View {
-        Section(content: {
-            ForEach((showAll ? cards : Array(cards.prefix(3))), id: \.self) { card in
-                NavigationLink(destination: {
-//                    [NAVI785]
-                }, label: {
-                    CardInfo(card)
-                })
-                .buttonStyle(.plain)
-            }
-            .frame(maxWidth: 600)
-        }, header: {
-            HStack {
-                Text("Details.cards")
-                    .font(.title2)
-                    .bold()
-                Spacer()
-                Button(action: {
-                    showAll.toggle()
-                }, label: {
-                    Text(showAll ? "Details.show-less" : "Details.show-all.\(cards.count)")
-                        .foregroundStyle(.secondary)
-                        .font(.caption)
-                })
-                .buttonStyle(.plain)
-//                .alignmentGuide(.bottom, computeValue: 0)
-                
-            }
-            .frame(maxWidth: 615)
-//            .border(.red)
-        })
+        LazyVStack(pinnedViews: .sectionHeaders) {
+            Section(content: {
+                ForEach((showAll ? cards : Array(cards.prefix(3))), id: \.self) { card in
+                    NavigationLink(destination: {
+//                        [NAVI785]
+                    }, label: {
+                        CardInfo(card)
+                    })
+                    .buttonStyle(.plain)
+                }
+                .frame(maxWidth: 600)
+            }, header: {
+                HStack {
+                    Text("Details.cards")
+                        .font(.title2)
+                        .bold()
+                    Spacer()
+                    Button(action: {
+                        showAll.toggle()
+                    }, label: {
+                        Text(showAll ? "Details.show-less" : "Details.show-all.\(cards.count)")
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                    })
+                    .buttonStyle(.plain)
+                }
+                .frame(maxWidth: 615)
+            })
+        }
     }
 }
