@@ -369,6 +369,22 @@ extension DoriAPI.Costume.${property} {
 }
 % end
 
+extension DoriAPI.Degree.Degree {
+    @inlinable
+    public var baseImageURL: URL {
+        let locale = self.degreeName.availableLocale()!
+        return .init(string: "https://bestdori.com/assets/\(locale.rawValue)/thumb/degree_rip/\(self.baseImageName.forLocale(locale)!).png")!.respectOfflineAssetContext()
+    }
+    @inlinable
+    public func baseImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.degreeName, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/thumb/degree_rip/\(self.baseImageName.forLocale(.init(rawValue: locale)!)!).png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+}
+
 %{
     properties = ["PreviewGacha", "Gacha"]
 }%

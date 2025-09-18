@@ -297,6 +297,40 @@
         }
       }
     },
+    "%lld 分" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Pt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Pts"
+                }
+              }
+            }
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ポイント"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Pts"
+          }
+        }
+      }
+    },
     "%lld%% 完成率" : {
       "localizations" : {
         "en" : {
@@ -542,6 +576,9 @@
         }
       }
     },
+    "Name" : {
+      "shouldTranslate" : false
+    },
     "PICK UP 成员卡牌" : {
       "localizations" : {
         "en" : {
@@ -563,6 +600,9 @@
           }
         }
       }
+    },
+    "Point" : {
+      "shouldTranslate" : false
     },
     "Type" : {
       "shouldTranslate" : false
