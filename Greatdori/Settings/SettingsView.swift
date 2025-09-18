@@ -270,13 +270,14 @@ struct SettingsNotificationView: View {
     @Environment(\.openURL) var openURL
     @AppStorage("IsNewsNotifEnabled") var isNewsNotificationEnabled = false
     @AppStorage("BirthdaysCalendarID") var birthdaysCalendarID = ""
-    @State var birthdatCalendarIsEnabled = false
+    @State var birthdayCalendarIsEnabled = false
     @State var notificationIsAuthorized = false
     @State var notificationIsRejected = false
     @State var showErrorAlert = false
     @State var errorCode = 0
     @State var calendarIsAuthorized = false
     @State var calendarIsRejected = false
+    @State var shouldRespondToggleChange = true
     var body: some View {
         Section(content: {
             Group {
@@ -297,19 +298,24 @@ struct SettingsNotificationView: View {
                             }
                     })
                     .onChange(of: isNewsNotificationEnabled) {
-                        isNewsNotificationEnabled = $0
-                        if $0 {
+                        guard shouldRespondToggleChange else {
+                            shouldRespondToggleChange = true
+                            return
+                        }
+                        if isNewsNotificationEnabled {
                             if let token = UserDefaults.standard.data(forKey: "RemoteNotifDeviceToken") {
                                 Task {
                                     if let id = await DoriNotification.registerRemoteNewsNotification(deviceToken: token) {
                                         UserDefaults.standard.set(id.uuidString, forKey: "NewsNotifID")
                                     } else {
+                                        shouldRespondToggleChange = false
                                         isNewsNotificationEnabled = false
                                         errorCode = -401
                                         showErrorAlert = true
                                     }
                                 }
                             } else {
+                                shouldRespondToggleChange = false
                                 isNewsNotificationEnabled = false
                                 errorCode = -402
                                 showErrorAlert = true
@@ -320,6 +326,7 @@ struct SettingsNotificationView: View {
                                 Task {
                                     let success = await DoriNotification.unregisterRemoteNewsNotification(id: uuid)
                                     if !success {
+                                        shouldRespondToggleChange = false
                                         isNewsNotificationEnabled = true
                                         errorCode = -403
                                         showErrorAlert = true
@@ -360,7 +367,7 @@ struct SettingsNotificationView: View {
             }
             Group {
                 if calendarIsAuthorized || calendarIsRejected {
-                    Toggle(isOn: $birthdatCalendarIsEnabled, label: {
+                    Toggle(isOn: $birthdayCalendarIsEnabled, label: {
                         Text("Settings.notifications.birthday-calendar")
                             .foregroundStyle((!calendarIsAuthorized && calendarIsRejected) ? .secondary : .primary)
                             .onTapGesture {
@@ -375,8 +382,8 @@ struct SettingsNotificationView: View {
                                 }
                             }
                     })
-                    .onChange(of: birthdatCalendarIsEnabled) {
-                        if $0 {
+                    .onChange(of: birthdayCalendarIsEnabled) {
+                        if birthdayCalendarIsEnabled {
                             Task {
                                 try? await updateBirthdayCalendar()
                             }
@@ -430,9 +437,9 @@ struct SettingsNotificationView: View {
                 isNewsNotificationEnabled = false
             }
             if calendarIsRejected {
-                birthdatCalendarIsEnabled = false
+                birthdayCalendarIsEnabled = false
             }
-            birthdatCalendarIsEnabled = !birthdaysCalendarID.isEmpty
+            birthdayCalendarIsEnabled = !birthdaysCalendarID.isEmpty
         }
     }
 }
