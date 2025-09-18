@@ -484,15 +484,26 @@ struct CardCardView: View {
 #endif
         })
         .task {
-            let fullCard = await DoriAPI.Card.Card(id: cardID)
-            DispatchQueue.main.async {
-                cardTitle = fullCard?.prefix
+            await updateCardInfo()
+        }
+        .onChange(of: cardID) {
+            // Clear out-dated info
+            cardTitle = nil
+            cardCharacterName = nil
+            Task {
+                await updateCardInfo()
             }
-            if let cardCharacterID = fullCard?.characterID,
-               let name = DoriCache.preCache.characterDetails[cardCharacterID]?.characterName {
-                self.cardCharacterName = name
-//                isCardInfoAvailable = true
-            }
+        }
+    }
+    
+    func updateCardInfo() async {
+        let fullCard = await DoriAPI.Card.Card(id: cardID)
+        DispatchQueue.main.async {
+            cardTitle = fullCard?.prefix
+        }
+        if let cardCharacterID = fullCard?.characterID,
+           let name = DoriCache.preCache.characterDetails[cardCharacterID]?.characterName {
+            self.cardCharacterName = name
         }
     }
 }
