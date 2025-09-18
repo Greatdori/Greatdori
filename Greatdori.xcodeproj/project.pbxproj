@@ -123,6 +123,7 @@
 		8C7855A12E48FBF9000EA06E /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855A02E48FBF5000EA06E /* ImageViewer.swift */; };
 		8C7855DA2E4A6994000EA06E /* MiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855D92E4A698D000EA06E /* MiracleTicket.swift */; };
 		8C7855DC2E4A6BFA000EA06E /* FrontendMiracleTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */; };
+		8C7B2D7E2E7B9EAF00EE0C89 /* NewsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B2D7D2E7B9EA900EE0C89 /* NewsListView.swift */; };
 		8C7B4A042E7AA38200EE0C89 /* DriverTopLevelTypes.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B4A032E7AA37A00EE0C89 /* DriverTopLevelTypes.swift.gyb */; };
 		8C7F17602E5AB5910040C206 /* DoriAssetShims.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7F6BC42E5949950040C206 /* DoriAssetShims.framework */; platformFilters = (ios, maccatalyst, macos, ); };
 		8C7F17642E5AEB7C0040C206 /* GitUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C7F17632E5AEB740040C206 /* GitUtils.h */; };
@@ -683,6 +684,7 @@
 		8C7855A02E48FBF5000EA06E /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		8C7855D92E4A698D000EA06E /* MiracleTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiracleTicket.swift; sourceTree = "<group>"; };
 		8C7855DB2E4A6BEC000EA06E /* FrontendMiracleTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendMiracleTicket.swift; sourceTree = "<group>"; };
+		8C7B2D7D2E7B9EA900EE0C89 /* NewsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListView.swift; sourceTree = "<group>"; };
 		8C7B4A032E7AA37A00EE0C89 /* DriverTopLevelTypes.swift.gyb */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = DriverTopLevelTypes.swift.gyb; sourceTree = "<group>"; };
 		8C7F17632E5AEB740040C206 /* GitUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GitUtils.h; sourceTree = "<group>"; };
 		8C7F17652E5AEB870040C206 /* GitUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GitUtils.m; sourceTree = "<group>"; };
@@ -1355,6 +1357,7 @@
 		8C6C0F072E4258A500D1FB0A /* Community */ = {
 			isa = PBXGroup;
 			children = (
+				8C7B2D7D2E7B9EA900EE0C89 /* NewsListView.swift */,
 				8C499F982E51774F0073FCB6 /* NewsDetailView.swift */,
 				8C2CCD522E3F43E00014189F /* CommunityPostsView.swift */,
 				8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */,
@@ -2480,6 +2483,7 @@
 				8C32640A2E3CB4D000081F4F /* GachaDetailView.swift in Sources */,
 				8C3FA2442E4B5D1E001526F2 /* InfoTextView.swift in Sources */,
 				8CBC1BE12E340AD8004023F7 /* CostumeListView.swift in Sources */,
+				8C7B2D7E2E7B9EAF00EE0C89 /* NewsListView.swift in Sources */,
 				8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */,
 				8C923D872E304AF3003AFC0A /* Date+.swift in Sources */,
 				8C2CCD532E3F43E90014189F /* CommunityPostsView.swift in Sources */,

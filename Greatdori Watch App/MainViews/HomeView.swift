@@ -41,6 +41,9 @@ struct HomeView: View {
                             }
                         }
                     }
+                    NavigationLink(destination: { NewsListView() }) {
+                        Label("显示所有", systemImage: "list.bullet")
+                    }
                 } else {
                     if availability[0] {
                         HStack {

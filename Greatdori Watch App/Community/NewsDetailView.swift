@@ -28,7 +28,7 @@ struct NewsDetailView: View {
         case .event:
             EventDetailView(id: item.relatedID)
         case .gacha:
-            EventDetailView(id: item.relatedID)
+            GachaDetailView(id: item.relatedID)
         @unknown default:
             Image(systemName: "exclamationmark.triangle.fill")
                 .foregroundStyle(.yellow)
