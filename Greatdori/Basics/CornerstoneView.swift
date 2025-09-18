@@ -154,6 +154,7 @@ struct MultilingualText: View {
     var showSecondaryText: Bool = true
     //    let locale: Locale
     var showLocaleKey: Bool = false
+    var allowPopover = true
     @State var isHovering = false
     @State var allLocaleTexts: [String] = []
     @State var shownLocaleValueDict: [String: DoriAPI.Locale] = [:]
@@ -161,10 +162,11 @@ struct MultilingualText: View {
     @State var showCopyMessage = false
     @State var lastCopiedLocaleValue: DoriAPI.Locale? = nil
     
-    init(source: DoriAPI.LocalizedData<String>, showSecondaryText: Bool = true, showLocaleKey: Bool = false) {
+    init(source: DoriAPI.LocalizedData<String>, showSecondaryText: Bool = true, showLocaleKey: Bool = false, allowPopover: Bool = true) {
         self.source = source
         self.showSecondaryText = showSecondaryText
         self.showLocaleKey = showLocaleKey
+        self.allowPopover = allowPopover
         
         var __allLocaleTexts: [String] = []
         var __shownLocaleValueDict: [String: DoriAPI.Locale] = [:]
@@ -221,7 +223,9 @@ struct MultilingualText: View {
 #else
             MultilingualTextInternalLabel(source: source, showSecondaryText: showSecondaryText, showLocaleKey: showLocaleKey)
                 .onHover { isHovering in
-                    self.isHovering = isHovering
+                    if allowPopover {
+                        self.isHovering = isHovering
+                    }
                 }
                 .popover(isPresented: $isHovering, arrowEdge: .bottom) {
                     VStack(alignment: .trailing) {
@@ -500,6 +504,9 @@ struct ListItemView<Content1: View, Content2: View>: View {
                         .onFrameChange(perform: { geometry in
                             titleAvailableWidth = geometry.size.width
                         })
+                    Rectangle()
+                        .opacity(0)
+                        .frame(width: 0, height: 1)
                     HStack {
                         if !allowValueLeading {
                             Spacer()

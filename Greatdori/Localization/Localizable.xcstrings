@@ -686,6 +686,22 @@
         }
       }
     },
+    "Details.cards" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cards"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡牌"
+          }
+        }
+      }
+    },
     "Details.gacha" : {
       "localizations" : {
         "en" : {
@@ -698,6 +714,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "招募"
+          }
+        }
+      }
+    },
+    "Details.show-all.%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show All (%lld)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部显示 (%lld)"
+          }
+        }
+      }
+    },
+    "Details.show-less" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Less"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更少内容"
           }
         }
       }

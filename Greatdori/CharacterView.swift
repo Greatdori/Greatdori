@@ -22,10 +22,12 @@ import UIKit
 fileprivate let bandLogoScaleFactor: CGFloat = 1.2
 fileprivate let charVisualImageCornerRadius: CGFloat = 10
 
+//MARK: CharacterSearchView
 struct CharacterSearchView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     @Namespace var detailNavigation
     @State var charactersDict: DoriFrontend.Character.CategorizedCharacters?
+    @State var allCharacters: [PreviewCharacter]? = nil
     @State var bandArray: [DoriAPI.Band.Band?] = []
     @State var infoIsAvailable = true
     @State var infoIsReady = false
@@ -35,7 +37,7 @@ struct CharacterSearchView: View {
                 ScrollView {
                     HStack {
                         Spacer(minLength: 0)
-                        VStack {
+                        LazyVStack(pinnedViews: .sectionHeaders) {
                             ForEach(bandArray, id: \.self) { band in
                                 if let band {
                                     WebImage(url: band.logoImageURL)
@@ -44,7 +46,7 @@ struct CharacterSearchView: View {
                                     HStack {
                                         ForEach(charactersDict![band]!.swappedAt(0, 3).swappedAt(2, 3), id: \.self) { char in
                                             NavigationLink(destination: {
-                                                CharacterDetailView(id: char.id, allCharacters: $charactersDict)
+                                                CharacterDetailView(id: char.id, allCharacters: allCharacters)
                                                 #if !os(macOS)
                                                     .wrapIf(true, in: { content in
                                                         if #available(iOS 18.0, *) {
@@ -114,7 +116,7 @@ struct CharacterSearchView: View {
         infoIsReady = false
         DoriCache.withCache(id: "CharacterList") {
             await DoriFrontend.Character.categorizedCharacters()
-        }.onUpdate {
+        } .onUpdate {
             if let characters = $0 {
                 self.charactersDict = characters
                 bandArray = []
@@ -127,6 +129,14 @@ struct CharacterSearchView: View {
                 infoIsReady = true
             } else {
                 infoIsAvailable = false
+            }
+        }
+        
+        DoriCache.withCache(id: "AllCharacters") {
+            await DoriAPI.Character.all()
+        } .onUpdate {
+            if let characters = $0 {
+                allCharacters = characters
             }
         }
     }
@@ -174,12 +184,13 @@ struct CharacterSearchView: View {
 }
 
 
+//MARK: CharacterDetailView
 struct CharacterDetailView: View {
     private let randomCardScalingFactor: CGFloat = 1
-    
     var id: Int
-    @Binding var allCharacters: DoriFrontend.Character.CategorizedCharacters?
+    var allCharacters: [PreviewCharacter]? = nil
     @Environment(\.horizontalSizeClass) var sizeClass
+    @State var useableAllChar: [PreviewCharacter]? = nil
     @State var currentID: Int = 0
     @State var informationLoadPromise: DoriCache.Promise<DoriFrontend.Character.ExtendedCharacter?>?
     @State var information: DoriFrontend.Character.ExtendedCharacter?
@@ -197,9 +208,8 @@ struct CharacterDetailView: View {
                         HStack {
                             Spacer(minLength: 0)
                             VStack {
-                                //                            Text()
-                                if var randomCard, information.band != nil {
-                                    CardCardView(randomCard, band: information.band!)
+                                if let randomCard, information.band != nil {
+                                    CardCoverImage(randomCard, band: information.band!)
                                         .wrapIf(sizeClass == .regular) { content in
                                             content
                                                 .frame(maxWidth: 480*randomCardScalingFactor, maxHeight: 320*randomCardScalingFactor)
@@ -208,13 +218,15 @@ struct CharacterDetailView: View {
                                                 .padding(.horizontal, -15)
                                         }
                                 }
-                                Button(action: {
-                                    randomCard = information.randomCard()!
-                                }, label: {
-                                    Label("Character.random-card", systemImage: "arrow.clockwise")
-                                })
-                                .buttonStyle(.bordered)
-                                .buttonBorderShape(.capsule)
+                                if randomCard != nil && information.band != nil {
+                                    Button(action: {
+                                        randomCard = information.randomCard()!
+                                    }, label: {
+                                        Label("Character.random-card", systemImage: "arrow.clockwise")
+                                    })
+                                    .buttonStyle(.bordered)
+                                    .buttonBorderShape(.capsule)
+                                }
                                 
                                 //                            CharacterDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
                             }
@@ -222,6 +234,10 @@ struct CharacterDetailView: View {
                             Spacer(minLength: 0)
                         }
                         CharacterDetailOverviewView(information: information)
+                        Rectangle()
+                            .opacity(0)
+                            .frame(height: 30)
+                        DetailsCardSection(cards: information.cards.sorted{ $0.id > $1.id })
                         Spacer()
                     }
                     .padding()
@@ -279,6 +295,7 @@ struct CharacterDetailView: View {
         }
         .onChange(of: currentID, {
             Task {
+                randomCardHadUpdatedOnce = false
                 await getInformation(id: currentID)
             }
         })
@@ -288,11 +305,12 @@ struct CharacterDetailView: View {
         }
         .toolbar {
             ToolbarItemGroup(content: {
-                if sizeClass == .regular, let allCharacters {
-                    let flatMainCharacters = allCharacters.compactMap { key, value in
-                        // only *main* characters
-                        key != nil ? value : nil
-                    }.flatMap { $0 }
+                if sizeClass == .regular, let useableAllChar {
+//                    let flatMainCharacters = useableAllChar.compactMap { key, value in
+//                        // only *main* characters
+////                        key != nil ? value : nil
+//                    }.flatMap { $0 }
+                    let flatMainCharacters = useableAllChar
                     if let currentIndex = flatMainCharacters.firstIndex(where: { $0.id == currentID }) {
                         HStack(spacing: 0) {
                             Button(action: {
@@ -302,6 +320,7 @@ struct CharacterDetailView: View {
                                 Label("Character.previous", systemImage: "arrow.backward")
                             })
                             .disabled(currentIndex - 1 < 0)
+                            .disabled((useableAllChar ?? []).isEmpty)
                             NavigationLink(destination: {
                                 EventSearchView()
                             }, label: {
@@ -316,6 +335,7 @@ struct CharacterDetailView: View {
                                 Label("Character.next", systemImage: "arrow.forward")
                             })
                             .disabled(currentIndex + 1 >= flatMainCharacters.count)
+                            .disabled((useableAllChar ?? []).isEmpty)
                         }
                         .disabled(lastAvaialbleID == 0 || currentID == 0)
                         .onAppear {
@@ -333,6 +353,21 @@ struct CharacterDetailView: View {
                     }
                 }
             })
+        }
+        .onAppear {
+            if allCharacters == nil {
+                Task {
+                    DoriCache.withCache(id: "CharacterList") {
+                        await PreviewCharacter.all()
+                    }.onUpdate {
+                        if let characters = $0 {
+                            self.useableAllChar = characters
+                        }
+                    }
+                }
+            } else {
+                useableAllChar = allCharacters!
+            }
         }
     }
     
@@ -359,6 +394,7 @@ struct CharacterDetailView: View {
 
 //MARK: CharacterDetailOverviewView
 struct CharacterDetailOverviewView: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
     let information: DoriFrontend.Character.ExtendedCharacter
     var dateFormatter: DateFormatter {
         let df = DateFormatter()
@@ -558,8 +594,8 @@ struct CharacterDetailOverviewView: View {
                                 Text("Character.introduction")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: profile.selfIntroduction, showSecondaryText: false)
-                            }, displayMode: .compactOnly)
+                                MultilingualText(source: profile.selfIntroduction, showSecondaryText: false, allowPopover: false)
+                            }, displayMode: sizeClass == .regular ? .compactOnly : .automatic)
                             Divider()
                         }
                     }
@@ -578,41 +614,44 @@ struct CharacterDetailOverviewView: View {
             }
         }
         .frame(maxWidth: 600)
-        .onAppear {}
     }
 }
 
 
-extension Color {
-    /// 转换为十六进制字符串 (#RRGGBB)
-    func toHex() -> String? {
-#if os(macOS)
-        let nativeColor = NSColor(self).usingColorSpace(.deviceRGB)
-        guard let color = nativeColor else { return nil }
-#else
-        let color = UIColor(self)
-#endif
-        
-//        guard let color = nativeColor else { return nil }
-        
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-#if os(macOS)
-        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-#else
-        guard color.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
-            return nil
-        }
-#endif
-        
-        return String(
-            format: "#%02lX%02lX%02lX",
-            lroundf(Float(red * 255)),
-            lroundf(Float(green * 255)),
-            lroundf(Float(blue * 255))
-        )
+//MARK: DetailsCardSection
+struct DetailsCardSection: View {
+    var cards: [PreviewCard]
+    @State var showAll = false
+    var body: some View {
+        Section(content: {
+            ForEach((showAll ? cards : Array(cards.prefix(3))), id: \.self) { card in
+                NavigationLink(destination: {
+//                    [NAVI785]
+                }, label: {
+                    CardInfo(card)
+                })
+                .buttonStyle(.plain)
+            }
+            .frame(maxWidth: 600)
+        }, header: {
+            HStack {
+                Text("Details.cards")
+                    .font(.title2)
+                    .bold()
+                Spacer()
+                Button(action: {
+                    showAll.toggle()
+                }, label: {
+                    Text(showAll ? "Details.show-less" : "Details.show-all.\(cards.count)")
+                        .foregroundStyle(.secondary)
+                        .font(.caption)
+                })
+                .buttonStyle(.plain)
+//                .alignmentGuide(.bottom, computeValue: 0)
+                
+            }
+            .frame(maxWidth: 615)
+//            .border(.red)
+        })
     }
 }

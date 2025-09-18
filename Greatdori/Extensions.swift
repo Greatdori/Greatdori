@@ -27,6 +27,37 @@ extension Array {
     }
 }
 
+//MARK: Color
+extension Color {
+    func toHex() -> String? {
+#if os(macOS)
+        let nativeColor = NSColor(self).usingColorSpace(.deviceRGB)
+        guard let color = nativeColor else { return nil }
+#else
+        let color = UIColor(self)
+#endif
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+#if os(macOS)
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+#else
+        guard color.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return nil
+        }
+#endif
+        
+        return String(
+            format: "#%02lX%02lX%02lX",
+            lroundf(Float(red * 255)),
+            lroundf(Float(green * 255)),
+            lroundf(Float(blue * 255))
+        )
+    }
+}
+
 //MARK: Int
 extension Int?: @retroactive Identifiable {
     public var id: Int? { self }

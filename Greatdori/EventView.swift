@@ -297,7 +297,7 @@ struct EventDetailOverviewView: View {
 #if os(macOS)
                                 if let value = value {
                                     NavigationLink(destination: {
-                                        //TODO: [NAVI785]CharD
+                                        CharacterDetailView(id: value.characterID)
                                     }, label: {
                                         WebImage(url: value.iconImageURL)
                                             .antialiased(true)
@@ -314,7 +314,7 @@ struct EventDetailOverviewView: View {
                                 if let value = value {
                                     Menu(content: {
                                         NavigationLink(destination: {
-                                            //TODO: [NAVI785]CharD
+                                         CharacterDetailView(id: value.characterID)
                                         }, label: {
                                             HStack {
                                                 WebImage(url: value.iconImageURL)
@@ -364,7 +364,7 @@ struct EventDetailOverviewView: View {
                                             ForEach(eventCharacterPercentageDict[percentage]!, id: \.self) { char in
 #if os(macOS)
                                                 NavigationLink(destination: {
-                                                    //TODO: [NAVI785]CharD
+                                                    CharacterDetailView(id: char.characterID)
                                                 }, label: {
                                                     WebImage(url: char.iconImageURL)
                                                         .antialiased(true)
@@ -375,7 +375,7 @@ struct EventDetailOverviewView: View {
 #else
                                                 Menu(content: {
                                                     NavigationLink(destination: {
-                                                        //TODO: [NAVI785]CharD
+                                                        CharacterDetailView(id: char.characterID)
                                                     }, label: {
                                                         HStack {
                                                             WebImage(url: char.iconImageURL)
@@ -445,7 +445,7 @@ struct EventDetailOverviewView: View {
                                 //TODO: [NAVI785]CardD
                                 Text("\(value)")
                             }, label: {
-                                CardIconView(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                CardPreviewImage(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
                             })
                             .buttonStyle(.plain)
                         }, caption: {
@@ -466,7 +466,7 @@ struct EventDetailOverviewView: View {
                                 NavigationLink(destination: {
                                     
                                 }, label: {
-                                    CardIconView(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                    CardPreviewImage(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
                                 })
                                 .contentShape(Rectangle())
                                 .buttonStyle(.plain)
@@ -563,7 +563,7 @@ struct EventSearchView: View {
                                                                 presentingEventID = event.id
 //                                                            }
                                                         }, label: {
-                                                            EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                            EventInfo(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                         })
                                                         .buttonStyle(.plain)
                                                         .wrapIf(true, in: { content in
@@ -593,7 +593,7 @@ struct EventSearchView: View {
                                                         presentingEventID = event.id
 //                                                    }
                                                 }, label: {
-                                                    EventCardView(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                    EventInfo(event, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
                                                         .frame(maxWidth: bannerWidth)
                                                 })
                                                 .buttonStyle(.plain)

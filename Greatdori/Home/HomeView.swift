@@ -84,7 +84,7 @@ struct HomeView: View {
                 case .news:
                     NewsView() // FIXME: [NAVI785]
                 case .characterDetail(let id):
-                    EmptyView() // FIXME: [NAVI785]
+                    CharacterDetailView(id: id)
                 case .eventDetail(let id):
                     EventDetailView(id: id)
                 }
@@ -473,7 +473,7 @@ struct HomeEventsView: View {
                 ZStack {
                     Group {
                         if let latestEvents {
-                            EventCardHomeView(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
+                            EventInfoForHome(latestEvents.forLocale(locale)!, inLocale: locale, showsCountdown: true)
                         }
                     }
                     .opacity(imageOpacity)

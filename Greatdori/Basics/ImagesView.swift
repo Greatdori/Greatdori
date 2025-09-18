@@ -15,15 +15,16 @@
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 1)
 
 
-// This file is essential for almost all image.
-// Files not marked with [✓] is not optimized for multiplatform yet (they're from watchOS).
+// This file is an essential complications for several items that are all related with images.
+// Files not marked with [✓] is not optimized for multiplatform yet (they're all from watchOS).
 
 import DoriKit
 import SDWebImageSwiftUI
 import SwiftUI
 
-//MARK: EventCardHomeView [✓]
-struct EventCardHomeView: View {
+
+//MARK: EventInfoForHome [✓]
+struct EventInfoForHome: View {
     private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
     private var startAt: DoriAPI.LocalizedData<Date>
@@ -95,8 +96,9 @@ struct EventCardHomeView: View {
     }
 }
 
-//MARK: EventCardView [✓]
-struct EventCardView: View {
+
+//MARK: EventInfo [✓]
+struct EventInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
     @State var attributedType: AttributedString = AttributedString("")
@@ -196,8 +198,9 @@ struct EventCardView: View {
     }
 }
 
-//MARK: CardCardView [✓]
-struct CardCardView: View {
+
+//MARK: CardCoverImage [✓]
+struct CardCoverImage: View {
     private var normalBackgroundImageURL: URL
     private var trainedBackgroundImageURL: URL?
     private var cardType: DoriAPI.Card.CardType
@@ -206,6 +209,9 @@ struct CardCardView: View {
     private var bandIconImageURL: URL
     private var showNavigationHints: Bool
     private var cardID: Int
+    private var cardTitle: DoriAPI.LocalizedData<String>
+    private var characterID: Int
+    @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
     init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band, showNavigationHints: Bool = true) {
@@ -217,6 +223,8 @@ struct CardCardView: View {
         self.bandIconImageURL = band.iconImageURL
         self.showNavigationHints = showNavigationHints
         self.cardID = card.id
+        self.cardTitle = card.prefix
+        self.characterID = card.characterID
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
     init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band, showNavigationHints: Bool = true) {
@@ -228,6 +236,8 @@ struct CardCardView: View {
         self.bandIconImageURL = band.iconImageURL
         self.showNavigationHints = showNavigationHints
         self.cardID = card.id
+        self.cardTitle = card.prefix
+        self.characterID = card.characterID
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 113)
     
@@ -235,12 +245,12 @@ struct CardCardView: View {
     private let standardCardWidth: CGFloat = 480
     private let standardCardHeight: CGFloat = 320
     private let expectedCardRatio: CGFloat = 480/320
+    private let cardFocusSwitchingAnimation: Animation = .easeOut(duration: 0.15)
     
     @State var normalCardIsOnHover = false
     @State var trainedCardIsOnHover = false
     
-    @State var cardTitle: DoriAPI.LocalizedData<String>?
-    @State var cardCharacterName: DoriAPI.LocalizedData<String>?
+   
     @State var isHovering: Bool = false
     var body: some View {
         ZStack {
@@ -277,7 +287,7 @@ struct CardCardView: View {
                                     .frame(width: proxy.size.width * CGFloat(normalCardIsOnHover ? 0.75 : (trainedCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
                                     .onTapGesture {
-                                        withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
+                                        withAnimation(cardFocusSwitchingAnimation) {
                                             if !normalCardIsOnHover {
                                                 normalCardIsOnHover = true
                                                 trainedCardIsOnHover = false
@@ -287,7 +297,7 @@ struct CardCardView: View {
                                         }
                                     }
                                     .onHover { isHovering in
-                                        withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
+                                        withAnimation(cardFocusSwitchingAnimation) {
                                             if isHovering {
                                                 normalCardIsOnHover = true
                                                 trainedCardIsOnHover = false
@@ -311,7 +321,7 @@ struct CardCardView: View {
                                     .frame(width: proxy.size.width * CGFloat(trainedCardIsOnHover ? 0.75 : (normalCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
                                     .onTapGesture {
-                                        withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
+                                        withAnimation(cardFocusSwitchingAnimation) {
                                             if !trainedCardIsOnHover {
                                                 normalCardIsOnHover = false
                                                 trainedCardIsOnHover = true
@@ -321,7 +331,7 @@ struct CardCardView: View {
                                         }
                                     }
                                     .onHover { isHovering in
-                                        withAnimation(.spring(duration: 0.3, bounce: 0.15, blendDuration: 0)) {
+                                        withAnimation(cardFocusSwitchingAnimation) {
                                             if isHovering {
                                                 normalCardIsOnHover = false
                                                 trainedCardIsOnHover = true
@@ -415,7 +425,7 @@ struct CardCardView: View {
                         Button(action: {
 //                            cardNavigationDestinationID = cardID
                         }, label: {
-                            if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+                            if let title = cardTitle.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
                                 Group {
                                     Text(title)
                                     Group {
@@ -435,7 +445,7 @@ struct CardCardView: View {
                                 
                             }
                         })
-                        .disabled(cardTitle?.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
+                        .disabled(cardTitle.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
                     }
                 })
 #else
@@ -483,151 +493,92 @@ struct CardCardView: View {
              */
 #endif
         })
-        .task {
-            await updateCardInfo()
-        }
-        .onChange(of: cardID) {
-            // Clear out-dated info
-            cardTitle = nil
-            cardCharacterName = nil
-            Task {
-                await updateCardInfo()
-            }
+        .onAppear {
+            self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
         }
     }
-    
-    func updateCardInfo() async {
-        let fullCard = await DoriAPI.Card.Card(id: cardID)
-        DispatchQueue.main.async {
-            cardTitle = fullCard?.prefix
-        }
-        if let cardCharacterID = fullCard?.characterID,
-           let name = DoriCache.preCache.characterDetails[cardCharacterID]?.characterName {
-            self.cardCharacterName = name
-        }
-    }
+
 }
 
-//MARK: ThumbCardCardView
-struct ThumbCardCardView: View {
+
+//MARK: CardInfo [✓]
+struct CardInfo: View {
     private var thumbNormalImageURL: URL
     private var thumbTrainedImageURL: URL?
     private var cardType: DoriAPI.Card.CardType
     private var attribute: DoriAPI.Attribute
     private var rarity: Int
-    private var bandIconImageURL: URL
+    private var band: Band?
+    private var bandIconImageURL: URL?
     private var prefix: DoriAPI.LocalizedData<String>
+    private var characterID: Int
+    private var cardID: Int
+    private var previewCard: PreviewCard
+    @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band) {
+    init(_ card: DoriAPI.Card.PreviewCard/*, band: DoriAPI.Band.Band*/) {
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = band.iconImageURL
+        self.band = DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == card.characterID }) })?.key
+        self.bandIconImageURL = band?.iconImageURL
         self.prefix = card.prefix
+        self.characterID = card.characterID
+        self.cardID = card.id
+        self.previewCard = card
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band) {
+    init(_ card: DoriAPI.Card.Card/*, band: DoriAPI.Band.Band*/) {
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = band.iconImageURL
+        self.band = DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == card.characterID }) })?.key
+        self.bandIconImageURL = band?.iconImageURL
         self.prefix = card.prefix
+        self.characterID = card.characterID
+        self.cardID = card.id
+        self.previewCard = PreviewCard(card)
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 230)
     
     var body: some View {
-        HStack {
-            if let thumbTrainedImageURL {
-                ZStack {
-                    WebImage(url: thumbTrainedImageURL) { image in
-                        image
-                    } placeholder: {
-                        RoundedRectangle(cornerRadius: 10)
-//                            .fill(Color.gray.opacity(0.15))
-                            .fill(getPlaceholderColor())
-                            .aspectRatio(1, contentMode: .fit)
-                    }
-                    .resizable()
-                    .interpolation(.high)
-                    .antialiased(true)
-                    .scaledToFill()
-                    .clipped()
-                    upperLayer(trained: true)
-                }
-                .frame(width: 50, height: 50)
-            } else {
-                ZStack {
-                    WebImage(url: thumbNormalImageURL) { image in
-                        image
-                    } placeholder: {
-                        RoundedRectangle(cornerRadius: 10)
-//                            .fill(Color.gray.opacity(0.15))
-                            .fill(getPlaceholderColor())
-                            .aspectRatio(1, contentMode: .fit)
-                    }
-                    .resizable()
-                    .interpolation(.high)
-                    .antialiased(true)
-                    .cornerRadius(2)
-                    upperLayer(trained: false)
-                }
-                .frame(width: 50, height: 50)
-            }
-            VStack(alignment: .leading) {
-                Text(prefix.forPreferredLocale() ?? "")
-                    .font(.system(size: 16, weight: .semibold))
-                Text(cardType.localizedString)
-                    .font(.system(size: 14))
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private func upperLayer(trained: Bool) -> some View {
-        if rarity != 1 {
-            Image("CardThumbBorder\(rarity)")
-                .resizable()
-        } else {
-            Image("CardThumbBorder\(rarity)\(attribute.rawValue.prefix(1).uppercased() + attribute.rawValue.dropFirst())")
-                .resizable()
-        }
-        VStack {
+        CustomGroupBox {
             HStack {
-                WebImage(url: bandIconImageURL)
-                    .resizable()
-                    .interpolation(.high)
-                    .antialiased(true)
-                    .frame(width: 15, height: 15)
-                Spacer()
-                WebImage(url: attribute.iconImageURL)
-                    .resizable()
-                    .interpolation(.high)
-                    .antialiased(true)
-                    .frame(width: 12, height: 12)
-            }
-            Spacer()
-            HStack {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(1...rarity, id: \.self) { _ in
-                        Image(trained ? .trainedStar : .star)
-                            .resizable()
-                            .frame(width: 6, height: 6)
+                HStack(spacing: 3) {
+                    CardPreviewImage(previewCard, cardNavigationDestinationID: .constant(nil))
+                    if thumbTrainedImageURL != nil {
+                        CardPreviewImage(previewCard, showTrainedVersion: true, cardNavigationDestinationID: .constant(nil))
                     }
+                }
+                .frame(maxWidth: 200)
+                VStack(alignment: .leading) {
+                    Text(prefix.forPreferredLocale() ?? "nil")
+                        .bold()
+                        .font(.title3)
+                    Group {
+                        Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text("\(cardType.localizedString)") + Text(verbatim: " • ").bold() + Text("#\(String(cardID))")
+                    }
+                    .foregroundStyle(.secondary)
+                    .font(isMACOS ? .body : .caption)
+//                    .font(.caption)
                 }
                 Spacer()
             }
+        }
+        .onAppear {
+            self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
         }
     }
 }
 
 
-//MARK: CardIconView [✓]
-struct CardIconView: View {
+//MARK: CardPreviewImage [✓]
+struct CardPreviewImage: View {
     private var inputtedPreviewCard: DoriAPI.Card.PreviewCard?
     private var cardID: Int
     private var thumbNormalImageURL: URL
@@ -639,9 +590,10 @@ struct CardIconView: View {
     private var showTrainedVersion: Bool = false
     private var sideLength: CGFloat = 72
     private var showNavigationHints: Bool
-    @State var cardTitle: DoriAPI.LocalizedData<String>?
+    private var cardTitle: DoriAPI.LocalizedData<String>
+    private var characterID: Int
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
-    @State var isCardInfoAvailable = false
+//    @State var isCardInfoAvailable = false
 //    @State var cardNavigationDestinationID: Int?
     @Binding var cardNavigationDestinationID: Int?
     @State var isHovering: Bool = false
@@ -659,6 +611,8 @@ struct CardIconView: View {
         self.showTrainedVersion = showTrainedVersion
         self.sideLength = sideLength
         self.showNavigationHints = showNavigationHints
+        self.cardTitle = card.prefix
+        self.characterID = card.characterID
         self._cardNavigationDestinationID = cardNavigationDestinationID
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
@@ -673,6 +627,8 @@ struct CardIconView: View {
         self.showTrainedVersion = showTrainedVersion
         self.sideLength = sideLength
         self.showNavigationHints = showNavigationHints
+        self.cardTitle = card.prefix
+        self.characterID = card.characterID
         self._cardNavigationDestinationID = cardNavigationDestinationID
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 332)
@@ -746,7 +702,7 @@ struct CardIconView: View {
                         Button(action: {
                             cardNavigationDestinationID = cardID
                         }, label: {
-                            if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+                            if let title = cardTitle.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
                                 Group {
                                     Text(title)
                                     Group {
@@ -766,7 +722,7 @@ struct CardIconView: View {
                                 
                             }
                         })
-                        .disabled(cardTitle?.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
+                        .disabled(cardTitle.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
                     }
                 })
             #else
@@ -774,7 +730,7 @@ struct CardIconView: View {
             // Don't touch without complete-understaning
             let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
                 VStack {
-                    if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+                    if let title = cardTitle.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
                         Group {
                             Text(title)
                             Group {
@@ -812,19 +768,12 @@ struct CardIconView: View {
             #endif
         })
         .frame(width: sideLength, height: sideLength)
-        .task {
-            let fullCard = await DoriAPI.Card.Card(id: cardID)
-            DispatchQueue.main.async {
-                cardTitle = fullCard?.prefix
-            }
-            if let cardCharacterID = fullCard?.characterID,
-               let name = DoriCache.preCache.characterDetails[cardCharacterID]?.characterName {
-                self.cardCharacterName = name
-                isCardInfoAvailable = true
-            }
+        .onAppear {
+            self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
         }
     }
 }
+
 
 //MARK: ThumbCostumeCardView
 struct ThumbCostumeCardView: View {
