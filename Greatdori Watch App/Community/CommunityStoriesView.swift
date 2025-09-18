@@ -48,7 +48,7 @@ struct CommunityStoriesView: View {
                             .font(.system(size: 14))
                     }
                     .onAppear {
-                        if !isLoadingMore {
+                        if !isLoadingMore && index == posts.content.count - 1 {
                             continueLoadPosts()
                         }
                     }
@@ -73,8 +73,12 @@ struct CommunityStoriesView: View {
             }
         }
         .navigationTitle("故事")
-        .task {
-            await getPosts()
+        .onAppear {
+            // SwiftUI's `task` cancels the request immediately after call,
+            // we have to use `onAppear`, why?
+            Task {
+                await getPosts()
+            }
         }
     }
     
