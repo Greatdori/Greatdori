@@ -31,6 +31,7 @@ struct CharacterSearchView: View {
     @State var bandArray: [DoriAPI.Band.Band?] = []
     @State var infoIsAvailable = true
     @State var infoIsReady = false
+    @State var chunkedOtherCharacters: [[PreviewCharacter]] = [[]]
     var body: some View {
         Group {
             if infoIsReady {
@@ -77,6 +78,68 @@ struct CharacterSearchView: View {
                                     }
                                 }
                             }
+                            if !chunkedOtherCharacters.isEmpty {
+                                HStack {
+                                    Text("Characters.search.others")
+                                        .font(.title2)
+                                        .bold()
+                                    Spacer()
+                                }
+                                .frame(maxWidth: 675)
+                                ForEach(chunkedOtherCharacters, id: \.self) { item in
+                                    HStack {
+                                        ForEach(0...1, id: \.self) { itemIndex in
+                                            if !(itemIndex == 1 && item.count <= 1) {
+                                                NavigationLink(destination: {
+                                                    CharacterDetailView(id: item[itemIndex].id, allCharacters: allCharacters)
+#if !os(macOS)
+                                                        .wrapIf(true, in: { content in
+                                                            if #available(iOS 18.0, *) {
+                                                                content
+                                                                    .navigationTransition(.zoom(sourceID: item[itemIndex].id, in: detailNavigation))
+                                                            } else {
+                                                                content
+                                                            }
+                                                        })
+#endif
+                                                }, label: {
+                                                    CustomGroupBox {
+                                                        HStack {
+                                                            Spacer()
+                                                            Text(item[itemIndex].characterName.forPreferredLocale() ?? "nil")
+//                                                                .bold()
+                                                                .font(isMACOS ? .title3 : .body)
+                                                                .multilineTextAlignment(.center)
+                                                            Spacer()
+                                                        }
+                                                        .frame(height: 40)
+                                                    }
+                                                })
+                                                .buttonStyle(.plain)
+                                                .wrapIf(true, in: { content in
+                                                    if #available(iOS 18.0, macOS 15.0, *) {
+                                                        content
+                                                            .matchedTransitionSource(id: item[itemIndex].id, in: detailNavigation)
+                                                    } else {
+                                                        content
+                                                    }
+                                                })
+                                            } else {
+                                                CustomGroupBox {
+                                                    HStack {
+                                                        Spacer()
+                                                        Text("")
+                                                        Spacer()
+                                                    }
+                                                }
+                                                .opacity(0)
+                                            }
+                                        }
+                                    }
+                                }
+                                .frame(maxWidth: 650)
+                            }
+                            
                         }
                         Spacer(minLength: 0)
                     }
@@ -126,6 +189,7 @@ struct CharacterSearchView: View {
                     }
                     bandArray.sort { ($0?.id ?? 9999) < ($1?.id ?? 9999) }
                 }
+                chunkedOtherCharacters = characters[nil]?.chunked(into: 2) ?? [[]]
                 infoIsReady = true
             } else {
                 infoIsAvailable = false
@@ -234,23 +298,31 @@ struct CharacterDetailView: View {
                             Spacer(minLength: 0)
                         }
                         CharacterDetailOverviewView(information: information)
-                        Rectangle()
-                            .opacity(0)
-                            .frame(height: 30)
-                        DetailsCardsSection(cards: information.cards.sorted{ compare($0.releasedAt.jp,$1.releasedAt.jp) })
-                        Rectangle()
-                            .opacity(0)
-                            .frame(height: 30)
-                        DetailsEventsSection(events: information.events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp))))
+                        if !information.cards.isEmpty {
+                            Rectangle()
+                                .opacity(0)
+                                .frame(height: 30)
+                            DetailsCardsSection(cards: information.cards.sorted{ compare($0.releasedAt.jp,$1.releasedAt.jp) })
+                        }
+                        if !information.events.isEmpty {
+                            Rectangle()
+                                .opacity(0)
+                                .frame(height: 30)
+                            DetailsEventsSection(events: information.events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp))))
+                        }
                         Spacer()
                     }
                     .padding()
                 }
             } else {
                 if infoIsAvailable {
-                    HStack {
+                    VStack {
                         Spacer()
-                        ProgressView()
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
                         Spacer()
                     }
                 } else {

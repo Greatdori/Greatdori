@@ -59,14 +59,16 @@ struct DetailsCardsSection: View {
                         .font(.title2)
                         .bold()
                     Spacer()
-                    Button(action: {
-                        showAll.toggle()
-                    }, label: {
-                        Text(showAll ? "Details.show-less" : "Details.show-all.\(cards.count)")
-                            .foregroundStyle(.secondary)
-                        //                        .font(.caption)
-                    })
-                    .buttonStyle(.plain)
+                    if cards.count > 3 {
+                        Button(action: {
+                            showAll.toggle()
+                        }, label: {
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(cards.count)")
+                                .foregroundStyle(.secondary)
+                            //                        .font(.caption)
+                        })
+                        .buttonStyle(.plain)
+                    }
                     //                .alignmentGuide(.bottom, computeValue: 0)
                     
                 }
@@ -106,14 +108,16 @@ struct DetailsEventsSection: View {
                         .font(.title2)
                         .bold()
                     Spacer()
-                    Button(action: {
-                        showAll.toggle()
-                    }, label: {
-                        Text(showAll ? "Details.show-less" : "Details.show-all.\(events.count)")
-                            .foregroundStyle(.secondary)
-                        //                        .font(.caption)
-                    })
-                    .buttonStyle(.plain)
+                    if events.count > 3 {
+                        Button(action: {
+                            showAll.toggle()
+                        }, label: {
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(events.count)")
+                                .foregroundStyle(.secondary)
+                            //                        .font(.caption)
+                        })
+                        .buttonStyle(.plain)
+                    }
                     //                .alignmentGuide(.bottom, computeValue: 0)
                     
                 }

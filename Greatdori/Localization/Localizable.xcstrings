@@ -574,6 +574,22 @@
         }
       }
     },
+    "Characters.search.others" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Others"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他"
+          }
+        }
+      }
+    },
     "Debug.crash-detected.direct-enter" : {
       "localizations" : {
         "en" : {
