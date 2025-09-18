@@ -49,5 +49,8 @@ class AppDelegate: NSObject, WKApplicationDelegate {
             }
             isFirstLaunch = false
         }
+        
+        // Don't say lazy
+        _ = NetworkMonitor.shared
     }
 }

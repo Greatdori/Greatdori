@@ -111,6 +111,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //            }
 //            isFirstLaunch = false
 //        }
+        
+        // Don't say lazy
+        _ = NetworkMonitor.shared
     }
     
     func application(_ application: NSApplication, open urls: [URL]) {
@@ -141,6 +144,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 //            }
 //            isFirstLaunch = false
 //        }
+        
+        // Don't say lazy
+        _ = NetworkMonitor.shared
         
         return true
     }

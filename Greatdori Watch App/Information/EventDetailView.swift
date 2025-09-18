@@ -160,6 +160,13 @@ struct EventDetailView: View {
         }.onUpdate {
             if let information = $0 {
                 self.information = information
+                prefetchImages(
+                    information.cards.map(\.thumbNormalImageURL)
+                    + information.cards.compactMap(\.thumbAfterTrainingImageURL)
+                    + information.gacha.map(\.bannerImageURL)
+                    + information.songs.map(\.jacketImageURL)
+                    + information.characters.map(\.iconImageURL)
+                )
             } else {
                 availability = false
             }

@@ -223,6 +223,9 @@ struct SongDetailView: View {
             if let information = $0 {
                 self.information = information
                 selectedDifficulty = information.song.difficulty.keys.sorted { $0.rawValue < $1.rawValue }.first
+                prefetchImages(
+                    information.events.map(\.bannerImageURL)
+                )
             } else {
                 availability = false
             }

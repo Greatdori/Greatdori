@@ -279,6 +279,17 @@ struct CardDetailView: View {
             if let information = $0 {
                 self.information = information
                 statsCustomLevel = information.card.stat.maximumLevel ?? 1
+                prefetchImages(
+                    information.events.map(\.bannerImageURL)
+                    + information.gacha.map(\.bannerImageURL)
+                    + [
+                        information.character.iconImageURL,
+                        information.card.coverNormalImageURL,
+                        information.card.thumbNormalImageURL,
+                        information.card.coverAfterTrainingImageURL,
+                        information.card.thumbAfterTrainingImageURL
+                    ].compactMap { $0 }
+                )
             } else {
                 availability = false
             }

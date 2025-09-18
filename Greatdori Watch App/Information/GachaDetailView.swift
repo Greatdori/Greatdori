@@ -215,6 +215,13 @@ struct GachaDetailView: View {
         }.onUpdate {
             if let information = $0 {
                 self.information = information
+                prefetchImages(
+                    information.cardDetails.flatMap(\.value).map(\.thumbNormalImageURL)
+                    + information.cardDetails.flatMap(\.value).compactMap(\.thumbAfterTrainingImageURL)
+                    + information.events.map(\.bannerImageURL)
+                    + information.pickupCards.map(\.thumbNormalImageURL)
+                    + information.pickupCards.compactMap(\.thumbAfterTrainingImageURL)
+                )
             } else {
                 availability = false
             }

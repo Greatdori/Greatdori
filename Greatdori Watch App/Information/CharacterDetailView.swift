@@ -163,6 +163,13 @@ struct CharacterDetailView: View {
             if let information = $0 {
                 self.information = information
                 randomCard = information.randomCard()
+                prefetchImages(
+                    information.cards.map(\.thumbNormalImageURL)
+                    + information.cards.compactMap(\.thumbAfterTrainingImageURL)
+                    + information.costumes.map(\.thumbImageURL)
+                    + information.events.map(\.bannerImageURL)
+                    + information.gacha.map(\.bannerImageURL)
+                )
             } else {
                 availability = false
             }
