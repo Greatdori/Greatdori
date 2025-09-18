@@ -107,6 +107,65 @@ extension DoriFrontend {
             )
         }
         
+        /// Returns top 10 data of an event.
+        ///
+        /// - Parameters:
+        ///   - id: ID of the event.
+        ///   - locale: Locale for event data.
+        ///   - interval: Interval of each data, the default value is 0.
+        /// - Returns: Top 10 data of requested event, nil if failed to fetch.
+        ///
+        /// - SeeAlso:
+        ///     See ``trackerData(for:in:tier:smooth:)-(PreviewEvent,_,_,_)``
+        ///     for cutoff data of tier *20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000 and 30000*.
+        public static func topData(of id: Int, in locale: DoriAPI.Locale, interval: TimeInterval = 0) async -> [TopData]? {
+            let groupResult = await withTasksResult {
+                await DoriAPI.Event.topData(of: id, in: locale, interval: interval)
+            } _: {
+                await DoriAPI.Card.all()
+            } _: {
+                await DoriAPI.Degree.all()
+            }
+            guard let data = groupResult.0 else { return nil }
+            guard let cards = groupResult.1 else { return nil }
+            guard let degrees = groupResult.2 else { return nil }
+            
+            var result = [TopData]()
+            for user in data.users {
+                result.append(.init(
+                    uid: user.uid,
+                    name: user.name,
+                    introduction: user.introduction,
+                    rank: user.rank,
+                    card: cards.first { $0.id == user.sid
+                    } ?? .init( // dummy
+                        id: -1,
+                        characterID: -1,
+                        rarity: -1,
+                        attribute: .powerful,
+                        levelLimit: -1,
+                        resourceSetName: "",
+                        prefix: .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil),
+                        releasedAt: .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil),
+                        skillID: -1,
+                        type: .others,
+                        stat: .init()
+                              ),
+                    trained: user.strained,
+                    degrees: degrees.filter { user.degrees.contains($0.id) },
+                    points: data.points.filter {
+                        $0.uid == user.uid
+                    }.map {
+                        .init(time: $0.time, value: $0.value)
+                    }.sorted {
+                        $0.time < $1.time
+                    }
+                ))
+            }
+            
+            return result.sorted { ($0.points.last?.value ?? 0) > ($1.points.last?.value ?? 0) }
+        }
+        
         /// Returns event tracker data.
         ///
         /// - Parameters:
@@ -118,7 +177,7 @@ extension DoriFrontend {
         ///
         /// - Note:
         ///     Valid tiers are *20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000 and 30000*.
-        ///     For data of tier 10, see ``DoriAPI/Event/topData(of:in:interval:)``.
+        ///     For data of tier 10, see ``topData(of:in:interval:)``.
         @inlinable
         public static func trackerData(
             for event: PreviewEvent,
@@ -149,7 +208,7 @@ extension DoriFrontend {
         ///
         /// - Note:
         ///     Valid tiers are *20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000 and 30000*.
-        ///     For data of tier 10, see ``DoriAPI/Event/topData(of:in:interval:)``.
+        ///     For data of tier 10, see ``topData(of:in:interval:)``.
         @inlinable
         public static func trackerData(
             for event: Event,
@@ -319,6 +378,22 @@ extension DoriFrontend.Event {
         public var gacha: [DoriAPI.Gacha.PreviewGacha]
         public var songs: [DoriAPI.Song.PreviewSong]
         public var degrees: [DoriAPI.Degree.Degree]
+    }
+    
+    public struct TopData: Sendable, Hashable, DoriCache.Cacheable {
+        public var uid: Int
+        public var name: String
+        public var introduction: String
+        public var rank: Int
+        public var card: DoriAPI.Card.PreviewCard
+        public var trained: Bool
+        public var degrees: [DoriAPI.Degree.Degree]
+        public var points: [Point]
+        
+        public struct Point: Sendable, Hashable, DoriCache.Cacheable {
+            public var time: Date
+            public var value: Int
+        }
     }
     
     public struct TrackerData: Sendable, Hashable, DoriCache.Cacheable {

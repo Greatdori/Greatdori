@@ -215,7 +215,7 @@ struct EventTrackerView: View {
             await DoriFrontend.Event.list()
         }.onUpdate {
             if let events = $0 {
-                self.eventList = events
+                self.eventList = events.reversed()
                 let storedEventID = UserDefaults.standard.integer(forKey: "EventTrackerSelectedEventID")
                 if storedEventID > 0, let event = events.first(where: { $0.id == storedEventID }) {
                     self.selectedEvent = event
