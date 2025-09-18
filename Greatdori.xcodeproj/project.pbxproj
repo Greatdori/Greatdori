@@ -11,6 +11,7 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 8C2E8F092E702A7400EDDD0D /* Build configuration list for PBXAggregateTarget "libgit2" */;
 			buildPhases = (
+				8C7B2D7F2E7BA90300EE0C89 /* Check Local Repositories Existence */,
 				8C085AC62E71637F00447B05 /* Check CMake Availability */,
 				8C085AC72E71641C00447B05 /* Build OpenSSL */,
 				8C085AC82E71659700447B05 /* Build LibSSH2 */,
@@ -2412,6 +2413,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/bin/codesign --force --sign 'Apple Development: Yuxuan Chen' -o runtime --entitlements \"$CONFIGURATION_TEMP_DIR/Greatdori.build/Greatdori.app.xcent\" --timestamp\\=none --generate-entitlement-der \"$BUILT_PRODUCTS_DIR/Greatdori.app\"\n";
+		};
+		8C7B2D7F2E7BA90300EE0C89 /* Check Local Repositories Existence */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Check Local Repositories Existence";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "if [[ ! -f \"$SRCROOT/clib/openssl/Configure\" ]]; then\n    echo \"error: OpenSSL source could not be found\"\n    echo \"note: Forgot to update submodules?\"\n    exit 1\nfi\n\nif [[ ! -f \"$SRCROOT/clib/libssh2/CMakeLists.txt\" ]]; then\n    echo \"error: LibSSH2 source could not be found\"\n    echo \"note: Forgot to update submodules?\"\n    exit 1\nfi\n\nif [[ ! -f \"$SRCROOT/clib/libgit2/CMakeLists.txt\" ]]; then\n    echo \"error: LibGit2 source could not be found\"\n    echo \"note: Forgot to update submodules?\"\n    exit 1\nfi\n";
 		};
 		8C8E43F32E5DAC86005590F0 /* Fix Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
