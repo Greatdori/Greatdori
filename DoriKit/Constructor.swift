@@ -16,6 +16,6 @@
 @_section("__DATA,__mod_init_func")
 private let __constructor: @convention(c) () -> Void = {
     Task {
-        await InMemoryCache.updateAll()
+        InMemoryCache.updateAll()
     }
 }
