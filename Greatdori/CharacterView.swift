@@ -294,7 +294,7 @@ struct CharacterDetailView: View {
                                 
                                 //                            CharacterDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
                             }
-                            .padding()
+                            .padding(.horizontal)
                             Spacer(minLength: 0)
                         }
                         CharacterDetailOverviewView(information: information)
