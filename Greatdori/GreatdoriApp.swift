@@ -70,6 +70,7 @@ struct GreatdoriApp: App {
                 break
             case .active:
                 #if os(iOS)
+                UNUserNotificationCenter.current().setBadgeCount(0)
                 UIApplication.shared.registerForRemoteNotifications()
                 #endif
             @unknown default: break
