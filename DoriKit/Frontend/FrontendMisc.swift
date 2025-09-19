@@ -90,6 +90,59 @@ extension DoriFrontend {
             }
             return result
         }
+        
+        public static func extendedPlayerProfile(of id: Int, in locale: DoriAPI.Locale) async -> ExtendedPlayerProfile? {
+            let groupResult = await withTasksResult {
+                await DoriAPI.Misc.playerProfile(of: id, in: locale)
+            } _: {
+                await DoriAPI.Degree.all()
+            } _: {
+                await DoriAPI.Card.all()
+            } _: {
+                await DoriAPI.Song.all()
+            }
+            guard let profile = groupResult.0 else { return nil }
+            guard let degrees = groupResult.1 else { return nil }
+            guard let cards = groupResult.2 else { return nil }
+            guard let songs = groupResult.3 else { return nil }
+            
+            return .init(
+                profile: profile,
+                degrees: degrees.filter { profile.userProfileDegree.compactMap { $0 }.contains($0.id)
+                },
+                keyVisualCard: cards.first { $0.id == profile.userProfileSituation.situationID } ?? .init( // dummy
+                    id: -1,
+                    characterID: -1,
+                    rarity: -1,
+                    attribute: .powerful,
+                    levelLimit: -1,
+                    resourceSetName: "",
+                    prefix: .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil),
+                    releasedAt: .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil),
+                    skillID: -1,
+                    type: .others,
+                    stat: .init()
+                ),
+                mainDeckCards: cards.filter {
+                    [profile.mainUserDeck.leader,
+                     profile.mainUserDeck.member1,
+                     profile.mainUserDeck.member2,
+                     profile.mainUserDeck.member3,
+                     profile.mainUserDeck.member4].contains($0.id)
+                },
+                songs: songs.filter {
+                    (profile.userHighScoreRating.poppinParty.map(\.musicID)
+                     + profile.userHighScoreRating.afterglow.map(\.musicID)
+                     + profile.userHighScoreRating.pastelPalettes.map(\.musicID)
+                     + profile.userHighScoreRating.helloHappyWorld.map(\.musicID)
+                     + profile.userHighScoreRating.roselia.map(\.musicID)
+                     + profile.userHighScoreRating.others.map(\.musicID)
+                     + profile.userHighScoreRating.morfonica.map(\.musicID)
+                     + profile.userHighScoreRating.raiseASuilen.map(\.musicID)
+                     + profile.userHighScoreRating.myGO.map(\.musicID)).contains($0.id)
+                }
+            )
+        }
     }
 }
 
@@ -108,6 +161,14 @@ extension DoriFrontend {
             self.item = item
             self.text = text
         }
+    }
+    
+    public struct ExtendedPlayerProfile: Sendable, Hashable, DoriCache.Cacheable {
+        public var profile: DoriAPI.Misc.PlayerProfile
+        public var degrees: [DoriAPI.Degree.Degree]
+        public var keyVisualCard: DoriAPI.Card.PreviewCard
+        public var mainDeckCards: [DoriAPI.Card.PreviewCard]
+        public var songs: [DoriAPI.Song.PreviewSong]
     }
 }
 
