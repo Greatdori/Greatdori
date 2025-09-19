@@ -146,6 +146,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.playerSearch) {
+                    Label {
+                        Text("玩家查询")
+                    } icon: {
+                        Image(systemName: "person.crop.badge.magnifyingglass.fill")
+                            .foregroundStyle(.accent)
+                    }
+                }
                 NavigationLink(value: NavigationPage.storyViewer) {
                     Label {
                         Text("故事浏览器")

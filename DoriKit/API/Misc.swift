@@ -472,7 +472,7 @@ extension DoriAPI {
                                 situationID: $0.1["situationId"].intValue,
                                 level: $0.1["level"].intValue,
                                 exp: $0.1["exp"].intValue,
-                                createdAt: .init(timeIntervalSince1970: Double(Int($0.1["createdAt"][0].stringValue.dropLast(3))!)),
+                                createdAt: .init(timeIntervalSince1970: Double(Int($0.1["createdAt"].stringValue.dropLast(3))!)),
                                 addExp: $0.1["addExp"].intValue,
                                 trained: $0.1["trainingStatus"].stringValue == "done",
                                 duplicateCount: $0.1["duplicateCount"].intValue,

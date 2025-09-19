@@ -190,6 +190,36 @@ extension DoriAPI.Card.${property} {
     }
     
     @inlinable
+    public var trimmedNormalImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/characters/resourceset/\(self.resourceSetName)_rip/trim_normal.png")!.respectOfflineAssetContext()
+    }
+    @inlinable
+    public var trimmedAfterTrainingImageURL: URL? {
+        if self.rarity >= 4 || (self.rarity >= 3 && [.others, .campaign, .birthday].contains(self.type)) {
+            .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/characters/resourceset/\(self.resourceSetName)_rip/trim_after_training.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+    @inlinable
+    public func trimmedNormalImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/characters/resourceset/\(self.resourceSetName)_rip/trim_normal.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+    @inlinable
+    public func trimmedAfterTrainingImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if self.rarity >= 4 || (self.rarity >= 3 && [.others, .campaign, .birthday].contains(self.type)),
+           let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/characters/resourceset/\(self.resourceSetName)_rip/trim_after_training.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+    
+    @inlinable
     public var thumbNormalImageURL: URL {
         var ripID = String(Int(Double(self.id) / 50))
         while ripID.count < 5 {

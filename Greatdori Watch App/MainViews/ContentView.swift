@@ -57,6 +57,8 @@ struct ContentView: View {
                         ComicListView()
                     case .eventTracker:
                         EventTrackerView()
+                    case .playerSearch:
+                        PlayerSearchView()
                     case .storyViewer:
                         StoryViewerView()
                     case nil:
@@ -127,5 +129,6 @@ enum NavigationPage {
     case miracleTicket
     case comic
     case eventTracker
+    case playerSearch
     case storyViewer
 }
