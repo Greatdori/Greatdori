@@ -162,7 +162,9 @@ extension DoriFrontend {
             self.text = text
         }
     }
-    
+}
+
+extension DoriFrontend.Misc {
     public struct ExtendedPlayerProfile: Sendable, Hashable, DoriCache.Cacheable {
         public var profile: DoriAPI.Misc.PlayerProfile
         public var degrees: [DoriAPI.Degree.Degree]
