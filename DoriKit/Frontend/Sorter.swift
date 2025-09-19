@@ -17,16 +17,34 @@ internal import CryptoKit
 
 // MARK: extension DoriFrontend
 extension DoriFrontend {
+    /// A type that can be sorted by ``DoriFrontend/Sorter``.
     public protocol Sortable {
+        /// A group of ``DoriFrontend/Sorter/Keyword`` that can be used
+        /// for sorting this type.
         static var applicableSortingTypes: [DoriFrontend.Sorter.Keyword] { get }
+        
+        /// A boolean value that indicates whether this type
+        /// has an ending date (i.e. can be *removed*, *stopped*, or etc.)
+        ///
+        /// - SeeAlso:
+        ///     Pass this value as the `hasEndingDate` argument
+        ///     of ``DoriFrontend/Sorter/Keyword/localizedString(hasEndingDate:)``
+        ///     to get more accurate description of a keyword if needed.
         static var hasEndingDate: Bool { get }
+        
         static func _compare<ValueType>(usingDoriSorter: DoriFrontend.Sorter, lhs: ValueType, rhs: ValueType) -> Bool?
     }
     
     public struct Sorter: Sendable, Equatable, Hashable, Codable {
+        /// The direction of this sorter.
         public var direction: Direction { didSet { store() } }
+        /// The keyword for sorting.
         public var keyword: Keyword { didSet { store() } }
         
+        /// Creates a sorter with given direction and keyword.
+        /// - Parameters:
+        ///   - direction: The direction of this sorter.
+        ///   - keyword: The keyword for sorting.
         public init(direction: Direction = .descending, keyword: Keyword = .id) {
             self.direction = direction
             self.keyword = keyword
@@ -82,11 +100,14 @@ extension DoriFrontend {
             }
         }
         
+        /// Represents direction of a sorter.
         @frozen
         public enum Direction: String, Equatable, Hashable, Codable {
             case ascending = "ascending"
             case descending = "descending"
             
+            /// The reversed direction of current.
+            @inlinable
             public var reversed: Self {
                 switch self {
                 case .ascending: .descending
@@ -94,10 +115,13 @@ extension DoriFrontend {
                 }
             }
             
+            /// Reverse the direction.
+            @inlinable
             public mutating func reverse() {
                 self = self.reversed
             }
         }
+        /// Represents keyword of a sorter.
         public enum Keyword: RawRepresentable, CaseIterable, Sendable, Equatable, Hashable, Codable {
             case releaseDate(in: DoriAPI.Locale)
             case difficultyReleaseDate(in: DoriAPI.Locale)
@@ -218,6 +242,11 @@ extension DoriFrontend {
                 }
             }
             
+            /// Localized description text for keyword.
+            /// - Parameter hasEndingDate: A boolean value that indicates
+            ///     whether the type has an ending date
+            ///     (i.e. can be *removed*, *stopped*, or etc.)
+            /// - Returns: A localized description text for keyword.
             public func localizedString(hasEndingDate: Bool = false) -> String {
                 switch self {
                 case .releaseDate(let locale):
@@ -235,6 +264,11 @@ extension DoriFrontend {
             }
         }
         
+        /// Returns a localized name of given direction with keyword.
+        /// - Parameters:
+        ///   - keyword: The keyword for direction, nil to use the current one.
+        ///   - direction: The direction, nil to use the current one.
+        /// - Returns: A localized name of given direction with keyword.
         public func localizedDirectionName(keyword: Keyword? = nil, direction: Direction? = nil) -> String {
             let isAscending: Bool = (direction ?? self.direction) == .ascending
             switch keyword ?? self.keyword {

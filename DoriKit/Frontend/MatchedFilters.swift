@@ -16,7 +16,10 @@ import Foundation
 internal import os
 
 extension DoriFrontend {
+    /// A type that can be filtered by ``DoriFrontend/Filter``.
     public protocol Filterable {
+        /// A group of ``DoriFrontend/Filter/Key`` that can be used
+        /// for filtering this type.
         static var applicableFilteringKeys: [DoriFrontend.Filter.Key] { get }
         
         // `matches` only handle single value.
