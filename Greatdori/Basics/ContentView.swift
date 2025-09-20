@@ -42,31 +42,31 @@ struct ContentView: View {
         if mainAppShouldBeDisplayed {
             Group {
                 if #available(macOS 15.0, iOS 18.0, *) {
+                    // MARK: Currently Used Version
                     TabView(selection: $selection) {
-                        
-                        Tab("App.home", systemImage: "house", value: .home) {
+                        Tab("App.home", systemImage: "house"/*, value: .home*/) {
                             HomeView()
                         }
-                        Tab("App.community", systemImage: "at", value: .community) {
+                        Tab("App.community", systemImage: "at"/*, value: .community*/) {
                             //                        HomeView()
                             Text(verbatim: "community")
                         }
-                        Tab("App.leaderboard", systemImage: "chart.bar", value: .leaderboard) {
+                        Tab("App.leaderboard", systemImage: "chart.bar"/*, value: .leaderboard*/) {
                             //                        HomeView()
                             Text(verbatim: "leaderboard")
                         }
                         TabSection(content: {
-                            Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
+                            Tab("App.info.characters", systemImage: "person.2"/*, value: AppSection.info(.characters)*/) {
                                 NavigationStack {
                                     CharacterSearchView()
                                 }
                             }
-                            Tab("App.info.events", systemImage: "star.hexagon", value: AppSection.info(.events)) {
+                            Tab("App.info.events", systemImage: "star.hexagon"/*, value: AppSection.info(.events)*/) {
                                 NavigationStack {
                                     EventSearchView()
                                 }
                             }
-                            Tab("App.info.gachas", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.gachas)) {
+                            Tab("App.info.gachas", systemImage: "line.horizontal.star.fill.line.horizontal"/*, value: AppSection.info(.gachas)*/) {
                                 NavigationStack {
                                     GachaSearchView()
                                 }
@@ -74,20 +74,14 @@ struct ContentView: View {
                         }, header: {
                             Text("App.info")
                         })
-                        
 #if os(iOS)
                         if sizeClass == .regular {
-                            Tab("App.settings", systemImage: "gear", value: .settings) {
+                            Tab("App.settings", systemImage: "gear"/*, value: .settings*/) {
                                 //                        Text("settings")
                                 SettingsView()
                             }
                         }
 #endif
-                        //                }
-                        //                Tab($selection, tag: .community) { HomeView() }
-                        //                Tab($selection, tag: .leaderboard) { HomeView() }
-                        //                Tab($selection, tag: .info) { HomeView() }
-                        //                Tab($selection, tag: .tools) { HomeView() }
                     }
                     .tabViewStyle(.sidebarAdaptable)
                     .wrapIf(true, in: { content in
@@ -99,6 +93,7 @@ struct ContentView: View {
                         }
                     })
                 } else {
+                    // MARK: Fallback for Older Versions
                     if platform == .mac || sizeClass == .regular {
                         NavigationSplitView {
                             List(selection: $selection) {
