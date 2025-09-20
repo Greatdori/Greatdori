@@ -934,26 +934,26 @@ struct GachaInfo: View {
         self._searchedKeyword = searchedKeyword
     }
     
-    let lighterVersionBannerScaleFactor: CGFloat = 1
+    let lighterVersionBannerScaleFactor: CGFloat = 0.85
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
     
     var body: some View {
         CustomGroupBox(showGroupBox: showDetails) {
             HStack {
-//                if !preferHeavierFonts {
+                if !preferHeavierFonts {
                     Spacer(minLength: 0)
-//                }
+                }
                 VStack {
-//                    if preferHeavierFonts {
+                    if preferHeavierFonts {
                         Spacer(minLength: 0)
-//                    }
+                    }
                     WebImage(url: gachaImageURL) { image in
                         image
                             .resizable()
                             .antialiased(true)
                             .scaledToFit()
                             .aspectRatio(3.0, contentMode: .fit)
-                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(getPlaceholderColor())
@@ -1009,13 +1009,13 @@ struct GachaInfo: View {
                         .frame(height: showDetails ? nil : 0)
                         .opacity(showDetails ? 1 : 0)
                     }
-//                    if preferHeavierFonts {
-                    Spacer(minLength: 0)
-//                                        }
+                    if preferHeavierFonts {
+                        Spacer(minLength: 0)
+                    }
                 }
-//                if !preferHeavierFonts {
+                if !preferHeavierFonts {
                     Spacer(minLength: 0)
-//                }
+                }
             }
         }
     }
