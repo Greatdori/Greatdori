@@ -43,10 +43,9 @@ extension DoriFrontend {
         
         /// Creates a sorter with given direction and keyword.
         /// - Parameters:
-        ///   - direction: The direction of this sorter.
         ///   - keyword: The keyword for sorting.
-        public init(direction: Direction = .descending, keyword: Keyword = .id) {
-            self.direction = direction
+        ///   - direction: The direction of this sorter.
+        public init(keyword: Keyword = .id, direction: Direction = .descending) {
             self.keyword = keyword
             self.direction = direction
         }
