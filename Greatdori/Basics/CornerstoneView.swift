@@ -73,34 +73,33 @@ struct CompactToggle: View {
 
 
 
-//MARK: CustomGroupBox
+// MARK: CustomGroupBox
 struct CustomGroupBox<Content: View>: View {
     let content: () -> Content
     var cornerRadius: CGFloat = 15
     var showGroupBox: Bool = true
-    init(showGroupBox: Bool = true, cornerRadius: CGFloat = 15, @ViewBuilder content: @escaping () -> Content) {
+    var useExtenedConstraints: Bool = false
+    init(showGroupBox: Bool = true, cornerRadius: CGFloat = 15, useExtenedConstraints: Bool = false, @ViewBuilder content: @escaping () -> Content) {
         self.showGroupBox = showGroupBox
         self.cornerRadius = cornerRadius
+        self.useExtenedConstraints = useExtenedConstraints
         self.content = content
     }
     var body: some View {
-        content()
-        //            .wrapIf(showGroupBox) { content in
-        //                content
-        //                    .padding()
-        //            }
-            .padding(.all, showGroupBox ? nil : 0)
-        //            .padding(.all, showGroupBox ? nil : 0)
-            .background {
-                if showGroupBox {
-                    RoundedRectangle(cornerRadius: cornerRadius)
+        ExtendedConstraints(isActive: useExtenedConstraints) {
+            content()
+                .padding(.all, showGroupBox ? nil : 0)
+        }
+        .background {
+            if showGroupBox {
+                RoundedRectangle(cornerRadius: cornerRadius)
 #if !os(macOS)
-                        .foregroundStyle(Color(.secondarySystemGroupedBackground))
+                    .foregroundStyle(Color(.secondarySystemGroupedBackground))
 #else
-                        .foregroundStyle(Color(NSColor.quaternarySystemFill))
+                    .foregroundStyle(Color(NSColor.quaternarySystemFill))
 #endif
-                }
             }
+        }
     }
 }
 
@@ -129,6 +128,70 @@ struct CustomGroupBoxOld<Content: View>: View {
 #endif
     }
 }
+
+// MARK: DetailsIDSwitcher
+struct DetailsIDSwitcher<Content: View>: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
+    let destination: () -> Content
+    @Binding var currentID: Int
+    var allIDs: [Int]
+    init(currentID: Binding<Int>, allIDs: [Int], @ViewBuilder destination: @escaping () -> Content) {
+        self._currentID = currentID
+        self.allIDs = allIDs
+        self.destination = destination
+    }
+    
+    var body: some View {
+        if sizeClass == .regular {
+            HStack(spacing: 0) {
+                Button(action: {
+                    if currentID > 1 {
+                        currentID = allIDs[(allIDs.firstIndex(where: { $0 == currentID }) ?? 0 ) - 1]
+                    }
+                }, label: {
+                    Label("Detail.previous", systemImage: "arrow.backward")
+                })
+                .disabled(currentID <= 1 || currentID > allIDs.last ?? 0)
+                NavigationLink(destination: {
+                    //                EventSearchView()
+                    destination()
+                }, label: {
+                    Text("#\(String(currentID))")
+                        .fontDesign(.monospaced)
+                        .bold()
+                })
+                Button(action: {
+                    currentID = allIDs[(allIDs.firstIndex(where: { $0 == currentID }) ?? 0 ) + 1]
+                }, label: {
+                    Label("Detail.next", systemImage: "arrow.forward")
+                })
+                .disabled(currentID >= allIDs.last ?? 0)
+            }
+            .disabled(currentID == 0)
+            .disabled(allIDs.isEmpty)
+        } else {
+            NavigationLink(destination: {
+                destination()
+            }, label: {
+                Image(systemName: "list.bullet")
+            })
+        }
+    }
+}
+
+// How to use `DetailsIDSwitcher`:
+//
+// ```swift
+// ToolbarItemGroup(content: {
+//     DetailsIDSwitcher(currentID: $itemID, allIDs: $allItemIDs, destination: { ItemSearchView() })
+//         .onChange(of: itemID) {
+//             information = nil
+//         }
+//         .onAppear {
+//             showSubtitle = (sizeClass == .compact)
+//         }
+// })
+//```
 
 
 //MARK: DimissButton
@@ -322,11 +385,28 @@ struct MultilingualText: View {
 
 //MARK: MultilingualTextForCountdown
 struct MultilingualTextForCountdown: View {
-    let source: DoriAPI.Event.Event
+    let startDate: DoriAPI.LocalizedData<Date>
+    let endDate: DoriAPI.LocalizedData<Date>
+    let aggregateEndDate: DoriAPI.LocalizedData<Date>?
+    let distributionStartDate: DoriAPI.LocalizedData<Date>?
+    
     @State var isHovering = false
     @State var allAvailableLocales: [DoriAPI.Locale] = []
     @State var primaryDisplayLocale: DoriAPI.Locale?
     @State var showCopyMessage = false
+    
+    init(source: Event) {
+        self.startDate = source.startAt
+        self.endDate = source.endAt
+        self.aggregateEndDate = source.aggregateEndAt
+        self.distributionStartDate = source.distributionStartAt
+    }
+    init (source: Gacha) {
+        self.startDate = source.publishedAt
+        self.endDate = source.closedAt
+        self.aggregateEndDate = nil
+        self.distributionStartDate = nil
+    }
     var body: some View {
         Group {
 #if !os(macOS)
@@ -363,14 +443,14 @@ struct MultilingualTextForCountdown: View {
             .menuIndicator(.hidden)
             .foregroundStyle(.primary)
 #else
-            MultilingualTextForCountdownInternalLabel(source: source, allAvailableLocales: allAvailableLocales)
+            MultilingualTextForCountdownInternalLabel(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, allAvailableLocales: allAvailableLocales)
                 .onHover { isHovering in
                     self.isHovering = isHovering
                 }
                 .popover(isPresented: $isHovering, arrowEdge: .bottom) {
                     VStack(alignment: .trailing) {
                         ForEach(allAvailableLocales, id: \.self) { localeValue in
-                            MultilingualTextForCountdownInternalNumbersView(event: source, locale: localeValue)
+                            MultilingualTextForCountdownInternalNumbersView(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, locale: localeValue)
                         }
                     }
                     .padding()
@@ -380,36 +460,39 @@ struct MultilingualTextForCountdown: View {
         .onAppear {
             allAvailableLocales = []
             for lang in DoriAPI.Locale.allCases {
-                if source.startAt.availableInLocale(lang) {
+                if startDate.availableInLocale(lang) {
                     allAvailableLocales.append(lang)
                 }
             }
         }
     }
     struct MultilingualTextForCountdownInternalLabel: View {
-        let source: DoriAPI.Event.Event
+        let startDate: DoriAPI.LocalizedData<Date>
+        let endDate: DoriAPI.LocalizedData<Date>
+        let aggregateEndDate: DoriAPI.LocalizedData<Date>?
+        let distributionStartDate: DoriAPI.LocalizedData<Date>?
         let allAvailableLocales: [DoriAPI.Locale]
         let allowTextSelection: Bool = true
         @State var primaryDisplayingLocale: DoriAPI.Locale? = nil
         var body: some View {
             VStack(alignment: .trailing) {
                 if allAvailableLocales.contains(DoriAPI.preferredLocale) {
-                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: DoriAPI.preferredLocale)
+                    MultilingualTextForCountdownInternalNumbersView(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, locale: DoriAPI.preferredLocale)
                         .onAppear {
                             primaryDisplayingLocale = DoriAPI.preferredLocale
                         }
                 } else if allAvailableLocales.contains(DoriAPI.secondaryLocale) {
-                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: DoriAPI.secondaryLocale)
+                    MultilingualTextForCountdownInternalNumbersView(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, locale: DoriAPI.secondaryLocale)
                         .onAppear {
                             primaryDisplayingLocale = DoriAPI.secondaryLocale
                         }
                 } else if allAvailableLocales.contains(.jp) {
-                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: .jp)
+                    MultilingualTextForCountdownInternalNumbersView(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, locale: .jp)
                         .onAppear {
                             primaryDisplayingLocale = .jp
                         }
                 } else if !allAvailableLocales.isEmpty {
-                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: allAvailableLocales.first!)
+                    MultilingualTextForCountdownInternalNumbersView(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, locale: allAvailableLocales.first!)
                         .onAppear {
                             print(allAvailableLocales)
                             primaryDisplayingLocale = allAvailableLocales.first!
@@ -417,10 +500,10 @@ struct MultilingualTextForCountdown: View {
                 }
                 
                 if allAvailableLocales.contains(DoriAPI.secondaryLocale), DoriAPI.secondaryLocale != primaryDisplayingLocale {
-                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: DoriAPI.secondaryLocale)
+                    MultilingualTextForCountdownInternalNumbersView(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, locale: DoriAPI.secondaryLocale)
                         .foregroundStyle(.secondary)
                 } else if allAvailableLocales.contains(.jp), .jp != primaryDisplayingLocale {
-                    MultilingualTextForCountdownInternalNumbersView(event: source, locale: .jp)
+                    MultilingualTextForCountdownInternalNumbersView(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, locale: .jp)
                         .foregroundStyle(.secondary)
                 }
             }
@@ -437,23 +520,25 @@ struct MultilingualTextForCountdown: View {
         }
     }
     struct MultilingualTextForCountdownInternalNumbersView: View {
-        let event: DoriFrontend.Event.Event
+//        let event: DoriFrontend.Event.Event
+        let startDate: DoriAPI.LocalizedData<Date>
+        let endDate: DoriAPI.LocalizedData<Date>
+        let aggregateEndDate: DoriAPI.LocalizedData<Date>?
+        let distributionStartDate: DoriAPI.LocalizedData<Date>?
         let locale: DoriAPI.Locale
         var body: some View {
-            if let startDate = event.startAt.forLocale(locale),
-               let endDate = event.endAt.forLocale(locale),
-               let aggregateEndDate = event.aggregateEndAt.forLocale(locale),
-               let distributionStartDate = event.distributionStartAt.forLocale(locale) {
+            if let startDate = startDate.forLocale(locale),
+               let endDate = endDate.forLocale(locale) {
                 if startDate > .now {
-                    Text("Event.countdown.start-at.\(Text(startDate, style: .relative)).\(locale.rawValue.uppercased())")
+                    Text("Countdown.start-at.\(Text(startDate, style: .relative)).\(locale.rawValue.uppercased())")
                 } else if endDate > .now {
-                    Text("Event.countdown.end-at.\(Text(endDate, style: .relative)).\(locale.rawValue.uppercased())")
-                } else if aggregateEndDate > .now {
-                    Text("Event.countdown.results-in.\(Text(endDate, style: .relative)).\(locale.rawValue.uppercased())")
-                } else if distributionStartDate > .now {
-                    Text("Event.countdown.rewards-in.\(Text(endDate, style: .relative)).\(locale.rawValue.uppercased())")
+                    Text("Countdown.end-at.\(Text(endDate, style: .relative)).\(locale.rawValue.uppercased())")
+                } else if let aggregateEndDate = aggregateEndDate?.forLocale(locale), aggregateEndDate > .now {
+                    Text("Countdown.results-in.\(Text(aggregateEndDate, style: .relative)).\(locale.rawValue.uppercased())")
+                } else if let distributionStartDate = distributionStartDate?.forLocale(locale), distributionStartDate > .now {
+                    Text("Countdown.rewards-in.\(Text(distributionStartDate, style: .relative)).\(locale.rawValue.uppercased())")
                 } else {
-                    Text("Event.countdown.completed.\(locale.rawValue.uppercased())")
+                    Text("Countdown.completed.\(locale.rawValue.uppercased())")
                 }
             }
         }
@@ -620,6 +705,27 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
                 useCompactLayout = false
             }
         })
+    }
+}
+
+// MARK: ExtendedConstraints
+struct ExtendedConstraints<Content: View>: View {
+    var isActive: Bool = true
+    let content: () -> Content
+    var body: some View {
+        if isActive {
+            VStack {
+                Spacer(minLength: 0)
+                HStack {
+                    Spacer(minLength: 0)
+                    content()
+                    Spacer(minLength: 0)
+                }
+                Spacer(minLength: 0)
+            }
+        } else {
+            content()
+        }
     }
 }
 

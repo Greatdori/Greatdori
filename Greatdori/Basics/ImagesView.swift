@@ -893,6 +893,135 @@ struct GachaCardView: View {
     }
 }
 
+//MARK: GachaInfo
+struct GachaInfo: View {
+    @Binding var searchedKeyword: String
+    @State var attributedTitle: AttributedString = AttributedString("")
+    @State var attributedType: AttributedString = AttributedString("")
+    
+    private var preferHeavierFonts: Bool = true
+    private var gachaImageURL: URL
+    private var title: DoriAPI.LocalizedData<String>
+    private var gachaID: Int
+    private var gachaType: DoriAPI.Gacha.GachaType
+    private var locale: DoriAPI.Locale?
+    private var showDetails: Bool
+    private var showID: Bool
+    //    @State var imageHeight: CGFloat = 100
+    
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
+    init(_ gacha: DoriAPI.Gacha.PreviewGacha, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+        self.preferHeavierFonts = preferHeavierFonts
+        self.gachaImageURL = gacha.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = gacha.gachaName
+        self.gachaID = gacha.id
+        self.gachaType = gacha.type
+        self.locale = locale
+        self.showDetails = showDetails
+        self.showID = showID
+        self._searchedKeyword = searchedKeyword
+    }
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
+    init(_ gacha: DoriAPI.Gacha.Gacha, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+        self.preferHeavierFonts = preferHeavierFonts
+        self.gachaImageURL = gacha.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = gacha.gachaName
+        self.gachaID = gacha.id
+        self.gachaType = gacha.type
+        self.locale = locale
+        self.showDetails = showDetails
+        self.showID = showID
+        self._searchedKeyword = searchedKeyword
+    }
+    
+    let lighterVersionBannerScaleFactor: CGFloat = 0.85
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
+    
+    var body: some View {
+        CustomGroupBox(showGroupBox: showDetails) {
+            HStack {
+//                if preferHeavierFonts {
+                    Spacer(minLength: 0)
+//                }
+                VStack {
+                    if preferHeavierFonts {
+                        Spacer(minLength: 0)
+                    }
+                    WebImage(url: gachaImageURL) { image in
+                        image
+                            .resizable()
+                            .antialiased(true)
+                            .scaledToFit()
+                        //                            .aspectRatio(3.0, contentMode: .fit)
+//                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                            .frame(maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                    } placeholder: {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(getPlaceholderColor())
+                            .aspectRatio(3.0, contentMode: .fit)
+                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                    }
+                    .interpolation(.high)
+                    .cornerRadius(10)
+                    
+                    if showDetails {
+                        VStack { // Accually Title & Countdown
+                                 //                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                            Text(attributedTitle)
+                                .multilineTextAlignment(.center)
+                                .bold()
+                                .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+                                .onAppear {
+                                    //                                attributedString = highlightKeyword(in: , keyword: searchedKeyword)
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                                }
+                                .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
+                                .onChange(of: searchedKeyword, {
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                                })
+                            Group {
+                                //                            if !searchedKeyword.isEmpty {
+                                //                                Text("#\(gachaID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(gachaID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
+                                if preferHeavierFonts {
+                                    HStack {
+                                        Text(attributedType)
+                                        if showID {
+                                            Text("#\(String(gachaID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(gachaID)") ? Color.accentColor : .secondary)
+                                        }
+                                    }
+                                } else {
+                                    Group {
+                                        Text(attributedType)/* + Text(verbatim: " • ").bold() + Text("#\(String(gachaID))").fontDesign(.monospaced)*/
+                                    }
+                                    .foregroundStyle(.secondary)
+                                    //                                    .font(.caption)
+                                }
+                                //                            } else {
+                                //                                Text(gachaType.localizedString)
+                                //                            }
+                            }
+                            .onAppear {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: gachaType.localizedString)
+                            }
+                            .onChange(of: gachaType.localizedString, {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: gachaType.localizedString)
+                            })
+                        }
+                        .frame(height: showDetails ? nil : 0)
+                        .opacity(showDetails ? 1 : 0)
+                    }
+                    if preferHeavierFonts {
+                        Spacer(minLength: 0)
+                    }
+                }
+//                if !preferHeavierFonts {
+                    Spacer(minLength: 0)
+//                }
+            }
+        }
+    }
+}
+
 
 //MARK: SongCardView
 struct SongCardView: View {

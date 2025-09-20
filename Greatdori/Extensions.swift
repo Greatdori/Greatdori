@@ -18,7 +18,7 @@ import DoriKit
 import Network
 import SwiftUI
 
-//MARK: Array
+// MARK: Array
 extension Array {
     func chunked(into size: Int) -> [[Element]] {
         stride(from: 0, to: count, by: size).map {
@@ -27,7 +27,7 @@ extension Array {
     }
 }
 
-//MARK: Color
+// MARK: Color
 extension Color {
     func toHex() -> String? {
 #if os(macOS)
@@ -58,19 +58,30 @@ extension Color {
     }
 }
 
-//MARK: Int
+// MARK: Date
+extension Date {
+    public func corrected() -> Date? {
+        if self.timeIntervalSince1970 >= 3786879600 {
+            return nil
+        } else {
+            return self
+        }
+    }
+}
+
+// MARK: Int
 extension Int?: @retroactive Identifiable {
     public var id: Int? { self }
 }
 
-//MARK: Optional
+// MARK: Optional
 extension Optional {
     var id: Self { self }
 }
 
-//MARK: View
+// MARK: View
 public extension View {
-    //MARK: inverseMask
+    // MARK: inverseMask
     public func inverseMask<Mask: View>(
         @ViewBuilder _ mask: () -> Mask,
         alignment: Alignment = .center
@@ -83,7 +94,7 @@ public extension View {
         }
     }
     
-    //MARK: onFrameChange
+    // MARK: onFrameChange
     /// Performs action when frame of attached view changes.
     ///
     /// ```swift
@@ -113,7 +124,7 @@ public extension View {
         )
     }
     
-    //MARK: withSystemBackground
+    // MARK: withSystemBackground
     @ViewBuilder
     func withSystemBackground() -> some View {
         #if os(iOS)
@@ -124,7 +135,7 @@ public extension View {
         #endif
     }
     
-    //MARK: wrapIf
+    // MARK: wrapIf
     /// Wraps a view into a specific container when `condition` is `true`.
     ///
     /// Use this modifier to conditionally wrap a view into a container.
@@ -196,7 +207,7 @@ public extension View {
     }
 }
 
-//MARK: NetworkMonitor
+// MARK: NetworkMonitor
 final class NetworkMonitor: Sendable {
     @MainActor static let shared = NetworkMonitor()
     

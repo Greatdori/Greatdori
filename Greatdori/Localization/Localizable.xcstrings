@@ -124,6 +124,22 @@
         }
       }
     },
+    "App.info.gachas" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募"
+          }
+        }
+      }
+    },
     "App.leaderboard" : {
       "localizations" : {
         "en" : {
@@ -430,22 +446,6 @@
         }
       }
     },
-    "Character.next" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next Character"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "下一个角色"
-          }
-        }
-      }
-    },
     "Character.nickname" : {
       "localizations" : {
         "en" : {
@@ -458,22 +458,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "昵称"
-          }
-        }
-      }
-    },
-    "Character.previous" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last Character"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "上一个角色"
           }
         }
       }
@@ -590,6 +574,86 @@
         }
       }
     },
+    "Countdown.completed.%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completed (%@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完结 (%@)"
+          }
+        }
+      }
+    },
+    "Countdown.end-at.%@.%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ends in %1$@ (%2$@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束于%1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Countdown.results-in.%@.%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Results in %1$@ (%2$@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结果公布于%1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Countdown.rewards-in.%@.%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rewards in %1$@ (%2$@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "奖励颁发于%1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Countdown.start-at.%@.%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts in %1$@ (%2$@)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始于%1$@ (%2$@)"
+          }
+        }
+      }
+    },
     "Debug.crash-detected.direct-enter" : {
       "localizations" : {
         "en" : {
@@ -702,6 +766,38 @@
         }
       }
     },
+    "Detail.next" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next Item"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一个项目"
+          }
+        }
+      }
+    },
+    "Detail.previous" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Item"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上一个项目"
+          }
+        }
+      }
+    },
     "Details.cards" : {
       "localizations" : {
         "en" : {
@@ -734,12 +830,11 @@
         }
       }
     },
-    "Details.gacha" : {
-      "extractionState" : "stale",
+    "Details.gachas" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Gacha"
           }
         },
@@ -907,86 +1002,6 @@
         }
       }
     },
-    "Event.countdown.completed.%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Completed (%@)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已完结 (%@)"
-          }
-        }
-      }
-    },
-    "Event.countdown.end-at.%@.%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ends in %1$@ (%2$@)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "结束于%1$@ (%2$@)"
-          }
-        }
-      }
-    },
-    "Event.countdown.results-in.%@.%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Results in %1$@ (%2$@)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "结果公布于%1$@ (%2$@)"
-          }
-        }
-      }
-    },
-    "Event.countdown.rewards-in.%@.%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rewards in %1$@ (%2$@)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "奖励颁发于%1$@ (%2$@)"
-          }
-        }
-      }
-    },
-    "Event.countdown.start-at.%@.%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts in %1$@ (%2$@)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "开始于%1$@ (%2$@)"
-          }
-        }
-      }
-    },
     "Event.end-date" : {
       "localizations" : {
         "en" : {
@@ -999,22 +1014,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "结束日期"
-          }
-        }
-      }
-    },
-    "Event.next" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next Event"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "下一个活动"
           }
         }
       }
@@ -1083,50 +1082,6 @@
         }
       }
     },
-    "Event.previous" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Previous Event"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "上一个活动"
-          }
-        }
-      }
-    },
-    "Event.result.%lld" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld result"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld results"
-                }
-              }
-            }
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld个结果"
-          }
-        }
-      }
-    },
     "Event.rewards" : {
       "localizations" : {
         "en" : {
@@ -1139,38 +1094,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "奖励"
-          }
-        }
-      }
-    },
-    "Event.search.no-results" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Results"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无结果"
-          }
-        }
-      }
-    },
-    "Event.search.no-results.description" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No event matched your search."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "没有活动匹配你的搜索条件。"
           }
         }
       }
@@ -1475,6 +1398,166 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "仅横幅"
+          }
+        }
+      }
+    },
+    "Gacha" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募"
+          }
+        }
+      }
+    },
+    "Gacha.close-date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close Date"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束日期"
+          }
+        }
+      }
+    },
+    "Gacha.count.%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld gacha"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld个招募"
+          }
+        }
+      }
+    },
+    "Gacha.countdown" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Countdown"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "倒计时"
+          }
+        }
+      }
+    },
+    "Gacha.release-date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Release Date"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发布日期"
+          }
+        }
+      }
+    },
+    "Gacha.search.placeholder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search Gacha"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索招募"
+          }
+        }
+      }
+    },
+    "Gacha.search.unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha Search Unavailable"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募搜索不可用"
+          }
+        }
+      }
+    },
+    "Gacha.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标题"
+          }
+        }
+      }
+    },
+    "Gacha.type" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "类型"
+          }
+        }
+      }
+    },
+    "Gacha.unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha Information Unavailable"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募信息不可用"
           }
         }
       }
@@ -2886,6 +2969,66 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "歌曲(%@) • 将在今天发布"
+          }
+        }
+      }
+    },
+    "Search.no-results" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Results"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无结果"
+          }
+        }
+      }
+    },
+    "Search.no-results.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No item matched your search."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有项目匹配你的搜索条件。"
+          }
+        }
+      }
+    },
+    "Search.result.%lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld result"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld results"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld个结果"
           }
         }
       }

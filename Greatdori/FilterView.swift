@@ -572,5 +572,6 @@ struct SorterPickerView: View {
         }, label: {
             Label("Sort", systemImage: "arrow.up.arrow.down")
         })
+        .menuIndicator(.hidden)
     }
 }

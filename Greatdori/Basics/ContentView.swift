@@ -57,15 +57,18 @@ struct ContentView: View {
                         }
                         TabSection(content: {
                             Tab("App.info.characters", systemImage: "person.2", value: AppSection.info(.characters)) {
-                                //                            Text(verbatim: "char")
                                 NavigationStack {
                                     CharacterSearchView()
                                 }
-                                
                             }
-                            Tab("App.info.events", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.events)) {
+                            Tab("App.info.events", systemImage: "star.hexagon", value: AppSection.info(.events)) {
                                 NavigationStack {
                                     EventSearchView()
+                                }
+                            }
+                            Tab("App.info.gachas", systemImage: "line.horizontal.star.fill.line.horizontal", value: AppSection.info(.gachas)) {
+                                NavigationStack {
+                                    GachaSearchView()
                                 }
                             }
                         }, header: {
@@ -364,7 +367,7 @@ enum AppSection: Hashable {
 }
 
 enum InfoTab: CaseIterable, Hashable {
-    case home, characters, events
+    case home, characters, events, cards, gachas
 }
 
 enum Platform {

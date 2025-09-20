@@ -15,36 +15,15 @@
 import DoriKit
 import SwiftUI
 
-//struct ListGachaView: View {
-//    @State var locale: DoriAPI.Locale = DoriAPI.preferredLocale
-//    var body: some View {
-//        VStack {
-//            HStack {
-//                Text("Details.gacha")
-//                HStack {
-//                    Picker(selection: $locale, content: {
-//                        ForEach(DoriAPI.Locale.allCases, id: \.self) { locale in
-//                            Text(locale.rawValue.uppercased())
-//                                .tag(locale)
-//                        }
-//                    }, label: {
-//                        Text("")
-//                    })
-//                    .labelsHidden()
-//                }
-//            }
-//        }
-//    }
-//}
-
 // MARK: DetailsCardSection
 struct DetailsCardsSection: View {
     var cards: [PreviewCard]
+    @State var cardsSorted: [PreviewCard] = []
     @State var showAll = false
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
-                ForEach((showAll ? cards : Array(cards.prefix(3))), id: \.self) { item in
+                ForEach((showAll ? cardsSorted : Array(cardsSorted.prefix(3))), id: \.self) { item in
                     NavigationLink(destination: {
                         //                    [NAVI785]
                     }, label: {
@@ -59,11 +38,11 @@ struct DetailsCardsSection: View {
                         .font(.title2)
                         .bold()
                     Spacer()
-                    if cards.count > 3 {
+                    if cardsSorted.count > 3 {
                         Button(action: {
                             showAll.toggle()
                         }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(cards.count)")
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(cardsSorted.count)")
                                 .foregroundStyle(.secondary)
                             //                        .font(.caption)
                         })
@@ -77,17 +56,21 @@ struct DetailsCardsSection: View {
                 //            .border(.red)
             })
         }
+        .onAppear {
+            cardsSorted = cards.sorted{compare($0.releasedAt.jp?.corrected(),$1.releasedAt.jp?.corrected())}
+        }
     }
 }
 
 // MARK: DetailsEventsSection
 struct DetailsEventsSection: View {
     var events: [PreviewEvent]
+    @State var eventsSorted: [PreviewEvent] = []
     @State var showAll = false
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
-                ForEach((showAll ? events : Array(events.prefix(3))), id: \.self) { item in
+                ForEach((showAll ? eventsSorted : Array(eventsSorted.prefix(3))), id: \.self) { item in
                     NavigationLink(destination: {
                         //                    [NAVI785]
                         EventDetailView(id: item.id)
@@ -108,11 +91,11 @@ struct DetailsEventsSection: View {
                         .font(.title2)
                         .bold()
                     Spacer()
-                    if events.count > 3 {
+                    if eventsSorted.count > 3 {
                         Button(action: {
                             showAll.toggle()
                         }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(events.count)")
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(eventsSorted.count)")
                                 .foregroundStyle(.secondary)
                             //                        .font(.caption)
                         })
@@ -124,6 +107,61 @@ struct DetailsEventsSection: View {
                 .frame(maxWidth: 615)
                 //            .border(.red)
             })
+        }
+        .onAppear {
+            eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp)))
+        }
+    }
+}
+
+// MARK: DetailsGachasSection
+struct DetailsGachasSection: View {
+    var gachas: [PreviewGacha]
+    @State var gachasSorted: [PreviewGacha] = []
+    @State var showAll = false
+    var body: some View {
+        LazyVStack(pinnedViews: .sectionHeaders) {
+            Section(content: {
+                ForEach((showAll ? gachasSorted : Array(gachasSorted.prefix(3))), id: \.self) { item in
+                    NavigationLink(destination: {
+                        //                    [NAVI785]
+                        GachaDetailView(id: item.id)
+                    }, label: {
+                        //                    CustomGroupBox {
+                        GachaInfo(item, preferHeavierFonts: false, showDetails: true)
+                            .scaledToFill()
+                            .frame(maxWidth: 600)
+                            .scaledToFill()
+                        //                    }
+                    })
+                    .buttonStyle(.plain)
+                }
+                .frame(maxWidth: 600)
+            }, header: {
+                HStack {
+                    Text("Details.gachas")
+                        .font(.title2)
+                        .bold()
+                    Spacer()
+                    if gachasSorted.count > 3 {
+                        Button(action: {
+                            showAll.toggle()
+                        }, label: {
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(gachasSorted.count)")
+                                .foregroundStyle(.secondary)
+                            //                        .font(.caption)
+                        })
+                        .buttonStyle(.plain)
+                    }
+                    //                .alignmentGuide(.bottom, computeValue: 0)
+                    
+                }
+                .frame(maxWidth: 615)
+                //            .border(.red)
+            })
+        }
+        .onAppear {
+            gachasSorted = gachas.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp)))
         }
     }
 }

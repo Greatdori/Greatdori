@@ -48,6 +48,7 @@ extension DoriFrontend {
         public init(direction: Direction = .descending, keyword: Keyword = .id) {
             self.direction = direction
             self.keyword = keyword
+            self.direction = direction
         }
         
         private var recoveryID: String?
@@ -393,6 +394,36 @@ extension DoriFrontend.Card.CardWithBand: DoriFrontend.Sortable {
     }
 }
 
+// MARK: extension PreviewCard
+extension DoriFrontend.Card.PreviewCard: DoriFrontend.Sortable {
+    @inlinable
+    public static var applicableSortingTypes: [DoriFrontend.Sorter.Keyword] {
+        [.releaseDate(in: .jp), .releaseDate(in: .en), .releaseDate(in: .tw), .releaseDate(in: .cn), .releaseDate(in: .kr), .rarity, .maximumStat, .id]
+    }
+    
+    @inlinable
+    public static var hasEndingDate: Bool { false }
+    
+    public static func _compare<ValueType>(usingDoriSorter sorter: DoriFrontend.Sorter, lhs: ValueType, rhs: ValueType) -> Bool? {
+        guard let castedLHS = lhs as? DoriFrontend.Card.PreviewCard, let castedRHS = rhs as? DoriFrontend.Card.PreviewCard else { return nil }
+        switch sorter.keyword {
+        case .releaseDate(let locale):
+            return sorter.compare(
+                castedLHS.releasedAt.forLocale(locale),
+                castedRHS.releasedAt.forLocale(locale)
+            )
+        case .rarity:
+            return sorter.compare(castedLHS.rarity, castedRHS.rarity)
+        case .maximumStat:
+            return sorter.compare(castedLHS.stat.maximumLevel, castedRHS.stat.maximumLevel)
+        case .id:
+            return sorter.compare(castedLHS.id, castedRHS.id)
+        default:
+            return nil
+        }
+    }
+}
+
 // MARK: extension PreviewSong
 extension DoriAPI.Song.PreviewSong: DoriFrontend.Sortable {
     @inlinable
@@ -515,6 +546,27 @@ extension DoriFrontend.Costume.PreviewCostume: DoriFrontend.Sortable {
                 castedLHS.publishedAt.forLocale(locale),
                 castedRHS.publishedAt.forLocale(locale)
             )
+        case .id:
+            return sorter.compare(castedLHS.id, castedRHS.id)
+        default:
+            return nil
+        }
+    }
+}
+
+// MARK: extension PreviewCharacter
+extension DoriFrontend.Character.PreviewCharacter: DoriFrontend.Sortable {
+    @inlinable
+    public static var applicableSortingTypes: [DoriFrontend.Sorter.Keyword] {
+        [.id]
+    }
+    
+    @inlinable
+    public static var hasEndingDate: Bool { false }
+    
+    public static func _compare<ValueType>(usingDoriSorter sorter: DoriFrontend.Sorter, lhs: ValueType, rhs: ValueType) -> Bool? {
+        guard let castedLHS = lhs as? DoriFrontend.Character.PreviewCharacter, let castedRHS = rhs as? DoriFrontend.Character.PreviewCharacter else { return nil }
+        switch sorter.keyword {
         case .id:
             return sorter.compare(castedLHS.id, castedRHS.id)
         default:

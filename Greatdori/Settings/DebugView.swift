@@ -242,7 +242,7 @@ struct DebugOfflineAssetView: View {
 
 struct DebugFilterExperimentView: View {
     @State var filter: DoriFrontend.Filter = .init()
-    @State var sorter: DoriFrontend.Sorter = DoriFrontend.Sorter(direction: .descending, keyword: .id)
+    @State var sorter: DoriFrontend.Sorter = DoriFrontend.Sorter(keyword: .id, direction: .descending)
     @State var updating = false
     @State var focusingList: Int = -1
     

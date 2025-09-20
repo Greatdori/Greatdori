@@ -254,13 +254,12 @@ struct CharacterDetailView: View {
     var id: Int
     var allCharacters: [PreviewCharacter]? = nil
     @Environment(\.horizontalSizeClass) var sizeClass
-    @State var useableAllChar: [PreviewCharacter]? = nil
+    @State var allCharacterIDs: [Int] = []
     @State var currentID: Int = 0
     @State var informationLoadPromise: DoriCache.Promise<DoriFrontend.Character.ExtendedCharacter?>?
     @State var information: DoriFrontend.Character.ExtendedCharacter?
     @State var infoIsAvailable = true
     @State var cardNavigationDestinationID: Int?
-    @State var lastAvaialbleID: Int = 0
     @State var randomCard: DoriAPI.Card.PreviewCard?
     @State var showSubtitle: Bool = false
     @State var randomCardHadUpdatedOnce = false
@@ -302,13 +301,19 @@ struct CharacterDetailView: View {
                             Rectangle()
                                 .opacity(0)
                                 .frame(height: 30)
-                            DetailsCardsSection(cards: information.cards.sorted{ compare($0.releasedAt.jp,$1.releasedAt.jp) })
+                            DetailsCardsSection(cards: information.cards)
                         }
                         if !information.events.isEmpty {
                             Rectangle()
                                 .opacity(0)
                                 .frame(height: 30)
-                            DetailsEventsSection(events: information.events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp))))
+                            DetailsEventsSection(events: information.events)
+                        }
+                        if !information.gacha.isEmpty {
+                            Rectangle()
+                                .opacity(0)
+                                .frame(height: 30)
+                            DetailsGachasSection(gachas: information.gacha)
                         }
                         Spacer()
                     }
@@ -316,14 +321,8 @@ struct CharacterDetailView: View {
                 }
             } else {
                 if infoIsAvailable {
-                    VStack {
-                        Spacer()
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                        Spacer()
+                    ExtendedConstraints {
+                        ProgressView()
                     }
                 } else {
                     Button(action: {
@@ -331,14 +330,8 @@ struct CharacterDetailView: View {
                             await getInformation(id: currentID)
                         }
                     }, label: {
-                        VStack {
-                            Spacer()
-                            HStack {
-                                Spacer()
-                                ContentUnavailableView("Character.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                                Spacer()
-                            }
-                            Spacer()
+                        ExtendedConstraints {
+                            ContentUnavailableView("Character.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
                         }
                     })
                     .buttonStyle(.plain)
@@ -360,14 +353,11 @@ struct CharacterDetailView: View {
             }
         }
         #endif
-        .onAppear {
-            Task {
-                DoriCache.withCache(id: "Character_Last_JP_ID", trait: .realTime) {
-                    await DoriFrontend.Event.localizedLatestEvent()?.jp?.id
-//                    await DoriFrontend.Character.CategorizedCharacters()
-                } .onUpdate {
-                    lastAvaialbleID = $0 ?? 0
-                }
+        .task {
+            if (allCharacters ?? []).isEmpty {
+                allCharacterIDs = (await Character.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
+            } else {
+                allCharacterIDs = (allCharacters ?? []).map { $0.id }
             }
         }
         .onChange(of: currentID, {
@@ -382,69 +372,14 @@ struct CharacterDetailView: View {
         }
         .toolbar {
             ToolbarItemGroup(content: {
-                if sizeClass == .regular, let useableAllChar {
-//                    let flatMainCharacters = useableAllChar.compactMap { key, value in
-//                        // only *main* characters
-////                        key != nil ? value : nil
-//                    }.flatMap { $0 }
-                    let flatMainCharacters = useableAllChar
-                    if let currentIndex = flatMainCharacters.firstIndex(where: { $0.id == currentID }) {
-                        HStack(spacing: 0) {
-                            Button(action: {
-                                information = nil
-                                currentID = flatMainCharacters[currentIndex - 1].id
-                            }, label: {
-                                Label("Character.previous", systemImage: "arrow.backward")
-                            })
-                            .disabled(currentIndex - 1 < 0)
-                            .disabled((useableAllChar ?? []).isEmpty)
-                            NavigationLink(destination: {
-                                EventSearchView()
-                            }, label: {
-                                Text("#\(String(currentID))")
-                                    .fontDesign(.monospaced)
-                                    .bold()
-                            })
-                            Button(action: {
-                                information = nil
-                                currentID = flatMainCharacters[currentIndex + 1].id
-                            }, label: {
-                                Label("Character.next", systemImage: "arrow.forward")
-                            })
-                            .disabled(currentIndex + 1 >= flatMainCharacters.count)
-                            .disabled((useableAllChar ?? []).isEmpty)
-                        }
-                        .disabled(lastAvaialbleID == 0 || currentID == 0)
-                        .onAppear {
-                            showSubtitle = false
-                        }
+                DetailsIDSwitcher(currentID: $currentID, allIDs: allCharacterIDs, destination: { CharacterSearchView() })
+                    .onChange(of: currentID) {
+                        information = nil
                     }
-                } else {
-                    NavigationLink(destination: {
-                        CharacterSearchView()
-                    }, label: {
-                        Image(systemName: "list.bullet")
-                    })
                     .onAppear {
-                        showSubtitle = true
+                        showSubtitle = (sizeClass == .compact)
                     }
-                }
             })
-        }
-        .onAppear {
-            if allCharacters == nil {
-                Task {
-                    DoriCache.withCache(id: "CharacterList") {
-                        await PreviewCharacter.all()
-                    }.onUpdate {
-                        if let characters = $0 {
-                            self.useableAllChar = characters
-                        }
-                    }
-                }
-            } else {
-                useableAllChar = allCharacters!
-            }
         }
     }
     
@@ -464,6 +399,13 @@ struct CharacterDetailView: View {
             } else {
                 infoIsAvailable = false
             }
+//            SDWebImagePrefetcher.shared.prefetchURLs(
+//                information.cards.map(\.thumbNormalImageURL)
+//                + information.cards.compactMap(\.thumbAfterTrainingImageURL)
+//                + information.costumes.map(\.thumbImageURL)
+//                + information.events.map(\.bannerImageURL)
+//                + information.gacha.map(\.bannerImageURL)
+//            )
         }
     }
 }
@@ -695,3 +637,4 @@ struct CharacterDetailOverviewView: View {
         .frame(maxWidth: 600)
     }
 }
+
