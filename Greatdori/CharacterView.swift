@@ -615,7 +615,7 @@ struct CharacterDetailOverviewView: View {
                                         .bold()
                                 }, value: {
                                     MultilingualText(source: profile.selfIntroduction, showSecondaryText: false, allowPopover: false)
-                                }, displayMode: sizeClass == .regular ? .compactOnly : .automatic)
+                                }, displayMode: .basedOnUISizeClass)
                                 Divider()
                             }
                         }

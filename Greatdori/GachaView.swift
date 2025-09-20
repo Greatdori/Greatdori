@@ -56,6 +56,7 @@ struct GachaSearchView: View {
                                                             //                                                            }
                                                         }, label: {
                                                             GachaInfo(gacha, preferHeavierFonts: true, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                                .frame(maxWidth: bannerWidth)
                                                         })
                                                         .buttonStyle(.plain)
                                                         .wrapIf(true, in: { content in
@@ -517,67 +518,35 @@ struct GachaDetailOverviewView: View {
                             Divider()
                         }
                         
-                        //                    // MARK: Attribute
-                        //                    Group {
-                        //                        ListItemView(title: {
-                        //                            Text("Gacha.attribute")
-                        //                                .bold()
-                        //                        }, value: {
-                        //                            ForEach(information.gacha.attributes, id: \.attribute.rawValue) { attribute in
-                        //                                VStack(alignment: .trailing) {
-                        //                                    HStack {
-                        //                                        WebImage(url: attribute.attribute.iconImageURL)
-                        //                                            .antialiased(true)
-                        //                                            .resizable()
-                        //                                            .frame(width: imageButtonSize, height: imageButtonSize)
-                        //                                        Text(verbatim: "+\(attribute.percent)%")
-                        //                                    }
-                        //                                }
-                        //                            }
-                        //                        })
-                        //                        Divider()
-                        //                    }
+//                        //MARK: Spotlight Card
+//                        if !cardsArray.isEmpty {
+//                            ListItemWithWrappingView(title: {
+//                                Text("Event.spotlight-card")
+//                                    .bold()
+//                            }, element: { value in
+//                                NavigationLink(destination: {
+//                                    //TODO: [NAVI785]CardD
+//                                    Text("\(value)")
+//                                }, label: {
+//                                    CardPreviewImage(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+//                                })
+//                                .buttonStyle(.plain)
+//                            }, caption: nil, contentArray: cardsArray, columnNumbers: 3, elementWidth: cardThumbnailSideLength)
+//                            Divider()
+//                        }
                         
-                        //                    // MARK: Card
-                        //                    if !cardsArray.isEmpty {
-                        //                        ListItemWithWrappingView(title: {
-                        //                            Text("Gacha.card")
-                        //                                .bold()
-                        //                        }, element: { value in
-                        //                            NavigationLink(destination: {
-                        //                                //TODO: [NAVI785]CardD
-                        //                                Text("\(value)")
-                        //                            }, label: {
-                        //                                CardPreviewImage(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                        //                            })
-                        //                            .buttonStyle(.plain)
-                        //                        }, caption: {
-                        //                            Text("+\(cardsPercentage)%")
-                        //                                .lineLimit(1, reservesSpace: true)
-                        //                                .fixedSize(horizontal: true, vertical: true)
-                        //                        }, contentArray: cardsArray, columnNumbers: 3, elementWidth: cardThumbnailSideLength)
-                        //                        Divider()
-                        //                    }
+                        // MARK: Description
+                        Group {
+                            ListItemView(title: {
+                                //[250920-a]
+                                Text("Gacha.descripition")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(source: information.gacha.description)
+                            }, displayMode: .basedOnUISizeClass)
+                            Divider()
+                        }
                         
-                        //                    // MARK: Rewards
-                        //                    if !rewardsArray.isEmpty {
-                        //                        ListItemView(title: {
-                        //                            Text("Gacha.rewards")
-                        //                                .bold()
-                        //                        }, value: {
-                        //                            ForEach(rewardsArray) { card in
-                        //                                NavigationLink(destination: {
-                        //
-                        //                                }, label: {
-                        //                                    CardPreviewImage(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
-                        //                                })
-                        //                                .contentShape(Rectangle())
-                        //                                .buttonStyle(.plain)
-                        //
-                        //                            }
-                        //                        })
-                        //                        Divider()
-                        //                    }
                         
                         // MARK: ID
                         Group {

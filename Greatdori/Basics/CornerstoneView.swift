@@ -259,6 +259,7 @@ struct MultilingualText: View {
                         showCopyMessage = true
                     }, label: {
                         Text(localeValue)
+                            .lineLimit(nil)
                             .multilineTextAlignment(.trailing)
                             .textSelection(.enabled)
                             .typesettingLanguage(.explicit((shownLocaleValueDict[localeValue]?.nsLocale().language) ?? Locale.current.language))
@@ -410,6 +411,7 @@ struct MultilingualTextForCountdown: View {
     var body: some View {
         Group {
 #if !os(macOS)
+<<<<<<< refs/remotes/origin/main
 //            Menu(content: {
 //                VStack(alignment: .trailing) {
 //                    ForEach(allAvailableLocales, id: \.self) { localeValue in
@@ -442,6 +444,40 @@ struct MultilingualTextForCountdown: View {
 //            .buttonStyle(.borderless)
 //            .menuIndicator(.hidden)
 //            .foregroundStyle(.primary)
+=======
+            Menu(content: {
+                VStack(alignment: .trailing) {
+                    ForEach(allAvailableLocales, id: \.self) { localeValue in
+                        Button(action: {
+//                            copyStringToClipboard(getCountdownLocalizedString(source, forLocale: localeValue) ?? LocalizedStringResource(""))
+                            showCopyMessage = true
+                        }, label: {
+                            MultilingualTextForCountdownInternalNumbersView(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, locale: localeValue)
+                        })
+                    }
+                }
+            }, label: {
+                ZStack(alignment: .trailing, content: {
+                    Label("Message.copy.unavailable.for.countdown", systemImage: "exclamationmark.circle")
+                        .offset(y: 2)
+                        .opacity(showCopyMessage ? 1 : 0)
+                    MultilingualTextForCountdownInternalLabel(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, allAvailableLocales: allAvailableLocales)
+                        .opacity(showCopyMessage ? 0 : 1)
+                })
+                .animation(.easeIn(duration: 0.2), value: showCopyMessage)
+                .onChange(of: showCopyMessage, {
+                    if showCopyMessage {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            showCopyMessage = false
+                        }
+                    }
+                })
+            })
+            .menuStyle(.button)
+            .buttonStyle(.borderless)
+            .menuIndicator(.hidden)
+            .foregroundStyle(.primary)
+>>>>>>> Small Optimizaitons
 #else
             MultilingualTextForCountdownInternalLabel(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, allAvailableLocales: allAvailableLocales)
                 .onHover { isHovering in
@@ -547,6 +583,7 @@ struct MultilingualTextForCountdown: View {
 
 //MARK: ListItemView
 struct ListItemView<Content1: View, Content2: View>: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
     let title: Content1
     let value: Content2
     var allowValueLeading: Bool = false
@@ -566,7 +603,7 @@ struct ListItemView<Content1: View, Content2: View>: View {
     
     var body: some View {
         Group {
-            if (displayMode == .compactOnly || (totalAvailableWidth - titleAvailableWidth - valueAvailableWidth) > 5) && displayMode != .expandedOnly { // HStack (SHORT)
+            if (displayMode == .compactOnly  || (displayMode == .basedOnUISizeClass && sizeClass == .regular) || (totalAvailableWidth - titleAvailableWidth - valueAvailableWidth) > 5) && displayMode != .expandedOnly { // HStack (SHORT)
                 HStack {
                     title
                         .fixedSize(horizontal: true, vertical: true)

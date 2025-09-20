@@ -120,4 +120,5 @@ enum ListItemType: Hashable, Equatable {
     case compactOnly
     case expandedOnly
     case automatic
+    case basedOnUISizeClass
 }
