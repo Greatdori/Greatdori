@@ -963,6 +963,7 @@ struct GachaInfo: View {
                     }
                     .interpolation(.high)
                     .cornerRadius(10)
+                    .padding(.horizontal, gachaType == .special && (title.jp ?? "").contains(/チケットガチャ|出現率UPガチャ|タイプガチャ/) ? 40 : 0)
                     
                     if showDetails {
                         VStack { // Accually Title & Countdown
