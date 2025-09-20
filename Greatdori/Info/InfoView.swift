@@ -32,7 +32,7 @@ import SwiftUI
         title: "App.info.costumes",
         symbol: "swatchpalette",
         lightColor: .blue,
-        destination: {GachaSearchView()}
+        destination: {CostumeSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.events",

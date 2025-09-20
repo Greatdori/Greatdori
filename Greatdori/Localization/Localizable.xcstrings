@@ -670,6 +670,36 @@
         }
       }
     },
+    "Costume" : {
+
+    },
+    "Costume.band" : {
+
+    },
+    "Costume.character" : {
+
+    },
+    "Costume.count.%lld" : {
+
+    },
+    "Costume.description" : {
+
+    },
+    "Costume.how-to-get" : {
+
+    },
+    "Costume.release-date" : {
+
+    },
+    "Costume.search.placeholder" : {
+
+    },
+    "Costume.search.unavailable" : {
+
+    },
+    "Costume.unavailable" : {
+
+    },
     "Countdown.completed.%@" : {
       "localizations" : {
         "en" : {

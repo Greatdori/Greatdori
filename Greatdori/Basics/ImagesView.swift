@@ -839,6 +839,88 @@ struct ThumbCostumeCardView: View {
     }
 }
 
+// MARK: CostumeInfo
+struct CostumeInfo: View {
+    @Binding var searchedKeyword: String
+    @State var attributedTitle: AttributedString = AttributedString("")
+    
+    private var preferHeavierFonts: Bool = true
+    private var thumbImageURL: URL
+    private var title: DoriAPI.LocalizedData<String>
+    private var costumeID: Int
+    private var locale: DoriAPI.Locale?
+    private var layout: Axis
+    private var showID: Bool
+    
+    init(_ costume: DoriAPI.Costume.PreviewCostume, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+        self.preferHeavierFonts = preferHeavierFonts
+        self.thumbImageURL = costume.thumbImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = costume.description
+        self.costumeID = costume.id
+        self.locale = locale
+        self.layout = layout
+        self.showID = showID
+        self._searchedKeyword = searchedKeyword
+    }
+    
+    init(_ costume: DoriAPI.Costume.Costume, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+        self.preferHeavierFonts = preferHeavierFonts
+        self.thumbImageURL = costume.thumbImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = costume.description
+        self.costumeID = costume.id
+        self.locale = locale
+        self.layout = layout
+        self.showID = showID
+        self._searchedKeyword = searchedKeyword
+    }
+    
+    let lighterVersionBannerScaleFactor: CGFloat = 0.85
+    
+    var body: some View {
+        CustomGroupBox {
+            Group {
+                WebImage(url: thumbImageURL) { image in
+                    image
+                        .resizable()
+                        .antialiased(true)
+                        .scaledToFit()
+                        .frame(width: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                } placeholder: {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(getPlaceholderColor())
+                        .frame(width: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                }
+                .interpolation(.high)
+                
+                Text(attributedTitle)
+                    .multilineTextAlignment(.center)
+                    .bold()
+                    .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+                    .onAppear {
+                        attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                    }
+                    .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
+                    .onChange(of: searchedKeyword, {
+                        attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                    })
+            }
+            .wrapIf(layout == .horizontal) { content in
+                HStack {
+                    content
+                    Spacer()
+                }
+            } else: { content in
+                HStack {
+                    Spacer()
+                    VStack {
+                        content
+                    }
+                    Spacer()
+                }
+            }
+        }
+    }
+}
 
 //MARK: GachaCardView
 struct GachaCardView: View {
