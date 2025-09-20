@@ -16,13 +16,13 @@ import SwiftUI
 import DoriKit
 
 struct EventListView: View {
-    @State var filter = DoriFrontend.Filter.recoverable(id: "EventList")
-    @State var sorter = DoriFrontend.Sorter.recoverable(id: "EventList")
-    @State var events: [DoriFrontend.Event.PreviewEvent]?
+    @State var filter = DoriFilter.recoverable(id: "EventList")
+    @State var sorter = DoriSorter.recoverable(id: "EventList")
+    @State var events: [PreviewEvent]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
     @State var searchInput = ""
-    @State var searchedEvents: [DoriFrontend.Event.PreviewEvent]?
+    @State var searchedEvents: [PreviewEvent]?
     @State var availability = true
     var body: some View {
         List {
@@ -92,8 +92,8 @@ struct EventListView: View {
     
     func getEvents() async {
         availability = true
-        DoriCache.withCache(id: "EventList_\(filter.identity)_\(sorter.identity)") {
-            await DoriFrontend.Event.list()?
+        withDoriCache(id: "EventList_\(filter.identity)_\(sorter.identity)") {
+            await PreviewEvent.all()?
                 .filter(withDoriFilter: filter)
                 .sorted(withDoriSorter: sorter)
         }.onUpdate {

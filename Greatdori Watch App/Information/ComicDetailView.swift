@@ -17,7 +17,7 @@ import DoriKit
 import SDWebImageSwiftUI
 
 struct ComicDetailView: View {
-    var comic: DoriFrontend.Comic.Comic
+    var comic: Comic
     var body: some View {
         List {
             Section {

@@ -51,18 +51,18 @@ extension InfoTextView where Content == ModifiedContent<Text, _OpacityEffect> {
         self.init(title, text: text)
     }
     
-    init<S: StringProtocol>(_ titleKey: LocalizedStringResource, text: DoriAPI.LocalizedData<S>?) {
+    init<S: StringProtocol>(_ titleKey: LocalizedStringResource, text: LocalizedData<S>?) {
         self.init(String(localized: titleKey), text: text)
     }
     @_disfavoredOverload
-    init<S1: StringProtocol, S2: StringProtocol>(_ title: S1, text: DoriAPI.LocalizedData<S2>?) {
+    init<S1: StringProtocol, S2: StringProtocol>(_ title: S1, text: LocalizedData<S2>?) {
         if let text = text?.forPreferredLocale() {
             self.init(title, text: text)
         } else {
             self.init(verbatim: "__EmptyView__", text: "")
         }
     }
-    init<S1: StringProtocol, S2: StringProtocol>(verbatim title: S1, text: DoriAPI.LocalizedData<S2>?) {
+    init<S1: StringProtocol, S2: StringProtocol>(verbatim title: S1, text: LocalizedData<S2>?) {
         self.init(title, text: text)
     }
 }
@@ -87,18 +87,18 @@ extension InfoTextView where Content == ModifiedContent<Text, _OpacityEffect> {
         self.init(title, date: date)
     }
     
-    init(_ titleKey: LocalizedStringResource, date: DoriAPI.LocalizedData<Date>) {
+    init(_ titleKey: LocalizedStringResource, date: LocalizedData<Date>) {
         self.init(String(localized: titleKey), date: date)
     }
     @_disfavoredOverload
-    init<S: StringProtocol>(_ title: S, date: DoriAPI.LocalizedData<Date>) {
+    init<S: StringProtocol>(_ title: S, date: LocalizedData<Date>) {
         if let date = date.forPreferredLocale() {
             self.init(title, date: date)
         } else {
             self.init(verbatim: "__EmptyView__", text: "")
         }
     }
-    init<S: StringProtocol>(verbatim title: S, date: DoriAPI.LocalizedData<Date>) {
+    init<S: StringProtocol>(verbatim title: S, date: LocalizedData<Date>) {
         self.init(title, date: date)
     }
 }

@@ -16,15 +16,15 @@ import SwiftUI
 import DoriKit
 
 struct MiracleTicketView: View {
-    @State var tickets: [DoriFrontend.MiracleTicket.ExtendedMiracleTicket]?
+    @State var tickets: [ExtendedMiracleTicket]?
     @State var availability = true
-    @State var selectedTicket: DoriFrontend.MiracleTicket.ExtendedMiracleTicket?
+    @State var selectedTicket: ExtendedMiracleTicket?
     var body: some View {
         List {
             if let tickets {
                 Section {
                     Picker("自选券", selection: $selectedTicket) {
-                        Text("(选择一项)").tag(Optional<DoriFrontend.MiracleTicket.ExtendedMiracleTicket>.none)
+                        Text("(选择一项)").tag(Optional<ExtendedMiracleTicket>.none)
                         ForEach(tickets) { ticket in
                             Text(ticket.ticket.name.forPreferredLocale() ?? "")
                                 .tag(ticket)
@@ -74,8 +74,8 @@ struct MiracleTicketView: View {
     
     func getTickets() async {
         availability = true
-        DoriCache.withCache(id: "MiracleTicketList") {
-            await DoriFrontend.MiracleTicket.extendedList()
+        withDoriCache(id: "MiracleTicketList") {
+            await ExtendedMiracleTicket.all()
         }.onUpdate {
             if let tickets = $0 {
                 self.tickets = tickets

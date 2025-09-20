@@ -18,17 +18,17 @@ import SDWebImageSwiftUI
 
 struct EventCardView: View {
     private var eventImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
-    private var startAt: DoriAPI.LocalizedData<Date>
-    private var endAt: DoriAPI.LocalizedData<Date>
-    private var locale: DoriAPI.Locale?
+    private var title: LocalizedData<String>
+    private var startAt: LocalizedData<Date>
+    private var endAt: LocalizedData<Date>
+    private var locale: DoriLocale?
     private var showsCountdown: Bool
     
 %{
     eventTypes = ["PreviewEvent", "Event"]
 }%
     % for eventType in eventTypes:
-    init(_ event: DoriAPI.Event.${eventType}, inLocale locale: DoriAPI.Locale?, showsCountdown: Bool = false) {
+    init(_ event: ${eventType}, inLocale locale: DoriLocale?, showsCountdown: Bool = false) {
         self.eventImageURL = event.bannerImageURL
         self.title = event.eventName
         self.startAt = event.startAt
@@ -101,8 +101,8 @@ struct CardCardView: View {
     private var cardPrefix: String
     private var normalBackgroundImageURL: URL
     private var trainedBackgroundImageURL: URL?
-    private var cardType: DoriAPI.Card.CardType
-    private var attribute: DoriAPI.Attribute
+    private var cardType: CardType
+    private var attribute: Attribute
     private var rarity: Int
     private var bandIconImageURL: URL?
     
@@ -110,15 +110,15 @@ struct CardCardView: View {
     cardTypes = ["PreviewCard", "Card"]
 }%
     % for cardType in cardTypes:
-    init(_ card: DoriAPI.Card.${cardType}) {
-        self.characterName = DoriCache.preCache.characterDetails[card.characterID]?.characterName.forPreferredLocale() ?? ""
+    init(_ card: ${cardType}) {
+        self.characterName = PreCache.current.characterDetails[card.characterID]?.characterName.forPreferredLocale() ?? ""
         self.cardPrefix = card.prefix.forPreferredLocale() ?? ""
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(PreCache.current.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
     }
     % end
     
@@ -220,23 +220,23 @@ struct CardCardView: View {
 struct ThumbCardCardView: View {
     private var thumbNormalImageURL: URL
     private var thumbTrainedImageURL: URL?
-    private var cardType: DoriAPI.Card.CardType
-    private var attribute: DoriAPI.Attribute
+    private var cardType: CardType
+    private var attribute: Attribute
     private var rarity: Int
     private var bandIconImageURL: URL?
-    private var prefix: DoriAPI.LocalizedData<String>
+    private var prefix: LocalizedData<String>
     
 %{
     cardTypes = ["PreviewCard", "Card"]
 }%
     % for cardType in cardTypes:
-    init(_ card: DoriAPI.Card.${cardType}) {
+    init(_ card: ${cardType}) {
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(PreCache.current.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
         self.prefix = card.prefix
     }
     % end
@@ -324,8 +324,8 @@ struct ThumbCardCardView: View {
 struct CardIconView: View {
     private var thumbNormalImageURL: URL
     private var thumbTrainedImageURL: URL?
-    private var cardType: DoriAPI.Card.CardType
-    private var attribute: DoriAPI.Attribute
+    private var cardType: CardType
+    private var attribute: Attribute
     private var rarity: Int
     private var bandIconImageURL: URL?
     
@@ -333,13 +333,13 @@ struct CardIconView: View {
     cardTypes = ["PreviewCard", "Card"]
 }%
     % for cardType in cardTypes:
-    init(_ card: DoriAPI.Card.${cardType}) {
+    init(_ card: ${cardType}) {
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(DoriCache.preCache.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
+        self.bandIconImageURL = URL(string: "https://bestdori.com/res/icon/band_\(PreCache.current.characters.first { $0.id == card.characterID }?.bandID ?? 0).svg")!
     }
     % end
     
@@ -417,9 +417,9 @@ struct CardIconView: View {
 }
 
 struct ComicCardView: View {
-    private var comic: DoriAPI.Comic.Comic
+    private var comic: Comic
     
-    init(_ comic: DoriAPI.Comic.Comic) {
+    init(_ comic: Comic) {
         self.comic = comic
     }
     
@@ -436,13 +436,13 @@ struct ComicCardView: View {
 
 struct ThumbCostumeCardView: View {
     private var thumbImageURL: URL
-    private var description: DoriAPI.LocalizedData<String>
+    private var description: LocalizedData<String>
     
 %{
     costumeTypes = ["PreviewCostume", "Costume"]
 }%
     % for costumeType in costumeTypes:
-    init(_ costume: DoriAPI.Costume.${costumeType}) {
+    init(_ costume: ${costumeType}) {
         self.thumbImageURL = costume.thumbImageURL
         self.description = costume.description
     }
@@ -466,13 +466,13 @@ struct ThumbCostumeCardView: View {
 
 struct GachaCardView: View {
     private var bannerImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
+    private var title: LocalizedData<String>
     
 %{
     gachaTypes = ["PreviewGacha", "Gacha"]
 }%
     % for gachaType in gachaTypes:
-    init(_ gacha: DoriAPI.Gacha.${gachaType}) {
+    init(_ gacha: ${gachaType}) {
         self.bannerImageURL = gacha.bannerImageURL
         self.title = gacha.gachaName
     }
@@ -516,14 +516,14 @@ struct GachaCardView: View {
 
 struct SongCardView: View {
     private var jacketImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
+    private var title: LocalizedData<String>
     private var difficulty: [DoriAPI.Song.DifficultyType: DoriAPI.Song.PreviewSong.Difficulty]
     
 %{
     songTypes = ["PreviewSong", "Song"]
 }%
     % for songType in songTypes:
-    init(_ song: DoriAPI.Song.${songType}) {
+    init(_ song: ${songType}) {
         self.jacketImageURL = song.jacketImageURL
         self.title = song.musicTitle
         % if songType == "Song":

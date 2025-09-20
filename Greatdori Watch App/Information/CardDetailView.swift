@@ -19,7 +19,7 @@ import SDWebImageSwiftUI
 
 struct CardDetailView: View {
     var id: Int
-    @State var information: DoriFrontend.Card.ExtendedCard?
+    @State var information: ExtendedCard?
     @State var statsView = 0
     @State var statsCustomLevel = 1
     @State var statsCustomMasterRank = 4
@@ -273,8 +273,8 @@ struct CardDetailView: View {
     
     func getInformation() async {
         availability = true
-        DoriCache.withCache(id: "CardDetail_\(id)") {
-            await DoriFrontend.Card.extendedInformation(of: id)
+        withDoriCache(id: "CardDetail_\(id)") {
+            await ExtendedCard(id: id)
         }.onUpdate {
             if let information = $0 {
                 self.information = information

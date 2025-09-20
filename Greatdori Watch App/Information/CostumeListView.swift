@@ -16,13 +16,13 @@ import SwiftUI
 import DoriKit
 
 struct CostumeListView: View {
-    @State var filter = DoriFrontend.Filter.recoverable(id: "CostumeList")
-    @State var sorter = DoriFrontend.Sorter.recoverable(id: "CostumeList")
-    @State var costumes: [DoriFrontend.Costume.PreviewCostume]?
+    @State var filter = DoriFilter.recoverable(id: "CostumeList")
+    @State var sorter = DoriSorter.recoverable(id: "CostumeList")
+    @State var costumes: [PreviewCostume]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
     @State var searchInput = ""
-    @State var searchedCostumes: [DoriFrontend.Costume.PreviewCostume]?
+    @State var searchedCostumes: [PreviewCostume]?
     @State var availability = true
     var body: some View {
         List {
@@ -88,8 +88,8 @@ struct CostumeListView: View {
     
     func getCostumes() async {
         availability = true
-        DoriCache.withCache(id: "CostumeList_\(filter.identity)_\(sorter.identity)") {
-            await DoriFrontend.Costume.list(filter: filter)?
+        withDoriCache(id: "CostumeList_\(filter.identity)_\(sorter.identity)") {
+            await PreviewCostume.all()?
                 .filter(withDoriFilter: filter)
                 .sorted(withDoriSorter: sorter)
         }.onUpdate {

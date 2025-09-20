@@ -18,7 +18,7 @@ import SDWebImageSwiftUI
 
 struct PlayerSearchView: View {
     @AppStorage("PlayerSearchPlayerIDInput") var playerID = ""
-    @State var selectedLocale = DoriAPI.preferredLocale
+    @State var selectedLocale = DoriLocale.primaryLocale
     @State var profile: DoriFrontend.Misc.ExtendedPlayerProfile?
     @State var isLoading = false
     var body: some View {

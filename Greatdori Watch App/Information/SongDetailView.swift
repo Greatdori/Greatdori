@@ -18,7 +18,7 @@ import SDWebImageSwiftUI
 
 struct SongDetailView: View {
     var id: Int
-    @State var information: DoriFrontend.Song.ExtendedSong?
+    @State var information: ExtendedSong?
     @State var availability = true
     @State var selectedDifficulty: DoriAPI.Song.DifficultyType?
     var body: some View {
@@ -217,8 +217,8 @@ struct SongDetailView: View {
     
     func getInformation() async {
         availability = true
-        DoriCache.withCache(id: "SongDetail_\(id)") {
-            await DoriFrontend.Song.extendedInformation(of: id)
+        withDoriCache(id: "SongDetail_\(id)") {
+            await ExtendedSong(id: id)
         }.onUpdate {
             if let information = $0 {
                 self.information = information

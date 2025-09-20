@@ -17,9 +17,9 @@ import DoriKit
 import SDWebImageSwiftUI
 
 struct HomeView: View {
-    @State var news: [DoriFrontend.News.ListItem]?
-    @State var birthdays: [DoriFrontend.Character.BirthdayCharacter]?
-    @State var latestEvents: DoriAPI.LocalizedData<DoriFrontend.Event.PreviewEvent>?
+    @State var news: [NewsListItem]?
+    @State var birthdays: [BirthdayCharacter]?
+    @State var latestEvents: LocalizedData<PreviewEvent>?
     @State var availability = [true, true, true]
     var body: some View {
         Form {
@@ -153,8 +153,8 @@ struct HomeView: View {
     
     func getNews() async {
         availability[0] = true
-        DoriCache.withCache(id: "Home_News", trait: .realTime) {
-            await DoriFrontend.News.list()
+        withDoriCache(id: "Home_News", trait: .realTime) {
+            await NewsListItem.all()
         }.onUpdate {
             if let news = $0 {
                 self.news = news
@@ -165,8 +165,8 @@ struct HomeView: View {
     }
     func getBirthdays() async {
         availability[1] = true
-        DoriCache.withCache(id: "Home_Birthdays", trait: .realTime) {
-            await DoriFrontend.Character.recentBirthdayCharacters()
+        withDoriCache(id: "Home_Birthdays", trait: .realTime) {
+            await BirthdayCharacter.recent()
         }.onUpdate {
             if let birthdays = $0 {
                 self.birthdays = birthdays
@@ -177,8 +177,8 @@ struct HomeView: View {
     }
     func getEvents() async {
         availability[2] = true
-        DoriCache.withCache(id: "Home_LatestEvents", trait: .realTime) {
-            await DoriFrontend.Event.localizedLatestEvent()
+        withDoriCache(id: "Home_LatestEvents", trait: .realTime) {
+            await PreviewEvent.localizedLatest()
         }.onUpdate {
             if let latestEvents = $0 {
                 self.latestEvents = latestEvents

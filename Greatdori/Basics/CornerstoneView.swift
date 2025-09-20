@@ -410,38 +410,38 @@ struct MultilingualTextForCountdown: View {
     var body: some View {
         Group {
 #if !os(macOS)
-            Menu(content: {
-                VStack(alignment: .trailing) {
-                    ForEach(allAvailableLocales, id: \.self) { localeValue in
-                        Button(action: {
-//                            copyStringToClipboard(getCountdownLocalizedString(source, forLocale: localeValue) ?? LocalizedStringResource(""))
-                            showCopyMessage = true
-                        }, label: {
-                            MultilingualTextForCountdownInternalNumbersView(event: source, locale: localeValue)
-                        })
-                    }
-                }
-            }, label: {
-                ZStack(alignment: .trailing, content: {
-                    Label("Message.copy.unavailable.for.countdown", systemImage: "exclamationmark.circle")
-                        .offset(y: 2)
-                        .opacity(showCopyMessage ? 1 : 0)
-                    MultilingualTextForCountdownInternalLabel(source: source, allAvailableLocales: allAvailableLocales)
-                        .opacity(showCopyMessage ? 0 : 1)
-                })
-                .animation(.easeIn(duration: 0.2), value: showCopyMessage)
-                .onChange(of: showCopyMessage, {
-                    if showCopyMessage {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                            showCopyMessage = false
-                        }
-                    }
-                })
-            })
-            .menuStyle(.button)
-            .buttonStyle(.borderless)
-            .menuIndicator(.hidden)
-            .foregroundStyle(.primary)
+//            Menu(content: {
+//                VStack(alignment: .trailing) {
+//                    ForEach(allAvailableLocales, id: \.self) { localeValue in
+//                        Button(action: {
+////                            copyStringToClipboard(getCountdownLocalizedString(source, forLocale: localeValue) ?? LocalizedStringResource(""))
+//                            showCopyMessage = true
+//                        }, label: {
+//                            MultilingualTextForCountdownInternalNumbersView(event: source, locale: localeValue)
+//                        })
+//                    }
+//                }
+//            }, label: {
+//                ZStack(alignment: .trailing, content: {
+//                    Label("Message.copy.unavailable.for.countdown", systemImage: "exclamationmark.circle")
+//                        .offset(y: 2)
+//                        .opacity(showCopyMessage ? 1 : 0)
+//                    MultilingualTextForCountdownInternalLabel(source: source, allAvailableLocales: allAvailableLocales)
+//                        .opacity(showCopyMessage ? 0 : 1)
+//                })
+//                .animation(.easeIn(duration: 0.2), value: showCopyMessage)
+//                .onChange(of: showCopyMessage, {
+//                    if showCopyMessage {
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                            showCopyMessage = false
+//                        }
+//                    }
+//                })
+//            })
+//            .menuStyle(.button)
+//            .buttonStyle(.borderless)
+//            .menuIndicator(.hidden)
+//            .foregroundStyle(.primary)
 #else
             MultilingualTextForCountdownInternalLabel(startDate: startDate, endDate: endDate, aggregateEndDate: aggregateEndDate, distributionStartDate: distributionStartDate, allAvailableLocales: allAvailableLocales)
                 .onHover { isHovering in

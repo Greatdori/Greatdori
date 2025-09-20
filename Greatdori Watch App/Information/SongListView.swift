@@ -16,13 +16,13 @@ import SwiftUI
 import DoriKit
 
 struct SongListView: View {
-    @State var filter = DoriFrontend.Filter.recoverable(id: "SongList")
-    @State var sorter = DoriFrontend.Sorter.recoverable(id: "SongList")
-    @State var songs: [DoriFrontend.Song.PreviewSong]?
+    @State var filter = DoriFilter.recoverable(id: "SongList")
+    @State var sorter = DoriSorter.recoverable(id: "SongList")
+    @State var songs: [PreviewSong]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
     @State var searchInput = ""
-    @State var searchedSongs: [DoriFrontend.Song.PreviewSong]?
+    @State var searchedSongs: [PreviewSong]?
     @State var availability = true
     var body: some View {
         List {
@@ -103,8 +103,8 @@ struct SongListView: View {
     
     func getSongs() async {
         availability = true
-        DoriCache.withCache(id: "SongList_\(filter.identity)_\(sorter.identity)") {
-            await DoriFrontend.Song.list()?
+        withDoriCache(id: "SongList_\(filter.identity)_\(sorter.identity)") {
+            await PreviewSong.all()?
                 .filter(withDoriFilter: filter)
                 .sorted(withDoriSorter: sorter)
         }.onUpdate {

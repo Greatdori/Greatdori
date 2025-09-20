@@ -18,9 +18,9 @@ import SDWebImageSwiftUI
 
 struct GachaDetailView: View {
     var id: Int
-    @State var information: DoriFrontend.Gacha.ExtendedGacha?
+    @State var information: ExtendedGacha?
     @State var availability = true
-    @State var cardListPresentation: [DoriFrontend.Card.PreviewCard]?
+    @State var cardListPresentation: [PreviewCard]?
     @State var cardDetailPresentation: Int?
     var body: some View {
         List {
@@ -210,8 +210,8 @@ struct GachaDetailView: View {
     
     func getInformation() async {
         availability = true
-        DoriCache.withCache(id: "GachaDetail_\(id)") {
-            await DoriFrontend.Gacha.extendedInformation(of: id)
+        withDoriCache(id: "GachaDetail_\(id)") {
+            await ExtendedGacha(id: id)
         }.onUpdate {
             if let information = $0 {
                 self.information = information
@@ -229,7 +229,7 @@ struct GachaDetailView: View {
     }
 }
 
-extension Array<DoriFrontend.Card.PreviewCard>: @retroactive Identifiable {
+extension Array<PreviewCard>: @retroactive Identifiable {
     public var id: String {
         self.reduce(into: "") { partialResult, card in
             partialResult += String(card.id)

@@ -23,6 +23,8 @@ extension DoriCache {
     /// and embeds it to `DoriKit.framework` bundle. This allows you to get some information
     /// like character list from `DoriCache.preCache` without performing a network request.
     public struct PreCache: Sendable, Hashable, Decodable {
+        public static let current: Self = preCache
+        
         public var bands: [DoriAPI.Band.Band]
         public var mainBands: [DoriAPI.Band.Band]
         public var characters: [DoriAPI.Character.PreviewCharacter]

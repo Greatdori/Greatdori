@@ -1838,6 +1838,7 @@
       }
     },
     "Message.copy.unavailable.for.countdown" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

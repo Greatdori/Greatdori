@@ -17,7 +17,7 @@ import DoriKit
 import SDWebImageSwiftUI
 
 struct CharacterListView: View {
-    @State var characters: DoriFrontend.Character.CategorizedCharacters?
+    @State var characters: CategorizedCharacters?
     @State var availability = true
     var body: some View {
         List {
@@ -84,8 +84,8 @@ struct CharacterListView: View {
     
     func getCharacters() async {
         availability = true
-        DoriCache.withCache(id: "CharacterList") {
-            await DoriFrontend.Character.categorizedCharacters()
+        withDoriCache(id: "CharacterList") {
+            await CategorizedCharacters.all()
         }.onUpdate {
             if let characters = $0 {
                 self.characters = characters

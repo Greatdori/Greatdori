@@ -39,7 +39,7 @@ class AppDelegate: NSObject, WKApplicationDelegate {
         SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
         
         if isFirstLaunch {
-            DoriAPI.preferredLocale = switch locale.language {
+            DoriLocale.primaryLocale = switch locale.language {
             case let x where x.hasCommonParent(with: .init(identifier: "ja-JP")): .jp
             case let x where x.hasCommonParent(with: .init(identifier: "en-US")): .en
             case let x where x.isEquivalent(to: .init(identifier: "zh-TW")): .tw

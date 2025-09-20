@@ -308,6 +308,17 @@ extension DoriFrontend.Song {
     }
 }
 
+extension DoriFrontend.Song.ExtendedSong {
+    @inlinable
+    public init?(id: Int) async {
+        if let song = await DoriFrontend.Song.extendedInformation(of: id) {
+            self = song
+        } else {
+            return nil
+        }
+    }
+}
+
 extension DoriFrontend.Song {
     public struct Lyrics: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int

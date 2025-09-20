@@ -16,8 +16,8 @@ import DoriKit
 import SwiftUI
 
 struct NewsListView: View {
-    @State var news: [DoriFrontend.News.ListItem]?
-    @State var filter: DoriFrontend.News.ListFilter?
+    @State var news: [NewsListItem]?
+    @State var filter: NewsListFilter?
     @State var availability = true
     @State var isFilterPresented = false
     var body: some View {
@@ -77,8 +77,8 @@ struct NewsListView: View {
     
     func getNews() async {
         availability = true
-        DoriCache.withCache(id: "NewsList_\(filter.identity)", trait: .realTime) {
-            await DoriFrontend.News.list(filter: filter)
+        withDoriCache(id: "NewsList_\(filter.identity)", trait: .realTime) {
+            await NewsListItem.all(filter: filter)
         }.onUpdate {
             if let news = $0 {
                 self.news = news
@@ -90,13 +90,13 @@ struct NewsListView: View {
 }
 
 private struct NewsListFilterView: View {
-    @Binding var filter: DoriFrontend.News.ListFilter?
+    @Binding var filter: NewsListFilter?
     var body: some View {
         NavigationStack {
             List {
                 Section {
                     ForEach([type(of: filter).none, .bestdori, .article, .patchNote, .update]
-                            + DoriAPI.Locale.allCases.map { .locale($0) }, id: \.self) { selection in
+                            + DoriLocale.allCases.map { .locale($0) }, id: \.self) { selection in
                         Button(action: {
                             filter = selection
                         }, label: {
@@ -129,7 +129,7 @@ private struct NewsListFilterView: View {
     }
 }
 
-extension DoriFrontend.News.ListFilter? {
+extension NewsListFilter? {
     var identity: String {
         switch self {
         case .none: "None"

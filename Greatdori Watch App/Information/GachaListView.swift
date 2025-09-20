@@ -16,13 +16,13 @@ import SwiftUI
 import DoriKit
 
 struct GachaListView: View {
-    @State var filter = DoriFrontend.Filter.recoverable(id: "GachaList")
-    @State var sorter = DoriFrontend.Sorter.recoverable(id: "GachaList")
-    @State var gacha: [DoriFrontend.Gacha.PreviewGacha]?
+    @State var filter = DoriFilter.recoverable(id: "GachaList")
+    @State var sorter = DoriSorter.recoverable(id: "GachaList")
+    @State var gacha: [PreviewGacha]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
     @State var searchInput = ""
-    @State var searchedGacha: [DoriFrontend.Gacha.PreviewGacha]?
+    @State var searchedGacha: [PreviewGacha]?
     @State var availability = true
     var body: some View {
         List {
@@ -92,8 +92,8 @@ struct GachaListView: View {
     
     func getGacha() async {
         availability = true
-        DoriCache.withCache(id: "GachaList_\(filter.identity)_\(sorter.identity)") {
-            await DoriFrontend.Gacha.list()?
+        withDoriCache(id: "GachaList_\(filter.identity)_\(sorter.identity)") {
+            await PreviewGacha.all()?
                 .filter(withDoriFilter: filter)
                 .sorted(withDoriSorter: sorter)
         }.onUpdate {

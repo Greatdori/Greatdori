@@ -18,7 +18,7 @@ import SDWebImageSwiftUI
 
 struct EventDetailView: View {
     var id: Int
-    @State var information: DoriFrontend.Event.ExtendedEvent?
+    @State var information: ExtendedEvent?
     @State var availability = true
     var body: some View {
         List {
@@ -155,8 +155,8 @@ struct EventDetailView: View {
     
     func getInformation() async {
         availability = true
-        DoriCache.withCache(id: "EventDetail_\(id)") {
-            await DoriFrontend.Event.extendedInformation(of: id)
+        withDoriCache(id: "EventDetail_\(id)") {
+            await ExtendedEvent(id: id)
         }.onUpdate {
             if let information = $0 {
                 self.information = information

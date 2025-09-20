@@ -16,7 +16,7 @@ import SwiftUI
 import DoriKit
 
 struct NewsDetailView: View {
-    var item: DoriFrontend.News.ListItem
+    var item: NewsListItem
     var body: some View {
         switch item.type {
         case .article:
@@ -38,7 +38,7 @@ struct NewsDetailView: View {
 
 private struct NewsArticleView: View {
     var id: Int
-    @State var detail: DoriAPI.News.Item?
+    @State var detail: NewsItem?
     @State var availability = true
     var body: some View {
         ScrollView {
@@ -65,8 +65,8 @@ private struct NewsArticleView: View {
     
     func getDetail() async {
         availability = true
-        DoriCache.withCache(id: "NewsArticleDetail_\(id)") {
-            await DoriAPI.News.detail(of: id)
+        withDoriCache(id: "NewsArticleDetail_\(id)") {
+            await NewsItem(id: id)
         }.onUpdate {
             if let detail = $0 {
                 self.detail = detail

@@ -16,13 +16,13 @@ import SwiftUI
 import DoriKit
 
 struct ComicListView: View {
-    @State var filter = DoriFrontend.Filter.recoverable(id: "ComicList")
-    @State var sorter = DoriFrontend.Sorter.recoverable(id: "ComicList")
-    @State var comics: [DoriFrontend.Comic.Comic]?
+    @State var filter = DoriFilter.recoverable(id: "ComicList")
+    @State var sorter = DoriSorter.recoverable(id: "ComicList")
+    @State var comics: [Comic]?
     @State var isFilterSettingsPresented = false
     @State var isSearchPresented = false
     @State var searchInput = ""
-    @State var searchedComics: [DoriFrontend.Comic.Comic]?
+    @State var searchedComics: [Comic]?
     @State var availability = true
     var body: some View {
         List {
@@ -83,8 +83,8 @@ struct ComicListView: View {
     
     func getComics() async {
         availability = true
-        DoriCache.withCache(id: "ComicList_\(filter.identity)_\(sorter.identity)") {
-            await DoriFrontend.Comic.list()?
+        withDoriCache(id: "ComicList_\(filter.identity)_\(sorter.identity)") {
+            await Comic.all()?
                 .filter(withDoriFilter: filter)
                 .sorted(withDoriSorter: sorter)
         }.onUpdate {

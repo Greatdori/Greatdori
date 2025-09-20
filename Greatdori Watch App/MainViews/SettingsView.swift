@@ -19,26 +19,26 @@ import AuthenticationServices
 
 struct SettingsView: View {
     @AppStorage("AppLanguage") var appLanguage = ""
-    @State var preferredLocale = DoriAPI.preferredLocale
+    @State var primaryLocale = DoriLocale.primaryLocale
     var body: some View {
         List {
             Section {
-                Picker("首选服务器", selection: $preferredLocale) {
-                    ForEach(DoriAPI.Locale.allCases, id: \.rawValue) { locale in
+                Picker("首选服务器", selection: $primaryLocale) {
+                    ForEach(DoriLocale.allCases, id: \.rawValue) { locale in
                         Text(locale.rawValue.uppercased()).tag(locale)
                     }
                 }
-                .onChange(of: preferredLocale) {
-                    DoriAPI.preferredLocale = preferredLocale
+                .onChange(of: primaryLocale) {
+                    DoriLocale.primaryLocale = primaryLocale
                     DoriCache.invalidateAll()
                     if !appLanguage.isEmpty {
-                        appLanguage = preferredLocale.nsLocale().identifier
+                        appLanguage = primaryLocale.nsLocale().identifier
                     }
                 }
                 Toggle("界面使用首选服务器对应的语言", isOn: .init {
                     !appLanguage.isEmpty
                 } set: {
-                    appLanguage = $0 ? preferredLocale.nsLocale().identifier : ""
+                    appLanguage = $0 ? primaryLocale.nsLocale().identifier : ""
                 })
             }
             Section {

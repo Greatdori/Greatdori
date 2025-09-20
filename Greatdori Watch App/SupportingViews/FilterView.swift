@@ -18,17 +18,17 @@ import DoriKit
 import SDWebImageSwiftUI
 
 struct FilterView: View {
-    @Binding private var filter: DoriFrontend.Filter
-    @Binding private var sorter: DoriFrontend.Sorter
-    private var includingKeys: Set<DoriFrontend.Filter.Key>
-    private var includingKeywords: Set<DoriFrontend.Sorter.Keyword>
+    @Binding private var filter: DoriFilter
+    @Binding private var sorter: DoriSorter
+    private var includingKeys: Set<DoriFilter.Key>
+    private var includingKeywords: Set<DoriSorter.Keyword>
     private var searchView: AnyView?
     
     init(
-        filter: Binding<DoriFrontend.Filter>,
-        sorter: Binding<DoriFrontend.Sorter> = .constant(.init()),
-        includingKeys: Set<DoriFrontend.Filter.Key>,
-        includingKeywords: Set<DoriFrontend.Sorter.Keyword> = []
+        filter: Binding<DoriFilter>,
+        sorter: Binding<DoriSorter> = .constant(.init()),
+        includingKeys: Set<DoriFilter.Key>,
+        includingKeywords: Set<DoriSorter.Keyword> = []
     ) {
         self._filter = filter
         self._sorter = sorter
@@ -36,10 +36,10 @@ struct FilterView: View {
         self.includingKeywords = includingKeywords
     }
     init<V: View>(
-        filter: Binding<DoriFrontend.Filter>,
-        sorter: Binding<DoriFrontend.Sorter> = .constant(.init()),
-        includingKeys: Set<DoriFrontend.Filter.Key>,
-        includingKeywords: Set<DoriFrontend.Sorter.Keyword> = [],
+        filter: Binding<DoriFilter>,
+        sorter: Binding<DoriSorter> = .constant(.init()),
+        includingKeys: Set<DoriFilter.Key>,
+        includingKeywords: Set<DoriSorter.Keyword> = [],
         @ViewBuilder searchView: () -> V
     ) {
         self._filter = filter
@@ -106,19 +106,19 @@ struct FilterView: View {
     }
     
     private struct SingleSelector: View {
-        @Binding var filter: DoriFrontend.Filter
-        var key: DoriFrontend.Filter.Key
+        @Binding var filter: DoriFilter
+        var key: DoriFilter.Key
         var body: some View {
             NavigationLink {
                 List {
                     if key == .skill {
                         Button(action: {
-                            filter[key] = nil as Optional<DoriFrontend.Filter.Skill>
+                            filter[key] = nil as Optional<DoriFilter.Skill>
                         }, label: {
                             HStack {
                                 Text("任意")
                                 Spacer()
-                                if (filter[key].base as! Optional<DoriFrontend.Filter.Skill>) == nil {
+                                if (filter[key].base as! Optional<DoriFilter.Skill>) == nil {
                                     Image(systemName: "checkmark")
                                         .foregroundStyle(.accent)
                                 }
@@ -132,7 +132,7 @@ struct FilterView: View {
                             HStack {
                                 Text(item.text)
                                 Spacer() 
-                                if (filter[key].base as! any DoriFrontend.Filter._Selectable).isEqual(to: item.item.value.base as! any DoriFrontend.Filter._Selectable) {
+                                if (filter[key].base as! any DoriFilter._Selectable).isEqual(to: item.item.value.base as! any DoriFilter._Selectable) {
                                     Image(systemName: "checkmark")
                                         .foregroundStyle(.accent)
                                 }
@@ -144,7 +144,7 @@ struct FilterView: View {
             } label: {
                 VStack(alignment: .leading) {
                     Text(key.localizedString)
-                    if let filterItem = filter[key] as? any DoriFrontend.Filter._Selectable {
+                    if let filterItem = filter[key] as? any DoriFilter._Selectable {
                         Text(filterItem.selectorText)
                             .font(.system(size: 14))
                             .lineLimit(1)
@@ -155,8 +155,8 @@ struct FilterView: View {
         }
     }
     private struct MultipleSelector: View {
-        @Binding var filter: DoriFrontend.Filter
-        var key: DoriFrontend.Filter.Key
+        @Binding var filter: DoriFilter
+        var key: DoriFilter.Key
         var containsCharacterMatchAll: Bool = false
         var body: some View {
             NavigationLink {
@@ -235,7 +235,7 @@ struct FilterView: View {
                 VStack(alignment: .leading) {
                     Text(key.localizedString)
                     if let filterSet = filter[key] as? Set<AnyHashable> {
-                        Text(filterSet.map { ($0 as! (any DoriFrontend.Filter._Selectable)).selectorText }.sorted().joined(separator: ", "))
+                        Text(filterSet.map { ($0 as! (any DoriFilter._Selectable)).selectorText }.sorted().joined(separator: ", "))
                             .font(.system(size: 14))
                             .lineLimit(1)
                             .opacity(0.6)
@@ -245,8 +245,8 @@ struct FilterView: View {
         }
     }
     private struct SorterSelector: View {
-        @Binding var sorter: DoriFrontend.Sorter
-        var keywords: [DoriFrontend.Sorter.Keyword]
+        @Binding var sorter: DoriSorter
+        var keywords: [DoriSorter.Keyword]
         var body: some View {
             NavigationLink {
                 List {

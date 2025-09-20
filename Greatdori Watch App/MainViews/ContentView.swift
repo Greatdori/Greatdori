@@ -17,9 +17,8 @@ import DoriKit
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("StartUpSucceeded") var startUpSucceeded = true
     @State var navigation: NavigationPage? = .home
-    
-    @AppStorage("startUpSucceeded") var startUpSucceeded = true
     @State var mainAppShouldBeDisplayed = false
     @State var crashViewShouldBeDisplayed = false
     @State var lastStartUpWasSuccessful = true

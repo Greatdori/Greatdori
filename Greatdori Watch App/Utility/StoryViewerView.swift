@@ -75,9 +75,9 @@ private enum StoryType: String, CaseIterable, Hashable {
 extension StoryViewerView {
     struct EventStoryViewer: View {
         @State var isFirstShowing = true
-        @State var eventList: [DoriFrontend.Event.PreviewEvent]?
+        @State var eventList: [PreviewEvent]?
         @State var eventListAvailability = true
-        @State var selectedEvent: DoriFrontend.Event.PreviewEvent?
+        @State var selectedEvent: PreviewEvent?
         @State var stories: [DoriAPI.Event.EventStory]?
         @State var storyAvailability = true
         var body: some View {
@@ -150,8 +150,8 @@ extension StoryViewerView {
         
         func getEvents() async {
             eventListAvailability = true
-            DoriCache.withCache(id: "EventList") {
-                await DoriFrontend.Event.list()
+            withDoriCache(id: "EventList") {
+                await PreviewEvent.all()
             }.onUpdate {
                 if let events = $0 {
                     self.eventList = events
@@ -168,7 +168,7 @@ extension StoryViewerView {
         }
         func getStories() async {
             storyAvailability = true
-            DoriCache.withCache(id: "EventStories") {
+            withDoriCache(id: "EventStories") {
                 await DoriAPI.Event.allStories()
             }.onUpdate {
                 if let stories = $0 {

@@ -18,8 +18,8 @@ import SDWebImageSwiftUI
 
 struct CharacterDetailView: View {
     var id: Int
-    @State var information: DoriFrontend.Character.ExtendedCharacter?
-    @State var randomCard: DoriAPI.Card.PreviewCard?
+    @State var information: ExtendedCharacter?
+    @State var randomCard: PreviewCard?
     @State var availability = true
     var body: some View {
         List {
@@ -157,8 +157,8 @@ struct CharacterDetailView: View {
     
     func getInformation() async {
         availability = true
-        DoriCache.withCache(id: "CharacterDetail_\(id)") {
-            await DoriFrontend.Character.extendedInformation(of: id)
+        withDoriCache(id: "CharacterDetail_\(id)") {
+            await ExtendedCharacter(id: id)
         }.onUpdate {
             if let information = $0 {
                 self.information = information

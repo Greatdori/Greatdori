@@ -18,9 +18,9 @@ import DoriKit
 import SDWebImageSwiftUI
 
 struct EventTrackerView: View {
-    @State private var eventList: [DoriFrontend.Event.PreviewEvent]?
+    @State private var eventList: [PreviewEvent]?
     @State private var eventListAvailability = true
-    @State private var selectedEvent: DoriFrontend.Event.PreviewEvent?
+    @State private var selectedEvent: PreviewEvent?
     @State private var tier = 1000
     @State private var trackerData: TrackerData?
     @State private var trackerAvailability = true
@@ -309,8 +309,8 @@ struct EventTrackerView: View {
     
     func getEvents() async {
         eventListAvailability = true
-        DoriCache.withCache(id: "EventList") {
-            await DoriFrontend.Event.list()
+        withDoriCache(id: "EventList") {
+            await PreviewEvent.all()
         }.onUpdate {
             if let events = $0 {
                 self.eventList = events.reversed()

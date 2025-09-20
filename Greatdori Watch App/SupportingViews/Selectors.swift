@@ -16,15 +16,15 @@ import SwiftUI
 import DoriKit
 
 struct CardSelector: View {
-    @Binding var selection: DoriFrontend.Card.CardWithBand?
+    @Binding var selection: CardWithBand?
     @State private var isFirstShowing = true
-    @State private var cardList: [DoriFrontend.Card.CardWithBand]?
-    @State private var searchedCardList: [DoriFrontend.Card.CardWithBand]?
+    @State private var cardList: [CardWithBand]?
+    @State private var searchedCardList: [CardWithBand]?
     @State private var availability = true
     @State private var isSelectorPresented = false
     @State private var isFilterSettingsPresented = false
-    @State private var filter = DoriFrontend.Filter.recoverable(id: "CardSelector")
-    @State private var sorter = DoriFrontend.Sorter.recoverable(id: "CardSelector")
+    @State private var filter = DoriFilter.recoverable(id: "CardSelector")
+    @State private var sorter = DoriSorter.recoverable(id: "CardSelector")
     @State private var searchInput = ""
     var body: some View {
         Button(action: {
@@ -113,8 +113,8 @@ struct CardSelector: View {
     
     private func getCards() async {
         availability = true
-        DoriCache.withCache(id: "CardList_\(filter.identity)") {
-            await DoriFrontend.Card.list()?
+        withDoriCache(id: "CardList_\(filter.identity)") {
+            await Card.allWithBand()?
                 .filter(withDoriFilter: filter)
                 .sorted(withDoriSorter: sorter)
         }.onUpdate {
