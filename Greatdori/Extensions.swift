@@ -56,6 +56,44 @@ extension Color {
             lroundf(Float(blue * 255))
         )
     }
+    
+    func hue(factor: CGFloat) -> Color {
+        return modifyHSB { (h, s, b, a) in
+            let newHue = (h * factor).truncatingRemainder(dividingBy: 1.0)
+            return (newHue, s, b, a)
+        }
+    }
+    
+    func saturation(factor: CGFloat) -> Color {
+        return modifyHSB { (h, s, b, a) in
+            (h, min(max(s * factor, 0), 1), b, a)
+        }
+    }
+    
+    func brightness(factor: CGFloat) -> Color {
+        return modifyHSB { (h, s, b, a) in
+            (h, s, min(max(b * factor, 0), 1), a)
+        }
+    }
+    
+    private func modifyHSB(_ transform: (CGFloat, CGFloat, CGFloat, CGFloat) -> (CGFloat, CGFloat, CGFloat, CGFloat)) -> Color {
+#if canImport(UIKit)
+        let uiColor = UIColor(self)
+        var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        uiColor.getHue(&h, saturation: &s, brightness: &b, alpha: &a)
+        let (newH, newS, newB, newA) = transform(h, s, b, a)
+        return Color(UIColor(hue: newH, saturation: newS, brightness: newB, alpha: newA))
+#elseif canImport(AppKit)
+        let nsColor = NSColor(self).usingColorSpace(.deviceRGB) ?? .black
+        var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        nsColor.getHue(&h, saturation: &s, brightness: &b, alpha: &a)
+        let (newH, newS, newB, newA) = transform(h, s, b, a)
+        return Color(NSColor(hue: newH, saturation: newS, brightness: newB, alpha: newA))
+#else
+        return self
+#endif
+    }
+    
 }
 
 // MARK: Date
@@ -127,12 +165,12 @@ public extension View {
     // MARK: withSystemBackground
     @ViewBuilder
     func withSystemBackground() -> some View {
-        #if os(iOS)
+#if os(iOS)
         self
             .background(Color(.systemGroupedBackground))
-        #else
+#else
         self
-        #endif
+#endif
     }
     
     // MARK: wrapIf

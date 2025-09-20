@@ -55,29 +55,44 @@ struct ContentView: View {
                             //                        HomeView()
                             Text(verbatim: "leaderboard")
                         }
-                        TabSection(content: {
-                            Tab("App.info.characters", systemImage: "person.2") {
-                                NavigationStack {
-                                    CharacterSearchView()
+                        if sizeClass == .regular {
+                            TabSection(content: {
+                                ForEach(0..<allInfoDestinationItems.count, id: \.self) { itemIndex in
+                                    Tab(allInfoDestinationItems[itemIndex].title, systemImage: allInfoDestinationItems[itemIndex].symbol) {
+                                        NavigationStack {
+                                            allInfoDestinationItems[itemIndex].destination()
+                                        }
+                                    }
                                 }
+//                                Tab("App.info.characters", systemImage: "person.2") {
+//                                    NavigationStack {
+//                                        CharacterSearchView()
+//                                    }
+//                                }
+//                                Tab("App.info.events", systemImage: "star.hexagon") {
+//                                    NavigationStack {
+//                                        EventSearchView()
+//                                    }
+//                                }
+//                                Tab("App.info.gachas", systemImage: "line.horizontal.star.fill.line.horizontal") {
+//                                    NavigationStack {
+//                                        GachaSearchView()
+//                                    }
+//                                }
+                            }, header: {
+                                Text("App.info")
+                            })
+                        } else {
+                            Tab("App.info", systemImage: "rectangle.stack") {
+                                InfoView()
                             }
-                            Tab("App.info.events", systemImage: "star.hexagon"/*, value: AppSection.info(.events)*/) {
-                                NavigationStack {
-                                    EventSearchView()
-                                }
-                            }
-                            Tab("App.info.gachas", systemImage: "line.horizontal.star.fill.line.horizontal"/*, value: AppSection.info(.gachas)*/) {
-                                NavigationStack {
-                                    GachaSearchView()
-                                }
-                            }
-                        }, header: {
-                            Text("App.info")
-                        })
+                        }
+                        Tab("App.tools", systemImage: "slider.horizontal.3") {
+                            Text(verbatim: "leaderboard")
+                        }
 #if os(iOS)
                         if sizeClass == .regular {
-                            Tab("App.settings", systemImage: "gear"/*, value: .settings*/) {
-                                //                        Text("settings")
+                            Tab("App.settings", systemImage: "gear") {
                                 SettingsView()
                             }
                         }
@@ -358,7 +373,7 @@ struct WelcomeView: View {
 
 
 enum AppSection: Hashable {
-    case home, community, leaderboard, info(InfoTab), tools, settings
+    case home, community, leaderboard, info(InfoTab?), tools, settings
 }
 
 enum InfoTab: CaseIterable, Hashable {
