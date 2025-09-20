@@ -43,20 +43,20 @@ struct ContentView: View {
             Group {
                 if #available(macOS 15.0, iOS 18.0, *) {
                     // MARK: Currently Used Version
-                    TabView(selection: $selection) {
-                        Tab("App.home", systemImage: "house"/*, value: .home*/) {
+                    TabView {
+                        Tab("App.home", systemImage: "house") {
                             HomeView()
                         }
-                        Tab("App.community", systemImage: "at"/*, value: .community*/) {
+                        Tab("App.community", systemImage: "at") {
                             //                        HomeView()
                             Text(verbatim: "community")
                         }
-                        Tab("App.leaderboard", systemImage: "chart.bar"/*, value: .leaderboard*/) {
+                        Tab("App.leaderboard", systemImage: "chart.bar") {
                             //                        HomeView()
                             Text(verbatim: "leaderboard")
                         }
                         TabSection(content: {
-                            Tab("App.info.characters", systemImage: "person.2"/*, value: AppSection.info(.characters)*/) {
+                            Tab("App.info.characters", systemImage: "person.2") {
                                 NavigationStack {
                                     CharacterSearchView()
                                 }
