@@ -462,7 +462,10 @@ struct GachaDetailOverviewView: View {
                 
                 // MARK: Info
                 CustomGroupBox(cornerRadius: 20) {
-                    VStack {
+                    // Make this lazy fixes [250920-a] last appears in 8783d44.
+                    // Seems like a bug of SwiftUI, idk why make this lazy
+                    // fixes that bug. Whatever, it works.
+                    LazyVStack {
                         // MARK: Title
                         Group {
                             ListItemView(title: {
@@ -538,7 +541,6 @@ struct GachaDetailOverviewView: View {
                         // MARK: Description
                         Group {
                             ListItemView(title: {
-                                //[250920-a]
                                 Text("Gacha.descripition")
                                     .bold()
                             }, value: {
