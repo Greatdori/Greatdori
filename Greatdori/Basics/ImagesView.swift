@@ -952,10 +952,8 @@ struct GachaInfo: View {
                             .resizable()
                             .antialiased(true)
                             .scaledToFit()
-                        //                            .aspectRatio(3.0, contentMode: .fit)
+                            .aspectRatio(3.0, contentMode: .fit)
                             .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
-                            .frame(maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
-                        //                            .scaledToFit()
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(getPlaceholderColor())
@@ -964,8 +962,6 @@ struct GachaInfo: View {
                     }
                     .interpolation(.high)
                     .cornerRadius(10)
-                    .scaledToFit()
-                    
                     
                     if showDetails {
                         VStack { // Accually Title & Countdown
