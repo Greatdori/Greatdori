@@ -32,7 +32,7 @@ struct CostumeSearchView: View {
     @State var presentingCostumeID: Int?
     @Namespace var costumeLists
     
-    let gridLayoutItemWidth: CGFloat = 200*0.7
+    let gridLayoutItemWidth: CGFloat = 200*0.9
     var body: some View {
         Group {
             Group {
@@ -61,7 +61,6 @@ struct CostumeSearchView: View {
                                                             content
                                                         }
                                                     })
-                                                    .matchedGeometryEffect(id: costume.id, in: costumeLists)
                                                 }
                                             }
                                             .frame(maxWidth: 600)
@@ -72,13 +71,7 @@ struct CostumeSearchView: View {
                                                         showFilterSheet = false
                                                         presentingCostumeID = costume.id
                                                     }, label: {
-//                                                        HStack {
-//                                                            Spacer()
-//                                                                .border(.blue)
-                                                            CostumeInfo(costume, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
-//                                                            Spacer()
-////                                                                .border(.blue)
-//                                                        }
+                                                        CostumeInfo(costume, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -89,13 +82,11 @@ struct CostumeSearchView: View {
                                                             content
                                                         }
                                                     })
-                                                    .matchedGeometryEffect(id: costume.id, in: costumeLists)
                                                 }
                                             }
                                         }
                                     }
                                     .padding(.horizontal)
-                                    .animation(.spring(duration: 0.3, bounce: 0.1, blendDuration: 0), value: layout)
                                     Spacer(minLength: 0)
                                 }
                             }

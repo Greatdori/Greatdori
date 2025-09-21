@@ -667,6 +667,10 @@ struct CostumeInfo: View {
                 }
                 .interpolation(.high)
                 
+                if layout == .vertical {
+                    Spacer()
+                }
+                
                 VStack(alignment: layout == .horizontal ? .leading : .center) {
                     Text(attributedTitle)
                         .bold()
@@ -688,12 +692,14 @@ struct CostumeInfo: View {
                     Spacer()
                 }
             }
-//            .wrapIf(layout == .horizontal, in: { content in
-//                content
-//                    .frame(width: 200*0.7, height: 192*0.7)
-//            })
+            .wrapIf(layout == .vertical) { content in
+                HStack {
+                    Spacer()
+                    content
+                    Spacer()
+                }
+            }
         }
-//        .border(.red)
         .onAppear {
             characterName = DoriCache.preCache.characters.first(where: {$0.id == characterID})?.characterName
             

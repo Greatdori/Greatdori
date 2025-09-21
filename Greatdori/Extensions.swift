@@ -353,7 +353,6 @@ private struct ScrollDisableMultilingualTextPopoverModifier: ViewModifier {
                 .environment(\._multilingualTextDisablePopover, disablesPopover)
                 .onScrollPhaseChange { _, newPhase in
                     disablesPopover = newPhase != .idle
-                    print(disablesPopover)
                 }
         } else {
             content
