@@ -333,6 +333,54 @@ struct FilterAndSorterPicker: View {
 //```
 
 
+// MARK: LayoutPicker
+struct LayoutPicker<T: Hashable>: View {
+    @Binding var selection: T
+    var options: [(LocalizedStringKey, String, T)]
+    var body: some View {
+#if os(iOS)
+        Menu {
+            Picker("", selection: $selection.animation(.easeInOut(duration: 0.2))) {
+                ForEach(options, id: \.2) { item in
+                    Label(title: {
+                        Text(item.0)
+                    }, icon: {
+                        Image(_internalSystemName: item.1)
+                    })
+                    .tag(item.2)
+                }
+            }
+            .pickerStyle(.inline)
+            .labelsHidden()
+        } label: {
+            Image(_internalSystemName: options.first(where: { $0.2 == selection })!.1)
+        }
+#else
+        Picker("Search.layout", selection: $selection) {
+            ForEach(options, id: \.2) { item in
+                Label(title: {
+                    Text(item.0)
+                }, icon: {
+                    Image(_internalSystemName: item.1)
+                })
+                .tag(item.2)
+            }
+        }
+        .pickerStyle(.inline)
+#endif
+    }
+}
+// # Guidance for `LayoutPicker`
+//
+// ```swift
+// ToolbarItem {
+//     LayoutPicker(selection: $layout, options: [("Localized String Key", "symbol", value)])
+// }
+//```
+
+
+
+
 // MARK: MultilingualText
 struct MultilingualText: View {
     let source: DoriAPI.LocalizedData<String>

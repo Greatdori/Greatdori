@@ -85,9 +85,13 @@ struct ContentView: View {
                     }
                     .tabViewStyle(.sidebarAdaptable)
                     .wrapIf(true, in: { content in
-                        if #available(iOS 26.0, macOS 26.0, *) {
+                        if #available(iOS 26.0, *) {
+                            #if os(iOS)
                             content
                                 .tabBarMinimizeBehavior(.onScrollDown)
+                            #else
+                            content
+                            #endif
                         } else {
                             content
                         }
@@ -100,10 +104,12 @@ struct ContentView: View {
                                 Label("App.home", systemImage: "house").tag(AppSection.home)
                                 Label("App.community", systemImage: "at").tag(AppSection.community)
                                 Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
+                                
                                 Section("App.info", content: {
-                                    //                            Label("App.info.characters", systemImage: "person.2").tag(AppSection.info)
+                                    ForEach(0..<allInfoDestinationItems.count, id: \.self) { itemIndex in
+                                        Label(allInfoDestinationItems[itemIndex].title, systemImage: allInfoDestinationItems[itemIndex].symbol).tag(AppSection.info(allInfoDestinationItems[itemIndex].tabValue))
+                                    }
                                 })
-                                //                    Label("App.info", systemImage: "rectangle.stack").tag(AppSection.info)
                                 Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
 #if os(iOS)
                                 Label("App.settings", systemImage: "gear").tag(AppSection.settings)
@@ -216,7 +222,14 @@ struct ContentView: View {
         case .home: HomeView()
         case .community: HomeView()
         case .leaderboard: HomeView()
-        case .info: HomeView()
+        case .info(let destination):
+            if destination == .home {
+                InfoView()
+            } else if let item = allInfoDestinationItems.first(where: { $0.tabValue == destination }) {
+                item.destination()
+            } else {
+                InfoView()
+            }
         case .tools: HomeView()
         case .settings: SettingsView()
         case nil: EmptyView()
@@ -358,11 +371,11 @@ struct WelcomeView: View {
 
 
 enum AppSection: Hashable {
-    case home, community, leaderboard, info(InfoTab?), tools, settings
+    case home, community, leaderboard, info(InfoTab), tools, settings
 }
 
-enum InfoTab: CaseIterable, Hashable {
-    case home, characters, events, cards, gachas
+enum InfoTab: Hashable {
+    case home, characters, cards, costumes, events, gacha, songs, songMeta, miracleTicket, comics
 }
 
 enum Platform {

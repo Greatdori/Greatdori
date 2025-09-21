@@ -140,52 +140,9 @@ struct CostumeSearchView: View {
                 }
             })
             .toolbar {
-#if os(iOS)
                 ToolbarItem {
-                    Menu {
-                        Picker("", selection: $layout.animation(.easeInOut(duration: 0.2))) {
-                            Label(title: {
-                                Text("Filter.view.list")
-                            }, icon: {
-                                Image(systemName: "list.bullet")
-                            })
-                            .tag(Axis.horizontal)
-                            Label(title: {
-                                Text("Filter.view.grid")
-                            }, icon: {
-                                Image(systemName: "square.grid.2x2")
-                            })
-                            .tag(Axis.vertical)
-                        }
-                        .pickerStyle(.inline)
-                        .labelsHidden()
-                    } label: {
-                        if layout == .horizontal {
-                            Image(systemName: "list.bullet")
-                        } else {
-                            Image(systemName: "square.grid.2x2")
-                        }
-                    }
+                    LayoutPicker(selection: $layout, options: [("Filter.view.list", "list.bullet", Axis.horizontal), ("Filter.view.grid", "square.grid.2x2", Axis.vertical)])
                 }
-#else
-                ToolbarItem {
-                    Picker("", selection: $layout) {
-                        Label(title: {
-                            Text("Filter.view.list")
-                        }, icon: {
-                            Image(systemName: "list.bullet")
-                        })
-                        .tag(Axis.horizontal)
-                        Label(title: {
-                            Text("Filter.view.grid")
-                        }, icon: {
-                            Image(systemName: "square.grid.2x2")
-                        })
-                        .tag(Axis.vertical)
-                    }
-                    .pickerStyle(.inline)
-                }
-#endif
                 if #available(iOS 26.0, macOS 26.0, *) {
                     ToolbarSpacer()
                 }
@@ -211,18 +168,17 @@ struct CostumeSearchView: View {
         }
         .onChange(of: filter) {
             if let costumes {
-                searchedCostumes = costumes.filter(withDoriFilter: filter).search(for: searchedText)
+                searchedCostumes = costumes.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             }
         }
         .onChange(of: sorter) {
-            if let oldCostumes = costumes {
-                costumes = oldCostumes.sorted(withDoriSorter: sorter)
-                searchedCostumes = costumes!.filter(withDoriFilter: filter).search(for: searchedText)
+            if let costumes {
+                searchedCostumes = costumes.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             }
         }
         .onChange(of: searchedText, {
             if let costumes {
-                searchedCostumes = costumes.filter(withDoriFilter: filter).search(for: searchedText)
+                searchedCostumes = costumes.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             }
         })
     }

@@ -27,6 +27,11 @@ import SwiftUI
 struct CardInfo: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     
+    var layoutType = 1
+    // 1 - List
+    // 2 - Grid
+    // 3 - Gallery
+    
     private var preferHeavierFonts: Bool = true
     private var thumbNormalImageURL: URL
     private var thumbTrainedImageURL: URL?
@@ -42,7 +47,8 @@ struct CardInfo: View {
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.PreviewCard, preferHeavierFonts: Bool = false) {
+    init(_ card: DoriAPI.Card.PreviewCard, layoutType: Int = 1, preferHeavierFonts: Bool = false) {
+        self.layoutType = layoutType
         self.preferHeavierFonts = preferHeavierFonts
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
@@ -57,7 +63,8 @@ struct CardInfo: View {
         self.previewCard = card
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.Card, preferHeavierFonts: Bool = false) {
+    init(_ card: DoriAPI.Card.Card, layoutType: Int = 1, preferHeavierFonts: Bool = false) {
+        self.layoutType = layoutType
         self.preferHeavierFonts = preferHeavierFonts
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
@@ -75,28 +82,32 @@ struct CardInfo: View {
     
     var body: some View {
         CustomGroupBox {
-            HStack {
-                HStack(spacing: 5) {
-                    CardPreviewImage(previewCard, cardNavigationDestinationID: .constant(nil))
-                    if thumbTrainedImageURL != nil {
-                        CardPreviewImage(previewCard, showTrainedVersion: true, cardNavigationDestinationID: .constant(nil))
+            CustomStack(axis: layoutType == 1 ? .horizontal : .vertical) {
+                // MARK: CardPreviewImage
+                if layoutType == 3 {
+                    HStack(spacing: 5) {
+                        CardPreviewImage(previewCard, cardNavigationDestinationID: .constant(nil))
+                        if thumbTrainedImageURL != nil {
+                            CardPreviewImage(previewCard, showTrainedVersion: true, cardNavigationDestinationID: .constant(nil))
+                        }
                     }
+                    .wrapIf(sizeClass == .regular, in: { content in
+                        content.frame(maxWidth: 200)
+                    })
+                } else {
+                    CardCoverImage(previewCard, band: band)
                 }
-                .wrapIf(sizeClass == .regular, in: { content in
-                    content.frame(maxWidth: 200)
-                })
-//                .frame(maxWidth: 200)
-                VStack(alignment: .leading) {
+                
+                // MARK: Text
+                VStack(alignment: layoutType == 1 ? .leading : .center) {
                     Text(prefix.forPreferredLocale() ?? "nil")
                         .bold()
-                        .font(isMACOS ? .title3 : .body)
+                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
                     Group {
                         Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text("\(cardType.localizedString)")
                     }
                     .foregroundStyle(.secondary)
                     .font(isMACOS ? .body : .caption)
-                
-//                    .font(.caption)
                 }
                 Spacer()
             }
@@ -115,7 +126,7 @@ struct CardCoverImage: View {
     private var cardType: DoriAPI.Card.CardType
     private var attribute: DoriAPI.Attribute
     private var rarity: Int
-    private var bandIconImageURL: URL
+    private var bandIconImageURL: URL?
     private var showNavigationHints: Bool
     private var cardID: Int
     private var cardTitle: DoriAPI.LocalizedData<String>
@@ -123,26 +134,26 @@ struct CardCoverImage: View {
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
-    init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band, showNavigationHints: Bool = true) {
+    init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band?, showNavigationHints: Bool = true) {
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = band.iconImageURL
+        self.bandIconImageURL = band?.iconImageURL
         self.showNavigationHints = showNavigationHints
         self.cardID = card.id
         self.cardTitle = card.prefix
         self.characterID = card.characterID
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
-    init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band, showNavigationHints: Bool = true) {
+    init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band?, showNavigationHints: Bool = true) {
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
         self.cardType = card.type
         self.attribute = card.attribute
         self.rarity = card.rarity
-        self.bandIconImageURL = band.iconImageURL
+        self.bandIconImageURL = band?.iconImageURL
         self.showNavigationHints = showNavigationHints
         self.cardID = card.id
         self.cardTitle = card.prefix
@@ -292,15 +303,18 @@ struct CardCoverImage: View {
             GeometryReader { proxy in
                 VStack {
                     HStack {
-                        WebImage(url: bandIconImageURL)
-                            .resizable()
-                            .interpolation(.high)
-                            .antialiased(true)
-                        //51:480 = ?:currentWidth
-                        //? = currentWidth*51/480
-                            .frame(width: 51/standardCardWidth*proxy.size.width, height: 51/standardCardHeight*proxy.size.height, alignment: .topLeading)
-                            .offset(x: proxy.size.width*0.005, y: proxy.size.height*0.01)
-                        //                    Spacer()
+                        if let bandIconImageURL {
+                            WebImage(url: bandIconImageURL)
+                                .resizable()
+                                .interpolation(.high)
+                                .antialiased(true)
+                            //51:480 = ?:currentWidth
+                            //? = currentWidth*51/480
+                            
+                                .frame(width: 51/standardCardWidth*proxy.size.width, height: 51/standardCardHeight*proxy.size.height, alignment: .topLeading)
+                                .offset(x: proxy.size.width*0.005, y: proxy.size.height*0.01)
+                            //                    Spacer()
+                        }
                         Spacer()
                         WebImage(url: attribute.iconImageURL)
                             .resizable()

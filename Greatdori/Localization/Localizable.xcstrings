@@ -225,7 +225,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Song"
+            "value" : "Songs"
           }
         },
         "zh-Hans" : {
@@ -350,6 +350,98 @@
         }
       }
     },
+    "Card" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cards"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡牌"
+          }
+        }
+      }
+    },
+    "Card.count.%lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld card"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld cards"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld张卡牌"
+          }
+        }
+      }
+    },
+    "Card.search.placeholder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search Cards"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索卡牌"
+          }
+        }
+      }
+    },
+    "Card.search.unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card Search Unavailable"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡片搜索不可用"
+          }
+        }
+      }
+    },
+    "Card.unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card Information Unavailable"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡牌信息不可用"
+          }
+        }
+      }
+    },
     "Character" : {
       "localizations" : {
         "en" : {
@@ -378,6 +470,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "乐团"
+          }
+        }
+      }
+    },
+    "Character.band-unknown" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown Band"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知乐团"
+          }
+        }
+      }
+    },
+    "Character.band.count.%lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld band"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld bands"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld个乐团"
           }
         }
       }
@@ -675,7 +811,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Costume"
+            "value" : "Costumes"
           }
         },
         "zh-Hans" : {
@@ -697,7 +833,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "乐队"
+            "value" : "乐团"
           }
         }
       }
@@ -1183,7 +1319,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Event"
+            "value" : "Events"
           }
         },
         "zh-Hans" : {
@@ -1682,6 +1818,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "仅横幅"
+          }
+        }
+      }
+    },
+    "Filter.view.gallery" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gallery"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画廊"
           }
         }
       }
@@ -3301,6 +3453,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "歌曲(%@) • 将在今天发布"
+          }
+        }
+      }
+    },
+    "Search.layout" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示"
           }
         }
       }

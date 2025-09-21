@@ -35,7 +35,7 @@ func compare<T: Comparable>(_ lhs: T?, _ rhs: T?, ascending: Bool = true) -> Boo
     }
 }
 
-//MARK: copyStringToClipboard
+// MARK: copyStringToClipboard
 func copyStringToClipboard(_ content: String) {
 #if os(macOS)
     let pasteboard = NSPasteboard.general
@@ -46,7 +46,7 @@ func copyStringToClipboard(_ content: String) {
 #endif
 }
 
-//MARK: getBirthdayTimeZone
+// MARK: getBirthdayTimeZone
 func getBirthdayTimeZone(from input: BirthdayTimeZone? = nil) -> TimeZone {
     switch (input != nil ? input! : BirthdayTimeZone(rawValue: UserDefaults.standard.string(forKey: "BirthdayTimeZone") ?? "JST"))! {
     case .adaptive:
@@ -62,8 +62,16 @@ func getBirthdayTimeZone(from input: BirthdayTimeZone? = nil) -> TimeZone {
     }
 }
 
+// MARK: getCharactersRelatingBand [?]
+//func getCharactersRelatingBand(_ characterID: Int) -> Int {
+//    return DoriCache.preCache.categorizedCharacters.first { (_, characters) in
+//        characters.contains(where: { $0.id == characterID })
+//    }?.key?.id ?? 0
+//}
 
-//MARK: getPlaceholderColor
+
+
+// MARK: getPlaceholderColor
 func getPlaceholderColor() -> Color {
 #if os(iOS)
     return Color(UIColor.placeholderText)
@@ -72,7 +80,7 @@ func getPlaceholderColor() -> Color {
 #endif
 }
 
-//MARK: getProperDataSourceType
+// MARK: getProperDataSourceType
 @MainActor func getProperDataSourceType(dataPrefersInternet: Bool = false) -> OfflineAssetBehavior {
     let dataSourcePreference = DataSourcePreference(rawValue: UserDefaults.standard.string(forKey: "DataSourcePreference") ?? "hybrid") ?? .hybrid
     switch dataSourcePreference {
@@ -89,7 +97,7 @@ func getPlaceholderColor() -> Color {
     }
 }
 
-//MARK: getSecondaryBackgroundColor
+// MARK: getSecondaryBackgroundColor
 func getTertiaryLabelColor() -> Color {
 #if os(iOS)
     return Color(UIColor.tertiaryLabel)
@@ -98,7 +106,7 @@ func getTertiaryLabelColor() -> Color {
 #endif
 }
 
-//MARK: highlightOccurrences
+// MARK: highlightOccurrences
 /// Highlights all occurrences of a keyword within a string in blue.
 /// - Parameters:
 ///   - keyword: The substring to highlight within `content`. If empty or only whitespace, no highlighting occurs.
@@ -115,7 +123,7 @@ func highlightOccurrences(of keyword: String, in content: String) -> AttributedS
     return attributedString
 }
 
-//MARK: ListItemType
+// MARK: ListItemType
 enum ListItemType: Hashable, Equatable {
     case compactOnly
     case expandedOnly

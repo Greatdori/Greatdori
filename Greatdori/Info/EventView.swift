@@ -161,52 +161,9 @@ struct EventSearchView: View {
                 }
             })
             .toolbar {
-#if os(iOS)
                 ToolbarItem {
-                    Menu {
-                        Picker("", selection: $showDetails.animation(.easeInOut(duration: 0.2))) {
-                            Label(title: {
-                                Text("Filter.view.banner-and-details")
-                            }, icon: {
-                                Image(_internalSystemName: "text.below.rectangle")
-                            })
-                            .tag(true)
-                            Label(title: {
-                                Text("Filter.view.banner-only")
-                            }, icon: {
-                                Image(systemName: "rectangle.grid.1x2")
-                            })
-                            .tag(false)
-                        }
-                        .pickerStyle(.inline)
-                        .labelsHidden()
-                    } label: {
-                        if showDetails {
-                            Image(_internalSystemName: "text.below.rectangle")
-                        } else {
-                            Image(systemName: "rectangle.grid.1x2")
-                        }
-                    }
+                    LayoutPicker(selection: $showDetails, options: [("Filter.view.banner-and-details", "text.below.rectangle", true), ("Filter.view.banner-only", "rectangle.grid.1x2", false)])
                 }
-#else
-                ToolbarItem {
-                    Picker("", selection: $showDetails) {
-                        Label(title: {
-                            Text("Filter.view.banner-and-details")
-                        }, icon: {
-                            Image(_internalSystemName: "text.below.rectangle")
-                        })
-                        .tag(true)
-                        Label(title: {
-                            Text("Filter.view.banner-only")
-                        }, icon: {
-                            Image(systemName: "rectangle.grid.1x2")
-                        })
-                        .tag(false)
-                    }
-                    .pickerStyle(.inline)
-                }
-#endif
                 if #available(iOS 26.0, macOS 26.0, *) {
                     ToolbarSpacer()
                 }
@@ -232,18 +189,17 @@ struct EventSearchView: View {
         }
         .onChange(of: filter) {
             if let events {
-                searchedEvents = events.filter(withDoriFilter: filter).search(for: searchedText)
+                searchedEvents = events.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             }
         }
         .onChange(of: sorter) {
             if let oldEvents = events {
-                events = oldEvents.sorted(withDoriSorter: sorter)
-                searchedEvents = events!.filter(withDoriFilter: filter).search(for: searchedText)
+                searchedEvents = events!.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             }
         }
         .onChange(of: searchedText, {
             if let events {
-                searchedEvents = events.filter(withDoriFilter: filter).search(for: searchedText)
+                searchedEvents = events.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             }
         })
     }

@@ -44,6 +44,7 @@ struct CharacterSearchView: View {
                                     WebImage(url: band.logoImageURL)
                                         .resizable()
                                         .frame(width: 160*bandLogoScaleFactor, height: 76*bandLogoScaleFactor)
+                                        .accessibilityLabel(band.bandName.forPreferredLocale() ?? String(localized: "Character.band-unknown"))
                                     HStack {
                                         ForEach(charactersDict![band]!.swappedAt(0, 3).swappedAt(2, 3), id: \.self) { char in
                                             NavigationLink(destination: {
@@ -168,6 +169,14 @@ struct CharacterSearchView: View {
         }
 //        .withSystemBackground()
         .navigationTitle("Character")
+        .wrapIf(isMACOS, in: { content in
+            if #available(iOS 26.0, macOS 26.0, *) {
+                content
+                    .navigationSubtitle("Character.band.count.\(bandArray.count-1)")
+            } else {
+                content
+            }
+        })
         .task {
             await getCharacters()
         }
@@ -196,7 +205,7 @@ struct CharacterSearchView: View {
             }
         }
         
-        DoriCache.withCache(id: "AllCharacters") {
+        DoriCache.withCache(id: "AllCharacters", trait: .realTime) {
             await DoriAPI.Character.all()
         } .onUpdate {
             if let characters = $0 {

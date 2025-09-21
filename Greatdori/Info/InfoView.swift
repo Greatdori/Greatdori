@@ -20,54 +20,63 @@ import SwiftUI
         title: "App.info.characters",
         symbol: "person.2",
         lightColor: .mint,
+        tabValue: .characters,
         destination: {CharacterSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.cards",
         symbol: "person.crop.square.on.square.angled",
         lightColor: .orange,
-        destination: {GachaSearchView()}
+        tabValue: .cards,
+        destination: {CardSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.costumes",
         symbol: "swatchpalette",
         lightColor: .blue,
+        tabValue: .costumes,
         destination: {CostumeSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.events",
         symbol: "star.hexagon",
         lightColor: .green,
+        tabValue: .events,
         destination: {EventSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.gachas",
         symbol: "line.horizontal.star.fill.line.horizontal",
         lightColor: .yellow,
+        tabValue: .gacha,
         destination: {GachaSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.songs",
         symbol: "music.note",
         lightColor: .red,
+        tabValue: .songs,
         destination: {GachaSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.song-meta",
         symbol: "music.note.list",
         lightColor: .pink,
+        tabValue: .songMeta,
         destination: {GachaSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.miracle-ticket",
         symbol: "ticket",
         lightColor: .indigo,
+        tabValue: .miracleTicket,
         destination: {GachaSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.comics",
         symbol: "book",
         lightColor: .brown,
+        tabValue: .comics,
         destination: {GachaSearchView()}
     ),
 ]
@@ -77,13 +86,15 @@ struct InfoDestinationItem {
     let symbol: String
     let lightColor: Color
     let darkColor: Color?
+    let tabValue: InfoTab
     let destination: () -> AnyView
     
-    init<T: View>(title: LocalizedStringKey, symbol: String, lightColor: Color, darkColor: Color? = nil, @ViewBuilder destination: @escaping () -> T) {
+    init<T: View>(title: LocalizedStringKey, symbol: String, lightColor: Color, darkColor: Color? = nil, tabValue: InfoTab, @ViewBuilder destination: @escaping () -> T) {
         self.title = title
         self.symbol = symbol
         self.lightColor = lightColor
         self.darkColor = darkColor
+        self.tabValue = tabValue
         self.destination = { AnyView(destination()) }
     }
 }
