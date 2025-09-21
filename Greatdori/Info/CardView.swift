@@ -163,7 +163,7 @@ struct CardSearchView: View {
         }
         .withSystemBackground()
         .inspector(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: CardWithBand.applicableFilteringKeys)
+            FilterView(filter: $filter, includingKeys: Set(CardWithBand.applicableFilteringKeys))
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .presentationBackgroundInteraction(.enabled)

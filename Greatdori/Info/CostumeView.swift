@@ -156,7 +156,7 @@ struct CostumeSearchView: View {
         }
         .withSystemBackground()
         .inspector(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: PreviewCostume.applicableFilteringKeys)
+            FilterView(filter: $filter, includingKeys: Set(PreviewCostume.applicableFilteringKeys))
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .presentationBackgroundInteraction(.enabled)

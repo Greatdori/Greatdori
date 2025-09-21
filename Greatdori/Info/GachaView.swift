@@ -176,7 +176,7 @@ struct GachaSearchView: View {
         }
         .withSystemBackground()
         .inspector(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: [.attribute, .character, .characterRequiresMatchAll, .server, .timelineStatus, .gachaType])
+            FilterView(filter: $filter, includingKeys: Set(PreviewGacha.applicableFilteringKeys))
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .presentationBackgroundInteraction(.enabled)

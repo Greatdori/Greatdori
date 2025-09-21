@@ -177,7 +177,7 @@ struct EventSearchView: View {
         }
         .withSystemBackground()
         .inspector(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: PreviewEvent.applicableFilteringKeys)
+            FilterView(filter: $filter, includingKeys: Set(PreviewEvent.applicableFilteringKeys))
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
                 .presentationBackgroundInteraction(.enabled)
@@ -333,6 +333,7 @@ struct EventDetailView: View {
                     }
             })
         }
+        .withSystemBackground()
     }
     
     func getInformation(id: Int) async {
