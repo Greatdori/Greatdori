@@ -274,3 +274,19 @@ extension DoriAPI.LocalizedData {
         return result
     }
 }
+extension DoriAPI.LocalizedData {
+    @inlinable
+    public var isEmpty: Bool {
+        self.jp == nil && self.en == nil && self.tw == nil && self.cn == nil && self.kr == nil
+    }
+}
+extension DoriAPI.LocalizedData where T: Collection {
+    @inlinable
+    public var isValueEmpty: Bool {
+        self.jp?.isEmpty != false
+        && self.en?.isEmpty != false
+        && self.tw?.isEmpty != false
+        && self.cn?.isEmpty != false
+        && self.kr?.isEmpty != false
+    }
+}
