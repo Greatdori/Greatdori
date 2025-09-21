@@ -4354,13 +4354,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Greatdori! is a third-party wiki running on Apple platforms. Lets set up your settings first:"
+            "value" : "Greatdori! is a wiki running on Apple platforms. Lets set up your settings first:"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Greatdori!是一款运行于Apple平台的第三方Wiki客户端。让我们先设定好你的设置："
+            "value" : "Greatdori!是一款运行于Apple平台的Wiki客户端。让我们先设定好你的设置："
           }
         }
       }
