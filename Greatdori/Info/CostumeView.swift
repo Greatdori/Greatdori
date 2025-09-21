@@ -297,7 +297,7 @@ struct CostumeDetailView: View {
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
                 content
-                    .navigationSubtitle(information?.description.forPreferredLocale() != nil ? "#\(gachaID)" : "")
+                    .navigationSubtitle(information?.description.forPreferredLocale() != nil ? "#\(costumeID)" : "")
             } else {
                 content
             }

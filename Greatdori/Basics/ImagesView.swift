@@ -609,7 +609,7 @@ struct CardPreviewImage: View {
 }
 
 
-// MARK: CostumeInfo
+// MARK: CostumeInfo [✓]
 struct CostumeInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
