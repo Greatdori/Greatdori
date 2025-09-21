@@ -286,6 +286,7 @@ struct EventDetailView: View {
                         Spacer(minLength: 0)
                         VStack {
                             EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                .allowsHitTesting(false)
 //                            ListGachaView()
                         }
                         .padding()

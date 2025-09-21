@@ -93,6 +93,7 @@
       }
     },
     "App.info.cards" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -125,6 +126,7 @@
       }
     },
     "App.info.comics" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -141,6 +143,7 @@
       }
     },
     "App.info.costumes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -173,6 +176,7 @@
       }
     },
     "App.info.gachas" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -189,6 +193,7 @@
       }
     },
     "App.info.miracle-ticket" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -205,6 +210,7 @@
       }
     },
     "App.info.song-meta" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -221,6 +227,7 @@
       }
     },
     "App.info.songs" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

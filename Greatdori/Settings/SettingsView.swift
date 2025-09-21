@@ -32,11 +32,13 @@ struct SettingsView: View {
             Form {
                 SettingsLocaleView()
                 SettingsHomeView()
+                /*
                 SettingsNotificationView()
                 #if os(iOS)
                 SettingsWidgetView()
                 #endif
                 SettingsOfflineDataView()
+                 */
                 if AppFlag.DEBUG {
                     SettingsDebugView()
                 }

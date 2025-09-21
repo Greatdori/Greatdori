@@ -280,6 +280,8 @@ struct CharacterDetailView: View {
                                             content
                                                 .padding(.horizontal, -15)
                                         }
+//                                        .disabled(true)
+                                    
                                 }
                                 if randomCard != nil && information.band != nil {
                                     Button(action: {
@@ -297,6 +299,8 @@ struct CharacterDetailView: View {
                             Spacer(minLength: 0)
                         }
                         CharacterDetailOverviewView(information: information)
+                            .allowsHitTesting(false)
+                        /*
                         if !information.cards.isEmpty {
                             Rectangle()
                                 .opacity(0)
@@ -309,18 +313,21 @@ struct CharacterDetailView: View {
                                 .frame(height: 30)
                             DetailsCostumesSection(costumes: information.costumes)
                         }
+                         */
                         if !information.events.isEmpty {
                             Rectangle()
                                 .opacity(0)
                                 .frame(height: 30)
                             DetailsEventsSection(events: information.events)
                         }
+                        /*
                         if !information.gacha.isEmpty {
                             Rectangle()
                                 .opacity(0)
                                 .frame(height: 30)
                             DetailsGachasSection(gachas: information.gacha)
                         }
+                         */
                         Spacer()
                     }
                     .padding()

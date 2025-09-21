@@ -50,6 +50,7 @@ struct HomeView: View {
                     HStack {
                         VStack {
                             HomeNewsView()
+                                .allowsHitTesting(false)
                             CustomGroupBox { HomeBirthdayView() }
                             HomeEventsView(locale: localeFromStringDict[homeEventServer4] ?? .jp)
                             Spacer()
@@ -66,6 +67,7 @@ struct HomeView: View {
                     .frame(width: useCompactVariant ? 0 : nil, height: useCompactVariant ? 0 : nil)
                     VStack {
                         HomeNewsView()
+                            .allowsHitTesting(false)
                         CustomGroupBox { HomeBirthdayView() }
                         HomeEventsView(locale: localeFromStringDict[homeEventServer1] ?? .jp)
                         HomeEventsView(locale: localeFromStringDict[homeEventServer2] ?? .jp)

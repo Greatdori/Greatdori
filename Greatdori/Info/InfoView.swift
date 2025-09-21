@@ -22,6 +22,7 @@ import SwiftUI
         lightColor: .mint,
         destination: {CharacterSearchView()}
     ),
+    /*
     InfoDestinationItem(
         title: "App.info.cards",
         symbol: "person.crop.square.on.square.angled",
@@ -34,12 +35,14 @@ import SwiftUI
         lightColor: .blue,
         destination: {CostumeSearchView()}
     ),
+     */
     InfoDestinationItem(
         title: "App.info.events",
         symbol: "star.hexagon",
         lightColor: .green,
         destination: {EventSearchView()}
     ),
+    /*
     InfoDestinationItem(
         title: "App.info.gachas",
         symbol: "line.horizontal.star.fill.line.horizontal",
@@ -70,6 +73,7 @@ import SwiftUI
         lightColor: .brown,
         destination: {GachaSearchView()}
     ),
+     */
 ]
 
 struct InfoDestinationItem {
