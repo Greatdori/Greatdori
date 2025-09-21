@@ -98,7 +98,6 @@
 		8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */; };
 		8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */; };
 		8C6C0ECD2E422F9000D1FB0A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECC2E422F9000D1FB0A /* SwiftUI.framework */; };
-		8C6C0EDA2E422F9100D1FB0A /* Greatdori Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8C6C0EE22E422FEC00D1FB0A /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; platformFilters = (ios, macos, ); };
 		8C6C0EED2E42301000D1FB0A /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE72E42301000D1FB0A /* AppIntents.swift */; };
 		8C6C0EEE2E42301000D1FB0A /* CardWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EE92E42301000D1FB0A /* CardWidgets.swift */; };
@@ -383,13 +382,6 @@
 			remoteGlobalIDString = 8C0C99902E296A8C00549B5C;
 			remoteInfo = DoriKit;
 		};
-		8C6C0ED82E422F9100D1FB0A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8C6C0EC82E422F8F00D1FB0A;
-			remoteInfo = "Greatdori WidgetsExtension";
-		};
 		8C6C0EE42E422FEC00D1FB0A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C0C99552E296A4400549B5C /* Project object */;
@@ -530,17 +522,6 @@
 				8C3FA2622E4BA6EA001526F2 /* DoriKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8C6C0EE12E422F9100D1FB0A /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				8C6C0EDA2E422F9100D1FB0A /* Greatdori Widgets.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8C6C0F102E42700B00D1FB0A /* Embed Frameworks */ = {
@@ -1713,7 +1694,6 @@
 				8C0C995B2E296A4400549B5C /* Resources */,
 				8C0C997A2E296A4700549B5C /* Embed Watch Content */,
 				8C0C999C2E296A8C00549B5C /* Embed Frameworks */,
-				8C6C0EE12E422F9100D1FB0A /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 				8C923D8B2E3055A4003AFC0A /* PBXBuildRule */,
@@ -1721,7 +1701,6 @@
 			dependencies = (
 				8C0C996D2E296A4600549B5C /* PBXTargetDependency */,
 				8C0C99962E296A8C00549B5C /* PBXTargetDependency */,
-				8C6C0ED92E422F9100D1FB0A /* PBXTargetDependency */,
 				8CB4D47E2E445F700085D57A /* PBXTargetDependency */,
 			);
 			name = Greatdori;
@@ -2765,11 +2744,6 @@
 			isa = PBXTargetDependency;
 			target = 8C0C99902E296A8C00549B5C /* DoriKit */;
 			targetProxy = 8C3FA2632E4BA6EA001526F2 /* PBXContainerItemProxy */;
-		};
-		8C6C0ED92E422F9100D1FB0A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8C6C0EC82E422F8F00D1FB0A /* Greatdori Widgets */;
-			targetProxy = 8C6C0ED82E422F9100D1FB0A /* PBXContainerItemProxy */;
 		};
 		8C6C0EE52E422FEC00D1FB0A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
