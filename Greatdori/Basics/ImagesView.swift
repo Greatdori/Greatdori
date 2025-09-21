@@ -84,7 +84,7 @@ struct CardInfo: View {
         CustomGroupBox {
             CustomStack(axis: layoutType == 1 ? .horizontal : .vertical) {
                 // MARK: CardPreviewImage
-                if layoutType == 3 {
+                if layoutType != 3 {
                     HStack(spacing: 5) {
                         CardPreviewImage(previewCard, cardNavigationDestinationID: .constant(nil))
                         if thumbTrainedImageURL != nil {
