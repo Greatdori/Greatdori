@@ -64,21 +64,6 @@ struct ContentView: View {
                                         }
                                     }
                                 }
-//                                Tab("App.info.characters", systemImage: "person.2") {
-//                                    NavigationStack {
-//                                        CharacterSearchView()
-//                                    }
-//                                }
-//                                Tab("App.info.events", systemImage: "star.hexagon") {
-//                                    NavigationStack {
-//                                        EventSearchView()
-//                                    }
-//                                }
-//                                Tab("App.info.gachas", systemImage: "line.horizontal.star.fill.line.horizontal") {
-//                                    NavigationStack {
-//                                        GachaSearchView()
-//                                    }
-//                                }
                             }, header: {
                                 Text("App.info")
                             })
@@ -102,7 +87,7 @@ struct ContentView: View {
                     .wrapIf(true, in: { content in
                         if #available(iOS 26.0, macOS 26.0, *) {
                             content
-                                .tabBarMinimizeBehavior(.automatic)
+                                .tabBarMinimizeBehavior(.onScrollDown)
                         } else {
                             content
                         }
