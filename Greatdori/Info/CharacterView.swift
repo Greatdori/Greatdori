@@ -325,6 +325,7 @@ struct CharacterDetailView: View {
                     }
                     .padding()
                 }
+                .scrollDisablesMultilingualTextPopover()
             } else {
                 if infoIsAvailable {
                     ExtendedConstraints {

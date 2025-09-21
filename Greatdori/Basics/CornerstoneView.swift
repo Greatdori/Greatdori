@@ -340,6 +340,7 @@ struct MultilingualText: View {
     //    let locale: Locale
     var showLocaleKey: Bool = false
     var allowPopover = true
+    @Environment(\._multilingualTextDisablePopover) var envDisablesPopover
     @State var isHovering = false
     @State var allLocaleTexts: [String] = []
     @State var shownLocaleValueDict: [String: DoriAPI.Locale] = [:]
@@ -410,7 +411,7 @@ struct MultilingualText: View {
             MultilingualTextInternalLabel(source: source, showSecondaryText: showSecondaryText, showLocaleKey: showLocaleKey)
                 .onHover { isHovering in
                     if allowPopover {
-                        self.isHovering = isHovering
+                        self.isHovering = isHovering && !envDisablesPopover
                     }
                 }
                 .popover(isPresented: $isHovering, arrowEdge: .bottom) {

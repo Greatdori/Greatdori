@@ -269,6 +269,7 @@ struct CostumeDetailView: View {
                         Spacer(minLength: 0)
                     }
                 }
+                .scrollDisablesMultilingualTextPopover()
             } else {
                 if infoIsAvailable {
                     ExtendedConstraints {

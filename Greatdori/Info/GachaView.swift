@@ -291,6 +291,7 @@ struct GachaDetailView: View {
                         Spacer(minLength: 0)
                     }
                 }
+                .scrollDisablesMultilingualTextPopover()
             } else {
                 if infoIsAvailable {
                     ExtendedConstraints {
