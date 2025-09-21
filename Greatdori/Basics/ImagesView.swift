@@ -99,6 +99,7 @@ struct CardInfo: View {
                 }
                 
                 // MARK: Text
+                // TODO: Implement Search Highlight
                 VStack(alignment: layoutType == 1 ? .leading : .center) {
                     Text(prefix.forPreferredLocale() ?? "nil")
                         .bold()
@@ -107,7 +108,7 @@ struct CardInfo: View {
                         Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text("\(cardType.localizedString)")
                     }
                     .foregroundStyle(.secondary)
-                    .font(isMACOS ? .body : .caption)
+                    .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
                 }
                 Spacer()
             }
@@ -699,7 +700,7 @@ struct CostumeInfo: View {
                         })
                         Text(characterName?.forPreferredLocale() ?? "nil")
                     .foregroundStyle(.secondary)
-                    .font(isMACOS ? .body : .caption)
+                    .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
                 }
                 
                 if layout == .horizontal {
