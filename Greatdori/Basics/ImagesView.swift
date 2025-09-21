@@ -23,7 +23,6 @@ import SDWebImageSwiftUI
 import SwiftUI
 
 
-
 //MARK: CardInfo [✓]
 struct CardInfo: View {
     @Environment(\.horizontalSizeClass) var sizeClass
@@ -675,6 +674,7 @@ struct CostumeInfo: View {
                         .onAppear {
                             attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
                         }
+                        .multilineTextAlignment(layout == .horizontal ? .leading : .center)
                         .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
                         .onChange(of: searchedKeyword, {
                             attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
@@ -688,13 +688,19 @@ struct CostumeInfo: View {
                     Spacer()
                 }
             }
+//            .wrapIf(layout == .horizontal, in: { content in
+//                content
+//                    .frame(width: 200*0.7, height: 192*0.7)
+//            })
         }
+//        .border(.red)
         .onAppear {
             characterName = DoriCache.preCache.characters.first(where: {$0.id == characterID})?.characterName
             
             attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
             attributedChar = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (characterName?.forLocale(locale!) ?? characterName?.jp ?? "") : (characterName?.forPreferredLocale() ?? "")))
         }
+//        .border(.red)
     }
 }
 
@@ -1026,60 +1032,6 @@ struct GachaInfo: View {
 }
 
 
-//MARK: GachaCardView [×]
-struct GachaCardView: View {
-    private var bannerImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
-    
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 444)
-    init(_ gacha: DoriAPI.Gacha.PreviewGacha) {
-        self.bannerImageURL = gacha.bannerImageURL
-        self.title = gacha.gachaName
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 444)
-    init(_ gacha: DoriAPI.Gacha.Gacha) {
-        self.bannerImageURL = gacha.bannerImageURL
-        self.title = gacha.gachaName
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 449)
-    
-    var body: some View {
-        ZStack {
-            WebImage(url: bannerImageURL) { image in
-                image
-            } placeholder: {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(getPlaceholderColor())
-            }
-            .resizable()
-            .scaledToFill()
-//            .frame(width: screenBounds.width - 5, height: 100)
-            .clipped()
-            .cornerRadius(10)
-            HStack {
-                Spacer()
-                VStack {
-                    Spacer()
-                    Text(title.forPreferredLocale() ?? "")
-                        .padding(.horizontal, 2)
-                        .background {
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(Material.ultraThin)
-                                .blur(radius: 5)
-                        }
-                }
-                .font(.system(size: 12))
-                .lineLimit(1)
-                .padding(.horizontal, 4)
-                Spacer()
-            }
-        }
-        .listRowBackground(Color.clear)
-        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-    }
-}
-
-
 //MARK: SongCardView
 struct SongCardView: View {
     private var jacketImageURL: URL
@@ -1129,5 +1081,3 @@ struct SongCardView: View {
         }
     }
 }
-
-

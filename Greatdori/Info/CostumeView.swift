@@ -31,6 +31,8 @@ struct CostumeSearchView: View {
     @State var showFilterSheet = false
     @State var presentingCostumeID: Int?
     @Namespace var costumeLists
+    
+    let gridLayoutItemWidth: CGFloat = 200*0.7
     var body: some View {
         Group {
             Group {
@@ -64,14 +66,19 @@ struct CostumeSearchView: View {
                                             }
                                             .frame(maxWidth: 600)
                                         } else {
-                                            LazyVGrid(columns: [.init(.adaptive(minimum: 200), spacing: bannerSpacing)]) {
+                                            LazyVGrid(columns: [GridItem(.adaptive(minimum: gridLayoutItemWidth, maximum: gridLayoutItemWidth))]) {
                                                 ForEach(resultCostumes, id: \.self) { costume in
                                                     Button(action: {
                                                         showFilterSheet = false
                                                         presentingCostumeID = costume.id
                                                     }, label: {
-                                                        CostumeInfo(costume, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
-                                                            .frame(maxWidth: bannerWidth)
+//                                                        HStack {
+//                                                            Spacer()
+//                                                                .border(.blue)
+                                                            CostumeInfo(costume, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
+//                                                            Spacer()
+////                                                                .border(.blue)
+//                                                        }
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -155,7 +162,7 @@ struct CostumeSearchView: View {
                             Label(title: {
                                 Text("Filter.view.grid")
                             }, icon: {
-                                Image(systemName: "rectangle.grid.2x2")
+                                Image(systemName: "square.grid.2x2")
                             })
                             .tag(Axis.vertical)
                         }
@@ -165,7 +172,7 @@ struct CostumeSearchView: View {
                         if layout == .horizontal {
                             Image(systemName: "list.bullet")
                         } else {
-                            Image(systemName: "rectangle.grid.2x2")
+                            Image(systemName: "square.grid.2x2")
                         }
                     }
                 }
@@ -181,7 +188,7 @@ struct CostumeSearchView: View {
                         Label(title: {
                             Text("Filter.view.grid")
                         }, icon: {
-                            Image(systemName: "rectangle.grid.2x2")
+                            Image(systemName: "square.grid.2x2")
                         })
                         .tag(Axis.vertical)
                     }
