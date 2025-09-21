@@ -68,7 +68,7 @@ func getPlaceholderColor() -> Color {
 #if os(iOS)
     return Color(UIColor.placeholderText)
 #else
-    return Color(NSColor.placeholderTextColor)
+    return Color.gray
 #endif
 }
 

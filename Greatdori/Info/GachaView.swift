@@ -210,47 +210,7 @@ struct GachaSearchView: View {
                     ToolbarSpacer()
                 }
                 ToolbarItemGroup {
-#if os(macOS)
-                    HStack(spacing: 0) {
-                        Button(action: {
-                            showFilterSheet.toggle()
-                        }, label: {
-                            (filter.isFiltered ? Color.white : .primary)
-                                .scaleEffect(2) // a larger value has no side effects because we're using `mask`
-                                .mask {
-                                    // We use `mask` to prgacha unexpected blink
-                                    // while changing `foregroundStyle`.
-                                    Image(systemName: "line.3.horizontal.decrease")
-                                }
-                                .background {
-                                    if filter.isFiltered {
-                                        Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1.1 : 1.65)
-                                    }
-                                }
-                        })
-                        .animation(.easeInOut(duration: 0.2), value: filter.isFiltered)
-                        SorterPickerView(sorter: $sorter, allOptions: DoriFrontend.Gacha.PreviewGacha.applicableSortingTypes)
-                    }
-#else
-                    Button(action: {
-                        showFilterSheet.toggle()
-                    }, label: {
-                        (filter.isFiltered ? Color.white : .primary)
-                            .scaleEffect(2) // a larger value has no side effects because we're using `mask`
-                            .mask {
-                                // We use `mask` to prgacha unexpected blink
-                                // while changing `foregroundStyle`.
-                                Image(systemName: "line.3.horizontal.decrease")
-                            }
-                            .background {
-                                if filter.isFiltered {
-                                    Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1.1 : 1.65)
-                                }
-                            }
-                    })
-                    .animation(.easeInOut(duration: 0.2), value: filter.isFiltered)
-                    SorterPickerView(sorter: $sorter, allOptions: DoriFrontend.Gacha.PreviewGacha.applicableSortingTypes)
-#endif
+                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewGacha.applicableSortingTypes)
                 }
             }
             .onDisappear {

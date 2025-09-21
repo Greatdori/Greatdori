@@ -128,14 +128,14 @@ struct InfoViewCard<Content: View>: View {
 //                    .foregroundStyle(.white)
 //                    .opacity(0.7)
                 RoundedRectangle(cornerRadius: 20)
-//                    .foregroundStyle(color.gradient)
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [color, color.saturation(factor: 0.9).brightness(factor: 2.2)],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
+                    .foregroundStyle(color.gradient)
+//                    .foregroundStyle(
+//                        LinearGradient(
+//                            colors: [color, color.saturation(factor: 0.9).brightness(factor: 2.2)],
+//                            startPoint: .leading,
+//                            endPoint: .trailing
+//                        )
+//                    )
                 HStack {
                     VStack(alignment: .leading) {
                         Image(systemName: symbol)

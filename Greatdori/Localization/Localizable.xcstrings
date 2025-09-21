@@ -682,9 +682,6 @@
     "Costume.count.%lld" : {
 
     },
-    "Costume.description" : {
-
-    },
     "Costume.how-to-get" : {
 
     },
@@ -695,6 +692,9 @@
 
     },
     "Costume.search.unavailable" : {
+
+    },
+    "Costume.title" : {
 
     },
     "Costume.unavailable" : {
@@ -939,6 +939,9 @@
           }
         }
       }
+    },
+    "Details.costumes" : {
+
     },
     "Details.events" : {
       "localizations" : {
@@ -1527,6 +1530,12 @@
           }
         }
       }
+    },
+    "Filter.view.grid" : {
+
+    },
+    "Filter.view.list" : {
+
     },
     "Gacha" : {
       "localizations" : {

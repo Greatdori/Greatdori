@@ -14,20 +14,21 @@
 
 // As name, this file is the cornerstone for the whole app, providing the most basic & repeative views.
 // Views marked with [×] are deprecated.
+// Please consider sorting structures in alphabetical order.
 
 // MARK: This file should be view only.
 
 import DoriKit
 import SwiftUI
 
-//MARK: Constants
+// MARK: Constants
 let bannerWidth: CGFloat = isMACOS ? 370 : 420
 let bannerSpacing: CGFloat = isMACOS ? 10 : 15
 let imageButtonSize: CGFloat = isMACOS ? 30 : 35
 let cardThumbnailSideLength: CGFloat = isMACOS ? 64 : 72
 let filterItemHeight: CGFloat = isMACOS ? 25 : 35
 
-//MARK: CompactToggle
+// MARK: CompactToggle
 struct CompactToggle: View {
     var isLit: Bool?
     var action: (() -> Void)? = nil
@@ -44,7 +45,7 @@ struct CompactToggle: View {
             CompactToggleLabel(isLit: isLit, size: size)
         }
     }
-    //MARK: CompactToggle
+    
     struct CompactToggleLabel: View {
         var isLit: Bool?
         var size: CGFloat
@@ -70,7 +71,6 @@ struct CompactToggle: View {
         }
     }
 }
-
 
 
 // MARK: CustomGroupBox
@@ -104,7 +104,7 @@ struct CustomGroupBox<Content: View>: View {
 }
 
 
-//MARK: CustomGroupBoxOld [×]
+// MARK: CustomGroupBoxOld [×]
 struct CustomGroupBoxOld<Content: View>: View {
     @Binding var backgroundOpacity: CGFloat
     let content: () -> Content
@@ -128,6 +128,46 @@ struct CustomGroupBoxOld<Content: View>: View {
 #endif
     }
 }
+
+
+// MARK: CustomStack
+struct CustomStack<Content: View>: View {
+    let axis: Axis
+    let spacing: CGFloat?
+    let hAlignment: HorizontalAlignment
+    let vAlignment: VerticalAlignment
+    let content: () -> Content
+    
+    init(
+        axis: Axis,
+        spacing: CGFloat? = nil,
+        hAlignment: HorizontalAlignment = .center,
+        vAlignment: VerticalAlignment = .center,
+        @ViewBuilder content: @escaping () -> Content
+    ) {
+        self.axis = axis
+        self.spacing = spacing
+        self.hAlignment = hAlignment
+        self.vAlignment = vAlignment
+        self.content = content
+    }
+    
+    var body: some View {
+        Group {
+            switch axis {
+            case .horizontal:
+                HStack(alignment: vAlignment, spacing: spacing) {
+                    content()
+                }
+            case .vertical:
+                VStack(alignment: hAlignment, spacing: spacing) {
+                    content()
+                }
+            }
+        }
+    }
+}
+
 
 // MARK: DetailsIDSwitcher
 struct DetailsIDSwitcher<Content: View>: View {
@@ -178,8 +218,7 @@ struct DetailsIDSwitcher<Content: View>: View {
         }
     }
 }
-
-// How to use `DetailsIDSwitcher`:
+// # Guidance for `DetailsIDSwitcher`
 //
 // ```swift
 // ToolbarItemGroup(content: {
@@ -194,7 +233,7 @@ struct DetailsIDSwitcher<Content: View>: View {
 //```
 
 
-//MARK: DimissButton
+// MARK: DimissButton
 struct DismissButton<L: View>: View {
     var action: () -> Void
     var label: () -> L
@@ -213,7 +252,88 @@ struct DismissButton<L: View>: View {
 }
 
 
-//MARK: MultilingualText
+// MARK: ExtendedConstraints
+struct ExtendedConstraints<Content: View>: View {
+    var isActive: Bool = true
+    let content: () -> Content
+    var body: some View {
+        if isActive {
+            VStack {
+                Spacer(minLength: 0)
+                HStack {
+                    Spacer(minLength: 0)
+                    content()
+                    Spacer(minLength: 0)
+                }
+                Spacer(minLength: 0)
+            }
+        } else {
+            content()
+        }
+    }
+}
+
+
+// MARK: FilterAndSorterPicker
+struct FilterAndSorterPicker: View {
+    @Binding var showFilterSheet: Bool
+    @Binding var sorter: DoriSorter
+    var filterIsFiltering: Bool
+    let sorterKeywords: [DoriSorter.Keyword]
+    var body: some View {
+#if os(macOS)
+        HStack(spacing: 0) {
+            Button(action: {
+                showFilterSheet.toggle()
+            }, label: {
+                (filterIsFiltering ? Color.white : .primary)
+                    .scaleEffect(2) // a larger value has no side effects because we're using `mask`
+                    .mask {
+                        // We use `mask` to prgacha unexpected blink
+                        // while changing `foregroundStyle`.
+                        Image(systemName: "line.3.horizontal.decrease")
+                    }
+                    .background {
+                        if filterIsFiltering {
+                            Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1.1 : 1.65)
+                        }
+                    }
+            })
+            .animation(.easeInOut(duration: 0.2), value: filterIsFiltering)
+            SorterPickerView(sorter: $sorter, allOptions: sorterKeywords)
+        }
+#else
+        Button(action: {
+            showFilterSheet.toggle()
+        }, label: {
+            (filterIsFiltering ? Color.white : .primary)
+                .scaleEffect(2) // a larger value has no side effects because we're using `mask`
+                .mask {
+                    // We use `mask` to prgacha unexpected blink
+                    // while changing `foregroundStyle`.
+                    Image(systemName: "line.3.horizontal.decrease")
+                }
+                .background {
+                    if filterIsFiltering {
+                        Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1.1 : 1.65)
+                    }
+                }
+        })
+        .animation(.easeInOut(duration: 0.2), value: filterIsFiltering)
+        SorterPickerView(sorter: $sorter, allOptions: sorterKeywords)
+#endif
+    }
+}
+// # Guidance for `FilterAndSorterPicker`
+//
+// ```swift
+// ToolbarItemGroup {
+//     FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewItem.applicableSortingTypes)
+// }
+//```
+
+
+// MARK: MultilingualText
 struct MultilingualText: View {
     let source: DoriAPI.LocalizedData<String>
     var showSecondaryText: Bool = true
@@ -384,7 +504,7 @@ struct MultilingualText: View {
 }
 
 
-//MARK: MultilingualTextForCountdown
+// MARK: MultilingualTextForCountdown
 struct MultilingualTextForCountdown: View {
     let startDate: DoriAPI.LocalizedData<Date>
     let endDate: DoriAPI.LocalizedData<Date>
@@ -546,7 +666,8 @@ struct MultilingualTextForCountdown: View {
     }
 }
 
-//MARK: ListItemView
+
+// MARK: ListItemView
 struct ListItemView<Content1: View, Content2: View>: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     let title: Content1
@@ -621,7 +742,7 @@ struct ListItemView<Content1: View, Content2: View>: View {
 }
 
 
-//MARK: ListItemWithWrappingView
+// MARK: ListItemWithWrappingView
 struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, T>: View {
     let title: Content1
     let element: (T?) -> Content2
@@ -710,33 +831,3 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
     }
 }
 
-// MARK: ExtendedConstraints
-struct ExtendedConstraints<Content: View>: View {
-    var isActive: Bool = true
-    let content: () -> Content
-    var body: some View {
-        if isActive {
-            VStack {
-                Spacer(minLength: 0)
-                HStack {
-                    Spacer(minLength: 0)
-                    content()
-                    Spacer(minLength: 0)
-                }
-                Spacer(minLength: 0)
-            }
-        } else {
-            content()
-        }
-    }
-}
-
-
-////MARK: groupedContentBackgroundColor
-//func groupedContentBackgroundColor() -> Color {
-//#if os(iOS)
-//    return Color(.systemGroupedBackground)
-//#elseif os(macOS)
-//    return Color(NSColor.windowBackgroundColor)
-//#endif
-//}

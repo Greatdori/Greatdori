@@ -49,7 +49,6 @@ struct CostumeSearchView: View {
                                                         presentingCostumeID = costume.id
                                                     }, label: {
                                                         CostumeInfo(costume, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
-                                                            .frame(maxWidth: bannerWidth)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -63,7 +62,7 @@ struct CostumeSearchView: View {
                                                     .matchedGeometryEffect(id: costume.id, in: costumeLists)
                                                 }
                                             }
-                                            .frame(maxWidth: bannerWidth)
+                                            .frame(maxWidth: 600)
                                         } else {
                                             LazyVGrid(columns: [.init(.adaptive(minimum: 200), spacing: bannerSpacing)]) {
                                                 ForEach(resultCostumes, id: \.self) { costume in
@@ -148,13 +147,13 @@ struct CostumeSearchView: View {
                     Menu {
                         Picker("", selection: $layout.animation(.easeInOut(duration: 0.2))) {
                             Label(title: {
-                                Text("Filter.view.banner-and-details")
+                                Text("Filter.view.list")
                             }, icon: {
-                                Image(_internalSystemName: "list.bullet")
+                                Image(systemName: "list.bullet")
                             })
                             .tag(Axis.horizontal)
                             Label(title: {
-                                Text("Filter.view.banner-only")
+                                Text("Filter.view.grid")
                             }, icon: {
                                 Image(systemName: "rectangle.grid.2x2")
                             })
@@ -164,7 +163,7 @@ struct CostumeSearchView: View {
                         .labelsHidden()
                     } label: {
                         if layout == .horizontal {
-                            Image(_internalSystemName: "list.bullet")
+                            Image(systemName: "list.bullet")
                         } else {
                             Image(systemName: "rectangle.grid.2x2")
                         }
@@ -174,13 +173,13 @@ struct CostumeSearchView: View {
                 ToolbarItem {
                     Picker("", selection: $layout) {
                         Label(title: {
-                            Text("Filter.view.banner-and-details")
+                            Text("Filter.view.list")
                         }, icon: {
-                            Image(_internalSystemName: "list.bullet")
+                            Image(systemName: "list.bullet")
                         })
                         .tag(Axis.horizontal)
                         Label(title: {
-                            Text("Filter.view.banner-only")
+                            Text("Filter.view.grid")
                         }, icon: {
                             Image(systemName: "rectangle.grid.2x2")
                         })
@@ -193,47 +192,7 @@ struct CostumeSearchView: View {
                     ToolbarSpacer()
                 }
                 ToolbarItemGroup {
-#if os(macOS)
-                    HStack(spacing: 0) {
-                        Button(action: {
-                            showFilterSheet.toggle()
-                        }, label: {
-                            (filter.isFiltered ? Color.white : .primary)
-                                .scaleEffect(2) // a larger value has no side effects because we're using `mask`
-                                .mask {
-                                    // We use `mask` to prgacha unexpected blink
-                                    // while changing `foregroundStyle`.
-                                    Image(systemName: "line.3.horizontal.decrease")
-                                }
-                                .background {
-                                    if filter.isFiltered {
-                                        Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1.1 : 1.65)
-                                    }
-                                }
-                        })
-                        .animation(.easeInOut(duration: 0.2), value: filter.isFiltered)
-                        SorterPickerView(sorter: $sorter, allOptions: DoriFrontend.Costume.PreviewCostume.applicableSortingTypes)
-                    }
-#else
-                    Button(action: {
-                        showFilterSheet.toggle()
-                    }, label: {
-                        (filter.isFiltered ? Color.white : .primary)
-                            .scaleEffect(2) // a larger value has no side effects because we're using `mask`
-                            .mask {
-                                // We use `mask` to prgacha unexpected blink
-                                // while changing `foregroundStyle`.
-                                Image(systemName: "line.3.horizontal.decrease")
-                            }
-                            .background {
-                                if filter.isFiltered {
-                                    Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1.1 : 1.65)
-                                }
-                            }
-                    })
-                    .animation(.easeInOut(duration: 0.2), value: filter.isFiltered)
-                    SorterPickerView(sorter: $sorter, allOptions: DoriFrontend.Costume.PreviewCostume.applicableSortingTypes)
-#endif
+                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewCostume.applicableSortingTypes)
                 }
             }
             .onDisappear {
@@ -432,14 +391,11 @@ struct CostumeDetailOverviewView: View {
                 
                 // MARK: Info
                 CustomGroupBox(cornerRadius: 20) {
-                    // Make this lazy fixes [250920-a] last appears in 8783d44.
-                    // Seems like a bug of SwiftUI, idk why make this lazy
-                    // fixes that bug. Whatever, it works.
                     LazyVStack {
                         // MARK: Description
                         Group {
                             ListItemView(title: {
-                                Text("Costume.description")
+                                Text("Costume.title")
                                     .bold()
                             }, value: {
                                 MultilingualText(source: information.description)
@@ -482,15 +438,17 @@ struct CostumeDetailOverviewView: View {
                             Divider()
                         }
                         
-                        // MARK: Description
-                        Group {
-                            ListItemView(title: {
-                                Text("Costume.how-to-get")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(source: information.howToGet)
-                            }, displayMode: .basedOnUISizeClass)
-                            Divider()
+                        if !information.howToGet.isValueEmpty {
+                            // MARK: How to Get
+                            Group {
+                                ListItemView(title: {
+                                    Text("Costume.how-to-get")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: information.howToGet)
+                                }, displayMode: .basedOnUISizeClass)
+                                Divider()
+                            }
                         }
                         
                         // MARK: ID

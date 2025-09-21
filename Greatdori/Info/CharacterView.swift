@@ -303,6 +303,12 @@ struct CharacterDetailView: View {
                                 .frame(height: 30)
                             DetailsCardsSection(cards: information.cards)
                         }
+                        if !information.costumes.isEmpty {
+                            Rectangle()
+                                .opacity(0)
+                                .frame(height: 30)
+                            DetailsCostumesSection(costumes: information.costumes)
+                        }
                         if !information.events.isEmpty {
                             Rectangle()
                                 .opacity(0)

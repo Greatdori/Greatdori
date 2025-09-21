@@ -23,199 +23,87 @@ import SDWebImageSwiftUI
 import SwiftUI
 
 
-//MARK: EventInfoForHome [✓]
-struct EventInfoForHome: View {
-    private var eventImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
-    private var startAt: DoriAPI.LocalizedData<Date>
-    private var endAt: DoriAPI.LocalizedData<Date>
-    private var locale: DoriAPI.Locale?
-    private var showsCountdown: Bool
-    
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showsCountdown: Bool = false) {
-        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = event.eventName
-        self.startAt = event.startAt
-        self.endAt = event.endAt
-        self.locale = locale
-        self.showsCountdown = showsCountdown
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showsCountdown: Bool = false) {
-        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = event.eventName
-        self.startAt = event.startAt
-        self.endAt = event.endAt
-        self.locale = locale
-        self.showsCountdown = showsCountdown
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
-    
-    var body: some View {
-        VStack {
-            WebImage(url: eventImageURL) { image in
-                image
-                    .resizable()
-                    .antialiased(true)
-                    .scaledToFit()
-            } placeholder: {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(getPlaceholderColor())
-                    .aspectRatio(3.0, contentMode: .fit)
-            }
-            .interpolation(.high)
-            .cornerRadius(10)
-            
-            if showsCountdown { // Accually Title & Countdown
-                Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
-                    .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
-                    .bold()
-                    .font(.title3)
-                    .multilineTextAlignment(.center)
-                Group {
-                    if let startDate = locale != nil ? startAt.forLocale(locale!) : startAt.forPreferredLocale(),
-                       let endDate = locale != nil ? endAt.forLocale(locale!) : startAt.forPreferredLocale() {
-                        if startDate > .now {
-                            Text("Events.countdown.start-at.\(Text(startDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
-                                .multilineTextAlignment(.center)
-                        } else if endDate > .now {
-                            Text("Events.countdown.end-at.\(Text(endDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
-                                .multilineTextAlignment(.center)
-                        } else {
-                            Text("Events.countdown.ended.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
-                                .multilineTextAlignment(.center)
-                        }
-                    } else {
-                        Text("Events.countdown.unstarted.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
-                            .multilineTextAlignment(.center)
-                    }
-                }
-            }
-        }
-    }
-}
 
-
-//MARK: EventInfo [✓]
-struct EventInfo: View {
-    @Binding var searchedKeyword: String
-    @State var attributedTitle: AttributedString = AttributedString("")
-    @State var attributedType: AttributedString = AttributedString("")
+//MARK: CardInfo [✓]
+struct CardInfo: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
     
     private var preferHeavierFonts: Bool = true
-    private var eventImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
-    private var eventID: Int
-    private var eventType: DoriAPI.Event.EventType
-    private var locale: DoriAPI.Locale?
-    private var showDetails: Bool
-    private var showID: Bool
-//    @State var imageHeight: CGFloat = 100
+    private var thumbNormalImageURL: URL
+    private var thumbTrainedImageURL: URL?
+    private var cardType: DoriAPI.Card.CardType
+    private var attribute: DoriAPI.Attribute
+    private var rarity: Int
+    private var band: Band?
+    private var bandIconImageURL: URL?
+    private var prefix: DoriAPI.LocalizedData<String>
+    private var characterID: Int
+    private var cardID: Int
+    private var previewCard: PreviewCard
+    @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     
-    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.PreviewEvent, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
+//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
+    init(_ card: DoriAPI.Card.PreviewCard, preferHeavierFonts: Bool = false) {
         self.preferHeavierFonts = preferHeavierFonts
-        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = event.eventName
-        self.eventID = event.id
-        self.eventType = event.eventType
-        self.locale = locale
-        self.showDetails = showDetails
-        self.showID = showID
-        self._searchedKeyword = searchedKeyword
+        self.thumbNormalImageURL = card.thumbNormalImageURL
+        self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
+        self.cardType = card.type
+        self.attribute = card.attribute
+        self.rarity = card.rarity
+        self.band = DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == card.characterID }) })?.key
+        self.bandIconImageURL = band?.iconImageURL
+        self.prefix = card.prefix
+        self.characterID = card.characterID
+        self.cardID = card.id
+        self.previewCard = card
     }
-    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.Event, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = true,  searchedKeyword: Binding<String> = .constant("")) {
+//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
+    init(_ card: DoriAPI.Card.Card, preferHeavierFonts: Bool = false) {
         self.preferHeavierFonts = preferHeavierFonts
-        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = event.eventName
-        self.eventID = event.id
-        self.eventType = event.eventType
-        self.locale = locale
-        self.showDetails = showDetails
-        self.showID = showID
-        self._searchedKeyword = searchedKeyword
+        self.thumbNormalImageURL = card.thumbNormalImageURL
+        self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
+        self.cardType = card.type
+        self.attribute = card.attribute
+        self.rarity = card.rarity
+        self.band = DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == card.characterID }) })?.key
+        self.bandIconImageURL = band?.iconImageURL
+        self.prefix = card.prefix
+        self.characterID = card.characterID
+        self.cardID = card.id
+        self.previewCard = PreviewCard(card)
     }
-    
-    let lighterVersionBannerScaleFactor: CGFloat = 0.85
-    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
+//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 230)
     
     var body: some View {
-        CustomGroupBox(showGroupBox: showDetails) {
+        CustomGroupBox {
             HStack {
-                if !preferHeavierFonts {
-                    Spacer(minLength: 0)
-                }
-                VStack {
-                    WebImage(url: eventImageURL) { image in
-                        image
-                            .resizable()
-                            .antialiased(true)
-                        //                        .scaledToFit()
-                            .aspectRatio(3.0, contentMode: .fit)
-                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
-                    } placeholder: {
-                        RoundedRectangle(cornerRadius: 10)
-                        //                        .fill(Color.gray.opacity(0.15))
-                            .fill(getPlaceholderColor())
-                            .aspectRatio(3.0, contentMode: .fit)
-                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
-                    }
-                    .interpolation(.high)
-                    .cornerRadius(10)
-                    
-                    if showDetails {
-                        VStack { // Accually Title & Countdown
-                                 //                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
-                            Text(attributedTitle)
-                                .multilineTextAlignment(.center)
-                                .bold()
-                                .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
-                                .onAppear {
-                                    //                                attributedString = highlightKeyword(in: , keyword: searchedKeyword)
-                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
-                                }
-                                .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
-                                .onChange(of: searchedKeyword, {
-                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
-                                })
-                            Group {
-                                //                            if !searchedKeyword.isEmpty {
-                                //                                Text("#\(eventID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
-                                if preferHeavierFonts {
-                                    HStack {
-                                        Text(attributedType)
-                                        if showID {
-                                            Text("#\(String(eventID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .secondary)
-                                        }
-                                    }
-                                } else {
-                                    Group {
-                                        Text(attributedType) + Text(verbatim: " • ").bold() + Text("#\(String(eventID))").fontDesign(.monospaced)
-                                    }
-                                    .foregroundStyle(.secondary)
-//                                    .font(.caption)
-                                }
-                                //                            } else {
-                                //                                Text(eventType.localizedString)
-                                //                            }
-                            }
-                            .onAppear {
-                                attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
-                            }
-                            .onChange(of: eventType.localizedString, {
-                                attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
-                            })
-                        }
-                        .frame(height: showDetails ? nil : 0)
-                        .opacity(showDetails ? 1 : 0)
+                HStack(spacing: 5) {
+                    CardPreviewImage(previewCard, cardNavigationDestinationID: .constant(nil))
+                    if thumbTrainedImageURL != nil {
+                        CardPreviewImage(previewCard, showTrainedVersion: true, cardNavigationDestinationID: .constant(nil))
                     }
                 }
-                if !preferHeavierFonts {
-                    Spacer(minLength: 0)
+                .wrapIf(sizeClass == .regular, in: { content in
+                    content.frame(maxWidth: 200)
+                })
+//                .frame(maxWidth: 200)
+                VStack(alignment: .leading) {
+                    Text(prefix.forPreferredLocale() ?? "nil")
+                        .bold()
+                        .font(isMACOS ? .title3 : .body)
+                    Group {
+                        Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text("\(cardType.localizedString)")
+                    }
+                    .foregroundStyle(.secondary)
+                    .font(isMACOS ? .body : .caption)
+                
+//                    .font(.caption)
                 }
+                Spacer()
             }
+        }
+        .onAppear {
+            self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
         }
     }
 }
@@ -235,7 +123,7 @@ struct CardCoverImage: View {
     private var characterID: Int
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
     init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band, showNavigationHints: Bool = true) {
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
@@ -248,7 +136,7 @@ struct CardCoverImage: View {
         self.cardTitle = card.prefix
         self.characterID = card.characterID
     }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
     init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band, showNavigationHints: Bool = true) {
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
@@ -261,7 +149,7 @@ struct CardCoverImage: View {
         self.cardTitle = card.prefix
         self.characterID = card.characterID
     }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 113)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 113)
     
     private let cardCornerRadius: CGFloat = 10
     private let standardCardWidth: CGFloat = 480
@@ -272,7 +160,7 @@ struct CardCoverImage: View {
     @State var normalCardIsOnHover = false
     @State var trainedCardIsOnHover = false
     
-   
+    
     @State var isHovering: Bool = false
     var body: some View {
         ZStack {
@@ -392,7 +280,7 @@ struct CardCoverImage: View {
                     .scaledToFill()
                     .frame(width: proxy.size.width, height: proxy.size.height)
                     .clipped()
-//                    .scaleEffect(0.97)
+                    //                    .scaleEffect(0.97)
                 }
             }
             
@@ -445,7 +333,7 @@ struct CardCoverImage: View {
                 .contextMenu(menuItems: {
                     VStack {
                         Button(action: {
-//                            cardNavigationDestinationID = cardID
+                            //                            cardNavigationDestinationID = cardID
                         }, label: {
                             if let title = cardTitle.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
                                 Group {
@@ -473,45 +361,45 @@ struct CardCoverImage: View {
 #else
             content
             /*
-            // Very weird code cuz SwiftUI has very weird refreshing logic.
-            // Don't touch without complete-understaning
-            let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
-                VStack {
-                    if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
-                        Group {
-                            Text(title)
-                            Group {
-                                Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
-                            }
-                            .font(.caption)
-                        }
-                    } else {
-                        Group {
-                            Text(verbatim: "Lorem ipsum dolor")
-                                .foregroundStyle(getPlaceholderColor())
-                            //                                .fill()
-                            Text(verbatim: "Lorem ipsum")
-                                .foregroundStyle(.tertiary)
-                        }
-                        .redacted(reason: .placeholder)
-                        
-                    }
-                }
-                .padding()
-            }
-            content
-                .onHover { isHovering in
-                    self.isHovering = isHovering
-                }
-                .popover(isPresented: $isHovering, arrowEdge: .bottom) {
-                    sumimi
-                }
-                .onChange(of: cardTitle) {
-                    sumimi.updateArguments((cardTitle, cardCharacterName))
-                }
-                .onChange(of: cardCharacterName) {
-                    sumimi.updateArguments((cardTitle, cardCharacterName))
-                }
+             // Very weird code cuz SwiftUI has very weird refreshing logic.
+             // Don't touch without complete-understaning
+             let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
+             VStack {
+             if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+             Group {
+             Text(title)
+             Group {
+             Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
+             }
+             .font(.caption)
+             }
+             } else {
+             Group {
+             Text(verbatim: "Lorem ipsum dolor")
+             .foregroundStyle(getPlaceholderColor())
+             //                                .fill()
+             Text(verbatim: "Lorem ipsum")
+             .foregroundStyle(.tertiary)
+             }
+             .redacted(reason: .placeholder)
+             
+             }
+             }
+             .padding()
+             }
+             content
+             .onHover { isHovering in
+             self.isHovering = isHovering
+             }
+             .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+             sumimi
+             }
+             .onChange(of: cardTitle) {
+             sumimi.updateArguments((cardTitle, cardCharacterName))
+             }
+             .onChange(of: cardCharacterName) {
+             sumimi.updateArguments((cardTitle, cardCharacterName))
+             }
              */
 #endif
         })
@@ -519,92 +407,7 @@ struct CardCoverImage: View {
             self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
         }
     }
-
-}
-
-
-//MARK: CardInfo [✓]
-struct CardInfo: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     
-    private var preferHeavierFonts: Bool = true
-    private var thumbNormalImageURL: URL
-    private var thumbTrainedImageURL: URL?
-    private var cardType: DoriAPI.Card.CardType
-    private var attribute: DoriAPI.Attribute
-    private var rarity: Int
-    private var band: Band?
-    private var bandIconImageURL: URL?
-    private var prefix: DoriAPI.LocalizedData<String>
-    private var characterID: Int
-    private var cardID: Int
-    private var previewCard: PreviewCard
-    @State var cardCharacterName: DoriAPI.LocalizedData<String>?
-    
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.PreviewCard, preferHeavierFonts: Bool = false) {
-        self.preferHeavierFonts = preferHeavierFonts
-        self.thumbNormalImageURL = card.thumbNormalImageURL
-        self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
-        self.cardType = card.type
-        self.attribute = card.attribute
-        self.rarity = card.rarity
-        self.band = DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == card.characterID }) })?.key
-        self.bandIconImageURL = band?.iconImageURL
-        self.prefix = card.prefix
-        self.characterID = card.characterID
-        self.cardID = card.id
-        self.previewCard = card
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.Card, preferHeavierFonts: Bool = false) {
-        self.preferHeavierFonts = preferHeavierFonts
-        self.thumbNormalImageURL = card.thumbNormalImageURL
-        self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
-        self.cardType = card.type
-        self.attribute = card.attribute
-        self.rarity = card.rarity
-        self.band = DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == card.characterID }) })?.key
-        self.bandIconImageURL = band?.iconImageURL
-        self.prefix = card.prefix
-        self.characterID = card.characterID
-        self.cardID = card.id
-        self.previewCard = PreviewCard(card)
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 230)
-    
-    var body: some View {
-        CustomGroupBox {
-            HStack {
-                HStack(spacing: 5) {
-                    CardPreviewImage(previewCard, cardNavigationDestinationID: .constant(nil))
-                    if thumbTrainedImageURL != nil {
-                        CardPreviewImage(previewCard, showTrainedVersion: true, cardNavigationDestinationID: .constant(nil))
-                    }
-                }
-                .wrapIf(sizeClass == .regular, in: { content in
-                    content.frame(maxWidth: 200)
-                })
-//                .frame(maxWidth: 200)
-                VStack(alignment: .leading) {
-                    Text(prefix.forPreferredLocale() ?? "nil")
-                        .bold()
-                        .font(isMACOS ? .title3 : .body)
-                    Group {
-                        Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text("\(cardType.localizedString)")
-                    }
-                    .foregroundStyle(.secondary)
-                    .font(isMACOS ? .body : .caption)
-                
-//                    .font(.caption)
-                }
-                Spacer()
-            }
-        }
-        .onAppear {
-            self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
-        }
-    }
 }
 
 
@@ -806,43 +609,11 @@ struct CardPreviewImage: View {
 }
 
 
-//MARK: ThumbCostumeCardView
-struct ThumbCostumeCardView: View {
-    private var thumbImageURL: URL
-    private var description: DoriAPI.LocalizedData<String>
-    
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 414)
-    init(_ costume: DoriAPI.Costume.PreviewCostume) {
-        self.thumbImageURL = costume.thumbImageURL
-        self.description = costume.description
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 414)
-    init(_ costume: DoriAPI.Costume.Costume) {
-        self.thumbImageURL = costume.thumbImageURL
-        self.description = costume.description
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 419)
-    
-    var body: some View {
-        HStack {
-            WebImage(url: thumbImageURL) { image in
-                image
-            } placeholder: {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(getPlaceholderColor())
-            }
-            .resizable()
-            .scaledToFit()
-            .frame(width: 50)
-            Text(description.forPreferredLocale() ?? "")
-        }
-    }
-}
-
 // MARK: CostumeInfo
 struct CostumeInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
+    @State var attributedChar: AttributedString = AttributedString("")
     
     private var preferHeavierFonts: Bool = true
     private var thumbImageURL: URL
@@ -851,6 +622,7 @@ struct CostumeInfo: View {
     private var locale: DoriAPI.Locale?
     private var layout: Axis
     private var showID: Bool
+    private var characterID: Int
     
     init(_ costume: DoriAPI.Costume.PreviewCostume, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
         self.preferHeavierFonts = preferHeavierFonts
@@ -861,6 +633,7 @@ struct CostumeInfo: View {
         self.layout = layout
         self.showID = showID
         self._searchedKeyword = searchedKeyword
+        self.characterID = costume.characterID
     }
     
     init(_ costume: DoriAPI.Costume.Costume, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
@@ -872,18 +645,21 @@ struct CostumeInfo: View {
         self.layout = layout
         self.showID = showID
         self._searchedKeyword = searchedKeyword
+        self.characterID = costume.characterID
     }
     
     let lighterVersionBannerScaleFactor: CGFloat = 0.85
+    @State var characterName: LocalizedData<String>?
     
     var body: some View {
         CustomGroupBox {
-            Group {
+            CustomStack(axis: layout) {
                 WebImage(url: thumbImageURL) { image in
                     image
                         .resizable()
                         .antialiased(true)
-                        .scaledToFit()
+//                        .scaledToFit()
+                        .aspectRatio(1, contentMode: .fit)
                         .frame(width: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
                 } placeholder: {
                     RoundedRectangle(cornerRadius: 10)
@@ -892,90 +668,236 @@ struct CostumeInfo: View {
                 }
                 .interpolation(.high)
                 
-                Text(attributedTitle)
-                    .multilineTextAlignment(.center)
-                    .bold()
-                    .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
-                    .onAppear {
-                        attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
-                    }
-                    .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
-                    .onChange(of: searchedKeyword, {
-                        attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
-                    })
-            }
-            .wrapIf(layout == .horizontal) { content in
-                HStack {
-                    content
+                VStack(alignment: layout == .horizontal ? .leading : .center) {
+                    Text(attributedTitle)
+                        .bold()
+                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+                        .onAppear {
+                            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                        }
+                        .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
+                        .onChange(of: searchedKeyword, {
+                            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                        })
+                        Text(characterName?.forPreferredLocale() ?? "nil")
+                    .foregroundStyle(.secondary)
+                    .font(isMACOS ? .body : .caption)
+                }
+                
+                if layout == .horizontal {
                     Spacer()
                 }
-            } else: { content in
-                HStack {
-                    Spacer()
-                    VStack {
-                        content
+            }
+        }
+        .onAppear {
+            characterName = DoriCache.preCache.characters.first(where: {$0.id == characterID})?.characterName
+            
+            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+            attributedChar = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (characterName?.forLocale(locale!) ?? characterName?.jp ?? "") : (characterName?.forPreferredLocale() ?? "")))
+        }
+    }
+}
+
+
+//MARK: EventInfo [✓]
+struct EventInfo: View {
+    @Binding var searchedKeyword: String
+    @State var attributedTitle: AttributedString = AttributedString("")
+    @State var attributedType: AttributedString = AttributedString("")
+    
+    private var preferHeavierFonts: Bool = true
+    private var eventImageURL: URL
+    private var title: DoriAPI.LocalizedData<String>
+    private var eventID: Int
+    private var eventType: DoriAPI.Event.EventType
+    private var locale: DoriAPI.Locale?
+    private var showDetails: Bool
+    private var showID: Bool
+    //    @State var imageHeight: CGFloat = 100
+    
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
+    init(_ event: DoriAPI.Event.PreviewEvent, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
+        self.preferHeavierFonts = preferHeavierFonts
+        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = event.eventName
+        self.eventID = event.id
+        self.eventType = event.eventType
+        self.locale = locale
+        self.showDetails = showDetails
+        self.showID = showID
+        self._searchedKeyword = searchedKeyword
+    }
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
+    init(_ event: DoriAPI.Event.Event, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = true,  searchedKeyword: Binding<String> = .constant("")) {
+        self.preferHeavierFonts = preferHeavierFonts
+        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = event.eventName
+        self.eventID = event.id
+        self.eventType = event.eventType
+        self.locale = locale
+        self.showDetails = showDetails
+        self.showID = showID
+        self._searchedKeyword = searchedKeyword
+    }
+    
+    let lighterVersionBannerScaleFactor: CGFloat = 0.85
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
+    
+    var body: some View {
+        CustomGroupBox(showGroupBox: showDetails) {
+            HStack {
+                if !preferHeavierFonts {
+                    Spacer(minLength: 0)
+                }
+                VStack {
+                    WebImage(url: eventImageURL) { image in
+                        image
+                            .resizable()
+                            .antialiased(true)
+                        //                        .scaledToFit()
+                            .aspectRatio(3.0, contentMode: .fit)
+                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                    } placeholder: {
+                        RoundedRectangle(cornerRadius: 10)
+                        //                        .fill(Color.gray.opacity(0.15))
+                            .fill(getPlaceholderColor())
+                            .aspectRatio(3.0, contentMode: .fit)
+                            .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
                     }
-                    Spacer()
+                    .interpolation(.high)
+                    .cornerRadius(10)
+                    
+                    if showDetails {
+                        VStack { // Accually Title & Countdown
+                                 //                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                            Text(attributedTitle)
+                                .multilineTextAlignment(.center)
+                                .bold()
+                                .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+                                .onAppear {
+                                    //                                attributedString = highlightKeyword(in: , keyword: searchedKeyword)
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                                }
+                                .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
+                                .onChange(of: searchedKeyword, {
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                                })
+                            Group {
+                                //                            if !searchedKeyword.isEmpty {
+                                //                                Text("#\(eventID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
+                                if preferHeavierFonts {
+                                    HStack {
+                                        Text(attributedType)
+                                        if showID {
+                                            Text("#\(String(eventID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .secondary)
+                                        }
+                                    }
+                                } else {
+                                    Group {
+                                        Text(attributedType) + Text(verbatim: " • ").bold() + Text("#\(String(eventID))").fontDesign(.monospaced)
+                                    }
+                                    .foregroundStyle(.secondary)
+                                    //                                    .font(.caption)
+                                }
+                                //                            } else {
+                                //                                Text(eventType.localizedString)
+                                //                            }
+                            }
+                            .onAppear {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
+                            }
+                            .onChange(of: eventType.localizedString, {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
+                            })
+                        }
+                        .frame(height: showDetails ? nil : 0)
+                        .opacity(showDetails ? 1 : 0)
+                    }
+                }
+                if !preferHeavierFonts {
+                    Spacer(minLength: 0)
                 }
             }
         }
     }
 }
 
-//MARK: GachaCardView
-struct GachaCardView: View {
-    private var bannerImageURL: URL
+
+//MARK: EventInfoForHome [✓]
+struct EventInfoForHome: View {
+    private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
+    private var startAt: DoriAPI.LocalizedData<Date>
+    private var endAt: DoriAPI.LocalizedData<Date>
+    private var locale: DoriAPI.Locale?
+    private var showsCountdown: Bool
     
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 444)
-    init(_ gacha: DoriAPI.Gacha.PreviewGacha) {
-        self.bannerImageURL = gacha.bannerImageURL
-        self.title = gacha.gachaName
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
+    init(_ event: DoriAPI.Event.PreviewEvent, inLocale locale: DoriAPI.Locale?, showsCountdown: Bool = false) {
+        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = event.eventName
+        self.startAt = event.startAt
+        self.endAt = event.endAt
+        self.locale = locale
+        self.showsCountdown = showsCountdown
     }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 444)
-    init(_ gacha: DoriAPI.Gacha.Gacha) {
-        self.bannerImageURL = gacha.bannerImageURL
-        self.title = gacha.gachaName
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
+    init(_ event: DoriAPI.Event.Event, inLocale locale: DoriAPI.Locale?, showsCountdown: Bool = false) {
+        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        self.title = event.eventName
+        self.startAt = event.startAt
+        self.endAt = event.endAt
+        self.locale = locale
+        self.showsCountdown = showsCountdown
     }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 449)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 33)
     
     var body: some View {
-        ZStack {
-            WebImage(url: bannerImageURL) { image in
+        VStack {
+            WebImage(url: eventImageURL) { image in
                 image
+                    .resizable()
+                    .antialiased(true)
+                    .scaledToFit()
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(getPlaceholderColor())
+                    .aspectRatio(3.0, contentMode: .fit)
             }
-            .resizable()
-            .scaledToFill()
-//            .frame(width: screenBounds.width - 5, height: 100)
-            .clipped()
+            .interpolation(.high)
             .cornerRadius(10)
-            HStack {
-                Spacer()
-                VStack {
-                    Spacer()
-                    Text(title.forPreferredLocale() ?? "")
-                        .padding(.horizontal, 2)
-                        .background {
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(Material.ultraThin)
-                                .blur(radius: 5)
+            
+            if showsCountdown { // Accually Title & Countdown
+                Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
+                    .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
+                    .bold()
+                    .font(.title3)
+                    .multilineTextAlignment(.center)
+                Group {
+                    if let startDate = locale != nil ? startAt.forLocale(locale!) : startAt.forPreferredLocale(),
+                       let endDate = locale != nil ? endAt.forLocale(locale!) : startAt.forPreferredLocale() {
+                        if startDate > .now {
+                            Text("Events.countdown.start-at.\(Text(startDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                                .multilineTextAlignment(.center)
+                        } else if endDate > .now {
+                            Text("Events.countdown.end-at.\(Text(endDate, style: .relative)).\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                                .multilineTextAlignment(.center)
+                        } else {
+                            Text("Events.countdown.ended.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                                .multilineTextAlignment(.center)
                         }
+                    } else {
+                        Text("Events.countdown.unstarted.\(locale != nil ? "(\(locale!.rawValue.uppercased()))" : "")")
+                            .multilineTextAlignment(.center)
+                    }
                 }
-                .font(.system(size: 12))
-                .lineLimit(1)
-                .padding(.horizontal, 4)
-                Spacer()
             }
         }
-        .listRowBackground(Color.clear)
-        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }
 
-//MARK: GachaInfo
+
+//MARK: GachaInfo [✓]
 struct GachaInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
@@ -1100,6 +1022,60 @@ struct GachaInfo: View {
                 }
             }
         }
+    }
+}
+
+
+//MARK: GachaCardView [×]
+struct GachaCardView: View {
+    private var bannerImageURL: URL
+    private var title: DoriAPI.LocalizedData<String>
+    
+//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 444)
+    init(_ gacha: DoriAPI.Gacha.PreviewGacha) {
+        self.bannerImageURL = gacha.bannerImageURL
+        self.title = gacha.gachaName
+    }
+//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 444)
+    init(_ gacha: DoriAPI.Gacha.Gacha) {
+        self.bannerImageURL = gacha.bannerImageURL
+        self.title = gacha.gachaName
+    }
+//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 449)
+    
+    var body: some View {
+        ZStack {
+            WebImage(url: bannerImageURL) { image in
+                image
+            } placeholder: {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(getPlaceholderColor())
+            }
+            .resizable()
+            .scaledToFill()
+//            .frame(width: screenBounds.width - 5, height: 100)
+            .clipped()
+            .cornerRadius(10)
+            HStack {
+                Spacer()
+                VStack {
+                    Spacer()
+                    Text(title.forPreferredLocale() ?? "")
+                        .padding(.horizontal, 2)
+                        .background {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Material.ultraThin)
+                                .blur(radius: 5)
+                        }
+                }
+                .font(.system(size: 12))
+                .lineLimit(1)
+                .padding(.horizontal, 4)
+                Spacer()
+            }
+        }
+        .listRowBackground(Color.clear)
+        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }
 

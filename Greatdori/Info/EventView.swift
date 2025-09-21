@@ -211,47 +211,7 @@ struct EventSearchView: View {
                     ToolbarSpacer()
                 }
                 ToolbarItemGroup {
-#if os(macOS)
-                    HStack(spacing: 0) {
-                        Button(action: {
-                            showFilterSheet.toggle()
-                        }, label: {
-                            (filter.isFiltered ? Color.white : .primary)
-                                .scaleEffect(2) // a larger value has no side effects because we're using `mask`
-                                .mask {
-                                    // We use `mask` to prevent unexpected blink
-                                    // while changing `foregroundStyle`.
-                                    Image(systemName: "line.3.horizontal.decrease")
-                                }
-                                .background {
-                                    if filter.isFiltered {
-                                        Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1.1 : 1.65)
-                                    }
-                                }
-                        })
-                        .animation(.easeInOut(duration: 0.2), value: filter.isFiltered)
-                        SorterPickerView(sorter: $sorter, allOptions: DoriFrontend.Event.PreviewEvent.applicableSortingTypes)
-                    }
-#else
-                    Button(action: {
-                        showFilterSheet.toggle()
-                    }, label: {
-                        (filter.isFiltered ? Color.white : .primary)
-                            .scaleEffect(2) // a larger value has no side effects because we're using `mask`
-                            .mask {
-                                // We use `mask` to prevent unexpected blink
-                                // while changing `foregroundStyle`.
-                                Image(systemName: "line.3.horizontal.decrease")
-                            }
-                            .background {
-                                if filter.isFiltered {
-                                    Capsule().foregroundStyle(Color.accentColor).scaledToFill().scaleEffect(isMACOS ? 1.1 : 1.65)
-                                }
-                            }
-                    })
-                    .animation(.easeInOut(duration: 0.2), value: filter.isFiltered)
-                    SorterPickerView(sorter: $sorter, allOptions: DoriFrontend.Event.PreviewEvent.applicableSortingTypes)
-#endif
+                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewEvent.applicableSortingTypes)
                 }
             }
             .onDisappear {

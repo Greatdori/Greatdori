@@ -165,3 +165,55 @@ struct DetailsGachasSection: View {
         }
     }
 }
+
+// MARK: DetailsCostumesSection
+struct DetailsCostumesSection: View {
+    var costumes: [PreviewCostume]
+    @State var costumesSorted: [PreviewCostume] = []
+    @State var showAll = false
+    var body: some View {
+        LazyVStack(pinnedViews: .sectionHeaders) {
+            Section(content: {
+                ForEach((showAll ? costumesSorted : Array(costumesSorted.prefix(3))), id: \.self) { item in
+                    NavigationLink(destination: {
+                        //                    [NAVI785]
+                        CostumeDetailView(id: item.id)
+                    }, label: {
+                        //                    CustomGroupBox {
+                        CostumeInfo(item, preferHeavierFonts: false/*, showDetails: true*/)
+                            .scaledToFill()
+                            .frame(maxWidth: 600)
+                            .scaledToFill()
+                        //                    }
+                    })
+                    .buttonStyle(.plain)
+                }
+                .frame(maxWidth: 600)
+            }, header: {
+                HStack {
+                    Text("Details.costumes")
+                        .font(.title2)
+                        .bold()
+                    Spacer()
+                    if costumesSorted.count > 3 {
+                        Button(action: {
+                            showAll.toggle()
+                        }, label: {
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(costumesSorted.count)")
+                                .foregroundStyle(.secondary)
+                            //                        .font(.caption)
+                        })
+                        .buttonStyle(.plain)
+                    }
+                    //                .alignmentGuide(.bottom, computeValue: 0)
+                    
+                }
+                .frame(maxWidth: 615)
+                //            .border(.red)
+            })
+        }
+        .onAppear {
+            costumesSorted = costumes.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp)))
+        }
+    }
+}
