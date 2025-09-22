@@ -242,9 +242,11 @@ struct EventDetailView: View {
                         Spacer(minLength: 0)
                         VStack {
                             EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
-//                            ListGachaView()
                             
-                            
+                            Rectangle()
+                                .opacity(0)
+                                .frame(height: 30)
+                            DetailsCardsSection(cards: information.cards, applyLocaleFilter: true)
                         }
                         .padding()
                         Spacer(minLength: 0)

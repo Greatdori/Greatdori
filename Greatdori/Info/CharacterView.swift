@@ -306,30 +306,30 @@ struct CharacterDetailView: View {
                             Spacer(minLength: 0)
                         }
                         CharacterDetailOverviewView(information: information)
-                        if !information.cards.isEmpty {
+//                        if !information.cards.isEmpty {
                             Rectangle()
                                 .opacity(0)
                                 .frame(height: 30)
                             DetailsCardsSection(cards: information.cards)
-                        }
-                        if !information.costumes.isEmpty {
+//                        }
+//                        if !information.costumes.isEmpty {
                             Rectangle()
                                 .opacity(0)
                                 .frame(height: 30)
                             DetailsCostumesSection(costumes: information.costumes)
-                        }
-                        if !information.events.isEmpty {
+//                        }
+//                        if !information.events.isEmpty {
                             Rectangle()
                                 .opacity(0)
                                 .frame(height: 30)
                             DetailsEventsSection(events: information.events)
-                        }
-                        if !information.gacha.isEmpty {
+//                        }
+//                        if !information.gacha.isEmpty {
                             Rectangle()
                                 .opacity(0)
                                 .frame(height: 30)
                             DetailsGachasSection(gachas: information.gacha)
-                        }
+//                        }
                         Spacer()
                     }
                     .padding()

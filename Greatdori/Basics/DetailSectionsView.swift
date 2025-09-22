@@ -18,18 +18,29 @@ import SwiftUI
 // MARK: DetailsCardSection
 struct DetailsCardsSection: View {
     var cards: [PreviewCard]
+    var applyLocaleFilter: Bool = false
+    @State var locale: DoriLocale = DoriLocale.primaryLocale
     @State var cardsSorted: [PreviewCard] = []
+    @State var displayingCards: [PreviewCard] = []
     @State var showAll = false
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
-                ForEach((showAll ? cardsSorted : Array(cardsSorted.prefix(3))), id: \.self) { item in
-                    NavigationLink(destination: {
-                        CardDetailView(id: item.id)
-                    }, label: {
-                        CardInfo(item)
-                    })
-                    .buttonStyle(.plain)
+                Group {
+                    if !displayingCards.isEmpty {
+                        ForEach((showAll ? displayingCards : Array(displayingCards.prefix(3))), id: \.self) { item in
+                            NavigationLink(destination: {
+                                CardDetailView(id: item.id)
+                            }, label: {
+                                CardInfo(item)
+                            })
+                            .buttonStyle(.plain)
+                        }
+                    } else {
+                        CustomGroupBox {
+                            ContentUnavailableView("Details.cards.unavailable", systemImage: "person.crop.square.on.square.angled")
+                        }
+                    }
                 }
                 .frame(maxWidth: 600)
             }, header: {
@@ -37,27 +48,37 @@ struct DetailsCardsSection: View {
                     Text("Details.cards")
                         .font(.title2)
                         .bold()
+                    if applyLocaleFilter {
+                        DetailsLocalePicker(locale: $locale)
+                    }
+                    
                     Spacer()
-                    if cardsSorted.count > 3 {
+                    if displayingCards.count > 3 {
                         Button(action: {
                             showAll.toggle()
                         }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(cardsSorted.count)")
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(displayingCards.count)")
                                 .foregroundStyle(.secondary)
-                            //                        .font(.caption)
                         })
                         .buttonStyle(.plain)
                     }
-                    //                .alignmentGuide(.bottom, computeValue: 0)
                     
                 }
                 .frame(maxWidth: 615)
-//                .shadow(radius: 10)
-                //            .border(.red)
             })
         }
         .onAppear {
             cardsSorted = cards.sorted{compare($0.releasedAt.jp?.corrected(),$1.releasedAt.jp?.corrected())}
+            if applyLocaleFilter {
+                displayingCards = cardsSorted.filter{$0.releasedAt.availableInLocale(locale)}
+            } else {
+                displayingCards = cardsSorted
+            }
+        }
+        .onChange(of: locale) {
+            if applyLocaleFilter {
+                displayingCards = cardsSorted.filter{$0.releasedAt.availableInLocale(locale)}
+            }
         }
     }
 }
@@ -65,23 +86,32 @@ struct DetailsCardsSection: View {
 // MARK: DetailsEventsSection
 struct DetailsEventsSection: View {
     var events: [PreviewEvent]
+    var applyLocaleFilter: Bool = false
+    @State var locale: DoriLocale = DoriLocale.primaryLocale
     @State var eventsSorted: [PreviewEvent] = []
+    @State var displayingEvents: [PreviewEvent] = []
     @State var showAll = false
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
-                ForEach((showAll ? eventsSorted : Array(eventsSorted.prefix(3))), id: \.self) { item in
-                    NavigationLink(destination: {
-                        EventDetailView(id: item.id)
-                    }, label: {
-                        //                    CustomGroupBox {
-                        EventInfo(item, preferHeavierFonts: false, showDetails: true)
-                            .scaledToFill()
-                            .frame(maxWidth: 600)
-                            .scaledToFill()
-                        //                    }
-                    })
-                    .buttonStyle(.plain)
+                Group {
+                    if !displayingEvents.isEmpty {
+                        ForEach((showAll ? displayingEvents : Array(displayingEvents.prefix(3))), id: \.self) { item in
+                            NavigationLink(destination: {
+                                EventDetailView(id: item.id)
+                            }, label: {
+                                EventInfo(item, preferHeavierFonts: false, showDetails: true)
+                                    .scaledToFill()
+                                    .frame(maxWidth: 600)
+                                    .scaledToFill()
+                            })
+                            .buttonStyle(.plain)
+                        }
+                    } else {
+                        CustomGroupBox {
+                            ContentUnavailableView("Details.events.unavailable", systemImage: "star.hexagon")
+                        }
+                    }
                 }
                 .frame(maxWidth: 600)
             }, header: {
@@ -89,12 +119,15 @@ struct DetailsEventsSection: View {
                     Text("Details.events")
                         .font(.title2)
                         .bold()
+                    if applyLocaleFilter {
+                        DetailsLocalePicker(locale: $locale)
+                    }
                     Spacer()
-                    if eventsSorted.count > 3 {
+                    if displayingEvents.count > 3 {
                         Button(action: {
                             showAll.toggle()
                         }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(eventsSorted.count)")
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(displayingEvents.count)")
                                 .foregroundStyle(.secondary)
                             //                        .font(.caption)
                         })
@@ -109,6 +142,16 @@ struct DetailsEventsSection: View {
         }
         .onAppear {
             eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp)))
+            if applyLocaleFilter {
+                displayingEvents = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
+            } else {
+                displayingEvents = eventsSorted
+            }
+        }
+        .onChange(of: locale) {
+            if applyLocaleFilter {
+                displayingEvents = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
+            }
         }
     }
 }
@@ -207,5 +250,29 @@ struct DetailsCostumesSection: View {
         .onAppear {
             costumesSorted = costumes.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp)))
         }
+    }
+}
+
+struct DetailsLocalePicker: View {
+    @Binding var locale: DoriLocale
+    var body: some View {
+        Menu(content: {
+            Picker(selection: $locale, content: {
+                ForEach(DoriLocale.allCases, id: \.self) { item in
+                    Text(item.selectorText)
+                        .tag(item)
+                }
+            }, label: {
+                Text("")
+            })
+            .pickerStyle(.inline)
+            .labelsHidden()
+            .multilineTextAlignment(.leading)
+        }, label: {
+            Text(getAttributedString(locale.selectorText, fontSize: .title2, fontWeight: .semibold, foregroundColor: .accent))
+        })
+        .menuIndicator(.hidden)
+        .menuStyle(.borderlessButton)
+        .buttonStyle(.plain)
     }
 }

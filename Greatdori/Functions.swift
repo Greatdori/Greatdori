@@ -70,6 +70,14 @@ func getBirthdayTimeZone(from input: BirthdayTimeZone? = nil) -> TimeZone {
 //}
 
 
+func getAttributedString(_ source: String, fontSize: Font.TextStyle = .body, fontWeight: Font.Weight = .regular, foregroundColor: Color = .primary) -> AttributedString {
+    var attrString = AttributedString()
+    attrString = AttributedString(source)
+    attrString.font = .system(fontSize, weight: fontWeight)
+    attrString.foregroundColor = foregroundColor
+    return attrString
+}
+
 
 // MARK: getPlaceholderColor
 func getPlaceholderColor() -> Color {
