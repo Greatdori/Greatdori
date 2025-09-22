@@ -177,7 +177,7 @@ public typealias DoriFilter = DoriFrontend.Filter
 public typealias DoriSorter = DoriFrontend.Sorter
 
 %{
-    baseNames = ["Card", "Character", "Event", "Gacha", "Song"]
+    baseNames = ["Card", "Character", "Costume", "Event", "Gacha", "Song"]
 }%
 % for baseName in baseNames:
 public typealias Extended${baseName} = DoriFrontend.${baseName}.Extended${baseName}

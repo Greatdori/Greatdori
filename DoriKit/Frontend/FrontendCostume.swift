@@ -38,6 +38,41 @@ extension DoriFrontend {
             return costumes
         }
         
+        /// Get a detailed costume with related information.
+        ///
+        /// - Parameter id: The ID of costume.
+        /// - Returns: The costume of requested ID,
+        ///     with related character and band.
+        public static func extendedInformation(of id: Int) async -> ExtendedCostume? {
+            let groupResult = await withTasksResult {
+                await DoriAPI.Costume.detail(of: id)
+            } _: {
+                await DoriAPI.Character.all()
+            } _: {
+                await DoriAPI.Band.all()
+            }
+            guard let costume = groupResult.0 else { return nil }
+            guard let characters = groupResult.1 else { return nil }
+            guard let bands = groupResult.2 else { return nil }
+            
+            let character = characters.first { $0.id == costume.characterID } ?? .init( // dummy
+                id: -1,
+                characterType: .common,
+                characterName: .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil),
+                nickname: .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil),
+                bandID: nil,
+                color: nil
+            )
+            return .init(
+                costume: costume,
+                character: character,
+                band: bands.first { $0.id == character.bandID } ?? .init( // dummy
+                    id: -1,
+                    bandName: .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
+                )
+            )
+        }
+        
         #if !os(watchOS)
         @MainActor
         public static func live2dViewer(for id: Int) -> WKWebView {
@@ -87,4 +122,27 @@ extension DoriFrontend {
 
 extension DoriFrontend.Costume {
     public typealias PreviewCostume = DoriAPI.Costume.PreviewCostume
+    public typealias Costume = DoriAPI.Costume.Costume
+    
+    public struct ExtendedCostume: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+        public var costume: Costume
+        public var character: DoriAPI.Character.PreviewCharacter
+        public var band: DoriAPI.Band.Band
+        
+        @inlinable
+        public var id: Int {
+            costume.id
+        }
+    }
+}
+
+extension DoriFrontend.Costume.ExtendedCostume {
+    @inlinable
+    public init?(id: Int) async {
+        if let costume = await DoriFrontend.Costume.extendedInformation(of: id) {
+            self = costume
+        } else {
+            return nil
+        }
+    }
 }

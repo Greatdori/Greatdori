@@ -655,7 +655,6 @@ struct EventDetailOverviewView: View {
                 }
             }
         }
-        .padding()
         .frame(maxWidth: 600)
         .onAppear {
             eventCharacterPercentageDict = [:]
