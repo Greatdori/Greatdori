@@ -88,6 +88,9 @@ struct CardInfo: View {
     var body: some View {
         CustomGroupBox {
             CustomStack(axis: layoutType == 1 ? .horizontal : .vertical) {
+                if layoutType == 2 {
+                    Spacer()
+                }
                 // MARK: CardPreviewImage
                 if layoutType != 3 {
                     HStack(spacing: 5) {
@@ -96,9 +99,9 @@ struct CardInfo: View {
                             CardPreviewImage(previewCard, showTrainedVersion: true, cardNavigationDestinationID: .constant(nil))
                         }
                     }
-                    .wrapIf(sizeClass == .regular, in: { content in
+                    .wrapIf(sizeClass == .regular) { content in
                         content.frame(maxWidth: 200)
-                    })
+                    }
                 } else {
                     CardCoverImage(previewCard, band: band)
                         .allowsHitTesting(false)
@@ -124,7 +127,16 @@ struct CardInfo: View {
 //                    .font(isMACOS ? .body : .caption)
                 }
                 .multilineTextAlignment(layoutType == 1 ? .leading : .center)
-                Spacer()
+                if layoutType != 3 {
+                    Spacer()
+                }
+            }
+            .wrapIf(layoutType == 2) { content in
+                HStack {
+                    Spacer(minLength: 0)
+                    content
+                    Spacer(minLength: 0)
+                }
             }
         }
         .onAppear {
