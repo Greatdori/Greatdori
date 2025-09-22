@@ -345,7 +345,7 @@ struct CardCoverImage: View {
                                 Image(rarity >= 4 ? .trainedStar : .star)
                                     .resizable()
                                     .frame(width: 40/standardCardWidth*proxy.size.width, height: 40/standardCardHeight*proxy.size.height, alignment: .topLeading)
-                                    .padding(.top, -1)
+                                    .padding(.top, CGFloat(-rarity))
                             }
                         }
                         Spacer()
