@@ -127,12 +127,7 @@ struct DetailsGachasSection: View {
                         //                    [NAVI785]
                         GachaDetailView(id: item.id)
                     }, label: {
-                        //                    CustomGroupBox {
                         GachaInfo(item, preferHeavierFonts: false, showDetails: true)
-                            .scaledToFill()
-                            .frame(maxWidth: 600)
-                            .scaledToFill()
-                        //                    }
                     })
                     .buttonStyle(.plain)
                 }
