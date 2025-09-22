@@ -366,6 +366,22 @@
         }
       }
     },
+    "Card.attribute" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attribute"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "属性"
+          }
+        }
+      }
+    },
     "Card.band" : {
       "localizations" : {
         "en" : {
@@ -426,6 +442,54 @@
         }
       }
     },
+    "Card.gacha-quote" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha Quote"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募语"
+          }
+        }
+      }
+    },
+    "Card.rarity" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rarity"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稀有度"
+          }
+        }
+      }
+    },
+    "Card.release-date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Release Date"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发布日期"
+          }
+        }
+      }
+    },
     "Card.search.placeholder" : {
       "localizations" : {
         "en" : {
@@ -454,6 +518,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "卡片搜索不可用"
+          }
+        }
+      }
+    },
+    "Card.skill" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skill"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "技能"
           }
         }
       }

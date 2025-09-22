@@ -315,6 +315,7 @@ struct CardDetailOverviewView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     let information: ExtendedCard
     @Binding var cardNavigationDestinationID: Int?
+    @State private var allSkills: [Skill] = []
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     
     let cardCoverScalingFactor: CGFloat = 1
@@ -389,7 +390,7 @@ struct CardDetailOverviewView: View {
                             Divider()
                         }
                         
-                        // MARK: Type
+                        // MARK: Band
                         Group {
                             ListItemView(title: {
                                 Text("Card.band")
@@ -399,9 +400,81 @@ struct CardDetailOverviewView: View {
                                     MultilingualText(source: information.band.bandName, allowPopover: false)
                                     WebImage(url: information.band.iconImageURL)
                                         .resizable()
-                                        .clipShape(Circle())
                                         .frame(width: imageButtonSize, height: imageButtonSize)
                                 }
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Attribute
+                        Group {
+                            ListItemView(title: {
+                                Text("Card.attribute")
+                                    .bold()
+                            }, value: {
+                                HStack {
+                                    Text(information.card.attribute.selectorText.uppercased())
+                                    WebImage(url: information.card.attribute.iconImageURL)
+                                        .resizable()
+                                        .frame(width: imageButtonSize, height: imageButtonSize)
+                                }
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Rarity
+                        Group {
+                            ListItemView(title: {
+                                Text("Card.rarity")
+                                    .bold()
+                            }, value: {
+                                HStack(spacing: 0) {
+                                    ForEach(1...information.card.rarity, id: \.self) { _ in
+                                        Image(information.card.rarity >= 4 ? .trainedStar : .star)
+                                            .resizable()
+                                            .frame(width: imageButtonSize, height: imageButtonSize)
+                                            .padding(.top, -1)
+                                    }
+                                }
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Skill
+                        if let skill = allSkills.first(where: { $0.id == information.card.skillID }) {
+                            Group {
+                                ListItemView(title: {
+                                    Text("Card.skill")
+                                        .bold()
+                                }, value: {
+//                                    Text(skill.maximumDescription)
+                                    MultilingualText(source: skill.maximumDescription)
+                                }, displayMode: .basedOnUISizeClass)
+                                Divider()
+                            }
+                        }
+                        
+                        
+                        // MARK: Gacha Quote
+                        if !information.card.gachaText.isValueEmpty {
+                            Group {
+                                ListItemView(title: {
+                                    Text("Card.gacha-quote")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(source: information.card.gachaText)
+                                }, displayMode: .basedOnUISizeClass)
+                                Divider()
+                            }
+                        }
+                        
+                        // MARK: Release Date
+                        Group {
+                            ListItemView(title: {
+                                Text("Card.release-date")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(source: information.card.releasedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                             })
                             Divider()
                         }
@@ -415,11 +488,19 @@ struct CardDetailOverviewView: View {
                                 Text("\(String(information.id))")
                             })
                         }
-                        
                     }
                 }
             }
         }
         .frame(maxWidth: 600)
+        .task {
+            // Load skills asynchronously once when the view appears
+            if allSkills.isEmpty {
+                if let fetched = await Skill.all() {
+                    allSkills = fetched
+                }
+            }
+        }
     }
 }
+
