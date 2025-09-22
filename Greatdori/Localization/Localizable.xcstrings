@@ -1381,6 +1381,9 @@
         }
       }
     },
+    "Details.costumes.unavailable" : {
+
+    },
     "Details.events" : {
       "localizations" : {
         "en" : {
@@ -1415,6 +1418,9 @@
           }
         }
       }
+    },
+    "Details.gachas.unavailable" : {
+
     },
     "Details.show-all.%lld" : {
       "localizations" : {

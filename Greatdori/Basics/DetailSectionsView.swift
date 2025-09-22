@@ -21,14 +21,13 @@ struct DetailsCardsSection: View {
     var applyLocaleFilter: Bool = false
     @State var locale: DoriLocale = DoriLocale.primaryLocale
     @State var cardsSorted: [PreviewCard] = []
-    @State var displayingCards: [PreviewCard] = []
     @State var showAll = false
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
                 Group {
-                    if !displayingCards.isEmpty {
-                        ForEach((showAll ? displayingCards : Array(displayingCards.prefix(3))), id: \.self) { item in
+                    if !cardsSorted.isEmpty {
+                        ForEach((showAll ? cardsSorted : Array(cardsSorted.prefix(3))), id: \.self) { item in
                             NavigationLink(destination: {
                                 CardDetailView(id: item.id)
                             }, label: {
@@ -53,11 +52,11 @@ struct DetailsCardsSection: View {
                     }
                     
                     Spacer()
-                    if displayingCards.count > 3 {
+                    if cardsSorted.count > 3 {
                         Button(action: {
                             showAll.toggle()
                         }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(displayingCards.count)")
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(cardsSorted.count)")
                                 .foregroundStyle(.secondary)
                         })
                         .buttonStyle(.plain)
@@ -68,16 +67,15 @@ struct DetailsCardsSection: View {
             })
         }
         .onAppear {
-            cardsSorted = cards.sorted{compare($0.releasedAt.jp?.corrected(),$1.releasedAt.jp?.corrected())}
+            cardsSorted = cards.sorted{compare($0.releasedAt.forLocale(applyLocaleFilter ? locale : .jp)?.corrected(),$1.releasedAt.forLocale(applyLocaleFilter ? locale : .jp)?.corrected())}
             if applyLocaleFilter {
-                displayingCards = cardsSorted.filter{$0.releasedAt.availableInLocale(locale)}
-            } else {
-                displayingCards = cardsSorted
+                cardsSorted = cardsSorted.filter{$0.releasedAt.availableInLocale(locale)}
             }
         }
         .onChange(of: locale) {
+            cardsSorted = cards.sorted{compare($0.releasedAt.forLocale(applyLocaleFilter ? locale : .jp)?.corrected(),$1.releasedAt.forLocale(applyLocaleFilter ? locale : .jp)?.corrected())}
             if applyLocaleFilter {
-                displayingCards = cardsSorted.filter{$0.releasedAt.availableInLocale(locale)}
+                cardsSorted = cardsSorted.filter{$0.releasedAt.availableInLocale(locale)}
             }
         }
     }
@@ -89,14 +87,13 @@ struct DetailsEventsSection: View {
     var applyLocaleFilter: Bool = false
     @State var locale: DoriLocale = DoriLocale.primaryLocale
     @State var eventsSorted: [PreviewEvent] = []
-    @State var displayingEvents: [PreviewEvent] = []
     @State var showAll = false
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
                 Group {
-                    if !displayingEvents.isEmpty {
-                        ForEach((showAll ? displayingEvents : Array(displayingEvents.prefix(3))), id: \.self) { item in
+                    if !eventsSorted.isEmpty {
+                        ForEach((showAll ? eventsSorted : Array(eventsSorted.prefix(3))), id: \.self) { item in
                             NavigationLink(destination: {
                                 EventDetailView(id: item.id)
                             }, label: {
@@ -123,11 +120,11 @@ struct DetailsEventsSection: View {
                         DetailsLocalePicker(locale: $locale)
                     }
                     Spacer()
-                    if displayingEvents.count > 3 {
+                    if eventsSorted.count > 3 {
                         Button(action: {
                             showAll.toggle()
                         }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(displayingEvents.count)")
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(eventsSorted.count)")
                                 .foregroundStyle(.secondary)
                             //                        .font(.caption)
                         })
@@ -141,16 +138,15 @@ struct DetailsEventsSection: View {
             })
         }
         .onAppear {
-            eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp)))
+            eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
             if applyLocaleFilter {
-                displayingEvents = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
-            } else {
-                displayingEvents = eventsSorted
+                eventsSorted = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
             }
         }
         .onChange(of: locale) {
+            eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
             if applyLocaleFilter {
-                displayingEvents = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
+                eventsSorted = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
             }
         }
     }
@@ -159,18 +155,28 @@ struct DetailsEventsSection: View {
 // MARK: DetailsGachasSection
 struct DetailsGachasSection: View {
     var gachas: [PreviewGacha]
+    var applyLocaleFilter: Bool = false
+    @State var locale: DoriLocale = DoriLocale.primaryLocale
     @State var gachasSorted: [PreviewGacha] = []
     @State var showAll = false
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
-                ForEach((showAll ? gachasSorted : Array(gachasSorted.prefix(3))), id: \.self) { item in
-                    NavigationLink(destination: {
-                        GachaDetailView(id: item.id)
-                    }, label: {
-                        GachaInfo(item, preferHeavierFonts: false, showDetails: true)
-                    })
-                    .buttonStyle(.plain)
+                Group {
+                    if !gachasSorted.isEmpty {
+                        ForEach((showAll ? gachasSorted : Array(gachasSorted.prefix(3))), id: \.self) { item in
+                            NavigationLink(destination: {
+                                GachaDetailView(id: item.id)
+                            }, label: {
+                                GachaInfo(item, preferHeavierFonts: false, showDetails: true)
+                            })
+                            .buttonStyle(.plain)
+                        }
+                    } else {
+                        CustomGroupBox {
+                            ContentUnavailableView("Details.gachas.unavailable", systemImage: "line.horizontal.star.fill.line.horizontal")
+                        }
+                    }
                 }
                 .frame(maxWidth: 600)
             }, header: {
@@ -178,6 +184,9 @@ struct DetailsGachasSection: View {
                     Text("Details.gachas")
                         .font(.title2)
                         .bold()
+                    if applyLocaleFilter {
+                        DetailsLocalePicker(locale: $locale)
+                    }
                     Spacer()
                     if gachasSorted.count > 3 {
                         Button(action: {
@@ -197,7 +206,16 @@ struct DetailsGachasSection: View {
             })
         }
         .onAppear {
-            gachasSorted = gachas.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp)))
+            gachasSorted = gachas.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
+            if applyLocaleFilter {
+                gachasSorted = gachasSorted.filter{$0.publishedAt.availableInLocale(locale)}
+            }
+        }
+        .onChange(of: locale) {
+            gachasSorted = gachas.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
+            if applyLocaleFilter {
+                gachasSorted = gachasSorted.filter{$0.publishedAt.availableInLocale(locale)}
+            }
         }
     }
 }
@@ -205,23 +223,33 @@ struct DetailsGachasSection: View {
 // MARK: DetailsCostumesSection
 struct DetailsCostumesSection: View {
     var costumes: [PreviewCostume]
+    var applyLocaleFilter = false
+    @State var locale: DoriLocale = DoriLocale.primaryLocale
     @State var costumesSorted: [PreviewCostume] = []
     @State var showAll = false
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
-                ForEach((showAll ? costumesSorted : Array(costumesSorted.prefix(3))), id: \.self) { item in
-                    NavigationLink(destination: {
-                        CostumeDetailView(id: item.id)
-                    }, label: {
-                        //                    CustomGroupBox {
-                        CostumeInfo(item, preferHeavierFonts: false/*, showDetails: true*/)
-                            .scaledToFill()
-                            .frame(maxWidth: 600)
-                            .scaledToFill()
-                        //                    }
-                    })
-                    .buttonStyle(.plain)
+                Group {
+                    if !costumesSorted.isEmpty {
+                        ForEach((showAll ? costumesSorted : Array(costumesSorted.prefix(3))), id: \.self) { item in
+                            NavigationLink(destination: {
+                                CostumeDetailView(id: item.id)
+                            }, label: {
+                                //                    CustomGroupBox {
+                                CostumeInfo(item, preferHeavierFonts: false/*, showDetails: true*/)
+                                    .scaledToFill()
+                                    .frame(maxWidth: 600)
+                                    .scaledToFill()
+                                //                    }
+                            })
+                            .buttonStyle(.plain)
+                        }
+                    } else {
+                        CustomGroupBox {
+                            ContentUnavailableView("Details.costumes.unavailable", systemImage: "swatchpalette")
+                        }
+                    }
                 }
                 .frame(maxWidth: 600)
             }, header: {
@@ -229,6 +257,9 @@ struct DetailsCostumesSection: View {
                     Text("Details.costumes")
                         .font(.title2)
                         .bold()
+                    if applyLocaleFilter {
+                        DetailsLocalePicker(locale: $locale)
+                    }
                     Spacer()
                     if costumesSorted.count > 3 {
                         Button(action: {
@@ -248,7 +279,16 @@ struct DetailsCostumesSection: View {
             })
         }
         .onAppear {
-            costumesSorted = costumes.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp)))
+            costumesSorted = costumes.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
+            if applyLocaleFilter {
+                costumesSorted = costumesSorted.filter{$0.publishedAt.availableInLocale(locale)}
+            }
+        }
+        .onChange(of: locale) {
+            costumesSorted = costumes.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
+            if applyLocaleFilter {
+                costumesSorted = costumesSorted.filter{$0.publishedAt.availableInLocale(locale)}
+            }
         }
     }
 }
