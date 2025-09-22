@@ -35,7 +35,8 @@ struct CardSearchView: View {
     @Namespace var cardLists
     
     let gridLayoutItemWidth: CGFloat = 200*0.9
-    let galleryLayoutItemWidth: CGFloat = 200*0.9
+    let galleryLayoutItemMinimumWidth: CGFloat = 400
+    let galleryLayoutItemMaximumWidth: CGFloat = 500
     var body: some View {
         Group {
             Group {
@@ -68,7 +69,7 @@ struct CardSearchView: View {
                                             }
                                             .frame(maxWidth: 600)
                                         } else {
-                                            LazyVGrid(columns: [GridItem(.adaptive(minimum: layoutType == 2 ? gridLayoutItemWidth : galleryLayoutItemWidth, maximum: layoutType == 2 ? gridLayoutItemWidth : galleryLayoutItemWidth))]) {
+                                            LazyVGrid(columns: [GridItem(.adaptive(minimum: layoutType == 2 ? gridLayoutItemWidth : galleryLayoutItemMinimumWidth, maximum: layoutType == 2 ? gridLayoutItemWidth : galleryLayoutItemMaximumWidth))]) {
                                                 ForEach(resultCards, id: \.self) { card in
                                                     Button(action: {
                                                         showFilterSheet = false
@@ -194,7 +195,7 @@ struct CardSearchView: View {
         } .onUpdate {
             if let cards = $0 {
                 self.cards = cards.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending))
-                searchedCards = cards.sorted(withDoriSorter: sorter)
+                searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             } else {
                 infoIsAvailable = false
             }
@@ -208,8 +209,8 @@ struct CardDetailView: View {
     var id: Int
     var allCards: [CardWithBand]? = nil
     @State var cardID: Int = 0
-    @State var informationLoadPromise: CachePromise<Card?>?
-    @State var information: Card?
+    @State var informationLoadPromise: CachePromise<ExtendedCard?>?
+    @State var information: ExtendedCard?
     @State var infoIsAvailable = true
     @State var cardNavigationDestinationID: Int?
     @State var allCardIDs: [Int] = []
@@ -221,7 +222,7 @@ struct CardDetailView: View {
                     HStack {
                         Spacer(minLength: 0)
                         VStack {
-//                            CardDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+                            CardDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -251,12 +252,12 @@ struct CardDetailView: View {
         .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
             Text("\(id)")
         })
-        .navigationTitle(Text(information?.prefix.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Card") : "")"))
+        .navigationTitle(Text(information?.card.prefix.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Card") : "")"))
 #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
                 content
-                    .navigationSubtitle(information?.prefix.forPreferredLocale() != nil ? "#\(cardID)" : "")
+                    .navigationSubtitle(information?.card.prefix.forPreferredLocale() != nil ? "#\(cardID)" : "")
             } else {
                 content
             }
@@ -297,7 +298,7 @@ struct CardDetailView: View {
         infoIsAvailable = true
         informationLoadPromise?.cancel()
         informationLoadPromise = DoriCache.withCache(id: "CardDetail_\(id)", trait: .realTime) {
-            await Card(id: id)
+            await ExtendedCard(id: id)
         } .onUpdate {
             if let information = $0 {
                 self.information = information
@@ -308,21 +309,15 @@ struct CardDetailView: View {
     }
 }
 
-/*
+
 // MARK: CardDetailOverviewView
 struct CardDetailOverviewView: View {
-    let information: Card
-    @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
-    @State var cardsArraySeperated: [[DoriFrontend.Card.PreviewCard?]] = []
-    @State var cardsPercentage: Int = -100
-    @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
-    @State var cardsTitleWidth: CGFloat = 0 // Fixed
-    @State var cardsPercentageWidth: CGFloat = 0 // Fixed
-    @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
-    @State var cardsFixedWidth: CGFloat = 0 //Fixed
-    @State var cardsUseCompactLayout = true
+    @Environment(\.horizontalSizeClass) var sizeClass
+    let information: ExtendedCard
     @Binding var cardNavigationDestinationID: Int?
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
+    
+    let cardCoverScalingFactor: CGFloat = 1
     var body: some View {
         VStack {
             Group {
@@ -331,18 +326,16 @@ struct CardDetailOverviewView: View {
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)
-                    // FIXME: Replace image with Live2D viewer
-                    WebImage(url: information.thumbImageURL) { image in
-                        image
-                            .antialiased(true)
-                            .resizable()
-                            .scaledToFit()
-                    } placeholder: {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(getPlaceholderColor())
-                    }
-                    .interpolation(.high)
-                    .frame(width: 96, height: 96)
+                    CardCoverImage(information.card, band: information.band)
+                        .wrapIf(sizeClass == .regular) { content in
+                            content
+                                .frame(maxWidth: 480*cardCoverScalingFactor, maxHeight: 320*cardCoverScalingFactor)
+                        } else: { content in
+                            content
+                                .padding(.horizontal, -15)
+                        }
+//                    .interpolation(.high)
+//                    .frame(width: 96, height: 96)
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)
@@ -352,63 +345,65 @@ struct CardDetailOverviewView: View {
                 // MARK: Info
                 CustomGroupBox(cornerRadius: 20) {
                     LazyVStack {
-                        // MARK: Description
+                        // MARK: Title
                         Group {
                             ListItemView(title: {
                                 Text("Card.title")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.description)
+                                MultilingualText(source: information.card.prefix)
                             })
                             Divider()
                         }
                         
-                        // MARK: Character
+                        // MARK: Type
+                        Group {
+                            ListItemView(title: {
+                                Text("Card.type")
+                                    .bold()
+                            }, value: {
+                                Text(information.card.type.localizedString)
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Type
                         Group {
                             ListItemView(title: {
                                 Text("Card.character")
                                     .bold()
                             }, value: {
-                                // FIXME: This requires `ExtendedCard` to be
-                                // FIXME: implemented in DoriKit.
+                                NavigationLink(destination: {
+                                    CharacterDetailView(id: information.character.id)
+                                }, label: {
+                                    HStack {
+                                        MultilingualText(source: information.character.characterName)
+                                        WebImage(url: information.character.iconImageURL)
+                                            .resizable()
+                                            .clipShape(Circle())
+                                            .frame(width: imageButtonSize, height: imageButtonSize)
+                                    }
+                                })
+                                .buttonStyle(.plain)
                             })
                             Divider()
                         }
                         
-                        // MARK: Band
+                        // MARK: Type
                         Group {
                             ListItemView(title: {
                                 Text("Card.band")
                                     .bold()
                             }, value: {
-                                // FIXME: This requires `ExtendedCard` to be
-                                // FIXME: implemented in DoriKit.
+                                HStack {
+                                    MultilingualText(source: information.band.bandName, allowPopover: false)
+                                    WebImage(url: information.band.iconImageURL)
+                                        .resizable()
+                                        .clipShape(Circle())
+                                        .frame(width: imageButtonSize, height: imageButtonSize)
+                                }
                             })
                             Divider()
-                        }
-                        
-                        // MARK: Release Date
-                        Group {
-                            ListItemView(title: {
-                                Text("Card.release-date")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(source: information.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                            })
-                            Divider()
-                        }
-                        
-                        if !information.howToGet.isValueEmpty {
-                            // MARK: How to Get
-                            Group {
-                                ListItemView(title: {
-                                    Text("Card.how-to-get")
-                                        .bold()
-                                }, value: {
-                                    MultilingualText(source: information.howToGet)
-                                }, displayMode: .basedOnUISizeClass)
-                                Divider()
-                            }
                         }
                         
                         // MARK: ID
@@ -428,4 +423,3 @@ struct CardDetailOverviewView: View {
         .frame(maxWidth: 600)
     }
 }
-*/

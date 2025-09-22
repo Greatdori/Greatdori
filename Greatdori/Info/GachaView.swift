@@ -210,7 +210,7 @@ struct GachaSearchView: View {
         } .onUpdate {
             if let gachas = $0 {
                 self.gachas = gachas.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending))
-                searchedGachas = gachas.sorted(withDoriSorter: sorter)
+                searchedGachas = gachas.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             } else {
                 infoIsAvailable = false
             }

@@ -190,7 +190,7 @@ struct CostumeSearchView: View {
         } .onUpdate {
             if let costumes = $0 {
                 self.costumes = costumes.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending))
-                searchedCostumes = costumes.sorted(withDoriSorter: sorter)
+                searchedCostumes = costumes.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             } else {
                 infoIsAvailable = false
             }

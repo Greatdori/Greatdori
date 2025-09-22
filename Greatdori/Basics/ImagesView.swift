@@ -101,6 +101,7 @@ struct CardInfo: View {
                     })
                 } else {
                     CardCoverImage(previewCard, band: band)
+                        .allowsHitTesting(false)
                 }
                 
                 // MARK: Text
@@ -122,6 +123,7 @@ struct CardInfo: View {
                     .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
 //                    .font(isMACOS ? .body : .caption)
                 }
+                .multilineTextAlignment(layoutType == 1 ? .leading : .center)
                 Spacer()
             }
         }

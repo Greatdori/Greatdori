@@ -211,7 +211,7 @@ struct EventSearchView: View {
         } .onUpdate {
             if let events = $0 {
                 self.events = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending))
-                searchedEvents = events.sorted(withDoriSorter: sorter)
+                searchedEvents = events.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
             } else {
                 infoIsAvailable = false
             }
@@ -655,6 +655,7 @@ struct EventDetailOverviewView: View {
                 }
             }
         }
+        .padding()
         .frame(maxWidth: 600)
         .onAppear {
             eventCharacterPercentageDict = [:]
