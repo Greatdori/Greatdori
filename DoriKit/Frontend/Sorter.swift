@@ -326,8 +326,8 @@ extension DoriAPI.Event.PreviewEvent: DoriFrontend.Sortable {
         switch sorter.keyword {
         case .releaseDate(let locale):
             return sorter.compare(
-                castedLHS.startAt.forLocale(locale),
-                castedRHS.startAt.forLocale(locale)
+                castedLHS.startAt.forLocale(locale)?.corrected(),
+                castedRHS.startAt.forLocale(locale)?.corrected()
             )
         case .id:
             return sorter.compare(castedLHS.id, castedRHS.id)
@@ -352,8 +352,8 @@ extension DoriAPI.Gacha.PreviewGacha: DoriFrontend.Sortable {
         switch sorter.keyword {
         case .releaseDate(let locale):
             return sorter.compare(
-                castedLHS.publishedAt.forLocale(locale),
-                castedRHS.publishedAt.forLocale(locale)
+                castedLHS.publishedAt.forLocale(locale)?.corrected(),
+                castedRHS.publishedAt.forLocale(locale)?.corrected()
             )
         case .id:
             return sorter.compare(castedLHS.id, castedRHS.id)
@@ -378,8 +378,8 @@ extension DoriFrontend.Card.CardWithBand: DoriFrontend.Sortable {
         switch sorter.keyword {
         case .releaseDate(let locale):
             return sorter.compare(
-                castedLHS.card.releasedAt.forLocale(locale),
-                castedRHS.card.releasedAt.forLocale(locale)
+                castedLHS.card.releasedAt.forLocale(locale)?.corrected(),
+                castedRHS.card.releasedAt.forLocale(locale)?.corrected()
             )
         case .rarity:
             return sorter.compare(castedLHS.card.rarity, castedRHS.card.rarity)
@@ -408,8 +408,8 @@ extension DoriFrontend.Card.PreviewCard: DoriFrontend.Sortable {
         switch sorter.keyword {
         case .releaseDate(let locale):
             return sorter.compare(
-                castedLHS.releasedAt.forLocale(locale),
-                castedRHS.releasedAt.forLocale(locale)
+                castedLHS.releasedAt.forLocale(locale)?.corrected(),
+                castedRHS.releasedAt.forLocale(locale)?.corrected()
             )
         case .rarity:
             return sorter.compare(castedLHS.rarity, castedRHS.rarity)
@@ -438,13 +438,13 @@ extension DoriAPI.Song.PreviewSong: DoriFrontend.Sortable {
         switch sorter.keyword {
         case .releaseDate(let locale):
             return sorter.compare(
-                castedLHS.publishedAt.forLocale(locale),
-                castedRHS.publishedAt.forLocale(locale)
+                castedLHS.publishedAt.forLocale(locale)?.corrected(),
+                castedRHS.publishedAt.forLocale(locale)?.corrected()
             )
         case .difficultyReleaseDate(let locale):
             return sorter.compare(
-                castedLHS.difficulty[.special]?.publishedAt?.forLocale(locale),
-                castedRHS.difficulty[.special]?.publishedAt?.forLocale(locale)
+                castedLHS.difficulty[.special]?.publishedAt?.forLocale(locale)?.corrected(),
+                castedRHS.difficulty[.special]?.publishedAt?.forLocale(locale)?.corrected()
             )
         case .mvReleaseDate(let locale):
             var finalReleaseDateForLHS: Date?
@@ -463,7 +463,7 @@ extension DoriAPI.Song.PreviewSong: DoriFrontend.Sortable {
             } else {
                 finalReleaseDateForRHS = nil
             }
-            return sorter.compare(finalReleaseDateForLHS, finalReleaseDateForRHS)
+            return sorter.compare(finalReleaseDateForLHS?.corrected(), finalReleaseDateForRHS?.corrected())
         case .level(let difficulty):
             return sorter.compare(castedLHS.difficulty[difficulty]?.playLevel, castedRHS.difficulty[difficulty]?.playLevel)
         case .id:
@@ -489,8 +489,8 @@ extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend.Sortable {
         switch sorter.keyword {
         case .releaseDate(let locale):
             return sorter.compare(
-                castedLHS.publishedAt.forLocale(locale),
-                castedRHS.publishedAt.forLocale(locale)
+                castedLHS.publishedAt.forLocale(locale)?.corrected(),
+                castedRHS.publishedAt.forLocale(locale)?.corrected()
             )
         case .id:
             return sorter.compare(castedLHS.id, castedRHS.id)
@@ -542,8 +542,8 @@ extension DoriFrontend.Costume.PreviewCostume: DoriFrontend.Sortable {
         switch sorter.keyword {
         case .releaseDate(let locale):
             return sorter.compare(
-                castedLHS.publishedAt.forLocale(locale),
-                castedRHS.publishedAt.forLocale(locale)
+                castedLHS.publishedAt.forLocale(locale)?.corrected(),
+                castedRHS.publishedAt.forLocale(locale)?.corrected()
             )
         case .id:
             return sorter.compare(castedLHS.id, castedRHS.id)

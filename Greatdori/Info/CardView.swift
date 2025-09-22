@@ -35,6 +35,7 @@ struct CardSearchView: View {
     @Namespace var cardLists
     
     let gridLayoutItemWidth: CGFloat = 200*0.9
+    let galleryLayoutItemWidth: CGFloat = 200*0.9
     var body: some View {
         Group {
             Group {
@@ -42,20 +43,17 @@ struct CardSearchView: View {
                     Group {
                         if !resultCards.isEmpty {
                             ScrollView {
-                                Text(verbatim: "1")
-                                /*
                                 HStack {
                                     Spacer(minLength: 0)
                                     Group {
-                                        if layout == .horizontal {
+                                        if layoutType == 1 {
                                             LazyVStack {
                                                 ForEach(resultCards, id: \.self) { card in
                                                     Button(action: {
                                                         showFilterSheet = false
                                                         presentingCardID = card.id
                                                     }, label: {
-//                                                        CardInfo(card, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
-                                                        Text("1")
+                                                        CardInfo(card.card, layoutType: layoutType, preferHeavierFonts: true, searchedText: searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -70,14 +68,13 @@ struct CardSearchView: View {
                                             }
                                             .frame(maxWidth: 600)
                                         } else {
-                                            LazyVGrid(columns: [GridItem(.adaptive(minimum: gridLayoutItemWidth, maximum: gridLayoutItemWidth))]) {
+                                            LazyVGrid(columns: [GridItem(.adaptive(minimum: layoutType == 2 ? gridLayoutItemWidth : galleryLayoutItemWidth, maximum: layoutType == 2 ? gridLayoutItemWidth : galleryLayoutItemWidth))]) {
                                                 ForEach(resultCards, id: \.self) { card in
                                                     Button(action: {
                                                         showFilterSheet = false
                                                         presentingCardID = card.id
                                                     }, label: {
-//                                                        CardInfo(card, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
-                                                        Text("1")
+                                                        CardInfo(card.card, layoutType: layoutType, preferHeavierFonts: true, searchedText: searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -95,7 +92,7 @@ struct CardSearchView: View {
                                     .padding(.horizontal)
                                     Spacer(minLength: 0)
                                 }
-                                */
+//                                */
                             }
                             .geometryGroup()
                             .navigationDestination(item: $presentingCardID) { id in

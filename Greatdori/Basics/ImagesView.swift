@@ -26,6 +26,8 @@ import SwiftUI
 //MARK: CardInfo [✓]
 struct CardInfo: View {
     @Environment(\.horizontalSizeClass) var sizeClass
+    @State var attributedTitle: AttributedString = AttributedString("")
+//    @State var attributedType: AttributedString = AttributedString("")
     
     var layoutType = 1
     // 1 - List
@@ -44,10 +46,11 @@ struct CardInfo: View {
     private var characterID: Int
     private var cardID: Int
     private var previewCard: PreviewCard
+    private var searchedText: String
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.PreviewCard, layoutType: Int = 1, preferHeavierFonts: Bool = false) {
+    init(_ card: DoriAPI.Card.PreviewCard, layoutType: Int = 1, preferHeavierFonts: Bool = false, searchedText: String = "") {
         self.layoutType = layoutType
         self.preferHeavierFonts = preferHeavierFonts
         self.thumbNormalImageURL = card.thumbNormalImageURL
@@ -61,9 +64,10 @@ struct CardInfo: View {
         self.characterID = card.characterID
         self.cardID = card.id
         self.previewCard = card
+        self.searchedText = searchedText
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
-    init(_ card: DoriAPI.Card.Card, layoutType: Int = 1, preferHeavierFonts: Bool = false) {
+    init(_ card: DoriAPI.Card.Card, layoutType: Int = 1, preferHeavierFonts: Bool = false, searchedText: String = "") {
         self.layoutType = layoutType
         self.preferHeavierFonts = preferHeavierFonts
         self.thumbNormalImageURL = card.thumbNormalImageURL
@@ -77,6 +81,7 @@ struct CardInfo: View {
         self.characterID = card.characterID
         self.cardID = card.id
         self.previewCard = PreviewCard(card)
+        self.searchedText = searchedText
     }
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 230)
     
@@ -99,16 +104,23 @@ struct CardInfo: View {
                 }
                 
                 // MARK: Text
-                // TODO: Implement Search Highlight
                 VStack(alignment: layoutType == 1 ? .leading : .center) {
-                    Text(prefix.forPreferredLocale() ?? "nil")
+                    Text(attributedTitle)
                         .bold()
-                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+//                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+                        .font(isMACOS ? .title3 : .body)
+                        .onAppear {
+                            attributedTitle = highlightOccurrences(of: searchedText, in: prefix.forPreferredLocale() ?? "nil")
+                        }
+                        .onChange(of: prefix, {
+                            attributedTitle = highlightOccurrences(of: searchedText, in: prefix.forPreferredLocale() ?? "nil")
+                        })
                     Group {
-                        Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text("\(cardType.localizedString)")
+                        Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text(cardType.localizedString)
                     }
                     .foregroundStyle(.secondary)
                     .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
+//                    .font(isMACOS ? .body : .caption)
                 }
                 Spacer()
             }
@@ -1019,6 +1031,7 @@ struct GachaInfo: View {
                                             Text("#\(String(gachaID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(gachaID)") ? Color.accentColor : .secondary)
                                         }
                                     }
+                                    .foregroundStyle(.secondary)
                                 } else {
                                     Group {
                                         Text(attributedType)/* + Text(verbatim: " • ").bold() + Text("#\(String(gachaID))").fontDesign(.monospaced)*/

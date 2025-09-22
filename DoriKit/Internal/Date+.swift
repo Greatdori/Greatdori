@@ -126,6 +126,14 @@ extension Date {
             from: self
         )
     }
+    
+    internal func corrected() -> Date? {
+        if self.timeIntervalSince1970 >= 3786879600 {
+            return nil
+        } else {
+            return self
+        }
+    }
 }
 
 extension Date {
