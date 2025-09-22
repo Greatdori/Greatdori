@@ -333,7 +333,7 @@ struct CardDetailOverviewView: View {
                                 .frame(maxWidth: 480*cardCoverScalingFactor, maxHeight: 320*cardCoverScalingFactor)
                         } else: { content in
                             content
-                                .padding(.horizontal, -15)
+//                                .padding(.horizontal, -15)
                         }
 //                    .interpolation(.high)
 //                    .frame(width: 96, height: 96)

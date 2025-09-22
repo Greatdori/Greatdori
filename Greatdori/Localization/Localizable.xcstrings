@@ -42,7 +42,7 @@
       "shouldTranslate" : false
     },
     "+%lld%%" : {
-      "shouldTranslate" : false
+
     },
     "App.community" : {
       "localizations" : {

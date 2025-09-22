@@ -796,7 +796,7 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
     let title: Content1
     let element: (T?) -> Content2
     let caption: Content3
-    let columnNumbers: Int
+    let columnNumbers: Int?
     let elementWidth: CGFloat
     var contentArray: [T?]
     @State var contentArrayChunked: [[T?]] = []
@@ -806,7 +806,7 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
     @State var fixedWidth: CGFloat = 0 //Fixed
     @State var useCompactLayout = true
     
-    init(@ViewBuilder title: () -> Content1, @ViewBuilder element: @escaping (T?) -> Content2, @ViewBuilder caption: () -> Content3, contentArray: [T] , columnNumbers: Int, elementWidth: CGFloat) {
+    init(@ViewBuilder title: () -> Content1, @ViewBuilder element: @escaping (T?) -> Content2, @ViewBuilder caption: () -> Content3, contentArray: [T], columnNumbers: Int? = nil, elementWidth: CGFloat) {
         self.title = title()
         self.element = element
         self.caption = caption()
@@ -831,27 +831,26 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
                         }
                     }
                 } else {
-                    Grid(alignment: .trailing) {
-                        ForEach(0..<contentArrayChunked.count, id: \.self) { rowIndex in
-                            GridRow {
-                                ForEach(0..<contentArrayChunked[rowIndex].count, id: \.self) { columnIndex in
-                                    if contentArrayChunked[rowIndex][columnIndex] != nil {
-                                        NavigationLink(destination: {
-                                            //TODO: [NAVI785]CardD
-                                        }, label: {
-                                            element(contentArrayChunked[rowIndex][columnIndex]!)
-                                        })
-                                        .buttonStyle(.plain)
-                                    } else {
-                                        Rectangle()
-                                            .opacity(0)
-                                            .frame(width: 0, height: 0)
-                                    }
-                                }
+                    LazyVGrid(columns: columnNumbers == nil ? [.init(.adaptive(minimum: elementWidth, maximum: elementWidth))] : Array(repeating: .init(.fixed(elementWidth)), count: columnNumbers!), alignment: .trailing) {
+                        ForEach(0..<contentArray.count, id: \.self) { index in
+                            if contentArray[index] != nil {
+                                element(contentArray[index])
+                            } else {
+//                                Rectangle()
+//                                    .opacity(0)
+//                                    .frame(width: 0, height: 0)
                             }
                         }
                     }
-                    .gridCellAnchor(.trailing)
+//                    Grid(alignment: .trailing) {
+//                        ForEach(0..<contentArrayChunked.count, id: \.self) { rowIndex in
+//                            GridRow {
+//                                ForEach(0..<contentArrayChunked[rowIndex].count, id: \.self) { columnIndex in
+//
+//                            }
+//                        }
+//                    }
+//                    .gridCellAnchor(.trailing)
                 }
                 caption
                     .onFrameChange(perform: { geometry in
@@ -863,10 +862,12 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
         .onAppear {
             fixedWidth = (CGFloat(contentArray.count)*elementWidth) + titleWidth + captionWidth
             
-            contentArrayChunked = contentArray.chunked(into: columnNumbers)
-            for i in 0..<contentArrayChunked.count {
-                while contentArrayChunked[i].count < columnNumbers {
-                    contentArrayChunked[i].insert(nil, at: 0)
+            if let columnNumbers {
+                contentArrayChunked = contentArray.chunked(into: columnNumbers)
+                for i in 0..<contentArrayChunked.count {
+                    while contentArrayChunked[i].count < columnNumbers {
+                        contentArrayChunked[i].insert(nil, at: 0)
+                    }
                 }
             }
         }

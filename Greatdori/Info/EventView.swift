@@ -243,6 +243,8 @@ struct EventDetailView: View {
                         VStack {
                             EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
 //                            ListGachaView()
+                            
+                            
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -494,7 +496,7 @@ struct EventDetailOverviewView: View {
                                                                 .foregroundStyle(Color(UIColor.placeholderText))
                                                                 .redacted(reason: .placeholder)
                                                         }
-                                                        Spacer()
+//                                                        Spacer()
                                                     }
                                                 })
                                             }, label: {
@@ -515,6 +517,7 @@ struct EventDetailOverviewView: View {
                                             .fixedSize(horizontal: true, vertical: true)
                                     }, contentArray: valueArray, columnNumbers: 5, elementWidth: imageButtonSize)
                                 } else {
+                                    // Fallback to legacy render mode
                                     ListItemView(title: {
                                         Text("Event.character")
                                             .bold()
@@ -525,7 +528,7 @@ struct EventDetailOverviewView: View {
                                             let keys = eventCharacterPercentageDict.keys.sorted()
                                             ForEach(keys, id: \.self) { percentage in
                                                 HStack {
-                                                    Spacer()
+//                                                    Spacer()
                                                     ForEach(eventCharacterPercentageDict[percentage]!, id: \.self) { char in
 #if os(macOS)
                                                         NavigationLink(destination: {
@@ -549,7 +552,7 @@ struct EventDetailOverviewView: View {
                                                                         .frame(width: imageButtonSize, height: imageButtonSize)
                                                                     //                                                Text(char.name)
                                                                     Text(eventCharacterNameDict[char.characterID]?.forPreferredLocale() ?? "Unknown")
-                                                                    Spacer()
+//                                                                    Spacer()
                                                                 }
                                                             })
                                                         }, label: {
@@ -607,10 +610,9 @@ struct EventDetailOverviewView: View {
                                         .bold()
                                 }, element: { value in
                                     NavigationLink(destination: {
-                                        //TODO: [NAVI785]CardD
-                                        Text("\(value)")
+                                        CardDetailView(id: value!.id)
                                     }, label: {
-                                        CardPreviewImage(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                        CardPreviewImage(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true)
                                     })
                                     .buttonStyle(.plain)
                                 }, caption: {
@@ -629,9 +631,9 @@ struct EventDetailOverviewView: View {
                                 }, value: {
                                     ForEach(rewardsArray) { card in
                                         NavigationLink(destination: {
-                                            
+                                            CardDetailView(id: card.id)
                                         }, label: {
-                                            CardPreviewImage(card, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                                            CardPreviewImage(card, sideLength: cardThumbnailSideLength, showNavigationHints: true/*, cardNavigationDestinationID: $cardNavigationDestinationID*/)
                                         })
                                         .contentShape(Rectangle())
                                         .buttonStyle(.plain)
@@ -640,6 +642,7 @@ struct EventDetailOverviewView: View {
                                 })
                                 Divider()
                             }
+                            
                             
                             //MARK: ID
                             Group {

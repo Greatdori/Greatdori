@@ -25,7 +25,7 @@ struct DetailsCardsSection: View {
             Section(content: {
                 ForEach((showAll ? cardsSorted : Array(cardsSorted.prefix(3))), id: \.self) { item in
                     NavigationLink(destination: {
-                        //                    [NAVI785]
+                        CardDetailView(id: item.id)
                     }, label: {
                         CardInfo(item)
                     })
@@ -72,7 +72,6 @@ struct DetailsEventsSection: View {
             Section(content: {
                 ForEach((showAll ? eventsSorted : Array(eventsSorted.prefix(3))), id: \.self) { item in
                     NavigationLink(destination: {
-                        //                    [NAVI785]
                         EventDetailView(id: item.id)
                     }, label: {
                         //                    CustomGroupBox {
@@ -124,7 +123,6 @@ struct DetailsGachasSection: View {
             Section(content: {
                 ForEach((showAll ? gachasSorted : Array(gachasSorted.prefix(3))), id: \.self) { item in
                     NavigationLink(destination: {
-                        //                    [NAVI785]
                         GachaDetailView(id: item.id)
                     }, label: {
                         GachaInfo(item, preferHeavierFonts: false, showDetails: true)
@@ -171,7 +169,6 @@ struct DetailsCostumesSection: View {
             Section(content: {
                 ForEach((showAll ? costumesSorted : Array(costumesSorted.prefix(3))), id: \.self) { item in
                     NavigationLink(destination: {
-                        //                    [NAVI785]
                         CostumeDetailView(id: item.id)
                     }, label: {
                         //                    CustomGroupBox {

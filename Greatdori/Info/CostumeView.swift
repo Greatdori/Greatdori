@@ -218,6 +218,13 @@ struct CostumeDetailView: View {
                         Spacer(minLength: 0)
                         VStack {
                             CostumeDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+                            
+//                            if !information.cards.isEmpty {
+//                                Rectangle()
+//                                    .opacity(0)
+//                                    .frame(height: 30)
+//                                DetailsCardsSection(cards: information.cards)
+//                            }
                         }
                         .padding()
                         Spacer(minLength: 0)
