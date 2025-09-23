@@ -36,13 +36,7 @@ struct DetailsCardsSection: View {
                             .buttonStyle(.plain)
                         }
                     } else {
-                        CustomGroupBox {
-                            HStack {
-                                Spacer()
-                                ContentUnavailableView("Details.cards.unavailable", systemImage: "person.crop.square.on.square.angled")
-                                Spacer()
-                            }
-                        }
+                        DetailUnavailableView(title: "Details.cards.unavailable", symbol: "person.crop.square.on.square.angled")
                     }
                 }
                 .frame(maxWidth: 600)
@@ -87,30 +81,55 @@ struct DetailsCardsSection: View {
 // MARK: DetailsEventsSection
 struct DetailsEventsSection: View {
     var events: [PreviewEvent]
+    var sources: DoriAPI.LocalizedData<Set<DoriAPI.Card.Card.CardSource>>?
     var applyLocaleFilter: Bool = false
+//    var withSourceSubtitle: Bool
     @State var locale: DoriLocale = DoriLocale.primaryLocale
     @State var eventsSorted: [PreviewEvent] = []
+    @State var finalEvents: [Int] = []
+    @State var finalSource: [Int: Int] = [:]
+    @State var eventDict: [Int: PreviewEvent] = [:]
     @State var showAll = false
+    
+    init(events: [PreviewEvent], applyLocaleFilter: Bool = false) {
+        self.events = events
+        self.sources = nil
+        self.applyLocaleFilter = applyLocaleFilter
+//        self.withSourceSubtitle = false
+    }
+    
+    init(events: [PreviewEvent], sources: DoriAPI.LocalizedData<Set<DoriAPI.Card.Card.CardSource>>) {
+        self.events = events
+        self.sources = sources
+        self.applyLocaleFilter = true
+//        self.withSourceSubtitle = true
+    }
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
                 Group {
                     if !eventsSorted.isEmpty {
-                        ForEach((showAll ? eventsSorted : Array(eventsSorted.prefix(3))), id: \.self) { item in
+                        ForEach((showAll ? finalEvents : Array(finalEvents.prefix(3))), id: \.self) { item in
+                            let eventItem = eventDict[item]
                             NavigationLink(destination: {
-                                EventDetailView(id: item.id)
+                                EventDetailView(id: item)
                             }, label: {
-                                EventInfo(item, preferHeavierFonts: false, showDetails: true)
-                                    .scaledToFill()
-                                    .frame(maxWidth: 600)
-                                    .scaledToFill()
+                                if let event = eventDict[item] {
+                                    EventInfo(event, preferHeavierFonts: false, subtitle: sources == nil ? nil : "Details.source.release-during-event", showDetails: true)
+                                        .scaledToFill()
+                                        .frame(maxWidth: 600)
+                                        .scaledToFill()
+                                } else {
+                                    EventInfo(id: item, preferHeavierFonts: false, subtitle: sources == nil ? nil : "Details.events.source.rewarded-at-points.\(finalSource[item] ?? 0)", showDetails: true)
+                                        .scaledToFill()
+                                        .frame(maxWidth: 600)
+                                        .scaledToFill()
+                                }
                             })
                             .buttonStyle(.plain)
                         }
                     } else {
-                        CustomGroupBox {
-                            ContentUnavailableView("Details.events.unavailable", systemImage: "star.hexagon")
-                        }
+                        DetailUnavailableView(title: "Details.events.unavailable", symbol: "star.hexagon")
                     }
                 }
                 .frame(maxWidth: 600)
@@ -137,20 +156,39 @@ struct DetailsEventsSection: View {
                     
                 }
                 .frame(maxWidth: 615)
-                //            .border(.red)
             })
         }
         .onAppear {
-            eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
-            if applyLocaleFilter {
-                eventsSorted = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
-            }
+            handleEvents()
         }
         .onChange(of: locale) {
-            eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
-            if applyLocaleFilter {
-                eventsSorted = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
+            handleEvents()
+        }
+    }
+    
+    func handleEvents() {
+        eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
+        if applyLocaleFilter {
+            eventsSorted = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
+        }
+        
+        if let sources {
+            print("AAA \(sources)")
+            for item in Array(sources.forLocale(locale) ?? Set()) {
+                switch item {
+                case .event(let dict):
+                    for (key, value) in dict {
+                        finalEvents.append(key)
+                        finalSource.updateValue(value, forKey: key)
+                    }
+                    finalEvents.sort {compareWithinNormalRange($0, $1, largetAcceptableNumber: 1000, ascending: true)}
+                default: break
+                }
             }
+        }
+        finalEvents = eventsSorted.map{$0.id} + finalEvents
+        for item in eventsSorted {
+            eventDict.updateValue(item, forKey: item.id)
         }
     }
 }
@@ -176,9 +214,7 @@ struct DetailsGachasSection: View {
                             .buttonStyle(.plain)
                         }
                     } else {
-                        CustomGroupBox {
-                            ContentUnavailableView("Details.gachas.unavailable", systemImage: "line.horizontal.star.fill.line.horizontal")
-                        }
+                        DetailUnavailableView(title: "Details.gachas.unavailable", symbol: "line.horizontal.star.fill.line.horizontal")
                     }
                 }
                 .frame(maxWidth: 600)
@@ -249,9 +285,7 @@ struct DetailsCostumesSection: View {
                             .buttonStyle(.plain)
                         }
                     } else {
-                        CustomGroupBox {
-                            ContentUnavailableView("Details.costumes.unavailable", systemImage: "swatchpalette")
-                        }
+                        DetailUnavailableView(title: "Details.costumes.unavailable", symbol: "swatchpalette")
                     }
                 }
                 .frame(maxWidth: 600)
@@ -330,3 +364,28 @@ struct DetailSectionsSpacer: View {
             .frame(height: 30)
     }
 }
+
+struct DetailUnavailableView: View {
+    var title: LocalizedStringKey
+    var symbol: String
+    var body: some View {
+        CustomGroupBox {
+            HStack {
+                Spacer()
+                VStack {
+                    Image(systemName: symbol)
+                        .font(.largeTitle)
+                        .padding(.top, 2)
+                        .padding(.bottom, 1)
+                    Text(title)
+                        .font(.title2)
+                        .padding(.bottom, 2)
+                }
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                Spacer()
+            }
+        }
+    }
+}
+

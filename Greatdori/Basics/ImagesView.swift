@@ -117,10 +117,10 @@ struct CardInfo: View {
 //                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
                         .font(isMACOS ? .title3 : .body)
                         .onAppear {
-                            attributedTitle = highlightOccurrences(of: searchedText, in: prefix.forPreferredLocale() ?? "nil")
+                            attributedTitle = highlightOccurrences(of: searchedText, in: prefix.forPreferredLocale() ?? "nil")!
                         }
                         .onChange(of: prefix, {
-                            attributedTitle = highlightOccurrences(of: searchedText, in: prefix.forPreferredLocale() ?? "nil")
+                            attributedTitle = highlightOccurrences(of: searchedText, in: prefix.forPreferredLocale() ?? "nil")!
                         })
                     Group {
                         Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text(cardType.localizedString)
@@ -740,12 +740,12 @@ struct CostumeInfo: View {
                         .bold()
                         .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
                         .onAppear {
-                            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
                         }
                         .multilineTextAlignment(layout == .horizontal ? .leading : .center)
                         .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
                         .onChange(of: searchedKeyword, {
-                            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
                         })
                         Text(characterName?.forPreferredLocale() ?? "nil")
                     .foregroundStyle(.secondary)
@@ -767,8 +767,8 @@ struct CostumeInfo: View {
         .onAppear {
             characterName = DoriCache.preCache.characters.first(where: {$0.id == characterID})?.characterName
             
-            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
-            attributedChar = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (characterName?.forLocale(locale!) ?? characterName?.jp ?? "") : (characterName?.forPreferredLocale() ?? "")))
+            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
+            attributedChar = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (characterName?.forLocale(locale!) ?? characterName?.jp ?? "") : (characterName?.forPreferredLocale() ?? "")))!
         }
 //        .border(.red)
     }
@@ -778,39 +778,66 @@ struct CostumeInfo: View {
 //MARK: EventInfo [✓]
 struct EventInfo: View {
     @Binding var searchedKeyword: String
-    @State var attributedTitle: AttributedString = AttributedString("")
-    @State var attributedType: AttributedString = AttributedString("")
+    @State var attributedTitle: AttributedString? = AttributedString("")
+    @State var attributedType: AttributedString? = AttributedString("")
+    @State var currentID: Int
     
-    private var preferHeavierFonts: Bool = true
-    private var eventImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
-    private var eventID: Int
-    private var eventType: DoriAPI.Event.EventType
-    private var locale: DoriAPI.Locale?
-    private var showDetails: Bool
-    private var showID: Bool
+    @State var preferHeavierFonts: Bool = true
+    @State var subtitle: LocalizedStringKey? = nil
+    @State var locale: DoriAPI.Locale?
+    @State var showDetails: Bool
+    @State var showID: Bool
+    
+    @State var information: PreviewEvent?
     //    @State var imageHeight: CGFloat = 100
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.PreviewEvent, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ event: DoriAPI.Event.PreviewEvent, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
+        self.information = event
+        self.currentID = event.id
+        
+        
+//        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+//        self.title = event.eventName
+//        self.eventID = event.id
+//        self.eventType = event.eventType
+        
+        
         self.preferHeavierFonts = preferHeavierFonts
-        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = event.eventName
-        self.eventID = event.id
-        self.eventType = event.eventType
         self.locale = locale
+        self.subtitle = subtitle
         self.showDetails = showDetails
         self.showID = showID
         self._searchedKeyword = searchedKeyword
+//        self.dataIsReady = true
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ event: DoriAPI.Event.Event, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = true,  searchedKeyword: Binding<String> = .constant("")) {
+    init(_ event: DoriAPI.Event.Event, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
+        self.information = PreviewEvent(event)
+        self.currentID = event.id
+        
         self.preferHeavierFonts = preferHeavierFonts
-        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = event.eventName
-        self.eventID = event.id
-        self.eventType = event.eventType
         self.locale = locale
+        self.subtitle = subtitle
+        self.showDetails = showDetails
+        self.showID = showID
+        self._searchedKeyword = searchedKeyword
+//        self.dataIsReady = true
+    }
+    
+    init(id: Int, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
+        self.information = nil
+        self.currentID = id
+        
+        
+//        self.eventImageURL = URL(string: "")
+//        self.title = nil
+//        self.eventID = id
+//        self.eventType = .story
+        
+        self.preferHeavierFonts = preferHeavierFonts
+        self.locale = locale
+        self.subtitle = subtitle
         self.showDetails = showDetails
         self.showID = showID
         self._searchedKeyword = searchedKeyword
@@ -826,7 +853,7 @@ struct EventInfo: View {
                     Spacer(minLength: 0)
                 }
                 VStack {
-                    WebImage(url: eventImageURL) { image in
+                    WebImage(url: information?.bannerImageURL) { image in
                         image
                             .resizable()
                             .antialiased(true)
@@ -846,45 +873,64 @@ struct EventInfo: View {
                     if showDetails {
                         VStack { // Accually Title & Countdown
                                  //                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
-                            Text(attributedTitle)
-                                .multilineTextAlignment(.center)
-                                .bold()
-                                .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
-                                .onAppear {
-                                    //                                attributedString = highlightKeyword(in: , keyword: searchedKeyword)
-                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
-                                }
-                                .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
-                                .onChange(of: searchedKeyword, {
-                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
-                                })
                             Group {
-                                //                            if !searchedKeyword.isEmpty {
-                                //                                Text("#\(eventID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
-                                if preferHeavierFonts {
-                                    HStack {
-                                        Text(attributedType)
-                                        if showID {
-                                            Text("#\(String(eventID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(eventID)") ? Color.accentColor : .secondary)
-                                        }
-                                    }
-                                } else {
-                                    Group {
-                                        Text(attributedType) + Text(verbatim: " • ").bold() + Text("#\(String(eventID))").fontDesign(.monospaced)
-                                    }
-                                    .foregroundStyle(.secondary)
-                                    //                                    .font(.caption)
-                                }
-                                //                            } else {
-                                //                                Text(eventType.localizedString)
-                                //                            }
+                                Text(attributedTitle ?? "Lorem Ipsum")
+                                    .multilineTextAlignment(.center)
+                                    .bold()
+                                    .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+                                    .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
+                                    .wrapIf(attributedTitle == nil, in: { content in
+                                        content
+                                            .redacted(reason: .placeholder)
+                                    })
                             }
                             .onAppear {
-                                attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
+                                attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (information?.eventName.forLocale(locale!) ?? information?.eventName.jp ?? "") : (information?.eventName.forPreferredLocale())))
                             }
-                            .onChange(of: eventType.localizedString, {
-                                attributedType = highlightOccurrences(of: searchedKeyword, in: eventType.localizedString)
+                            .onChange(of: information) {
+                                attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (information?.eventName.forLocale(locale!) ?? information?.eventName.jp ?? "") : (information?.eventName.forPreferredLocale())))
+                            }
+                            .onChange(of: searchedKeyword, {
+                                attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (information?.eventName.forLocale(locale!) ?? information?.eventName.jp ?? "") : (information?.eventName.forPreferredLocale())))
                             })
+                            
+                            Group {
+                                if let attributedType {
+                                    if preferHeavierFonts {
+                                        HStack {
+                                            Text(attributedType)
+                                            if showID {
+                                                Text("#\(String(currentID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(currentID)") ? Color.accentColor : .secondary)
+                                            }
+                                        }
+                                    } else {
+                                        Group {
+                                            Text(attributedType) + Text(verbatim: " • ").bold() + Text("#\(String(currentID))").fontDesign(.monospaced)
+                                        }
+                                        .foregroundStyle(.secondary)
+                                        //                                    .font(.caption)
+                                    }
+                                } else {
+                                    Text(verbatim: "Lorem Ipsum Dolor")
+                                        .redacted(reason: .placeholder)
+                                }
+                            }
+                            .onAppear {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: information?.eventType.localizedString)
+                            }
+                            .onChange(of: information) {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: information?.eventType.localizedString)
+                            }
+                            .onChange(of: searchedKeyword) {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: information?.eventType.localizedString)
+                            }
+                            
+                            if let subtitle {
+                                Group {
+                                    Text(subtitle)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
                         }
                         .frame(height: showDetails ? nil : 0)
                         .opacity(showDetails ? 1 : 0)
@@ -892,6 +938,14 @@ struct EventInfo: View {
                 }
                 if !preferHeavierFonts {
                     Spacer(minLength: 0)
+                }
+            }
+        }
+        .task {
+            if information == nil {
+                let fetchedEvent = await Event(id: currentID)
+                if let fetchedEvent {
+                    information = PreviewEvent(fetchedEvent)
                 }
             }
         }
@@ -1052,11 +1106,11 @@ struct GachaInfo: View {
                                 .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
                                 .onAppear {
                                     //                                attributedString = highlightKeyword(in: , keyword: searchedKeyword)
-                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
                                 }
                                 .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
                                 .onChange(of: searchedKeyword, {
-                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
                                 })
                             Group {
                                 //                            if !searchedKeyword.isEmpty {
@@ -1081,10 +1135,10 @@ struct GachaInfo: View {
                                 //                            }
                             }
                             .onAppear {
-                                attributedType = highlightOccurrences(of: searchedKeyword, in: gachaType.localizedString)
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: gachaType.localizedString)!
                             }
                             .onChange(of: gachaType.localizedString, {
-                                attributedType = highlightOccurrences(of: searchedKeyword, in: gachaType.localizedString)
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: gachaType.localizedString)!
                             })
                         }
                         .frame(height: showDetails ? nil : 0)

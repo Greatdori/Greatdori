@@ -35,6 +35,13 @@ func compare<T: Comparable>(_ lhs: T?, _ rhs: T?, ascending: Bool = true) -> Boo
     }
 }
 
+func compareWithinNormalRange(_ lhs: Int, _ rhs: Int, largetAcceptableNumber: Int, ascending: Bool = true) -> Bool {
+    let correctedLHS = lhs > largetAcceptableNumber ? lhs : nil
+    let correctedRHS = rhs > largetAcceptableNumber ? rhs : nil
+    return compare(correctedLHS, correctedRHS, ascending: ascending)
+}
+
+
 // MARK: copyStringToClipboard
 func copyStringToClipboard(_ content: String) {
 #if os(macOS)
@@ -120,15 +127,19 @@ func getTertiaryLabelColor() -> Color {
 ///   - keyword: The substring to highlight within `content`. If empty or only whitespace, no highlighting occurs.
 ///   - content: The string to search in.
 /// - Returns: An AttributedString (from `content`) with all `keyword` occurrences colored blue.
-func highlightOccurrences(of keyword: String, in content: String) -> AttributedString {
-    var attributedString = AttributedString(content)
-    guard !keyword.isEmpty else { return attributedString }
-    guard !content.isEmpty else { return attributedString }
-    //    let keywordTrimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard let range = attributedString.range(of: keyword, options: .caseInsensitive) else { return attributedString }
-    attributedString[range].foregroundColor = .accent
-    
-    return attributedString
+func highlightOccurrences(of keyword: String, in content: String?) -> AttributedString? {
+    if let content {
+        var attributedString = AttributedString(content)
+        guard !keyword.isEmpty else { return attributedString }
+        guard !content.isEmpty else { return attributedString }
+        //    let keywordTrimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let range = attributedString.range(of: keyword, options: .caseInsensitive) else { return attributedString }
+        attributedString[range].foregroundColor = .accent
+        
+        return attributedString
+    } else {
+        return nil
+    }
 }
 
 // MARK: ListItemType

@@ -468,6 +468,9 @@ struct MultilingualText: View {
                             Text(text)
                                 .multilineTextAlignment(.trailing)
                                 .typesettingLanguage(.explicit((shownLocaleValueDict[text]?.nsLocale().language) ?? Locale.current.language))
+                            if text.contains("\n") && text != allLocaleTexts.last {
+                                Text("")
+                            }
 //                                .typesettingLanguage(.explicit(DoriAPI.Locale(rawValue: localeValue)?.nsLocale()))
                         }
                     }

@@ -570,6 +570,38 @@
         }
       }
     },
+    "Card.stats.duration" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duration"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "持续时间"
+          }
+        }
+      }
+    },
+    "Card.stats.effect" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effect"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "效果"
+          }
+        }
+      }
+    },
     "Card.stats.episode" : {
       "localizations" : {
         "en" : {
@@ -582,6 +614,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "故事"
+          }
+        }
+      }
+    },
+    "Card.stats.full-effect" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Effect"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完整效果"
           }
         }
       }
@@ -646,6 +694,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最小"
+          }
+        }
+      }
+    },
+    "Card.stats.name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "名字"
           }
         }
       }
@@ -729,9 +793,6 @@
           }
         }
       }
-    },
-    "Card.stats.trained" : {
-
     },
     "Card.stats.visual" : {
       "localizations" : {
@@ -1637,6 +1698,22 @@
         }
       }
     },
+    "Details.events.source.rewarded-at-points.%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rewarded at %lld Points"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "获得于%lld活动PT"
+          }
+        }
+      }
+    },
     "Details.events.unavailable" : {
       "localizations" : {
         "en" : {
@@ -1713,6 +1790,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更少内容"
+          }
+        }
+      }
+    },
+    "Details.source.release-during-event" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Release During Event"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活动间发布"
           }
         }
       }
