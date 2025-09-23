@@ -296,9 +296,24 @@ extension DoriFrontend {
             
             switch direction {
             case .ascending:
-                return lhs! < rhs!
+                return unsafe lhs.unsafelyUnwrapped < rhs.unsafelyUnwrapped
             case .descending:
-                return lhs! > rhs!
+                return unsafe lhs.unsafelyUnwrapped > rhs.unsafelyUnwrapped
+            }
+        }
+        // `nil` return value means equal
+        internal func strictCompare<T: Comparable>(_ lhs: T?, _ rhs: T?) -> Bool? {
+            if lhs == rhs {
+                return nil
+            }
+            guard lhs != nil else { return false }
+            guard rhs != nil else { return true }
+            
+            switch direction {
+            case .ascending:
+                return unsafe lhs.unsafelyUnwrapped < rhs.unsafelyUnwrapped
+            case .descending:
+                return unsafe lhs.unsafelyUnwrapped > rhs.unsafelyUnwrapped
             }
         }
     }
@@ -325,10 +340,10 @@ extension DoriAPI.Event.PreviewEvent: DoriFrontend.Sortable {
         guard let castedLHS = lhs as? DoriAPI.Event.PreviewEvent, let castedRHS = rhs as? DoriAPI.Event.PreviewEvent else { return nil }
         switch sorter.keyword {
         case .releaseDate(let locale):
-            return sorter.compare(
+            return sorter.strictCompare(
                 castedLHS.startAt.forLocale(locale)?.corrected(),
                 castedRHS.startAt.forLocale(locale)?.corrected()
-            )
+            ) ?? sorter.compare(castedLHS.id, castedRHS.id)
         case .id:
             return sorter.compare(castedLHS.id, castedRHS.id)
         default:
@@ -351,10 +366,10 @@ extension DoriAPI.Gacha.PreviewGacha: DoriFrontend.Sortable {
         guard let castedLHS = lhs as? DoriAPI.Gacha.PreviewGacha, let castedRHS = rhs as? DoriAPI.Gacha.PreviewGacha else { return nil }
         switch sorter.keyword {
         case .releaseDate(let locale):
-            return sorter.compare(
+            return sorter.strictCompare(
                 castedLHS.publishedAt.forLocale(locale)?.corrected(),
                 castedRHS.publishedAt.forLocale(locale)?.corrected()
-            )
+            ) ?? sorter.compare(castedLHS.id, castedRHS.id)
         case .id:
             return sorter.compare(castedLHS.id, castedRHS.id)
         default:
@@ -377,10 +392,10 @@ extension DoriFrontend.Card.CardWithBand: DoriFrontend.Sortable {
         guard let castedLHS = lhs as? DoriFrontend.Card.CardWithBand, let castedRHS = rhs as? DoriFrontend.Card.CardWithBand else { return nil }
         switch sorter.keyword {
         case .releaseDate(let locale):
-            return sorter.compare(
+            return sorter.strictCompare(
                 castedLHS.card.releasedAt.forLocale(locale)?.corrected(),
                 castedRHS.card.releasedAt.forLocale(locale)?.corrected()
-            )
+            ) ?? sorter.compare(castedLHS.id, castedRHS.id)
         case .rarity:
             return sorter.compare(castedLHS.card.rarity, castedRHS.card.rarity)
         case .maximumStat:
@@ -407,10 +422,10 @@ extension DoriFrontend.Card.PreviewCard: DoriFrontend.Sortable {
         guard let castedLHS = lhs as? DoriFrontend.Card.PreviewCard, let castedRHS = rhs as? DoriFrontend.Card.PreviewCard else { return nil }
         switch sorter.keyword {
         case .releaseDate(let locale):
-            return sorter.compare(
+            return sorter.strictCompare(
                 castedLHS.releasedAt.forLocale(locale)?.corrected(),
                 castedRHS.releasedAt.forLocale(locale)?.corrected()
-            )
+            ) ?? sorter.compare(castedLHS.id, castedRHS.id)
         case .rarity:
             return sorter.compare(castedLHS.rarity, castedRHS.rarity)
         case .maximumStat:
@@ -437,10 +452,10 @@ extension DoriAPI.Song.PreviewSong: DoriFrontend.Sortable {
         guard let castedLHS = lhs as? DoriAPI.Song.PreviewSong, let castedRHS = rhs as? DoriAPI.Song.PreviewSong else { return nil }
         switch sorter.keyword {
         case .releaseDate(let locale):
-            return sorter.compare(
+            return sorter.strictCompare(
                 castedLHS.publishedAt.forLocale(locale)?.corrected(),
                 castedRHS.publishedAt.forLocale(locale)?.corrected()
-            )
+            ) ?? sorter.compare(castedLHS.id, castedRHS.id)
         case .difficultyReleaseDate(let locale):
             return sorter.compare(
                 castedLHS.difficulty[.special]?.publishedAt?.forLocale(locale)?.corrected(),
@@ -488,10 +503,10 @@ extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend.Sortable {
         guard let castedLHS = lhs as? DoriAPI.LoginCampaign.PreviewCampaign, let castedRHS = rhs as? DoriAPI.LoginCampaign.PreviewCampaign else { return nil }
         switch sorter.keyword {
         case .releaseDate(let locale):
-            return sorter.compare(
+            return sorter.strictCompare(
                 castedLHS.publishedAt.forLocale(locale)?.corrected(),
                 castedRHS.publishedAt.forLocale(locale)?.corrected()
-            )
+            ) ?? sorter.compare(castedLHS.id, castedRHS.id)
         case .id:
             return sorter.compare(castedLHS.id, castedRHS.id)
         default:
@@ -541,10 +556,10 @@ extension DoriFrontend.Costume.PreviewCostume: DoriFrontend.Sortable {
         guard let castedLHS = lhs as? DoriFrontend.Costume.PreviewCostume, let castedRHS = rhs as? DoriFrontend.Costume.PreviewCostume else { return nil }
         switch sorter.keyword {
         case .releaseDate(let locale):
-            return sorter.compare(
+            return sorter.strictCompare(
                 castedLHS.publishedAt.forLocale(locale)?.corrected(),
                 castedRHS.publishedAt.forLocale(locale)?.corrected()
-            )
+            ) ?? sorter.compare(castedLHS.id, castedRHS.id)
         case .id:
             return sorter.compare(castedLHS.id, castedRHS.id)
         default:
