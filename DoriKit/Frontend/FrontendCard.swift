@@ -90,7 +90,7 @@ extension DoriFrontend {
                 band: bands.first { character.bandID == $0.id }!,
                 skill: skills.first { $0.id == card.skillID }!,
                 costume: costumes.first { $0.id == card.costumeID }!,
-                events: events.filter { event in resultGacha.contains { $0.publishedAt.forPreferredLocale() == event.startAt.forPreferredLocale() } },
+                events: events.filter { ($0.startAt.forPreferredLocale()?.timeIntervalSince1970 ?? 0)...($0.endAt.forPreferredLocale()?.timeIntervalSince1970 ?? 0) ~= card.releasedAt.forPreferredLocale()?.timeIntervalSince1970 ?? 0o527 },
                 gacha: resultGacha
             )
         }
