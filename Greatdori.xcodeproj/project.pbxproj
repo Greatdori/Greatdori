@@ -260,6 +260,7 @@
 		8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FC32E2FE2BF00673E15 /* Logger.swift */; };
 		8CD13FCB2E2FEFCE00673E15 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FCA2E2FEFCC00673E15 /* Date+.swift */; };
 		8CD13FE72E300D2300673E15 /* FrontendNews.swift.gyb in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13FBB2E2FE2BF00673E15 /* FrontendNews.swift.gyb */; };
+		8CDEAAE22E825B0D001397CC /* URLValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDEAAE12E825B02001397CC /* URLValidator.swift */; };
 		8CDEC7742E7ED254001397CC /* CostumeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDEC7732E7ED254001397CC /* CostumeView.swift */; };
 		8CE186AA2E5352D1009C1C87 /* CommandLineEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */; };
 		8CE186AD2E535324009C1C87 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 8CE186AC2E535324009C1C87 /* ArgumentParser */; };
@@ -812,6 +813,7 @@
 		8CD13FC32E2FE2BF00673E15 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		8CD13FCA2E2FEFCC00673E15 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		8CD13FE42E300AE700673E15 /* gyb.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = gyb.py; sourceTree = "<group>"; };
+		8CDEAAE12E825B02001397CC /* URLValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLValidator.swift; sourceTree = "<group>"; };
 		8CDEC7732E7ED254001397CC /* CostumeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostumeView.swift; sourceTree = "<group>"; };
 		8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OfflineResBundleGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineEntry.swift; sourceTree = "<group>"; };
@@ -1567,6 +1569,7 @@
 				E9EFF2B72E61BEA800991940 /* MatchedFilters.swift */,
 				E9A67EB32E72AF160047E6BA /* Sorter.swift */,
 				8CBC1BDA2E334233004023F7 /* Searching.swift */,
+				8CDEAAE12E825B02001397CC /* URLValidator.swift */,
 				8C923D9C2E313B47003AFC0A /* FrontendCard.swift */,
 				8C923D792E3046C6003AFC0A /* FrontendCharacter.swift */,
 				8C78559A2E48C949000EA06E /* FrontendComic.swift */,
@@ -2600,6 +2603,7 @@
 				8C923D952E307227003AFC0A /* TaskGroup.swift.gyb in Sources */,
 				8C923D9B2E3138E3003AFC0A /* Post.swift in Sources */,
 				E9EFF2B82E61BEAB00991940 /* MatchedFilters.swift in Sources */,
+				8CDEAAE22E825B0D001397CC /* URLValidator.swift in Sources */,
 				8CBC1BD12E32B5BA004023F7 /* Constructor.swift in Sources */,
 				8C8E43EA2E5D2AC4005590F0 /* OfflineAssetDispatch.swift in Sources */,
 				8C8E43EC2E5D3118005590F0 /* OfflineNetworking.swift in Sources */,

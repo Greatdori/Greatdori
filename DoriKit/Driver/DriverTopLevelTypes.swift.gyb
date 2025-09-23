@@ -175,6 +175,7 @@ extension BirthdayCharacter {
 
 public typealias DoriFilter = DoriFrontend.Filter
 public typealias DoriSorter = DoriFrontend.Sorter
+public typealias DoriURLValidator = DoriFrontend.URLValidator
 
 %{
     baseNames = ["Card", "Character", "Costume", "Event", "Gacha", "Song"]
