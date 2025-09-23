@@ -366,7 +366,7 @@ struct CardCoverImage: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 0) {
                             ForEach(1...rarity, id: \.self) { _ in
-                                Image(rarity >= 4 ? .trainedStar : .star)
+                                Image(rarity >= 3 ? .trainedStar : .star)
                                     .resizable()
                                     .frame(width: 40/standardCardWidth*proxy.size.width, height: 40/standardCardHeight*proxy.size.height, alignment: .topLeading)
                                     .padding(.top, CGFloat(-rarity))

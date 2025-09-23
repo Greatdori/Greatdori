@@ -443,7 +443,7 @@ struct CardDetailOverviewView: View {
                             }, value: {
                                 HStack(spacing: 0) {
                                     ForEach(1...information.card.rarity, id: \.self) { _ in
-                                        Image(information.card.rarity >= 4 ? .trainedStar : .star)
+                                        Image(information.card.rarity >= 3 ? .trainedStar : .star)
                                             .resizable()
                                             .frame(width: imageButtonSize, height: imageButtonSize)
                                             .padding(.top, -1)
