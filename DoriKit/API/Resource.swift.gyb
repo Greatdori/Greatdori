@@ -295,19 +295,6 @@ extension DoriAPI.Card.${property} {
     }
     
     @inlinable
-    public var sdImageURL: URL {
-        .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/characters/livesd/\(self.sdResourceName)_rip/sdchara.png")!.respectOfflineAssetContext()
-    }
-    @inlinable
-    public func sdImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
-        if let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
-            .init(string: "https://bestdori.com/assets/\(locale)/characters/livesd/\(self.sdResourceName)_rip/sdchara.png")!.respectOfflineAssetContext()
-        } else {
-            nil
-        }
-    }
-    
-    @inlinable
     public var gachaVoiceURL: URL {
         .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/sound/voice/gacha/limitedspin_rip/\(self.resourceSetName).mp3")!.respectOfflineAssetContext()
     }
@@ -322,6 +309,19 @@ extension DoriAPI.Card.${property} {
 }
 % end
 extension DoriAPI.Card.Card {
+    @inlinable
+    public var sdImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/characters/livesd/\(self.sdResourceName)_rip/sdchara.png")!.respectOfflineAssetContext()
+    }
+    @inlinable
+    public func sdImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/characters/livesd/\(self.sdResourceName)_rip/sdchara.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+    
     @inlinable
     public var animationVideoURL: URL? {
         if let bundleName = self.animation?.assetBundleName {
