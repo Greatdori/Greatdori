@@ -166,6 +166,11 @@ struct DetailsEventsSection: View {
     }
     
     func handleEvents() {
+        eventsSorted = []
+        finalEvents = []
+        finalSource = [:]
+        eventDict = [:]
+        
         eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
         if applyLocaleFilter {
             eventsSorted = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
