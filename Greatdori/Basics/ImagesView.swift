@@ -48,6 +48,7 @@ struct CardInfo: View {
     private var previewCard: PreviewCard
     private var searchedText: String
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
+    @State var isNormalCardAvailable = true
     
 //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
     init(_ card: DoriAPI.Card.PreviewCard, layoutType: Int = 1, preferHeavierFonts: Bool = false, searchedText: String = "") {
@@ -94,7 +95,9 @@ struct CardInfo: View {
                 // MARK: CardPreviewImage
                 if layoutType != 3 {
                     HStack(spacing: 5) {
-                        CardPreviewImage(previewCard)
+                        if isNormalCardAvailable {
+                            CardPreviewImage(previewCard)
+                        }
                         if thumbTrainedImageURL != nil {
                             CardPreviewImage(previewCard, showTrainedVersion: true)
                         }
@@ -140,6 +143,11 @@ struct CardInfo: View {
             }
         }
         .onAppear {
+            if cardCharacterName == nil { // First appear
+                Task {
+                    isNormalCardAvailable = await DoriURLValidator.reachability(of: previewCard.coverNormalImageURL)
+                }
+            }
             self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
         }
     }

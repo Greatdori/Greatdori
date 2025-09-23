@@ -559,6 +559,9 @@
     "Card.stats.total" : {
 
     },
+    "Card.stats.trained" : {
+
+    },
     "Card.stats.visual" : {
 
     },
