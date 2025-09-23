@@ -69,6 +69,7 @@ extension DoriAPI.Event.${property} {
             nil
         }
     }
+    
     @inlinable
     public var logoImageURL: URL {
         .init(string: "https://bestdori.com/assets/\(self.startAt.availableLocale()!.rawValue)/event/\(self.assetBundleName)/images_rip/logo.png")!.respectOfflineAssetContext()
@@ -77,6 +78,31 @@ extension DoriAPI.Event.${property} {
     public func logoImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
         if let locale = _resLocale(locale, by: self.startAt, allowsFallback: allowsFallback) {
             .init(string: "https://bestdori.com/assets/\(locale)/event/\(self.assetBundleName)/images_rip/logo.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+    
+    @inlinable
+    public var topScreenTrimmedImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.startAt.availableLocale()!.rawValue)/event/\(self.assetBundleName)/topscreen_rip/trim_eventtop.png")!.respectOfflineAssetContext()
+    }
+    @inlinable
+    public func topScreenTrimmedImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.startAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/event/\(self.assetBundleName)/topscreen_rip/trim_eventtop.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+    @inlinable
+    public var topScreenBackgroundImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.startAt.availableLocale()!.rawValue)/event/\(self.assetBundleName)/topscreen_rip/bg_eventtop.png")!.respectOfflineAssetContext()
+    }
+    @inlinable
+    public func topScreenBackgroundImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.startAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/event/\(self.assetBundleName)/topscreen_rip/bg_eventtop.png")!.respectOfflineAssetContext()
         } else {
             nil
         }
@@ -269,6 +295,19 @@ extension DoriAPI.Card.${property} {
     }
     
     @inlinable
+    public var sdImageURL: URL {
+        .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/characters/livesd/\(self.sdResourceName)_rip/sdchara.png")!.respectOfflineAssetContext()
+    }
+    @inlinable
+    public func sdImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.releasedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/characters/livesd/\(self.sdResourceName)_rip/sdchara.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+    
+    @inlinable
     public var gachaVoiceURL: URL {
         .init(string: "https://bestdori.com/assets/\(self.releasedAt.availableLocale()!.rawValue)/sound/voice/gacha/limitedspin_rip/\(self.resourceSetName).mp3")!.respectOfflineAssetContext()
     }
@@ -440,6 +479,8 @@ extension DoriAPI.Gacha.${property} {
             nil
         }
     }
+    
+    @inlinable
     public var logoImageURL: URL {
         .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/logo.png")!.respectOfflineAssetContext()
     }
@@ -447,6 +488,27 @@ extension DoriAPI.Gacha.${property} {
     public func logoImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
         if let locale = _resLocale(locale, by: self.publishedAt, allowsFallback: allowsFallback) {
             .init(string: "https://bestdori.com/assets/\(locale)/gacha/screen/\(self.resourceName)_rip/logo.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+    
+    @inlinable
+    public var pickupImageURLs: [URL] {
+        [
+            .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/pickup.png")!.respectOfflineAssetContext(),
+            .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/pickup1.png")!.respectOfflineAssetContext(),
+            .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale(prefer: .jp)!.rawValue)/gacha/screen/\(self.resourceName)_rip/pickup2.png")!.respectOfflineAssetContext()
+        ]
+    }
+    @inlinable
+    public func pickupImageURLs(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> [URL]? {
+        if let locale = _resLocale(locale, by: self.publishedAt, allowsFallback: allowsFallback) {
+            [
+                .init(string: "https://bestdori.com/assets/\(locale)/gacha/screen/\(self.resourceName)_rip/pickup.png")!.respectOfflineAssetContext(),
+                .init(string: "https://bestdori.com/assets/\(locale)/gacha/screen/\(self.resourceName)_rip/pickup1.png")!.respectOfflineAssetContext(),
+                .init(string: "https://bestdori.com/assets/\(locale)/gacha/screen/\(self.resourceName)_rip/pickup2.png")!.respectOfflineAssetContext()
+            ]
         } else {
             nil
         }
