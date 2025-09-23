@@ -226,6 +226,12 @@ struct CardDetailView: View {
                             
                             DetailSectionsSpacer()
                             CardDetailStatsView(card: information.card)
+                            
+                            DetailSectionsSpacer()
+                            DetailsCostumesSection(costumes: [information.costume])
+                            
+                            DetailSectionsSpacer()
+                            DetailsEventsSection(events: information.events)
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -524,48 +530,68 @@ struct CardDetailStatsView: View {
                     VStack {
                         if tab != 3 {
                             Group {
-                                ListItemView(title: {
-                                    Text("Card.stats.level")
-                                        .bold()
-                                }, value: {
-                                    Text(tab == 0 ? "\(card.stat.minimumLevel ?? 1)" : tab == 1 ? "\(card.stat.maximumLevel ?? 60)" : ("\(Int(level))"))
-//                                        .fontDesign(.monospaced)
-                                    if tab == 2 {
-                                        Stepper("", value: $level, in: Float(card.stat.minimumLevel ?? 1)...Float(card.stat.maximumLevel ?? 60), step: 1)
-                                            .labelsHidden()
-                                    }
-                                })
-                                if tab == 2 {
-                                    Slider(value: $level, in: Float(card.stat.minimumLevel ?? 1)...Float(card.stat.maximumLevel ?? 60), step: 1, label: {
-                                        Text("")
-                                    })
-                                    .labelsHidden()
-                                }
-                                Divider()
-                            }
-                            
-                            if tab == 2 {
                                 Group {
                                     ListItemView(title: {
-                                        Text("Card.stats.master-rank")
+                                        Text("Card.stats.level")
                                             .bold()
                                     }, value: {
-                                        Text("\(Int(masterRank))")
-                                        Stepper("", value: $masterRank, in: 0...4, step: 1)
-                                            .labelsHidden()
+                                        Text(tab == 0 ? "\(card.stat.minimumLevel ?? 1)" : tab == 1 ? "\(card.stat.maximumLevel ?? 60)" : ("\(Int(level))"))
+                                            .contentTransition(.numericText())
+                                            .animation(.default, value: stat)
+                                        //                                        .fontDesign(.monospaced)
+                                        if tab == 2 {
+                                            Stepper("", value: $level, in: Float(card.stat.minimumLevel ?? 1)...Float(card.stat.maximumLevel ?? 60), step: 1)
+                                                .labelsHidden()
+                                        }
                                     })
+                                    if tab == 2 {
+                                        Slider(value: $level, in: Float(card.stat.minimumLevel ?? 1)...Float(card.stat.maximumLevel ?? 60), step: 1, label: {
+                                            Text("")
+                                        })
+                                        .labelsHidden()
+                                    }
                                     Divider()
                                 }
                                 
-                                if !card.episodes.isEmpty {
+                                if tab == 2 {
                                     Group {
                                         ListItemView(title: {
-                                            Text("Card.stats.episode")
+                                            Text("Card.stats.master-rank")
                                                 .bold()
                                         }, value: {
-                                            Text("\(Int(episodes))")
-                                            Stepper("", value: $episodes, in: 0...Float(card.episodes.count), step: 1)
+                                            Text("\(Int(masterRank))")
+                                                .contentTransition(.numericText())
+                                                .animation(.default, value: stat)
+                                            Stepper("", value: $masterRank, in: 0...4, step: 1)
                                                 .labelsHidden()
+                                        })
+                                        Divider()
+                                    }
+                                    
+                                    if !card.episodes.isEmpty {
+                                        Group {
+                                            ListItemView(title: {
+                                                Text("Card.stats.episode")
+                                                    .bold()
+                                            }, value: {
+                                                Text("\(Int(episodes))")
+                                                Stepper("", value: $episodes, in: 0...Float(card.episodes.count), step: 1)
+                                                    .labelsHidden()
+                                            })
+                                            Divider()
+                                        }
+                                    }
+                                    
+                                    Group {
+                                        ListItemView(title: {
+                                            Text("Card.stats.trained")
+                                                .bold()
+                                        }, value: {
+                                            Toggle(isOn: $trained, label: {
+                                                Text("")
+                                            })
+                                            .labelsHidden()
+                                            .toggleStyle(.switch)
                                         })
                                         Divider()
                                     }
@@ -573,67 +599,48 @@ struct CardDetailStatsView: View {
                                 
                                 Group {
                                     ListItemView(title: {
-                                        Text("Card.stats.trained")
+                                        Text("Card.stats.performance")
+                                            .bold()
                                     }, value: {
-                                        Toggle(isOn: $trained, label: {
-                                            Text("")
-                                        })
-                                        .labelsHidden()
-                                        .toggleStyle(.switch)
+                                        Text("\(stat.performance)")
+                                    })
+                                    Divider()
+                                }
+                                
+                                Group {
+                                    ListItemView(title: {
+                                        Text("Card.stats.technique")
+                                            .bold()
+                                    }, value: {
+                                        Text("\(stat.technique)")
+                                    })
+                                    Divider()
+                                }
+                                
+                                Group {
+                                    ListItemView(title: {
+                                        Text("Card.stats.visual")
+                                            .bold()
+                                    }, value: {
+                                        Text("\(stat.visual)")
+                                    })
+                                    Divider()
+                                }
+                                
+                                Group {
+                                    ListItemView(title: {
+                                        Text("Card.stats.total")
+                                            .bold()
+                                    }, value: {
+                                        Text("\(stat.total)")
+                                        //                                        .fontDesign(.monospaced)
+//                                            .contentTransition(.numericText())
+//                                            .animation(.default, value: stat)
                                     })
                                 }
                             }
-                            
-                            Group {
-                                ListItemView(title: {
-                                    Text("Card.stats.performance")
-                                        .bold()
-                                }, value: {
-                                    Text("\(stat.performance)")
-//                                        .fontDesign(.monospaced)
-                                        .contentTransition(.numericText())
-                                        .animation(.default, value: stat)
-                                })
-                                Divider()
-                            }
-                            
-                            Group {
-                                ListItemView(title: {
-                                    Text("Card.stats.technique")
-                                        .bold()
-                                }, value: {
-                                    Text("\(stat.technique)")
-//                                        .fontDesign(.monospaced)
-                                        .contentTransition(.numericText())
-                                        .animation(.default, value: stat)
-                                })
-                                Divider()
-                            }
-                            
-                            Group {
-                                ListItemView(title: {
-                                    Text("Card.stats.visual")
-                                        .bold()
-                                }, value: {
-                                    Text("\(stat.visual)")
-//                                        .fontDesign(.monospaced)
-                                        .contentTransition(.numericText())
-                                        .animation(.default, value: stat)
-                                })
-                                Divider()
-                            }
-                            
-                            Group {
-                                ListItemView(title: {
-                                    Text("Card.stats.total")
-                                        .bold()
-                                }, value: {
-                                    Text("\(stat.total)")
-//                                        .fontDesign(.monospaced)
-                                        .contentTransition(.numericText())
-                                        .animation(.default, value: stat)
-                                })
-                            }
+                            .contentTransition(.numericText())
+                            .animation(.default, value: stat)
                         }
                     }
                 }
@@ -663,7 +670,7 @@ struct CardDetailStatsView: View {
                     Text("Card.stats")
                         .font(.title2)
                         .bold()
-                    DetailSectionOptionPicker(selection: $tab, options: [0, 1, 2, 3], labels: [0: "Card.stats.min", 1: "Card.stats.max", 2: "Card.stats.custom", 3: "Card.stats.skill"])
+                    DetailSectionOptionPicker(selection: $tab, options: [0, 1, 2, 3], labels: [0: String(localized: "Card.stats.min"), 1: String(localized: "Card.stats.max"), 2: String(localized: "Card.stats.custom"), 3: String(localized: "Card.stats.skill")])
                     Spacer()
                 }
                 .frame(maxWidth: 615)
