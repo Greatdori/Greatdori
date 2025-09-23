@@ -107,6 +107,30 @@ extension Date {
     }
 }
 
+extension DoriAPI.LocalizedData<Set<DoriAPI.Card.Card.CardSource>> {
+    public enum CardSource {
+        case event, gacha, loginCampaign
+    }
+    
+    public func containsSource(from source: CardSource) -> Bool {
+        for locale in DoriLocale.allCases {
+            for item in Array(self.forLocale(locale) ?? Set()) {
+                switch item {
+                case .event:
+                    if source == .event { return true }
+                case .gacha:
+                    if source == .gacha { return true }
+                case .login:
+                    if source == .loginCampaign { return true }
+                default: continue
+                }
+            }
+        }
+        return false
+    }
+}
+
+
 // MARK: Int
 extension Int?: @retroactive Identifiable {
     public var id: Int? { self }

@@ -231,11 +231,10 @@ struct CardDetailView: View {
                             DetailSectionsSpacer()
                             DetailsCostumesSection(costumes: [information.costume])
                             
-                            DetailSectionsSpacer()
-                            DetailsEventsSection(events: information.events, sources: information.card.source)
-//                            DetailsEventsSection(events: information.events/*, applyLocaleFilter: true*/)
-                            
-//                            information.card.source
+                            if !information.events.isEmpty || information.card.source.containsSource(from: .event) {
+                                DetailSectionsSpacer()
+                                DetailsEventsSection(events: information.events, sources: information.card.source)
+                            }
                         }
                         .padding()
                         Spacer(minLength: 0)

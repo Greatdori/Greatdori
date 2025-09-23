@@ -108,9 +108,8 @@ struct DetailsEventsSection: View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
                 Group {
-                    if !eventsSorted.isEmpty {
+                    if !finalEvents.isEmpty {
                         ForEach((showAll ? finalEvents : Array(finalEvents.prefix(3))), id: \.self) { item in
-                            let eventItem = eventDict[item]
                             NavigationLink(destination: {
                                 EventDetailView(id: item)
                             }, label: {
@@ -142,11 +141,11 @@ struct DetailsEventsSection: View {
                         DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
                     }
                     Spacer()
-                    if eventsSorted.count > 3 {
+                    if finalEvents.count > 3 {
                         Button(action: {
                             showAll.toggle()
                         }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(eventsSorted.count)")
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(finalEvents.count)")
                                 .foregroundStyle(.secondary)
                             //                        .font(.caption)
                         })
@@ -173,10 +172,10 @@ struct DetailsEventsSection: View {
         }
         
         if let sources {
-            print("AAA \(sources)")
             for item in Array(sources.forLocale(locale) ?? Set()) {
                 switch item {
                 case .event(let dict):
+                    print("EVENT!")
                     for (key, value) in dict {
                         finalEvents.append(key)
                         finalSource.updateValue(value, forKey: key)
