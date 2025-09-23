@@ -576,8 +576,10 @@ struct CardDetailStatsView: View {
                                         Text("Card.stats.trained")
                                     }, value: {
                                         Toggle(isOn: $trained, label: {
-                                            
+                                            Text("")
                                         })
+                                        .labelsHidden()
+                                        .toggleStyle(.switch)
                                     })
                                 }
                             }
