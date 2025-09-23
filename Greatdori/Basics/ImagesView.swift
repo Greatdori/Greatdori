@@ -145,7 +145,9 @@ struct CardInfo: View {
         .onAppear {
             if cardCharacterName == nil { // First appear
                 Task {
-                    isNormalCardAvailable = await DoriURLValidator.reachability(of: previewCard.coverNormalImageURL)
+                    isNormalCardAvailable = await DoriURLValidator.reachability(
+                        of: layoutType != 3 ? previewCard.thumbNormalImageURL : previewCard.coverNormalImageURL
+                    )
                 }
             }
             self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
