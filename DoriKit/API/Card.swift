@@ -796,17 +796,25 @@ extension DoriAPI.Card.CardStat {
         guard 0...4 ~= masterRank else { return nil }
         guard 0...2 ~= viewedStoryCount else { return nil }
         
-        guard var result = self[.level(level)]?[0] else { return nil }
-        let episodeCount = self[.episodes]?.count ?? 0
-        result += DoriAPI.Card.Stat(performance: 50, technique: 50, visual: 50) * rarity
-        if viewedStoryCount >= 1, episodeCount >= 1 {
-            result += self[.episodes]![0]
+        var result = DoriAPI.Card.Stat(performance: 50, technique: 50, visual: 50) * rarity * masterRank
+        if let baseStats = self[.level(level)]?[0] {
+            result.performance += baseStats.performance
+            result.technique += baseStats.technique
+            result.visual += baseStats.visual
         }
-        if viewedStoryCount >= 2, episodeCount >= 2 {
-            result += self[.episodes]![1]
+        if let episodes = self[.episodes] {
+            for (index, bonus) in episodes.enumerated() {
+                if viewedStoryCount > index {
+                    result.performance += bonus.performance
+                    result.technique += bonus.technique
+                    result.visual += bonus.visual
+                }
+            }
         }
-        if let training = self[.training]?[0], trained {
-            result += training
+        if trained, let trainingBonus = self[.training]?[0] {
+            result.performance += trainingBonus.performance
+            result.technique += trainingBonus.technique
+            result.visual += trainingBonus.visual
         }
         
         return result
