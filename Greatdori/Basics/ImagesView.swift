@@ -123,8 +123,8 @@ struct CardInfo: View {
                         Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text(cardType.localizedString)
                     }
                     .foregroundStyle(.secondary)
-                    .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
-//                    .font(isMACOS ? .body : .caption)
+//                    .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
+                    .font(isMACOS ? .body : .caption)
                 }
                 .multilineTextAlignment(layoutType == 1 ? .leading : .center)
                 if layoutType != 3 {
@@ -395,7 +395,6 @@ struct CardCoverImage: View {
                                     //                                        .foregroundStyle(.tertiary)
                                 }
                                 .redacted(reason: .placeholder)
-                                
                             }
                         })
                         .disabled(cardTitle.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)

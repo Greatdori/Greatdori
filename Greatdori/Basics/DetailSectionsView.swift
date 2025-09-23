@@ -37,7 +37,11 @@ struct DetailsCardsSection: View {
                         }
                     } else {
                         CustomGroupBox {
-                            ContentUnavailableView("Details.cards.unavailable", systemImage: "person.crop.square.on.square.angled")
+                            HStack {
+                                Spacer()
+                                ContentUnavailableView("Details.cards.unavailable", systemImage: "person.crop.square.on.square.angled")
+                                Spacer()
+                            }
                         }
                     }
                 }
@@ -48,9 +52,8 @@ struct DetailsCardsSection: View {
                         .font(.title2)
                         .bold()
                     if applyLocaleFilter {
-                        DetailsLocalePicker(locale: $locale)
+                        DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
                     }
-                    
                     Spacer()
                     if cardsSorted.count > 3 {
                         Button(action: {
@@ -117,7 +120,7 @@ struct DetailsEventsSection: View {
                         .font(.title2)
                         .bold()
                     if applyLocaleFilter {
-                        DetailsLocalePicker(locale: $locale)
+                        DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
                     }
                     Spacer()
                     if eventsSorted.count > 3 {
@@ -185,7 +188,7 @@ struct DetailsGachasSection: View {
                         .font(.title2)
                         .bold()
                     if applyLocaleFilter {
-                        DetailsLocalePicker(locale: $locale)
+                        DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
                     }
                     Spacer()
                     if gachasSorted.count > 3 {
@@ -258,7 +261,8 @@ struct DetailsCostumesSection: View {
                         .font(.title2)
                         .bold()
                     if applyLocaleFilter {
-                        DetailsLocalePicker(locale: $locale)
+                        DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
+//                        DetailsLocalePicker(locale: $locale)
                     }
                     Spacer()
                     if costumesSorted.count > 3 {
@@ -293,13 +297,15 @@ struct DetailsCostumesSection: View {
     }
 }
 
-struct DetailsLocalePicker: View {
-    @Binding var locale: DoriLocale
+struct DetailSectionOptionPicker<T: Hashable>: View {
+    @Binding var selection: T
+    var options: [T]
+    var labels: [T: String]? = nil
     var body: some View {
         Menu(content: {
-            Picker(selection: $locale, content: {
-                ForEach(DoriLocale.allCases, id: \.self) { item in
-                    Text(item.selectorText)
+            Picker(selection: $selection, content: {
+                ForEach(options, id: \.self) { item in
+                    Text(labels?[item] ?? ((T.self == DoriLocale.self) ? "\(item)".uppercased() : "\(item)"))
                         .tag(item)
                 }
             }, label: {
@@ -309,10 +315,18 @@ struct DetailsLocalePicker: View {
             .labelsHidden()
             .multilineTextAlignment(.leading)
         }, label: {
-            Text(getAttributedString(locale.selectorText, fontSize: .title2, fontWeight: .semibold, foregroundColor: .accent))
+            Text(getAttributedString(labels?[selection] ?? ((T.self == DoriLocale.self) ? "\(selection)".uppercased() : "\(selection)"), fontSize: .title2, fontWeight: .semibold, foregroundColor: .accent))
         })
         .menuIndicator(.hidden)
         .menuStyle(.borderlessButton)
         .buttonStyle(.plain)
+    }
+}
+
+struct DetailSectionsSpacer: View {
+    var body: some View {
+        Rectangle()
+            .opacity(0)
+            .frame(height: 30)
     }
 }

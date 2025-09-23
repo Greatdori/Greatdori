@@ -538,6 +538,30 @@
         }
       }
     },
+    "Card.stats" : {
+
+    },
+    "Card.stats.episode" : {
+
+    },
+    "Card.stats.level" : {
+
+    },
+    "Card.stats.master-rank" : {
+
+    },
+    "Card.stats.performance" : {
+
+    },
+    "Card.stats.technique" : {
+
+    },
+    "Card.stats.total" : {
+
+    },
+    "Card.stats.visual" : {
+
+    },
     "Card.title" : {
       "localizations" : {
         "en" : {

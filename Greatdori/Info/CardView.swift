@@ -223,6 +223,9 @@ struct CardDetailView: View {
                         Spacer(minLength: 0)
                         VStack {
                             CardDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+                            
+                            DetailSectionsSpacer()
+                            CardDetailStatsView(card: information.card)
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -504,3 +507,179 @@ struct CardDetailOverviewView: View {
     }
 }
 
+
+// MARK: CardDetailStatsView
+struct CardDetailStatsView: View {
+    var card: Card
+    @State var tab: Int = 0
+    @State var level: Float = 1
+    @State var masterRank: Float = 4
+    @State var episodes: Float = 2
+    @State var trained: Bool = false
+    @State var stat: DoriAPI.Card.Stat = .zero
+    var body: some View {
+        LazyVStack(pinnedViews: .sectionHeaders) {
+            Section(content: {
+                CustomGroupBox {
+                    VStack {
+                        if tab != 3 {
+                            Group {
+                                ListItemView(title: {
+                                    Text("Card.stats.level")
+                                        .bold()
+                                }, value: {
+                                    Text(tab == 0 ? "\(card.stat.minimumLevel ?? 1)" : tab == 1 ? "\(card.stat.maximumLevel ?? 60)" : ("\(Int(level))"))
+//                                        .fontDesign(.monospaced)
+                                    if tab == 2 {
+                                        Stepper("", value: $level, in: Float(card.stat.minimumLevel ?? 1)...Float(card.stat.maximumLevel ?? 60), step: 1)
+                                            .labelsHidden()
+                                    }
+                                })
+                                if tab == 2 {
+                                    Slider(value: $level, in: Float(card.stat.minimumLevel ?? 1)...Float(card.stat.maximumLevel ?? 60), step: 1, label: {
+                                        Text("")
+                                    })
+                                    .labelsHidden()
+                                }
+                                Divider()
+                            }
+                            
+                            if tab == 2 {
+                                Group {
+                                    ListItemView(title: {
+                                        Text("Card.stats.master-rank")
+                                            .bold()
+                                    }, value: {
+                                        Text("\(Int(masterRank))")
+                                        Stepper("", value: $masterRank, in: 0...4, step: 1)
+                                            .labelsHidden()
+                                    })
+                                    Divider()
+                                }
+                                
+                                if !card.episodes.isEmpty {
+                                    Group {
+                                        ListItemView(title: {
+                                            Text("Card.stats.episode")
+                                                .bold()
+                                        }, value: {
+                                            Text("\(Int(episodes))")
+                                            Stepper("", value: $episodes, in: 0...Float(card.episodes.count), step: 1)
+                                                .labelsHidden()
+                                        })
+                                        Divider()
+                                    }
+                                }
+                                
+                                Group {
+                                    ListItemView(title: {
+                                        Text("Card.stats.trained")
+                                    }, value: {
+                                        Toggle(isOn: $trained, label: {
+                                            
+                                        })
+                                    })
+                                }
+                            }
+                            
+                            Group {
+                                ListItemView(title: {
+                                    Text("Card.stats.performance")
+                                        .bold()
+                                }, value: {
+                                    Text("\(stat.performance)")
+//                                        .fontDesign(.monospaced)
+                                        .contentTransition(.numericText())
+                                        .animation(.default, value: stat)
+                                })
+                                Divider()
+                            }
+                            
+                            Group {
+                                ListItemView(title: {
+                                    Text("Card.stats.technique")
+                                        .bold()
+                                }, value: {
+                                    Text("\(stat.technique)")
+//                                        .fontDesign(.monospaced)
+                                        .contentTransition(.numericText())
+                                        .animation(.default, value: stat)
+                                })
+                                Divider()
+                            }
+                            
+                            Group {
+                                ListItemView(title: {
+                                    Text("Card.stats.visual")
+                                        .bold()
+                                }, value: {
+                                    Text("\(stat.visual)")
+//                                        .fontDesign(.monospaced)
+                                        .contentTransition(.numericText())
+                                        .animation(.default, value: stat)
+                                })
+                                Divider()
+                            }
+                            
+                            Group {
+                                ListItemView(title: {
+                                    Text("Card.stats.total")
+                                        .bold()
+                                }, value: {
+                                    Text("\(stat.total)")
+//                                        .fontDesign(.monospaced)
+                                        .contentTransition(.numericText())
+                                        .animation(.default, value: stat)
+                                })
+                            }
+                        }
+                    }
+                }
+                .frame(maxWidth: 600)
+                .onAppear {
+                    level = Float(card.stat.maximumLevel ?? 60)
+                    episodes = Float(card.episodes.count)
+                    updateStatsData()
+                }
+                .onChange(of: tab) {
+                    updateStatsData()
+                }
+                .onChange(of: level) {
+                    updateStatsData()
+                }
+                .onChange(of: episodes) {
+                    updateStatsData()
+                }
+                .onChange(of: masterRank) {
+                    updateStatsData()
+                }
+                .onChange(of: trained) {
+                    updateStatsData()
+                }
+            }, header: {
+                HStack {
+                    Text("Card.stats")
+                        .font(.title2)
+                        .bold()
+                    DetailSectionOptionPicker(selection: $tab, options: [0, 1, 2, 3], labels: [0: "Card.stats.min", 1: "Card.stats.max", 2: "Card.stats.custom", 3: "Card.stats.skill"])
+                    Spacer()
+                }
+                .frame(maxWidth: 615)
+            })
+        }
+    }
+    
+    func updateStatsData() {
+        stat = switch tab {
+        case 0: card.stat.forMinimumLevel() ?? .zero
+        case 1: card.stat.maximumValue(rarity: card.rarity) ?? .zero
+        default: card.stat.calculated(
+            level: Int(level),
+            rarity: card.rarity,
+            masterRank: Int(masterRank),
+            viewedStoryCount: Int(episodes),
+            trained: trained
+        ) ?? .zero
+        }
+    }
+}
