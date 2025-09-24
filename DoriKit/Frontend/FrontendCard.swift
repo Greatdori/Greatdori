@@ -83,6 +83,13 @@ extension DoriFrontend {
                 }
             }
             
+            func relatedEvent(for locale: DoriAPI.Locale) -> PreviewEvent? {
+                events.first {
+                    ($0.startAt.forLocale(locale)?.timeIntervalSince1970 ?? 0)...($0.endAt.forLocale(locale)?.timeIntervalSince1970 ?? 0)
+                    ~= card.releasedAt.forLocale(locale)?.timeIntervalSince1970 ?? 0o527
+                }
+            }
+            
             return .init(
                 id: id,
                 card: card,
@@ -90,7 +97,13 @@ extension DoriFrontend {
                 band: bands.first { character.bandID == $0.id }!,
                 skill: skills.first { $0.id == card.skillID }!,
                 costume: costumes.first { $0.id == card.costumeID }!,
-                events: events.filter { ($0.startAt.forPreferredLocale()?.timeIntervalSince1970 ?? 0)...($0.endAt.forPreferredLocale()?.timeIntervalSince1970 ?? 0) ~= card.releasedAt.forPreferredLocale()?.timeIntervalSince1970 ?? 0o527 },
+                event: .init(
+                    jp: relatedEvent(for: .jp),
+                    en: relatedEvent(for: .en),
+                    tw: relatedEvent(for: .tw),
+                    cn: relatedEvent(for: .cn),
+                    kr: relatedEvent(for: .kr)
+                ),
                 gacha: resultGacha
             )
         }
@@ -112,7 +125,7 @@ extension DoriFrontend.Card {
         public var band: DoriAPI.Band.Band
         public var skill: DoriAPI.Skill.Skill
         public var costume: DoriAPI.Costume.PreviewCostume
-        public var events: [DoriAPI.Event.PreviewEvent]
+        public var event: DoriAPI.LocalizedData<DoriAPI.Event.PreviewEvent>
         public var gacha: [DoriAPI.Gacha.PreviewGacha]
     }
 }
