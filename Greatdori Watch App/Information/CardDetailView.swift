@@ -278,8 +278,7 @@ struct CardDetailView: View {
                 self.information = information
                 statsCustomLevel = information.card.stat.maximumLevel ?? 1
                 prefetchImages(
-                    information.events.map(\.bannerImageURL)
-                    + information.gacha.map(\.bannerImageURL)
+                    information.gacha.map(\.bannerImageURL)
                     + [
                         information.character.iconImageURL,
                         information.card.coverNormalImageURL,
