@@ -379,82 +379,88 @@ struct CardCoverImage: View {
             .aspectRatio(expectedCardRatio, contentMode: .fit)
         }
         .cornerRadius(cardCornerRadius)
-        .wrapIf(showNavigationHints, in: { content in
-#if os(iOS)
-            content
-                .contextMenu(menuItems: {
-                    VStack {
-                        Button(action: {
-                            //                            cardNavigationDestinationID = cardID
-                            showCardDetailView = true
-                        }, label: {
-                            if let title = cardTitle.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
-                                Group {
-                                    Text(title)
-                                    Group {
-                                        Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text(cardType.localizedString)
-                                    }
-                                    .font(.caption)
-                                }
-                            } else {
-                                Group {
-                                    Text(verbatim: "Lorem ipsum dolor")
-                                    //                                        .foregroundStyle(.secondary)
-                                    Text(verbatim: "Lorem ipsum")
-                                        .font(.caption)
-                                    //                                        .foregroundStyle(.tertiary)
-                                }
-                                .redacted(reason: .placeholder)
-                            }
-                        })
-                        .disabled(cardTitle.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
-                    }
-                })
-#else
-            content
-            /*
-             // Very weird code cuz SwiftUI has very weird refreshing logic.
-             // Don't touch without complete-understaning
-             let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
-             VStack {
-             if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
-             Group {
-             Text(title)
-             Group {
-             Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
-             }
-             .font(.caption)
-             }
-             } else {
-             Group {
-             Text(verbatim: "Lorem ipsum dolor")
-             .foregroundStyle(getPlaceholderColor())
-             //                                .fill()
-             Text(verbatim: "Lorem ipsum")
-             .foregroundStyle(.tertiary)
-             }
-             .redacted(reason: .placeholder)
-             
-             }
-             }
-             .padding()
-             }
-             content
-             .onHover { isHovering in
-             self.isHovering = isHovering
-             }
-             .popover(isPresented: $isHovering, arrowEdge: .bottom) {
-             sumimi
-             }
-             .onChange(of: cardTitle) {
-             sumimi.updateArguments((cardTitle, cardCharacterName))
-             }
-             .onChange(of: cardCharacterName) {
-             sumimi.updateArguments((cardTitle, cardCharacterName))
-             }
-             */
-#endif
-        })
+        // FIXME: This context menu makes image context menu invisible
+        // FIXME: on iOS, merge or drop it?
+//        .wrapIf(showNavigationHints, in: { content in
+//#if os(iOS)
+//            content
+//                .contextMenu(menuItems: {
+//                    VStack {
+//                        Button(action: {
+//                            //                            cardNavigationDestinationID = cardID
+//                            showCardDetailView = true
+//                        }, label: {
+//                            if let title = cardTitle.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+//                                Group {
+//                                    Text(title)
+//                                    Group {
+//                                        Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text(cardType.localizedString)
+//                                    }
+//                                    .font(.caption)
+//                                }
+//                            } else {
+//                                Group {
+//                                    Text(verbatim: "Lorem ipsum dolor")
+//                                    //                                        .foregroundStyle(.secondary)
+//                                    Text(verbatim: "Lorem ipsum")
+//                                        .font(.caption)
+//                                    //                                        .foregroundStyle(.tertiary)
+//                                }
+//                                .redacted(reason: .placeholder)
+//                            }
+//                        })
+//                        .disabled(cardTitle.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
+//                    }
+//                })
+//#else
+//            content
+//            /*
+//             // Very weird code cuz SwiftUI has very weird refreshing logic.
+//             // Don't touch without complete-understaning
+//             let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
+//             VStack {
+//             if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+//             Group {
+//             Text(title)
+//             Group {
+//             Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
+//             }
+//             .font(.caption)
+//             }
+//             } else {
+//             Group {
+//             Text(verbatim: "Lorem ipsum dolor")
+//             .foregroundStyle(getPlaceholderColor())
+//             //                                .fill()
+//             Text(verbatim: "Lorem ipsum")
+//             .foregroundStyle(.tertiary)
+//             }
+//             .redacted(reason: .placeholder)
+//             
+//             }
+//             }
+//             .padding()
+//             }
+//             content
+//             .onHover { isHovering in
+//             self.isHovering = isHovering
+//             }
+//             .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+//             sumimi
+//             }
+//             .onChange(of: cardTitle) {
+//             sumimi.updateArguments((cardTitle, cardCharacterName))
+//             }
+//             .onChange(of: cardCharacterName) {
+//             sumimi.updateArguments((cardTitle, cardCharacterName))
+//             }
+//             */
+//#endif
+//        })
+        .imageContextMenu([
+            .init(url: normalBackgroundImageURL, description: "特训前卡面"),
+            trainedBackgroundImageURL != nil ? .init(url: trainedBackgroundImageURL!, description: "特训后卡面") : nil
+        ].compactMap { $0 })
         .onAppear {
             self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
         }
