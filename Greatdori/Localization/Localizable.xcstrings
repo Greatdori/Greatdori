@@ -1639,13 +1639,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Card Information Unavailable"
+            "value" : "Card Unavailable"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "卡片信息不可用"
+            "value" : "卡片不可用"
           }
         }
       }
@@ -1671,13 +1671,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Costume Information Unavailable"
+            "value" : "Costume Unavailable"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "服装信息不可用"
+            "value" : "服装不可用"
           }
         }
       }
@@ -1719,13 +1719,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Event Information Unavailable"
+            "value" : "Event Unavailable"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "活动信息不可用"
+            "value" : "活动不可用"
           }
         }
       }
@@ -1746,18 +1746,34 @@
         }
       }
     },
-    "Details.gachas.unavailable" : {
+    "Details.gachas.source.chance.%@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gacha Information Unavailable"
+            "value" : "%@ Chance"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "招募信息不可用"
+            "value" : "%@概率"
+          }
+        }
+      }
+    },
+    "Details.gachas.unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gacha Unavailable"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "招募不可用"
           }
         }
       }

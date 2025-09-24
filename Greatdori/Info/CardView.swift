@@ -231,9 +231,14 @@ struct CardDetailView: View {
                             DetailSectionsSpacer()
                             DetailsCostumesSection(costumes: [information.costume])
                             
-                            if !information.events.isEmpty || information.card.source.containsSource(from: .event) {
+                            if !information.event.isEmpty || information.cardSource.containsSource(from: .event) {
                                 DetailSectionsSpacer()
-                                DetailsEventsSection(events: information.events, sources: information.card.source)
+                                DetailsEventsSection(event: information.event, sources: information.cardSource)
+                            }
+                            
+                            if information.cardSource.containsSource(from: .gacha) {
+                                DetailSectionsSpacer()
+                                DetailsGachasSection(sources: information.cardSource)
                             }
                         }
                         .padding()

@@ -15,7 +15,7 @@
 import DoriKit
 import SwiftUI
 
-// MARK: DetailsCardSection
+// MARK: DetailsCardsSection
 struct DetailsCardsSection: View {
     var cards: [PreviewCard]
     var applyLocaleFilter: Bool = false
@@ -80,52 +80,64 @@ struct DetailsCardsSection: View {
 
 // MARK: DetailsEventsSection
 struct DetailsEventsSection: View {
-    var events: [PreviewEvent]
-    var sources: DoriAPI.LocalizedData<Set<DoriAPI.Card.Card.CardSource>>?
+    var events: [PreviewEvent]?
+    var event: DoriAPI.LocalizedData<PreviewEvent>?
+    var sources: DoriAPI.LocalizedData<Set<DoriFrontend.Card.ExtendedCard.Source>>?
     var applyLocaleFilter: Bool = false
-//    var withSourceSubtitle: Bool
+    //    var withSourceSubtitle: Bool
     @State var locale: DoriLocale = DoriLocale.primaryLocale
-    @State var eventsSorted: [PreviewEvent] = []
-    @State var finalEvents: [Int] = []
-    @State var finalSource: [Int: Int] = [:]
-    @State var eventDict: [Int: PreviewEvent] = [:]
+    @State var eventsFromList: [PreviewEvent] = []
+    @State var eventsFromSources: [PreviewEvent] = []
+    @State var pointsDict: [PreviewEvent: Int] = [:]
     @State var showAll = false
+    @State var sourcePreference: Int
     
     init(events: [PreviewEvent], applyLocaleFilter: Bool = false) {
         self.events = events
+        self.event = nil
         self.sources = nil
         self.applyLocaleFilter = applyLocaleFilter
-//        self.withSourceSubtitle = false
+        //        self.withSourceSubtitle = false
+        self.sourcePreference = 0
     }
     
-    init(events: [PreviewEvent], sources: DoriAPI.LocalizedData<Set<DoriAPI.Card.Card.CardSource>>) {
-        self.events = events
+    init(event: DoriAPI.LocalizedData<PreviewEvent>, sources: DoriAPI.LocalizedData<Set<DoriFrontend.Card.ExtendedCard.Source>>) {
+        self.events = nil
+        self.event = event
         self.sources = sources
         self.applyLocaleFilter = true
-//        self.withSourceSubtitle = true
+        //        self.withSourceSubtitle = true
+        self.sourcePreference = 1
     }
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
                 Group {
-                    if !finalEvents.isEmpty {
-                        ForEach((showAll ? finalEvents : Array(finalEvents.prefix(3))), id: \.self) { item in
-                            NavigationLink(destination: {
-                                EventDetailView(id: item)
-                            }, label: {
-                                if let event = eventDict[item] {
-                                    EventInfo(event, preferHeavierFonts: false, subtitle: sources == nil ? nil : "Details.source.release-during-event", showDetails: true)
+                    if getEventsCount() > 0 {
+                        if sourcePreference == 0 {
+                            ForEach((showAll ? eventsFromList : Array(eventsFromList.prefix(3))), id: \.self) { item in
+                                NavigationLink(destination: {
+                                    EventDetailView(id: item.id)
+                                }, label: {
+                                    EventInfo(item, preferHeavierFonts: false, showDetails: true)
                                         .scaledToFill()
                                         .frame(maxWidth: 600)
                                         .scaledToFill()
-                                } else {
-                                    EventInfo(id: item, preferHeavierFonts: false, subtitle: sources == nil ? nil : "Details.events.source.rewarded-at-points.\(finalSource[item] ?? 0)", showDetails: true)
+                                })
+                                .buttonStyle(.plain)
+                            }
+                        } else {
+                            ForEach((showAll ? eventsFromSources : Array(eventsFromSources.prefix(3))), id: \.self) { item in
+                                NavigationLink(destination: {
+                                    EventDetailView(id: item.id)
+                                }, label: {
+                                    EventInfo(item, preferHeavierFonts: false, subtitle: (pointsDict[item] == nil ? "Details.source.release-during-event" :"Details.events.source.rewarded-at-points.\(pointsDict[item]!)"), showDetails: true)
                                         .scaledToFill()
                                         .frame(maxWidth: 600)
                                         .scaledToFill()
-                                }
-                            })
-                            .buttonStyle(.plain)
+                                })
+                                .buttonStyle(.plain)
+                            }
                         }
                     } else {
                         DetailUnavailableView(title: "Details.events.unavailable", symbol: "star.hexagon")
@@ -141,11 +153,11 @@ struct DetailsEventsSection: View {
                         DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
                     }
                     Spacer()
-                    if finalEvents.count > 3 {
+                    if getEventsCount() > 3 {
                         Button(action: {
                             showAll.toggle()
                         }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(finalEvents.count)")
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(getEventsCount())")
                                 .foregroundStyle(.secondary)
                             //                        .font(.caption)
                         })
@@ -166,56 +178,103 @@ struct DetailsEventsSection: View {
     }
     
     func handleEvents() {
-        eventsSorted = []
-        finalEvents = []
-        finalSource = [:]
-        eventDict = [:]
+        eventsFromList = []
+        eventsFromSources = []
+        pointsDict = [:]
         
-        eventsSorted = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
-        if applyLocaleFilter {
-            eventsSorted = eventsSorted.filter{$0.startAt.availableInLocale(locale)}
-        }
-        
-        if let sources {
-            for item in Array(sources.forLocale(locale) ?? Set()) {
-                switch item {
-                case .event(let dict):
-                    print("EVENT!")
-                    for (key, value) in dict {
-                        finalEvents.append(key)
-                        finalSource.updateValue(value, forKey: key)
-                    }
-                    finalEvents.sort {compareWithinNormalRange($0, $1, largetAcceptableNumber: 1000, ascending: true)}
-                default: break
+        if sourcePreference == 0 {
+            if let events {
+                eventsFromList = events.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
+                if applyLocaleFilter {
+                    eventsFromList = eventsFromList.filter{$0.startAt.availableInLocale(locale)}
                 }
             }
+        } else {
+            if let sources {
+                for item in Array(sources.forLocale(locale) ?? Set()) {
+                    switch item {
+                    case .event(let dict):
+                        for (key, value) in dict {
+                            eventsFromSources.append(key)
+                            pointsDict.updateValue(value, forKey: key)
+                        }
+                        eventsFromSources = eventsFromSources.sorted(withDoriSorter: DoriSorter(keyword: .releaseDate(in: locale)))
+                    default: break
+                    }
+                }
+            }
+            if let localEvent = event?.forLocale(locale) {
+                eventsFromSources.insert(localEvent, at: 0)
+            }
         }
-        finalEvents = eventsSorted.map{$0.id} + finalEvents
-        for item in eventsSorted {
-            eventDict.updateValue(item, forKey: item.id)
+    }
+    
+    func getEventsCount() -> Int {
+        if sourcePreference == 0 {
+            return eventsFromList.count
+        } else {
+            return eventsFromSources.count
         }
     }
 }
 
 // MARK: DetailsGachasSection
 struct DetailsGachasSection: View {
-    var gachas: [PreviewGacha]
+    var gachas: [PreviewGacha]?
+    var sources: DoriAPI.LocalizedData<Set<DoriFrontend.Card.ExtendedCard.Source>>?
     var applyLocaleFilter: Bool = false
+    //    var withSourceSubtitle: Bool
     @State var locale: DoriLocale = DoriLocale.primaryLocale
-    @State var gachasSorted: [PreviewGacha] = []
+    @State var gachasFromList: [PreviewGacha] = []
+    @State var gachasFromSources: [PreviewGacha] = []
+    @State var probabilityDict: [PreviewGacha: Double] = [:]
     @State var showAll = false
+    @State var sourcePreference: Int
+    
+    init(gachas: [PreviewGacha], applyLocaleFilter: Bool = false) {
+        self.gachas = gachas
+        self.sources = nil
+        self.applyLocaleFilter = applyLocaleFilter
+        //        self.withSourceSubtitle = false
+        self.sourcePreference = 0
+    }
+    
+    init(sources: DoriAPI.LocalizedData<Set<DoriFrontend.Card.ExtendedCard.Source>>) {
+        self.gachas = nil
+        self.sources = sources
+        self.applyLocaleFilter = true
+        //        self.withSourceSubtitle = true
+        self.sourcePreference = 1
+    }
     var body: some View {
         LazyVStack(pinnedViews: .sectionHeaders) {
             Section(content: {
                 Group {
-                    if !gachasSorted.isEmpty {
-                        ForEach((showAll ? gachasSorted : Array(gachasSorted.prefix(3))), id: \.self) { item in
-                            NavigationLink(destination: {
-                                GachaDetailView(id: item.id)
-                            }, label: {
-                                GachaInfo(item, preferHeavierFonts: false, showDetails: true)
-                            })
-                            .buttonStyle(.plain)
+                    if getGachasCount() > 0 {
+                        if sourcePreference == 0 {
+                            ForEach((showAll ? gachasFromList : Array(gachasFromList.prefix(3))), id: \.self) { item in
+                                NavigationLink(destination: {
+                                    GachaDetailView(id: item.id)
+                                }, label: {
+                                    GachaInfo(item, preferHeavierFonts: false, showDetails: true)
+                                        .scaledToFill()
+                                        .frame(maxWidth: 600)
+                                        .scaledToFill()
+                                })
+                                .buttonStyle(.plain)
+                            }
+                        } else {
+                            ForEach((showAll ? gachasFromSources : Array(gachasFromSources.prefix(3))), id: \.self) { item in
+                                NavigationLink(destination: {
+                                    GachaDetailView(id: item.id)
+                                }, label: {
+                                    GachaInfo(item, preferHeavierFonts: false, subtitle: unsafe "Details.gachas.source.chance.\(String(format: "%.2f", (probabilityDict[item] ?? 0)*100) + String("%"))", showDetails: true)
+                                        .scaledToFill()
+                                        .frame(maxWidth: 600)
+                                        .scaledToFill()
+                                })
+                                .buttonStyle(.plain)
+                            }
                         }
                     } else {
                         DetailUnavailableView(title: "Details.gachas.unavailable", symbol: "line.horizontal.star.fill.line.horizontal")
@@ -231,11 +290,11 @@ struct DetailsGachasSection: View {
                         DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
                     }
                     Spacer()
-                    if gachasSorted.count > 3 {
+                    if getGachasCount() > 3 {
                         Button(action: {
                             showAll.toggle()
                         }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(gachasSorted.count)")
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(getGachasCount())")
                                 .foregroundStyle(.secondary)
                             //                        .font(.caption)
                         })
@@ -245,20 +304,50 @@ struct DetailsGachasSection: View {
                     
                 }
                 .frame(maxWidth: 615)
-                //            .border(.red)
             })
         }
         .onAppear {
-            gachasSorted = gachas.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
-            if applyLocaleFilter {
-                gachasSorted = gachasSorted.filter{$0.publishedAt.availableInLocale(locale)}
-            }
+            handleGachas()
         }
         .onChange(of: locale) {
-            gachasSorted = gachas.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
-            if applyLocaleFilter {
-                gachasSorted = gachasSorted.filter{$0.publishedAt.availableInLocale(locale)}
+            handleGachas()
+        }
+    }
+    
+    func handleGachas() {
+        gachasFromList = []
+        gachasFromSources = []
+        probabilityDict = [:]
+        
+        if sourcePreference == 0 {
+            if let gachas {
+                gachasFromList = gachas.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
+                if applyLocaleFilter {
+                    gachasFromList = gachasFromList.filter {$0.publishedAt.availableInLocale(locale)}
+                }
             }
+        } else {
+            if let sources {
+                for item in Array(sources.forLocale(locale) ?? Set()) {
+                    switch item {
+                    case .gacha(let dict):
+                        for (key, value) in dict {
+                            gachasFromSources.append(key)
+                            probabilityDict.updateValue(value, forKey: key)
+                        }
+                        gachasFromSources = gachasFromSources.sorted(withDoriSorter: DoriSorter(keyword: .releaseDate(in: locale)))
+                    default: break
+                    }
+                }
+            }
+        }
+    }
+    
+    func getGachasCount() -> Int {
+        if sourcePreference == 0 {
+            return gachasFromList.count
+        } else {
+            return gachasFromSources.count
         }
     }
 }
@@ -335,6 +424,7 @@ struct DetailsCostumesSection: View {
     }
 }
 
+// MARK: DetailSectionOptionPicker
 struct DetailSectionOptionPicker<T: Hashable>: View {
     @Binding var selection: T
     var options: [T]
@@ -361,6 +451,7 @@ struct DetailSectionOptionPicker<T: Hashable>: View {
     }
 }
 
+// MARK: DetailSectionsSpacer
 struct DetailSectionsSpacer: View {
     var body: some View {
         Rectangle()
@@ -369,6 +460,7 @@ struct DetailSectionsSpacer: View {
     }
 }
 
+// MARK: DetailUnavailableView
 struct DetailUnavailableView: View {
     var title: LocalizedStringKey
     var symbol: String

@@ -1030,39 +1030,51 @@ struct EventInfoForHome: View {
 //MARK: GachaInfo [✓]
 struct GachaInfo: View {
     @Binding var searchedKeyword: String
-    @State var attributedTitle: AttributedString = AttributedString("")
-    @State var attributedType: AttributedString = AttributedString("")
+    @State var attributedTitle: AttributedString?
+    @State var attributedType: AttributedString?
     
-    private var preferHeavierFonts: Bool = true
-    private var gachaImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
-    private var gachaID: Int
-    private var gachaType: DoriAPI.Gacha.GachaType
-    private var locale: DoriAPI.Locale?
-    private var showDetails: Bool
-    private var showID: Bool
+    @State var information: PreviewGacha?
+    @State var currentID: Int
+    
+    
+    @State var preferHeavierFonts: Bool = true
+    @State var locale: DoriAPI.Locale?
+    @State var subtitle: LocalizedStringKey?
+    @State var showDetails: Bool
+    @State var showID: Bool
     //    @State var imageHeight: CGFloat = 100
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ gacha: DoriAPI.Gacha.PreviewGacha, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ gacha: DoriAPI.Gacha.PreviewGacha, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+        self.information = gacha
+        self.currentID = gacha.id
+        
         self.preferHeavierFonts = preferHeavierFonts
-        self.gachaImageURL = gacha.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = gacha.gachaName
-        self.gachaID = gacha.id
-        self.gachaType = gacha.type
         self.locale = locale
+        self.subtitle = subtitle
         self.showDetails = showDetails
         self.showID = showID
         self._searchedKeyword = searchedKeyword
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
-    init(_ gacha: DoriAPI.Gacha.Gacha, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, showDetails: Bool = false, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ gacha: DoriAPI.Gacha.Gacha, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+        self.information = PreviewGacha(gacha)
+        self.currentID = gacha.id
+        
         self.preferHeavierFonts = preferHeavierFonts
-        self.gachaImageURL = gacha.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = gacha.gachaName
-        self.gachaID = gacha.id
-        self.gachaType = gacha.type
         self.locale = locale
+        self.subtitle = subtitle
+        self.showDetails = showDetails
+        self.showID = showID
+        self._searchedKeyword = searchedKeyword
+    }
+    init(id: Int, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+        self.information = nil
+        self.currentID = id
+        
+        self.preferHeavierFonts = preferHeavierFonts
+        self.locale = locale
+        self.subtitle = subtitle
         self.showDetails = showDetails
         self.showID = showID
         self._searchedKeyword = searchedKeyword
@@ -1081,7 +1093,7 @@ struct GachaInfo: View {
                     if preferHeavierFonts {
                         Spacer(minLength: 0)
                     }
-                    WebImage(url: gachaImageURL) { image in
+                    WebImage(url: information?.bannerImageURL) { image in
                         image
                             .resizable()
                             .antialiased(true)
@@ -1098,48 +1110,68 @@ struct GachaInfo: View {
                     .cornerRadius(10)
                     
                     if showDetails {
-                        VStack { // Accually Title & Countdown
-                                 //                        Text(locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? ""))
-                            Text(attributedTitle)
+                        VStack {
+                            Text(attributedTitle ?? "Lorem Ipsum")
                                 .multilineTextAlignment(.center)
                                 .bold()
                                 .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
-                                .onAppear {
-                                    //                                attributedString = highlightKeyword(in: , keyword: searchedKeyword)
-                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
-                                }
                                 .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
-                                .onChange(of: searchedKeyword, {
-                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
+                                .wrapIf(attributedTitle == nil, in: { content in
+                                    content.redacted(reason: .placeholder)
                                 })
+                                .onAppear {
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (information?.gachaName.forLocale(locale!) ?? information?.gachaName.jp) : (information?.gachaName.forPreferredLocale())))
+                                }
+                                .onChange(of: searchedKeyword) {
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (information?.gachaName.forLocale(locale!) ?? information?.gachaName.jp) : (information?.gachaName.forPreferredLocale())))
+                                }
+                                .onChange(of: information) {
+                                    attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (information?.gachaName.forLocale(locale!) ?? information?.gachaName.jp) : (information?.gachaName.forPreferredLocale())))
+                                }
                             Group {
                                 //                            if !searchedKeyword.isEmpty {
                                 //                                Text("#\(gachaID)").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(gachaID)") ? Color.accentColor : .primary) + Text("Typography.dot-seperater").bold() + Text(attributedType)
                                 if preferHeavierFonts {
-                                    HStack {
-                                        Text(attributedType)
-                                        if showID {
-                                            Text("#\(String(gachaID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(gachaID)") ? Color.accentColor : .secondary)
+                                    if let attributedType {
+                                        HStack {
+                                            Text(attributedType)
+                                            if showID {
+                                                Text("#\(String(currentID))").fontDesign(.monospaced).foregroundStyle((searchedKeyword == "#\(currentID)") ? Color.accentColor : .secondary)
+                                            }
                                         }
+                                        .foregroundStyle(.secondary)
+                                    } else {
+                                        Text(verbatim: "Lorem Ipsum Dolor")
+                                            .foregroundStyle(.secondary)
+                                            .redacted(reason: .placeholder)
                                     }
-                                    .foregroundStyle(.secondary)
                                 } else {
                                     Group {
-                                        Text(attributedType)/* + Text(verbatim: " • ").bold() + Text("#\(String(gachaID))").fontDesign(.monospaced)*/
+                                        Text(attributedType ?? "Lorem Ipsum")
                                     }
                                     .foregroundStyle(.secondary)
-                                    //                                    .font(.caption)
+                                    .wrapIf(attributedType == nil, in: { content in
+                                        content.redacted(reason: .placeholder)
+                                    })
                                 }
-                                //                            } else {
-                                //                                Text(gachaType.localizedString)
-                                //                            }
                             }
                             .onAppear {
-                                attributedType = highlightOccurrences(of: searchedKeyword, in: gachaType.localizedString)!
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: information?.type.localizedString)
                             }
-                            .onChange(of: gachaType.localizedString, {
-                                attributedType = highlightOccurrences(of: searchedKeyword, in: gachaType.localizedString)!
+                            .onChange(of: information) {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: information?.type.localizedString)
+                            }
+                            .onChange(of: searchedKeyword, {
+                                attributedType = highlightOccurrences(of: searchedKeyword, in: information?.type.localizedString)
                             })
+                            
+                            if let subtitle {
+                                Text(subtitle)
+                                    .foregroundStyle(.secondary)
+                                    .wrapIf(information == nil, in: { content in
+                                        content.redacted(reason: .placeholder)
+                                    })
+                            }
                         }
                         .frame(height: showDetails ? nil : 0)
                         .opacity(showDetails ? 1 : 0)
@@ -1150,6 +1182,14 @@ struct GachaInfo: View {
                 }
                 if !preferHeavierFonts {
                     Spacer(minLength: 0)
+                }
+            }
+        }
+        .task {
+            if information == nil {
+                let fetchedGacha = await Gacha(id: currentID)
+                if let fetchedGacha {
+                    information = PreviewGacha(fetchedGacha)
                 }
             }
         }
