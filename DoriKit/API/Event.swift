@@ -572,6 +572,60 @@ extension DoriAPI {
             return nil
         }
         
+        /// Get rotation musics for a festival event.
+        /// - Parameter id: ID of target event.
+        /// - Returns: Rotation musics for the event, nil if failed to fetch.
+        public static func festivalRotationMusics(of id: Int) async -> [RotationMusic]? {
+            // Response example:
+            // [{
+            //     "musicId": 672,
+            //     "startAt": "1758524400000",
+            //     "endAt": "1758529799000"
+            // },
+            // ...]
+            let request = await requestJSON("https://bestdori.com/api/festival/rotationMusics/\(id).json")
+            if case let .success(respJSON) = request {
+                let task = Task.detached(priority: .userInitiated) {
+                    respJSON.map {
+                        RotationMusic(
+                            musicID: $0.1["musicId"].intValue,
+                            startAt: .init(apiTimeInterval: $0.1["startAt"].stringValue) ?? .init(timeIntervalSince1970: 0),
+                            endAt: .init(apiTimeInterval: $0.1["endAt"].stringValue) ?? .init(timeIntervalSince1970: 0)
+                        )
+                    }
+                }
+                return await task.value
+            }
+            return nil
+        }
+        
+        /// Get stages for a festival event.
+        /// - Parameter id: ID of target event.
+        /// - Returns: Stages for the event, nil if failed to fetch.
+        public static func festivalStages(of id: Int) async -> [FestivalStage]? {
+            // Response example:
+            // [{
+            //     "type": "life",
+            //     "startAt": "1758524400000",
+            //     "endAt": "1758535199000"
+            // },
+            // ...]
+            let request = await requestJSON("https://bestdori.com/api/festival/rotationMusics/\(id).json")
+            if case let .success(respJSON) = request {
+                let task = Task.detached(priority: .userInitiated) {
+                    respJSON.map {
+                        FestivalStage(
+                            type: .init(rawValue: $0.1["type"].stringValue) ?? .life,
+                            startAt: .init(apiTimeInterval: $0.1["startAt"].stringValue) ?? .init(timeIntervalSince1970: 0),
+                            endAt: .init(apiTimeInterval: $0.1["endAt"].stringValue) ?? .init(timeIntervalSince1970: 0)
+                        )
+                    }
+                }
+                return await task.value
+            }
+            return nil
+        }
+        
         /// Get top 10 data of an event in Bandori.
         /// - Parameters:
         ///   - id: ID of the event.
@@ -921,6 +975,24 @@ extension DoriAPI.Event {
             public var title: DoriAPI.LocalizedData<String>
             public var synopsis: DoriAPI.LocalizedData<String>
             public var releaseConditions: DoriAPI.LocalizedData<String>
+        }
+    }
+    
+    public struct RotationMusic: Sendable, Hashable, DoriCache.Cacheable {
+        public var musicID: Int
+        public var startAt: Date
+        public var endAt: Date
+    }
+    
+    public struct FestivalStage: Sendable, Hashable, DoriCache.Cacheable {
+        public var type: StageType
+        public var startAt: Date
+        public var endAt: Date
+        
+        public enum StageType: String, Sendable, Codable, Hashable {
+            case life
+            case judge
+            case combo
         }
     }
     
