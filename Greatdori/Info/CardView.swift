@@ -203,6 +203,7 @@ struct CardSearchView: View {
     }
 }
 
+
 // MARK: CardDetailView
 struct CardDetailView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
