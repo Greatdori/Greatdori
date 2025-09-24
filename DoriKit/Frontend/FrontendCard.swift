@@ -65,6 +65,8 @@ extension DoriFrontend {
                 await DoriAPI.Event.all()
             } _: {
                 await DoriAPI.Gacha.all()
+            } _: {
+                await DoriAPI.LoginCampaign.all()
             }
             guard let card = groupResult.0 else { return nil }
             guard let characters = groupResult.1 else { return nil }
@@ -73,6 +75,7 @@ extension DoriFrontend {
             guard let costumes = groupResult.4 else { return nil }
             guard let events = groupResult.5 else { return nil }
             guard let gacha = groupResult.6 else { return nil }
+            guard let campaigns = groupResult.7 else { return nil }
             
             let character = characters.first { $0.id == card.characterID }!
             var resultGacha = [DoriAPI.Gacha.PreviewGacha]()
@@ -93,6 +96,40 @@ extension DoriFrontend {
             return .init(
                 id: id,
                 card: card,
+                cardSource: card.source.map {
+                    let mappedResult = $0?.map { (src: DoriAPI.Card.Card.CardSource) -> DoriFrontend.Card.ExtendedCard.Source in
+                        switch src {
+                        case .gacha(let dict): .gacha(dict.compactMap { key, value in
+                            if let g = gacha.first(where: { $0.id == key }) {
+                                (key: g, value: value)
+                            } else {
+                                nil
+                            }
+                        }.reduce(into: [:]) { (dict, pair: (key: DoriAPI.Gacha.PreviewGacha, value: Double)) in
+                            // Swift says the types are too complex
+                            // so we have to annotate the type
+                            // of `pair` explicitly.
+                            dict.updateValue(pair.value, forKey: pair.key)
+                        })
+                        case .event(let dict): .event(dict.compactMap { key, value in
+                            if let e = events.first(where: { $0.id == key }) {
+                                (key: e, value: value)
+                            } else {
+                                nil
+                            }
+                        }.reduce(into: [:]) { (dict, pair: (key: DoriAPI.Event.PreviewEvent, value: Int)) in
+                            // Swift says the types are too complex
+                            // so we have to annotate the type
+                            // of `pair` explicitly.
+                            dict.updateValue(pair.value, forKey: pair.key)
+                        })
+                        case .login(let ids): .login(ids.compactMap { id in
+                            campaigns.first { $0.id == id }
+                        })
+                        }
+                    }
+                    return mappedResult != nil ? Set(mappedResult!) : nil
+                },
                 character: character,
                 band: bands.first { character.bandID == $0.id }!,
                 skill: skills.first { $0.id == card.skillID }!,
@@ -121,12 +158,29 @@ extension DoriFrontend.Card {
     public struct ExtendedCard: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var id: Int
         public var card: Card
+        public var cardSource: DoriAPI.LocalizedData<Set<Source>>
         public var character: DoriAPI.Character.PreviewCharacter
         public var band: DoriAPI.Band.Band
         public var skill: DoriAPI.Skill.Skill
         public var costume: DoriAPI.Costume.PreviewCostume
         public var event: DoriAPI.LocalizedData<DoriAPI.Event.PreviewEvent>
         public var gacha: [DoriAPI.Gacha.PreviewGacha]
+        
+        /// Represent a part of extended sources of a card.
+        public enum Source: Sendable, Hashable, DoriCache.Cacheable {
+            /// Information about a card can be got from gacha.
+            ///
+            /// This case is associated an `[PreviewGacha: Double]` dictionary,
+            /// which represents `[gacha: probability]`.
+            case gacha([DoriAPI.Gacha.PreviewGacha: Double])
+            /// Information about a card can be got from events.
+            ///
+            /// This case is associated an `[PreviewEvent: Int]` dictionary,
+            /// which represents `[event: point]`.
+            case event([DoriAPI.Event.PreviewEvent: Int])
+            /// Information about a card can be got from login campaigns.
+            case login([DoriAPI.LoginCampaign.PreviewCampaign])
+        }
     }
 }
 extension DoriFrontend.Card.CardWithBand: DoriFrontend.Searchable {

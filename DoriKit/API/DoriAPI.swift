@@ -273,6 +273,53 @@ extension DoriAPI.LocalizedData {
         }
         return result
     }
+    
+//    /// Returns an array containing the non-`nil` results of calling the given
+//    /// transformation with each element of this sequence.
+//    ///
+//    /// Use this method to receive an array of non-optional values when your
+//    /// transformation produces an optional value.
+//    ///
+//    /// In this example, note the difference in the result of using `map` and
+//    /// `compactMap` with a transformation that returns an optional `Int` value.
+//    ///
+//    ///     let possibleNumbers = ["1", "2", "three", "///4///", "5"]
+//    ///
+//    ///     let mapped: [Int?] = possibleNumbers.map { str in Int(str) }
+//    ///     // [1, 2, nil, nil, 5]
+//    ///
+//    ///     let compactMapped: [Int] = possibleNumbers.compactMap { str in Int(str) }
+//    ///     // [1, 2, 5]
+//    ///
+//    /// - Parameter transform: A closure that accepts an element of this
+//    ///   sequence as its argument and returns an optional value.
+//    /// - Returns: An array of the non-`nil` results of calling `transform`
+//    ///   with each element of the sequence.
+//    ///
+//    /// - Complexity: O(*n*), where *n* is the length of this sequence.
+//    @inlinable
+//    public func compactMap<ElementOfResult>(
+//        _ transform: (T?) throws -> ElementOfResult?
+//    ) rethrows -> DoriAPI.LocalizedData<ElementOfResult> {
+//        return try _compactMap(transform)
+//    }
+//    
+//    // The implementation of compactMap accepting a closure with an optional result.
+//    // Factored out into a separate function in order to be used in multiple
+//    // overloads.
+//    @inlinable
+//    @inline(__always)
+//    public func _compactMap<ElementOfResult>(
+//        _ transform: (T?) throws -> ElementOfResult?
+//    ) rethrows -> DoriAPI.LocalizedData<ElementOfResult> {
+//        var result = DoriAPI.LocalizedData<ElementOfResult>(jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
+//        for locale in DoriAPI.Locale.allCases {
+//            if let newElement = try transform(element) {
+//                result.append(newElement)
+//            }
+//        }
+//        return result
+//    }
 }
 extension DoriAPI.LocalizedData {
     @inlinable
