@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-// (In Alphabetic Order)
+// (In Alphabetical Order)
 
 import Photos
 import Vision

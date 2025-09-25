@@ -379,8 +379,6 @@ struct LayoutPicker<T: Hashable>: View {
 //```
 
 
-
-
 // MARK: MultilingualText
 struct MultilingualText: View {
     let source: DoriAPI.LocalizedData<String>
