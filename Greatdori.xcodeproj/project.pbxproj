@@ -192,6 +192,7 @@
 		8C9474672E37ADD8003A90B4 /* UnavailableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474662E37ADD5003A90B4 /* UnavailableView.swift */; };
 		8C9474692E39CA1F003A90B4 /* EventTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9474682E39CA19003A90B4 /* EventTrackerView.swift */; };
 		8C94746B2E3ADE27003A90B4 /* StoryViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C94746A2E3ADE21003A90B4 /* StoryViewerView.swift */; };
+		8C9774612E8536690038E717 /* SongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9774602E8536640038E717 /* SongView.swift */; };
 		8CB4D46C2E4304A20085D57A /* FrontendSong.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4D46B2E43049E0085D57A /* FrontendSong.swift */; };
 		8CB4D46E2E43093A0085D57A /* SongListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4D46D2E4309370085D57A /* SongListView.swift */; };
 		8CB4D4702E4454890085D57A /* CardCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB4D46F2E4454840085D57A /* CardCollectionManager.swift */; };
@@ -756,6 +757,7 @@
 		8C9474662E37ADD5003A90B4 /* UnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableView.swift; sourceTree = "<group>"; };
 		8C9474682E39CA19003A90B4 /* EventTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTrackerView.swift; sourceTree = "<group>"; };
 		8C94746A2E3ADE21003A90B4 /* StoryViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryViewerView.swift; sourceTree = "<group>"; };
+		8C9774602E8536640038E717 /* SongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongView.swift; sourceTree = "<group>"; };
 		8CB4D46B2E43049E0085D57A /* FrontendSong.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendSong.swift; sourceTree = "<group>"; };
 		8CB4D46D2E4309370085D57A /* SongListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListView.swift; sourceTree = "<group>"; };
 		8CB4D46F2E4454840085D57A /* CardCollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionManager.swift; sourceTree = "<group>"; };
@@ -1661,6 +1663,7 @@
 				8CDEC7732E7ED254001397CC /* CostumeView.swift */,
 				E93A1FAE2E38E52E00F5390A /* EventView.swift */,
 				E91392DA2E7D726500C59731 /* GachaView.swift */,
+				8C9774602E8536640038E717 /* SongView.swift */,
 			);
 			path = Info;
 			sourceTree = "<group>";
@@ -2491,6 +2494,7 @@
 				8C08B8BD2E73DC8F00447B05 /* CalendarEvents.swift in Sources */,
 				E91392DB2E7D726A00C59731 /* GachaView.swift in Sources */,
 				8CB4D4712E4454890085D57A /* CardCollectionManager.swift in Sources */,
+				8C9774612E8536690038E717 /* SongView.swift in Sources */,
 				E93A1FAF2E38E53500F5390A /* EventView.swift in Sources */,
 				E90769CD2E546D5500C9871C /* HomeView.swift in Sources */,
 				E90769CE2E546D5500C9871C /* NewsView.swift in Sources */,

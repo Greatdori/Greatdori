@@ -56,7 +56,7 @@ import SwiftUI
         symbol: "music.note",
         lightColor: .red,
         tabValue: .songs,
-        destination: {GachaSearchView()}
+        destination: {SongSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.song-meta",
