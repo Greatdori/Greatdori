@@ -14,7 +14,6 @@
 
 // (In Alphabetical Order)
 
-import Photos
 import Vision
 import DoriKit
 import Network
@@ -426,141 +425,88 @@ struct _ImageContextMenuModifier: ViewModifier {
             .contextMenu {
                 Section {
                     #if os(macOS)
-                    forEachImageInfo { info in
-                        Button("存储\(info.description ?? "图片")到“下载”", systemImage: "square.and.arrow.down") {
-                            Task {
-                                guard let downloadsFolder = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first else { return }
-                                try? await info.resolvedData()?.write(to: downloadsFolder.appending(path: info.url.lastPathComponent))
+                    forEachImageInfo("存储__DESCRIPTION__到“下载”", systemImage: "square.and.arrow.down") { info in
+                        Task {
+                            guard let downloadsFolder = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first else { return }
+                            try? await info.resolvedData()?.write(to: downloadsFolder.appending(path: info.url.lastPathComponent))
+                        }
+                    }
+                    forEachImageInfo("存储__DESCRIPTION__为…", systemImage: "square.and.arrow.down") { info in
+                        Task {
+                            if let data = await info.resolvedData() {
+                                exportingImageDocument = .init(data: data)
+                                isFileExporterPresented = true
                             }
                         }
                     }
-                    forEachImageInfo { info in
-                        Button("存储\(info.description ?? "图片")为…", systemImage: "square.and.arrow.down") {
-                            Task {
-                                if let data = await info.resolvedData() {
-                                    exportingImageDocument = .init(data: data)
-                                    isFileExporterPresented = true
-                                }
+                    #else
+                    forEachImageInfo("添加__DESCRIPTION__到相册", systemImage: "photo.badge.plus") { info in
+                        Task {
+                            if let data = await info.resolvedData(), let image = UIImage(data: data) {
+                                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
                             }
                         }
                     }
                     #endif
-                    forEachImageInfo { info in
-                        Button("添加\(info.description ?? "图片")到相册", systemImage: "photo.badge.plus") {
-                            Task {
-                                // FIXME: This crashes on `PHPhotoLibrary.shared().performChanges(_:)`
-                                // ???: Why
-                                // FIXME: Fix this problem tomorrow (Sep. 25)
-                                // FIXME: #0    0x000000010142dbe0 in dispatch_async ()
-                                // FIXME: #1    0x00000001b4cf0a18 in -[PHPhotoLibrary _performCancellableChanges:withInstrumentation:onExecutionContext:completionHandler:] ()
-                                // FIXME: #2    0x00000001b4cf0d2c in -[PHPhotoLibrary _performCancellableChanges:withInstrumentation:completionHandler:] ()
-                                // FIXME: #3    0x00000001b4cf0c20 in -[PHPhotoLibrary performChanges:completionHandler:] ()
-                                // FIXME: #4    0x00000001024c9568 in closure #1 in closure #1 in closure #1 in closure #1 in closure #1 in _ImageContextMenuModifier.body(content:) at /Users/memz233/Desktop/Projects/Greatdori/Greatdori/Extensions.swift:454
-                                // FIXME: #5    0x0000000199e2138c in swift::runJobInEstablishedExecutorContext ()
-                                // FIXME: #6    0x0000000199e22800 in swift_job_runImpl ()
-                                // FIXME: #7    0x00000001014633a4 in _dispatch_main_queue_drain.cold.5 ()
-                                // FIXME: #8    0x0000000101438778 in _dispatch_main_queue_drain ()
-                                // FIXME: #9    0x00000001014386b4 in _dispatch_main_queue_callback_4CF ()
-                                // FIXME: #10    0x000000019b924520 in __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__ ()
-                                // FIXME: #11    0x000000019b8d6d14 in __CFRunLoopRun ()
-                                // FIXME: #12    0x000000019b8d5c44 in _CFRunLoopRunSpecificWithOptions ()
-                                // FIXME: #13    0x000000023acca498 in GSEventRunModal ()
-                                // FIXME: #14    0x00000001a1250ddc in -[UIApplication _run] ()
-                                // FIXME: #15    0x00000001a11f5b0c in UIApplicationMain ()
-                                // FIXME: #16    0x00000001a43aa6f0 in closure #1 (Swift.UnsafeMutablePointer<Swift.Optional<Swift.UnsafeMutablePointer<Swift.Int8>>>) -> Swift.Never in SwiftUI.KitRendererCommon(Swift.AnyObject.Type) -> Swift.Never ()
-                                // FIXME: #17    0x00000001a43a722c in runApp ()
-                                // FIXME: #18    0x00000001a43a6d18 in static SwiftUI.App.main() -> () ()
-                                // FIXME: #19    0x0000000102518fb4 in static GreatdoriApp.$main() ()
-                                // FIXME: #20    0x000000010251b2a8 in main ()
-                                // FIXME: #21    0x000000019894ee28 in start ()
-                                if let data = await info.resolvedData() {
-                                    let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
-                                    if case .authorized = status {
-                                        try? await PHPhotoLibrary.shared().performChanges {
-                                            PHAssetChangeRequest.creationRequestForAsset(from: .init(data: data)!)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
                 Section {
-                    forEachImageInfo { info in
-                        Button("拷贝\(info.description ?? "图片")地址", systemImage: "document.on.document") {
-                            #if os(macOS)
-                            NSPasteboard.general.clearContents()
-                            NSPasteboard.general.setString(info.url.absoluteString, forType: .string)
-                            #else
-                            UIPasteboard.general.string = info.url.absoluteString
-                            #endif
-                        }
+                    forEachImageInfo("拷贝__DESCRIPTION__地址", systemImage: "document.on.document") { info in
+                        #if os(macOS)
+                        NSPasteboard.general.clearContents()
+                        NSPasteboard.general.setString(info.url.absoluteString, forType: .string)
+                        #else
+                        UIPasteboard.general.string = info.url.absoluteString
+                        #endif
                     }
-                    forEachImageInfo { info in
-                        Button("拷贝\(info.description ?? "图片")", systemImage: "document.on.document") {
-                            Task {
-                                if let data = await info.resolvedData() {
-                                    #if os(macOS)
-                                    NSPasteboard.general.clearContents()
-                                    NSPasteboard.general.setData(data, forType: .png)
-                                    #else
-                                    UIPasteboard.general.image = .init(data: data)!
-                                    #endif
-                                }
+                    forEachImageInfo("拷贝__DESCRIPTION__", systemImage: "document.on.document") { info in
+                        Task {
+                            if let data = await info.resolvedData() {
+                                #if os(macOS)
+                                NSPasteboard.general.clearContents()
+                                NSPasteboard.general.setData(data, forType: .png)
+                                #else
+                                UIPasteboard.general.image = .init(data: data)!
+                                #endif
                             }
                         }
                     }
                     if #available(iOS 18.0, macOS 15.0, *) {
-                        forEachImageInfo { info in
-                            Button("拷贝\(info.description ?? "图片")主体") {
-                                // FIXME: Quality is too low
-                                Task {
-                                    if let data = await info.resolvedData() {
-                                        guard let image = CIImage(data: data) else { return }
-                                        do {
-                                            let request = GeneratePersonSegmentationRequest()
-                                            request.qualityLevel = .accurate
-                                            let observation = try await request.perform(on: image)
-                                            
-                                            guard let maskCGImage = try? observation.cgImage else { return }
-                                            var ciMaskImage = CIImage(cgImage: maskCGImage)
-                                            
-                                            let originalExtent = image.extent
-                                            ciMaskImage = CIImage(cgImage: maskCGImage).transformed(by: CGAffineTransform(scaleX: originalExtent.width / CGFloat(maskCGImage.width), y: originalExtent.height / CGFloat(maskCGImage.height)))
-                                            
-                                            let mauveBackground = CIImage(color: CIColor(red: 0, green: 0, blue: 0, alpha: 0))
-                                                .cropped(to: image.extent)
-                                            
-                                            let blendFilter = CIFilter.blendWithMask()
-                                            blendFilter.inputImage = image
-                                            blendFilter.backgroundImage = mauveBackground
-                                            blendFilter.maskImage = ciMaskImage
-                                            
-                                            let context = CIContext()
-                                            guard let outputImage = blendFilter.outputImage,
-                                                  let cgImage = context.createCGImage(outputImage, from: outputImage.extent) else { return }
-                                            
-                                            #if os(macOS)
-                                            let _imageData = NSMutableData()
-                                            if let dest = CGImageDestinationCreateWithData(_imageData, UTType.png.identifier as CFString, 1, nil) {
-                                                CGImageDestinationAddImage(dest, cgImage, nil)
-                                                if CGImageDestinationFinalize(dest) {
-                                                    NSPasteboard.general.clearContents()
-                                                    NSPasteboard.general.setData(_imageData as Data, forType: .png)
-                                                }
+                        forEachImageInfo("拷贝__DESCRIPTION__主体", systemImage: "circle.dashed.rectangle") { info in
+                            Task {
+                                if let data = await info.resolvedData() {
+                                    guard var image = CIImage(data: data) else { return }
+                                    do {
+                                        image = image.oriented(.up)
+                                        
+                                        let request = GenerateForegroundInstanceMaskRequest()
+                                        let result = try await request.perform(on: image)
+                                        
+                                        guard let cgImage = result?.allInstances.compactMap({ (index) -> (CGImage, Int)? in
+                                            let buffer = try? result?.generateMaskedImage(for: [index], imageFrom: .init(data))
+                                            if buffer != nil {
+                                                let _image = CIImage(cvPixelBuffer: unsafe buffer.unsafelyUnwrapped)
+                                                let context = CIContext()
+                                                guard let image = context.createCGImage(_image, from: _image.extent) else { return nil }
+                                                return (image, image.width * image.height)
+                                            } else {
+                                                return nil
                                             }
-                                            #else
-                                            let _imageData = NSMutableData()
-                                            if let dest = CGImageDestinationCreateWithData(_imageData, UTType.png.identifier as CFString, 1, nil) {
-                                                CGImageDestinationAddImage(dest, cgImage, nil)
-                                                if CGImageDestinationFinalize(dest) {
-                                                    UIPasteboard.general.image = .init(data: _imageData as Data)!
-                                                }
+                                        }).min(by: { $0.1 < $1.1 })?.0 else { return }
+                                        
+                                        let _imageData = NSMutableData()
+                                        if let dest = CGImageDestinationCreateWithData(_imageData, UTType.png.identifier as CFString, 1, nil) {
+                                            CGImageDestinationAddImage(dest, cgImage, nil)
+                                            if CGImageDestinationFinalize(dest) {
+                                                #if os(macOS)
+                                                NSPasteboard.general.clearContents()
+                                                NSPasteboard.general.setData(_imageData as Data, forType: .png)
+                                                #else
+                                                UIPasteboard.general.image = .init(data: _imageData as Data)!
+                                                #endif
                                             }
-                                            #endif
-                                        } catch {
-                                            print(error)
                                         }
+                                    } catch {
+                                        print(error)
                                     }
                                 }
                             }
@@ -581,9 +527,27 @@ struct _ImageContextMenuModifier: ViewModifier {
     }
     
     @ViewBuilder
-    private func forEachImageInfo<Content: View>(@ViewBuilder content: @escaping (ImageInfo) -> Content) -> some View {
-        ForEach(imageInfo, id: \.self) { info in
-            content(info)
+    private func forEachImageInfo(
+        _ titleKey: LocalizedStringResource,
+        systemImage: String,
+        action: @escaping (ImageInfo) -> Void
+    ) -> some View {
+        if imageInfo.count > 1 {
+            let replacedName = String(localized: titleKey)
+                .replacing("__DESCRIPTION__", with: "图片")
+            Menu(replacedName, systemImage: systemImage) {
+                ForEach(imageInfo, id: \.self) { info in
+                    Button(info.description ?? "图片") {
+                        action(info)
+                    }
+                }
+            }
+        } else if let info = imageInfo.first {
+            let replacedName = String(localized: titleKey)
+                .replacing("__DESCRIPTION__", with: String(localized: info.description ?? "图片"))
+            Button(replacedName, systemImage: systemImage) {
+                action(info)
+            }
         }
     }
     
