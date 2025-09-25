@@ -392,37 +392,65 @@ extension EnvironmentValues {
 }
 
 extension WebImage {
-    func imageContextMenu(url: URL, description: LocalizedStringResource? = nil) -> some View {
-        _WebImageContentMenuWrapperView(content: self, url: url, description: description)
+    func imageContextMenu<V: View>(
+        url: URL,
+        description: LocalizedStringResource? = nil,
+        otherContentAt placement: _ImageContextMenuModifier<V>.ContentPlacement = .start,
+        @ViewBuilder otherContent: @escaping () -> V = { EmptyView() }
+    ) -> some View {
+        _WebImageContentMenuWrapperView(
+            content: self,
+            url: url,
+            description: description,
+            otherContentPlacement: placement,
+            otherContent: otherContent
+        )
     }
     
-    private struct _WebImageContentMenuWrapperView: View {
+    private struct _WebImageContentMenuWrapperView<V: View>: View {
         var content: WebImage
         var url: URL
         var description: LocalizedStringResource?
-        @State private var info: _ImageContextMenuModifier.ImageInfo?
+        var otherContentPlacement: _ImageContextMenuModifier<V>.ContentPlacement
+        var otherContent: (() -> V)?
+        @State private var info: _ImageContextMenuModifier<V>.ImageInfo?
         var body: some View {
             content
                 .onSuccess { _, data, _ in
                     info = .init(url: url, data: data, description: description)
                 }
-                .modifier(_ImageContextMenuModifier(imageInfo: info != nil ? [info!] : []))
+                .modifier(
+                    _ImageContextMenuModifier(
+                        imageInfo: info != nil ? [info!] : [],
+                        otherContentPlacement: otherContentPlacement,
+                        otherContent: otherContent
+                    )
+                )
         }
     }
 }
 extension View {
-    func imageContextMenu(_ info: [_ImageContextMenuModifier.ImageInfo]) -> some View {
+    func imageContextMenu<V: View>(
+        _ info: [_ImageContextMenuModifier<V>.ImageInfo],
+        otherContentAt placement: _ImageContextMenuModifier<V>.ContentPlacement = .start,
+        @ViewBuilder otherContent: @escaping () -> V = { EmptyView() }
+    ) -> some View {
         self
-            .modifier(_ImageContextMenuModifier(imageInfo: info))
+            .modifier(_ImageContextMenuModifier(imageInfo: info, otherContentPlacement: placement, otherContent: otherContent))
     }
 }
-struct _ImageContextMenuModifier: ViewModifier {
+struct _ImageContextMenuModifier<V: View>: ViewModifier {
     @State var imageInfo: [ImageInfo]
+    var otherContentPlacement: ContentPlacement
+    var otherContent: (() -> V)?
     @State private var isFileExporterPresented = false
-    @State private var exportingImageDocument: ImageFileDocument?
+    @State private var exportingImageDocument: _ImageFileDocument?
     func body(content: Content) -> some View {
         content
             .contextMenu {
+                if otherContentPlacement == .start, let otherContent {
+                    otherContent()
+                }
                 Section {
                     #if os(macOS)
                     forEachImageInfo("存储__DESCRIPTION__到“下载”", systemImage: "square.and.arrow.down") { info in
@@ -513,6 +541,9 @@ struct _ImageContextMenuModifier: ViewModifier {
                         }
                     }
                 }
+                if otherContentPlacement == .end, let otherContent {
+                    otherContent()
+                }
             }
             .fileExporter(isPresented: $isFileExporterPresented, document: exportingImageDocument, contentType: .image) { _ in
                 exportingImageDocument = nil
@@ -551,6 +582,10 @@ struct _ImageContextMenuModifier: ViewModifier {
         }
     }
     
+    enum ContentPlacement {
+        case start
+        case end
+    }
     struct ImageInfo: Hashable {
         var url: URL
         var data: Data?
@@ -576,24 +611,24 @@ struct _ImageContextMenuModifier: ViewModifier {
             }
         }
     }
-    struct ImageFileDocument: FileDocument {
-        static let readableContentTypes: [UTType] = [.image]
-        
-        var imageData: Data
-        
-        init(data imageData: Data) {
-            self.imageData = imageData
+}
+struct _ImageFileDocument: FileDocument {
+    static let readableContentTypes: [UTType] = [.image]
+    
+    var imageData: Data
+    
+    init(data imageData: Data) {
+        self.imageData = imageData
+    }
+    init(configuration: ReadConfiguration) throws {
+        if let data = configuration.file.regularFileContents {
+            imageData = data
+        } else {
+            throw CocoaError(.fileReadUnknown)
         }
-        init(configuration: ReadConfiguration) throws {
-            if let data = configuration.file.regularFileContents {
-                imageData = data
-            } else {
-                throw CocoaError(.fileReadUnknown)
-            }
-        }
-        
-        func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-            .init(regularFileWithContents: imageData)
-        }
+    }
+    
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        .init(regularFileWithContents: imageData)
     }
 }

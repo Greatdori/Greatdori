@@ -379,38 +379,11 @@ struct CardCoverImage: View {
             .aspectRatio(expectedCardRatio, contentMode: .fit)
         }
         .cornerRadius(cardCornerRadius)
-        // FIXME: This context menu makes image context menu invisible
-        // FIXME: on iOS, merge or drop it?
 //        .wrapIf(showNavigationHints, in: { content in
 //#if os(iOS)
 //            content
 //                .contextMenu(menuItems: {
-//                    VStack {
-//                        Button(action: {
-//                            //                            cardNavigationDestinationID = cardID
-//                            showCardDetailView = true
-//                        }, label: {
-//                            if let title = cardTitle.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
-//                                Group {
-//                                    Text(title)
-//                                    Group {
-//                                        Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text(cardType.localizedString)
-//                                    }
-//                                    .font(.caption)
-//                                }
-//                            } else {
-//                                Group {
-//                                    Text(verbatim: "Lorem ipsum dolor")
-//                                    //                                        .foregroundStyle(.secondary)
-//                                    Text(verbatim: "Lorem ipsum")
-//                                        .font(.caption)
-//                                    //                                        .foregroundStyle(.tertiary)
-//                                }
-//                                .redacted(reason: .placeholder)
-//                            }
-//                        })
-//                        .disabled(cardTitle.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
-//                    }
+
 //                })
 //#else
 //            content
@@ -460,7 +433,34 @@ struct CardCoverImage: View {
         .imageContextMenu([
             .init(url: normalBackgroundImageURL, description: "特训前卡面"),
             trainedBackgroundImageURL != nil ? .init(url: trainedBackgroundImageURL!, description: "特训后卡面") : nil
-        ].compactMap { $0 })
+        ].compactMap { $0 }) {
+            if showNavigationHints {
+                VStack {
+                    Button(action: {
+                        // cardNavigationDestinationID = cardID
+                        showCardDetailView = true
+                    }, label: {
+                        if let title = cardTitle.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+                            Group {
+                                Text(title)
+                                Group {
+                                    Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text(cardType.localizedString)
+                                }
+                                .font(.caption)
+                            }
+                        } else {
+                            Group {
+                                Text(verbatim: "Lorem ipsum dolor")
+                                Text(verbatim: "Lorem ipsum")
+                                    .font(.caption)
+                            }
+                            .redacted(reason: .placeholder)
+                        }
+                    })
+                    .disabled(cardTitle.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
+                }
+            }
+        }
         .onAppear {
             self.cardCharacterName = DoriCache.preCache.characterDetails[characterID]?.characterName
         }
