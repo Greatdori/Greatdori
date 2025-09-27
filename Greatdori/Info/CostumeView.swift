@@ -360,7 +360,7 @@ struct CostumeDetailOverviewView: View {
                                 Text("Costume.title")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.description)
+                                MultilingualText(information.description)
                             })
                             Divider()
                         }
@@ -395,7 +395,7 @@ struct CostumeDetailOverviewView: View {
                                 Text("Costume.release-date")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                MultilingualText(information.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                             })
                             Divider()
                         }
@@ -407,7 +407,7 @@ struct CostumeDetailOverviewView: View {
                                     Text("Costume.how-to-get")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: information.howToGet)
+                                    MultilingualText(information.howToGet)
                                 }, displayMode: .basedOnUISizeClass)
                                 Divider()
                             }

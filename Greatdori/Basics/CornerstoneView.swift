@@ -394,7 +394,7 @@ struct MultilingualText: View {
     @State var showCopyMessage = false
     @State var lastCopiedLocaleValue: DoriAPI.Locale? = nil
     
-    init(source: DoriAPI.LocalizedData<String>, showSecondaryText: Bool = true, showLocaleKey: Bool = false, allowPopover: Bool = true) {
+    init(_ source: DoriAPI.LocalizedData<String>, showSecondaryText: Bool = true, showLocaleKey: Bool = false, allowPopover: Bool = true) {
         self.source = source
         self.showSecondaryText = showSecondaryText
         self.showLocaleKey = showLocaleKey
@@ -566,13 +566,13 @@ struct MultilingualTextForCountdown: View {
     @State var primaryDisplayLocale: DoriAPI.Locale?
     @State var showCopyMessage = false
     
-    init(source: Event) {
+    init(_ source: Event) {
         self.startDate = source.startAt
         self.endDate = source.endAt
         self.aggregateEndDate = source.aggregateEndAt
         self.distributionStartDate = source.distributionStartAt
     }
-    init (source: Gacha) {
+    init(_ source: Gacha) {
         self.startDate = source.publishedAt
         self.endDate = source.closedAt
         self.aggregateEndDate = nil

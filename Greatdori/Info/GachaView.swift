@@ -389,7 +389,7 @@ struct GachaDetailOverviewView: View {
                                 Text("Gacha.title")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.gacha.gachaName)
+                                MultilingualText(information.gacha.gachaName)
                             })
                             Divider()
                         }
@@ -411,7 +411,7 @@ struct GachaDetailOverviewView: View {
                                 Text("Gacha.countdown")
                                     .bold()
                             }, value: {
-                                MultilingualTextForCountdown(source: information.gacha)
+                                MultilingualTextForCountdown(information.gacha)
                             })
                             Divider()
                         }
@@ -422,7 +422,7 @@ struct GachaDetailOverviewView: View {
                                 Text("Gacha.release-date")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.gacha.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                MultilingualText(information.gacha.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                             })
                             Divider()
                         }
@@ -433,7 +433,7 @@ struct GachaDetailOverviewView: View {
                                 Text("Gacha.close-date")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.gacha.closedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                MultilingualText(information.gacha.closedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                             })
                             Divider()
                         }
@@ -461,7 +461,7 @@ struct GachaDetailOverviewView: View {
                                 Text("Gacha.descripition")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.gacha.description)
+                                MultilingualText(information.gacha.description)
                             }, displayMode: .basedOnUISizeClass)
                             Divider()
                         }

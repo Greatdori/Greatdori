@@ -204,10 +204,9 @@ struct SongDetailView: View {
     var id: Int
     var allSongs: [PreviewSong]? = nil
     @State var songID: Int = 0
-    @State var informationLoadPromise: CachePromise<Song?>?
-    @State var information: Song?
+    @State var informationLoadPromise: CachePromise<ExtendedSong?>?
+    @State var information: ExtendedSong?
     @State var infoIsAvailable = true
-    @State var cardNavigationDestinationID: Int?
     @State var allSongIDs: [Int] = []
     @State var showSubtitle: Bool = false
     var body: some View {
@@ -217,14 +216,10 @@ struct SongDetailView: View {
                     HStack {
                         Spacer(minLength: 0)
                         VStack {
-                            SongDetailOverviewView(information: information)
+                            SongDetailOverviewView(information: information.song)
                             
-                            //                            if !information.cards.isEmpty {
-                            //                                Rectangle()
-                            //                                    .opacity(0)
-                            //                                    .frame(height: 30)
-                            //                                DetailsCardsSection(cards: information.cards)
-                            //                            }
+                            DetailSectionsSpacer()
+                            SongDetailGameplayView(information: information)
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -251,10 +246,7 @@ struct SongDetailView: View {
             }
         }
         .withSystemBackground()
-        .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
-            Text("\(id)")
-        })
-        .navigationTitle(Text(information?.musicTitle.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Song") : "")"))
+        .navigationTitle(Text(information?.song.musicTitle.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Song") : "")"))
 #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
@@ -300,7 +292,7 @@ struct SongDetailView: View {
         infoIsAvailable = true
         informationLoadPromise?.cancel()
         informationLoadPromise = DoriCache.withCache(id: "SongDetail_\(id)", trait: .realTime) {
-            await Song(id: id)
+            await ExtendedSong(id: id)
         } .onUpdate {
             if let information = $0 {
                 self.information = information
@@ -314,119 +306,165 @@ struct SongDetailView: View {
 // MARK: SongDetailOverviewView
 struct SongDetailOverviewView: View {
     let information: Song
-//    @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
-//    @State var cardsArraySeperated: [[DoriFrontend.Card.PreviewCard?]] = []
-//    @State var cardsPercentage: Int = -100
-//    @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
-//    @State var cardsTitleWidth: CGFloat = 0 // Fixed
-//    @State var cardsPercentageWidth: CGFloat = 0 // Fixed
-//    @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
-//    @State var cardsFixedWidth: CGFloat = 0 //Fixed
-//    @State var cardsUseCompactLayout = true
-//    @Binding var cardNavigationDestinationID: Int?
+    
+    let coverSideLength: CGFloat = 320
+    var body: some View {
+        VStack {
+            Group {
+                //                // MARK: Title Image
+                Group {
+                    Rectangle()
+                        .opacity(0)
+                        .frame(height: 2)
+                    WebImage(url: information.jacketImageURL) { image in
+                        image
+                            .antialiased(true)
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(getPlaceholderColor())
+                    }
+                    .interpolation(.high)
+                    .frame(width: 96, height: 96)
+                    Rectangle()
+                        .opacity(0)
+                        .frame(height: 2)
+                }
+                // MARK: Info
+                CustomGroupBox(cornerRadius: 20) {
+                    LazyVStack {
+                        // MARK: Title
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.title")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(information.musicTitle)
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Type
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.type")
+                                    .bold()
+                            }, value: {
+                                Text(information.tag.localizedString)
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Lyrics
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.lyrics")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(information.lyricist)
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Composer
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.composer")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(information.composer)
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Arrangement
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.arrangement")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(information.arranger)
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: ID
+                        Group {
+                            ListItemView(title: {
+                                Text("ID")
+                                    .bold()
+                            }, value: {
+                                Text("\(String(information.id))")
+                            })
+                        }
+                        //
+                        //                    }
+                        //                }
+                        //            }
+                        //        }
+                        //        .frame(maxWidth: 600)
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: 600)
+    }
+}
+
+struct SongDetailGameplayView: View {
+    var information: ExtendedSong
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
-//        VStack {
-//            Group {
-//                // MARK: Title Image
-//                Group {
-//                    Rectangle()
-//                        .opacity(0)
-//                        .frame(height: 2)
-//                    // FIXME: Replace image with Live2D viewer
-//                    WebImage(url: information.thumbImageURL) { image in
-//                        image
-//                            .antialiased(true)
-//                            .resizable()
-//                            .scaledToFit()
-//                    } placeholder: {
-//                        RoundedRectangle(cornerRadius: 10)
-//                            .fill(getPlaceholderColor())
-//                    }
-//                    .interpolation(.high)
-//                    .frame(width: 96, height: 96)
-                    Rectangle()
-//                        .opacity(0)
-//                        .frame(height: 2)
-//                }
-//                
-//                
-//                // MARK: Info
-//                CustomGroupBox(cornerRadius: 20) {
-//                    LazyVStack {
-//                        // MARK: Description
-//                        Group {
-//                            ListItemView(title: {
-//                                Text("Song.title")
-//                                    .bold()
-//                            }, value: {
-//                                MultilingualText(source: information.description)
-//                            })
-//                            Divider()
-//                        }
-//                        
-//                        // MARK: Character
-//                        Group {
-//                            ListItemView(title: {
-//                                Text("Song.character")
-//                                    .bold()
-//                            }, value: {
-//                                // FIXME: This requires `ExtendedSong` to be
-//                                // FIXME: implemented in DoriKit.
-//                            })
-//                            Divider()
-//                        }
-//                        
-//                        // MARK: Band
-//                        Group {
-//                            ListItemView(title: {
-//                                Text("Song.band")
-//                                    .bold()
-//                            }, value: {
-//                                // FIXME: This requires `ExtendedSong` to be
-//                                // FIXME: implemented in DoriKit.
-//                            })
-//                            Divider()
-//                        }
-//                        
-//                        // MARK: Release Date
-//                        Group {
-//                            ListItemView(title: {
-//                                Text("Song.release-date")
-//                                    .bold()
-//                            }, value: {
-//                                MultilingualText(source: information.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-//                            })
-//                            Divider()
-//                        }
-//                        
-//                        if !information.howToGet.isValueEmpty {
-//                            // MARK: How to Get
-//                            Group {
-//                                ListItemView(title: {
-//                                    Text("Song.how-to-get")
-//                                        .bold()
-//                                }, value: {
-//                                    MultilingualText(source: information.howToGet)
-//                                }, displayMode: .basedOnUISizeClass)
-//                                Divider()
-//                            }
-//                        }
-//                        
-//                        // MARK: ID
-//                        Group {
-//                            ListItemView(title: {
-//                                Text("ID")
-//                                    .bold()
-//                            }, value: {
-//                                Text("\(String(information.id))")
-//                            })
-//                        }
-//                        
-//                    }
-//                }
-//            }
-//        }
-//        .frame(maxWidth: 600)
+        LazyVStack(pinnedViews: .sectionHeaders) {
+            Section(content: {
+                CustomGroupBox {
+                    VStack {
+                        if let band = information.band {
+                            //MARK: Band
+                            Group {
+                                ListItemView(title: {
+                                    Text("Character.band")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(band.bandName)
+                                    //                            Text(DoriCache.preCache.mainBands.first{$0.id == bandID}?.bandName.forPreferredLocale(allowsFallback: true) ?? "Unknown")
+                                    if DoriCache.preCache.mainBands.contains(where: { $0.id == band.id }) || !DoriCache.preCacheAvailability {
+                                        WebImage(url: band.iconImageURL)
+                                            .resizable()
+                                            .interpolation(.high)
+                                            .antialiased(true)
+                                            .frame(width: 30, height: 30)
+                                    }
+                                    
+                                })
+                                Divider()
+                            }
+                        }
+                        
+                        
+                        // MARK: Release Date
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.release-date")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(information.song.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                            })
+                            Divider()
+                        }
+                    }
+                }
+                .frame(maxWidth: 600)
+            }, header: {
+                HStack {
+                    Text("Song.gameplay")
+                        .font(.title2)
+                        .bold()
+                    Spacer()
+                }
+                .frame(maxWidth: 615)
+            })
+        }
     }
 }

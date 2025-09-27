@@ -370,7 +370,7 @@ struct CardDetailOverviewView: View {
                                 Text("Card.title")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.card.prefix)
+                                MultilingualText(information.card.prefix)
                             })
                             Divider()
                         }
@@ -396,7 +396,7 @@ struct CardDetailOverviewView: View {
                                     CharacterDetailView(id: information.character.id)
                                 }, label: {
                                     HStack {
-                                        MultilingualText(source: information.character.characterName)
+                                        MultilingualText(information.character.characterName)
                                         WebImage(url: information.character.iconImageURL)
                                             .resizable()
                                             .clipShape(Circle())
@@ -415,7 +415,7 @@ struct CardDetailOverviewView: View {
                                     .bold()
                             }, value: {
                                 HStack {
-                                    MultilingualText(source: information.band.bandName, allowPopover: false)
+                                    MultilingualText(information.band.bandName, allowPopover: false)
                                     WebImage(url: information.band.iconImageURL)
                                         .resizable()
                                         .frame(width: imageButtonSize, height: imageButtonSize)
@@ -466,7 +466,7 @@ struct CardDetailOverviewView: View {
                                         .bold()
                                 }, value: {
 //                                    Text(skill.maximumDescription)
-                                    MultilingualText(source: skill.maximumDescription)
+                                    MultilingualText(skill.maximumDescription)
                                 }, displayMode: .basedOnUISizeClass)
                                 Divider()
                             }
@@ -480,7 +480,7 @@ struct CardDetailOverviewView: View {
                                     Text("Card.gacha-quote")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: information.card.gachaText)
+                                    MultilingualText(information.card.gachaText)
                                 }, displayMode: .basedOnUISizeClass)
                                 Divider()
                             }
@@ -492,7 +492,7 @@ struct CardDetailOverviewView: View {
                                 Text("Card.release-date")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.card.releasedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                MultilingualText(information.card.releasedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                             })
                             Divider()
                         }
@@ -673,7 +673,7 @@ struct CardDetailStatsView: View {
                                             .bold()
                                     }, value: {
                                         //                                        Text("\(card.name)")
-                                        MultilingualText(source: card.skillName)
+                                        MultilingualText(card.skillName)
                                     })
                                 }
                                 
@@ -687,7 +687,7 @@ struct CardDetailStatsView: View {
                                                 .bold()
                                         }, value: {
                                             //                                        Text("\(card.name)")
-                                            MultilingualText(source: skill.simpleDescription)
+                                            MultilingualText(skill.simpleDescription)
                                             //                                            skill.description
                                         })
                                         Divider()
@@ -699,7 +699,7 @@ struct CardDetailStatsView: View {
                                                 .bold()
                                         }, value: {
                                             //                                        Text("\(card.name)")
-                                            MultilingualText(source: skill.description)
+                                            MultilingualText(skill.description)
                                             //                                            skill.description
                                         })
                                         Divider()

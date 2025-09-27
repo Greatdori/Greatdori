@@ -4967,6 +4967,12 @@
         }
       }
     },
+    "Song.arrangement" : {
+
+    },
+    "Song.composer" : {
+
+    },
     "Song.count.%lld" : {
       "localizations" : {
         "zh-Hans" : {
@@ -4976,6 +4982,15 @@
           }
         }
       }
+    },
+    "Song.gameplay" : {
+
+    },
+    "Song.lyrics" : {
+
+    },
+    "Song.release-date" : {
+
     },
     "Song.search.placeholder" : {
       "localizations" : {
@@ -4996,6 +5011,12 @@
           }
         }
       }
+    },
+    "Song.title" : {
+
+    },
+    "Song.type" : {
+
     },
     "Song.unavailable" : {
       "localizations" : {

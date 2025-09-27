@@ -449,7 +449,7 @@ struct CharacterDetailOverviewView: View {
                                 Text("Character.name")
                                     .bold()
                             }, value: {
-                                MultilingualText(source: information.character.characterName)
+                                MultilingualText(information.character.characterName)
                             })
                             Divider()
                         }
@@ -461,7 +461,7 @@ struct CharacterDetailOverviewView: View {
                                     Text("Character.nickname")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: information.character.nickname)
+                                    MultilingualText(information.character.nickname)
                                 })
                                 Divider()
                             }
@@ -474,7 +474,7 @@ struct CharacterDetailOverviewView: View {
                                     Text("Character.character-voice")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: profile.characterVoice)
+                                    MultilingualText(profile.characterVoice)
                                 })
                                 Divider()
                             }
@@ -569,7 +569,7 @@ struct CharacterDetailOverviewView: View {
                                     Text("Character.school")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: profile.school)
+                                    MultilingualText(profile.school)
                                 })
                                 Divider()
                             }
@@ -580,7 +580,7 @@ struct CharacterDetailOverviewView: View {
                                     Text("Character.year-class")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: {
+                                    MultilingualText({
                                         var localizedContent = DoriAPI.LocalizedData<String>.init(_jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
                                         for locale in DoriAPI.Locale.allCases {
                                             localizedContent._set("\(profile.schoolYear.forLocale(locale) ?? "nil") - \(profile.schoolClass.forLocale(locale) ?? "nil")", forLocale: locale)
@@ -597,7 +597,7 @@ struct CharacterDetailOverviewView: View {
                                     Text("Character.favorite-food")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: profile.favoriteFood)
+                                    MultilingualText(profile.favoriteFood)
                                 })
                                 Divider()
                             }
@@ -608,7 +608,7 @@ struct CharacterDetailOverviewView: View {
                                     Text("Character.disliked-food")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: profile.hatedFood)
+                                    MultilingualText(profile.hatedFood)
                                 })
                                 Divider()
                             }
@@ -619,7 +619,7 @@ struct CharacterDetailOverviewView: View {
                                     Text("Character.hobby")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: profile.hobby)
+                                    MultilingualText(profile.hobby)
                                 })
                                 Divider()
                             }
@@ -630,7 +630,7 @@ struct CharacterDetailOverviewView: View {
                                     Text("Character.introduction")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: profile.selfIntroduction, showSecondaryText: false, allowPopover: false)
+                                    MultilingualText(profile.selfIntroduction, showSecondaryText: false, allowPopover: false)
                                 }, displayMode: .basedOnUISizeClass)
                                 Divider()
                             }

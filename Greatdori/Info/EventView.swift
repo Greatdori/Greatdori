@@ -386,7 +386,7 @@ struct EventDetailOverviewView: View {
                                     Text("Event.title")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: information.event.eventName)
+                                    MultilingualText(information.event.eventName)
                                 })
                                 Divider()
                             }
@@ -408,7 +408,7 @@ struct EventDetailOverviewView: View {
                                     Text("Event.countdown")
                                         .bold()
                                 }, value: {
-                                    MultilingualTextForCountdown(source: information.event)
+                                    MultilingualTextForCountdown(information.event)
                                 })
                                 Divider()
                             }
@@ -419,7 +419,7 @@ struct EventDetailOverviewView: View {
                                     Text("Event.start-date")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                    MultilingualText(information.event.startAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                                 })
                                 Divider()
                             }
@@ -430,7 +430,7 @@ struct EventDetailOverviewView: View {
                                     Text("Event.end-date")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(source: information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                    MultilingualText(information.event.endAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                                 })
                                 Divider()
                             }
