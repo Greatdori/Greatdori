@@ -453,13 +453,13 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                 }
                 Section {
                     #if os(macOS)
-                    forEachImageInfo("存储__DESCRIPTION__到“下载”", systemImage: "square.and.arrow.down") { info in
+                    forEachImageInfo("存储图片到“下载”", systemImage: "square.and.arrow.down") { info in
                         Task {
                             guard let downloadsFolder = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first else { return }
                             try? await info.resolvedData()?.write(to: downloadsFolder.appending(path: info.url.lastPathComponent))
                         }
                     }
-                    forEachImageInfo("存储__DESCRIPTION__为…", systemImage: "square.and.arrow.down") { info in
+                    forEachImageInfo("存储图片为…", systemImage: "square.and.arrow.down") { info in
                         Task {
                             if let data = await info.resolvedData() {
                                 exportingImageDocument = .init(data: data)
@@ -468,7 +468,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                         }
                     }
                     #else
-                    forEachImageInfo("添加__DESCRIPTION__到相册", systemImage: "photo.badge.plus") { info in
+                    forEachImageInfo("添加图片到相册", systemImage: "photo.badge.plus") { info in
                         Task {
                             if let data = await info.resolvedData(), let image = UIImage(data: data) {
                                 UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
@@ -478,7 +478,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                     #endif
                 }
                 Section {
-                    forEachImageInfo("拷贝__DESCRIPTION__地址", systemImage: "document.on.document") { info in
+                    forEachImageInfo("拷贝图片地址", systemImage: "document.on.document") { info in
                         #if os(macOS)
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(info.url.absoluteString, forType: .string)
@@ -486,7 +486,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                         UIPasteboard.general.string = info.url.absoluteString
                         #endif
                     }
-                    forEachImageInfo("拷贝__DESCRIPTION__", systemImage: "document.on.document") { info in
+                    forEachImageInfo("拷贝图片", systemImage: "document.on.document") { info in
                         Task {
                             if let data = await info.resolvedData() {
                                 #if os(macOS)
@@ -499,7 +499,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                         }
                     }
                     if #available(iOS 18.0, macOS 15.0, *) {
-                        forEachImageInfo("拷贝__DESCRIPTION__主体", systemImage: "circle.dashed.rectangle") { info in
+                        forEachImageInfo("拷贝图片主体", systemImage: "circle.dashed.rectangle") { info in
                             Task {
                                 if let data = await info.resolvedData() {
                                     guard var image = CIImage(data: data) else { return }
@@ -564,9 +564,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
         action: @escaping (ImageInfo) -> Void
     ) -> some View {
         if imageInfo.count > 1 {
-            let replacedName = String(localized: titleKey)
-                .replacing("__DESCRIPTION__", with: "图片")
-            Menu(replacedName, systemImage: systemImage) {
+            Menu(titleKey, systemImage: systemImage) {
                 ForEach(imageInfo, id: \.self) { info in
                     Button(info.description ?? "图片") {
                         action(info)
@@ -574,9 +572,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                 }
             }
         } else if let info = imageInfo.first {
-            let replacedName = String(localized: titleKey)
-                .replacing("__DESCRIPTION__", with: String(localized: info.description ?? "图片"))
-            Button(replacedName, systemImage: systemImage) {
+            Button(titleKey, systemImage: systemImage) {
                 action(info)
             }
         }
