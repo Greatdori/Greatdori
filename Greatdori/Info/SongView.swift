@@ -32,7 +32,7 @@ struct SongSearchView: View {
     @State var presentingSongID: Int?
     @Namespace var songLists
     
-    let gridLayoutItemWidth: CGFloat = 200*0.9
+    let gridLayoutItemWidth: CGFloat = 225
     var body: some View {
         Group {
             Group {
@@ -50,7 +50,7 @@ struct SongSearchView: View {
                                                         showFilterSheet = false
                                                         presentingSongID = song.id
                                                     }, label: {
-                                                        SongInfo(song, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
+                                                        SongInfo(song, preferHeavierFonts: true, layout: layout, searchedKeyword: $searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -71,7 +71,7 @@ struct SongSearchView: View {
                                                         showFilterSheet = false
                                                         presentingSongID = song.id
                                                     }, label: {
-                                                        SongInfo(song, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
+                                                        SongInfo(song, preferHeavierFonts: true, layout: layout, searchedKeyword: $searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -217,7 +217,7 @@ struct SongDetailView: View {
                     HStack {
                         Spacer(minLength: 0)
                         VStack {
-//                            SongDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+                            SongDetailOverviewView(information: information)
                             
                             //                            if !information.cards.isEmpty {
                             //                                Rectangle()
@@ -254,7 +254,7 @@ struct SongDetailView: View {
         .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
             Text("\(id)")
         })
-        .navigationTitle(Text(information?.description.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Song") : "")"))
+        .navigationTitle(Text(information?.musicTitle.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Song") : "")"))
 #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
@@ -312,8 +312,8 @@ struct SongDetailView: View {
 }
 
 // MARK: SongDetailOverviewView
-//struct SongDetailOverviewView: View {
-//    let information: Song
+struct SongDetailOverviewView: View {
+    let information: Song
 //    @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
 //    @State var cardsArraySeperated: [[DoriFrontend.Card.PreviewCard?]] = []
 //    @State var cardsPercentage: Int = -100
@@ -324,8 +324,8 @@ struct SongDetailView: View {
 //    @State var cardsFixedWidth: CGFloat = 0 //Fixed
 //    @State var cardsUseCompactLayout = true
 //    @Binding var cardNavigationDestinationID: Int?
-//    var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
-//    var body: some View {
+    var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
+    var body: some View {
 //        VStack {
 //            Group {
 //                // MARK: Title Image
@@ -345,7 +345,7 @@ struct SongDetailView: View {
 //                    }
 //                    .interpolation(.high)
 //                    .frame(width: 96, height: 96)
-//                    Rectangle()
+                    Rectangle()
 //                        .opacity(0)
 //                        .frame(height: 2)
 //                }
@@ -428,5 +428,5 @@ struct SongDetailView: View {
 //            }
 //        }
 //        .frame(maxWidth: 600)
-//    }
-//}
+    }
+}

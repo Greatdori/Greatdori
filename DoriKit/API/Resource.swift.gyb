@@ -553,6 +553,17 @@ extension DoriAPI.Song.DifficultyType {
         case .special: .init(red: 143 / 255, green: 131 / 255, blue: 203 / 255)
         }
     }
+    
+    @inlinable
+    public var darkColor: Color {
+        switch self {
+        case .easy: .init(red: 48 / 255, green: 118 / 255, blue: 248 / 255)
+        case .normal: .init(red: 24 / 255, green: 138 / 255, blue: 40 / 255)
+        case .hard: .init(red: 209 / 255, green: 134 / 255, blue: 26 / 255)
+        case .expert: .init(red: 253 / 255, green: 42 / 255, blue: 48 / 255)
+        case .special: .init(red: 241 / 255, green: 33 / 255, blue: 153 / 255)
+        }
+    }
 }
 
 %{

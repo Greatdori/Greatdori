@@ -729,7 +729,7 @@ extension DoriAPI.Song {
     }
     
     @frozen
-    public enum DifficultyType: Int, Hashable, DoriCache.Cacheable {
+    public enum DifficultyType: Int, Hashable, CaseIterable, DoriCache.Cacheable {
         case easy = 0
         case normal
         case hard

@@ -1257,82 +1257,83 @@ struct SongInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
     
+    @State var information: PreviewSong
+    
     private var preferHeavierFonts: Bool = true
-    private var thumbImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
     private var songID: Int
-    private var locale: DoriAPI.Locale?
+    private var locale: DoriAPI.Locale
     private var layout: Axis
     private var showID: Bool
-    private var bandID: Int
     
-    init(_ song: DoriAPI.Song.PreviewSong, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ song: DoriAPI.Song.PreviewSong, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+        self.information = song
         self.preferHeavierFonts = preferHeavierFonts
-        self.thumbImageURL = song.jacketImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = song.musicTitle
         self.songID = song.id
         self.locale = locale
         self.layout = layout
         self.showID = showID
         self._searchedKeyword = searchedKeyword
-        self.bandID = song.bandID
+//        self.bandID = song.bandID
     }
     
-    init(_ song: DoriAPI.Song.Song, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ song: DoriAPI.Song.Song, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+        self.information = PreviewSong(song)
         self.preferHeavierFonts = preferHeavierFonts
-        self.thumbImageURL = song.jacketImageURL(in: locale ?? DoriAPI.preferredLocale)!
-        self.title = song.description
         self.songID = song.id
         self.locale = locale
         self.layout = layout
         self.showID = showID
         self._searchedKeyword = searchedKeyword
-        self.bandID = song.bandID
     }
     
-    let lighterVersionBannerScaleFactor: CGFloat = 0.85
+    let lighterVersionBannerScaleFactor: CGFloat = 1
+    let coverSideLengthForHorizontalLayout: CGFloat = 100
+    let coverSideLengthForVerticalLayout: CGFloat = 120
+    let cornerRadius: CGFloat = 5
     @State var bandName: LocalizedData<String>?
     
     var body: some View {
         CustomGroupBox {
             CustomStack(axis: layout) {
-                WebImage(url: thumbImageURL) { image in
+                WebImage(url: information.jacketImageURL(in: locale)) { image in
                     image
                         .resizable()
                         .antialiased(true)
                         .aspectRatio(1, contentMode: .fit)
-                        .frame(width: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                        .frame(width: (layout == .vertical ? coverSideLengthForVerticalLayout : coverSideLengthForHorizontalLayout)*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: (layout == .vertical ? coverSideLengthForVerticalLayout : coverSideLengthForHorizontalLayout)*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                        .cornerRadius(cornerRadius)
                 } placeholder: {
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: cornerRadius)
                         .fill(getPlaceholderColor())
-                        .frame(width: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
+                        .frame(width: (layout == .vertical ? coverSideLengthForVerticalLayout : coverSideLengthForHorizontalLayout)*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: (layout == .vertical ? coverSideLengthForVerticalLayout : coverSideLengthForHorizontalLayout)*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
                 }
                 .interpolation(.high)
                 
                 if layout == .vertical {
                     Spacer()
+                } else {
+                    Spacer()
+                        .frame(maxWidth: 15)
                 }
                 
                 VStack(alignment: layout == .horizontal ? .leading : .center) {
                     Text(attributedTitle)
                         .bold()
                         .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
-                        .onAppear {
-                            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
-                        }
-                        .multilineTextAlignment(layout == .horizontal ? .leading : .center)
-                        .typesettingLanguage(.explicit(((locale ?? .jp).nsLocale().language)))
-                        .onChange(of: searchedKeyword) {
-                            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
-                        }
+                        .typesettingLanguage(.explicit(((locale).nsLocale().language)))
                     Text(bandName?.forPreferredLocale() ?? "nil")
                         .foregroundStyle(.secondary)
                         .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
+                    
+                    if layout == .horizontal {
+                        SongDifficultiesIndicator(information.difficulty)
+                    }
                 }
+                .multilineTextAlignment(layout == .horizontal ? .leading : .center)
                 
-                if layout == .horizontal {
-                    Spacer()
-                }
+//                if layout == .horizontal {
+                    Spacer(minLength: 0)
+//                }
             }
             .wrapIf(layout == .vertical) { content in
                 HStack {
@@ -1343,9 +1344,50 @@ struct SongInfo: View {
             }
         }
         .onAppear {
-            bandName = DoriCache.preCache.bands.first { $0.id == bandID }?.bandName
-            
-            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
+            bandName = DoriCache.preCache.bands.first { $0.id == information.bandID }?.bandName
+            attributedTitle = highlightOccurrences(of: searchedKeyword, in: ((information.musicTitle.forLocale(locale) ?? "")))!
+        }
+        .onChange(of: searchedKeyword) {
+            attributedTitle = highlightOccurrences(of: searchedKeyword, in: ((information.musicTitle.forLocale(locale) ?? "")))!
+        }
+    }
+}
+
+struct SongDifficultiesIndicator: View {
+    var information: [DoriAPI.Song.DifficultyType: Int]
+    
+    init(_ difficulty: [DoriAPI.Song.DifficultyType : DoriAPI.Song.PreviewSong.Difficulty]) {
+        self.information = difficulty.mapValues{ $0.playLevel }
+    }
+    
+    init (_ difficulty: [DoriAPI.Song.DifficultyType : Int]) {
+        self.information = difficulty
+    }
+    var body: some View {
+        HStack {
+            ForEach(DoriAPI.Song.DifficultyType.allCases, id: \.self) { item in
+                if information[item] != nil {
+                    SongDifficultyIndicator(difficulty: item, level: information[item]!)
+                }
+            }
+        }
+    }
+}
+
+
+struct SongDifficultyIndicator: View {
+    @Environment(\.colorScheme) var colorScheme
+    var difficulty: DoriAPI.Song.DifficultyType
+    var level: Int
+    let diameter: CGFloat = imageButtonSize*0.75
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .foregroundStyle(colorScheme == .dark ? difficulty.darkColor : difficulty.color)
+                .frame(width: diameter, height: diameter)
+            Text("\(level)")
+                .bold()
         }
     }
 }

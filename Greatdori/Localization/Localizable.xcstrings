@@ -4958,19 +4958,54 @@
       }
     },
     "Song" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲"
+          }
+        }
+      }
     },
     "Song.count.%lld" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld首歌曲"
+          }
+        }
+      }
     },
     "Song.search.placeholder" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索歌曲"
+          }
+        }
+      }
     },
     "Song.search.unavailable" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲搜索不可用"
+          }
+        }
+      }
     },
     "Song.unavailable" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歌曲信息不可用"
+          }
+        }
+      }
     },
     "Sort" : {
       "localizations" : {
