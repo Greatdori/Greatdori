@@ -251,7 +251,7 @@ struct SongDetailView: View {
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
                 content
-                    .navigationSubtitle(information?.description.forPreferredLocale() != nil ? "#\(songID)" : "")
+                    .navigationSubtitle(information?.song.musicTitle.forPreferredLocale() != nil ? "#\(songID)" : "")
             } else {
                 content
             }
