@@ -12,22 +12,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 1)
-
-
-// This file is an essential complications for several items that are all related with images.
-// Files not marked with [✓] is not optimized for multiplatform yet (they're all from watchOS).
 
 import DoriKit
 import SDWebImageSwiftUI
 import SwiftUI
 
 
-//MARK: CardInfo [✓]
+// MARK: CardInfo
 struct CardInfo: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     @State var attributedTitle: AttributedString = AttributedString("")
-//    @State var attributedType: AttributedString = AttributedString("")
+    //    @State var attributedType: AttributedString = AttributedString("")
     
     var layoutType = 1
     // 1 - List
@@ -50,7 +45,7 @@ struct CardInfo: View {
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     @State var isNormalCardAvailable = true
     
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
     init(_ card: DoriAPI.Card.PreviewCard, layoutType: Int = 1, preferHeavierFonts: Bool = false, searchedText: String = "") {
         self.layoutType = layoutType
         self.preferHeavierFonts = preferHeavierFonts
@@ -67,7 +62,7 @@ struct CardInfo: View {
         self.previewCard = card
         self.searchedText = searchedText
     }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
     init(_ card: DoriAPI.Card.Card, layoutType: Int = 1, preferHeavierFonts: Bool = false, searchedText: String = "") {
         self.layoutType = layoutType
         self.preferHeavierFonts = preferHeavierFonts
@@ -84,7 +79,7 @@ struct CardInfo: View {
         self.previewCard = PreviewCard(card)
         self.searchedText = searchedText
     }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 230)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 230)
     
     var body: some View {
         CustomGroupBox {
@@ -114,7 +109,7 @@ struct CardInfo: View {
                 VStack(alignment: layoutType == 1 ? .leading : .center) {
                     Text(attributedTitle)
                         .bold()
-//                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+                    //                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
                         .font(isMACOS ? .title3 : .body)
                         .onAppear {
                             attributedTitle = highlightOccurrences(of: searchedText, in: prefix.forPreferredLocale() ?? "nil")!
@@ -126,7 +121,7 @@ struct CardInfo: View {
                         Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text(cardType.localizedString)
                     }
                     .foregroundStyle(.secondary)
-//                    .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
+                    //                    .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
                     .font(isMACOS ? .body : .caption)
                 }
                 .multilineTextAlignment(layoutType == 1 ? .leading : .center)
@@ -156,7 +151,7 @@ struct CardInfo: View {
 }
 
 
-//MARK: CardCoverImage [✓]
+// MARK: CardCoverImage
 struct CardCoverImage: View {
     private var normalBackgroundImageURL: URL
     private var trainedBackgroundImageURL: URL?
@@ -170,7 +165,7 @@ struct CardCoverImage: View {
     private var characterID: Int
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     @State var showCardDetailView: Bool = false
-//    @State var cardDestinationID: Int = 0
+    //    @State var cardDestinationID: Int = 0
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
     init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band?, showNavigationHints: Bool = true) {
@@ -379,57 +374,57 @@ struct CardCoverImage: View {
             .aspectRatio(expectedCardRatio, contentMode: .fit)
         }
         .cornerRadius(cardCornerRadius)
-//        .wrapIf(showNavigationHints, in: { content in
-//#if os(iOS)
-//            content
-//                .contextMenu(menuItems: {
-
-//                })
-//#else
-//            content
-//            /*
-//             // Very weird code cuz SwiftUI has very weird refreshing logic.
-//             // Don't touch without complete-understaning
-//             let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
-//             VStack {
-//             if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
-//             Group {
-//             Text(title)
-//             Group {
-//             Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
-//             }
-//             .font(.caption)
-//             }
-//             } else {
-//             Group {
-//             Text(verbatim: "Lorem ipsum dolor")
-//             .foregroundStyle(getPlaceholderColor())
-//             //                                .fill()
-//             Text(verbatim: "Lorem ipsum")
-//             .foregroundStyle(.tertiary)
-//             }
-//             .redacted(reason: .placeholder)
-//             
-//             }
-//             }
-//             .padding()
-//             }
-//             content
-//             .onHover { isHovering in
-//             self.isHovering = isHovering
-//             }
-//             .popover(isPresented: $isHovering, arrowEdge: .bottom) {
-//             sumimi
-//             }
-//             .onChange(of: cardTitle) {
-//             sumimi.updateArguments((cardTitle, cardCharacterName))
-//             }
-//             .onChange(of: cardCharacterName) {
-//             sumimi.updateArguments((cardTitle, cardCharacterName))
-//             }
-//             */
-//#endif
-//        })
+        //        .wrapIf(showNavigationHints, in: { content in
+        //#if os(iOS)
+        //            content
+        //                .contextMenu(menuItems: {
+        
+        //                })
+        //#else
+        //            content
+        //            /*
+        //             // Very weird code cuz SwiftUI has very weird refreshing logic.
+        //             // Don't touch without complete-understaning
+        //             let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
+        //             VStack {
+        //             if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
+        //             Group {
+        //             Text(title)
+        //             Group {
+        //             Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
+        //             }
+        //             .font(.caption)
+        //             }
+        //             } else {
+        //             Group {
+        //             Text(verbatim: "Lorem ipsum dolor")
+        //             .foregroundStyle(getPlaceholderColor())
+        //             //                                .fill()
+        //             Text(verbatim: "Lorem ipsum")
+        //             .foregroundStyle(.tertiary)
+        //             }
+        //             .redacted(reason: .placeholder)
+        //
+        //             }
+        //             }
+        //             .padding()
+        //             }
+        //             content
+        //             .onHover { isHovering in
+        //             self.isHovering = isHovering
+        //             }
+        //             .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+        //             sumimi
+        //             }
+        //             .onChange(of: cardTitle) {
+        //             sumimi.updateArguments((cardTitle, cardCharacterName))
+        //             }
+        //             .onChange(of: cardCharacterName) {
+        //             sumimi.updateArguments((cardTitle, cardCharacterName))
+        //             }
+        //             */
+        //#endif
+        //        })
         .imageContextMenu([
             .init(url: normalBackgroundImageURL, description: "特训前卡面"),
             trainedBackgroundImageURL != nil ? .init(url: trainedBackgroundImageURL!, description: "特训后卡面") : nil
@@ -472,7 +467,7 @@ struct CardCoverImage: View {
 }
 
 
-//MARK: CardPreviewImage [✓]
+// MARK: CardPreviewImage
 struct CardPreviewImage: View {
     private var inputtedPreviewCard: DoriAPI.Card.PreviewCard?
     private var cardID: Int
@@ -488,13 +483,13 @@ struct CardPreviewImage: View {
     private var cardTitle: DoriAPI.LocalizedData<String>
     private var characterID: Int
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
-//    @State var isCardInfoAvailable = false
-//    @State var cardNavigationDestinationID: Int?
+    //    @State var isCardInfoAvailable = false
+    //    @State var cardNavigationDestinationID: Int?
     @State var showCardDetailView = false
     @State var cardNavigationDestinationID: Int = 0
     @State var isHovering: Bool = false
     
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
     init(_ card: DoriAPI.Card.PreviewCard, showTrainedVersion: Bool = false, sideLength: CGFloat = 72, showNavigationHints: Bool = false/*, cardNavigationDestinationID: Binding<Int?>*/) {
         self.inputtedPreviewCard = card
         self.cardID = card.id
@@ -509,9 +504,9 @@ struct CardPreviewImage: View {
         self.showNavigationHints = showNavigationHints
         self.cardTitle = card.prefix
         self.characterID = card.characterID
-//        self._cardNavigationDestinationID = cardNavigationDestinationID
+        //        self._cardNavigationDestinationID = cardNavigationDestinationID
     }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
+    //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 323)
     init(_ card: DoriAPI.Card.Card, showTrainedVersion: Bool = false, sideLength: CGFloat = 72, showNavigationHints: Bool = false/*, cardNavigationDestinationID: Binding<Int?>*/) {
         self.cardID = card.id
         self.thumbNormalImageURL = card.thumbNormalImageURL
@@ -525,7 +520,7 @@ struct CardPreviewImage: View {
         self.showNavigationHints = showNavigationHints
         self.cardTitle = card.prefix
         self.characterID = card.characterID
-//        self._cardNavigationDestinationID = cardNavigationDestinationID
+        //        self._cardNavigationDestinationID = cardNavigationDestinationID
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 332)
     
@@ -536,7 +531,7 @@ struct CardPreviewImage: View {
                 image
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
-//                    .fill(Color.gray.opacity(0.15))
+                //                    .fill(Color.gray.opacity(0.15))
                     .fill(getPlaceholderColor())
                     .aspectRatio(1, contentMode: .fit)
             }
@@ -591,7 +586,7 @@ struct CardPreviewImage: View {
             .frame(width: sideLength, height: sideLength)
         }
         .wrapIf(showNavigationHints, in: { content in
-            #if os(iOS)
+#if os(iOS)
             content
                 .contextMenu(menuItems: {
                     VStack {
@@ -613,10 +608,10 @@ struct CardPreviewImage: View {
                             } else {
                                 Group {
                                     Text(verbatim: "Lorem ipsum dolor")
-//                                        .foregroundStyle(.secondary)
+                                    //                                        .foregroundStyle(.secondary)
                                     Text(verbatim: "Lorem ipsum")
                                         .font(.caption)
-//                                        .foregroundStyle(.tertiary)
+                                    //                                        .foregroundStyle(.tertiary)
                                 }
                                 .redacted(reason: .placeholder)
                                 
@@ -625,7 +620,7 @@ struct CardPreviewImage: View {
                         .disabled(cardTitle.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
                     }
                 })
-            #else
+#else
             // Very weird code cuz SwiftUI has very weird refreshing logic.
             // Don't touch without complete-understaning
             let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
@@ -642,7 +637,7 @@ struct CardPreviewImage: View {
                         Group {
                             Text(verbatim: "Lorem ipsum dolor")
                                 .foregroundStyle(getPlaceholderColor())
-//                                .fill()
+                            //                                .fill()
                             Text(verbatim: "Lorem ipsum")
                                 .foregroundStyle(.tertiary)
                         }
@@ -665,7 +660,7 @@ struct CardPreviewImage: View {
                 .onChange(of: cardCharacterName) {
                     sumimi.updateArguments((cardTitle, cardCharacterName))
                 }
-            #endif
+#endif
         })
         .frame(width: sideLength, height: sideLength)
         .onAppear {
@@ -678,7 +673,7 @@ struct CardPreviewImage: View {
 }
 
 
-// MARK: CostumeInfo [✓]
+// MARK: CostumeInfo
 struct CostumeInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
@@ -727,7 +722,7 @@ struct CostumeInfo: View {
                     image
                         .resizable()
                         .antialiased(true)
-//                        .scaledToFit()
+                    //                        .scaledToFit()
                         .aspectRatio(1, contentMode: .fit)
                         .frame(width: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: 96*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
                 } placeholder: {
@@ -753,9 +748,9 @@ struct CostumeInfo: View {
                         .onChange(of: searchedKeyword, {
                             attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
                         })
-                        Text(characterName?.forPreferredLocale() ?? "nil")
-                    .foregroundStyle(.secondary)
-                    .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
+                    Text(characterName?.forPreferredLocale() ?? "nil")
+                        .foregroundStyle(.secondary)
+                        .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
                 }
                 
                 if layout == .horizontal {
@@ -776,23 +771,23 @@ struct CostumeInfo: View {
             attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
             attributedChar = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (characterName?.forLocale(locale!) ?? characterName?.jp ?? "") : (characterName?.forPreferredLocale() ?? "")))!
         }
-//        .border(.red)
+        //        .border(.red)
     }
 }
 
 
-//MARK: EventInfo [✓]
+// MARK: EventInfo
 struct EventInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString? = AttributedString("")
     @State var attributedType: AttributedString? = AttributedString("")
     @State var currentID: Int
     
-    @State var preferHeavierFonts: Bool = true
-    @State var subtitle: LocalizedStringKey? = nil
-    @State var locale: DoriAPI.Locale?
-    @State var showDetails: Bool
-    @State var showID: Bool
+    var preferHeavierFonts: Bool = true
+    var subtitle: LocalizedStringKey? = nil
+    var locale: DoriAPI.Locale?
+    var showDetails: Bool
+    var showID: Bool
     
     @State var information: PreviewEvent?
     //    @State var imageHeight: CGFloat = 100
@@ -803,10 +798,10 @@ struct EventInfo: View {
         self.currentID = event.id
         
         
-//        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
-//        self.title = event.eventName
-//        self.eventID = event.id
-//        self.eventType = event.eventType
+        //        self.eventImageURL = event.bannerImageURL(in: locale ?? DoriAPI.preferredLocale)!
+        //        self.title = event.eventName
+        //        self.eventID = event.id
+        //        self.eventType = event.eventType
         
         
         self.preferHeavierFonts = preferHeavierFonts
@@ -815,7 +810,7 @@ struct EventInfo: View {
         self.showDetails = showDetails
         self.showID = showID
         self._searchedKeyword = searchedKeyword
-//        self.dataIsReady = true
+        //        self.dataIsReady = true
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
     init(_ event: DoriAPI.Event.Event, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
@@ -828,7 +823,7 @@ struct EventInfo: View {
         self.showDetails = showDetails
         self.showID = showID
         self._searchedKeyword = searchedKeyword
-//        self.dataIsReady = true
+        //        self.dataIsReady = true
     }
     
     init(id: Int, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false, showID: Bool = true, searchedKeyword: Binding<String> = .constant("")) {
@@ -836,10 +831,10 @@ struct EventInfo: View {
         self.currentID = id
         
         
-//        self.eventImageURL = URL(string: "")
-//        self.title = nil
-//        self.eventID = id
-//        self.eventType = .story
+        //        self.eventImageURL = URL(string: "")
+        //        self.title = nil
+        //        self.eventID = id
+        //        self.eventType = .story
         
         self.preferHeavierFonts = preferHeavierFonts
         self.locale = locale
@@ -959,7 +954,7 @@ struct EventInfo: View {
 }
 
 
-//MARK: EventInfoForHome [✓]
+// MARK: EventInfoForHome
 struct EventInfoForHome: View {
     private var eventImageURL: URL
     private var title: DoriAPI.LocalizedData<String>
@@ -1033,7 +1028,7 @@ struct EventInfoForHome: View {
 }
 
 
-//MARK: GachaInfo [✓]
+// MARK: GachaInfo
 struct GachaInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString?
@@ -1043,11 +1038,11 @@ struct GachaInfo: View {
     @State var currentID: Int
     
     
-    @State var preferHeavierFonts: Bool = true
-    @State var locale: DoriAPI.Locale?
-    @State var subtitle: LocalizedStringKey?
-    @State var showDetails: Bool
-    @State var showID: Bool
+    var preferHeavierFonts: Bool = true
+    var locale: DoriAPI.Locale?
+    var subtitle: LocalizedStringKey?
+    var showDetails: Bool
+    var showID: Bool
     //    @State var imageHeight: CGFloat = 100
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 24)
@@ -1203,67 +1198,18 @@ struct GachaInfo: View {
 }
 
 
-//MARK: SongCardView
-struct SongCardView: View {
-    private var jacketImageURL: URL
-    private var title: DoriAPI.LocalizedData<String>
-    private var difficulty: [DoriAPI.Song.DifficultyType: DoriAPI.Song.PreviewSong.Difficulty]
-    
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 495)
-    init(_ song: DoriAPI.Song.PreviewSong) {
-        self.jacketImageURL = song.jacketImageURL
-        self.title = song.musicTitle
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 501)
-        self.difficulty = song.difficulty
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 503)
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 495)
-    init(_ song: DoriAPI.Song.Song) {
-        self.jacketImageURL = song.jacketImageURL
-        self.title = song.musicTitle
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 499)
-        self.difficulty = song.difficulty.mapValues { DoriAPI.Song.PreviewSong.Difficulty($0) }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 503)
-    }
-//#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 505)
-    
-    var body: some View {
-        HStack {
-            WebImage(url: jacketImageURL)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 40, height: 40)
-                .clipped()
-            VStack(alignment: .leading) {
-                Text(title.forPreferredLocale() ?? "")
-                HStack {
-                    let keys = difficulty.keys.sorted { $0.rawValue < $1.rawValue }
-                    ForEach(keys, id: \.rawValue) { key in
-                        Text(String(difficulty[key]!.playLevel))
-                            .foregroundStyle(.black)
-                            .frame(width: 20, height: 20)
-                            .background {
-                                Circle()
-                                    .fill(key.color)
-                            }
-                    }
-                }
-            }
-        }
-    }
-}
-
+// MARK: SongInfo
 struct SongInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
     
     @State var information: PreviewSong
     
-    private var preferHeavierFonts: Bool = true
-    private var songID: Int
-    private var locale: DoriAPI.Locale
-    private var layout: Axis
-    private var showID: Bool
+    var preferHeavierFonts: Bool = true
+    var songID: Int
+    var locale: DoriAPI.Locale
+    var layout: Axis
+    var showID: Bool
     
     init(_ song: DoriAPI.Song.PreviewSong, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
         self.information = song
@@ -1273,7 +1219,7 @@ struct SongInfo: View {
         self.layout = layout
         self.showID = showID
         self._searchedKeyword = searchedKeyword
-//        self.bandID = song.bandID
+        //        self.bandID = song.bandID
     }
     
     init(_ song: DoriAPI.Song.Song, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
@@ -1331,9 +1277,9 @@ struct SongInfo: View {
                 }
                 .multilineTextAlignment(layout == .horizontal ? .leading : .center)
                 
-//                if layout == .horizontal {
-                    Spacer(minLength: 0)
-//                }
+                //                if layout == .horizontal {
+                Spacer(minLength: 0)
+                //                }
             }
             .wrapIf(layout == .vertical) { content in
                 HStack {
@@ -1353,6 +1299,8 @@ struct SongInfo: View {
     }
 }
 
+
+// MARK: SongDifficultiesIndicator
 struct SongDifficultiesIndicator: View {
     var information: [DoriAPI.Song.DifficultyType: Int]
     
@@ -1375,6 +1323,7 @@ struct SongDifficultiesIndicator: View {
 }
 
 
+// MARK: SongDifficultyIndicator
 struct SongDifficultyIndicator: View {
     @Environment(\.colorScheme) var colorScheme
     var difficulty: DoriAPI.Song.DifficultyType
