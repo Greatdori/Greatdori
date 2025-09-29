@@ -120,6 +120,7 @@ struct SongDetailView: View {
             if let information = $0 {
                 self.information = information
                 
+                arts = []
                 var artsCover: [InfoArtsItem] = []
                 for locale in DoriLocale.allCases {
                     if let url = information.song.jacketImageURL(in: locale, allowsFallback: false) {

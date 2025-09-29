@@ -40,6 +40,7 @@ struct CardInfo: View {
     private var characterID: Int
     private var cardID: Int
     private var previewCard: PreviewCard
+    
     private var searchedText: String
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     @State var isNormalCardAvailable = true
@@ -47,7 +48,7 @@ struct CardInfo: View {
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
     init(_ card: DoriAPI.Card.PreviewCard, layoutType: Int = 1, preferHeavierFonts: Bool = false, searchedText: String = "") {
         self.layoutType = layoutType
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type
@@ -64,7 +65,7 @@ struct CardInfo: View {
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 220)
     init(_ card: DoriAPI.Card.Card, layoutType: Int = 1, preferHeavierFonts: Bool = false, searchedText: String = "") {
         self.layoutType = layoutType
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.thumbNormalImageURL = card.thumbNormalImageURL
         self.thumbTrainedImageURL = card.thumbAfterTrainingImageURL
         self.cardType = card.type

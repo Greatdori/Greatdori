@@ -30,6 +30,8 @@ struct EventDetailView: View {
     //    @State var latestEventID: Int = 0
     @State var showSubtitle: Bool = false
     @State var allEventIDs: [Int] = []
+    
+    @State var arts: [InfoArtsTab] = []
     var body: some View {
         EmptyContainer {
             if let information {
@@ -120,6 +122,23 @@ struct EventDetailView: View {
         } .onUpdate {
             if let information = $0 {
                 self.information = information
+                
+                arts = []
+                var artsBanners: [InfoArtsItem] = []
+                for locale in DoriLocale.allCases {
+                    if let url = information.event.bannerImageURL(in: locale, allowsFallback: false) {
+                        Task {
+                            if await DoriURLValidator.reachability(of: url) {
+                                artsBanners.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
+                            }
+                        }
+                    }
+                    
+                }
+//                arts.append(InfoArtsTab(tabName: "Song.art.cover", content: artsCover))
+                
+                
+                
             } else {
                 infoIsAvailable = false
             }

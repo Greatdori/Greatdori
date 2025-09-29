@@ -39,7 +39,7 @@ struct GachaInfo: View {
         self.information = gacha
         self.currentID = gacha.id
         
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.locale = locale
         self.subtitle = subtitle
         self.showDetails = showDetails
@@ -51,7 +51,7 @@ struct GachaInfo: View {
         self.information = PreviewGacha(gacha)
         self.currentID = gacha.id
         
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.locale = locale
         self.subtitle = subtitle
         self.showDetails = showDetails
@@ -62,7 +62,7 @@ struct GachaInfo: View {
         self.information = nil
         self.currentID = id
         
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.locale = locale
         self.subtitle = subtitle
         self.showDetails = showDetails

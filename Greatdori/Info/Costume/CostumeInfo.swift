@@ -33,7 +33,7 @@ struct CostumeInfo: View {
     private var characterID: Int
     
     init(_ costume: DoriAPI.Costume.PreviewCostume, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.thumbImageURL = costume.thumbImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = costume.description
         self.costumeID = costume.id
@@ -45,7 +45,7 @@ struct CostumeInfo: View {
     }
     
     init(_ costume: DoriAPI.Costume.Costume, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.thumbImageURL = costume.thumbImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = costume.description
         self.costumeID = costume.id

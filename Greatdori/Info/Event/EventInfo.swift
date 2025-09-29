@@ -45,7 +45,7 @@ struct EventInfo: View {
         //        self.eventType = event.eventType
         
         
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.locale = locale
         self.subtitle = subtitle
         self.showDetails = showDetails
@@ -58,7 +58,7 @@ struct EventInfo: View {
         self.information = PreviewEvent(event)
         self.currentID = event.id
         
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.locale = locale
         self.subtitle = subtitle
         self.showDetails = showDetails

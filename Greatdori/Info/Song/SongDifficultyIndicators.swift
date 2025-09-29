@@ -20,22 +20,48 @@ import SwiftUI
 // MARK: SongDifficultiesIndicator
 struct SongDifficultiesIndicator: View {
     var information: [DoriAPI.Song.DifficultyType: Int]
+    var allAvailableDifficulties: [DoriAPI.Song.DifficultyType]
     
     init(_ difficulty: [DoriAPI.Song.DifficultyType : DoriAPI.Song.Song.Difficulty]) {
         self.information = difficulty.mapValues{ $0.playLevel }
+        
+        var allAvailableDifficultiesTemp: [DoriAPI.Song.DifficultyType] = []
+        for difficulty in DoriAPI.Song.DifficultyType.allCases {
+            if information[difficulty] != nil {
+                allAvailableDifficultiesTemp.append(difficulty)
+            }
+        }
+        self.allAvailableDifficulties = allAvailableDifficultiesTemp
     }
     
     init(_ difficulty: [DoriAPI.Song.DifficultyType : DoriAPI.Song.PreviewSong.Difficulty]) {
         self.information = difficulty.mapValues{ $0.playLevel }
+        
+        var allAvailableDifficultiesTemp: [DoriAPI.Song.DifficultyType] = []
+        for difficulty in DoriAPI.Song.DifficultyType.allCases {
+            if information[difficulty] != nil {
+                allAvailableDifficultiesTemp.append(difficulty)
+            }
+        }
+        self.allAvailableDifficulties = allAvailableDifficultiesTemp
     }
     
     init (_ difficulty: [DoriAPI.Song.DifficultyType : Int]) {
         self.information = difficulty
+        
+        var allAvailableDifficultiesTemp: [DoriAPI.Song.DifficultyType] = []
+        for difficulty in DoriAPI.Song.DifficultyType.allCases {
+            if information[difficulty] != nil {
+                allAvailableDifficultiesTemp.append(difficulty)
+            }
+        }
+        self.allAvailableDifficulties = allAvailableDifficultiesTemp
     }
+    
     var body: some View {
         HStack {
-            ForEach(DoriAPI.Song.DifficultyType.allCases, id: \.self) { item in
-                if information[item] != nil {
+            if !allAvailableDifficulties.isEmpty {
+                ForEach(allAvailableDifficulties, id: \.self) { item in
                     SongDifficultyIndicator(difficulty: item, level: information[item]!)
                 }
             }
@@ -52,12 +78,13 @@ struct SongDifficultyIndicator: View {
     let diameter: CGFloat = imageButtonSize*0.75
     
     var body: some View {
-        ZStack {
-            Circle()
-                .foregroundStyle(colorScheme == .dark ? difficulty.darkColor : difficulty.color)
-                .frame(width: diameter, height: diameter)
-            Text("\(level)")
-                .fontWeight(.semibold)
-        }
+        Circle()
+            .foregroundStyle(colorScheme == .dark ? difficulty.darkColor : difficulty.color)
+            .frame(width: diameter, height: diameter)
+            .overlay {
+                Text("\(level)")
+                    .fontWeight(.semibold)
+            }
+            .frame(width: diameter, height: diameter)
     }
 }

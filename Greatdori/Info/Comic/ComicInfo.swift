@@ -34,7 +34,7 @@ struct ComicInfo: View {
     private var comicType: Comic.ComicType? // FIXME: Driver bug
     
     init(_ comic: Comic, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale? = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.thumbImageURL = comic.thumbImageURL(in: locale ?? DoriAPI.preferredLocale)!
         self.title = comic.title
         self.subTitle = comic.subTitle

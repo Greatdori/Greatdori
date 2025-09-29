@@ -134,6 +134,8 @@ struct CardDetailView: View {
         } .onUpdate {
             if let information = $0 {
                 self.information = information
+                
+                
             } else {
                 infoIsAvailable = false
             }

@@ -33,7 +33,7 @@ struct SongInfo: View {
     
     init(_ song: DoriAPI.Song.PreviewSong, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
         self.information = song
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.subtitle = subtitle
         self.songID = song.id
         self.locale = locale
@@ -45,7 +45,7 @@ struct SongInfo: View {
     
     init(_ song: DoriAPI.Song.Song, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale,  subtitle: LocalizedStringKey? = nil, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
         self.information = PreviewSong(song)
-        self.preferHeavierFonts = preferHeavierFonts
+        self.preferHeavierFonts = false
         self.subtitle = subtitle
         self.songID = song.id
         self.locale = locale
@@ -89,6 +89,7 @@ struct SongInfo: View {
                         .bold()
                         .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
                         .typesettingLanguage(.explicit(((locale).nsLocale().language)))
+                        .layoutPriority(1)
                     Text(bandName?.forPreferredLocale() ?? "nil")
                         .foregroundStyle(.secondary)
                         .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
@@ -101,6 +102,7 @@ struct SongInfo: View {
                         SongDifficultiesIndicator(information.difficulty)
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: layout == .horizontal ? .leading : .center)
                 .multilineTextAlignment(layout == .horizontal ? .leading : .center)
                 
                 //                if layout == .horizontal {
