@@ -71,7 +71,7 @@ import SwiftUI
         symbol: "calendar",
         lightColor: .cyan,
         tabValue: .songMeta,
-        destination: {GachaSearchView()}
+        destination: {LoginCampaignSearchView()}
     ),
     InfoDestinationItem(
         title: "App.info.miracle-ticket",

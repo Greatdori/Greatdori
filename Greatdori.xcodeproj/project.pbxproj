@@ -267,6 +267,9 @@
 		8CE186B02E536138009C1C87 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
 		8CE186B12E536138009C1C87 /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8CF826D42E8AC1120045CA97 /* FallingWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */; };
+		8CF827A92E8ACD380045CA97 /* LoginCampaignInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF827A82E8ACD380045CA97 /* LoginCampaignInfo.swift */; };
+		8CF827AB2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF827AA2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift */; };
+		8CF827AD2E8ACEDC0045CA97 /* LoginCampaignDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF827AC2E8ACEDC0045CA97 /* LoginCampaignDetailView.swift */; };
 		8CF8992B2E8A8D1E0045CA97 /* CampaignListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8992A2E8A8D120045CA97 /* CampaignListView.swift */; };
 		8CF8992D2E8A9C7B0045CA97 /* CampaignDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8992C2E8A9C750045CA97 /* CampaignDetailView.swift */; };
 		8CFEF5BF2E4DD5F00017FF66 /* FrontendLoginCampaign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */; };
@@ -848,6 +851,9 @@
 		8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineEntry.swift; sourceTree = "<group>"; };
 		8CE186AE2E535DDD009C1C87 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallingWebImage.swift; sourceTree = "<group>"; };
+		8CF827A82E8ACD380045CA97 /* LoginCampaignInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCampaignInfo.swift; sourceTree = "<group>"; };
+		8CF827AA2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCampaignSearchView.swift; sourceTree = "<group>"; };
+		8CF827AC2E8ACEDC0045CA97 /* LoginCampaignDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCampaignDetailView.swift; sourceTree = "<group>"; };
 		8CF8992A2E8A8D120045CA97 /* CampaignListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignListView.swift; sourceTree = "<group>"; };
 		8CF8992C2E8A9C750045CA97 /* CampaignDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignDetailView.swift; sourceTree = "<group>"; };
 		8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendLoginCampaign.swift; sourceTree = "<group>"; };
@@ -1695,6 +1701,16 @@
 			path = OfflineResBundleGen;
 			sourceTree = "<group>";
 		};
+		8CF827A72E8ACD180045CA97 /* LoginCampaign */ = {
+			isa = PBXGroup;
+			children = (
+				8CF827A82E8ACD380045CA97 /* LoginCampaignInfo.swift */,
+				8CF827AA2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift */,
+				8CF827AC2E8ACEDC0045CA97 /* LoginCampaignDetailView.swift */,
+			);
+			path = LoginCampaign;
+			sourceTree = "<group>";
+		};
 		E90769CC2E546D5500C9871C /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -1812,6 +1828,7 @@
 				E942191C2E8AA5B500F24974 /* Costume */,
 				E942192D2E8AA71B00F24974 /* Event */,
 				E942193A2E8AA7D700F24974 /* Gacha */,
+				8CF827A72E8ACD180045CA97 /* LoginCampaign */,
 				E942190F2E8AA4F900F24974 /* Song */,
 				E94219082E8AA49B00F24974 /* Comic */,
 				E942193B2E8AA7E600F24974 /* Other */,
@@ -2646,6 +2663,7 @@
 				E94219132E8AA53D00F24974 /* ComicInfo.swift in Sources */,
 				E94219392E8AA7B300F24974 /* GachaDetailView.swift in Sources */,
 				E94219112E8AA51600F24974 /* SongInfo.swift in Sources */,
+				8CF827A92E8ACD380045CA97 /* LoginCampaignInfo.swift in Sources */,
 				E94219022E8AA43300F24974 /* CardDetailStatsView.swift in Sources */,
 				E94219242E8AA67E00F24974 /* DetailArtsView.swift in Sources */,
 				E94219192E8AA58800F24974 /* CostumeSearchView.swift in Sources */,
@@ -2680,8 +2698,10 @@
 				E90769D92E546D5B00C9871C /* SettingsView.swift in Sources */,
 				E9EE03812E4F5DB30088843B /* FilterView.swift in Sources */,
 				E94219352E8AA78800F24974 /* GachaSearchView.swift in Sources */,
+				8CF827AD2E8ACEDC0045CA97 /* LoginCampaignDetailView.swift in Sources */,
 				E9CD3A4A2E58984400BF5EA9 /* Functions.swift in Sources */,
 				E97888C62E8A79EA00ABD33E /* QuickLook.swift in Sources */,
+				8CF827AB2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift in Sources */,
 				E94219002E8AA41500F24974 /* CardDetailView.swift in Sources */,
 				E9EFEF1C2E5ED7E800991940 /* DetailSectionsView.swift in Sources */,
 				E942191B2E8AA59900F24974 /* CostumeDetailView.swift in Sources */,

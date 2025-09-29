@@ -3076,6 +3076,21 @@
         }
       }
     },
+    "LoginCampaign" : {
+
+    },
+    "LoginCampaign.count.%lld" : {
+
+    },
+    "LoginCampaign.search.placeholder" : {
+
+    },
+    "LoginCampaign.search.unavailable" : {
+
+    },
+    "LoginCampaign.unavailable" : {
+
+    },
     "Message.copy.success" : {
       "localizations" : {
         "en" : {
