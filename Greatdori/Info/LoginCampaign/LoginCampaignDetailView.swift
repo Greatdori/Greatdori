@@ -72,7 +72,7 @@ struct LoginCampaignDetailView: View {
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
                 content
-                    .navigationSubtitle(information?.loginCampaign.loginCampaignName.forPreferredLocale() != nil ? "#\(loginCampaignID)" : "")
+                    .navigationSubtitle(information?.caption.forPreferredLocale() != nil ? "#\(loginCampaignID)" : "")
             } else {
                 content
             }
