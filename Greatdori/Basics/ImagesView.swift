@@ -630,6 +630,7 @@ struct CardPreviewImage: View {
     }
 }
 
+// MARK: ComicInfo
 struct ComicInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
