@@ -175,12 +175,17 @@ struct CostumeDetailOverviewView: View {
                                 Text("Costume.character")
                                     .bold()
                             }, value: {
-                                Text(information.character.characterName.forPreferredLocale() ?? "Unknown")
-                                WebImage(url: information.character.iconImageURL)
-                                    .resizable()
-                                    .interpolation(.high)
-                                    .antialiased(true)
-                                    .frame(width: 30, height: 30)
+                                NavigationLink(destination: {
+                                    CharacterDetailView(id: information.character.id)
+                                }, label: {
+                                    Text(information.character.characterName.forPreferredLocale() ?? "Unknown")
+                                    WebImage(url: information.character.iconImageURL)
+                                        .resizable()
+                                        .interpolation(.high)
+                                        .antialiased(true)
+                                        .frame(width: 30, height: 30)
+                                })
+                                .buttonStyle(.plain)
                             })
                             Divider()
                         }
