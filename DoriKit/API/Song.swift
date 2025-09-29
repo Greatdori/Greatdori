@@ -474,6 +474,86 @@ extension DoriAPI {
             }
             return nil
         }
+        
+        public static func charts(of id: Int, in difficulty: DifficultyType) async -> [Chart]? {
+            // Response example:
+            // [{
+            //     "type": "BPM",
+            //     "bpm": 190,
+            //     "beat": 0
+            // }, {
+            //     "type": "System",
+            //     "data": "bgm131.wav",
+            //     "beat": 0
+            // }, {
+            //     "type": "Slide",
+            //     "connections": [{
+            //         "lane": 4,
+            //         "beat": 6.5
+            //     }, ...]
+            // }...]
+            let request = await requestJSON("https://bestdori.com/api/charts/\(id)/\(difficulty.rawStringValue).json")
+            if case let .success(respJSON) = request {
+                let task = Task.detached(priority: .userInitiated) {
+                    respJSON.compactMap {
+                        switch $0.1["type"].stringValue {
+                        case "BPM": Chart.bpm(
+                            .init(
+                                bpm: $0.1["bpm"].intValue,
+                                beat: $0.1["beat"].doubleValue
+                            )
+                        )
+                        case "System": .system(
+                            .init(
+                                data: $0.1["data"].stringValue,
+                                beat: $0.1["beat"].doubleValue
+                            )
+                        )
+                        case "Single": .single(
+                            .init(
+                                lane: $0.1["lane"].doubleValue,
+                                beat: $0.1["beat"].doubleValue,
+                                flick: $0.1["flick"].bool ?? false,
+                                skill: $0.1["skill"].bool ?? false
+                            )
+                        )
+                        case "Long": .long(
+                            .init(
+                                connections: $0.1["connections"].map {
+                                    .init(
+                                        lane: $0.1["lane"].doubleValue,
+                                        beat: $0.1["beat"].doubleValue
+                                    )
+                                }
+                            )
+                        )
+                        case "Slide": .slide(
+                            .init(
+                                connections: $0.1["connections"].map {
+                                    .init(
+                                        lane: $0.1["lane"].doubleValue,
+                                        beat: $0.1["beat"].doubleValue,
+                                        hidden: $0.1["hidden"].bool ?? false
+                                    )
+                                }
+                            )
+                        )
+                        case "Directional": .directional(
+                            .init(
+                                beat: $0.1["beat"].doubleValue,
+                                lane: $0.1["lane"].doubleValue,
+                                direction: .init(rawValue: $0.1["direction"].stringValue) ?? .left,
+                                width: $0.1["width"].intValue
+                            )
+                        )
+                        default: logger.fault("Undefined chart type '\($0.1["type"].stringValue)', ignoring", evaluate: nil)
+                        }
+                    }
+                }
+                return await task.value
+            }
+            return nil
+        }
     }
 }
 
@@ -746,6 +826,58 @@ extension DoriAPI.Song {
     
     public struct MusicVideoMetadata: Sendable, Hashable, DoriCache.Cacheable {
         public var startAt: DoriAPI.LocalizedData<Date> // String(JSON) -> Date(Swift)
+    }
+    
+    public enum Chart: Sendable, Hashable, DoriCache.Cacheable {
+        case bpm(BPMData) // type: "BPM"
+        case system(SystemData) // type: "System"
+        case single(SingleData) // type: "Single"
+        case long(LongData) // type: "Long"
+        case slide(SlideData) // type: "Slide"
+        case directional(DirectionalData) // type: "Directional"
+        
+        public struct BPMData: Sendable, Hashable, DoriCache.Cacheable {
+            public var bpm: Int
+            public var beat: Double
+        }
+        public struct SystemData: Sendable, Hashable, DoriCache.Cacheable {
+            public var data: String
+            public var beat: Double
+        }
+        public struct SingleData: Sendable, Hashable, DoriCache.Cacheable {
+            public var lane: Double
+            public var beat: Double
+            public var flick: Bool
+            public var skill: Bool
+        }
+        public struct LongData: Sendable, Hashable, DoriCache.Cacheable {
+            public var connections: [Connection]
+            
+            public struct Connection: Sendable, Hashable, DoriCache.Cacheable {
+                public var lane: Double
+                public var beat: Double
+            }
+        }
+        public struct SlideData: Sendable, Hashable, DoriCache.Cacheable {
+            public var connections: [Connection]
+            
+            public struct Connection: Sendable, Hashable, DoriCache.Cacheable {
+                public var lane: Double
+                public var beat: Double
+                public var hidden: Bool
+            }
+        }
+        public struct DirectionalData: Sendable, Hashable, DoriCache.Cacheable {
+            public var beat: Double
+            public var lane: Double
+            public var direction: Direction
+            public var width: Int
+            
+            public enum Direction: String, Sendable, Hashable, DoriCache.Cacheable {
+                case left = "Left"
+                case right = "Right"
+            }
+        }
     }
 }
 
