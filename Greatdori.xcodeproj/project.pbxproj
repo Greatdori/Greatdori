@@ -266,6 +266,7 @@
 		8CE186AF2E535DE0009C1C87 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE186AE2E535DDD009C1C87 /* Asset.swift */; };
 		8CE186B02E536138009C1C87 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
 		8CE186B12E536138009C1C87 /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8CF826D42E8AC1120045CA97 /* FallingWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */; };
 		8CF8992B2E8A8D1E0045CA97 /* CampaignListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8992A2E8A8D120045CA97 /* CampaignListView.swift */; };
 		8CF8992D2E8A9C7B0045CA97 /* CampaignDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8992C2E8A9C750045CA97 /* CampaignDetailView.swift */; };
 		8CFEF5BF2E4DD5F00017FF66 /* FrontendLoginCampaign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */; };
@@ -846,6 +847,7 @@
 		8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OfflineResBundleGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineEntry.swift; sourceTree = "<group>"; };
 		8CE186AE2E535DDD009C1C87 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallingWebImage.swift; sourceTree = "<group>"; };
 		8CF8992A2E8A8D120045CA97 /* CampaignListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignListView.swift; sourceTree = "<group>"; };
 		8CF8992C2E8A9C750045CA97 /* CampaignDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignDetailView.swift; sourceTree = "<group>"; };
 		8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendLoginCampaign.swift; sourceTree = "<group>"; };
@@ -1529,6 +1531,7 @@
 				8CBC1BD62E3317DD004023F7 /* AudioPlaying.swift */,
 				8C7B2D822E7C3A3500EE0C89 /* Network.swift */,
 				8C7B2D842E7C3D0400EE0C89 /* ImagePrefetch.swift */,
+				8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2722,6 +2725,7 @@
 				8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */,
 				8CBC1BDD2E336556004023F7 /* SearchView.swift in Sources */,
 				8C3FA2422E4B5699001526F2 /* MiracleTicketView.swift in Sources */,
+				8CF826D42E8AC1120045CA97 /* FallingWebImage.swift in Sources */,
 				8C923D8D2E3056CB003AFC0A /* CardViews.swift.gyb in Sources */,
 				8C499F992E5177540073FCB6 /* NewsDetailView.swift in Sources */,
 				8CF8992B2E8A8D1E0045CA97 /* CampaignListView.swift in Sources */,

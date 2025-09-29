@@ -35,11 +35,6 @@ extension DoriAPI.Attribute {
     }
 }
 
-@usableFromInline
-internal let _homeBannerEventIDs = [
-    // Hi, what happened?
-    13, 16, 18, 20, 21, 23, 24, 29, 33, 36, 39, 49, 51, 55, 63, 81
-]
 %{
     properties = ["PreviewEvent", "Event"]
 }%
@@ -47,24 +42,24 @@ internal let _homeBannerEventIDs = [
 extension DoriAPI.Event.${property} {
     @inlinable
     public var bannerImageURL: URL {
-        if !_homeBannerEventIDs.contains(self.id) {
-            .init(string: "https://bestdori.com/assets/\(self.startAt.availableLocale()!.rawValue)/event/\(self.assetBundleName)/images_rip/banner.png")!.respectOfflineAssetContext()
-        } else {
-            // Availability for all locales of this type can't be guaranteed,
-            // we always use jp.
-            .init(string: "https://bestdori.com/assets/jp/homebanner_rip/banner_event\(self.id).png")!.respectOfflineAssetContext()
-        }
+        .init(string: "https://bestdori.com/assets/\(self.startAt.availableLocale()!.rawValue)/event/\(self.assetBundleName)/images_rip/banner.png")!.respectOfflineAssetContext()
     }
     @inlinable
     public func bannerImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
         if let locale = _resLocale(locale, by: self.startAt, allowsFallback: allowsFallback) {
-            if !_homeBannerEventIDs.contains(self.id) {
-                .init(string: "https://bestdori.com/assets/\(locale)/event/\(self.assetBundleName)/images_rip/banner.png")!.respectOfflineAssetContext()
-            } else {
-                // Availability for all locales of this type can't be guaranteed,
-                // we always use jp.
-                .init(string: "https://bestdori.com/assets/jp/homebanner_rip/banner_event\(self.id).png")!.respectOfflineAssetContext()
-            }
+            .init(string: "https://bestdori.com/assets/\(locale)/event/\(self.assetBundleName)/images_rip/banner.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+    @inlinable
+    public var homeBannerImageURL: URL {
+        .init(string: "https://bestdori.com/assets/jp/homebanner_rip/banner_event\(self.id).png")!.respectOfflineAssetContext()
+    }
+    @inlinable
+    public func homeBannerImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.startAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/jp/homebanner_rip/banner_event\(self.id).png")!.respectOfflineAssetContext()
         } else {
             nil
         }

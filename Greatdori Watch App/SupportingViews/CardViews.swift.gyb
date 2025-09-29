@@ -17,7 +17,8 @@ import DoriKit
 import SDWebImageSwiftUI
 
 struct EventCardView: View {
-    private var eventImageURL: URL
+    private var bannerImageURL: URL
+    private var homeBannerImageURL: URL
     private var title: LocalizedData<String>
     private var startAt: LocalizedData<Date>
     private var endAt: LocalizedData<Date>
@@ -29,7 +30,8 @@ struct EventCardView: View {
 }%
     % for eventType in eventTypes:
     init(_ event: ${eventType}, inLocale locale: DoriLocale?, showsCountdown: Bool = false) {
-        self.eventImageURL = event.bannerImageURL
+        self.bannerImageURL = event.bannerImageURL
+        self.homeBannerImageURL = event.homeBannerImageURL
         self.title = event.eventName
         self.startAt = event.startAt
         self.endAt = event.endAt
@@ -40,7 +42,7 @@ struct EventCardView: View {
     
     var body: some View {
         ZStack {
-            WebImage(url: eventImageURL) { image in
+            FallingWebImage(throughURLs: [bannerImageURL, homeBannerImageURL]) { image in
                 image
             } placeholder: {
                 RoundedRectangle(cornerRadius: 10)
