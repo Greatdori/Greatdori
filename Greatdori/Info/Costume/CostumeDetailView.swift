@@ -36,12 +36,12 @@ struct CostumeDetailView: View {
                         VStack {
                             CostumeDetailOverviewView(information: information)
                             
-                            //                            if !information.cards.isEmpty {
-                            //                                Rectangle()
-                            //                                    .opacity(0)
-                            //                                    .frame(height: 30)
-                            //                                DetailsCardsSection(cards: information.cards)
-                            //                            }
+                            if !information.cards.isEmpty {
+                                Rectangle()
+                                    .opacity(0)
+                                    .frame(height: 30)
+                                DetailsCardsSection(cards: information.cards)
+                            }
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -69,7 +69,7 @@ struct CostumeDetailView: View {
         }
         .withSystemBackground()
         .navigationTitle(Text(information?.costume.description.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Costume") : "")"))
-#if os(iOS)
+        #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
                 content
@@ -78,7 +78,7 @@ struct CostumeDetailView: View {
                 content
             }
         }
-#endif
+        #endif
         .onAppear {
             Task {
                 if (allCostumes ?? []).isEmpty {
@@ -175,8 +175,12 @@ struct CostumeDetailOverviewView: View {
                                 Text("Costume.character")
                                     .bold()
                             }, value: {
-                                // FIXME: This requires `ExtendedCostume` to be
-                                // FIXME: implemented in DoriKit.
+                                Text(information.character.characterName.forPreferredLocale() ?? "Unknown")
+                                WebImage(url: information.character.iconImageURL)
+                                    .resizable()
+                                    .interpolation(.high)
+                                    .antialiased(true)
+                                    .frame(width: 30, height: 30)
                             })
                             Divider()
                         }
@@ -187,8 +191,12 @@ struct CostumeDetailOverviewView: View {
                                 Text("Costume.band")
                                     .bold()
                             }, value: {
-                                // FIXME: This requires `ExtendedCostume` to be
-                                // FIXME: implemented in DoriKit.
+                                Text(information.band.bandName.forPreferredLocale() ?? "Unknown")
+                                WebImage(url: information.band.iconImageURL)
+                                    .resizable()
+                                    .interpolation(.high)
+                                    .antialiased(true)
+                                    .frame(width: 30, height: 30)
                             })
                             Divider()
                         }

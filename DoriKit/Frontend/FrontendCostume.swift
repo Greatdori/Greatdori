@@ -50,10 +50,13 @@ extension DoriFrontend {
                 await DoriAPI.Character.all()
             } _: {
                 await DoriAPI.Band.all()
+            } _: {
+                await DoriAPI.Card.all()
             }
             guard let costume = groupResult.0 else { return nil }
             guard let characters = groupResult.1 else { return nil }
             guard let bands = groupResult.2 else { return nil }
+            guard let cards = groupResult.3 else { return nil }
             
             let character = characters.first { $0.id == costume.characterID } ?? .init( // dummy
                 id: -1,
@@ -69,7 +72,8 @@ extension DoriFrontend {
                 band: bands.first { $0.id == character.bandID } ?? .init( // dummy
                     id: -1,
                     bandName: .init(jp: nil, en: nil, tw: nil, cn: nil, kr: nil)
-                )
+                ),
+                cards: cards.filter { costume.cards.contains($0.id) }
             )
         }
         
@@ -128,6 +132,7 @@ extension DoriFrontend.Costume {
         public var costume: Costume
         public var character: DoriAPI.Character.PreviewCharacter
         public var band: DoriAPI.Band.Band
+        public var cards: [DoriAPI.Card.PreviewCard]
         
         @inlinable
         public var id: Int {
