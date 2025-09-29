@@ -210,7 +210,7 @@ extension DoriAPI.Comic.Comic: DoriFrontend.Searchable {
     public var _searchLocales: [DoriAPI.Locale] {
         var result = [DoriAPI.Locale]()
         for locale in DoriAPI.Locale.allCases {
-            if self.publicStartAt.availableInLocale(locale) {
+            if self.title.availableInLocale(locale) {
                 result.append(locale)
             }
         }
@@ -257,6 +257,23 @@ extension DoriAPI.Gacha.PreviewGacha: DoriFrontend.Searchable {
     }
     public var _searchLocalizedStrings: [DoriAPI.LocalizedData<String>] {
         [self.gachaName]
+    }
+    public var _searchLocales: [DoriAPI.Locale] {
+        var result = [DoriAPI.Locale]()
+        for locale in DoriAPI.Locale.allCases {
+            if self.publishedAt.availableInLocale(locale) {
+                result.append(locale)
+            }
+        }
+        return result
+    }
+}
+extension DoriAPI.LoginCampaign.PreviewCampaign: DoriFrontend.Searchable {
+    public var _searchStrings: [String] {
+        [self.loginBonusType.localizedString]
+    }
+    public var _searchLocalizedStrings: [DoriAPI.LocalizedData<String>] {
+        [self.caption]
     }
     public var _searchLocales: [DoriAPI.Locale] {
         var result = [DoriAPI.Locale]()

@@ -118,6 +118,14 @@ struct NavigationListView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                NavigationLink(value: NavigationPage.loginCampaign) {
+                    Label {
+                        Text("登录奖励")
+                    } icon: {
+                        Image(_internalSystemName: "calendar.badge.ring.closed")
+                            .foregroundStyle(.accent)
+                    }
+                }
                 NavigationLink(value: NavigationPage.miracleTicket) {
                     Label {
                         Text("自选券")

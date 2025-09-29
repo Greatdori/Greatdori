@@ -542,6 +542,27 @@ extension DoriAPI.Gacha.Gacha.PaymentMethod.Method {
     }
 }
 
+%{
+    properties = ["PreviewCampaign", "Campaign"]
+}%
+% for property in properties:
+extension DoriAPI.LoginCampaign.${property} {
+    @inlinable
+    public var backgroundImageURL: URL {
+        let locale = self.publishedAt.availableLocale()!
+        return .init(string: "https://bestdori.com/assets/\(locale.rawValue)/event/loginbonus/\(self.assetBundleName.forLocale(locale)!)_rip/background.png")!.respectOfflineAssetContext()
+    }
+    @inlinable
+    public func backgroundImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        if let locale = _resLocale(locale, by: self.publishedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/event/loginbonus/\(self.assetBundleName.forLocale(.init(rawValue: locale)!)!)_rip/background.png")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
+}
+% end
+
 extension DoriAPI.Song.DifficultyType {
     @inlinable
     public var color: Color {

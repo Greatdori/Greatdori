@@ -96,6 +96,56 @@ struct EventCardView: View {
     }
 }
 
+struct CampaignCardView: View {
+    private var backgroundImageURL: URL
+    private var title: LocalizedData<String>
+    
+%{
+    campaignTypes = ["PreviewLoginCampaign", "LoginCampaign"]
+}%
+    % for campaignType in campaignTypes:
+    init(_ campaign: ${campaignType}) {
+        self.backgroundImageURL = campaign.backgroundImageURL
+        self.title = campaign.caption
+    }
+    % end
+    
+    var body: some View {
+        ZStack {
+            WebImage(url: backgroundImageURL) { image in
+                image
+            } placeholder: {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.15))
+            }
+            .resizable()
+            .aspectRatio(480 / 288, contentMode: .fill)
+            .frame(width: screenBounds.width - 5, height: 100)
+            .clipped()
+            .cornerRadius(10)
+            HStack {
+                Spacer()
+                VStack {
+                    Spacer()
+                    Text(title.forPreferredLocale() ?? "")
+                        .padding(.horizontal, 2)
+                        .background {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Material.ultraThin)
+                                .blur(radius: 5)
+                        }
+                }
+                .font(.system(size: 12))
+                .lineLimit(1)
+                .padding(.horizontal, 4)
+                Spacer()
+            }
+        }
+        .listRowBackground(Color.clear)
+        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+    }
+}
+
 struct CardCardView: View {
     private var characterName: String
     private var cardPrefix: String
