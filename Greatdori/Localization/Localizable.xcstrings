@@ -1222,6 +1222,21 @@
         }
       }
     },
+    "Comic" : {
+
+    },
+    "Comic.count.%lld" : {
+
+    },
+    "Comic.search.placeholder" : {
+
+    },
+    "Comic.search.unavailable" : {
+
+    },
+    "Comic.unavailable" : {
+
+    },
     "Costume" : {
       "localizations" : {
         "en" : {

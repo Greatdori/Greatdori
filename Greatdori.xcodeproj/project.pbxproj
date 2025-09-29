@@ -268,6 +268,7 @@
 		8CE186AF2E535DE0009C1C87 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE186AE2E535DDD009C1C87 /* Asset.swift */; };
 		8CE186B02E536138009C1C87 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
 		8CE186B12E536138009C1C87 /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8CF899292E8A847B0045CA97 /* ComicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF899282E8A84750045CA97 /* ComicView.swift */; };
 		8CFEF5BF2E4DD5F00017FF66 /* FrontendLoginCampaign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */; };
 		8CFEF5C12E4DE6250017FF66 /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */; };
 		E90769CD2E546D5500C9871C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769CA2E546D5500C9871C /* HomeView.swift */; };
@@ -820,6 +821,7 @@
 		8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OfflineResBundleGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineEntry.swift; sourceTree = "<group>"; };
 		8CE186AE2E535DDD009C1C87 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		8CF899282E8A84750045CA97 /* ComicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicView.swift; sourceTree = "<group>"; };
 		8CFEF5BE2E4DD5E60017FF66 /* FrontendLoginCampaign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendLoginCampaign.swift; sourceTree = "<group>"; };
 		8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsView.swift; sourceTree = "<group>"; };
 		E90769CA2E546D5500C9871C /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -1660,6 +1662,7 @@
 				E98B8B522E7E922700B4C8A8 /* InfoView.swift */,
 				E9412A5D2E6C0C390043EC2C /* CharacterView.swift */,
 				E9140C582E47893E00D6589E /* CardView.swift */,
+				8CF899282E8A84750045CA97 /* ComicView.swift */,
 				8CDEC7732E7ED254001397CC /* CostumeView.swift */,
 				E93A1FAE2E38E52E00F5390A /* EventView.swift */,
 				E91392DA2E7D726500C59731 /* GachaView.swift */,
@@ -2496,6 +2499,7 @@
 				8CB4D4712E4454890085D57A /* CardCollectionManager.swift in Sources */,
 				8C9774612E8536690038E717 /* SongView.swift in Sources */,
 				E93A1FAF2E38E53500F5390A /* EventView.swift in Sources */,
+				8CF899292E8A847B0045CA97 /* ComicView.swift in Sources */,
 				E90769CD2E546D5500C9871C /* HomeView.swift in Sources */,
 				E90769CE2E546D5500C9871C /* NewsView.swift in Sources */,
 				8CC046DC2E6C8F63009FDC13 /* AppFlags.swift in Sources */,

@@ -32,6 +32,18 @@ extension DoriFrontend.Comic {
 }
 
 extension DoriAPI.Comic.Comic {
+    @inlinable
+    public init?(id: Int) async {
+        guard let all = await DoriAPI.Comic.all() else { return nil }
+        if let comic = all.first(where: { $0.id == id }) {
+            self = comic
+        } else {
+            return nil
+        }
+    }
+}
+
+extension DoriAPI.Comic.Comic {
     @frozen
     public enum ComicType: String, CaseIterable, Hashable, Codable {
         case singleFrame

@@ -365,16 +365,16 @@ extension DoriAPI.Comic.Comic {
         let id = idForURL()
         return switch self.type {
         case .singleFrame:
-            .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_singleframe/comic_\(id)_rip/comic_\(id).png")?.respectOfflineAssetContext()
+            .init(string: "https://bestdori.com/assets/\(self.title.availableLocale()!.rawValue)/comic/comic_singleframe/comic_\(id)_rip/comic_\(id).png")?.respectOfflineAssetContext()
         case .fourFrame:
-            .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_fourframe/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")?.respectOfflineAssetContext()
+            .init(string: "https://bestdori.com/assets/\(self.title.availableLocale()!.rawValue)/comic/comic_fourframe/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")?.respectOfflineAssetContext()
         case .none:
             nil
         }
     }
     public func imageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
         let id = idForURL()
-        return if let locale = _resLocale(locale, by: self.publicStartAt, allowsFallback: allowsFallback) {
+        return if let locale = _resLocale(locale, by: self.title, allowsFallback: allowsFallback) {
             switch self.type {
             case .singleFrame:
                 .init(string: "https://bestdori.com/assets/\(locale)/comic/comic_singleframe/comic_\(id)_rip/comic_\(id).png")?.respectOfflineAssetContext()
@@ -392,16 +392,16 @@ extension DoriAPI.Comic.Comic {
         let id = idForURL()
         return switch self.type {
         case .singleFrame:
-            .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_singleframe_thumbnail/comic_\(id)_rip/comic_\(id).png")?.respectOfflineAssetContext()
+            .init(string: "https://bestdori.com/assets/\(self.title.availableLocale()!.rawValue)/comic/comic_singleframe_thumbnail/comic_\(id)_rip/comic_\(id).png")?.respectOfflineAssetContext()
         case .fourFrame:
-            .init(string: "https://bestdori.com/assets/\(self.publicStartAt.availableLocale()!.rawValue)/comic/comic_fourframe_thumbnail/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")?.respectOfflineAssetContext()
+            .init(string: "https://bestdori.com/assets/\(self.title.availableLocale()!.rawValue)/comic/comic_fourframe_thumbnail/comic_fourframe_\(id)_rip/comic_fourframe_\(id).png")?.respectOfflineAssetContext()
         case .none:
             nil
         }
     }
     public func thumbImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
         let id = idForURL()
-        return if let locale = _resLocale(locale, by: self.publicStartAt, allowsFallback: allowsFallback) {
+        return if let locale = _resLocale(locale, by: self.title, allowsFallback: allowsFallback) {
             switch self.type {
             case .singleFrame:
                 .init(string: "https://bestdori.com/assets/\(locale)/comic/comic_singleframe_thumbnail/comic_\(id)_rip/comic_\(id).png")?.respectOfflineAssetContext()

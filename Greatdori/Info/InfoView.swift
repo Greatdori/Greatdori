@@ -77,7 +77,7 @@ import SwiftUI
         symbol: "book",
         lightColor: .brown,
         tabValue: .comics,
-        destination: {GachaSearchView()}
+        destination: {ComicSearchView()}
     ),
 ]
 
