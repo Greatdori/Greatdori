@@ -1,5 +1,5 @@
 {
-  "sourceLanguage" : "zh-Hans",
+  "sourceLanguage" : "en",
   "strings" : {
     "(选择一项)" : {
       "localizations" : {
@@ -192,12 +192,6 @@
             "value" : "%1$@後に%2$@開始"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@后开始%2$@"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
@@ -242,12 +236,6 @@
             "value" : "%1$@後に%2$@終了"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@后结束%2$@"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
@@ -281,12 +269,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@の%2$lld★カード、%3$@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@的%2$lld星卡牌，%3$@"
           }
         },
         "zh-Hant" : {

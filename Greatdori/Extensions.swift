@@ -453,13 +453,13 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                 }
                 Section {
                     #if os(macOS)
-                    forEachImageInfo("存储图片到“下载”", systemImage: "square.and.arrow.down") { info in
+                    forEachImageInfo("Image.save.download", systemImage: "square.and.arrow.down") { info in
                         Task {
                             guard let downloadsFolder = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first else { return }
                             try? await info.resolvedData()?.write(to: downloadsFolder.appending(path: info.url.lastPathComponent))
                         }
                     }
-                    forEachImageInfo("存储图片为…", systemImage: "square.and.arrow.down") { info in
+                    forEachImageInfo("Image.save.as", systemImage: "square.and.arrow.down") { info in
                         Task {
                             if let data = await info.resolvedData() {
                                 exportingImageDocument = .init(data: data)
@@ -467,8 +467,10 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                             }
                         }
                     }
-                    #else
-                    forEachImageInfo("添加图片到相册", systemImage: "photo.badge.plus") { info in
+                    #endif
+                    #if os(iOS)
+                    // FIXME: Unavailable in macOS...
+                    forEachImageInfo("Image.save.photos", systemImage: "photo.badge.plus") { info in
                         Task {
                             if let data = await info.resolvedData(), let image = UIImage(data: data) {
                                 UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
@@ -478,7 +480,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                     #endif
                 }
                 Section {
-                    forEachImageInfo("拷贝图片地址", systemImage: "document.on.document") { info in
+                    forEachImageInfo("Image.copy.link", systemImage: "document.on.document") { info in
                         #if os(macOS)
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(info.url.absoluteString, forType: .string)
@@ -486,7 +488,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                         UIPasteboard.general.string = info.url.absoluteString
                         #endif
                     }
-                    forEachImageInfo("拷贝图片", systemImage: "document.on.document") { info in
+                    forEachImageInfo("Image.copy.image", systemImage: "document.on.document") { info in
                         Task {
                             if let data = await info.resolvedData() {
                                 #if os(macOS)
@@ -499,7 +501,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                         }
                     }
                     if #available(iOS 18.0, macOS 15.0, *) {
-                        forEachImageInfo("拷贝图片主体", systemImage: "circle.dashed.rectangle") { info in
+                        forEachImageInfo("Image.copy.subject", systemImage: "circle.dashed.rectangle") { info in
                             Task {
                                 if let data = await info.resolvedData() {
                                     guard var image = CIImage(data: data) else { return }
@@ -566,7 +568,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
         if imageInfo.count > 1 {
             Menu(titleKey, systemImage: systemImage) {
                 ForEach(imageInfo, id: \.self) { info in
-                    Button(info.description ?? "图片") {
+                    Button(info.description ?? "Image.image") {
                         action(info)
                     }
                 }

@@ -280,6 +280,7 @@ struct FilterAndSorterPicker: View {
     @Binding var sorter: DoriSorter
     var filterIsFiltering: Bool
     let sorterKeywords: [DoriSorter.Keyword]
+    let hasEndingDate: Bool
     var body: some View {
 #if os(macOS)
         HStack(spacing: 0) {
@@ -300,7 +301,7 @@ struct FilterAndSorterPicker: View {
                     }
             })
             .animation(.easeInOut(duration: 0.2), value: filterIsFiltering)
-            SorterPickerView(sorter: $sorter, allOptions: sorterKeywords)
+            SorterPickerView(sorter: $sorter, allOptions: sorterKeywords, sortingItemsHaveEndingDate: hasEndingDate)
         }
 #else
         Button(action: {
@@ -320,7 +321,7 @@ struct FilterAndSorterPicker: View {
                 }
         })
         .animation(.easeInOut(duration: 0.2), value: filterIsFiltering)
-        SorterPickerView(sorter: $sorter, allOptions: sorterKeywords)
+        SorterPickerView(sorter: $sorter, allOptions: sorterKeywords, sortingItemsHaveEndingDate: hasEndingDate)
 #endif
     }
 }
@@ -710,6 +711,140 @@ struct MultilingualTextForCountdown: View {
                     Text("Countdown.rewards-in.\(Text(distributionStartDate, style: .relative)).\(locale.rawValue.uppercased())")
                 } else {
                     Text("Countdown.completed.\(locale.rawValue.uppercased())")
+                }
+            }
+        }
+    }
+}
+
+// MARK: MultilingualTextForCountdownAlt
+struct MultilingualTextForCountdownAlt: View {
+    let date: LocalizedData<Date>
+    
+    @State var isHovering = false
+    @State var allAvailableLocales: [DoriAPI.Locale] = []
+    @State var primaryDisplayLocale: DoriAPI.Locale?
+    @State var showCopyMessage = false
+    
+    var body: some View {
+        Group {
+#if !os(macOS)
+            Menu(content: {
+                VStack(alignment: .trailing) {
+                    ForEach(allAvailableLocales, id: \.self) { localeValue in
+                        Button(action: {
+                            //                            copyStringToClipboard(getCountdownLocalizedString(source, forLocale: localeValue) ?? LocalizedStringResource(""))
+                            showCopyMessage = true
+                        }, label: {
+                            MultilingualTextForCountdownAltInternalNumbersView(date: date, locale: localeValue)
+                        })
+                    }
+                }
+            }, label: {
+                ZStack(alignment: .trailing, content: {
+                    Label("Message.copy.unavailable.for.countdown", systemImage: "exclamationmark.circle")
+                        .offset(y: 2)
+                        .opacity(showCopyMessage ? 1 : 0)
+                    MultilingualTextForCountdownAltInternalLabel(date: date, allAvailableLocales: allAvailableLocales)
+                        .opacity(showCopyMessage ? 0 : 1)
+                })
+                .animation(.easeIn(duration: 0.2), value: showCopyMessage)
+                .onChange(of: showCopyMessage, {
+                    if showCopyMessage {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            showCopyMessage = false
+                        }
+                    }
+                })
+            })
+            .menuStyle(.button)
+            .buttonStyle(.borderless)
+            .menuIndicator(.hidden)
+            .foregroundStyle(.primary)
+#else
+            MultilingualTextForCountdownAltInternalLabel(date: date, allAvailableLocales: allAvailableLocales)
+                .onHover { isHovering in
+                    self.isHovering = isHovering
+                }
+                .popover(isPresented: $isHovering, arrowEdge: .bottom) {
+                    VStack(alignment: .trailing) {
+                        ForEach(allAvailableLocales, id: \.self) { localeValue in
+                            MultilingualTextForCountdownAltInternalNumbersView(date: date, locale: localeValue)
+                        }
+                    }
+                    .padding()
+                }
+#endif
+        }
+        .onAppear {
+            allAvailableLocales = []
+            for lang in DoriAPI.Locale.allCases {
+                if date.availableInLocale(lang) {
+                    allAvailableLocales.append(lang)
+                }
+            }
+        }
+    }
+    struct MultilingualTextForCountdownAltInternalLabel: View {
+        let date: LocalizedData<Date>
+        let allAvailableLocales: [DoriAPI.Locale]
+        let allowTextSelection: Bool = true
+        @State var primaryDisplayingLocale: DoriAPI.Locale? = nil
+        var body: some View {
+            VStack(alignment: .trailing) {
+                if allAvailableLocales.contains(DoriAPI.preferredLocale) {
+                    MultilingualTextForCountdownAltInternalNumbersView(date: date, locale: DoriAPI.preferredLocale)
+                        .onAppear {
+                            primaryDisplayingLocale = DoriAPI.preferredLocale
+                        }
+                } else if allAvailableLocales.contains(DoriAPI.secondaryLocale) {
+                    MultilingualTextForCountdownAltInternalNumbersView(date: date, locale: DoriAPI.secondaryLocale)
+                        .onAppear {
+                            primaryDisplayingLocale = DoriAPI.secondaryLocale
+                        }
+                } else if allAvailableLocales.contains(.jp) {
+                    MultilingualTextForCountdownAltInternalNumbersView(date: date, locale: .jp)
+                        .onAppear {
+                            primaryDisplayingLocale = .jp
+                        }
+                } else if !allAvailableLocales.isEmpty {
+                    MultilingualTextForCountdownAltInternalNumbersView(date: date, locale: allAvailableLocales.first!)
+                        .onAppear {
+                            print(allAvailableLocales)
+                            primaryDisplayingLocale = allAvailableLocales.first!
+                        }
+                }
+                
+                if allAvailableLocales.contains(DoriAPI.secondaryLocale), DoriAPI.secondaryLocale != primaryDisplayingLocale {
+                    MultilingualTextForCountdownAltInternalNumbersView(date: date, locale: DoriAPI.secondaryLocale)
+                        .foregroundStyle(.secondary)
+                } else if allAvailableLocales.contains(.jp), .jp != primaryDisplayingLocale {
+                    MultilingualTextForCountdownAltInternalNumbersView(date: date, locale: .jp)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .wrapIf(allowTextSelection, in: { content in
+                content
+                    .textSelection(.enabled)
+            }, else: { content in
+                content
+                    .textSelection(.disabled)
+            })
+            .onAppear {
+                //                print(allAvailableLocales)
+            }
+        }
+    }
+    struct MultilingualTextForCountdownAltInternalNumbersView: View {
+        //        let event: DoriFrontend.Event.Event
+        let date: LocalizedData<Date>
+        let locale: DoriAPI.Locale
+        var body: some View {
+            if let localizedDate = date.forLocale(locale) {
+                if localizedDate > .now {
+                    Text("Countdown.release-in.\(Text(localizedDate, style: .relative)).\(locale.rawValue.uppercased())")
+                } else {
+                    Text("Countdown.released.\(locale.rawValue.uppercased())")
                 }
             }
         }

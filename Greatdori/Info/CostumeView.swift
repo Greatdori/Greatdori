@@ -147,7 +147,7 @@ struct CostumeSearchView: View {
                     ToolbarSpacer()
                 }
                 ToolbarItemGroup {
-                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewCostume.applicableSortingTypes)
+                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewCostume.applicableSortingTypes, hasEndingDate: false)
                 }
             }
             .onDisappear {
@@ -204,10 +204,9 @@ struct CostumeDetailView: View {
     var id: Int
     var allCostumes: [PreviewCostume]? = nil
     @State var costumeID: Int = 0
-    @State var informationLoadPromise: CachePromise<Costume?>?
-    @State var information: Costume?
+    @State var informationLoadPromise: CachePromise<ExtendedCostume?>?
+    @State var information: ExtendedCostume?
     @State var infoIsAvailable = true
-    @State var cardNavigationDestinationID: Int?
     @State var allCostumeIDs: [Int] = []
     @State var showSubtitle: Bool = false
     var body: some View {
@@ -217,7 +216,7 @@ struct CostumeDetailView: View {
                     HStack {
                         Spacer(minLength: 0)
                         VStack {
-                            CostumeDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+                            CostumeDetailOverviewView(information: information)
                             
 //                            if !information.cards.isEmpty {
 //                                Rectangle()
@@ -251,15 +250,12 @@ struct CostumeDetailView: View {
             }
         }
         .withSystemBackground()
-        .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
-            Text("\(id)")
-        })
-        .navigationTitle(Text(information?.description.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Costume") : "")"))
+        .navigationTitle(Text(information?.costume.description.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Costume") : "")"))
 #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
                 content
-                    .navigationSubtitle(information?.description.forPreferredLocale() != nil ? "#\(costumeID)" : "")
+                    .navigationSubtitle(information?.costume.description.forPreferredLocale() != nil ? "#\(costumeID)" : "")
             } else {
                 content
             }
@@ -300,7 +296,7 @@ struct CostumeDetailView: View {
         infoIsAvailable = true
         informationLoadPromise?.cancel()
         informationLoadPromise = DoriCache.withCache(id: "CostumeDetail_\(id)", trait: .realTime) {
-            await Costume(id: id)
+            await ExtendedCostume(id: id)
         } .onUpdate {
             if let information = $0 {
                 self.information = information
@@ -313,17 +309,7 @@ struct CostumeDetailView: View {
 
 // MARK: CostumeDetailOverviewView
 struct CostumeDetailOverviewView: View {
-    let information: Costume
-    @State var cardsArray: [DoriFrontend.Card.PreviewCard] = []
-    @State var cardsArraySeperated: [[DoriFrontend.Card.PreviewCard?]] = []
-    @State var cardsPercentage: Int = -100
-    @State var rewardsArray: [DoriFrontend.Card.PreviewCard] = []
-    @State var cardsTitleWidth: CGFloat = 0 // Fixed
-    @State var cardsPercentageWidth: CGFloat = 0 // Fixed
-    @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
-    @State var cardsFixedWidth: CGFloat = 0 //Fixed
-    @State var cardsUseCompactLayout = true
-    @Binding var cardNavigationDestinationID: Int?
+    let information: ExtendedCostume
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
         VStack {
@@ -334,7 +320,7 @@ struct CostumeDetailOverviewView: View {
                         .opacity(0)
                         .frame(height: 2)
                     // FIXME: Replace image with Live2D viewer
-                    WebImage(url: information.thumbImageURL) { image in
+                    WebImage(url: information.costume.thumbImageURL) { image in
                         image
                             .antialiased(true)
                             .resizable()
@@ -360,7 +346,7 @@ struct CostumeDetailOverviewView: View {
                                 Text("Costume.title")
                                     .bold()
                             }, value: {
-                                MultilingualText(information.description)
+                                MultilingualText(information.costume.description)
                             })
                             Divider()
                         }
@@ -395,19 +381,19 @@ struct CostumeDetailOverviewView: View {
                                 Text("Costume.release-date")
                                     .bold()
                             }, value: {
-                                MultilingualText(information.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                MultilingualText(information.costume.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                             })
                             Divider()
                         }
                         
-                        if !information.howToGet.isValueEmpty {
+                        if !information.costume.howToGet.isValueEmpty {
                             // MARK: How to Get
                             Group {
                                 ListItemView(title: {
                                     Text("Costume.how-to-get")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(information.howToGet)
+                                    MultilingualText(information.costume.howToGet)
                                 }, displayMode: .basedOnUISizeClass)
                                 Divider()
                             }
@@ -419,7 +405,7 @@ struct CostumeDetailOverviewView: View {
                                 Text("ID")
                                     .bold()
                             }, value: {
-                                Text("\(String(information.id))")
+                                Text("\(String(information.costume.id))")
                             })
                         }
                         

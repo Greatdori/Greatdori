@@ -168,7 +168,7 @@ struct EventSearchView: View {
                     ToolbarSpacer()
                 }
                 ToolbarItemGroup {
-                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewEvent.applicableSortingTypes)
+                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewEvent.applicableSortingTypes, hasEndingDate: true)
                 }
             }
             .onDisappear {

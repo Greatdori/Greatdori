@@ -1,5 +1,5 @@
 {
-  "sourceLanguage" : "zh-Hans",
+  "sourceLanguage" : "en",
   "strings" : {
     "\n" : {
       "shouldTranslate" : false
@@ -9,7 +9,7 @@
     },
     "%@%@" : {
       "localizations" : {
-        "zh-Hans" : {
+        "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@%2$@"

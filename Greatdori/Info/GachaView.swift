@@ -167,7 +167,7 @@ struct GachaSearchView: View {
                     ToolbarSpacer()
                 }
                 ToolbarItemGroup {
-                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewGacha.applicableSortingTypes)
+                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewGacha.applicableSortingTypes, hasEndingDate: true)
                 }
             }
             .onDisappear {

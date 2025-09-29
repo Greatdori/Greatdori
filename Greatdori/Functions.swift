@@ -35,11 +35,13 @@ func compare<T: Comparable>(_ lhs: T?, _ rhs: T?, ascending: Bool = true) -> Boo
     }
 }
 
+/* NO USAGE
 func compareWithinNormalRange(_ lhs: Int, _ rhs: Int, largetAcceptableNumber: Int, ascending: Bool = true) -> Bool {
     let correctedLHS = lhs > largetAcceptableNumber ? lhs : nil
     let correctedRHS = rhs > largetAcceptableNumber ? rhs : nil
     return compare(correctedLHS, correctedRHS, ascending: ascending)
 }
+*/
 
 
 // MARK: copyStringToClipboard
@@ -51,6 +53,13 @@ func copyStringToClipboard(_ content: String) {
 #else
     UIPasteboard.general.string = content
 #endif
+}
+
+// MARK: formattedSongLength
+func formattedSongLength(_ time: Double) -> String {
+    let minutes = Int(time / 60)
+    let seconds = time.truncatingRemainder(dividingBy: 60)
+    return String(format: "%d:%04.1f", minutes, seconds) // 1:42.6
 }
 
 // MARK: getBirthdayTimeZone

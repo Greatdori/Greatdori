@@ -374,60 +374,9 @@ struct CardCoverImage: View {
             .aspectRatio(expectedCardRatio, contentMode: .fit)
         }
         .cornerRadius(cardCornerRadius)
-        //        .wrapIf(showNavigationHints, in: { content in
-        //#if os(iOS)
-        //            content
-        //                .contextMenu(menuItems: {
-        
-        //                })
-        //#else
-        //            content
-        //            /*
-        //             // Very weird code cuz SwiftUI has very weird refreshing logic.
-        //             // Don't touch without complete-understaning
-        //             let sumimi = HereTheWorld(arguments: (cardTitle, cardCharacterName)) { cardTitle, cardCharacterName in
-        //             VStack {
-        //             if let title = cardTitle?.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
-        //             Group {
-        //             Text(title)
-        //             Group {
-        //             Text("\(character)") + Text(verbatim: " • ").bold() +  Text("#\(String(cardID))")
-        //             }
-        //             .font(.caption)
-        //             }
-        //             } else {
-        //             Group {
-        //             Text(verbatim: "Lorem ipsum dolor")
-        //             .foregroundStyle(getPlaceholderColor())
-        //             //                                .fill()
-        //             Text(verbatim: "Lorem ipsum")
-        //             .foregroundStyle(.tertiary)
-        //             }
-        //             .redacted(reason: .placeholder)
-        //
-        //             }
-        //             }
-        //             .padding()
-        //             }
-        //             content
-        //             .onHover { isHovering in
-        //             self.isHovering = isHovering
-        //             }
-        //             .popover(isPresented: $isHovering, arrowEdge: .bottom) {
-        //             sumimi
-        //             }
-        //             .onChange(of: cardTitle) {
-        //             sumimi.updateArguments((cardTitle, cardCharacterName))
-        //             }
-        //             .onChange(of: cardCharacterName) {
-        //             sumimi.updateArguments((cardTitle, cardCharacterName))
-        //             }
-        //             */
-        //#endif
-        //        })
         .imageContextMenu([
-            .init(url: normalBackgroundImageURL, description: "特训前卡面"),
-            trainedBackgroundImageURL != nil ? .init(url: trainedBackgroundImageURL!, description: "特训后卡面") : nil
+            .init(url: normalBackgroundImageURL, description: "Image.card.normal"),
+            trainedBackgroundImageURL != nil ? .init(url: trainedBackgroundImageURL!, description: "Image.card.trained") : nil
         ].compactMap { $0 }) {
             if showNavigationHints {
                 VStack {
@@ -435,6 +384,7 @@ struct CardCoverImage: View {
                         // cardNavigationDestinationID = cardID
                         showCardDetailView = true
                     }, label: {
+                        #if os(iOS)
                         if let title = cardTitle.forPreferredLocale(), let character = cardCharacterName?.forPreferredLocale() {
                             Group {
                                 Text(title)
@@ -451,6 +401,14 @@ struct CardCoverImage: View {
                             }
                             .redacted(reason: .placeholder)
                         }
+                        #else
+                        if let title = cardTitle.forPreferredLocale() {
+                            Label(title, systemImage: "info.circle")
+                        } else {
+                            Text(verbatim: "Lorem ipsum dolor")
+                                .redacted(reason: .placeholder)
+                        }
+                        #endif
                     })
                     .disabled(cardTitle.forPreferredLocale() == nil ||  cardCharacterName?.forPreferredLocale() == nil)
                 }
@@ -827,7 +785,8 @@ struct CostumeInfo: View {
                 VStack(alignment: layout == .horizontal ? .leading : .center) {
                     Text(attributedTitle)
                         .bold()
-                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+//                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
+                        .font(.body)
                         .onAppear {
                             attributedTitle = highlightOccurrences(of: searchedKeyword, in: (locale != nil ? (title.forLocale(locale!) ?? title.jp ?? "") : (title.forPreferredLocale() ?? "")))!
                         }
@@ -838,7 +797,8 @@ struct CostumeInfo: View {
                         })
                     Text(characterName?.forPreferredLocale() ?? "nil")
                         .foregroundStyle(.secondary)
-                        .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
+//                        .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
+                        .font(.caption)
                 }
                 
                 if layout == .horizontal {
@@ -1294,14 +1254,16 @@ struct SongInfo: View {
     @State var information: PreviewSong
     
     var preferHeavierFonts: Bool = true
+    var subtitle: LocalizedStringKey? = nil
     var songID: Int
     var locale: DoriAPI.Locale
     var layout: Axis
     var showID: Bool
     
-    init(_ song: DoriAPI.Song.PreviewSong, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ song: DoriAPI.Song.PreviewSong, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
         self.information = song
         self.preferHeavierFonts = preferHeavierFonts
+        self.subtitle = subtitle
         self.songID = song.id
         self.locale = locale
         self.layout = layout
@@ -1310,9 +1272,10 @@ struct SongInfo: View {
         //        self.bandID = song.bandID
     }
     
-    init(_ song: DoriAPI.Song.Song, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ song: DoriAPI.Song.Song, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale,  subtitle: LocalizedStringKey? = nil, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
         self.information = PreviewSong(song)
         self.preferHeavierFonts = preferHeavierFonts
+        self.subtitle = subtitle
         self.songID = song.id
         self.locale = locale
         self.layout = layout
@@ -1358,7 +1321,11 @@ struct SongInfo: View {
                     Text(bandName?.forPreferredLocale() ?? "nil")
                         .foregroundStyle(.secondary)
                         .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
-                    
+                    if let subtitle {
+                        Text(subtitle)
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                    }
                     if layout == .horizontal {
                         SongDifficultiesIndicator(information.difficulty)
                     }
@@ -1379,10 +1346,10 @@ struct SongInfo: View {
         }
         .onAppear {
             bandName = DoriCache.preCache.bands.first { $0.id == information.bandID }?.bandName
-            attributedTitle = highlightOccurrences(of: searchedKeyword, in: ((information.musicTitle.forLocale(locale) ?? "")))!
+            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (information.musicTitle.forLocale(locale) ?? information.musicTitle.forPreferredLocale(allowsFallback: true)))!
         }
         .onChange(of: searchedKeyword) {
-            attributedTitle = highlightOccurrences(of: searchedKeyword, in: ((information.musicTitle.forLocale(locale) ?? "")))!
+            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (information.musicTitle.forLocale(locale) ?? information.musicTitle.forPreferredLocale(allowsFallback: true)))!
         }
     }
 }
@@ -1391,6 +1358,10 @@ struct SongInfo: View {
 // MARK: SongDifficultiesIndicator
 struct SongDifficultiesIndicator: View {
     var information: [DoriAPI.Song.DifficultyType: Int]
+    
+    init(_ difficulty: [DoriAPI.Song.DifficultyType : DoriAPI.Song.Song.Difficulty]) {
+        self.information = difficulty.mapValues{ $0.playLevel }
+    }
     
     init(_ difficulty: [DoriAPI.Song.DifficultyType : DoriAPI.Song.PreviewSong.Difficulty]) {
         self.information = difficulty.mapValues{ $0.playLevel }
@@ -1424,7 +1395,7 @@ struct SongDifficultyIndicator: View {
                 .foregroundStyle(colorScheme == .dark ? difficulty.darkColor : difficulty.color)
                 .frame(width: diameter, height: diameter)
             Text("\(level)")
-                .bold()
+                .fontWeight(.semibold)
         }
     }
 }

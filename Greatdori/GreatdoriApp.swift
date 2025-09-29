@@ -49,6 +49,7 @@ struct GreatdoriApp: App {
         .commands {
             #if os(macOS)
             if AppFlag.DEBUG {
+//                /Users/t785/Xcode/Greatdori/Greatdori/GreatdoriApp.swift
                 CommandGroup(after: .appSettings) {
                     Button(String("Menu-bar.window.offline-asset-debug"), systemImage: "ant.fill") {
                         openWindow(id: "OfflineAssetDebugWindow")

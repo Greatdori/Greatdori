@@ -255,7 +255,7 @@ extension DoriFrontend.Card.CardWithBand: DoriFrontend.Filterable {
 extension DoriAPI.Song.PreviewSong: DoriFrontend.Filterable {
     @inlinable
     public static var applicableFilteringKeys: [DoriFrontend.Filter.Key] {
-        [.band, .server, .timelineStatus, .songType, .level]
+        [.band, .server, .songAvailability, .songType, .level]
     }
     
     public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? {

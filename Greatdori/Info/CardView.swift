@@ -152,7 +152,7 @@ struct CardSearchView: View {
                     ToolbarSpacer()
                 }
                 ToolbarItemGroup {
-                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewCard.applicableSortingTypes)
+                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewCard.applicableSortingTypes, hasEndingDate: false)
                 }
             }
             .onDisappear {

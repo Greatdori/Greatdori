@@ -147,7 +147,7 @@ struct SongSearchView: View {
                     ToolbarSpacer()
                 }
                 ToolbarItemGroup {
-                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewSong.applicableSortingTypes)
+                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewSong.applicableSortingTypes, hasEndingDate: false)
                 }
             }
             .onDisappear {
@@ -209,6 +209,7 @@ struct SongDetailView: View {
     @State var infoIsAvailable = true
     @State var allSongIDs: [Int] = []
     @State var showSubtitle: Bool = false
+    @State var arts: [InfoArtsTab] = []
     var body: some View {
         EmptyContainer {
             if let information {
@@ -220,6 +221,11 @@ struct SongDetailView: View {
                             
                             DetailSectionsSpacer()
                             SongDetailGameplayView(information: information)
+                            
+                            if !arts.isEmpty {
+                                DetailSectionsSpacer()
+                                DetailArtsSection(information: arts)
+                            }
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -257,13 +263,11 @@ struct SongDetailView: View {
             }
         }
 #endif
-        .onAppear {
-            Task {
-                if (allSongs ?? []).isEmpty {
-                    allSongIDs = await (Event.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
-                } else {
-                    allSongIDs = allSongs!.map {$0.id}
-                }
+        .task {
+            if (allSongs ?? []).isEmpty {
+                allSongIDs = await (Event.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
+            } else {
+                allSongIDs = allSongs!.map {$0.id}
             }
         }
         .onChange(of: songID, {
@@ -296,6 +300,14 @@ struct SongDetailView: View {
         } .onUpdate {
             if let information = $0 {
                 self.information = information
+                
+                var artsCover: [InfoArtsItem] = []
+                for locale in DoriLocale.allCases {
+                    if let url = information.song.jacketImageURL(in: locale, allowsFallback: false) {
+                        artsCover.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
+                    }
+                }
+                arts.append(InfoArtsTab(tabName: "Song.art.cover", content: artsCover))
             } else {
                 infoIsAvailable = false
             }
@@ -307,7 +319,7 @@ struct SongDetailView: View {
 struct SongDetailOverviewView: View {
     let information: Song
     
-    let coverSideLength: CGFloat = 320
+    let coverSideLength: CGFloat = 270
     var body: some View {
         VStack {
             Group {
@@ -326,7 +338,7 @@ struct SongDetailOverviewView: View {
                             .fill(getPlaceholderColor())
                     }
                     .interpolation(.high)
-                    .frame(width: 96, height: 96)
+                    .frame(width: coverSideLength, height: coverSideLength)
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)
@@ -424,7 +436,7 @@ struct SongDetailGameplayView: View {
                             //MARK: Band
                             Group {
                                 ListItemView(title: {
-                                    Text("Character.band")
+                                    Text("Song.gameplay.band")
                                         .bold()
                                 }, value: {
                                     MultilingualText(band.bandName)
@@ -442,16 +454,71 @@ struct SongDetailGameplayView: View {
                             }
                         }
                         
+                        // MARK: Length
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.gameplay.difficulty")
+                                    .bold()
+                            }, value: {
+                                SongDifficultiesIndicator(information.song.difficulty)
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Length
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.gameplay.length")
+                                    .bold()
+                            }, value: {
+                                Text(formattedSongLength(information.song.length))
+                            })
+                            Divider()
+                        }
+                        
+                        // MARK: Countdown
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.gameplay.countdown")
+                                    .bold()
+                            }, value: {
+                                MultilingualTextForCountdownAlt(date: information.song.publishedAt)
+                            })
+                            Divider()
+                        }
                         
                         // MARK: Release Date
                         Group {
                             ListItemView(title: {
-                                Text("Song.release-date")
+                                Text("Song.gameplay.release-date")
                                     .bold()
                             }, value: {
                                 MultilingualText(information.song.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
                             })
                             Divider()
+                        }
+                        
+                        if !information.song.closedAt.map({$0?.corrected()}).isEmpty {
+                            // MARK: Close Date
+                            Group {
+                                ListItemView(title: {
+                                    Text("Song.gameplay.close-date")
+                                        .bold()
+                                }, value: {
+                                    MultilingualText(information.song.closedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
+                                })
+                                Divider()
+                            }
+                        }
+                        
+                        // MARK: Release Date
+                        Group {
+                            ListItemView(title: {
+                                Text("Song.gameplay.how-to-get")
+                                    .bold()
+                            }, value: {
+                                MultilingualText(information.song.howToGet)
+                            })
                         }
                     }
                 }
