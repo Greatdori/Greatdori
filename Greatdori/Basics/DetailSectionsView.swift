@@ -636,7 +636,9 @@ struct DetailArtsSection: View {
             }
         }
         .sheet(isPresented: $showQuickLook, content: {
+            #if os(iOS)
             QuickLookPreview(url: quickLookOnFocusItem!)
+            #endif
         })
     }
 }

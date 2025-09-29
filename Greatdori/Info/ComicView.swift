@@ -22,7 +22,7 @@ struct ComicSearchView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     @Environment(\.colorScheme) var colorScheme
     @State var filter = DoriFrontend.Filter()
-    @State var sorter = DoriFrontend.Sorter(keyword: .releaseDate(in: .jp), direction: .descending)
+    @State var sorter = DoriFrontend.Sorter(keyword: .id, direction: .descending)
     @State var comics: [DoriFrontend.Comic.Comic]?
     @State var searchedComics: [DoriFrontend.Comic.Comic]?
     @State var infoIsAvailable = true
@@ -147,7 +147,7 @@ struct ComicSearchView: View {
                     ToolbarSpacer()
                 }
                 ToolbarItemGroup {
-                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: Comic.applicableSortingTypes)
+                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: Comic.applicableSortingTypes, hasEndingDate: Comic.hasEndingDate)
                 }
             }
             .onDisappear {

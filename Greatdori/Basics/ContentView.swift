@@ -51,10 +51,11 @@ struct ContentView: View {
                             //                        HomeView()
                             Text(verbatim: "community")
                         }
-                        Tab("App.leaderboard", systemImage: "chart.bar") {
-                            //                        HomeView()
-                            Text(verbatim: "leaderboard")
-                        }
+//                        Tab("App.leaderboard", systemImage: "chart.bar") {
+//                            //                        HomeView()
+//                            Text(verbatim: "leaderboard")
+//                        }
+                        
                         if sizeClass == .regular {
                             TabSection(content: {
                                 ForEach(0..<allInfoDestinationItems.count, id: \.self) { itemIndex in
@@ -72,8 +73,23 @@ struct ContentView: View {
                                 InfoView()
                             }
                         }
-                        Tab("App.tools", systemImage: "slider.horizontal.3") {
-                            Text(verbatim: "leaderboard")
+                        
+                        if sizeClass == .regular {
+                            TabSection(content: {
+                                ForEach(0..<allToolsDestinationItems.count, id: \.self) { itemIndex in
+                                    Tab(allToolsDestinationItems[itemIndex].title, systemImage: allToolsDestinationItems[itemIndex].symbol) {
+                                        NavigationStack {
+                                            allToolsDestinationItems[itemIndex].destination()
+                                        }
+                                    }
+                                }
+                            }, header: {
+                                Text("App.tools")
+                            })
+                        } else {
+                            Tab("App.tools", systemImage: "slider.horizontal.3") {
+                                ToolsView()
+                            }
                         }
 #if os(iOS)
                         if sizeClass == .regular {
@@ -110,7 +126,11 @@ struct ContentView: View {
                                         Label(allInfoDestinationItems[itemIndex].title, systemImage: allInfoDestinationItems[itemIndex].symbol).tag(AppSection.info(allInfoDestinationItems[itemIndex].tabValue))
                                     }
                                 })
-                                Label("App.tools", systemImage: "slider.horizontal.3").tag(AppSection.tools)
+                                Section("App.tools", content: {
+                                    ForEach(0..<allToolsDestinationItems.count, id: \.self) { itemIndex in
+                                        Label(allToolsDestinationItems[itemIndex].title, systemImage: allToolsDestinationItems[itemIndex].symbol).tag(AppSection.tools(allToolsDestinationItems[itemIndex].tabValue))
+                                    }
+                                })
 #if os(iOS)
                                 Label("App.settings", systemImage: "gear").tag(AppSection.settings)
 #endif
@@ -137,9 +157,9 @@ struct ContentView: View {
                                 .tabItem { Label("App.info", systemImage: "rectangle.stack") }
                                 .tag(AppSection.info(.home))
                             
-                            detailView(for: .tools)
+                            detailView(for: .tools(.home))
                                 .tabItem { Label("App.tools", systemImage: "slider.horizontal.3") }
-                                .tag(AppSection.tools)
+                                .tag(AppSection.tools(.home))
                         }
                     }
                 }
@@ -230,7 +250,14 @@ struct ContentView: View {
             } else {
                 InfoView()
             }
-        case .tools: HomeView()
+        case .tools(let destination):
+            if destination == .home {
+                ToolsView()
+            } else if let item = allToolsDestinationItems.first(where: { $0.tabValue == destination }) {
+                item.destination()
+            } else {
+                ToolsView()
+            }
         case .settings: SettingsView()
         case nil: EmptyView()
         }
@@ -371,11 +398,15 @@ struct WelcomeView: View {
 
 
 enum AppSection: Hashable {
-    case home, community, leaderboard, info(InfoTab), tools, settings
+    case home, community, leaderboard, info(InfoTab), tools(ToolTab), settings
 }
 
 enum InfoTab: Hashable {
     case home, characters, cards, costumes, events, gacha, songs, songMeta, miracleTicket, comics
+}
+
+enum ToolTab: Hashable {
+    case home, eventTracker
 }
 
 enum Platform {

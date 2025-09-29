@@ -85,7 +85,7 @@ import SwiftUI
         symbol: "book",
         lightColor: .brown,
         tabValue: .comics,
-        destination: {ComicSearchView()}
+        destination: {GachaSearchView()}
     ),
 ]
 
@@ -98,7 +98,7 @@ struct InfoDestinationItem {
     let tabValue: InfoTab
     let destination: () -> AnyView
     
-    init<T: View>(title: LocalizedStringKey, shortenedTitle: LocalizedStringKey? = nil,symbol: String, lightColor: Color, darkColor: Color? = nil, tabValue: InfoTab, @ViewBuilder destination: @escaping () -> T) {
+    init<T: View>(title: LocalizedStringKey, shortenedTitle: LocalizedStringKey? = nil, symbol: String, lightColor: Color, darkColor: Color? = nil, tabValue: InfoTab, @ViewBuilder destination: @escaping () -> T) {
         self.title = title
         self.shortenedTitle = shortenedTitle
         self.symbol = symbol
@@ -162,6 +162,52 @@ struct InfoView: View {
                 .padding()
             }
             .navigationTitle("App.info")
+        }
+    }
+}
+
+
+@MainActor let allToolsDestinationItems: [ToolDestinationItem] = [
+    ToolDestinationItem(
+        title: "App.tools.event-tracker",
+        symbol: "person.2",
+        tabValue: .eventTracker,
+        destination: {CharacterSearchView()}
+    ),
+]
+
+
+
+struct ToolDestinationItem {
+    let title: LocalizedStringKey
+//    let shortenedTitle: LocalizedStringKey?
+    let symbol: String
+//    let lightColor: Color
+//    let darkColor: Color?
+    let tabValue: ToolTab
+    let destination: () -> AnyView
+    
+    init<T: View>(title: LocalizedStringKey, symbol: String, tabValue: ToolTab, @ViewBuilder destination: @escaping () -> T) {
+        self.title = title
+        self.symbol = symbol
+        self.tabValue = tabValue
+        self.destination = { AnyView(destination()) }
+    }
+}
+
+struct ToolsView: View {
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(0..<allToolsDestinationItems.count, id: \.self) { itemIndex in
+                    NavigationLink(destination: {
+                        allToolsDestinationItems[itemIndex].destination()
+                    }, label: {
+                        Label(allToolsDestinationItems[itemIndex].title, systemImage: allToolsDestinationItems[itemIndex].symbol)
+                    })
+                }
+            }
+            .navigationTitle("App.tools")
         }
     }
 }
