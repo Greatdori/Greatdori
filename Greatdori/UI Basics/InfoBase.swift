@@ -15,45 +15,57 @@
 import SwiftUI
 import DoriKit
 
-struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable, PreviewInformation: Identifiable, Content: View, UnavailableContent: View>: View where Information.ID == Int, PreviewInformation.ID == Int {
+struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & TitleDescribable, PreviewInformation: Identifiable, Content: View>: View where Information.ID == Int, PreviewInformation.ID == Int {
     var titleKey: LocalizedStringResource
-    var previewList: [PreviewInformation]
+    var previewList: [PreviewInformation]?
     var initialID: Int
     var updateInformation: @Sendable (Int) async -> Information?
     var makeContent: (Information) -> Content
-    var makeUnavailableContent: () -> UnavailableContent
-    var provideName: (Information) -> String?
-    var makeArts: (Information) -> [ArtsTab]
+    var unavailablePrompt: LocalizedStringResource?
     
     init(
         _ titleKey: LocalizedStringResource,
-        previewList: [PreviewInformation],
+        previewList: [PreviewInformation]?,
+        initialID: Int,
+        @ViewBuilder content: @escaping (Information) -> Content,
+    ) where Information: GettableByID, PreviewInformation: ExtendedTypeConvertible, PreviewInformation.ExtendedType == Information {
+        self.init(titleKey, previewList: previewList, initialID: initialID, updateInformation: {
+            await PreviewInformation.ExtendedType.init(id: $0)
+        }, content: content)
+    }
+    init(
+        _ titleKey: LocalizedStringResource,
+        forType infoType: Information.Type,
+        previewList: [PreviewInformation]?,
+        initialID: Int,
+        @ViewBuilder content: @escaping (Information) -> Content,
+    ) where Information: GettableByID {
+        self.init(titleKey, previewList: previewList, initialID: initialID, updateInformation: {
+            await infoType.init(id: $0)
+        }, content: content)
+    }
+    init(
+        _ titleKey: LocalizedStringResource,
+        previewList: [PreviewInformation]?,
         initialID: Int,
         updateInformation: @Sendable @escaping (_ id: Int) async -> Information?,
         @ViewBuilder content: @escaping (Information) -> Content,
-        @ViewBuilder unavailableContent: @escaping () -> UnavailableContent,
-        nameProvider: @escaping (Information) -> String?,
-        @ArtsBuilder makeArts: @escaping (Information) -> [ArtsTab]
     ) {
         self.titleKey = titleKey
         self.previewList = previewList
         self.initialID = initialID
         self.updateInformation = updateInformation
         self.makeContent = content
-        self.makeUnavailableContent = unavailableContent
-        self.provideName = nameProvider
-        self.makeArts = makeArts
     }
     
-    @Environment(\.horizontalSizeClass) var sizeClass
-    @State var currentID: Int = 0
-    @State var informationLoadPromise: DoriCache.Promise<Information?>?
-    @State var information: Information?
-    @State var infoIsAvailable = true
-    @State var cardNavigationDestinationID: Int?
-    @State var showSubtitle: Bool = false
-    @State var allEventIDs: [Int] = []
-    @State var arts: [ArtsTab] = []
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var currentID: Int = 0
+    @State private var informationLoadPromise: DoriCache.Promise<Information?>?
+    @State private var information: Information?
+    @State private var infoIsAvailable = true
+    @State private var cardNavigationDestinationID: Int?
+    @State private var showSubtitle: Bool = false
+    @State private var allPreviewIDs: [Int] = []
     
     var body: some View {
         EmptyContainer {
@@ -63,10 +75,6 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable, Prev
                         Spacer(minLength: 0)
                         VStack {
                             makeContent(information)
-                            if !arts.isEmpty {
-                                DetailSectionsSpacer()
-                                DetailArtsSection(information: arts)
-                            }
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -85,7 +93,11 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable, Prev
                         }
                     }, label: {
                         ExtendedConstraints {
-                            makeUnavailableContent()
+                            if let unavailablePrompt {
+                                ContentUnavailableView(unavailablePrompt, systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
+                            } else {
+                                ContentUnavailableView("Content.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
+                            }
                         }
                     })
                     .buttonStyle(.plain)
@@ -95,12 +107,12 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable, Prev
         .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
             Text("\(id)")
         })
-        .navigationTitle(Text((information != nil ? provideName(information!) : nil) ?? "\(isMACOS ? String(localized: "Event") : "")"))
+        .navigationTitle(Text(information?.title.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Event") : "")"))
         #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
                 content
-                    .navigationSubtitle((information != nil ? provideName(information!) : nil) != nil ? "#\(currentID)" : "")
+                    .navigationSubtitle(information?.title.forPreferredLocale() ? "#\(currentID)" : "")
             } else {
                 content
             }
@@ -114,11 +126,17 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable, Prev
         .task {
             currentID = initialID
             await getInformation(id: currentID)
-            allEventIDs = previewList.map { $0.id }
+            if let previewList {
+                allPreviewIDs = previewList.map { $0.id }
+            } else if let ListGettableType = PreviewInformation.self as? (any (Sendable & Identifiable & ListGettable).Type) {
+                // We can always assume that the ID of elements are `Int`
+                // because it has been constrainted in the generic decls
+                allPreviewIDs = await ListGettableType.all()?.map { $0.id as! Int } ?? []
+            }
         }
         .toolbar {
             ToolbarItemGroup(content: {
-                DetailsIDSwitcher(currentID: $currentID, allIDs: allEventIDs, destination: { EventSearchView() })
+                DetailsIDSwitcher(currentID: $currentID, allIDs: allPreviewIDs, destination: { EventSearchView() })
                     .onChange(of: currentID) {
                         information = nil
                     }
@@ -130,7 +148,7 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable, Prev
         .withSystemBackground()
     }
     
-    func getInformation(id: Int) async {
+    private func getInformation(id: Int) async {
         infoIsAvailable = true
         informationLoadPromise?.cancel()
         informationLoadPromise = withDoriCache(id: "\(titleKey.key)Detail_\(id)", trait: .realTime) {
@@ -138,16 +156,16 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable, Prev
         } .onUpdate {
             if let information = $0 {
                 self.information = information
-                self.arts = makeArts(information)
             } else {
                 infoIsAvailable = false
             }
         }
     }
 }
-
-extension TupleView {
-    var rawMetadata: UnsafeRawPointer {
-        unsafe unsafeBitCast(T.self as Any.Type, to: UnsafeRawPointer.self)
+extension DetailViewBase {
+    func contentUnavailablePrompt(_ prompt: LocalizedStringResource?) -> Self {
+        var mutable = self
+        mutable.unavailablePrompt = prompt
+        return mutable
     }
 }

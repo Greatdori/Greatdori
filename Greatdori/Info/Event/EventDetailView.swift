@@ -22,48 +22,36 @@ struct EventDetailView: View {
     var id: Int
     @State var allEvents: [PreviewEvent]?
     var body: some View {
-        DetailViewBase("Event", previewList: allEvents ?? [], initialID: id) { id in
-            await DoriFrontend.Event.extendedInformation(of: id)
-        } content: { information in
+        DetailViewBase("Event", previewList: allEvents, initialID: id) { information in
             EventDetailOverviewView(information: information)
             DetailSectionsSpacer()
             DetailsGachasSection(gachas: information.gacha, applyLocaleFilter: false)
-        } unavailableContent: {
-            ContentUnavailableView("Event.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-        } nameProvider: { information in
-            information.event.eventName.forPreferredLocale()
-        } makeArts: { information in
-            ArtsTab(id: "banner", name: "Event.arts.banner") {
-                for locale in DoriLocale.allCases {
-                    if let url = information.event.bannerImageURL(in: locale, allowsFallback: false) {
-                        ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url)
-                    }
-                    if let url = information.event.homeBannerImageURL(in: locale, allowsFallback: false) {
-                        ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url)
+            DetailSectionsSpacer()
+            DetailArtsSection {
+                ArtsTab(id: "banner", name: "Event.arts.banner") {
+                    for locale in DoriLocale.allCases {
+                        if let url = information.event.bannerImageURL(in: locale, allowsFallback: false) {
+                            ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url)
+                        }
+                        if let url = information.event.homeBannerImageURL(in: locale, allowsFallback: false) {
+                            ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url)
+                        }
                     }
                 }
-            }
-            ArtsTab(id: "logo", name: "Event.arts.logo") {
-                for locale in DoriLocale.allCases {
-                    if let url = information.event.logoImageURL(in: locale, allowsFallback: false) {
-                        ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url)
+                ArtsTab(id: "logo", name: "Event.arts.logo") {
+                    for locale in DoriLocale.allCases {
+                        if let url = information.event.logoImageURL(in: locale, allowsFallback: false) {
+                            ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url)
+                        }
                     }
                 }
-            }
-            ArtsTab(id: "home-screen", name: "Event.arts.home-screen") {
-                ArtsItem(title: "Event.arts.home-screen.characters", url: information.event.topScreenTrimmedImageURL)
-                ArtsItem(title: "Event.arts.home-screen.background", url: information.event.topScreenBackgroundImageURL)
-            }
-        }
-        .task {
-            if allEvents == nil {
-                DoriCache.withCache(id: "EventList", trait: .realTime) {
-                    await PreviewEvent.all()
-                }.onUpdate {
-                    self.allEvents = $0?.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending))
+                ArtsTab(id: "home-screen", name: "Event.arts.home-screen") {
+                    ArtsItem(title: "Event.arts.home-screen.characters", url: information.event.topScreenTrimmedImageURL)
+                    ArtsItem(title: "Event.arts.home-screen.background", url: information.event.topScreenBackgroundImageURL)
                 }
             }
         }
+        .contentUnavailablePrompt("Event.unavailable")
     }
 }
 

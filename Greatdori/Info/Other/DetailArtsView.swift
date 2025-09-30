@@ -185,4 +185,8 @@ struct DetailArtsSection: View {
         })
     }
 }
-
+extension DetailArtsSection {
+    init(@ArtsBuilder content: () -> [ArtsTab]) {
+        self.information = content()
+    }
+}
