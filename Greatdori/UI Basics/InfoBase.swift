@@ -15,7 +15,9 @@
 import SwiftUI
 import DoriKit
 
-struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & TitleDescribable, PreviewInformation: Identifiable, Content: View>: View where Information.ID == Int, PreviewInformation.ID == Int {
+struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & TitleDescribable,
+                      PreviewInformation: Identifiable,
+                      Content: View>: View where Information.ID == Int, PreviewInformation.ID == Int {
     var titleKey: LocalizedStringResource
     var previewList: [PreviewInformation]?
     var initialID: Int
@@ -63,7 +65,6 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
     @State private var informationLoadPromise: DoriCache.Promise<Information?>?
     @State private var information: Information?
     @State private var infoIsAvailable = true
-    @State private var cardNavigationDestinationID: Int?
     @State private var showSubtitle: Bool = false
     @State private var allPreviewIDs: [Int] = []
     
@@ -104,9 +105,6 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
                 }
             }
         }
-        .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
-            Text("\(id)")
-        })
         .navigationTitle(Text(information?.title.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Event") : "")"))
         #if os(iOS)
         .wrapIf(showSubtitle) { content in

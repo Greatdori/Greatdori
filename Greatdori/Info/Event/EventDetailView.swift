@@ -20,7 +20,7 @@ import SDWebImageSwiftUI
 // MARK: EventDetailView
 struct EventDetailView: View {
     var id: Int
-    @State var allEvents: [PreviewEvent]?
+    var allEvents: [PreviewEvent]?
     var body: some View {
         DetailViewBase("Event", previewList: allEvents, initialID: id) { information in
             EventDetailOverviewView(information: information)
