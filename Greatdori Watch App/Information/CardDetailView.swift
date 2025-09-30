@@ -219,37 +219,64 @@ struct CardDetailView: View {
                     } header: {
                         Text("数据")
                     }
-                    Section {
-                        NavigationLink(destination: { CostumeLive2DViewer(id: information.costume.id).ignoresSafeArea() }) {
-                            ThumbCostumeCardView(information.costume)
-                        }
-                    } header: {
-                        Text("服装")
+                }
+                Section {
+                    NavigationLink(destination: { CostumeLive2DViewer(id: information.costume.id).ignoresSafeArea() }) {
+                        ThumbCostumeCardView(information.costume)
                     }
-                    if let event = information.event.forPreferredLocale() {
-                        Section {
-                            NavigationLink(destination: { EventDetailView(id: event.id) }) {
-                                EventCardView(event, inLocale: nil)
+                } header: {
+                    Text("服装")
+                }
+                if let event = information.event.forPreferredLocale() {
+                    Section {
+                        NavigationLink(destination: { EventDetailView(id: event.id) }) {
+                            EventCardView(event, inLocale: nil)
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    } header: {
+                        Text("活动")
+                    }
+                }
+                if !information.gacha.isEmpty {
+                    Section {
+                        FoldableList(information.gacha.reversed()) { gacha in
+                            NavigationLink(destination: { GachaDetailView(id: gacha.id) }) {
+                                GachaCardView(gacha)
                             }
                             .listRowBackground(Color.clear)
                             .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        } header: {
-                            Text("活动")
                         }
+                    } header: {
+                        Text("招募")
                     }
-                    if !information.gacha.isEmpty {
-                        Section {
-                            FoldableList(information.gacha.reversed()) { gacha in
-                                NavigationLink(destination: { GachaDetailView(id: gacha.id) }) {
-                                    GachaCardView(gacha)
-                                }
-                                .listRowBackground(Color.clear)
-                                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                }
+                Section {
+                    ImageListView {
+                        ImageGroup("完整") {
+                            ImageItem(url: information.card.coverNormalImageURL, description: "特训前")
+                            if let url = information.card.coverAfterTrainingImageURL {
+                                ImageItem(url: url, description: "特训后")
                             }
-                        } header: {
-                            Text("招募")
+                        }
+                        ImageGroup("无背景") {
+                            ImageItem(url: information.card.trimmedNormalImageURL, description: "特训前")
+                            if let url = information.card.trimmedAfterTrainingImageURL {
+                                ImageItem(url: url, description: "特训后")
+                            }
+                        }
+                        ImageGroup("缩略图") {
+                            ImageItem(url: information.card.thumbNormalImageURL, description: "特训前")
+                            if let url = information.card.thumbAfterTrainingImageURL {
+                                ImageItem(url: url, description: "特训后")
+                            }
+                        }
+                        ImageGroup("Live 服装") {
+                            ImageItem(url: information.card.sdImageURL, description: "Live 服装")
                         }
                     }
+                } header: {
+                    Text("图片")
                 }
             } else {
                 if availability {
