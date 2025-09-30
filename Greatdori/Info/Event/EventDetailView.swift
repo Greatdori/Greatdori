@@ -19,137 +19,49 @@ import SDWebImageSwiftUI
 
 // MARK: EventDetailView
 struct EventDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     var id: Int
-    var allEvents: [PreviewEvent]? = nil
-    @State var eventID: Int = 0
-    @State var informationLoadPromise: DoriCache.Promise<DoriFrontend.Event.ExtendedEvent?>?
-    @State var information: DoriFrontend.Event.ExtendedEvent?
-    @State var infoIsAvailable = true
-    @State var cardNavigationDestinationID: Int?
-    //    @State var latestEventID: Int = 0
-    @State var showSubtitle: Bool = false
-    @State var allEventIDs: [Int] = []
-    
-    @State var arts: [InfoArtsTab] = []
+    @State var allEvents: [PreviewEvent]?
     var body: some View {
-        EmptyContainer {
-            if let information {
-                ScrollView {
-                    HStack {
-                        Spacer(minLength: 0)
-                        VStack {
-                            EventDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
-                            
-                            DetailSectionsSpacer()
-                            DetailsGachasSection(gachas: information.gacha, applyLocaleFilter: false)
-                            //                            DetailsCardsSection(cards: information.cards, applyLocaleFilter: true)
-                            
-                            //                            DetailsEventsSection(events: information.event, applyLocaleFilter: true)
-                            if !arts.isEmpty {
-                                DetailSectionsSpacer()
-                                DetailArtsSection(information: arts)
-                            }
-                        }
-                        .padding()
-                        Spacer(minLength: 0)
-                    }
-                }
-                .scrollDisablesMultilingualTextPopover()
-            } else {
-                if infoIsAvailable {
-                    ExtendedConstraints {
-                        ProgressView()
-                    }
-                } else {
-                    Button(action: {
-                        Task {
-                            await getInformation(id: eventID)
-                        }
-                    }, label: {
-                        ExtendedConstraints {
-                            ContentUnavailableView("Event.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                        }
-                    })
-                    .buttonStyle(.plain)
-                }
-            }
-        }
-        .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
-            Text("\(id)")
-        })
-        .navigationTitle(Text(information?.event.eventName.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Event") : "")"))
-#if os(iOS)
-        .wrapIf(showSubtitle) { content in
-            if #available(iOS 26, macOS 14.0, *) {
-                content
-                    .navigationSubtitle(information?.event.eventName.forPreferredLocale() != nil ? "#\(eventID)" : "")
-            } else {
-                content
-            }
-        }
-#endif
-        .onChange(of: eventID, {
-            Task {
-                await getInformation(id: eventID)
-            }
-        })
-        .task {
-            eventID = id
-            await getInformation(id: eventID)
-            if (allEvents ?? []).isEmpty {
-                allEventIDs = await (Event.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
-            } else {
-                allEventIDs = allEvents!.map {$0.id}
-                //                print(allEventIDs)
-            }
-        }
-        .toolbar {
-            ToolbarItemGroup(content: {
-                DetailsIDSwitcher(currentID: $eventID, allIDs: allEventIDs, destination: { EventSearchView() })
-                    .onChange(of: eventID) {
-                        information = nil
-                    }
-                    .onAppear {
-                        showSubtitle = (sizeClass == .compact)
-                    }
-            })
-        }
-        .withSystemBackground()
-    }
-    
-    func getInformation(id: Int) async {
-        infoIsAvailable = true
-        informationLoadPromise?.cancel()
-        informationLoadPromise = DoriCache.withCache(id: "EventDetail_\(id)", trait: .realTime) {
+        DetailViewBase("Event", previewList: allEvents ?? [], initialID: id) { id in
             await DoriFrontend.Event.extendedInformation(of: id)
-        } .onUpdate {
-            if let information = $0 {
-                self.information = information
-                
-                arts = []
-                var artsBanners: [InfoArtsItem] = []
-                var artsLogos: [InfoArtsItem] = []
-                var artsHomeScreen: [InfoArtsItem] = []
+        } content: { information in
+            EventDetailOverviewView(information: information)
+            DetailSectionsSpacer()
+            DetailsGachasSection(gachas: information.gacha, applyLocaleFilter: false)
+        } unavailableContent: {
+            ContentUnavailableView("Event.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
+        } nameProvider: { information in
+            information.event.eventName.forPreferredLocale()
+        } makeArts: { information in
+            ArtsTab(id: "banner", name: "Event.arts.banner") {
                 for locale in DoriLocale.allCases {
                     if let url = information.event.bannerImageURL(in: locale, allowsFallback: false) {
-                        artsBanners.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
+                        ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url)
                     }
                     if let url = information.event.homeBannerImageURL(in: locale, allowsFallback: false) {
-                        artsBanners.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
-                    }
-                    if let url = information.event.logoImageURL(in: locale, allowsFallback: false) {
-                        artsLogos.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
+                        ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url)
                     }
                 }
-                artsHomeScreen.append(InfoArtsItem(title: "Event.arts.home-screen.characters", url: information.event.topScreenTrimmedImageURL))
-                artsHomeScreen.append(InfoArtsItem(title: "Event.arts.home-screen.background", url: information.event.topScreenBackgroundImageURL))
-                
-                arts.append(InfoArtsTab(id: "banner", tabName: "Event.arts.banner", content: artsBanners))
-                arts.append(InfoArtsTab(id: "logo", tabName: "Event.arts.logo", content: artsLogos))
-                arts.append(InfoArtsTab(id: "home-screen", tabName: "Event.arts.home-screen", content: artsHomeScreen))
-            } else {
-                infoIsAvailable = false
+            }
+            ArtsTab(id: "logo", name: "Event.arts.logo") {
+                for locale in DoriLocale.allCases {
+                    if let url = information.event.logoImageURL(in: locale, allowsFallback: false) {
+                        ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url)
+                    }
+                }
+            }
+            ArtsTab(id: "home-screen", name: "Event.arts.home-screen") {
+                ArtsItem(title: "Event.arts.home-screen.characters", url: information.event.topScreenTrimmedImageURL)
+                ArtsItem(title: "Event.arts.home-screen.background", url: information.event.topScreenBackgroundImageURL)
+            }
+        }
+        .task {
+            if allEvents == nil {
+                DoriCache.withCache(id: "EventList", trait: .realTime) {
+                    await PreviewEvent.all()
+                }.onUpdate {
+                    self.allEvents = $0?.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending))
+                }
             }
         }
     }
@@ -170,7 +82,6 @@ struct EventDetailOverviewView: View {
     @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
     @State var cardsFixedWidth: CGFloat = 0 //Fixed
     @State var cardsUseCompactLayout = true
-    @Binding var cardNavigationDestinationID: Int?
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
         Group {
@@ -460,7 +371,7 @@ struct EventDetailOverviewView: View {
                                         NavigationLink(destination: {
                                             CardDetailView(id: card.id)
                                         }, label: {
-                                            CardPreviewImage(card, sideLength: cardThumbnailSideLength, showNavigationHints: true/*, cardNavigationDestinationID: $cardNavigationDestinationID*/)
+                                            CardPreviewImage(card, sideLength: cardThumbnailSideLength, showNavigationHints: true)
                                         })
                                         .contentShape(Rectangle())
                                         .buttonStyle(.plain)

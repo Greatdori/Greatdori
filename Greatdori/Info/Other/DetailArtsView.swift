@@ -20,14 +20,70 @@ import SwiftUI
 import QuickLook
 #endif
 
-
-struct InfoArtsTab: Identifiable, Hashable, Equatable {
-    let id: String
-    var tabName: LocalizedStringResource
-    var content: [InfoArtsItem]
+@resultBuilder
+struct ArtsBuilder {
+    static func buildExpression(_ expression: ArtsTab) -> [ArtsTab] {
+        [expression]
+    }
+    
+    static func buildBlock(_ components: [ArtsTab]...) -> [ArtsTab] {
+        components.flatMap { $0 }
+    }
+    
+    static func buildOptional(_ component: [ArtsTab]?) -> [ArtsTab] {
+        component ?? []
+    }
+    static func buildEither(first component: [ArtsTab]) -> [ArtsTab] {
+        component
+    }
+    static func buildEither(second component: [ArtsTab]) -> [ArtsTab] {
+        component
+    }
+    
+    static func buildArray(_ components: [[ArtsTab]]) -> [ArtsTab] {
+        components.flatMap { $0 }
+    }
 }
 
-struct InfoArtsItem: Hashable, Equatable {
+@resultBuilder
+struct ArtsItemBuilder {
+    static func buildExpression(_ expression: ArtsItem) -> [ArtsItem] {
+        [expression]
+    }
+    
+    static func buildBlock(_ components: [ArtsItem]...) -> [ArtsItem] {
+        components.flatMap { $0 }
+    }
+    
+    static func buildOptional(_ component: [ArtsItem]?) -> [ArtsItem] {
+        component ?? []
+    }
+    static func buildEither(first component: [ArtsItem]) -> [ArtsItem] {
+        component
+    }
+    static func buildEither(second component: [ArtsItem]) -> [ArtsItem] {
+        component
+    }
+    
+    static func buildArray(_ components: [[ArtsItem]]) -> [ArtsItem] {
+        components.flatMap { $0 }
+    }
+}
+
+struct ArtsTab: Identifiable, Hashable, Equatable {
+    let id: String
+    var tabName: LocalizedStringResource
+    var content: [ArtsItem]
+}
+extension ArtsTab {
+    init(id: String, name: LocalizedStringResource, @ArtsItemBuilder content: () -> [ArtsItem]) {
+        self.id = id
+        self.tabName = name
+        self.content = content()
+    }
+}
+
+struct ArtsItem: Hashable, Equatable {
     let id = UUID()
     var title: LocalizedStringResource
     var url: URL
@@ -36,7 +92,7 @@ struct InfoArtsItem: Hashable, Equatable {
 
 // MARK: DetailArtsSection
 struct DetailArtsSection: View {
-    var information: [InfoArtsTab]
+    var information: [ArtsTab]
     @State var tab: String? = nil
 #if os(macOS)
     @State private var previewController = PreviewController()

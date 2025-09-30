@@ -28,7 +28,7 @@ struct SongDetailView: View {
     @State var infoIsAvailable = true
     @State var allSongIDs: [Int] = []
     @State var showSubtitle: Bool = false
-    @State var arts: [InfoArtsTab] = []
+    @State var arts: [ArtsTab] = []
     var body: some View {
         EmptyContainer {
             if let information {
@@ -121,13 +121,13 @@ struct SongDetailView: View {
                 self.information = information
                 
                 arts = []
-                var artsCover: [InfoArtsItem] = []
+                var artsCover: [ArtsItem] = []
                 for locale in DoriLocale.allCases {
                     if let url = information.song.jacketImageURL(in: locale, allowsFallback: false) {
-                        artsCover.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url, expectedRatio: 1))
+                        artsCover.append(ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url, expectedRatio: 1))
                     }
                 }
-                arts.append(InfoArtsTab(id: "cover", tabName: "Song.arts.cover", content: artsCover))
+                arts.append(ArtsTab(id: "cover", tabName: "Song.arts.cover", content: artsCover))
             } else {
                 infoIsAvailable = false
             }
