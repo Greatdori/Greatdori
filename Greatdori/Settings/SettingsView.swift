@@ -76,46 +76,49 @@ struct SettingsLocaleView: View {
                 Picker(selection: $primaryLocale, content: {
                     Text("Home.servers.selection.jp")
                         .tag("jp")
-                        .disabled(secondaryLocale == "jp")
                     Text("Home.servers.selection.en")
                         .tag("en")
-                        .disabled(secondaryLocale == "en")
                     Text("Home.servers.selection.cn")
                         .tag("cn")
-                        .disabled(secondaryLocale == "cn")
                     Text("Home.servers.selection.tw")
                         .tag("tw")
-                        .disabled(secondaryLocale == "tw")
                     Text("Home.servers.selection.kr")
                         .tag("kr")
                         .disabled(secondaryLocale == "kr")
                 }, label: {
                     Text("Settings.servers.primaryLocale")
                 })
-                .onChange(of: primaryLocale, {
+                .onChange(of: primaryLocale, { oldValue, newValue in
+                    if DoriLocale.secondaryLocale == DoriLocale(rawValue: newValue) {
+                        DoriLocale.secondaryLocale = DoriLocale(rawValue: oldValue)!
+                    }
                     DoriAPI.preferredLocale = localeFromStringDict[primaryLocale] ?? .jp
+                    
+                    primaryLocale = DoriAPI.preferredLocale.rawValue
+                    secondaryLocale = DoriAPI.secondaryLocale.rawValue
                 })
                 Picker(selection: $secondaryLocale, content: {
                     Text("Home.servers.selection.jp")
                         .tag("jp")
-                        .disabled(primaryLocale == "jp")
                     Text("Home.servers.selection.en")
                         .tag("en")
-                        .disabled(primaryLocale == "en")
                     Text("Home.servers.selection.cn")
                         .tag("cn")
-                        .disabled(primaryLocale == "cn")
                     Text("Home.servers.selection.tw")
                         .tag("tw")
-                        .disabled(primaryLocale == "tw")
                     Text("Home.servers.selection.kr")
                         .tag("kr")
-                        .disabled(primaryLocale == "kr")
                 }, label: {
                     Text("Settings.servers.secondaryLocale")
                 })
-                .onChange(of: secondaryLocale, {
+                .onChange(of: secondaryLocale, { oldValue, newValue in
+                    if DoriLocale.primaryLocale == DoriLocale(rawValue: newValue) {
+                        DoriLocale.primaryLocale = DoriLocale(rawValue: oldValue)!
+                    }
                     DoriAPI.secondaryLocale = localeFromStringDict[secondaryLocale] ?? .en
+                    
+                    primaryLocale = DoriAPI.preferredLocale.rawValue
+                    secondaryLocale = DoriAPI.secondaryLocale.rawValue
                 })
                 Group {
                     if #available(iOS 18.0, macOS 15.0, *) {
