@@ -54,12 +54,12 @@ extension DoriAPI.Event.${property} {
     }
     @inlinable
     public var homeBannerImageURL: URL {
-        .init(string: "https://bestdori.com/assets/jp/homebanner_rip/banner_event\(self.id).png")!.respectOfflineAssetContext()
+        .init(string: "https://bestdori.com/assets/\(self.startAt.availableLocale()!.rawValue)/homebanner_rip/banner_event\(self.id).png")!.respectOfflineAssetContext()
     }
     @inlinable
     public func homeBannerImageURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
         if let locale = _resLocale(locale, by: self.startAt, allowsFallback: allowsFallback) {
-            .init(string: "https://bestdori.com/assets/jp/homebanner_rip/banner_event\(self.id).png")!.respectOfflineAssetContext()
+            .init(string: "https://bestdori.com/assets/\(locale)/homebanner_rip/banner_event\(self.id).png")!.respectOfflineAssetContext()
         } else {
             nil
         }

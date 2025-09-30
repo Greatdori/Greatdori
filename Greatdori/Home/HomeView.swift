@@ -281,6 +281,10 @@ struct HomeBirthdayView: View {
 //                    .bold()
                     .fontWeight(.light)
                     .font(.title3)
+                    .wrapIf(birthdays == nil) { content in
+                        content
+                            .redacted(reason: .placeholder)
+                    }
                     if debugShowHomeBirthdayDatePicker {
                         DatePicker("", selection: $debugDate)
                             .labelsHidden()

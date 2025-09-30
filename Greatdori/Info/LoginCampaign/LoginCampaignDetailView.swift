@@ -56,7 +56,7 @@ struct LoginCampaignDetailView: View {
                         }
                     }, label: {
                         ExtendedConstraints {
-                            ContentUnavailableView("LoginCampaign.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
+                            ContentUnavailableView("Login-campaign.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
                         }
                     })
                     .buttonStyle(.plain)
@@ -67,7 +67,7 @@ struct LoginCampaignDetailView: View {
         .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
             Text("\(id)")
         })
-        .navigationTitle(Text(information?.caption.forPreferredLocale() ?? "\(isMACOS ? String(localized: "LoginCampaign") : "")"))
+        .navigationTitle(Text(information?.caption.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Login-campaign") : "")"))
         #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
@@ -181,7 +181,7 @@ struct LoginCampaignDetailView: View {
 //                        // MARK: Title
 //                        Group {
 //                            ListItemView(title: {
-//                                Text("LoginCampaign.title")
+//                                Text("Login-campaign.title")
 //                                    .bold()
 //                            }, value: {
 //                                MultilingualText(information.loginCampaign.loginCampaignName)
@@ -192,7 +192,7 @@ struct LoginCampaignDetailView: View {
 //                        // MARK: Type
 //                        Group {
 //                            ListItemView(title: {
-//                                Text("LoginCampaign.type")
+//                                Text("Login-campaign.type")
 //                                    .bold()
 //                            }, value: {
 //                                Text(information.loginCampaign.type.localizedString)
@@ -203,7 +203,7 @@ struct LoginCampaignDetailView: View {
 //                        // MARK: Countdown
 //                        Group {
 //                            ListItemView(title: {
-//                                Text("LoginCampaign.countdown")
+//                                Text("Login-campaign.countdown")
 //                                    .bold()
 //                            }, value: {
 //                                MultilingualTextForCountdown(information.loginCampaign)
@@ -214,7 +214,7 @@ struct LoginCampaignDetailView: View {
 //                        // MARK: Release Date
 //                        Group {
 //                            ListItemView(title: {
-//                                Text("LoginCampaign.release-date")
+//                                Text("Login-campaign.release-date")
 //                                    .bold()
 //                            }, value: {
 //                                MultilingualText(information.loginCampaign.publishedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
@@ -225,7 +225,7 @@ struct LoginCampaignDetailView: View {
 //                        // MARK: Close Date
 //                        Group {
 //                            ListItemView(title: {
-//                                Text("LoginCampaign.close-date")
+//                                Text("Login-campaign.close-date")
 //                                    .bold()
 //                            }, value: {
 //                                MultilingualText(information.loginCampaign.closedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
@@ -253,7 +253,7 @@ struct LoginCampaignDetailView: View {
 //                        // MARK: Description
 //                        Group {
 //                            ListItemView(title: {
-//                                Text("LoginCampaign.descripition")
+//                                Text("Login-campaign.descripition")
 //                                    .bold()
 //                            }, value: {
 //                                MultilingualText(information.loginCampaign.description)

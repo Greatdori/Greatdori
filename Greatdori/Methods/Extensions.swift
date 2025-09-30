@@ -140,6 +140,20 @@ extension Int?: @retroactive Identifiable {
     public var id: Int? { self }
 }
 
+
+// MARK: LocalizedStringResource
+extension LocalizedStringResource: Hashable {
+    public static func == (lhs: LocalizedStringResource, rhs: LocalizedStringResource) -> Bool {
+        lhs.key == rhs.key && lhs.table == rhs.table
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(key)
+        hasher.combine(table)
+    }
+}
+
+
 // MARK: Optional
 extension Optional {
     var id: Self { self }
@@ -147,6 +161,15 @@ extension Optional {
 
 // MARK: View
 public extension View {
+    @ViewBuilder
+    func hidden(_ isHidden: Bool = true) -> some View {
+        if isHidden {
+            self.hidden()
+        } else {
+            self
+        }
+    }
+    
     // MARK: inverseMask
     public func inverseMask<Mask: View>(
         @ViewBuilder _ mask: () -> Mask,
@@ -502,41 +525,30 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                     }
                     if #available(iOS 18.0, macOS 15.0, *) {
                         forEachImageInfo("Image.copy.subject", systemImage: "circle.dashed.rectangle") { info in
-                            Task {
-                                if let data = await info.resolvedData() {
-                                    guard var image = CIImage(data: data) else { return }
-                                    do {
-                                        image = image.oriented(.up)
-                                        
-                                        let request = GenerateForegroundInstanceMaskRequest()
-                                        let result = try await request.perform(on: image)
-                                        
-                                        guard let cgImage = result?.allInstances.compactMap({ (index) -> (CGImage, Int)? in
-                                            let buffer = try? result?.generateMaskedImage(for: [index], imageFrom: .init(data))
-                                            if buffer != nil {
-                                                let _image = CIImage(cvPixelBuffer: unsafe buffer.unsafelyUnwrapped)
-                                                let context = CIContext()
-                                                guard let image = context.createCGImage(_image, from: _image.extent) else { return nil }
-                                                return (image, image.width * image.height)
-                                            } else {
-                                                return nil
-                                            }
-                                        }).min(by: { $0.1 < $1.1 })?.0 else { return }
-                                        
-                                        let _imageData = NSMutableData()
-                                        if let dest = CGImageDestinationCreateWithData(_imageData, UTType.png.identifier as CFString, 1, nil) {
-                                            CGImageDestinationAddImage(dest, cgImage, nil)
-                                            if CGImageDestinationFinalize(dest) {
-                                                #if os(macOS)
-                                                NSPasteboard.general.clearContents()
-                                                NSPasteboard.general.setData(_imageData as Data, forType: .png)
-                                                #else
-                                                UIPasteboard.general.image = .init(data: _imageData as Data)!
-                                                #endif
-                                            }
+                            DispatchQueue(label: "com.memz233.Greatdori.Fetch-Trimmed-Image", qos: .userInitiated).async {
+                                Task {
+                                    var subjectImageData: Data? = nil
+                                    var onlineImageFetchSucceeded = false
+                                    if !UserDefaults.standard.bool(forKey: "preferSystemVisionModel") {
+                                        subjectImageData = try? Data(contentsOf: URL(string: info.url.absoluteString.replacingOccurrences(of: "card", with: "trim"))!)
+                                        onlineImageFetchSucceeded = subjectImageData != nil
+                                    }
+                                    
+                                    if !onlineImageFetchSucceeded {
+                                        if let data = await info.resolvedData() {
+                                            subjectImageData = await getImageSubject(data)
                                         }
-                                    } catch {
-                                        print(error)
+                                    }
+                                    
+                                    if let subjectImageData {
+#if os(macOS)
+                                        NSPasteboard.general.clearContents()
+                                        NSPasteboard.general.setData(subjectImageData, forType: .png)
+#else
+                                        UIPasteboard.general.image = .init(data: subjectImageData)
+#endif
+                                    } else {
+                                        print("Subject Fetch Failed")
                                     }
                                 }
                             }
@@ -584,7 +596,7 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
         case start
         case end
     }
-    struct ImageInfo: Hashable {
+    struct ImageInfo: Hashable, Sendable {
         var url: URL
         var data: Data?
         var description: LocalizedStringResource?

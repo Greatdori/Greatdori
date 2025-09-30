@@ -124,10 +124,10 @@ struct SongDetailView: View {
                 var artsCover: [InfoArtsItem] = []
                 for locale in DoriLocale.allCases {
                     if let url = information.song.jacketImageURL(in: locale, allowsFallback: false) {
-                        artsCover.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
+                        artsCover.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url, expectedRatio: 1))
                     }
                 }
-                arts.append(InfoArtsTab(tabName: "Song.art.cover", content: artsCover))
+                arts.append(InfoArtsTab(id: "cover", tabName: "Song.arts.cover", content: artsCover))
             } else {
                 infoIsAvailable = false
             }

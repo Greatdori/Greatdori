@@ -56,12 +56,18 @@ class PreviewController: NSObject, QLPreviewPanelDataSource, QLPreviewPanelDeleg
         fileURLs[index] as QLPreviewItem
     }
     
-    func showPanel() {
+    func showPanel(startingAt index: Int? = nil) {
         if let panel = QLPreviewPanel.shared() {
             panel.dataSource = self
             panel.delegate = self
+            panel.reloadData()
+            if let index, !fileURLs.isEmpty {
+                let clamped = max(0, min(index, fileURLs.count - 1))
+                panel.currentPreviewItemIndex = clamped
+            }
             panel.makeKeyAndOrderFront(nil)
         }
     }
 }
 #endif
+

@@ -37,6 +37,7 @@ struct SettingsView: View {
                 SettingsWidgetView()
                 #endif
                 SettingsOfflineDataView()
+                SettingsAboutView()
                 if AppFlag.DEBUG {
                     SettingsDebugView()
                 }
@@ -215,24 +216,38 @@ struct SettingsLocaleView: View {
 struct SettingsHomeView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     @AppStorage("showBirthdayDate") var showBirthdayDate = showBirthdayDateDefaultValue
+    let showCurrentDayPickerLabel: [Int: LocalizedStringKey] = [3: "Home.home.show-current-date.selection.always", 2: "Home.home.show-current-date.selection.during-birthday", 1: "Home.home.show-current-date.selection.automatic", 0: "Home.home.show-current-date.selection.never"]
+    let showCurrentDayPickerDescription: [Int: LocalizedStringKey] = [3: "Home.home.show-current-date.selection.always.description", 2: "Home.home.show-current-date.selection.during-birthday.description", 1: "Home.home.show-current-date.selection.automatic.description", 0: "Home.home.show-current-date.selection.never.description"]
     var body: some View {
         Section(content: {
             HomeEditEventsPicker(id: 1)
             HomeEditEventsPicker(id: 2)
             HomeEditEventsPicker(id: 3)
             HomeEditEventsPicker(id: 4)
-            Picker(selection: $showBirthdayDate, content: {
-                Text("Home.home.show-current-date.selection.always")
-                    .tag(3)
-                Text("Home.home.show-current-date.selection.during-birthday")
-                    .tag(2)
-                Text("Home.home.show-current-date.selection.automatic")
-                    .tag(1)
-                Text("Home.home.show-current-date.selection.never")
-                    .tag(0)
-            }, label: {
-                Text("Home.home.show-current-date")
-            })
+            if #available(iOS 18.0, macOS 15.0, *) {
+                Picker(selection: $showBirthdayDate, content: {
+                    ForEach([3, 2, 1, 0], id: \.self) { index in
+                        VStack(alignment: .leading) {
+                            Text(showCurrentDayPickerLabel[index]!)
+                            Text(showCurrentDayPickerDescription[index]!)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                            .tag(index)
+                    }
+                }, label: {
+                    Text("Home.home.show-current-date")
+                }, currentValueLabel: {
+                    Text(showCurrentDayPickerLabel[showBirthdayDate]!)
+                        .multilineTextAlignment(.trailing)
+                })
+                .wrapIf(!isMACOS, in: { content in
+                    #if os(iOS)
+                    content
+                        .pickerStyle(.navigationLink)
+                    #endif
+                })
+            }
         }, header: {
             Text("Settings.home-edit")
         }, footer: {
@@ -535,6 +550,21 @@ struct SettingsOfflineDataView: View {
         .onAppear {
             dataSourcePreference = DataSourcePreference(rawValue: UserDefaults.standard.string(forKey: "DataSourcePreference") ?? "hybrid") ?? .hybrid
         }
+    }
+}
+
+struct SettingsAboutView: View {
+    var body: some View {
+        Section(content: {
+            Text(verbatim: "Greatdori!")
+            NavigationLink(destination: {
+                SettingsAdvancedView()
+            }, label: {
+                Text("Settings.advanced")
+            })
+        }, header: {
+            Text("Settings.about")
+        })
     }
 }
 

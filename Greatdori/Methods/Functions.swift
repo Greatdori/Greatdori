@@ -14,8 +14,14 @@
 
 // (In Alphabetic Order)
 
+import CoreImage.CIFilterBuiltins
 import DoriKit
+import Network
+import SDWebImageSwiftUI
 import SwiftUI
+import UniformTypeIdentifiers
+import Vision
+
 #if os(iOS)
 import UIKit
 #endif
@@ -86,12 +92,57 @@ func getBirthdayTimeZone(from input: BirthdayTimeZone? = nil) -> TimeZone {
 //}
 
 
+// MARK: getAttributedString
 func getAttributedString(_ source: String, fontSize: Font.TextStyle = .body, fontWeight: Font.Weight = .regular, foregroundColor: Color = .primary) -> AttributedString {
     var attrString = AttributedString()
     attrString = AttributedString(source)
     attrString.font = .system(fontSize, weight: fontWeight)
     attrString.foregroundColor = foregroundColor
     return attrString
+}
+
+// MARK: getImageSubject
+func getImageSubject(_ data: Data) async -> Data? {
+    if #available(iOS 18.0, macOS 15.0, *) {
+            guard var image = CIImage(data: data) else { return nil }
+            do {
+                image = image.oriented(.up)
+               
+                let request = GenerateForegroundInstanceMaskRequest()
+                let result = try await request.perform(on: image)
+                
+                guard let cgImage = result?.allInstances.compactMap({ (index) -> (CGImage, Int)? in
+                    let buffer = try? result?.generateMaskedImage(for: [index], imageFrom: .init(data))
+                    if buffer != nil {
+                        let _image = CIImage(cvPixelBuffer: unsafe buffer.unsafelyUnwrapped)
+                        let context = CIContext()
+                        guard let image = context.createCGImage(_image, from: _image.extent) else { return nil }
+                        return (image, image.width * image.height)
+                    } else {
+                        return nil
+                    }
+                }).min(by: { $0.1 < $1.1 })?.0 else { return nil }
+                
+                let _imageData = NSMutableData()
+                if let dest = CGImageDestinationCreateWithData(_imageData, UTType.png.identifier as CFString, 1, nil) {
+                    CGImageDestinationAddImage(dest, cgImage, nil)
+                    if CGImageDestinationFinalize(dest) {
+                        return _imageData as Data
+//#if os(macOS)
+//                        NSPasteboard.general.clearContents()
+//                        NSPasteboard.general.setData(_imageData as Data, forType: .png)
+//#else
+//                        UIPasteboard.general.image = .init(data: _imageData as Data)!
+//#endif
+                    }
+                }
+            } catch {
+                print(error)
+            }
+    } else {
+        return nil
+    }
+    return nil
 }
 
 

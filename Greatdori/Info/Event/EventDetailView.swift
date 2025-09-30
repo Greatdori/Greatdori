@@ -46,6 +46,10 @@ struct EventDetailView: View {
                             //                            DetailsCardsSection(cards: information.cards, applyLocaleFilter: true)
                             
                             //                            DetailsEventsSection(events: information.event, applyLocaleFilter: true)
+                            if !arts.isEmpty {
+                                DetailSectionsSpacer()
+                                DetailArtsSection(information: arts)
+                            }
                         }
                         .padding()
                         Spacer(minLength: 0)
@@ -125,20 +129,25 @@ struct EventDetailView: View {
                 
                 arts = []
                 var artsBanners: [InfoArtsItem] = []
+                var artsLogos: [InfoArtsItem] = []
+                var artsHomeScreen: [InfoArtsItem] = []
                 for locale in DoriLocale.allCases {
                     if let url = information.event.bannerImageURL(in: locale, allowsFallback: false) {
-                        Task {
-                            if await DoriURLValidator.reachability(of: url) {
-                                artsBanners.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
-                            }
-                        }
+                        artsBanners.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
                     }
-                    
+                    if let url = information.event.homeBannerImageURL(in: locale, allowsFallback: false) {
+                        artsBanners.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
+                    }
+                    if let url = information.event.logoImageURL(in: locale, allowsFallback: false) {
+                        artsLogos.append(InfoArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url))
+                    }
                 }
-//                arts.append(InfoArtsTab(tabName: "Song.art.cover", content: artsCover))
+                artsHomeScreen.append(InfoArtsItem(title: "Event.arts.home-screen.characters", url: information.event.topScreenTrimmedImageURL))
+                artsHomeScreen.append(InfoArtsItem(title: "Event.arts.home-screen.background", url: information.event.topScreenBackgroundImageURL))
                 
-                
-                
+                arts.append(InfoArtsTab(id: "banner", tabName: "Event.arts.banner", content: artsBanners))
+                arts.append(InfoArtsTab(id: "logo", tabName: "Event.arts.logo", content: artsLogos))
+                arts.append(InfoArtsTab(id: "home-screen", tabName: "Event.arts.home-screen", content: artsHomeScreen))
             } else {
                 infoIsAvailable = false
             }
@@ -172,7 +181,7 @@ struct EventDetailOverviewView: View {
                         Rectangle()
                             .opacity(0)
                             .frame(height: 2)
-                        WebImage(url: information.event.bannerImageURL) { image in
+                        FallbackableWebImage(throughURLs: [information.event.bannerImageURL, information.event.homeBannerImageURL]) { image in
                             image
                                 .antialiased(true)
                                 .resizable()

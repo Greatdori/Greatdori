@@ -95,7 +95,7 @@ struct EventInfo: View {
                     Spacer(minLength: 0)
                 }
                 VStack {
-                    WebImage(url: information?.bannerImageURL) { image in
+                    FallbackableWebImage(throughURLs: [information?.bannerImageURL, information?.homeBannerImageURL]) { image in
                         image
                             .resizable()
                             .antialiased(true)
@@ -104,7 +104,6 @@ struct EventInfo: View {
                             .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
                     } placeholder: {
                         RoundedRectangle(cornerRadius: 10)
-                        //                        .fill(Color.gray.opacity(0.15))
                             .fill(getPlaceholderColor())
                             .aspectRatio(3.0, contentMode: .fit)
                             .frame(maxWidth: 420*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), maxHeight: 140*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))

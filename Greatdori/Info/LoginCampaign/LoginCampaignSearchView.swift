@@ -134,7 +134,7 @@ struct LoginCampaignSearchView: View {
                         }
                     } else {
                         ExtendedConstraints {
-                            ContentUnavailableView("LoginCampaign.search.unavailable", systemImage: "line.horizontal.star.fill.line.horizontal", description: Text("Search.unavailable.description"))
+                            ContentUnavailableView("Login-campaign.search.unavailable", systemImage: "line.horizontal.star.fill.line.horizontal", description: Text("Search.unavailable.description"))
                                 .onTapGesture {
                                     Task {
                                         await getLoginCampaigns()
@@ -144,11 +144,11 @@ struct LoginCampaignSearchView: View {
                     }
                 }
             }
-            .searchable(text: $searchedText, prompt: "LoginCampaign.search.placeholder")
-            .navigationTitle("LoginCampaign")
+            .searchable(text: $searchedText, prompt: "Login-campaign.search.placeholder")
+            .navigationTitle("Login-campaign")
             .wrapIf(searchedLoginCampaigns != nil, in: { content in
                 if #available(iOS 26.0, *) {
-                    content.navigationSubtitle((searchedText.isEmpty && !filter.isFiltered) ? "LoginCampaign.count.\(searchedLoginCampaigns!.count)" :  "Search.result.\(searchedLoginCampaigns!.count)")
+                    content.navigationSubtitle((searchedText.isEmpty && !filter.isFiltered) ? "Login-campaign.count.\(searchedLoginCampaigns!.count)" :  "Search.result.\(searchedLoginCampaigns!.count)")
                 } else {
                     content
                 }
