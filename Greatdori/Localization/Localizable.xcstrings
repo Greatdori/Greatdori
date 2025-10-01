@@ -1377,6 +1377,9 @@
         }
       }
     },
+    "Content.search.placeholder" : {
+
+    },
     "Content.unavailable" : {
 
     },
@@ -4652,6 +4655,9 @@
           }
         }
       }
+    },
+    "Result.count.%lld" : {
+
     },
     "Search.layout" : {
       "localizations" : {

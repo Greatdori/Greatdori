@@ -174,7 +174,10 @@ extension BirthdayCharacter {
 // MARK: - Frontend
 
 public typealias DoriFilter = DoriFrontend.Filter
+public typealias DoriFilterable = DoriFrontend.Filterable
 public typealias DoriSorter = DoriFrontend.Sorter
+public typealias DoriSortable = DoriFrontend.Sortable
+public typealias DoriSearchable = DoriFrontend.Searchable
 public typealias DoriURLValidator = DoriFrontend.URLValidator
 
 %{

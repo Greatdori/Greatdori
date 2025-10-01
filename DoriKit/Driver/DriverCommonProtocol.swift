@@ -217,6 +217,12 @@ extension PreviewEvent: ListGettable {}
 extension PreviewGacha: ListGettable {}
 extension PreviewLoginCampaign: ListGettable {}
 extension PreviewSong: ListGettable {}
+extension CardWithBand: ListGettable {
+    @inlinable
+    public static func all() async -> [Self]? {
+        await Card.allWithBand()
+    }
+}
 
 // MARK: - PreviewConvertible
 public protocol PreviewConvertible {
