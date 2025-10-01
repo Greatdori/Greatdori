@@ -294,17 +294,27 @@ extension DoriFrontend.Song {
         case notesPerSecond
         case sr
     }
-    public struct SongWithMeta: Sendable, Hashable, DoriCache.Cacheable {
+    public struct SongWithMeta: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var song: PreviewSong
         public var meta: Meta
+        
+        @inlinable
+        public var id: Int {
+            song.id
+        }
     }
     
-    public struct ExtendedSong: Sendable, Hashable, DoriCache.Cacheable {
+    public struct ExtendedSong: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
         public var song: Song
         public var band: DoriAPI.Band.Band?
         public var events: [DoriAPI.Event.PreviewEvent]
         public var meta: [DoriAPI.Song.DifficultyType: Meta]
         public var metaFever: [DoriAPI.Song.DifficultyType: Meta]
+        
+        @inlinable
+        public var id: Int {
+            song.id
+        }
     }
 }
 

@@ -19,119 +19,27 @@ import SDWebImageSwiftUI
 
 // MARK: SongDetailView
 struct SongDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     var id: Int
     var allSongs: [PreviewSong]? = nil
-    @State var songID: Int = 0
-    @State var informationLoadPromise: CachePromise<ExtendedSong?>?
-    @State var information: ExtendedSong?
-    @State var infoIsAvailable = true
-    @State var allSongIDs: [Int] = []
-    @State var showSubtitle: Bool = false
-    @State var arts: [ArtsTab] = []
     var body: some View {
-        EmptyContainer {
-            if let information {
-                ScrollView {
-                    HStack {
-                        Spacer(minLength: 0)
-                        VStack {
-                            SongDetailOverviewView(information: information.song)
-                            
-                            DetailSectionsSpacer()
-                            SongDetailGameplayView(information: information)
-                            
-                            if !arts.isEmpty {
-                                DetailSectionsSpacer()
-                                DetailArtsSection(information: arts)
-                            }
+        DetailViewBase("Song", previewList: allSongs, initialID: id) { information in
+            SongDetailOverviewView(information: information.song)
+            
+            DetailSectionsSpacer()
+            SongDetailGameplayView(information: information)
+            
+            DetailSectionsSpacer()
+            DetailArtsSection {
+                ArtsTab(id: "cover", name: "Song.arts.cover") {
+                    for locale in DoriLocale.allCases {
+                        if let url = information.song.jacketImageURL(in: locale, allowsFallback: false) {
+                            ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url, expectedRatio: 1)
                         }
-                        .padding()
-                        Spacer(minLength: 0)
                     }
-                }
-                .scrollDisablesMultilingualTextPopover()
-            } else {
-                if infoIsAvailable {
-                    ExtendedConstraints {
-                        ProgressView()
-                    }
-                } else {
-                    Button(action: {
-                        Task {
-                            await getInformation(id: songID)
-                        }
-                    }, label: {
-                        ExtendedConstraints {
-                            ContentUnavailableView("Song.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                        }
-                    })
-                    .buttonStyle(.plain)
                 }
             }
         }
-        .withSystemBackground()
-        .navigationTitle(Text(information?.song.musicTitle.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Song") : "")"))
-#if os(iOS)
-        .wrapIf(showSubtitle) { content in
-            if #available(iOS 26, macOS 14.0, *) {
-                content
-                    .navigationSubtitle(information?.song.musicTitle.forPreferredLocale() != nil ? "#\(songID)" : "")
-            } else {
-                content
-            }
-        }
-#endif
-        .task {
-            if (allSongs ?? []).isEmpty {
-                allSongIDs = await (Event.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
-            } else {
-                allSongIDs = allSongs!.map {$0.id}
-            }
-        }
-        .onChange(of: songID, {
-            Task {
-                await getInformation(id: songID)
-            }
-        })
-        .task {
-            songID = id
-            await getInformation(id: songID)
-        }
-        .toolbar {
-            ToolbarItemGroup(content: {
-                DetailsIDSwitcher(currentID: $songID, allIDs: allSongIDs, destination: { SongSearchView() })
-                    .onChange(of: songID) {
-                        information = nil
-                    }
-                    .onAppear {
-                        showSubtitle = (sizeClass == .compact)
-                    }
-            })
-        }
-    }
-    
-    func getInformation(id: Int) async {
-        infoIsAvailable = true
-        informationLoadPromise?.cancel()
-        informationLoadPromise = DoriCache.withCache(id: "SongDetail_\(id)", trait: .realTime) {
-            await ExtendedSong(id: id)
-        } .onUpdate {
-            if let information = $0 {
-                self.information = information
-                
-                arts = []
-                var artsCover: [ArtsItem] = []
-                for locale in DoriLocale.allCases {
-                    if let url = information.song.jacketImageURL(in: locale, allowsFallback: false) {
-                        artsCover.append(ArtsItem(title: LocalizedStringResource(stringLiteral: locale.rawValue.uppercased()), url: url, expectedRatio: 1))
-                    }
-                }
-                arts.append(ArtsTab(id: "cover", tabName: "Song.arts.cover", content: artsCover))
-            } else {
-                infoIsAvailable = false
-            }
-        }
+        .contentUnavailablePrompt("Song.unavailable")
     }
 }
 

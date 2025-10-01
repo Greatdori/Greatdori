@@ -19,109 +19,13 @@ import SDWebImageSwiftUI
 
 // MARK: LoginCampaignDetailView
 struct LoginCampaignDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     var id: Int
     var allLoginCampaigns: [PreviewLoginCampaign]? = nil
-    @State var loginCampaignID: Int = 0
-    @State var informationLoadPromise: DoriCache.Promise<LoginCampaign?>?
-    @State var information: LoginCampaign?
-    @State var infoIsAvailable = true
-    @State var cardNavigationDestinationID: Int?
-    //    @State var latestLoginCampaignID: Int = 0
-    @State var allLoginCampaignIDs: [Int] = []
-    @State var showSubtitle: Bool = false
     var body: some View {
-        EmptyContainer {
-            if let information {
-                ScrollView {
-                    HStack {
-                        Spacer(minLength: 0)
-                        VStack {
-//                            LoginCampaignDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
-                        }
-                        .padding()
-                        Spacer(minLength: 0)
-                    }
-                }
-                .scrollDisablesMultilingualTextPopover()
-            } else {
-                if infoIsAvailable {
-                    ExtendedConstraints {
-                        ProgressView()
-                    }
-                } else {
-                    Button(action: {
-                        Task {
-                            await getInformation(id: loginCampaignID)
-                        }
-                    }, label: {
-                        ExtendedConstraints {
-                            ContentUnavailableView("Login-campaign.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                        }
-                    })
-                    .buttonStyle(.plain)
-                }
-            }
+        DetailViewBase("Login-campaign", forType: LoginCampaign.self, previewList: allLoginCampaigns, initialID: id) { information in
+//            LoginCampaignDetailOverviewView(information: information)
         }
-        .withSystemBackground()
-        .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
-            Text("\(id)")
-        })
-        .navigationTitle(Text(information?.caption.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Login-campaign") : "")"))
-        #if os(iOS)
-        .wrapIf(showSubtitle) { content in
-            if #available(iOS 26, macOS 14.0, *) {
-                content
-                    .navigationSubtitle(information?.caption.forPreferredLocale() != nil ? "#\(loginCampaignID)" : "")
-            } else {
-                content
-            }
-        }
-        #endif
-        .onAppear {
-            Task {
-                if (allLoginCampaigns ?? []).isEmpty {
-                    allLoginCampaignIDs = await (Event.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
-                } else {
-                    allLoginCampaignIDs = allLoginCampaigns!.map {$0.id}
-                    //                print(allEventIDs)
-                }
-            }
-        }
-        .onChange(of: loginCampaignID, {
-            Task {
-                await getInformation(id: loginCampaignID)
-            }
-        })
-        .task {
-            loginCampaignID = id
-            await getInformation(id: loginCampaignID)
-        }
-        .toolbar {
-            ToolbarItemGroup(content: {
-                DetailsIDSwitcher(currentID: $loginCampaignID, allIDs: allLoginCampaignIDs, destination: { LoginCampaignSearchView() })
-                    .onChange(of: loginCampaignID) {
-                        information = nil
-                    }
-                    .onAppear {
-                        showSubtitle = (sizeClass == .compact)
-                    }
-            })
-        }
-    }
-    
-    func getInformation(id: Int) async {
-        infoIsAvailable = true
-        informationLoadPromise?.cancel()
-        informationLoadPromise = DoriCache.withCache(id: "LoginCampaignDetail_\(id)", trait: .realTime) {
-            await LoginCampaign(id: id)
-        } .onUpdate {
-            if let information = $0 {
-                self.information = information
-            } else {
-                infoIsAvailable = false
-            }
-        }
+        .contentUnavailablePrompt("Login-campaign.unavailable")
     }
 }
 
@@ -140,7 +44,6 @@ struct LoginCampaignDetailView: View {
 //    @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
 //    @State var cardsFixedWidth: CGFloat = 0 //Fixed
 //    @State var cardsUseCompactLayout = true
-//    @Binding var cardNavigationDestinationID: Int?
 //    var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
 //    var body: some View {
 //        VStack {

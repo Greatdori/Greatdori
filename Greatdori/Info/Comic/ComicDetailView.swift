@@ -19,115 +19,21 @@ import SDWebImageSwiftUI
 
 // MARK: ComicDetailView
 struct ComicDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     var id: Int
     var allComics: [Comic]? = nil
-    @State var comicID: Int = 0
-    @State var informationLoadPromise: CachePromise<Comic?>?
-    @State var information: Comic?
-    @State var infoIsAvailable = true
-    @State var cardNavigationDestinationID: Int?
-    @State var allComicIDs: [Int] = []
-    @State var showSubtitle: Bool = false
     var body: some View {
-        EmptyContainer {
-            if let information {
-                ScrollView {
-                    HStack {
-                        Spacer(minLength: 0)
-                        VStack {
-                            // FIXME: Implement `ComicDetailOverviewView` first
-                            //                            ComicDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
-                            
-                            //                            if !information.cards.isEmpty {
-                            //                                Rectangle()
-                            //                                    .opacity(0)
-                            //                                    .frame(height: 30)
-                            //                                DetailsCardsSection(cards: information.cards)
-                            //                            }
-                        }
-                        .padding()
-                        Spacer(minLength: 0)
-                    }
-                }
-                .scrollDisablesMultilingualTextPopover()
-            } else {
-                if infoIsAvailable {
-                    ExtendedConstraints {
-                        ProgressView()
-                    }
-                } else {
-                    Button(action: {
-                        Task {
-                            await getInformation(id: comicID)
-                        }
-                    }, label: {
-                        ExtendedConstraints {
-                            ContentUnavailableView("Comic.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                        }
-                    })
-                    .buttonStyle(.plain)
-                }
-            }
+        DetailViewBase("Comic", forType: Comic.self, previewList: allComics, initialID: id) { information in
+            // FIXME: Implement `ComicDetailOverviewView` first
+            //                            ComicDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
+            
+            //                            if !information.cards.isEmpty {
+            //                                Rectangle()
+            //                                    .opacity(0)
+            //                                    .frame(height: 30)
+            //                                DetailsCardsSection(cards: information.cards)
+            //                            }
         }
-        .withSystemBackground()
-        .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
-            Text("\(id)")
-        })
-        .navigationTitle(Text(information?.title.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Comic") : "")"))
-#if os(iOS)
-        .wrapIf(showSubtitle) { content in
-            if #available(iOS 26, macOS 14.0, *) {
-                content
-                    .navigationSubtitle(information?.subTitle.forPreferredLocale() != nil ? "#\(comicID)" : "")
-            } else {
-                content
-            }
-        }
-#endif
-        .onAppear {
-            Task {
-                if (allComics ?? []).isEmpty {
-                    allComicIDs = await (Event.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
-                } else {
-                    allComicIDs = allComics!.map {$0.id}
-                }
-            }
-        }
-        .onChange(of: comicID, {
-            Task {
-                await getInformation(id: comicID)
-            }
-        })
-        .task {
-            comicID = id
-            await getInformation(id: comicID)
-        }
-        .toolbar {
-            ToolbarItemGroup(content: {
-                DetailsIDSwitcher(currentID: $comicID, allIDs: allComicIDs, destination: { ComicSearchView() })
-                    .onChange(of: comicID) {
-                        information = nil
-                    }
-                    .onAppear {
-                        showSubtitle = (sizeClass == .compact)
-                    }
-            })
-        }
-    }
-    
-    func getInformation(id: Int) async {
-        infoIsAvailable = true
-        informationLoadPromise?.cancel()
-        informationLoadPromise = DoriCache.withCache(id: "ComicDetail_\(id)", trait: .realTime) {
-            await Comic(id: id)
-        } .onUpdate {
-            if let information = $0 {
-                self.information = information
-            } else {
-                infoIsAvailable = false
-            }
-        }
+        .contentUnavailablePrompt("Comic.unavailable")
     }
 }
 

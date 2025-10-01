@@ -18,110 +18,18 @@ import SDWebImageSwiftUI
 
 // MARK: CostumeDetailView
 struct CostumeDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     var id: Int
     var allCostumes: [PreviewCostume]? = nil
-    @State var costumeID: Int = 0
-    @State var informationLoadPromise: CachePromise<ExtendedCostume?>?
-    @State var information: ExtendedCostume?
-    @State var infoIsAvailable = true
-    @State var allCostumeIDs: [Int] = []
-    @State var showSubtitle: Bool = false
     var body: some View {
-        EmptyContainer {
-            if let information {
-                ScrollView {
-                    HStack {
-                        Spacer(minLength: 0)
-                        VStack {
-                            CostumeDetailOverviewView(information: information)
-                            
-                            if !information.cards.isEmpty {
-                                Rectangle()
-                                    .opacity(0)
-                                    .frame(height: 30)
-                                DetailsCardsSection(cards: information.cards)
-                            }
-                        }
-                        .padding()
-                        Spacer(minLength: 0)
-                    }
-                }
-                .scrollDisablesMultilingualTextPopover()
-            } else {
-                if infoIsAvailable {
-                    ExtendedConstraints {
-                        ProgressView()
-                    }
-                } else {
-                    Button(action: {
-                        Task {
-                            await getInformation(id: costumeID)
-                        }
-                    }, label: {
-                        ExtendedConstraints {
-                            ContentUnavailableView("Costume.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                        }
-                    })
-                    .buttonStyle(.plain)
-                }
+        DetailViewBase("Costume", previewList: allCostumes, initialID: id) { information in
+            CostumeDetailOverviewView(information: information)
+            
+            if !information.cards.isEmpty {
+                DetailSectionsSpacer()
+                DetailsCardsSection(cards: information.cards)
             }
         }
-        .withSystemBackground()
-        .navigationTitle(Text(information?.costume.description.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Costume") : "")"))
-        #if os(iOS)
-        .wrapIf(showSubtitle) { content in
-            if #available(iOS 26, macOS 14.0, *) {
-                content
-                    .navigationSubtitle(information?.costume.description.forPreferredLocale() != nil ? "#\(costumeID)" : "")
-            } else {
-                content
-            }
-        }
-        #endif
-        .onAppear {
-            Task {
-                if (allCostumes ?? []).isEmpty {
-                    allCostumeIDs = await (Event.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
-                } else {
-                    allCostumeIDs = allCostumes!.map {$0.id}
-                }
-            }
-        }
-        .onChange(of: costumeID, {
-            Task {
-                await getInformation(id: costumeID)
-            }
-        })
-        .task {
-            costumeID = id
-            await getInformation(id: costumeID)
-        }
-        .toolbar {
-            ToolbarItemGroup(content: {
-                DetailsIDSwitcher(currentID: $costumeID, allIDs: allCostumeIDs, destination: { CostumeSearchView() })
-                    .onChange(of: costumeID) {
-                        information = nil
-                    }
-                    .onAppear {
-                        showSubtitle = (sizeClass == .compact)
-                    }
-            })
-        }
-    }
-    
-    func getInformation(id: Int) async {
-        infoIsAvailable = true
-        informationLoadPromise?.cancel()
-        informationLoadPromise = DoriCache.withCache(id: "CostumeDetail_\(id)", trait: .realTime) {
-            await ExtendedCostume(id: id)
-        } .onUpdate {
-            if let information = $0 {
-                self.information = information
-            } else {
-                infoIsAvailable = false
-            }
-        }
+        .contentUnavailablePrompt("Costume.unavailable")
     }
 }
 

@@ -190,6 +190,7 @@ public protocol GettableByID {
 // Decls are in DoriKit/API/[Name].swift
 extension Card: GettableByID {}
 extension Character: GettableByID {}
+extension Comic: GettableByID {}
 extension Costume: GettableByID {}
 extension Event: GettableByID {}
 extension Gacha: GettableByID {}

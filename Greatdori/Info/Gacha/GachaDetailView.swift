@@ -19,110 +19,13 @@ import SDWebImageSwiftUI
 
 // MARK: GachaDetailView
 struct GachaDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     var id: Int
     var allGachas: [PreviewGacha]? = nil
-    @State var gachaID: Int = 0
-    @State var informationLoadPromise: DoriCache.Promise<DoriFrontend.Gacha.ExtendedGacha?>?
-    @State var information: DoriFrontend.Gacha.ExtendedGacha?
-    @State var infoIsAvailable = true
-    @State var cardNavigationDestinationID: Int?
-    //    @State var latestGachaID: Int = 0
-    @State var allGachaIDs: [Int] = []
-    @State var showSubtitle: Bool = false
     var body: some View {
-        EmptyContainer {
-            if let information {
-                ScrollView {
-                    HStack {
-                        Spacer(minLength: 0)
-                        VStack {
-                            GachaDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
-                        }
-                        .padding()
-                        Spacer(minLength: 0)
-                    }
-                }
-                .scrollDisablesMultilingualTextPopover()
-            } else {
-                if infoIsAvailable {
-                    ExtendedConstraints {
-                        ProgressView()
-                    }
-                } else {
-                    Button(action: {
-                        Task {
-                            await getInformation(id: gachaID)
-                        }
-                    }, label: {
-                        ExtendedConstraints {
-                            ContentUnavailableView("Gacha.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                        }
-                    })
-                    .buttonStyle(.plain)
-                }
-            }
+        DetailViewBase("Gacha", previewList: allGachas, initialID: id) { information in
+            GachaDetailOverviewView(information: information)
         }
-        .withSystemBackground()
-        .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
-            Text("\(id)")
-        })
-        .navigationTitle(Text(information?.gacha.gachaName.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Gacha") : "")"))
-#if os(iOS)
-        .wrapIf(showSubtitle) { content in
-            if #available(iOS 26, macOS 14.0, *) {
-                content
-                    .navigationSubtitle(information?.gacha.gachaName.forPreferredLocale() != nil ? "#\(gachaID)" : "")
-            } else {
-                content
-            }
-        }
-#endif
-        .onAppear {
-            Task {
-                if (allGachas ?? []).isEmpty {
-                    allGachaIDs = await (Event.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
-                } else {
-                    allGachaIDs = allGachas!.map {$0.id}
-                    //                print(allEventIDs)
-                }
-            }
-        }
-        .onChange(of: gachaID, {
-            Task {
-                await getInformation(id: gachaID)
-            }
-        })
-        .task {
-            gachaID = id
-            await getInformation(id: gachaID)
-        }
-        .toolbar {
-            ToolbarItemGroup(content: {
-                DetailsIDSwitcher(currentID: $gachaID, allIDs: allGachaIDs, destination: { GachaSearchView() })
-                    .onChange(of: gachaID) {
-                        information = nil
-                    }
-                    .onAppear {
-                        showSubtitle = (sizeClass == .compact)
-                    }
-            })
-        }
-    }
-    
-    func getInformation(id: Int) async {
-        infoIsAvailable = true
-        informationLoadPromise?.cancel()
-        informationLoadPromise = DoriCache.withCache(id: "GachaDetail_\(id)", trait: .realTime) {
-            await DoriFrontend.Gacha.extendedInformation(of: id)
-        } .onUpdate {
-            if let information = $0 {
-                self.information = information
-                //                latestGachaID = information.
-            } else {
-                infoIsAvailable = false
-            }
-        }
+        .contentUnavailablePrompt("Gacha.unavailable")
     }
 }
 
@@ -141,7 +44,6 @@ struct GachaDetailOverviewView: View {
     @State var cardsContentRegularWidth: CGFloat = 0 // Fixed
     @State var cardsFixedWidth: CGFloat = 0 //Fixed
     @State var cardsUseCompactLayout = true
-    @Binding var cardNavigationDestinationID: Int?
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     var body: some View {
         VStack {
@@ -244,7 +146,7 @@ struct GachaDetailOverviewView: View {
                         //                                    //TODO: [NAVI785]CardD
                         //                                    Text("\(value)")
                         //                                }, label: {
-                        //                                    CardPreviewImage(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true, cardNavigationDestinationID: $cardNavigationDestinationID)
+                        //                                    CardPreviewImage(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true)
                         //                                })
                         //                                .buttonStyle(.plain)
                         //                            }, caption: nil, contentArray: cardsArray, columnNumbers: 3, elementWidth: cardThumbnailSideLength)

@@ -20,126 +20,29 @@ import SDWebImageSwiftUI
 
 // MARK: CardDetailView
 struct CardDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
     var id: Int
     var allCards: [CardWithBand]? = nil
-    @State var cardID: Int = 0
-    @State var informationLoadPromise: CachePromise<ExtendedCard?>?
-    @State var information: ExtendedCard?
-    @State var infoIsAvailable = true
-    @State var cardNavigationDestinationID: Int?
-    @State var allCardIDs: [Int] = []
-    @State var showSubtitle: Bool = false
-    
     var body: some View {
-        EmptyContainer {
-            if let information {
-                ScrollView {
-                    HStack {
-                        Spacer(minLength: 0)
-                        VStack {
-                            CardDetailOverviewView(information: information, cardNavigationDestinationID: $cardNavigationDestinationID)
-                            
-                            DetailSectionsSpacer()
-                            CardDetailStatsView(card: information.card)
-                            
-                            DetailSectionsSpacer()
-                            DetailsCostumesSection(costumes: [information.costume])
-                            
-                            if !information.event.isEmpty || information.cardSource.containsSource(from: .event) {
-                                DetailSectionsSpacer()
-                                DetailsEventsSection(event: information.event, sources: information.cardSource)
-                            }
-                            
-                            if information.cardSource.containsSource(from: .gacha) {
-                                DetailSectionsSpacer()
-                                DetailsGachasSection(sources: information.cardSource)
-                            }
-                        }
-                        .padding()
-                        Spacer(minLength: 0)
-                    }
-                }
-                .scrollDisablesMultilingualTextPopover()
-            } else {
-                if infoIsAvailable {
-                    ExtendedConstraints {
-                        ProgressView()
-                    }
-                } else {
-                    Button(action: {
-                        Task {
-                            await getInformation(id: cardID)
-                        }
-                    }, label: {
-                        ExtendedConstraints {
-                            ContentUnavailableView("Card.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                        }
-                    })
-                    .buttonStyle(.plain)
-                }
+        DetailViewBase("Card", forType: ExtendedCard.self, previewList: allCards, initialID: id) { information in
+            CardDetailOverviewView(information: information)
+            
+            DetailSectionsSpacer()
+            CardDetailStatsView(card: information.card)
+            
+            DetailSectionsSpacer()
+            DetailsCostumesSection(costumes: [information.costume])
+            
+            if !information.event.isEmpty || information.cardSource.containsSource(from: .event) {
+                DetailSectionsSpacer()
+                DetailsEventsSection(event: information.event, sources: information.cardSource)
+            }
+            
+            if information.cardSource.containsSource(from: .gacha) {
+                DetailSectionsSpacer()
+                DetailsGachasSection(sources: information.cardSource)
             }
         }
-        .withSystemBackground()
-        .navigationDestination(item: $cardNavigationDestinationID, destination: { id in
-            Text("\(id)")
-        })
-        .navigationTitle(Text(information?.card.prefix.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Card") : "")"))
-#if os(iOS)
-        .wrapIf(showSubtitle) { content in
-            if #available(iOS 26, macOS 14.0, *) {
-                content
-                    .navigationSubtitle(information?.card.prefix.forPreferredLocale() != nil ? "#\(cardID)" : "")
-            } else {
-                content
-            }
-        }
-#endif
-        .onAppear {
-            Task {
-                if (allCards ?? []).isEmpty {
-                    allCardIDs = await (Event.all() ?? []).sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending)).map {$0.id}
-                } else {
-                    allCardIDs = allCards!.map {$0.id}
-                }
-            }
-        }
-        .onChange(of: cardID, {
-            Task {
-                await getInformation(id: cardID)
-            }
-        })
-        .task {
-            cardID = id
-            await getInformation(id: cardID)
-        }
-        .toolbar {
-            ToolbarItemGroup(content: {
-                DetailsIDSwitcher(currentID: $cardID, allIDs: allCardIDs, destination: { CardSearchView() })
-                    .onChange(of: cardID) {
-                        information = nil
-                    }
-                    .onAppear {
-                        showSubtitle = (sizeClass == .compact)
-                    }
-            })
-        }
-    }
-    
-    func getInformation(id: Int) async {
-        infoIsAvailable = true
-        informationLoadPromise?.cancel()
-        informationLoadPromise = DoriCache.withCache(id: "CardDetail_\(id)", trait: .realTime) {
-            await ExtendedCard(id: id)
-        } .onUpdate {
-            if let information = $0 {
-                self.information = information
-                
-                
-            } else {
-                infoIsAvailable = false
-            }
-        }
+        .contentUnavailablePrompt("Card.unavailable")
     }
 }
 
@@ -148,7 +51,6 @@ struct CardDetailView: View {
 struct CardDetailOverviewView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     let information: ExtendedCard
-    @Binding var cardNavigationDestinationID: Int?
     @State private var allSkills: [Skill] = []
     var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
     
