@@ -18,6 +18,32 @@ import SDWebImageSwiftUI
 
 // MARK: ComicSearchView
 struct ComicSearchView: View {
+    @State var theComic: Comic? = nil
+    
+    let gridLayoutItemWidth: CGFloat = 260*0.9
+    var body: some View {
+        Group {
+            if let theComic {
+                ComicInfo(theComic)
+            } else {
+                Text(verbatim: "WIP")
+            }
+        }
+            .onAppear {
+                Task {
+//                    DoriCache.withCache(id: "111111", invocation: {
+                        theComic = await Comic(id: 1)
+//                    }) .onUpdate({ sth in
+//                        theComic = sth
+//                    })
+                }
+            }
+    }
+}
+
+/*
+// MARK: ComicSearchView
+struct ComicSearchView: View {
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.horizontalSizeClass) var sizeClass
     @Environment(\.colorScheme) var colorScheme
@@ -27,7 +53,7 @@ struct ComicSearchView: View {
     @State var searchedComics: [DoriFrontend.Comic.Comic]?
     @State var infoIsAvailable = true
     @State var searchedText = ""
-    @State var layout = Axis.horizontal
+    @State var layout = SummaryLayout.horizontal
     @State var showFilterSheet = false
     @State var presentingComicID: Int?
     @Namespace var comicLists
@@ -50,7 +76,8 @@ struct ComicSearchView: View {
                                                         showFilterSheet = false
                                                         presentingComicID = comic.id
                                                     }, label: {
-                                                        ComicInfo(comic, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
+                                                        ComicInfo(comic, layout: layout)
+                                                            .highlightKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -71,7 +98,8 @@ struct ComicSearchView: View {
                                                         showFilterSheet = false
                                                         presentingComicID = comic.id
                                                     }, label: {
-                                                        ComicInfo(comic, preferHeavierFonts: true, inLocale: nil, layout: layout, searchedKeyword: $searchedText)
+                                                        ComicInfo(comic, layout: layout)
+                                                            .highlightKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -141,7 +169,7 @@ struct ComicSearchView: View {
             })
             .toolbar {
                 ToolbarItem {
-                    LayoutPicker(selection: $layout, options: [("Filter.view.list", "list.bullet", Axis.horizontal), ("Filter.view.grid", "square.grid.2x2", Axis.vertical)])
+                    LayoutPicker(selection: $layout, options: [("Filter.view.list", "list.bullet", SummaryLayout.horizontal), ("Filter.view.grid", "square.grid.2x2", SummaryLayout.vertical)])
                 }
                 if #available(iOS 26.0, macOS 26.0, *) {
                     ToolbarSpacer()
@@ -197,3 +225,5 @@ struct ComicSearchView: View {
         }
     }
 }
+
+*/

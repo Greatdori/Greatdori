@@ -20,6 +20,43 @@ import SwiftUI
 
 // MARK: ComicInfo
 struct ComicInfo: View {
+    @State var information: Comic
+//    var subtitle: LocalizedStringKey? = nil
+    var layout: SummaryLayout
+    
+    init(_ comic: DoriAPI.Comic.Comic, /*subtitle: LocalizedStringKey? = nil, */layout: SummaryLayout = .horizontal) {
+        self.information = comic
+//        self.subtitle = subtitle
+        self.layout = layout
+    }
+    
+    var body: some View {
+        SummaryViewBase(layout, source: information) {
+            WebImage(url: information.thumbImageURL) { image in
+                image
+                    .resizable()
+                    .antialiased(true)
+                    .aspectRatio(184/134, contentMode: .fit)
+                    .frame(width: 184, height: 134)
+                    .cornerRadius(5)
+            } placeholder: {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(getPlaceholderColor())
+                    .frame(width: 184, height: 134)
+            }
+            .interpolation(.high)
+        } detail: {
+            if let type = information.type {
+                Text(type.localizedString)
+                    .font(isMACOS ? .body : .caption)
+            }
+        }
+    }
+}
+
+/*
+// MARK: ComicInfo
+struct ComicInfo: View {
     @Binding var searchedKeyword: String
     @State var attributedTitle: AttributedString = AttributedString("")
     
@@ -107,3 +144,5 @@ struct ComicInfo: View {
         }
     }
 }
+
+*/

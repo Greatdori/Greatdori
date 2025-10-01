@@ -52,7 +52,7 @@ struct SongInfo: View {
             .interpolation(.high)
         } detail: {
             Text(DoriCache.preCache.bands.first { $0.id == information.bandID }?.bandName.forPreferredLocale() ?? "nil")
-                .font(!isMACOS ? .caption : .body)
+                .font(isMACOS ? .body : .caption)
             if let subtitle {
                 Text(subtitle)
                     .font(.caption)
