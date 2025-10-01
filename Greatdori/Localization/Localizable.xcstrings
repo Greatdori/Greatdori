@@ -2907,7 +2907,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Display the date if the Birthday Time Zone and the system time zone disagree."
+            "value" : "Display the date if Birthday Time Zone and system time zone will show different birthdays."
           }
         },
         "zh-Hans" : {
