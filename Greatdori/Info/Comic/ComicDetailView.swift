@@ -33,7 +33,6 @@ struct ComicDetailView: View {
             //                                DetailsCardsSection(cards: information.cards)
             //                            }
         }
-        .contentUnavailablePrompt("Comic.unavailable")
     }
 }
 

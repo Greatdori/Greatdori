@@ -35,15 +35,16 @@ struct SongDetailView: View {
                 }
             }
         }
-        .contentUnavailablePrompt("Song.unavailable")
     }
 }
 
 // MARK: SongDetailOverviewView
 struct SongDetailOverviewView: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
     let information: Song
     
-    let coverSideLength: CGFloat = 270
+    let coverSideLengthRegular: CGFloat = 270
+    let coverSideLengthCompact: CGFloat = 180
     var body: some View {
         VStack {
             Group {
@@ -62,7 +63,7 @@ struct SongDetailOverviewView: View {
                             .fill(getPlaceholderColor())
                     }
                     .interpolation(.high)
-                    .frame(width: coverSideLength, height: coverSideLength)
+                    .frame(width: sizeClass == .regular ? coverSideLengthRegular : coverSideLengthCompact, height: sizeClass == .regular ? coverSideLengthRegular : coverSideLengthCompact)
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)

@@ -23,7 +23,7 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
     var initialID: Int
     var updateInformation: @Sendable (Int) async -> Information?
     var makeContent: (Information) -> Content
-    var unavailablePrompt: LocalizedStringResource?
+    var unavailablePrompt: LocalizedStringResource
     
     init(
         _ titleKey: LocalizedStringResource,
@@ -58,6 +58,7 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
         self.initialID = initialID
         self.updateInformation = updateInformation
         self.makeContent = content
+        self.unavailablePrompt = "Content.unavailable.\(String(localized: titleKey))"
     }
     
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -94,11 +95,7 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
                         }
                     }, label: {
                         ExtendedConstraints {
-                            if let unavailablePrompt {
-                                ContentUnavailableView(unavailablePrompt, systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                            } else {
-                                ContentUnavailableView("Content.unavailable", systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
-                            }
+                            ContentUnavailableView(unavailablePrompt, systemImage: "photo.badge.exclamationmark", description: Text("Search.unavailable.description"))
                         }
                     })
                     .buttonStyle(.plain)
@@ -110,7 +107,7 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {
                 content
-                    .navigationSubtitle(information?.title.forPreferredLocale() ? "#\(currentID)" : "")
+                    .navigationSubtitle(information?.title.forPreferredLocale() != nil ? "#\(currentID)" : "")
             } else {
                 content
             }
@@ -158,13 +155,6 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
                 infoIsAvailable = false
             }
         }
-    }
-}
-extension DetailViewBase {
-    func contentUnavailablePrompt(_ prompt: LocalizedStringResource?) -> Self {
-        var mutable = self
-        mutable.unavailablePrompt = prompt
-        return mutable
     }
 }
 
@@ -266,6 +256,9 @@ extension EnvironmentValues {
     @Entry var searchedKeyword: Binding<String>? = nil
 }
 
+@MainActor let verticalAndHorizontalLayouts: [(LocalizedStringKey, String, SummaryLayout)] = [("Filter.view.list", "list.bullet", SummaryLayout.horizontal), ("Filter.view.grid", "square.grid.2x2", SummaryLayout.vertical(hidesDetail: false))]
+@MainActor let bannerLayouts: [(LocalizedStringKey, String, Bool)] = [("Filter.view.banner-and-details", "text.below.rectangle", true), ("Filter.view.banner-only", "rectangle.grid.1x2", false)]
+
 struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFilterable & DoriSortable & DoriSearchable, Layout, LayoutPicker: View, Container: View, Content: View, Destination: View>: View {
     var titleKey: LocalizedStringResource
     var updateList: @Sendable () async -> [Element]?
@@ -275,9 +268,9 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
     var makeDestination: (Element, [Element]) -> Destination
     @State var currentLayout: Layout
     
-    var unavailablePrompt: LocalizedStringResource?
-    var unavailableSystemImage: String = "exclamationmark.triangle.fill"
-    var searchPlaceholder: LocalizedStringResource?
+    var unavailablePrompt: LocalizedStringResource
+    var unavailableSystemImage: String = "bolt.horizontal.fill"
+    var searchPlaceholder: LocalizedStringResource
     var getResultCountDescription: ((Int) -> LocalizedStringResource)?
 
     init(
@@ -357,6 +350,8 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
         self.makeSomeContent = eachContent
         self.makeDestination = destination
         self._currentLayout = .init(initialValue: initialLayout)
+        self.unavailablePrompt = "Search.unavailable.\(String(localized: titleKey))"
+        self.searchPlaceholder = "Search.prompt.\(String(localized: titleKey))"
     }
     
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -437,7 +432,7 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
                         }
                     } else {
                         ExtendedConstraints {
-                            ContentUnavailableView(unavailablePrompt ?? "Content.unavailable", systemImage: unavailableSystemImage, description: Text("Search.unavailable.description"))
+                            ContentUnavailableView(unavailablePrompt, systemImage: unavailableSystemImage, description: Text("Search.unavailable.description"))
                                 .onTapGesture {
                                     Task {
                                         await getList()
@@ -447,11 +442,11 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
                     }
                 }
             }
-            .searchable(text: $searchedText, prompt: searchPlaceholder ?? "Content.search.placeholder")
+            .searchable(text: $searchedText, prompt: searchPlaceholder)
             .navigationTitle(titleKey)
             .wrapIf(searchedElements != nil, in: { content in
                 if #available(iOS 26.0, *) {
-                    content.navigationSubtitle((searchedText.isEmpty && !filter.isFiltered) ? (getResultCountDescription?(searchedElements!.count) ?? "Result.count.\(searchedElements!.count)") :  "Search.result.\(searchedElements!.count)")
+                    content.navigationSubtitle((searchedText.isEmpty && !filter.isFiltered) ? (getResultCountDescription?(searchedElements!.count) ?? "Search.item.\(searchedElements!.count)") :  "Search.result.\(searchedElements!.count)")
                 } else {
                     content
                 }
@@ -515,19 +510,9 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
     }
 }
 extension SearchViewBase {
-    func contentUnavailablePrompt(_ prompt: LocalizedStringResource?) -> Self {
-        var mutable = self
-        mutable.unavailablePrompt = prompt
-        return mutable
-    }
     func contentUnavailableImage(systemName: String) -> Self {
         var mutable = self
         mutable.unavailableSystemImage = systemName
-        return mutable
-    }
-    func searchPlaceholder(_ text: LocalizedStringResource?) -> Self {
-        var mutable = self
-        mutable.searchPlaceholder = text
         return mutable
     }
     func resultCountDescription(content: ((Int) -> LocalizedStringResource)?) -> Self {

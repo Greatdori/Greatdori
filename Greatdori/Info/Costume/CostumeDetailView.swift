@@ -27,7 +27,6 @@ struct CostumeDetailView: View {
                 DetailsCardsSection(cards: information.cards)
             }
         }
-        .contentUnavailablePrompt("Costume.unavailable")
     }
 }
 

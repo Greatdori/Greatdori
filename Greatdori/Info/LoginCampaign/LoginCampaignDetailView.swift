@@ -25,7 +25,6 @@ struct LoginCampaignDetailView: View {
         DetailViewBase("Login-campaign", forType: LoginCampaign.self, previewList: allLoginCampaigns, initialID: id) { information in
 //            LoginCampaignDetailOverviewView(information: information)
         }
-        .contentUnavailablePrompt("Login-campaign.unavailable")
     }
 }
 

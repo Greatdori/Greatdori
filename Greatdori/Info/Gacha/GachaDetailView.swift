@@ -25,7 +25,6 @@ struct GachaDetailView: View {
         DetailViewBase("Gacha", previewList: allGachas, initialID: id) { information in
             GachaDetailOverviewView(information: information)
         }
-        .contentUnavailablePrompt("Gacha.unavailable")
     }
 }
 

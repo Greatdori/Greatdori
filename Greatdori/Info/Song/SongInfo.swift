@@ -35,6 +35,9 @@ struct SongInfo: View {
         self.layout = layout
     }
     
+    let horizontalLayoutCoverSideLength: CGFloat = 110
+    let verticalLayoutCoverSideLength: CGFloat = 120
+    
     var body: some View {
         SummaryViewBase(layout, source: information) {
             WebImage(url: information.jacketImageURL) { image in
@@ -42,12 +45,12 @@ struct SongInfo: View {
                     .resizable()
                     .antialiased(true)
                     .aspectRatio(1, contentMode: .fit)
-                    .frame(width: 120, height: 120)
+                    .frame(width: (layout == .horizontal ? horizontalLayoutCoverSideLength : verticalLayoutCoverSideLength), height: (layout == .horizontal ? horizontalLayoutCoverSideLength : verticalLayoutCoverSideLength))
                     .cornerRadius(5)
             } placeholder: {
                 RoundedRectangle(cornerRadius: 5)
                     .fill(getPlaceholderColor())
-                    .frame(width: 120, height: 120)
+                    .frame(width: (layout == .horizontal ? horizontalLayoutCoverSideLength : verticalLayoutCoverSideLength), height: (layout == .horizontal ? horizontalLayoutCoverSideLength : verticalLayoutCoverSideLength))
             }
             .interpolation(.high)
         } detail: {
@@ -58,6 +61,7 @@ struct SongInfo: View {
                     .font(.caption)
             }
             SongDifficultiesIndicator(information.difficulty)
+                .foregroundStyle(.primary)
                 .preferHiddenInCompactLayout()
         }
     }

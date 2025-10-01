@@ -16,7 +16,65 @@ import SwiftUI
 import DoriKit
 import SDWebImageSwiftUI
 
+// MARK: EventSearchView
+struct EventSearchView: View {
+    let gridLayoutItemWidth: CGFloat = 225
+    
+    @Namespace var eventNamespace
+    var body: some View {
+        SearchViewBase("Event", forType: PreviewEvent.self, initialLayout: true, layoutOptions: bannerLayouts) { showDetails, content in
+            ViewThatFits {
+//                LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+////                    let events = .chunked(into: 2)
+//                    ForEach(events, id: \.self) { eventGroup in
+//                        HStack(spacing: showDetails ? nil : bannerSpacing) {
+//                            Spacer(minLength: 0)
+//                            ForEach(eventGroup) { event in
+//                                content
+//                                .wrapIf(true, in: { content in
+//                                    if #available(iOS 18.0, macOS 15.0, *) {
+//                                        content
+//                                            .matchedTransitionSource(id: event.id, in: eventNamespace)
+//                                    } else {
+//                                        content
+//                                    }
+//                                })
+//                                .matchedGeometryEffect(id: event.id, in: eventNamespace)
+//                                if eventGroup.count == 1 && events[0].count != 1 {
+//                                    Rectangle()
+//                                        .frame(maxWidth: 420, maxHeight: 140)
+//                                        .opacity(0)
+//                                }
+//                            }
+//                            Spacer(minLength: 0)
+//                        }
+//                    }
+//                }
+                LazyVGrid(columns: [GridItem(.fixed(bannerWidth), spacing: bannerSpacing), GridItem(.fixed(bannerWidth), spacing: 0)]) {
+                    content
+                }
+                .frame(width: bannerWidth * 2 + bannerSpacing)
+                LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+                    content
+                }
+                .frame(maxWidth: bannerWidth)
+            }
+            .padding(.horizontal)
+            .animation(.spring(duration: 0.3, bounce: 0.1, blendDuration: 0), value: showDetails)
+        } eachContent: { showDetails, element in
+            EventInfo(element, showDetails: showDetails)
+        } destination: { element, list in
+            EventDetailView(id: element.id, allEvents: list)
+        }
+        .contentUnavailableImage(systemName: "star.hexagon")
+        .resultCountDescription { count in
+            "Event.count.\(count)"
+        }
+    }
+}
 
+
+/*
 // MARK: EventSearchView
 struct EventSearchView: View {
     @Environment(\.accessibilityReduceMotion) var reduceMotion
@@ -165,7 +223,7 @@ struct EventSearchView: View {
             })
             .toolbar {
                 ToolbarItem {
-                    LayoutPicker(selection: $showDetails, options: [("Filter.view.banner-and-details", "text.below.rectangle", true), ("Filter.view.banner-only", "rectangle.grid.1x2", false)])
+                    LayoutPicker(selection: $showDetails, options: )
                 }
                 if #available(iOS 26.0, macOS 26.0, *) {
                     ToolbarSpacer()
@@ -222,3 +280,4 @@ struct EventSearchView: View {
     }
     
 }
+*/

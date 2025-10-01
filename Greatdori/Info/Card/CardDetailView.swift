@@ -34,7 +34,6 @@ struct CardDetailView: View {
                 DetailsGachasSection(sources: information.cardSource)
             }
         }
-        .contentUnavailablePrompt("Card.unavailable")
     }
 }
 

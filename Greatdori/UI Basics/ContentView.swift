@@ -51,10 +51,6 @@ struct ContentView: View {
                             //                        HomeView()
                             Text(verbatim: "community")
                         }
-//                        Tab("App.leaderboard", systemImage: "chart.bar") {
-//                            //                        HomeView()
-//                            Text(verbatim: "leaderboard")
-//                        }
                         
                         if sizeClass == .regular {
                             TabSection(content: {
@@ -94,7 +90,7 @@ struct ContentView: View {
                         }
 #if os(iOS)
                         if sizeClass == .regular {
-                            Tab("App.settings", systemImage: "gear") {
+                            Tab("App.settings", systemImage: "gear", value: .settings) {
                                 SettingsView()
                             }
                         }
@@ -120,7 +116,6 @@ struct ContentView: View {
                             List(selection: $selection) {
                                 Label("App.home", systemImage: "house").tag(AppSection.home)
                                 Label("App.community", systemImage: "at").tag(AppSection.community)
-                                Label("App.leaderboard", systemImage: "chart.bar").tag(AppSection.leaderboard)
                                 
                                 Section("App.info", content: {
                                     ForEach(0..<allInfoDestinationItems.count, id: \.self) { itemIndex in
@@ -149,10 +144,6 @@ struct ContentView: View {
                             detailView(for: .community)
                                 .tabItem { Label("App.community", systemImage: "at") }
                                 .tag(AppSection.community)
-                            
-                            detailView(for: .leaderboard)
-                                .tabItem { Label("App.leaderboard", systemImage: "chart.bar") }
-                                .tag(AppSection.leaderboard)
                             
                             detailView(for: .info(.home))
                                 .tabItem { Label("App.info", systemImage: "rectangle.stack") }
@@ -242,7 +233,7 @@ struct ContentView: View {
         switch section {
         case .home: HomeView()
         case .community: HomeView()
-        case .leaderboard: HomeView()
+//        case .leaderboard: HomeView()
         case .info(let destination):
             if destination == .home {
                 InfoView()
@@ -399,7 +390,7 @@ struct WelcomeView: View {
 
 
 enum AppSection: Hashable {
-    case home, community, leaderboard, info(InfoTab), tools(ToolTab), settings
+    case home, community, info(InfoTab), tools(ToolTab), settings
 }
 
 enum InfoTab: Hashable {

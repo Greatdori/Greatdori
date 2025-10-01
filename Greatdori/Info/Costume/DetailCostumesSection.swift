@@ -33,7 +33,7 @@ struct DetailsCostumesSection: View {
                                 CostumeDetailView(id: item.id)
                             }, label: {
                                 //                    CustomGroupBox {
-                                CostumeInfo(item, preferHeavierFonts: false/*, showDetails: true*/)
+                                CostumeInfo(item)
                                     .scaledToFill()
                                     .frame(maxWidth: 600)
                                     .scaledToFill()

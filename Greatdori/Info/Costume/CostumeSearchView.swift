@@ -18,6 +18,34 @@ import SDWebImageSwiftUI
 
 // MARK: CostumeSearchView
 struct CostumeSearchView: View {
+    let gridLayoutItemWidth: CGFloat = 200
+    var body: some View {
+        SearchViewBase("Costume", forType: PreviewCostume.self, initialLayout: SummaryLayout.horizontal, layoutOptions: verticalAndHorizontalLayouts) { layout, content in
+            if layout == .horizontal {
+                LazyVStack {
+                    content
+                }
+                .frame(maxWidth: 600)
+            } else {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: gridLayoutItemWidth, maximum: gridLayoutItemWidth))]) {
+                    content
+                }
+            }
+        } eachContent: { layout, element in
+            CostumeInfo(element, layout: layout)
+        } destination: { element, list in
+            CostumeDetailView(id: element.id, allCostumes: list)
+        }
+        .contentUnavailableImage(systemName: "swatchpalette")
+        .resultCountDescription { count in
+            "Costume.count.\(count)"
+        }
+    }
+}
+
+/*
+// MARK: CostumeSearchView
+struct CostumeSearchView: View {
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     @Environment(\.horizontalSizeClass) var sizeClass
     @Environment(\.colorScheme) var colorScheme
@@ -197,3 +225,4 @@ struct CostumeSearchView: View {
         }
     }
 }
+*/

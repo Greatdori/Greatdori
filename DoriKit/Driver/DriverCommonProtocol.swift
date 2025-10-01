@@ -217,6 +217,7 @@ extension PreviewEvent: ListGettable {}
 extension PreviewGacha: ListGettable {}
 extension PreviewLoginCampaign: ListGettable {}
 extension PreviewSong: ListGettable {}
+extension Comic: ListGettable {}
 extension CardWithBand: ListGettable {
     @inlinable
     public static func all() async -> [Self]? {

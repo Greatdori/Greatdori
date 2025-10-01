@@ -38,9 +38,7 @@ struct CardSearchView: View {
         } destination: { element, list in
             CardDetailView(id: element.id, allCards: list)
         }
-        .contentUnavailablePrompt("Card.search.unavailable")
         .contentUnavailableImage(systemName: "line.horizontal.star.fill.line.horizontal")
-        .searchPlaceholder("Card.search.placeholder")
         .resultCountDescription { count in
             "Card.count.\(count)"
         }

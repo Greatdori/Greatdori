@@ -70,7 +70,7 @@
 		8C2CCD512E3F0D850014189F /* PagedContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2CCD502E3F0D820014189F /* PagedContent.swift */; };
 		8C2CCD532E3F43E90014189F /* CommunityPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2CCD522E3F43E00014189F /* CommunityPostsView.swift */; };
 		8C2EE3AC2E704A3400EDDD0D /* libgit2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2EE3AA2E70498800EDDD0D /* libgit2.a */; };
-		8C320FAF2E8BF2AB002D183A /* InfoBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C320FAE2E8BF2A5002D183A /* InfoBase.swift */; };
+		8C320FAF2E8BF2AB002D183A /* InfoBases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C320FAE2E8BF2A5002D183A /* InfoBases.swift */; };
 		8C320FB12E8C1239002D183A /* DriverCommonProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C320FB02E8C1230002D183A /* DriverCommonProtocol.swift */; };
 		8C3264042E3B760100081F4F /* PreCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264032E3B75FF00081F4F /* PreCache.swift */; };
 		8C3264062E3C69C900081F4F /* FrontendGacha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264052E3C69C000081F4F /* FrontendGacha.swift */; };
@@ -674,7 +674,7 @@
 		8C2CCD502E3F0D820014189F /* PagedContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagedContent.swift; sourceTree = "<group>"; };
 		8C2CCD522E3F43E00014189F /* CommunityPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityPostsView.swift; sourceTree = "<group>"; };
 		8C2EE3AA2E70498800EDDD0D /* libgit2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgit2.a; path = "../../../Library/Developer/Xcode/DerivedData/Greatdori-aghqtexjlhuxqfcowlzrriajcttj/Build/Products/Debug/libgit2.a"; sourceTree = "<group>"; };
-		8C320FAE2E8BF2A5002D183A /* InfoBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBase.swift; sourceTree = "<group>"; };
+		8C320FAE2E8BF2A5002D183A /* InfoBases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBases.swift; sourceTree = "<group>"; };
 		8C320FB02E8C1230002D183A /* DriverCommonProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverCommonProtocol.swift; sourceTree = "<group>"; };
 		8C3264032E3B75FF00081F4F /* PreCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreCache.swift; sourceTree = "<group>"; };
 		8C3264052E3C69C000081F4F /* FrontendGacha.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendGacha.swift; sourceTree = "<group>"; };
@@ -1734,10 +1734,9 @@
 			children = (
 				E90769CF2E546D5B00C9871C /* ContentView.swift */,
 				E90769D02E546D5B00C9871C /* CornerstoneView.swift */,
-				E94218F32E8AA35B00F24974 /* Character */,
 				E98B8B522E7E922700B4C8A8 /* NavigationComponentsView.swift */,
 				E942C37F2E8B63E900F24974 /* FallbackableWebImage.swift */,
-				8C320FAE2E8BF2A5002D183A /* InfoBase.swift */,
+				8C320FAE2E8BF2A5002D183A /* InfoBases.swift */,
 			);
 			path = "UI Basics";
 			sourceTree = "<group>";
@@ -1846,6 +1845,7 @@
 		E98BE10F2E7E8C5E00B4C8A8 /* Info */ = {
 			isa = PBXGroup;
 			children = (
+				E94218F32E8AA35B00F24974 /* Character */,
 				E94218FB2E8AA3DD00F24974 /* Card */,
 				E942191C2E8AA5B500F24974 /* Costume */,
 				E942192D2E8AA71B00F24974 /* Event */,
@@ -2690,7 +2690,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C320FAF2E8BF2AB002D183A /* InfoBase.swift in Sources */,
+				8C320FAF2E8BF2AB002D183A /* InfoBases.swift in Sources */,
 				E94219262E8AA6AD00F24974 /* EventInfo.swift in Sources */,
 				E94219132E8AA53D00F24974 /* ComicInfo.swift in Sources */,
 				E94219392E8AA7B300F24974 /* GachaDetailView.swift in Sources */,

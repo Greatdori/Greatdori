@@ -49,7 +49,6 @@ struct EventDetailView: View {
                 }
             }
         }
-        .contentUnavailablePrompt("Event.unavailable")
     }
 }
 

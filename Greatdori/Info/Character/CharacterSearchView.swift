@@ -170,7 +170,7 @@ struct CharacterSearchView: View {
         }
         //        .withSystemBackground()
         .navigationTitle("Character")
-        .wrapIf(isMACOS, in: { content in
+        .wrapIf(isMACOS && bandArray.count > 0, in: { content in
             if #available(iOS 26.0, macOS 26.0, *) {
                 content
                     .navigationSubtitle("Character.band.count.\(bandArray.count-1)")
