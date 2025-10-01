@@ -2924,7 +2924,7 @@
       }
     },
     "Greatdori!" : {
-      "shouldTranslate" : false
+
     },
     "Home.birthday" : {
       "localizations" : {
@@ -6099,6 +6099,15 @@
           }
         }
       }
+    },
+    "Tools.event-tracker.latest-events" : {
+
+    },
+    "Tools.event-tracker.locale" : {
+
+    },
+    "Tools.event-trackter" : {
+
     },
     "Typography.bold-dot-seperater" : {
       "localizations" : {

@@ -89,6 +89,16 @@ import SwiftUI
     ),
 ]
 
+@MainActor let allToolsDestinationItems: [ToolDestinationItem] = [
+    ToolDestinationItem(
+        title: "App.tools.event-tracker",
+        symbol: "chart.line.uptrend.xyaxis",
+        tabValue: .eventTracker,
+        destination: {EventTrackerView()}
+    ),
+]
+
+
 struct InfoDestinationItem {
     let title: LocalizedStringKey
     let shortenedTitle: LocalizedStringKey?
@@ -165,17 +175,6 @@ struct InfoView: View {
         }
     }
 }
-
-
-@MainActor let allToolsDestinationItems: [ToolDestinationItem] = [
-    ToolDestinationItem(
-        title: "App.tools.event-tracker",
-        symbol: "person.2",
-        tabValue: .eventTracker,
-        destination: {CharacterSearchView()}
-    ),
-]
-
 
 
 struct ToolDestinationItem {

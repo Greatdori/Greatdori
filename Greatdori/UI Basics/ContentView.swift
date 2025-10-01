@@ -43,11 +43,11 @@ struct ContentView: View {
             Group {
                 if #available(macOS 15.0, iOS 18.0, *) {
                     // MARK: Currently Used Version
-                    TabView {
-                        Tab("App.home", systemImage: "house") {
+                    TabView(selection: $selection) {
+                        Tab("App.home", systemImage: "house", value: .home) {
                             HomeView()
                         }
-                        Tab("App.community", systemImage: "at") {
+                        Tab("App.community", systemImage: "at", value: .community) {
                             //                        HomeView()
                             Text(verbatim: "community")
                         }
@@ -59,7 +59,7 @@ struct ContentView: View {
                         if sizeClass == .regular {
                             TabSection(content: {
                                 ForEach(0..<allInfoDestinationItems.count, id: \.self) { itemIndex in
-                                    Tab(allInfoDestinationItems[itemIndex].title, systemImage: allInfoDestinationItems[itemIndex].symbol) {
+                                    Tab(allInfoDestinationItems[itemIndex].title, systemImage: allInfoDestinationItems[itemIndex].symbol, value: AppSection.info(allInfoDestinationItems[itemIndex].tabValue)) {
                                         NavigationStack {
                                             allInfoDestinationItems[itemIndex].destination()
                                         }
@@ -69,7 +69,7 @@ struct ContentView: View {
                                 Text("App.info")
                             })
                         } else {
-                            Tab("App.info", systemImage: "rectangle.stack") {
+                            Tab("App.info", systemImage: "rectangle.stack", value: .info(.home)) {
                                 InfoView()
                             }
                         }
@@ -77,7 +77,7 @@ struct ContentView: View {
                         if sizeClass == .regular {
                             TabSection(content: {
                                 ForEach(0..<allToolsDestinationItems.count, id: \.self) { itemIndex in
-                                    Tab(allToolsDestinationItems[itemIndex].title, systemImage: allToolsDestinationItems[itemIndex].symbol) {
+                                    Tab(allToolsDestinationItems[itemIndex].title, systemImage: allToolsDestinationItems[itemIndex].symbol, value: AppSection.tools(allToolsDestinationItems[itemIndex].tabValue)) {
                                         NavigationStack {
                                             allToolsDestinationItems[itemIndex].destination()
                                         }
@@ -86,8 +86,9 @@ struct ContentView: View {
                             }, header: {
                                 Text("App.tools")
                             })
+                            
                         } else {
-                            Tab("App.tools", systemImage: "slider.horizontal.3") {
+                            Tab("App.tools", systemImage: "slider.horizontal.3", value: .tools(.home)) {
                                 ToolsView()
                             }
                         }
