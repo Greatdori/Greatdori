@@ -60,9 +60,11 @@ struct CardInfo: View {
                     .allowsHitTesting(false)
             }
         } detail: {
-            Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text(previewCard.type.localizedString)
-                .foregroundStyle(.secondary)
-                .font(isMACOS ? .body : .caption)
+            Group {
+                Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text(previewCard.type.localizedString)
+            }
+            .foregroundStyle(.secondary)
+            .font(isMACOS ? .body : .caption)
         }
         .onAppear {
             if cardCharacterName == nil { // First appear
