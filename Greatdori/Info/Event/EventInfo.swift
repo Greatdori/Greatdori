@@ -19,10 +19,8 @@ import SwiftUI
 
 // MARK: EventInfo
 struct EventInfo: View {
-    @State var attributedType: AttributedString? = AttributedString("")
     var subtitle: LocalizedStringKey? = nil
     var showDetails: Bool
-    @Environment(\.searchedKeyword) private var searchedKeyword: Binding<String>?
     @State var information: PreviewEvent
     
     init(_ event: DoriAPI.Event.PreviewEvent, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false) {
@@ -54,21 +52,8 @@ struct EventInfo: View {
             .cornerRadius(10)
         } detail: {
             Group {
-                if let attributedType {
-                    Text(attributedType) + Text(verbatim: " • ").bold() + Text("#\(String(information.id))").fontDesign(.monospaced)
-                } else {
-                    Text(verbatim: "Lorem Ipsum Dolor")
-                        .redacted(reason: .placeholder)
-                }
-            }
-            .onAppear {
-                attributedType = highlightOccurrences(of: searchedKeyword?.wrappedValue ?? "", in: information.eventType.localizedString)
-            }
-            .onChange(of: information) {
-                attributedType = highlightOccurrences(of: searchedKeyword?.wrappedValue ?? "", in: information.eventType.localizedString)
-            }
-            .onChange(of: searchedKeyword?.wrappedValue) {
-                attributedType = highlightOccurrences(of: searchedKeyword?.wrappedValue ?? "", in: information.eventType.localizedString)
+                HighlightableText(verbatim: "\(information.eventType.localizedString) • #\(String(information.id))")
+                    .fontDesign(.monospaced)
             }
             
             if let subtitle {

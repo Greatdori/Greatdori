@@ -197,9 +197,6 @@ struct SummaryViewBase<Image: View, Detail: View>: View {
         self.makeDetailView = detail
     }
     
-    @Environment(\.searchedKeyword) private var searchedKeyword: Binding<String>?
-    @State private var attributedTitle: AttributedString = ""
-    
     var body: some View {
         CustomGroupBox(showGroupBox: layout != .vertical(hidesDetail: true)) {
             CustomStack(axis: layout.axis) {
@@ -213,7 +210,7 @@ struct SummaryViewBase<Image: View, Detail: View>: View {
                     }
                     
                     VStack(alignment: layout == .horizontal ? .leading : .center) {
-                        Text(attributedTitle)
+                        HighlightableText(title.forPreferredLocale() ?? "")
                             .bold()
                             .font(!isMACOS ? .body : .title3)
                             .layoutPriority(1)
@@ -232,20 +229,6 @@ struct SummaryViewBase<Image: View, Detail: View>: View {
                     content
                     Spacer()
                 }
-            }
-        }
-        .onAppear {
-            if let searchedKeyword {
-                attributedTitle = highlightOccurrences(of: searchedKeyword.wrappedValue, in: title.forPreferredLocale())!
-            } else {
-                attributedTitle = highlightOccurrences(of: "", in: title.forPreferredLocale())!
-            }
-        }
-        .onChange(of: searchedKeyword?.wrappedValue) {
-            if let searchedKeyword {
-                attributedTitle = highlightOccurrences(of: searchedKeyword.wrappedValue, in: title.forPreferredLocale())!
-            } else {
-                attributedTitle = highlightOccurrences(of: "", in: title.forPreferredLocale())!
             }
         }
     }

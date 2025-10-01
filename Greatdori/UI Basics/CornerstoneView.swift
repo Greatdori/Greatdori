@@ -1017,3 +1017,34 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
     }
 }
 
+struct HighlightableText: View {
+    private var resolvedText: String
+    @State private var attributedText: AttributedString = ""
+    
+    init(_ titleKey: LocalizedStringResource) {
+        self.init(String(localized: titleKey))
+    }
+    init(verbatim text: String) {
+        self.init(text)
+    }
+    @_disfavoredOverload
+    init<S: StringProtocol>(_ string: S) {
+        self.resolvedText = String(string)
+        self._attributedText = .init(initialValue: .init(string))
+    }
+    
+    @Environment(\.searchedKeyword) private var searchedKeyword: Binding<String>?
+    
+    var body: some View {
+        Text(attributedText)
+            .onAppear {
+                attributedText = highlightOccurrences(of: searchedKeyword?.wrappedValue ?? "", in: resolvedText) ?? .init(resolvedText)
+            }
+            .onChange(of: resolvedText) {
+                attributedText = highlightOccurrences(of: searchedKeyword?.wrappedValue ?? "", in: resolvedText) ?? .init(resolvedText)
+            }
+            .onChange(of: searchedKeyword?.wrappedValue) {
+                attributedText = highlightOccurrences(of: searchedKeyword?.wrappedValue ?? "", in: resolvedText) ?? .init(resolvedText)
+            }
+    }
+}
