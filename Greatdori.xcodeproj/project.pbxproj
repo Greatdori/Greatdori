@@ -76,6 +76,7 @@
 		8C3264062E3C69C900081F4F /* FrontendGacha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264052E3C69C000081F4F /* FrontendGacha.swift */; };
 		8C3264082E3C724900081F4F /* GachaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264072E3C723F00081F4F /* GachaListView.swift */; };
 		8C32640A2E3CB4D000081F4F /* GachaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */; };
+		8C32F31C2E8D61F0002D183A /* NetworkCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C32F31B2E8D61E9002D183A /* NetworkCache.swift */; };
 		8C3FA2422E4B5699001526F2 /* MiracleTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2412E4B5690001526F2 /* MiracleTicketView.swift */; };
 		8C3FA2442E4B5D1E001526F2 /* InfoTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2432E4B5D19001526F2 /* InfoTextView.swift */; };
 		8C3FA25A2E4B9EC6001526F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C3FA2562E4B9EC6001526F2 /* Assets.xcassets */; };
@@ -680,6 +681,7 @@
 		8C3264052E3C69C000081F4F /* FrontendGacha.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendGacha.swift; sourceTree = "<group>"; };
 		8C3264072E3C723F00081F4F /* GachaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaListView.swift; sourceTree = "<group>"; };
 		8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaDetailView.swift; sourceTree = "<group>"; };
+		8C32F31B2E8D61E9002D183A /* NetworkCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkCache.swift; sourceTree = "<group>"; };
 		8C3FA2412E4B5690001526F2 /* MiracleTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiracleTicketView.swift; sourceTree = "<group>"; };
 		8C3FA2432E4B5D19001526F2 /* InfoTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextView.swift; sourceTree = "<group>"; };
 		8C3FA2492E4B9EBF001526F2 /* GreatLyrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreatLyrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1668,6 +1670,7 @@
 			children = (
 				8CD13FBF2E2FE2BF00673E15 /* NetworkRequest.swift */,
 				8C8E43EB2E5D3110005590F0 /* OfflineNetworking.swift */,
+				8C32F31B2E8D61E9002D183A /* NetworkCache.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -2848,6 +2851,7 @@
 				8C8E43EA2E5D2AC4005590F0 /* OfflineAssetDispatch.swift in Sources */,
 				8C8E43EC2E5D3118005590F0 /* OfflineNetworking.swift in Sources */,
 				8C3264042E3B760100081F4F /* PreCache.swift in Sources */,
+				8C32F31C2E8D61F0002D183A /* NetworkCache.swift in Sources */,
 				8CD13FC62E2FE2BF00673E15 /* Logger.swift in Sources */,
 				8CD13FB42E2FE2BF00673E15 /* Event.swift in Sources */,
 				8C7855972E48A811000EA06E /* LoginCampaign.swift in Sources */,

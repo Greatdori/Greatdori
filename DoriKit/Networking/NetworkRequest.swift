@@ -43,6 +43,35 @@ internal func requestJSON(
         break
     }
     
+    if DoriCache.preferCachedNetworkSource,
+       let url = try? convertible.asURL(),
+       let cache = await NetworkCache.shared.getCache(for: url),
+       abs(Date.now.timeIntervalSince1970 - cache.dateUpdated.timeIntervalSince1970) < 60 * 60 {
+        if let json = (try? JSON(data: cache.data)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                AF.request(
+                    convertible,
+                    method: method,
+                    parameters: parameters,
+                    encoding: encoding,
+                    interceptor: interceptor,
+                    requestModifier: requestModifier
+                ).responseData { response in
+                    if let data = response.data {
+                        Task.detached(priority: .userInitiated) {
+                            if (try? JSON(data: data)) != nil {
+                                await NetworkCache.shared.updateCache(.init(data: data), for: url)
+                            }
+                        }
+                    }
+                }
+            }
+            return .success(json)
+        } else {
+            await NetworkCache.shared.removeCache(for: url)
+        }
+    }
+    
     let request = AF.request(
         convertible,
         method: method,
@@ -53,6 +82,7 @@ internal func requestJSON(
     )
     return await withTaskCancellationHandler {
         await withCheckedContinuation { continuation in
+            let preferCachedNetworkSource = DoriCache.preferCachedNetworkSource
             request.responseData { response in
                 let data = response.data
                 if data != nil {
@@ -60,6 +90,9 @@ internal func requestJSON(
                         do {
                             let json = try JSON(data: data!)
                             continuation.resume(returning: .success(json))
+                            if preferCachedNetworkSource, let url = try? convertible.asURL() {
+                                await NetworkCache.shared.updateCache(.init(data: data!), for: url)
+                            }
                         } catch {
                             continuation.resume(returning: .failure(()))
                         }
@@ -100,6 +133,35 @@ internal func requestJSON<Parameters: Encodable & Sendable>(
         break
     }
     
+    if DoriCache.preferCachedNetworkSource,
+       let url = try? convertible.asURL(),
+       let cache = await NetworkCache.shared.getCache(for: url),
+       abs(Date.now.timeIntervalSince1970 - cache.dateUpdated.timeIntervalSince1970) < 60 * 60 {
+        if let json = (try? JSON(data: cache.data)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                AF.request(
+                    convertible,
+                    method: method,
+                    parameters: parameters,
+                    encoder: encoder,
+                    interceptor: interceptor,
+                    requestModifier: requestModifier
+                ).responseData { response in
+                    if let data = response.data {
+                        Task.detached(priority: .userInitiated) {
+                            if (try? JSON(data: data)) != nil {
+                                await NetworkCache.shared.updateCache(.init(data: data), for: url)
+                            }
+                        }
+                    }
+                }
+            }
+            return .success(json)
+        } else {
+            await NetworkCache.shared.removeCache(for: url)
+        }
+    }
+    
     let request = AF.request(
         convertible,
         method: method,
@@ -117,6 +179,9 @@ internal func requestJSON<Parameters: Encodable & Sendable>(
                         do {
                             let json = try JSON(data: data!)
                             continuation.resume(returning: .success(json))
+                            if DoriCache.preferCachedNetworkSource, let url = try? convertible.asURL() {
+                                await NetworkCache.shared.updateCache(.init(data: data!), for: url)
+                            }
                         } catch {
                             continuation.resume(returning: .failure(()))
                         }

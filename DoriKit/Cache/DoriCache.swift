@@ -19,6 +19,9 @@ import Foundation
 public final class DoriCache {
     private init() {}
     
+    @TaskLocal
+    internal static var preferCachedNetworkSource: Bool = false
+    
     /// A type that can be cached by DoriKit.
     public protocol Cacheable: Codable {
         /// Creates a new instance by decoding from the given cache data.
@@ -217,9 +220,11 @@ public final class DoriCache {
             #if canImport(DoriAssetShims)
             // We have to explicitly call `withValue` to keep the localBehavior
             // because we're running in a detached task.
-            let result = await DoriOfflineAsset.$localBehavior.withValue(offlineAssetBehavior, operation: invocation)
+            let result = await DoriOfflineAsset.$localBehavior.withValue(offlineAssetBehavior) {
+                await $preferCachedNetworkSource.withValue(true, operation: invocation)
+            }
             #else
-            let result = await invocation()
+            let result = await $preferCachedNetworkSource.withValue(true, operation: invocation)
             #endif
             
             // If result is nil but there's data in cache,
