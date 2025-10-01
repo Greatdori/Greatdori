@@ -32,7 +32,7 @@ struct CardSearchView: View {
     @State var presentingCardID: Int?
     @Namespace var cardLists
     
-    let gridLayoutItemWidth: CGFloat = 200*0.9
+    let gridLayoutItemWidth: CGFloat = 200
     let galleryLayoutItemMinimumWidth: CGFloat = 400
     let galleryLayoutItemMaximumWidth: CGFloat = 500
     var body: some View {
@@ -52,7 +52,8 @@ struct CardSearchView: View {
                                                         showFilterSheet = false
                                                         presentingCardID = card.id
                                                     }, label: {
-                                                        CardInfo(card.card, layoutType: layoutType, preferHeavierFonts: true, searchedText: searchedText)
+                                                        CardInfo(card.card, layoutType: layoutType)
+                                                            .searchedKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -73,7 +74,8 @@ struct CardSearchView: View {
                                                         showFilterSheet = false
                                                         presentingCardID = card.id
                                                     }, label: {
-                                                        CardInfo(card.card, layoutType: layoutType, preferHeavierFonts: true, searchedText: searchedText)
+                                                        CardInfo(card.card, layoutType: layoutType)
+                                                            .searchedKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
