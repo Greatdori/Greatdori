@@ -25,20 +25,12 @@ struct CardDetailView: View {
     var body: some View {
         DetailViewBase("Card", forType: ExtendedCard.self, previewList: allCards, initialID: id) { information in
             CardDetailOverviewView(information: information)
-            
-            DetailSectionsSpacer()
             CardDetailStatsView(card: information.card)
-            
-            DetailSectionsSpacer()
             DetailsCostumesSection(costumes: [information.costume])
-            
             if !information.event.isEmpty || information.cardSource.containsSource(from: .event) {
-                DetailSectionsSpacer()
                 DetailsEventsSection(event: information.event, sources: information.cardSource)
             }
-            
             if information.cardSource.containsSource(from: .gacha) {
-                DetailSectionsSpacer()
                 DetailsGachasSection(sources: information.cardSource)
             }
         }

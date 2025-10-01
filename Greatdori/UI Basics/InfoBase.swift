@@ -74,7 +74,7 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
                 ScrollView {
                     HStack {
                         Spacer(minLength: 0)
-                        VStack {
+                        VStack(spacing: 40) {
                             makeContent(information)
                         }
                         .padding()

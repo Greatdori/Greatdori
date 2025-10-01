@@ -24,9 +24,7 @@ struct EventDetailView: View {
     var body: some View {
         DetailViewBase("Event", previewList: allEvents, initialID: id) { information in
             EventDetailOverviewView(information: information)
-            DetailSectionsSpacer()
             DetailsGachasSection(gachas: information.gacha, applyLocaleFilter: false)
-            DetailSectionsSpacer()
             DetailArtsSection {
                 ArtsTab(id: "banner", name: "Event.arts.banner") {
                     for locale in DoriLocale.allCases {

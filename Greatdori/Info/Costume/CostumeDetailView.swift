@@ -23,9 +23,7 @@ struct CostumeDetailView: View {
     var body: some View {
         DetailViewBase("Costume", previewList: allCostumes, initialID: id) { information in
             CostumeDetailOverviewView(information: information)
-            
             if !information.cards.isEmpty {
-                DetailSectionsSpacer()
                 DetailsCardsSection(cards: information.cards)
             }
         }

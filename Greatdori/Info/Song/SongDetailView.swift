@@ -24,11 +24,7 @@ struct SongDetailView: View {
     var body: some View {
         DetailViewBase("Song", previewList: allSongs, initialID: id) { information in
             SongDetailOverviewView(information: information.song)
-            
-            DetailSectionsSpacer()
             SongDetailGameplayView(information: information)
-            
-            DetailSectionsSpacer()
             DetailArtsSection {
                 ArtsTab(id: "cover", name: "Song.arts.cover") {
                     for locale in DoriLocale.allCases {
