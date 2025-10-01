@@ -27,7 +27,7 @@ struct SongSearchView: View {
     @State var searchedSongs: [DoriFrontend.Song.PreviewSong]?
     @State var infoIsAvailable = true
     @State var searchedText = ""
-    @State var layout = Axis.horizontal
+    @State var layout = SummaryLayout.horizontal
     @State var showFilterSheet = false
     @State var presentingSongID: Int?
     @Namespace var songLists
@@ -50,7 +50,8 @@ struct SongSearchView: View {
                                                         showFilterSheet = false
                                                         presentingSongID = song.id
                                                     }, label: {
-                                                        SongInfo(song, preferHeavierFonts: true, layout: layout, searchedKeyword: $searchedText)
+                                                        SongInfo(song, layout: layout)
+                                                            .searchedKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -71,7 +72,8 @@ struct SongSearchView: View {
                                                         showFilterSheet = false
                                                         presentingSongID = song.id
                                                     }, label: {
-                                                        SongInfo(song, preferHeavierFonts: true, layout: layout, searchedKeyword: $searchedText)
+                                                        SongInfo(song, layout: layout)
+                                                            .searchedKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -141,7 +143,7 @@ struct SongSearchView: View {
             })
             .toolbar {
                 ToolbarItem {
-                    LayoutPicker(selection: $layout, options: [("Filter.view.list", "list.bullet", Axis.horizontal), ("Filter.view.grid", "square.grid.2x2", Axis.vertical)])
+                    LayoutPicker(selection: $layout, options: [("Filter.view.list", "list.bullet", SummaryLayout.horizontal), ("Filter.view.grid", "square.grid.2x2", SummaryLayout.vertical())])
                 }
                 if #available(iOS 26.0, macOS 26.0, *) {
                     ToolbarSpacer()

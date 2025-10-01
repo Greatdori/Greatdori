@@ -58,7 +58,7 @@ struct DetailsEventsSection: View {
                                 NavigationLink(destination: {
                                     EventDetailView(id: item.id)
                                 }, label: {
-                                    EventInfo(item, preferHeavierFonts: false, showDetails: true)
+                                    EventInfo(item, showDetails: true)
                                         .scaledToFill()
                                         .frame(maxWidth: 600)
                                         .scaledToFill()
@@ -70,7 +70,7 @@ struct DetailsEventsSection: View {
                                 NavigationLink(destination: {
                                     EventDetailView(id: item.id)
                                 }, label: {
-                                    EventInfo(item, preferHeavierFonts: false, subtitle: (pointsDict[item] == nil ? "Details.source.release-during-event" :"Details.events.source.rewarded-at-points.\(pointsDict[item]!)"), showDetails: true)
+                                    EventInfo(item, subtitle: (pointsDict[item] == nil ? "Details.source.release-during-event" :"Details.events.source.rewarded-at-points.\(pointsDict[item]!)"), showDetails: true)
                                         .scaledToFill()
                                         .frame(maxWidth: 600)
                                         .scaledToFill()

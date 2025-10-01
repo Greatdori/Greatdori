@@ -54,7 +54,8 @@ struct EventSearchView: View {
                                                             presentingEventID = event.id
                                                             //                                                            }
                                                         }, label: {
-                                                            EventInfo(event, preferHeavierFonts: true, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                            EventInfo(event, showDetails: showDetails)
+                                                                .searchedKeyword($searchedText)
                                                         })
                                                         .buttonStyle(.plain)
                                                         .wrapIf(true, in: { content in
@@ -85,7 +86,8 @@ struct EventSearchView: View {
                                                     presentingEventID = event.id
                                                     //                                                    }
                                                 }, label: {
-                                                    EventInfo(event, preferHeavierFonts: true, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                    EventInfo(event, showDetails: showDetails)
+                                                        .searchedKeyword($searchedText)
                                                         .frame(maxWidth: bannerWidth)
                                                 })
                                                 .buttonStyle(.plain)

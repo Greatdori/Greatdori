@@ -33,7 +33,7 @@ struct DetailsSongsSection: View {
                             NavigationLink(destination: {
                                 SongDetailView(id: item.id)
                             }, label: {
-                                SongInfo(item, preferHeavierFonts: false, layout: .horizontal)
+                                SongInfo(item, layout: .horizontal)
                             })
                             .buttonStyle(.plain)
                         }

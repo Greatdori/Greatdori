@@ -167,3 +167,118 @@ extension DetailViewBase {
         return mutable
     }
 }
+
+struct SummaryViewBase<Image: View, Detail: View>: View {
+    var layout: SummaryLayout
+    var title: LocalizedData<String>
+    var makeImageView: () -> Image
+    var makeDetailView: () -> Detail
+    
+    init<Source: TitleDescribable>(
+        _ layout: SummaryLayout,
+        source: Source,
+        @ViewBuilder image: @escaping () -> Image,
+        @ViewBuilder detail: @escaping () -> Detail
+    ) {
+        self.layout = layout
+        self.title = source.title
+        self.makeImageView = image
+        self.makeDetailView = detail
+    }
+    init(
+        _ layout: SummaryLayout,
+        title: LocalizedData<String>,
+        @ViewBuilder image: @escaping () -> Image,
+        @ViewBuilder detail: @escaping () -> Detail
+    ) {
+        self.layout = layout
+        self.title = title
+        self.makeImageView = image
+        self.makeDetailView = detail
+    }
+    
+    @Environment(\.searchedKeyword) private var searchedKeyword: Binding<String>?
+    @State private var attributedTitle: AttributedString = ""
+    
+    var body: some View {
+        CustomGroupBox(showGroupBox: layout != .vertical(hidesDetail: true)) {
+            CustomStack(axis: layout.axis) {
+                makeImageView()
+                if layout != .vertical(hidesDetail: true) {
+                    if layout != .horizontal {
+                        Spacer()
+                    } else {
+                        Spacer()
+                            .frame(maxWidth: 15)
+                    }
+                    
+                    VStack(alignment: layout == .horizontal ? .leading : .center) {
+                        Text(attributedTitle)
+                            .bold()
+                            .font(!isMACOS ? .body : .title3)
+                            .layoutPriority(1)
+                        makeDetailView()
+                            .environment(\.isCompactHidden, layout != .horizontal)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: layout == .horizontal ? .leading : .center)
+                    .multilineTextAlignment(layout == .horizontal ? .leading : .center)
+                }
+                Spacer(minLength: 0)
+            }
+            .wrapIf(layout != .horizontal) { content in
+                HStack {
+                    Spacer()
+                    content
+                    Spacer()
+                }
+            }
+        }
+        .onAppear {
+            if let searchedKeyword {
+                attributedTitle = highlightOccurrences(of: searchedKeyword.wrappedValue, in: title.forPreferredLocale())!
+            } else {
+                attributedTitle = highlightOccurrences(of: "", in: title.forPreferredLocale())!
+            }
+        }
+        .onChange(of: searchedKeyword?.wrappedValue) {
+            if let searchedKeyword {
+                attributedTitle = highlightOccurrences(of: searchedKeyword.wrappedValue, in: title.forPreferredLocale())!
+            } else {
+                attributedTitle = highlightOccurrences(of: "", in: title.forPreferredLocale())!
+            }
+        }
+    }
+}
+enum SummaryLayout: Hashable {
+    case horizontal
+    case vertical(hidesDetail: Bool = false)
+    
+    fileprivate var axis: Axis {
+        switch self {
+        case .horizontal: .horizontal
+        case .vertical: .vertical
+        }
+    }
+}
+extension View {
+    func preferHiddenInCompactLayout() -> some View {
+        modifier(_CompactHiddenModifier())
+    }
+    
+    func searchedKeyword(_ keyword: Binding<String>?) -> some View {
+        environment(\.searchedKeyword, keyword)
+    }
+}
+private struct _CompactHiddenModifier: ViewModifier {
+    @Environment(\.isCompactHidden) private var isCompactHidden: Bool
+    func body(content: Content) -> some View {
+        if !isCompactHidden {
+            content
+        }
+    }
+}
+extension EnvironmentValues {
+    @Entry fileprivate var isCompactHidden: Bool = false
+    @Entry var searchedKeyword: Binding<String>? = nil
+}

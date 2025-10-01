@@ -19,110 +19,46 @@ import SwiftUI
 
 // MARK: SongInfo
 struct SongInfo: View {
-    @Binding var searchedKeyword: String
-    @State var attributedTitle: AttributedString = AttributedString("")
-    
     @State var information: PreviewSong
-    
-    var preferHeavierFonts: Bool = true
     var subtitle: LocalizedStringKey? = nil
-    var songID: Int
-    var locale: DoriAPI.Locale
-    var layout: Axis
-    var showID: Bool
+    var layout: SummaryLayout
     
-    init(_ song: DoriAPI.Song.PreviewSong, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale, subtitle: LocalizedStringKey? = nil, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ song: DoriAPI.Song.PreviewSong, subtitle: LocalizedStringKey? = nil, layout: SummaryLayout = .horizontal) {
         self.information = song
-        self.preferHeavierFonts = false
         self.subtitle = subtitle
-        self.songID = song.id
-        self.locale = locale
         self.layout = layout
-        self.showID = showID
-        self._searchedKeyword = searchedKeyword
-        //        self.bandID = song.bandID
     }
     
-    init(_ song: DoriAPI.Song.Song, preferHeavierFonts: Bool = false, inLocale locale: DoriAPI.Locale = DoriAPI.preferredLocale,  subtitle: LocalizedStringKey? = nil, layout: Axis = .horizontal, showID: Bool = false, searchedKeyword: Binding<String> = .constant("")) {
+    init(_ song: DoriAPI.Song.Song, subtitle: LocalizedStringKey? = nil, layout: SummaryLayout = .horizontal) {
         self.information = PreviewSong(song)
-        self.preferHeavierFonts = false
         self.subtitle = subtitle
-        self.songID = song.id
-        self.locale = locale
         self.layout = layout
-        self.showID = showID
-        self._searchedKeyword = searchedKeyword
     }
-    
-    let lighterVersionBannerScaleFactor: CGFloat = 1
-    let coverSideLengthForHorizontalLayout: CGFloat = 100
-    let coverSideLengthForVerticalLayout: CGFloat = 120
-    let cornerRadius: CGFloat = 5
-    @State var bandName: LocalizedData<String>?
     
     var body: some View {
-        CustomGroupBox {
-            CustomStack(axis: layout) {
-                WebImage(url: information.jacketImageURL(in: locale)) { image in
-                    image
-                        .resizable()
-                        .antialiased(true)
-                        .aspectRatio(1, contentMode: .fit)
-                        .frame(width: (layout == .vertical ? coverSideLengthForVerticalLayout : coverSideLengthForHorizontalLayout)*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: (layout == .vertical ? coverSideLengthForVerticalLayout : coverSideLengthForHorizontalLayout)*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
-                        .cornerRadius(cornerRadius)
-                } placeholder: {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(getPlaceholderColor())
-                        .frame(width: (layout == .vertical ? coverSideLengthForVerticalLayout : coverSideLengthForHorizontalLayout)*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor), height: (layout == .vertical ? coverSideLengthForVerticalLayout : coverSideLengthForHorizontalLayout)*(preferHeavierFonts ? 1 : lighterVersionBannerScaleFactor))
-                }
-                .interpolation(.high)
-                
-                if layout == .vertical {
-                    Spacer()
-                } else {
-                    Spacer()
-                        .frame(maxWidth: 15)
-                }
-                
-                VStack(alignment: layout == .horizontal ? .leading : .center) {
-                    Text(attributedTitle)
-                        .bold()
-                        .font((!preferHeavierFonts && !isMACOS) ? .body : .title3)
-                        .typesettingLanguage(.explicit(((locale).nsLocale().language)))
-                        .layoutPriority(1)
-                    Text(bandName?.forPreferredLocale() ?? "nil")
-                        .foregroundStyle(.secondary)
-                        .font((!preferHeavierFonts && !isMACOS) ? .caption : .body)
-                    if let subtitle {
-                        Text(subtitle)
-                            .foregroundStyle(.secondary)
-                            .font(.caption)
-                    }
-                    if layout == .horizontal {
-                        SongDifficultiesIndicator(information.difficulty)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: layout == .horizontal ? .leading : .center)
-                .multilineTextAlignment(layout == .horizontal ? .leading : .center)
-                
-                //                if layout == .horizontal {
-                Spacer(minLength: 0)
-                //                }
+        SummaryViewBase(layout, source: information) {
+            WebImage(url: information.jacketImageURL) { image in
+                image
+                    .resizable()
+                    .antialiased(true)
+                    .aspectRatio(1, contentMode: .fit)
+                    .frame(width: 120, height: 120)
+                    .cornerRadius(5)
+            } placeholder: {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(getPlaceholderColor())
+                    .frame(width: 120, height: 120)
             }
-            .wrapIf(layout == .vertical) { content in
-                HStack {
-                    Spacer()
-                    content
-                    Spacer()
-                }
+            .interpolation(.high)
+        } detail: {
+            Text(DoriCache.preCache.bands.first { $0.id == information.bandID }?.bandName.forPreferredLocale() ?? "nil")
+                .font(!isMACOS ? .caption : .body)
+            if let subtitle {
+                Text(subtitle)
+                    .font(.caption)
             }
-        }
-        .onAppear {
-            bandName = DoriCache.preCache.bands.first { $0.id == information.bandID }?.bandName
-            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (information.musicTitle.forLocale(locale) ?? information.musicTitle.forPreferredLocale(allowsFallback: true)))!
-        }
-        .onChange(of: searchedKeyword) {
-            attributedTitle = highlightOccurrences(of: searchedKeyword, in: (information.musicTitle.forLocale(locale) ?? information.musicTitle.forPreferredLocale(allowsFallback: true)))!
+            SongDifficultiesIndicator(information.difficulty)
+                .preferHiddenInCompactLayout()
         }
     }
 }
