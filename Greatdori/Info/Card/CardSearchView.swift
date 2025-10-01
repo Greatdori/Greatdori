@@ -53,7 +53,7 @@ struct CardSearchView: View {
                                                         presentingCardID = card.id
                                                     }, label: {
                                                         CardInfo(card.card, layoutType: layoutType)
-                                                            .searchedKeyword($searchedText)
+                                                            .highlightKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -75,7 +75,7 @@ struct CardSearchView: View {
                                                         presentingCardID = card.id
                                                     }, label: {
                                                         CardInfo(card.card, layoutType: layoutType)
-                                                            .searchedKeyword($searchedText)
+                                                            .highlightKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in

@@ -249,7 +249,7 @@ extension View {
         modifier(_CompactHiddenModifier())
     }
     
-    func searchedKeyword(_ keyword: Binding<String>?) -> some View {
+    func highlightKeyword(_ keyword: Binding<String>?) -> some View {
         environment(\.searchedKeyword, keyword)
     }
 }

@@ -55,8 +55,9 @@ struct GachaSearchView: View {
                                                             presentingGachaID = gacha.id
                                                             //                                                            }
                                                         }, label: {
-                                                            GachaInfo(gacha, preferHeavierFonts: true, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                            GachaInfo(gacha, showDetails: showDetails)
                                                                 .frame(maxWidth: bannerWidth)
+                                                                .highlightKeyword($searchedText)
                                                         })
                                                         .buttonStyle(.plain)
                                                         .wrapIf(true, in: { content in
@@ -87,8 +88,9 @@ struct GachaSearchView: View {
                                                     presentingGachaID = gacha.id
                                                     //                                                    }
                                                 }, label: {
-                                                    GachaInfo(gacha, preferHeavierFonts: true, inLocale: nil, showDetails: showDetails, searchedKeyword: $searchedText)
+                                                    GachaInfo(gacha, showDetails: showDetails)
                                                         .frame(maxWidth: bannerWidth)
+                                                        .highlightKeyword($searchedText)
                                                 })
                                                 .buttonStyle(.plain)
                                                 .wrapIf(true, in: { content in

@@ -1019,24 +1019,39 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
 
 struct HighlightableText: View {
     private var resolvedText: String
+    private var prefixText: String = ""
+    private var suffixText: String = ""
+    private var id: Int? = nil
     @State private var attributedText: AttributedString = ""
     
-    init(_ titleKey: LocalizedStringResource) {
-        self.init(String(localized: titleKey))
-    }
-    init(verbatim text: String) {
-        self.init(text)
-    }
+//    init(_ titleKey: LocalizedStringResource) {
+//        self.init(String(localized: titleKey))
+//    }
+//    init(verbatim text: String) {
+//        self.init(text)
+//    }
+//    init(prefix: String = "", _ text: String, suffix: String = "") {
+//       
+//    }
     @_disfavoredOverload
-    init<S: StringProtocol>(_ string: S) {
+    init<S: StringProtocol>(_ string: S, prefix: String = "", suffix: String = "", itemID: Int? = nil) {
         self.resolvedText = String(string)
         self._attributedText = .init(initialValue: .init(string))
+        self.prefixText = prefix
+        self.suffixText = suffix
+        self.id = itemID
     }
     
     @Environment(\.searchedKeyword) private var searchedKeyword: Binding<String>?
     
     var body: some View {
-        Text(attributedText)
+        Group {
+            if let id {
+                Text(prefixText) + Text(attributedText) + Text(suffixText) + Text(verbatim: " • ") + Text(verbatim: "#\(String(id))").fontDesign(.monospaced)
+            } else {
+                Text(prefixText) + Text(attributedText) + Text(suffixText)
+            }
+        }
             .onAppear {
                 attributedText = highlightOccurrences(of: searchedKeyword?.wrappedValue ?? "", in: resolvedText) ?? .init(resolvedText)
             }

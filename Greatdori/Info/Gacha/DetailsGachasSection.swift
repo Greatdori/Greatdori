@@ -55,7 +55,7 @@ struct DetailsGachasSection: View {
                                 NavigationLink(destination: {
                                     GachaDetailView(id: item.id)
                                 }, label: {
-                                    GachaInfo(item, preferHeavierFonts: false, showDetails: true)
+                                    GachaInfo(item)
                                         .scaledToFill()
                                         .frame(maxWidth: 600)
                                         .scaledToFill()
@@ -67,7 +67,7 @@ struct DetailsGachasSection: View {
                                 NavigationLink(destination: {
                                     GachaDetailView(id: item.id)
                                 }, label: {
-                                    GachaInfo(item, preferHeavierFonts: false, subtitle: unsafe "Details.gachas.source.chance.\(String(format: "%.2f", (probabilityDict[item] ?? 0)*100) + String("%"))", showDetails: true)
+                                    GachaInfo(item, subtitle: unsafe "Details.gachas.source.chance.\(String(format: "%.2f", (probabilityDict[item] ?? 0)*100) + String("%"))", showDetails: true)
                                         .scaledToFill()
                                         .frame(maxWidth: 600)
                                         .scaledToFill()

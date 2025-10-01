@@ -12,7 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
 import DoriKit
 import SDWebImageSwiftUI
 import SwiftUI
@@ -23,12 +22,12 @@ struct EventInfo: View {
     var showDetails: Bool
     @State var information: PreviewEvent
     
-    init(_ event: DoriAPI.Event.PreviewEvent, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false) {
+    init(_ event: DoriAPI.Event.PreviewEvent, subtitle: LocalizedStringKey? = nil, showDetails: Bool = true) {
         self.information = event
         self.subtitle = subtitle
         self.showDetails = showDetails
     }
-    init(_ event: DoriAPI.Event.Event, subtitle: LocalizedStringKey? = nil, showDetails: Bool = false) {
+    init(_ event: DoriAPI.Event.Event, subtitle: LocalizedStringKey? = nil, showDetails: Bool = true) {
         self.information = PreviewEvent(event)
         self.subtitle = subtitle
         self.showDetails = showDetails
@@ -52,8 +51,7 @@ struct EventInfo: View {
             .cornerRadius(10)
         } detail: {
             Group {
-                HighlightableText(verbatim: "\(information.eventType.localizedString) • #\(String(information.id))")
-                    .fontDesign(.monospaced)
+                HighlightableText(information.eventType.localizedString, itemID: information.id)
             }
             
             if let subtitle {

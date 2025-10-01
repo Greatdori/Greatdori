@@ -51,7 +51,7 @@ struct SongSearchView: View {
                                                         presentingSongID = song.id
                                                     }, label: {
                                                         SongInfo(song, layout: layout)
-                                                            .searchedKeyword($searchedText)
+                                                            .highlightKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
@@ -73,7 +73,7 @@ struct SongSearchView: View {
                                                         presentingSongID = song.id
                                                     }, label: {
                                                         SongInfo(song, layout: layout)
-                                                            .searchedKeyword($searchedText)
+                                                            .highlightKeyword($searchedText)
                                                     })
                                                     .buttonStyle(.plain)
                                                     .wrapIf(true, in: { content in
