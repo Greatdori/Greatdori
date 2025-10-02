@@ -42,9 +42,15 @@ struct GreatdoriApp: App {
     #endif
     @Environment(\.openWindow) var openWindow
     @Environment(\.scenePhase) var scenePhase
+    @AppStorage("EnableRulerOverlay") var enableRulerOverlay = false
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack {
+                ContentView()
+                if enableRulerOverlay {
+                    DebugRulerOverlay()
+                }
+            }
         }
         .commands {
             CommandGroup(replacing: .appSettings) {

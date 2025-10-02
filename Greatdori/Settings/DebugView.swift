@@ -486,3 +486,81 @@ struct DebugFilterExperimentView: View {
         }
     }
 }
+
+struct DebugRulerOverlay: View {
+    @State var xLength: CGFloat = 0
+    @State var xPosition: CGPoint = .zero
+    @State var yLength: CGFloat = 0
+    @State var yPosition: CGPoint = .zero
+    @State var xLengthZoomBase: CGFloat = 0
+    @State var yLengthZoomBase: CGFloat = 0
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack {
+                ZStack {
+                    Color.clear // hit testing
+                        .frame(width: 20, height: xLength)
+                        .contentShape(Rectangle())
+                    Rectangle()
+                        .fill(Color.blue)
+                        .frame(width: 3, height: xLength)
+                    Text(verbatim: "x: \(unsafe String(format: "%.2f", xPosition.x)), y: \(unsafe String(format: "%.2f", xPosition.y)), \(unsafe String(format: "%.2f", xLength)) pt")
+                        .rotationEffect(.degrees(xPosition.x < proxy.size.width / 2 ? 90 : -90))
+                        .offset(x: xPosition.x < proxy.size.width / 2 ? -10 : 10)
+                }
+                .position(xPosition)
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            xPosition = value.location
+                        }
+                )
+                .gesture(
+                    MagnifyGesture()
+                        .onChanged { value in
+                            xLength = xLengthZoomBase * value.magnification
+                        }
+                        .onEnded { _ in
+                            xLengthZoomBase = xLength
+                        }
+                )
+                ZStack {
+                    Color.clear
+                        .frame(width: yLength, height: 20)
+                        .contentShape(Rectangle())
+                    Rectangle()
+                        .fill(Color.red)
+                        .frame(width: yLength, height: 3)
+                    Text(verbatim: "x: \(unsafe String(format: "%.2f", yPosition.x)), y: \(unsafe String(format: "%.2f", yPosition.y)), \(unsafe String(format: "%.2f", yLength)) pt")
+                        .offset(y: yPosition.y < proxy.size.height / 2 ? -10 : 10)
+                }
+                .position(yPosition)
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            yPosition = value.location
+                        }
+                )
+                .gesture(
+                    MagnifyGesture()
+                        .onChanged { value in
+                            yLength = yLengthZoomBase * value.magnification
+                        }
+                        .onEnded { _ in
+                            yLengthZoomBase = yLength
+                        }
+                )
+            }
+            .onAppear {
+                xLength = proxy.size.height
+                yLength = proxy.size.width
+                xLengthZoomBase = xLength
+                yLengthZoomBase = yLength
+                let frame = proxy.frame(in: .global)
+                xPosition = .init(x: frame.width / 2, y: frame.height / 2)
+                yPosition = .init(x: frame.width / 2, y: frame.height / 2)
+            }
+        }
+        .ignoresSafeArea()
+    }
+}

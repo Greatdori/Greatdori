@@ -215,9 +215,9 @@ struct SummaryViewBase<Image: View, Detail: View>: View {
             }
             .wrapIf(layout != .horizontal) { content in
                 HStack {
-                    Spacer()
+                    Spacer(minLength: 0)
                     content
-                    Spacer()
+                    Spacer(minLength: 0)
                 }
             }
         }
