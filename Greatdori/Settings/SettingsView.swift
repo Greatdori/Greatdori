@@ -26,8 +26,12 @@ let showBirthdayDateDefaultValue = 1
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) var sizeClass
+    @State var selectionItem: Int = 0
     var usedAsSheet: Bool = false
+    
+    let SettingsTabs: [(LocalizedStringResource, )] = []
     var body: some View {
+        #if os(iOS)
         NavigationStack {
             Form {
                 SettingsLocaleView()
@@ -44,7 +48,6 @@ struct SettingsView: View {
             }
             .formStyle(.grouped)
             .navigationTitle("Settings")
-            #if !os(macOS)
             .wrapIf(usedAsSheet, in: { content in
                 content
                     .toolbar {
@@ -55,12 +58,39 @@ struct SettingsView: View {
                         }
                     }
             })
-            #endif
         }
+        #else
+        NavigationSplitView(sidebar: {
+            List(selection: $selectionItem, content: {
+                Label("Settings.locale", systemImage: "globe")
+                    .tag(0)
+                Label("Settings.home", systemImage: "house")
+                    .tag(1)
+                Label("Settings.advanced", systemImage: "hammer")
+                    .tag(20)
+            })
+        }, detail: {
+            Form {
+                switch selectionItem {
+                case 0:
+                    SettingsLocaleView()
+                case 1:
+                    SettingsHomeView()
+                case 20:
+                    SettingsAdvancedView()
+                default:
+                    ProgressView()
+                }
+            }
+            .formStyle(.grouped)
+        })
+        .toolbar(removing: .sidebarToggle)
+        #endif
     }
 }
 
 struct SettingsLocaleView: View {
+    var showHeader: Bool = false
     @State var primaryLocale = "jp"
     @State var secondaryLocale = "en"
     @State var server: String = "jp"

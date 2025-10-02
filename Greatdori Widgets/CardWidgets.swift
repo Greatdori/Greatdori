@@ -16,6 +16,7 @@ import DoriKit
 import SwiftUI
 import WidgetKit
 
+/*
 struct CardWidgets: Widget {
     let kind: String = "com.memz233.Greatdori.Widgets.Card"
     var body: some WidgetConfiguration {
@@ -92,3 +93,4 @@ private struct CardWidgetsEntryView : View {
         }
     }
 }
+*/

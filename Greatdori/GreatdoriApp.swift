@@ -47,6 +47,17 @@ struct GreatdoriApp: App {
             ContentView()
         }
         .commands {
+            CommandGroup(replacing: .appSettings) {
+                Button(action: {
+                    openWindow(id: "Secchi")
+                }, label: {
+                    Label("Settings.prompt", systemImage: "gear")
+                })
+                .keyboardShortcut(",", modifiers: .command)
+            }
+        }
+        /*
+        .commands {
             #if os(macOS)
             if AppFlag.DEBUG {
 //                /Users/t785/Xcode/Greatdori/Greatdori/GreatdoriApp.swift
@@ -63,6 +74,7 @@ struct GreatdoriApp: App {
             }
             #endif
         }
+        */
         .onChange(of: scenePhase) {
             switch scenePhase {
             case .background:
@@ -78,16 +90,18 @@ struct GreatdoriApp: App {
             }
         }
         #if os(macOS)
-        Settings {
+//        Settings {
+//            SettingsView()
+//        }
+        Window("Settings", id: "Secchi") {
             SettingsView()
         }
-        
-        Window(String("Window.offline-asset-debug"), id: "OfflineAssetDebugWindow") {
-            DebugOfflineAssetView()
-        }
-        Window(String("Window.filter-experiment-debug"), id: "FilterExperimentDebugWindow") {
-            DebugFilterExperimentView()
-        }
+//        Window(String("Window.offline-asset-debug"), id: "OfflineAssetDebugWindow") {
+//            DebugOfflineAssetView()
+//        }
+//        Window(String("Window.filter-experiment-debug"), id: "FilterExperimentDebugWindow") {
+//            DebugFilterExperimentView()
+//        }
         #endif
     }
 }

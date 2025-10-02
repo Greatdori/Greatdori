@@ -424,7 +424,7 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
                             .geometryGroup()
                             .navigationDestination(item: $presentingElement) { element in
                                 makeDestination(element, elements ?? [])
-                                #if !os(macOS)
+#if !os(macOS)
                                     .wrapIf(true, in: { content in
                                         if #available(iOS 18.0, *) {
                                             content

@@ -46,14 +46,37 @@ private struct Provider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: CardCollectionWidgetIntent, in context: Context) async -> CardEntry {
-        return entry(in: configuration.collectionName)
+        return entry(for: Date(), align: configuration.shuffleFrequency != .onTap, in: configuration.collectionName)
     }
     
     func timeline(for configuration: CardCollectionWidgetIntent, in context: Context) async -> Timeline<Entry> {
-        return .init(
-            entries: [entry(align: false, in: configuration.collectionName)],
-            policy: .atEnd
-        )
+        let now = Date()
+        let calendar = Calendar.current
+        let shouldAlign = configuration.shuffleFrequency != .onTap
+        let currentEntry = entry(for: now, align: shouldAlign, in: configuration.collectionName)
+
+        let next: Date? = {
+            switch configuration.shuffleFrequency {
+            case .onTap:
+                return nil
+            case .hourly:
+                let nextHour = calendar.date(byAdding: .hour, value: 1, to: calendar.date(bySetting: .minute, value: 0, of: now)!)!
+                return calendar.date(bySetting: .second, value: 5, of: nextHour)
+            case .daily:
+                let startOfDay = calendar.startOfDay(for: now)
+                let nextDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+                return calendar.date(bySetting: .second, value: 5, of: nextDay)
+            @unknown default:
+                return nil
+            }
+        }()
+
+        if let next = next {
+            let nextEntry = entry(for: next, align: true, in: configuration.collectionName)
+            return Timeline(entries: [currentEntry, nextEntry], policy: .after(next))
+        } else {
+            return Timeline(entries: [currentEntry], policy: .never)
+        }
     }
     
     func entry(for date: Date = .now, align: Bool = true, in collection: String?) -> CardEntry {

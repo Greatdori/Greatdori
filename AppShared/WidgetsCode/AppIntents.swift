@@ -40,9 +40,13 @@ struct CardCollectionWidgetIntent: WidgetConfigurationIntent {
     
     @Parameter(title: "Widget.collections.parameter.name", optionsProvider: CollectionOptionsProvider())
     var collectionName: String?
+    @Parameter(title: "Widget.collections.parameter.shuffle-frequency", default: .onTap)
+    var shuffleFrequency: ShuffleFrequency
     
     func perform() async throws -> some IntentResult {
-        .result()
+        // Trigger a reload so the widget can shuffle on tap when shuffleFrequency == .onTap
+        WidgetCenter.shared.reloadTimelines(ofKind: "com.memz233.Greatdori.Widgets.CardCollection")
+        return .result()
     }
     
     struct CollectionOptionsProvider: DynamicOptionsProvider {
@@ -52,3 +56,22 @@ struct CardCollectionWidgetIntent: WidgetConfigurationIntent {
         }
     }
 }
+
+enum ShuffleFrequency: String, CaseIterable, AppEnum {
+    case onTap
+    case hourly
+    case daily
+
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        "Widget.shuffle-frequency"
+    }
+
+    static var caseDisplayRepresentations: [ShuffleFrequency: DisplayRepresentation] {
+        [
+            .onTap: "Widget.shuffle-frequency.on-tap",
+            .hourly: "Widget.shuffle-frequency.hourly",
+            .daily: "Widget.shuffle-frequency.daily"
+        ]
+    }
+}
+
