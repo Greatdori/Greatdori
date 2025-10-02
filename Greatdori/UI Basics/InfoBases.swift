@@ -263,7 +263,7 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
     var titleKey: LocalizedStringResource
     var updateList: @Sendable () async -> [Element]?
     var makeLayoutPicker: (Binding<Layout>) -> LayoutPicker
-    var makeContainer: (Layout, AnyView) -> Container
+    var makeContainer: (Layout, [Element], AnyView, @escaping (Element) -> AnyView) -> Container
     var makeSomeContent: (Layout, Element) -> Content
     var makeDestination: (Element, [Element]) -> Destination
     @State var currentLayout: Layout
@@ -278,7 +278,7 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
         forType type: Element.Type,
         initialLayout: Layout,
         layoutOptions: [(LocalizedStringKey, String, Layout)],
-        @ViewBuilder container: @escaping (_ layout: Layout, _ content: AnyView) -> Container,
+        @ViewBuilder container: @escaping (_ layout: Layout, _ elements: [Element], _ content: AnyView, _ eachContent: @escaping (Element) -> AnyView) -> Container,
         @ViewBuilder eachContent: @escaping (_ layout: Layout, _ element: Element) -> Content,
         @ViewBuilder destination: @escaping (_ element: Element, _ list: [Element]) -> Destination
     ) where Element: ListGettable, Layout: Hashable, LayoutPicker == Greatdori.LayoutPicker<Layout> {
@@ -299,7 +299,7 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
         initialLayout: Layout,
         updateList: @Sendable @escaping () async -> [Element]?,
         layoutOptions: [(LocalizedStringKey, String, Layout)],
-        @ViewBuilder container: @escaping (_ layout: Layout, _ content: AnyView) -> Container,
+        @ViewBuilder container: @escaping (_ layout: Layout, _ elements: [Element], _ content: AnyView, _ eachContent: @escaping (Element) -> AnyView) -> Container,
         @ViewBuilder eachContent: @escaping (_ layout: Layout, _ element: Element) -> Content,
         @ViewBuilder destination: @escaping (_ element: Element, _ list: [Element]) -> Destination
     ) where Layout: Hashable, LayoutPicker == Greatdori.LayoutPicker<Layout> {
@@ -320,7 +320,7 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
         forType _: Element.Type,
         initialLayout: Layout,
         @ViewBuilder layoutPicker: @escaping (Binding<Layout>) -> LayoutPicker,
-        @ViewBuilder container: @escaping (_ layout: Layout, _ content: AnyView) -> Container,
+        @ViewBuilder container: @escaping (_ layout: Layout, _ elements: [Element], _ content: AnyView, _ eachContent: @escaping (Element) -> AnyView) -> Container,
         @ViewBuilder eachContent: @escaping (_ layout: Layout, _ element: Element) -> Content,
         @ViewBuilder destination: @escaping (_ element: Element, _ list: [Element]) -> Destination
     ) where Element: ListGettable {
@@ -339,7 +339,7 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
         initialLayout: Layout,
         updateList: @Sendable @escaping () async -> [Element]?,
         @ViewBuilder layoutPicker: @escaping (Binding<Layout>) -> LayoutPicker,
-        @ViewBuilder container: @escaping (_ layout: Layout, _ content: AnyView) -> Container,
+        @ViewBuilder container: @escaping (_ layout: Layout, _ elements: [Element], _ content: AnyView, _ eachContent: @escaping (Element) -> AnyView) -> Container,
         @ViewBuilder eachContent: @escaping (_ layout: Layout, _ element: Element) -> Content,
         @ViewBuilder destination: @escaping (_ element: Element, _ list: [Element]) -> Destination
     ) {
@@ -376,7 +376,7 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
                             ScrollView {
                                 HStack {
                                     Spacer(minLength: 0)
-                                    makeContainer(currentLayout,
+                                    makeContainer(currentLayout, resultElements,
                                         AnyView(
                                             ForEach(resultElements, id: \.self) { element in
                                                 Button(action: {
@@ -397,7 +397,26 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
                                                 }
                                             }
                                         )
-                                    )
+                                    ) { element in
+                                        AnyView(
+                                            Button(action: {
+                                                showFilterSheet = false
+                                                presentingElement = element
+                                            }, label: {
+                                                makeSomeContent(currentLayout, element)
+                                                    .highlightKeyword($searchedText)
+                                            })
+                                            .buttonStyle(.plain)
+                                            .wrapIf(true) { content in
+                                                if #available(iOS 18.0, macOS 15.0, *) {
+                                                    content
+                                                        .matchedTransitionSource(id: element.hashValue, in: navigationAnimationNamespace)
+                                                } else {
+                                                    content
+                                                }
+                                            }
+                                        )
+                                    }
                                     .padding(.horizontal)
                                     Spacer(minLength: 0)
                                 }

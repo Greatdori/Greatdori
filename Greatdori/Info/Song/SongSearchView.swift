@@ -20,7 +20,7 @@ import SDWebImageSwiftUI
 struct SongSearchView: View {
     let gridLayoutItemWidth: CGFloat = 225
     var body: some View {
-        SearchViewBase("Song", forType: PreviewSong.self, initialLayout: SummaryLayout.horizontal, layoutOptions: verticalAndHorizontalLayouts) { layout, content in
+        SearchViewBase("Song", forType: PreviewSong.self, initialLayout: SummaryLayout.horizontal, layoutOptions: verticalAndHorizontalLayouts) { layout, _, content, _ in
             if layout == .horizontal {
                 LazyVStack {
                     content

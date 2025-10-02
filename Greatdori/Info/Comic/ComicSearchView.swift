@@ -21,7 +21,7 @@ import SDWebImageSwiftUI
 struct ComicSearchView: View {
     let gridLayoutItemWidth: CGFloat = 260*0.9
     var body: some View {
-        SearchViewBase("Comic", forType: Comic.self, initialLayout: SummaryLayout.horizontal, layoutOptions: verticalAndHorizontalLayouts) { layout, content in
+        SearchViewBase("Comic", forType: Comic.self, initialLayout: SummaryLayout.horizontal, layoutOptions: verticalAndHorizontalLayouts) { layout, _, content, _ in
             if layout == .horizontal {
                 LazyVStack {
                     content

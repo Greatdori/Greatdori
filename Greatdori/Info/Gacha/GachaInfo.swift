@@ -41,6 +41,7 @@ struct GachaInfo: View {
                 image
                     .resizable()
                     .antialiased(true)
+                    .scaledToFit()
                     .aspectRatio(3.0, contentMode: .fit)
                     .frame(maxWidth: 420, maxHeight: 140)
             } placeholder: {

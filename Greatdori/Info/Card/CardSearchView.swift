@@ -22,7 +22,7 @@ struct CardSearchView: View {
     let galleryLayoutItemMinimumWidth: CGFloat = 400
     let galleryLayoutItemMaximumWidth: CGFloat = 500
     var body: some View {
-        SearchViewBase("Card", forType: CardWithBand.self, initialLayout: 1, layoutOptions: [("Filter.view.list", "list.bullet", 1), ("Filter.view.grid", "square.grid.2x2", 2), ("Filter.view.gallery", "text.below.rectangle", 3)]) { layout, content in
+        SearchViewBase("Card", forType: CardWithBand.self, initialLayout: 1, layoutOptions: [("Filter.view.list", "list.bullet", 1), ("Filter.view.grid", "square.grid.2x2", 2), ("Filter.view.gallery", "text.below.rectangle", 3)]) { layout, _, content, _ in
             if layout == 1 {
                 LazyVStack {
                     content

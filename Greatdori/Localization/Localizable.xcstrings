@@ -2736,6 +2736,7 @@
       }
     },
     "Gacha.search.placeholder" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2752,6 +2753,7 @@
       }
     },
     "Gacha.search.unavailable" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

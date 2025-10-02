@@ -22,10 +22,22 @@ struct EventSearchView: View {
     
     @Namespace var eventNamespace
     var body: some View {
-        SearchViewBase("Event", forType: PreviewEvent.self, initialLayout: true, layoutOptions: bannerLayouts) { showDetails, content in
+        SearchViewBase("Event", forType: PreviewEvent.self, initialLayout: true, layoutOptions: bannerLayouts) { showDetails, elements, content, eachContent in
             ViewThatFits {
-                LazyVGrid(columns: [GridItem(.fixed(bannerWidth), spacing: bannerSpacing), GridItem(.fixed(bannerWidth))], spacing: 25) {
-                    content
+                LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+                    let events = elements.chunked(into: 2)
+                    ForEach(events, id: \.self) { eventGroup in
+                        HStack(spacing: showDetails ? nil : bannerSpacing) {
+                            ForEach(eventGroup) { event in
+                                eachContent(event)
+                                if eventGroup.count == 1 && events[0].count != 1 {
+                                    Rectangle()
+                                        .frame(maxWidth: 420, maxHeight: 140)
+                                        .opacity(0)
+                                }
+                            }
+                        }
+                    }
                 }
                 .frame(width: bannerWidth * 2 + bannerSpacing)
                 LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
