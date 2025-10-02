@@ -317,6 +317,10 @@
 		E94219352E8AA78800F24974 /* GachaSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94219342E8AA78600F24974 /* GachaSearchView.swift */; };
 		E94219392E8AA7B300F24974 /* GachaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94219382E8AA7AD00F24974 /* GachaDetailView.swift */; };
 		E942C3802E8B63F300F24974 /* FallbackableWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E942C37F2E8B63E900F24974 /* FallbackableWebImage.swift */; };
+		E94443C72E8E6A2E00593F07 /* SettingsLocaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94443C62E8E6A2900593F07 /* SettingsLocaleView.swift */; };
+		E94443C92E8E6C8200593F07 /* SettingsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94443C82E8E6C7F00593F07 /* SettingsHomeView.swift */; };
+		E94443CC2E8E6EDE00593F07 /* SettingsPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94443CB2E8E6ED700593F07 /* SettingsPermissionsView.swift */; };
+		E94443CE2E8E80C200593F07 /* SettingsDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94443CD2E8E80BC00593F07 /* SettingsDebugView.swift */; };
 		E97888C62E8A79EA00ABD33E /* QuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97888C52E8A79E500ABD33E /* QuickLook.swift */; };
 		E98B8B532E7E922A00B4C8A8 /* NavigationComponentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B8B522E7E922700B4C8A8 /* NavigationComponentsView.swift */; };
 		E9A126FC2E8CB62000BBD39E /* EventTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A126FB2E8CB61900BBD39E /* EventTracker.swift */; };
@@ -907,6 +911,10 @@
 		E94219342E8AA78600F24974 /* GachaSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaSearchView.swift; sourceTree = "<group>"; };
 		E94219382E8AA7AD00F24974 /* GachaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaDetailView.swift; sourceTree = "<group>"; };
 		E942C37F2E8B63E900F24974 /* FallbackableWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallbackableWebImage.swift; sourceTree = "<group>"; };
+		E94443C62E8E6A2900593F07 /* SettingsLocaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLocaleView.swift; sourceTree = "<group>"; };
+		E94443C82E8E6C7F00593F07 /* SettingsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHomeView.swift; sourceTree = "<group>"; };
+		E94443CB2E8E6ED700593F07 /* SettingsPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPermissionsView.swift; sourceTree = "<group>"; };
+		E94443CD2E8E80BC00593F07 /* SettingsDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDebugView.swift; sourceTree = "<group>"; };
 		E97888C52E8A79E500ABD33E /* QuickLook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLook.swift; sourceTree = "<group>"; };
 		E98B8B522E7E922700B4C8A8 /* NavigationComponentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationComponentsView.swift; sourceTree = "<group>"; };
 		E9A126FB2E8CB61900BBD39E /* EventTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTracker.swift; sourceTree = "<group>"; };
@@ -1873,9 +1881,13 @@
 			isa = PBXGroup;
 			children = (
 				E90769D32E546D5B00C9871C /* SettingsView.swift */,
+				E94443C62E8E6A2900593F07 /* SettingsLocaleView.swift */,
+				E94443C82E8E6C7F00593F07 /* SettingsHomeView.swift */,
+				E94443CB2E8E6ED700593F07 /* SettingsPermissionsView.swift */,
+				E9076E2E2E8B839D00A9F5AE /* SettingsAdvanced.swift */,
+				E94443CD2E8E80BC00593F07 /* SettingsDebugView.swift */,
 				E90769D12E546D5B00C9871C /* DebugView.swift */,
 				8CC046DB2E6C8F5D009FDC13 /* AppFlags.swift */,
-				E9076E2E2E8B839D00A9F5AE /* SettingsAdvanced.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -2714,9 +2726,11 @@
 				E94219072E8AA48A00F24974 /* ComicDetailView.swift in Sources */,
 				E94218F22E8AA32000F24974 /* CharacterSearchView.swift in Sources */,
 				E942190E2E8AA4D700F24974 /* SongDetailGameplayView.swift in Sources */,
+				E94443CE2E8E80C200593F07 /* SettingsDebugView.swift in Sources */,
 				E90769CD2E546D5500C9871C /* HomeView.swift in Sources */,
 				E90769CE2E546D5500C9871C /* NewsView.swift in Sources */,
 				8CC046DC2E6C8F63009FDC13 /* AppFlags.swift in Sources */,
+				E94443CC2E8E6EDE00593F07 /* SettingsPermissionsView.swift in Sources */,
 				E94219052E8AA47400F24974 /* ComicSearchView.swift in Sources */,
 				E90769D52E546D5B00C9871C /* ContentView.swift in Sources */,
 				E90769D62E546D5B00C9871C /* CornerstoneView.swift in Sources */,
@@ -2728,7 +2742,9 @@
 				E942192C2E8AA6E700F24974 /* EventDetailView.swift in Sources */,
 				E942190C2E8AA4C400F24974 /* SongDetailView.swift in Sources */,
 				E942192F2E8AA72D00F24974 /* DetailEventsSection.swift in Sources */,
+				E94443C72E8E6A2E00593F07 /* SettingsLocaleView.swift in Sources */,
 				E94219222E8AA65500F24974 /* DetailSongsSection.swift in Sources */,
+				E94443C92E8E6C8200593F07 /* SettingsHomeView.swift in Sources */,
 				E9A126FC2E8CB62000BBD39E /* EventTracker.swift in Sources */,
 				E98B8B532E7E922A00B4C8A8 /* NavigationComponentsView.swift in Sources */,
 				E90769D92E546D5B00C9871C /* SettingsView.swift in Sources */,

@@ -158,14 +158,18 @@ struct DetailArtsSection: View {
                                                     .onFailure(perform: { _ in
                                                         hiddenItems.append(item.id)
                                                     })
+                                                    /*
                                                     .opacity(isDownloadingItem ? 0 : 1)
                                                     VStack {
                                                         ProgressView()
                                                             .controlSize(.large)
-                                                        Text("正在载入预览…")
+                                                        Text("Details.arts.loading")
+                                                            .foregroundStyle(.secondary)
+                                                            .bold()
                                                         
                                                     }
                                                     .opacity(isDownloadingItem ? 1 : 0)
+                                                     */
                                                 }
                                                 .animation(.spring(duration: 0.2, bounce: 0.2), value: isDownloadingItem)
                                                 Text(item.title)

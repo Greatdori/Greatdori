@@ -74,4 +74,3 @@ enum ShuffleFrequency: String, CaseIterable, AppEnum {
         ]
     }
 }
-
