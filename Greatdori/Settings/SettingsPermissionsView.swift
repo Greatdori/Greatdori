@@ -29,21 +29,23 @@ struct SettingsPermissionsView: View {
                 SettingsPermissionsNotificationNews()
                 SettingsPermissionsCalendarBirthdays()
             }, header: {
-                Text("Settings.notifications")
+                Text("Settings.permissions")
             }, footer: {
-                VStack(alignment: .leading) {
-                    if permissionNotGiven {
-                        Text("Settings.notifications.authorization-required.open-settings")
-                            .multilineTextAlignment(.leading)
-                            .onTapGesture {
-                                if let url = URL(string: UIApplication.openSettingsURLString) {
-                                    openURL(url)
+                if permissionNotGiven || permissionRejected {
+                    VStack(alignment: .leading) {
+                        if permissionNotGiven {
+                            Text("Settings.notifications.authorization-required.open-settings")
+                                .multilineTextAlignment(.leading)
+                                .onTapGesture {
+                                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                                        openURL(url)
+                                    }
                                 }
-                            }
-                    }
-                    if permissionRejected {
-                        Text("Settings.notifications.access-denied")
-                            .multilineTextAlignment(.leading)
+                        }
+                        if permissionRejected {
+                            Text("Settings.notifications.access-denied")
+                                .multilineTextAlignment(.leading)
+                        }
                     }
                 }
             })

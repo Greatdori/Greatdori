@@ -202,6 +202,50 @@ func highlightOccurrences(of keyword: String, in content: String?) -> Attributed
     }
 }
 
+func timeZoneDifference(to targetTimeZone: TimeZone) -> String {
+    let now = Date()
+    let systemTimeZone = TimeZone.current
+    
+    // 获取两个时区的偏移（秒）
+    let systemOffset = systemTimeZone.secondsFromGMT(for: now)
+    let targetOffset = targetTimeZone.secondsFromGMT(for: now)
+    
+    // 小时差（可能是负数）
+    let hoursDiff = (targetOffset - systemOffset) / 3600
+    
+    if hoursDiff == 0 {
+        return String(localized: "Time-zone.same-time")
+    }
+    
+    // 比较日期差异
+    let systemDate = Calendar.current.dateComponents(in: systemTimeZone, from: now).day
+    let targetDate = Calendar.current.dateComponents(in: targetTimeZone, from: now).day
+    
+    var dayDescription = String(localized: "Time-zone.today")
+    if let sysDay = systemDate, let tgtDay = targetDate {
+        if tgtDay == sysDay - 1 {
+            dayDescription = String(localized: "Time-zone.yesterday")
+        } else if tgtDay == sysDay + 1 {
+            dayDescription = String(localized: "Time-zone.tomorrow")
+        }
+    }
+    
+    return String(localized: "Time-zone.\(dayDescription).\(hoursDiff >= 0 ? "+" : "-").\(abs(hoursDiff))")
+}
+
+func timeZoneUTCOffsetDescription(for timeZone: TimeZone) -> String {
+    let seconds = timeZone.secondsFromGMT(for: Date())
+    let hours = seconds / 3600
+    let minutes = abs(seconds % 3600 / 60)
+    
+    if minutes == 0 {
+        return String(format: "UTC%+d", hours)
+    } else {
+        return String(format: "UTC%+d:%02d", hours, minutes)
+    }
+}
+
+
 // MARK: ListItemType
 enum ListItemType: Hashable, Equatable {
     case compactOnly
@@ -209,3 +253,4 @@ enum ListItemType: Hashable, Equatable {
     case automatic
     case basedOnUISizeClass
 }
+

@@ -106,16 +106,45 @@ struct SettingsLocaleView: View {
             Group {
                 if #available(iOS 18.0, macOS 15.0, *) {
                     Picker(selection: $birthdayTimeZone, content: {
-                        Text("Settings.birthday-time-zone.selection.adaptive")
-                            .tag(BirthdayTimeZone.adaptive)
-                        Text("Settings.birthday-time-zone.selection.JST")
-                            .tag(BirthdayTimeZone.JST)
-                        Text("Settings.birthday-time-zone.selection.UTC")
-                            .tag(BirthdayTimeZone.UTC)
-                        Text("Settings.birthday-time-zone.selection.CST")
-                            .tag(BirthdayTimeZone.CST)
-                        Text(TimeZone(identifier: "America/Los_Angeles")!.isDaylightSavingTime() ? "Settings.birthday-time-zone.selection.PT.PDT" : "Settings.birthday-time-zone.selection.PT.PST")
-                            .tag(BirthdayTimeZone.PT)
+                        VStack(alignment: .leading) {
+                            Text("Settings.birthday-time-zone.selection.adaptive")
+                            Text(verbatim: "\(TimeZone.current.localizedName(for: .generic, locale: Locale.current) ?? "") (\(timeZoneUTCOffsetDescription(for: TimeZone.current)))")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .tag(BirthdayTimeZone.adaptive)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Settings.birthday-time-zone.selection.JST")
+                            Text(timeZoneDifference(to: getBirthdayTimeZone(from: .JST)))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .tag(BirthdayTimeZone.JST)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Settings.birthday-time-zone.selection.UTC")
+                            Text(timeZoneDifference(to: getBirthdayTimeZone(from: .UTC)))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .tag(BirthdayTimeZone.UTC)
+
+                        VStack(alignment: .leading) {
+                            Text("Settings.birthday-time-zone.selection.CST")
+                            Text(timeZoneDifference(to: getBirthdayTimeZone(from: .CST)))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .tag(BirthdayTimeZone.CST)
+                        
+                        VStack(alignment: .leading) {
+                            Text(getBirthdayTimeZone(from: .PT).isDaylightSavingTime() ? "Settings.birthday-time-zone.selection.PT.PDT" : "Settings.birthday-time-zone.selection.PT.PST")
+                            Text(timeZoneDifference(to: getBirthdayTimeZone(from: .PT)))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .tag(BirthdayTimeZone.PT)
                     }, label: {
                         VStack(alignment: .leading) {
                             Text("Settings.birthday-time-zone")
@@ -137,6 +166,15 @@ struct SettingsLocaleView: View {
                             Text("Settings.birthday-time-zone.selection.PT.abbr")
                         }
                     })
+                    .wrapIf(true, in: { content in
+                        #if os(iOS)
+                        content
+                            .pickerStyle(.navigationLink)
+                        #else
+                        content
+                        #endif
+                    })
+                    
                 } else {
                     Picker(selection: $birthdayTimeZone, content: {
                         Text("Settings.birthday-time-zone.selection.adaptive")
