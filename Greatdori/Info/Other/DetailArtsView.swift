@@ -16,9 +16,7 @@
 import DoriKit
 import SDWebImageSwiftUI
 import SwiftUI
-#if os(macOS)
 import QuickLook
-#endif
 
 @resultBuilder
 struct ArtsBuilder {
@@ -97,8 +95,8 @@ struct DetailArtsSection: View {
 #if os(macOS)
     @State private var previewController = PreviewController()
 #endif
-    @State var showQuickLook = false
-    @State var quickLookOnFocusItem: URL? = nil
+    @State var quickLookOnFocusItem: URL?
+    @State var isDownloadingItem = false
     @State var hiddenItems: [UUID] = []
     
     let itemMinimumWidth: CGFloat = 280
@@ -112,10 +110,26 @@ struct DetailArtsSection: View {
                             ForEach(tabContent.content, id: \.self) { item in
                                 if !hiddenItems.contains(item.id) {
                                     Button(action: {
-#if os(iOS)
-                                        quickLookOnFocusItem = item.url
-                                        showQuickLook = true
-#else
+                                        #if os(iOS)
+                                        isDownloadingItem = true
+                                        DispatchQueue(label: "com.memz233.Greatdori.Quick-Look-Download", qos: .userInitiated).async {
+                                            let id = UUID()
+                                            let destination = URL(filePath: NSHomeDirectory() + "/tmp/\(id.uuidString)-\(item.url.lastPathComponent)")
+                                            if let data = try? Data(contentsOf: item.url),
+                                               (try? data.write(to: destination)) != nil {
+                                                DispatchQueue.main.async {
+                                                    quickLookOnFocusItem = destination
+                                                }
+                                            }
+                                            // Quick look takes some time
+                                            // to be presented on screen
+                                            // with animation, we add a delay
+                                            // to prevent flashes
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                                isDownloadingItem = false
+                                            }
+                                        }
+                                        #else
                                         // Build visible items and open Quick Look at the tapped item
                                         let visibleItems = tabContent.content.filter { !hiddenItems.contains($0.id) }
                                         previewController.fileURLs = visibleItems.map(\.url)
@@ -124,26 +138,36 @@ struct DetailArtsSection: View {
                                         } else {
                                             previewController.showPanel()
                                         }
-#endif
+                                        #endif
                                     }, label: {
                                         CustomGroupBox {
                                             VStack {
                                                 Spacer(minLength: 0)
-                                                WebImage(url: item.url) { image in
-                                                    image
-                                                        .resizable()
-                                                        .antialiased(true)
-                                                        .scaledToFit()
-                                                } placeholder: {
-                                                    RoundedRectangle(cornerRadius: 10)
-                                                        .fill(getPlaceholderColor())
-                                                        .aspectRatio(3, contentMode: .fit)
+                                                ZStack {
+                                                    WebImage(url: item.url) { image in
+                                                        image
+                                                            .resizable()
+                                                            .antialiased(true)
+                                                            .scaledToFit()
+                                                    } placeholder: {
+                                                        RoundedRectangle(cornerRadius: 10)
+                                                            .fill(getPlaceholderColor())
+                                                            .aspectRatio(3, contentMode: .fit)
+                                                    }
+                                                    .interpolation(.high)
+                                                    .onFailure(perform: { _ in
+                                                        hiddenItems.append(item.id)
+                                                    })
+                                                    .opacity(isDownloadingItem ? 0 : 1)
+                                                    VStack {
+                                                        ProgressView()
+                                                            .controlSize(.large)
+                                                        Text("正在载入预览…")
+                                                        
+                                                    }
+                                                    .opacity(isDownloadingItem ? 1 : 0)
                                                 }
-                                                .interpolation(.high)
-                                                .onFailure(perform: { _ in
-                                                    hiddenItems.append(item.id)
-                                                })
-                                                
+                                                .animation(.spring(duration: 0.2, bounce: 0.2), value: isDownloadingItem)
                                                 Text(item.title)
                                                     .multilineTextAlignment(.center)
                                                 Spacer(minLength: 0)
@@ -178,15 +202,17 @@ struct DetailArtsSection: View {
                 tab = information.first!.id
             }
         }
-        .sheet(isPresented: $showQuickLook, content: {
-#if os(iOS)
-            QuickLookPreview(url: quickLookOnFocusItem!)
-#endif
-        })
+        #if os(iOS)
+        .quickLookPreview($quickLookOnFocusItem)
+        #endif
     }
 }
 extension DetailArtsSection {
     init(@ArtsBuilder content: () -> [ArtsTab]) {
         self.information = content()
     }
+}
+
+extension URL: @retroactive Identifiable {
+    public var id: URL { self }
 }
