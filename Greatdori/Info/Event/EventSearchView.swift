@@ -24,10 +24,10 @@ struct EventSearchView: View {
     var body: some View {
         SearchViewBase("Event", forType: PreviewEvent.self, initialLayout: true, layoutOptions: bannerLayouts) { showDetails, elements, content, eachContent in
             ViewThatFits {
-                LazyVStack(spacing: showDetails ? nil : bannerSpacing) {
+                LazyVStack(spacing: showDetails ? nil : 15) {
                     let events = elements.chunked(into: 2)
                     ForEach(events, id: \.self) { eventGroup in
-                        HStack(spacing: showDetails ? nil : bannerSpacing) {
+                        HStack(spacing: showDetails ? nil : 0) {
                             ForEach(eventGroup) { event in
                                 eachContent(event)
                                 if eventGroup.count == 1 && events[0].count != 1 {

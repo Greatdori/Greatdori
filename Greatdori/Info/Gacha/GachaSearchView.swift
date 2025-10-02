@@ -22,10 +22,10 @@ struct GachaSearchView: View {
     var body: some View {
         SearchViewBase("Gacha", forType: PreviewGacha.self, initialLayout: true, layoutOptions: bannerLayouts) { layout, elements, content, eachContent in
             ViewThatFits {
-                LazyVStack(spacing: layout ? nil : bannerSpacing) {
+                LazyVStack(spacing: layout ? nil : 15) {
                     let gachas = elements.chunked(into: 2)
                     ForEach(gachas, id: \.self) { gachaGroup in
-                        HStack(spacing: layout ? nil : bannerSpacing) {
+                        HStack(spacing: layout ? nil : 0) {
                             Spacer(minLength: 0)
                             ForEach(gachaGroup) { gacha in
                                 eachContent(gacha)
