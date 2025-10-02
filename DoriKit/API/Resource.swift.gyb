@@ -601,6 +601,27 @@ extension DoriAPI.Song.${property} {
             nil
         }
     }
+    
+    @inlinable
+    public var soundURL: URL {
+        var id = String(self.id)
+        while id.count < 3 {
+            id = "0" + id
+        }
+        return .init(string: "https://bestdori.com/assets/\(self.publishedAt.availableLocale()!.rawValue)/sound/bgm\(id)_rip/bgm\(id).mp3")!.respectOfflineAssetContext()
+    }
+    @inlinable
+    public func soundURL(in locale: DoriAPI.Locale, allowsFallback: Bool = true) -> URL? {
+        var id = String(self.id)
+        while id.count < 3 {
+            id = "0" + id
+        }
+        return if let locale = _resLocale(locale, by: self.publishedAt, allowsFallback: allowsFallback) {
+            .init(string: "https://bestdori.com/assets/\(locale)/sound/bgm\(id)_rip/bgm\(id).mp3")!.respectOfflineAssetContext()
+        } else {
+            nil
+        }
+    }
 }
 % end
 

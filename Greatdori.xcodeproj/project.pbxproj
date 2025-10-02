@@ -76,6 +76,8 @@
 		8C3264062E3C69C900081F4F /* FrontendGacha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264052E3C69C000081F4F /* FrontendGacha.swift */; };
 		8C3264082E3C724900081F4F /* GachaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264072E3C723F00081F4F /* GachaListView.swift */; };
 		8C32640A2E3CB4D000081F4F /* GachaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */; };
+		8C32BA362E8E90D9002D183A /* ReflectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C32BA352E8E90D3002D183A /* ReflectionView.swift */; };
+		8C32BA382E8EA955002D183A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C32BA372E8EA955002D183A /* SDWebImageSwiftUI */; };
 		8C32F31C2E8D61F0002D183A /* NetworkCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C32F31B2E8D61E9002D183A /* NetworkCache.swift */; };
 		8C3FA2422E4B5699001526F2 /* MiracleTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2412E4B5690001526F2 /* MiracleTicketView.swift */; };
 		8C3FA2442E4B5D1E001526F2 /* InfoTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3FA2432E4B5D19001526F2 /* InfoTextView.swift */; };
@@ -685,6 +687,7 @@
 		8C3264052E3C69C000081F4F /* FrontendGacha.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontendGacha.swift; sourceTree = "<group>"; };
 		8C3264072E3C723F00081F4F /* GachaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaListView.swift; sourceTree = "<group>"; };
 		8C3264092E3CB4CC00081F4F /* GachaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaDetailView.swift; sourceTree = "<group>"; };
+		8C32BA352E8E90D3002D183A /* ReflectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionView.swift; sourceTree = "<group>"; };
 		8C32F31B2E8D61E9002D183A /* NetworkCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkCache.swift; sourceTree = "<group>"; };
 		8C3FA2412E4B5690001526F2 /* MiracleTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiracleTicketView.swift; sourceTree = "<group>"; };
 		8C3FA2432E4B5D19001526F2 /* InfoTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTextView.swift; sourceTree = "<group>"; };
@@ -1071,6 +1074,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C32BA382E8EA955002D183A /* SDWebImageSwiftUI in Frameworks */,
 				8C3FA2612E4BA6EA001526F2 /* DoriKit.framework in Frameworks */,
 				8C499F8D2E4FD9CE0073FCB6 /* SwiftUIIntrospect in Frameworks */,
 			);
@@ -1329,6 +1333,7 @@
 				8C3FA2702E4BD484001526F2 /* StyleEditorView.swift */,
 				8C74C66D2E4C8BB60070A70A /* MetadataView.swift */,
 				8CFEF5C02E4DE6220017FF66 /* LyricsView.swift */,
+				8C32BA352E8E90D3002D183A /* ReflectionView.swift */,
 				8C3FA2562E4B9EC6001526F2 /* Assets.xcassets */,
 			);
 			path = GreatLyrics;
@@ -2044,6 +2049,7 @@
 			name = GreatLyrics;
 			packageProductDependencies = (
 				8C499F8C2E4FD9CE0073FCB6 /* SwiftUIIntrospect */,
+				8C32BA372E8EA955002D183A /* SDWebImageSwiftUI */,
 			);
 			productName = GreatLyrics;
 			productReference = 8C3FA2492E4B9EBF001526F2 /* GreatLyrics.app */;
@@ -2899,6 +2905,7 @@
 				8C74C66E2E4C8BB80070A70A /* MetadataView.swift in Sources */,
 				8C3FA25B2E4B9EC6001526F2 /* ContentView.swift in Sources */,
 				8C3FA26D2E4BCE7B001526F2 /* TextStyleRender.swift in Sources */,
+				8C32BA362E8E90D9002D183A /* ReflectionView.swift in Sources */,
 				8C3FA2712E4BD487001526F2 /* StyleEditorView.swift in Sources */,
 				8C3FA26B2E4BCC20001526F2 /* StyleView.swift in Sources */,
 				8C3FA26F2E4BCEC2001526F2 /* WrapIf.swift in Sources */,
@@ -4325,7 +4332,7 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
 				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
@@ -4371,7 +4378,7 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
 				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
@@ -4417,7 +4424,7 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
 				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
@@ -4463,7 +4470,7 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
 				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
@@ -6015,6 +6022,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C0C99AF2E296F3900549B5C /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		8C32BA372E8EA955002D183A /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C923D7B2E304882003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 		8C499F8C2E4FD9CE0073FCB6 /* SwiftUIIntrospect */ = {
 			isa = XCSwiftPackageProductDependency;

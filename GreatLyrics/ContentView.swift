@@ -30,10 +30,24 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             List(selection: $mainTabSelection) {
-                Label("File", systemImage: "document").tag(0)
-                Label("Style", systemImage: "paintbrush").tag(1)
-                Label("Metadata", systemImage: "gearshape").tag(2)
-                Label("Lyrics", systemImage: "music.note.list").tag(3)
+                Section {
+                    Label("File", systemImage: "document").tag(0)
+                    Label("Style", systemImage: "paintbrush").tag(1)
+                    Label("Metadata", systemImage: "gearshape").tag(2)
+                    Label("Lyrics", systemImage: "music.note.list").tag(3)
+                } header: {
+                    Text("Lyrics")
+                }
+                Section {
+                    Label {
+                        Text("Reflection")
+                    } icon: {
+                        Image(_internalSystemName: "music.note.circle.righthalf.dotted")
+                    }
+                    .tag(4)
+                } header: {
+                    Text("Music")
+                }
             }
             .navigationSplitViewColumnWidth(180)
         } detail: {
@@ -44,6 +58,7 @@ struct ContentView: View {
                     case 1: StyleView(lyrics: $lyrics)
                     case 2: MetadataView(lyrics: $lyrics)
                     case 3: LyricsView(lyrics: $lyrics)
+                    case 4: ReflectionView()
                     default: EmptyView()
                     }
                 }
