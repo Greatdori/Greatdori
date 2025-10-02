@@ -555,6 +555,19 @@ struct _ImageContextMenuModifier<V: View>: ViewModifier {
                         }
                     }
                 }
+                Section {
+                    // Since `ShareLink` is not a button,
+                    // we can't use `forEachImageInfo` here
+                    if imageInfo.count > 1 {
+                        Menu("共享…", systemImage: "square.and.arrow.up") {
+                            ForEach(imageInfo, id: \.self) { info in
+                                ShareLink(info.description ?? "Image.image", item: info.url)
+                            }
+                        }
+                    } else if let info = imageInfo.first {
+                        ShareLink("共享…", item: info.url)
+                    }
+                }
                 if otherContentPlacement == .end, let otherContent {
                     otherContent()
                 }
