@@ -106,6 +106,7 @@ struct CardCoverImage: View {
                                     .scaledToFill()
                                     .frame(width: proxy.size.width * CGFloat(normalCardIsOnHover ? 0.75 : (trainedCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
+                                    #if !os(macOS)
                                     .onTapGesture {
                                         withAnimation(cardFocusSwitchingAnimation) {
                                             if !normalCardIsOnHover {
@@ -116,6 +117,7 @@ struct CardCoverImage: View {
                                             }
                                         }
                                     }
+                                    #endif
                                     .onHover { isHovering in
                                         withAnimation(cardFocusSwitchingAnimation) {
                                             if isHovering {
@@ -140,6 +142,7 @@ struct CardCoverImage: View {
                                     .scaledToFill()
                                     .frame(width: proxy.size.width * CGFloat(trainedCardIsOnHover ? 0.75 : (normalCardIsOnHover ? 0.25 : 0.5)))
                                     .clipped()
+                                    #if !os(macOS)
                                     .onTapGesture {
                                         withAnimation(cardFocusSwitchingAnimation) {
                                             if !trainedCardIsOnHover {
@@ -150,6 +153,7 @@ struct CardCoverImage: View {
                                             }
                                         }
                                     }
+                                    #endif
                                     .onHover { isHovering in
                                         withAnimation(cardFocusSwitchingAnimation) {
                                             if isHovering {
