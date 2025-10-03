@@ -104,4 +104,8 @@ extension BuiltinCard {
             Int(dropped.dropLast("Before".count))!
         }
     }
+    @inlinable
+    public var isTrained: Bool {
+        fileName.hasSuffix("After")
+    }
 }

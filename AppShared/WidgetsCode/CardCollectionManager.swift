@@ -78,8 +78,17 @@ final class CardCollectionManager: Sendable {
         return .path("/CardImages/\(name).png")
     }
     
-    func nameAvailable(_ name: String) -> Bool {
-        !builtinCardCollectionNames.contains(name) && !userCollections.contains(where: { $0.name == name }) && !name.isEmpty
+    func nameIsAvailable(_ name: String) -> Bool {
+        !allCollections.contains(where: { $0.name == name }) && !name.isEmpty
+    }
+    func duplicationName(_ name: String) -> String? {
+        guard !CardCollectionManager.shared.nameIsAvailable(name) else { return name }
+        for i in 2...100 {
+            if CardCollectionManager.shared.nameIsAvailable("\(name) \(i)") {
+                return "\(name) \(i)"
+            }
+        }
+        return nil
     }
     func _collection(named name: String) -> Collection? {
         if builtinCardCollectionNames.contains(name) {
@@ -116,7 +125,8 @@ final class CardCollectionManager: Sendable {
     @_eagerMove
     struct Card: Identifiable, Codable, Hashable {
         var id: Int
-        var localizedName: DoriAPI.LocalizedData<String>
+        var isTrained: Bool
+        var localizedName: DoriAPI.LocalizedData<String>?
         var file: File
         
         enum File: Codable, Hashable {
@@ -153,7 +163,7 @@ extension CardCollectionManager.Collection {
         self.init(
             name: NSLocalizedString(collection.name, bundle: .main, comment: ""),
             _rawName: collection.name,
-            cards: collection.cards.map { .init(id: $0.id, localizedName: $0.localizedName, file: .builtin($0.fileName)) }
+            cards: collection.cards.map { .init(id: $0.id, isTrained: $0.isTrained, localizedName: $0.localizedName, file: .builtin($0.fileName)) }
         )
     }
 }

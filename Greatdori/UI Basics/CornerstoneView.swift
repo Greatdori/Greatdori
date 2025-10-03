@@ -1047,7 +1047,7 @@ struct HighlightableText: View {
     var body: some View {
         Group {
             if let id {
-                Text(prefixText) + Text(attributedText) + Text(suffixText) + Text(verbatim: " • ") + Text(verbatim: "#\(String(id))").fontDesign(.monospaced)
+                Text(prefixText) + Text(attributedText) + Text(suffixText) + Text("Typography.bold-dot-seperater") + Text(verbatim: "#\(String(id))").fontDesign(.monospaced)
             } else {
                 Text(prefixText) + Text(attributedText) + Text(suffixText)
             }

@@ -26,29 +26,32 @@ struct CardInfo: View {
     
     private var band: Band?
     private var previewCard: PreviewCard
+    private var displayType: CardImageDisplayType
     @Environment(\.horizontalSizeClass) var sizeClass
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     @State var isNormalCardAvailable = true
     
-    init(_ card: DoriAPI.Card.PreviewCard, layoutType: Int = 1) {
+    init(_ card: DoriAPI.Card.PreviewCard, layoutType: Int = 1, displayType: CardImageDisplayType = .both) {
         self.layoutType = layoutType
         self.band = DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == card.characterID }) })?.key
         self.previewCard = card
+        self.displayType = displayType
     }
-    init(_ card: DoriAPI.Card.Card, layoutType: Int = 1) {
+    init(_ card: DoriAPI.Card.Card, layoutType: Int = 1, displayType: CardImageDisplayType = .both) {
         self.layoutType = layoutType
         self.band = DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == card.characterID }) })?.key
         self.previewCard = PreviewCard(card)
+        self.displayType = displayType
     }
     
     var body: some View {
         SummaryViewBase(layoutType == 1 ? .horizontal : .vertical(), source: previewCard) {
             if layoutType != 3 {
                 HStack(spacing: 5) {
-                    if isNormalCardAvailable {
+                    if isNormalCardAvailable && displayType != .trainedOnly {
                         CardPreviewImage(previewCard)
                     }
-                    if previewCard.thumbAfterTrainingImageURL != nil {
+                    if previewCard.thumbAfterTrainingImageURL != nil && displayType != .normalOnly {
                         CardPreviewImage(previewCard, showTrainedVersion: true)
                     }
                 }
@@ -63,7 +66,7 @@ struct CardInfo: View {
             }
         } detail: {
             Group {
-                Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text(verbatim: " • ").bold() + Text(previewCard.type.localizedString)
+                Text(cardCharacterName?.forPreferredLocale() ?? "nil") + Text("Typography.bold-dot-seperater").bold() + Text(previewCard.type.localizedString)
             }
             .foregroundStyle(.secondary)
             .font(isMACOS ? .body : .caption)
@@ -79,4 +82,10 @@ struct CardInfo: View {
             self.cardCharacterName = DoriCache.preCache.characterDetails[previewCard.characterID]?.characterName
         }
     }
+}
+
+enum CardImageDisplayType: Hashable {
+    case normalOnly
+    case trainedOnly
+    case both
 }

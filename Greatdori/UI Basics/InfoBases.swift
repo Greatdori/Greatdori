@@ -102,7 +102,7 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
                 }
             }
         }
-        .navigationTitle(Text(information?.title.forPreferredLocale() ?? "\(isMACOS ? String(localized: "Event") : "")"))
+        .navigationTitle(Text(information?.title.forPreferredLocale() ?? "\(isMACOS ? String(localized: titleKey) : "")"))
         #if os(iOS)
         .wrapIf(showSubtitle) { content in
             if #available(iOS 26, macOS 14.0, *) {

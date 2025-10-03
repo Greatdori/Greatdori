@@ -22,7 +22,7 @@ struct EventSearchView: View {
     
     @Namespace var eventNamespace
     var body: some View {
-        SearchViewBase("Event", forType: PreviewEvent.self, initialLayout: true, layoutOptions: bannerLayouts) { showDetails, elements, content, eachContent in
+        SearchViewBase("Events", forType: PreviewEvent.self, initialLayout: true, layoutOptions: bannerLayouts) { showDetails, elements, content, eachContent in
             ViewThatFits {
                 LazyVStack(spacing: showDetails ? nil : 15) {
                     let events = elements.chunked(into: 2)

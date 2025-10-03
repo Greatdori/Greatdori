@@ -12,12 +12,26 @@
 //
 //===----------------------------------------------------------------------===//
 
+import DoriKit
 import Foundation
+
+enum CollectionCodeVersion: String, Equatable, Hashable {
+    case illumination
+    case timber
+    case delight
+    case sphere
+    case aspiration
+}
+
+let versionSpecifiers: [CollectionCodeVersion: [String]] = [
+    .illumination: ["HND", "ANO", "UNK", "ANN", "AIN", "PLN", "PNK", "LSL", "CHY", "ANC", "LHR", "LGW", "MAN", "STN", "LTN", "EDI", "BHX", "GLA", "BFS", "NCL"]
+]
 
 struct CollectionEncodingInfo: Equatable {
     var name: String
     var cardList: [Int]
 }
+
 func encodeCollection(_ info: CollectionEncodingInfo) -> String {
     func compressInts(_ arr: [Int], preservesOrder: Bool = false) -> String {
         func encodeInt(_ value: UInt, into data: inout Data) {
@@ -138,21 +152,124 @@ func encodeCollection(_ info: CollectionEncodingInfo) -> String {
     let verificationString = verification(of: content)
     let verificationLengthTag = String(UnicodeScalar(Array(33...126)[verificationString.count]))
     // precondition: (each specifiers).count = 3
-    let versionSpecifiers = ["HND", "ANO", "UNK", "ANN", "AIN", "PLN", "PNK",
-                             "LSL", "CHY", "ANC", "LHR", "LGW", "MAN", "STN",
-                             "LTN", "EDI", "BHX", "GLA", "BFS", "NCL"]
+    let versionSpecifiers = versionSpecifiers[.illumination]!
     let _thisSpecifier = versionSpecifiers.randomElement()!
-    var thisSpecifier: [Character] = []
+    var thisSpecifier: [Swift.Character] = []
     for character in _thisSpecifier {
         if Bool.random() {
-            thisSpecifier.append(Character(character.lowercased()))
+            thisSpecifier.append(Swift.Character(character.lowercased()))
         } else {
             thisSpecifier.append(character)
         }
     }
     return String(thisSpecifier[0]) + verificationLengthTag + content + verificationString + String(thisSpecifier[1...2])
 }
-func decodeCollection(_ str: String) -> CollectionEncodingInfo? {
+
+func decodeCollection(_ input: String) -> CollectionEncodingInfo? {
+    guard input.count > 5 else { return nil } // s[0] + l + c + v + s[1...2]
+    // s: version specifier
+    // l: specifier length
+    // c: subject
+    // v: verification string
+    
+    // Verify version specifier
+    let decoderVersion: CollectionCodeVersion? = determineCollectionCodeVersion(input)
+    let str = String(input.dropFirst().dropLast(2))
+    switch decoderVersion {
+    case .illumination:
+        return decodeIllumination(str)
+    default:
+        return nil
+    }
+}
+
+private func string2IntArray(_ input: String) -> [Int32] {
+    let data = Array(input.utf8)
+    
+    var dict: [String: Int] = [:]
+    var dictSize = 256
+    for i in 0..<256 {
+        dict[String(UnicodeScalar(i)!)] = i
+    }
+    
+    var w = ""
+    var result: [Int] = []
+    
+    for byte in data {
+        let c = String(UnicodeScalar(Int(byte))!)
+        let wc = w + c
+        if dict[wc] != nil {
+            w = wc
+        } else {
+            result.append(dict[w]!)
+            dict[wc] = dictSize
+            dictSize += 1
+            w = c
+        }
+    }
+    if !w.isEmpty {
+        result.append(dict[w]!)
+    }
+    
+    return result.map { Int32($0) }
+}
+
+private func intArray2String(_ compressed: [Int32]) -> String? {
+    guard !compressed.isEmpty else { return "" }
+    
+    var dict: [Int: String] = [:]
+    var dictSize = 256
+    for i in 0..<256 {
+        dict[i] = String(UnicodeScalar(i)!)
+    }
+    
+    var result = ""
+    var w = dict[Int(compressed[0])]!
+    result.append(w)
+    
+    for k in compressed.dropFirst() {
+        let entry: String
+        if let s = dict[Int(k)] {
+            entry = s
+        } else if Int(k) == dictSize {
+            entry = w + String(w.first!)
+        } else {
+            return nil
+        }
+        
+        result.append(entry)
+        dict[dictSize] = w + String(entry.first!)
+        dictSize += 1
+        w = entry
+    }
+    
+    let bytes = result.unicodeScalars.map { UInt8($0.value) }
+    return String(data: Data(bytes), encoding: .utf8) ?? ""
+}
+
+func decodeIllumination(_ input: String) -> CollectionEncodingInfo? {
+    var str = input
+    // Verify verification code
+    var verificationLength = str.removeFirst().unicodeScalars.first!.value - 33
+    var verificationString = ""
+    while verificationLength > 0 {
+        verificationString.insert(str.removeLast(), at: verificationString.startIndex)
+        verificationLength -= 1
+    }
+    guard verify(str, with: verificationString) else { return nil }
+    
+    let mergedData = decompressInts(str, preservedOrder: true)
+    let splitedData = mergedData.split(separator: 10082625, maxSplits: 1)
+    guard splitedData.count == 2 else { return nil }
+    if let _decList = intArray2String(splitedData[0].map { Int32($0) }),
+       let _decName = intArray2String(splitedData[1].map { Int32($0) }) {
+        let decodedList = decompressInts(_decList)
+        let decodedName = _decName
+        return .init(name: decodedName, cardList: decodedList)
+    } else {
+        return nil
+    }
+    
     func decompressInts(_ str: String, preservedOrder: Bool = false) -> [Int] {
         func decodeInts(from data: Data) -> [UInt] {
             var values: [UInt] = []
@@ -285,101 +402,37 @@ func decodeCollection(_ str: String) -> CollectionEncodingInfo? {
         }
         return result.prefix(93) == code
     }
-    
-    guard str.count > 5 else { return nil } // s[0] + l + c + v + s[1...2]
-    // s: version specifier
-    // l: specifier length
-    // c: subject
-    // v: verification string
-    // Verify version specifier
-    let versionSpecifiers = ["HND", "ANO", "UNK", "ANN", "AIN", "PLN", "PNK",
-                             "LSL", "CHY", "ANC", "LHR", "LGW", "MAN", "STN",
-                             "LTN", "EDI", "BHX", "GLA", "BFS", "NCL"]
-    var str = str
-    let specifier = String(str.removeFirst()) + (String(str.removeLast()) + String(str.removeLast())).reversed()
-    guard versionSpecifiers.contains(specifier.uppercased()) else { return nil }
-    
-    // Verify verification code
-    var verificationLength = str.removeFirst().unicodeScalars.first!.value - 33
-    var verificationString = ""
-    while verificationLength > 0 {
-        verificationString.insert(str.removeLast(), at: verificationString.startIndex)
-        verificationLength -= 1
+}
+
+func determineCollectionCodeVersion(_ input: String) -> CollectionCodeVersion? {
+    guard input.count >= 3 else { return nil }
+    let str = input
+    let specifier = (String(str.first!) + String(str.suffix(2))).uppercased()
+    for (version, specifiers) in versionSpecifiers {
+        if specifiers.contains(specifier) {
+            return version
+        }
     }
-    guard verify(str, with: verificationString) else { return nil }
-    
-    let mergedData = decompressInts(str, preservedOrder: true)
-    let splitedData = mergedData.split(separator: 10082625, maxSplits: 1)
-    guard splitedData.count == 2 else { return nil }
-    if let _decList = intArray2String(splitedData[0].map { Int32($0) }),
-       let _decName = intArray2String(splitedData[1].map { Int32($0) }) {
-        let decodedList = decompressInts(_decList)
-        let decodedName = _decName
-        return .init(name: decodedName, cardList: decodedList)
-    } else {
-        return nil
+    return nil
+}
+
+extension CardCollectionManager.Collection {
+    public func toCollectionCodeStructure() -> CollectionEncodingInfo {
+        return .init(name: self.name, cardList: self.cards.map { $0.isTrained ? -$0.id : $0.id })
     }
 }
 
-private func string2IntArray(_ input: String) -> [Int32] {
-    let data = Array(input.utf8)
-    
-    var dict: [String: Int] = [:]
-    var dictSize = 256
-    for i in 0..<256 {
-        dict[String(UnicodeScalar(i)!)] = i
-    }
-    
-    var w = ""
-    var result: [Int] = []
-    
-    for byte in data {
-        let c = String(UnicodeScalar(Int(byte))!)
-        let wc = w + c
-        if dict[wc] != nil {
-            w = wc
-        } else {
-            result.append(dict[w]!)
-            dict[wc] = dictSize
-            dictSize += 1
-            w = c
+extension CollectionEncodingInfo {
+    public func toCollectionManagerStructure() async -> CardCollectionManager.Collection {
+        var allCollectionCards: [CardCollectionManager.Card] = []
+        let allCards = await Card.all()
+        if let allCards {
+            for codingCard in self.cardList {
+                if let card = allCards.first(where: { $0.id == abs(codingCard) }) {
+                    allCollectionCards.append(.init(id: card.id, isTrained: codingCard < 0, localizedName: card.title, file: .path(codingCard < 0 ? card.coverAfterTrainingImageURL?.absoluteString ?? "" : card.coverNormalImageURL.absoluteString)))
+                }
+            }
         }
+        return CardCollectionManager.Collection(name: CardCollectionManager.shared.duplicationName(self.name) ?? "\(UUID())", cards: allCollectionCards)
     }
-    if !w.isEmpty {
-        result.append(dict[w]!)
-    }
-    
-    return result.map { Int32($0) }
-}
-private func intArray2String(_ compressed: [Int32]) -> String? {
-    guard !compressed.isEmpty else { return "" }
-    
-    var dict: [Int: String] = [:]
-    var dictSize = 256
-    for i in 0..<256 {
-        dict[i] = String(UnicodeScalar(i)!)
-    }
-    
-    var result = ""
-    var w = dict[Int(compressed[0])]!
-    result.append(w)
-    
-    for k in compressed.dropFirst() {
-        let entry: String
-        if let s = dict[Int(k)] {
-            entry = s
-        } else if Int(k) == dictSize {
-            entry = w + String(w.first!)
-        } else {
-            return nil
-        }
-        
-        result.append(entry)
-        dict[dictSize] = w + String(entry.first!)
-        dictSize += 1
-        w = entry
-    }
-    
-    let bytes = result.unicodeScalars.map { UInt8($0.value) }
-    return String(data: Data(bytes), encoding: .utf8) ?? ""
 }

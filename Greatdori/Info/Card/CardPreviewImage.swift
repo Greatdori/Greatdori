@@ -178,7 +178,7 @@ struct CardPreviewImage: View {
                         Group {
                             Text(title)
                             Group {
-                                Text("\(character)") + Text(verbatim: " • ").bold() +  Text(cardType.localizedString)
+                                Text("\(character)") + Text("Typography.bold-dot-seperater").bold() +  Text(cardType.localizedString)
                             }
                             .font(.caption)
                         }

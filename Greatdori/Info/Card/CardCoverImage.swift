@@ -29,12 +29,13 @@ struct CardCoverImage: View {
     private var cardID: Int
     private var cardTitle: DoriAPI.LocalizedData<String>
     private var characterID: Int
+    private var displayType: CardImageDisplayType
     @State var cardCharacterName: DoriAPI.LocalizedData<String>?
     @State var showCardDetailView: Bool = false
     //    @State var cardDestinationID: Int = 0
     
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
-    init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band?, showNavigationHints: Bool = true) {
+    init(_ card: DoriAPI.Card.PreviewCard, band: DoriAPI.Band.Band?, showNavigationHints: Bool = true, displayType: CardImageDisplayType = .both) {
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
         self.cardType = card.type
@@ -45,9 +46,10 @@ struct CardCoverImage: View {
         self.cardID = card.id
         self.cardTitle = card.prefix
         self.characterID = card.characterID
+        self.displayType = displayType
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 104)
-    init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band?, showNavigationHints: Bool = true) {
+    init(_ card: DoriAPI.Card.Card, band: DoriAPI.Band.Band?, showNavigationHints: Bool = true, displayType: CardImageDisplayType = .both) {
         self.normalBackgroundImageURL = card.coverNormalImageURL
         self.trainedBackgroundImageURL = card.coverAfterTrainingImageURL
         self.cardType = card.type
@@ -58,6 +60,7 @@ struct CardCoverImage: View {
         self.cardID = card.id
         self.cardTitle = card.prefix
         self.characterID = card.characterID
+        self.displayType = displayType
     }
     //#sourceLocation(file: "/Users/t785/Xcode/Greatdori/Greatdori Watch App/CardViews.swift.gyb", line: 113)
     
@@ -91,8 +94,9 @@ struct CardCoverImage: View {
                 // MARK: Card Content
                 GeometryReader { proxy in
                     Group {
-                        if let trainedBackgroundImageURL {
-                            if ![.others, .campaign, .birthday].contains(cardType) {
+                        if let trainedBackgroundImageURL, displayType != .normalOnly {
+                            if ![.others, .campaign, .birthday].contains(cardType) && displayType == .both {
+                                // Both
                                 HStack(spacing: 0) {
                                     WebImage(url: normalBackgroundImageURL) { image in
                                         image
