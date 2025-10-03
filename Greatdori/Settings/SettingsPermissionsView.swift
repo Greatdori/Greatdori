@@ -210,6 +210,8 @@ struct SettingsPermissionsView: View {
         @State var birthdayCalendarIsEnabled = false
         @State var calendarIsAuthorized = false
         @State var calendarIsRejected = false
+        @State var errorCode = 0
+        @State var showErrorAlert = false
         var body: some View {
             Group {
                     Toggle(isOn: $birthdayCalendarIsEnabled, label: {
@@ -237,6 +239,8 @@ struct SettingsPermissionsView: View {
                                         calendarIsRejected = true
                                     } catch {
                                         print(error)
+                                        errorCode = -501
+                                        showErrorAlert = true
                                         birthdayCalendarIsEnabled = false
                                     }
                                 }
@@ -258,6 +262,9 @@ struct SettingsPermissionsView: View {
                 }
                 birthdayCalendarIsEnabled = !birthdaysCalendarID.isEmpty
             }
+            .alert("Settings.notifications.calendar.error-alert.title", isPresented: $showErrorAlert, actions: {}, message: {
+                Text("Settings.notifications.calendar.error-alert.message.\(errorCode)")
+            })
         }
     }
 }

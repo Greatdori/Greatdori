@@ -20,6 +20,7 @@ import SwiftUI
 // MARK: SongInfo
 struct SongInfo: View {
     @State var information: PreviewSong
+    @State var bandName: String = "Lorem Ipsum Dolor"
     var subtitle: LocalizedStringKey? = nil
     var layout: SummaryLayout
     
@@ -54,8 +55,12 @@ struct SongInfo: View {
             }
             .interpolation(.high)
         } detail: {
-            Text(DoriCache.preCache.bands.first { $0.id == information.bandID }?.bandName.forPreferredLocale() ?? "nil")
+            Text(bandName)
                 .font(isMACOS ? .body : .caption)
+                .wrapIf(bandName == "Lorem Ipsum Dolor", in: { content in
+                    Text(bandName)
+                        .redacted(reason: .placeholder)
+                })
             if let subtitle {
                 Text(subtitle)
                     .font(.caption)
@@ -63,6 +68,15 @@ struct SongInfo: View {
             SongDifficultiesIndicator(information.difficulty)
                 .foregroundStyle(.primary)
                 .preferHiddenInCompactLayout()
+        }
+        .onAppear {
+            bandName = DoriCache.preCache.bands.first { $0.id == information.bandID }?.bandName.forPreferredLocale() ?? "Lorem Ipsum Dolor"
+            if bandName == "Lorem Ipsum Dolor" {
+                Task {
+                    let allBands = await Band.all()
+                    bandName = allBands?.first{ $0.id == information.bandID }?.bandName.forPreferredLocale() ?? String(localized: "Band.unknown")
+                }
+            }
         }
     }
 }

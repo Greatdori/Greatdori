@@ -41,7 +41,7 @@ final class CardCollectionManager: Sendable {
     }
     @inline(__always)
     var allCollections: [Collection] {
-        builtinCollections + userCollections
+        userCollections + builtinCollections
     }
     
     func append(_ collection: Collection) {
@@ -64,6 +64,10 @@ final class CardCollectionManager: Sendable {
         userCollections.removeAll()
         updateStorage()
     }
+    func move(fromOffsets: IndexSet, toOffset: Int) {
+        userCollections.move(fromOffsets: fromOffsets, toOffset: toOffset)
+        updateStorage()
+    }
     
     @discardableResult
     func writeImageData(_ data: Data, named name: String) -> Card.File {
@@ -77,7 +81,6 @@ final class CardCollectionManager: Sendable {
     func nameAvailable(_ name: String) -> Bool {
         !builtinCardCollectionNames.contains(name) && !userCollections.contains(where: { $0.name == name })
     }
-    
     func _collection(named name: String) -> Collection? {
         if builtinCardCollectionNames.contains(name) {
             return .init(builtin: .init(named: name)!)
@@ -92,27 +95,30 @@ final class CardCollectionManager: Sendable {
     }
     
     @_eagerMove
-    struct Collection: Codable {
+    struct Collection: Codable, Hashable {
         var name: String
         var _rawName: String?
+        var isBuiltIn: Bool
         var cards: [Card]
         
         init(name: String, cards: [Card]) {
             self.name = name
+            self.isBuiltIn = false
             self.cards = cards
         }
         fileprivate init(name: String, _rawName: String? = nil, cards: [Card]) {
             self.name = name
             self._rawName = _rawName
+            self.isBuiltIn = true
             self.cards = cards
         }
     }
     @_eagerMove
-    struct Card: Codable {
+    struct Card: Codable, Hashable {
         var localizedName: DoriAPI.LocalizedData<String>
         var file: File
         
-        enum File: Codable {
+        enum File: Codable, Hashable {
             case builtin(String)
             case path(String)
             

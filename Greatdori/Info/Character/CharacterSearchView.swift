@@ -45,7 +45,7 @@ struct CharacterSearchView: View {
                                     WebImage(url: band.logoImageURL)
                                         .resizable()
                                         .frame(width: 160*bandLogoScaleFactor, height: 76*bandLogoScaleFactor)
-                                        .accessibilityLabel(band.bandName.forPreferredLocale() ?? String(localized: "Character.band-unknown"))
+                                        .accessibilityLabel(band.bandName.forPreferredLocale() ?? String(localized: "Band.unknown"))
                                     HStack {
                                         ForEach(charactersDict![band]!.swappedAt(0, 3).swappedAt(2, 3), id: \.self) { char in
                                             NavigationLink(destination: {

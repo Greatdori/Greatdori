@@ -37,9 +37,7 @@ struct SettingsView: View {
                 SettingsLocaleView()
                 SettingsHomeView()
                 SettingsPermissionsView()
-                #if os(iOS)
-                SettingsWidgetView()
-                #endif
+                SettingsWidgetsView()
                 SettingsOfflineDataView()
                 SettingsAboutView()
                 if AppFlag.DEBUG {
@@ -68,6 +66,8 @@ struct SettingsView: View {
                     .tag(1)
                 Label("Settings.permissions", systemImage: "bell.badge")
                     .tag(2)
+                Label("Settings.widgets", systemImage: "widget.small")
+                    .tag(3)
                 Label("Settings.advanced", systemImage: "hammer")
                     .tag(20)
                 if AppFlag.DEBUG {
@@ -75,26 +75,31 @@ struct SettingsView: View {
                         .tag(23)
                 }
             })
+//            .toolbar(removing: .sidebarToggle)
         }, detail: {
-            Form {
-                switch selectionItem {
-                case 0:
-                    SettingsLocaleView()
-                case 1:
-                    SettingsHomeView()
-                case 2:
-                    SettingsPermissionsView()
-                case 20:
-                    SettingsAdvancedView()
-                case 23:
-                    SettingsDebugView()
-                default:
-                    ProgressView()
+            NavigationStack {
+                Form {
+                    switch selectionItem {
+                    case 0:
+                        SettingsLocaleView()
+                    case 1:
+                        SettingsHomeView()
+                    case 2:
+                        SettingsPermissionsView()
+                    case 3:
+                        SettingsWidgetsView()
+                    case 20:
+                        SettingsAdvancedView()
+                    case 23:
+                        SettingsDebugView()
+                    default:
+                        ProgressView()
+                    }
                 }
+                .formStyle(.grouped)
             }
-            .formStyle(.grouped)
         })
-        .toolbar(removing: .sidebarToggle)
+//        .toolbar(removing: .sidebarToggle)
         #endif
     }
 }
@@ -103,74 +108,6 @@ struct SettingsView: View {
 
 
 
-#if os(iOS)
-struct SettingsWidgetView: View {
-    @State var cardIDInput = ""
-    var body: some View {
-        Section {
-            TextField("Settings.widget.ids", text: $cardIDInput)
-                .submitLabel(.done)
-                .onSubmit {
-                    let ids = cardIDInput
-                        .replacingOccurrences(of: " ", with: "")
-                        .components(separatedBy: ",")
-                        .compactMap {
-                            if let direct = Int($0) {
-                                // "2125"
-                                return (id: direct, trained: false)
-                            } else if $0.contains(":") {
-                                // "1954:after"
-                                let separated = $0.components(separatedBy: ":")
-                                guard separated.count == 2 else { return nil }
-                                guard let id = Int(separated[0]) else { return nil }
-                                return (id: id, trained: separated[1] == "after")
-                            } else {
-                                return nil
-                            }
-                        }
-                    Task {
-                        if let cards = await DoriAPI.Card.all() {
-                            let relatedCards = cards.compactMap { card in
-                                if ids.map({ $0.id }).contains(card.id) {
-                                    (card: card, trained: ids.first(where: { $0.id == card.id })!.trained)
-                                } else {
-                                    nil
-                                }
-                            }
-                            var descriptors = [CardWidgetDescriptor]()
-                            for (card, trained) in relatedCards {
-                                descriptors.append(
-                                    .init(
-                                        cardID: card.id,
-                                        trained: trained,
-                                        localizedName: card.prefix.forPreferredLocale() ?? "",
-                                        imageURL: trained ? (card.coverAfterTrainingImageURL ?? card.coverNormalImageURL) : card.coverNormalImageURL
-                                    )
-                                )
-                            }
-                            let encoder = PropertyListEncoder()
-                            encoder.outputFormat = .binary
-                            let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
-                            try? encoder.encode(descriptors).write(to: URL(filePath: containerPath + "/CardWidgetDescriptors.plist"))
-                            WidgetCenter.shared.reloadTimelines(ofKind: "com.memz233.Greatdori.Widgets.Card")
-                            print("Widget update succeeded")
-                        }
-                    }
-                }
-                .task {
-                    let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.memz233.Greatdori.Widgets")!.path
-                    let decoder = PropertyListDecoder()
-                    if let data = try? Data(contentsOf: URL(filePath: containerPath + "/CardWidgetDescriptors.plist")),
-                       let descriptors = try? decoder.decode([CardWidgetDescriptor].self, from: data) {
-                        cardIDInput = descriptors.map { String($0.cardID) + ($0.trained ? ":after" : ":before") }.joined(separator: ", ")
-                    }
-                }
-        } header: {
-            Text("Settings.widgets")
-        }
-    }
-}
-#endif
 
 struct SettingsOfflineDataView: View {
     @State var dataSourcePreference: DataSourcePreference = .hybrid
