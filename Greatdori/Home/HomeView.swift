@@ -103,6 +103,7 @@ struct HomeView: View {
             .sheet(isPresented: $showSettingsSheet, content: {
                 SettingsView(usedAsSheet: true)
             })
+            .handlesExternalView()
         }
         .onFrameChange { geometry in
             if useCompactVariant && geometry.size.width > 675 {

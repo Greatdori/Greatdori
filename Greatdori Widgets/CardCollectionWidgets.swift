@@ -38,25 +38,32 @@ private struct Provider: AppIntentTimelineProvider {
 
     func snapshot(for configuration: CardCollectionWidgetIntent, in context: Context) async -> CardEntry {
         if context.isPreview {
-            return entry(in: "BUILTIN_CARD_COLLECTION_GREATDORI")
+            return entry(in: "BUILTIN_CARD_COLLECTION_GREATDORI", frequency: configuration.shuffleFrequency)
         }
-        return entry(in: configuration.collectionName)
+        return entry(in: configuration.collectionName, frequency: configuration.shuffleFrequency)
     }
     
     func timeline(for configuration: CardCollectionWidgetIntent, in context: Context) async -> Timeline<Entry> {
-        .init(
-            entries: [entry(align: false, in: configuration.collectionName)],
-            policy: .atEnd
+        let policy: TimelineReloadPolicy = switch configuration.shuffleFrequency {
+        case .onTap: .never
+        case .hourly: .after(Date.now.addingTimeInterval(60 * 60).componentsRewritten(minute: 0, second: 0))
+        case .daily: .after(Date.now.addingTimeInterval(60 * 60 * 24).componentsRewritten(hour: 0, minute: 0, second: 0))
+        }
+        return .init(
+            entries: [
+                entry(align: false, in: configuration.collectionName, frequency: configuration.shuffleFrequency)
+            ],
+            policy: policy
         )
     }
     
-    func entry(for date: Date = .now, align: Bool = true, in collection: String?) -> CardEntry {
-        guard let collectionName = collection else { return .init() }
-        guard let collection = CardCollectionManager.shared._collection(named: collectionName) else { return .init() }
+    func entry(for date: Date = .now, align: Bool = true, in collection: String?, frequency: ShuffleFrequency) -> CardEntry {
+        guard let collectionName = collection else { return .init(frequency: frequency) }
+        guard let collection = CardCollectionManager.shared._collection(named: collectionName) else { return .init(frequency: frequency) }
         var generator = seed(for: date, align: align)
-        guard let card = collection.cards.randomElement(using: &generator) else { return .init() }
-        guard let image = card.file.image else { return .init() }
-        return .init(date: date, image: image)
+        guard let card = collection.cards.randomElement(using: &generator) else { return .init(frequency: frequency) }
+        guard let image = card.file.image else { return .init(frequency: frequency) }
+        return .init(date: date, frequency: frequency, cardID: card.id, image: image)
     }
     
     func seed(for date: Date = .now, align: Bool = true) -> some RandomNumberGenerator {
@@ -82,6 +89,8 @@ private struct Provider: AppIntentTimelineProvider {
 
 private struct CardEntry: TimelineEntry {
     var date: Date = .now
+    var frequency: ShuffleFrequency = .onTap
+    var cardID: Int?
     #if !os(macOS)
     var image: UIImage?
     #else
@@ -93,18 +102,33 @@ private struct CardWidgetsEntryView : View {
     var entry: Provider.Entry
     var body: some View {
         if let image = entry.image {
-            Button(intent: CardCollectionWidgetIntent()) {
-                #if !os(macOS)
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                #else
-                Image(nsImage: image)
-                    .resizable()
-                    .scaledToFill()
-                #endif
+            if entry.frequency != .onTap, let cardID = entry.cardID {
+                Group {
+                    #if !os(macOS)
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                    #else
+                    Image(nsImage: image)
+                        .resizable()
+                        .scaledToFill()
+                    #endif
+                }
+                .widgetURL(URL(string: "greatdori://info/cards/\(cardID)"))
+            } else {
+                Button(intent: CardCollectionWidgetIntent()) {
+                    #if !os(macOS)
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                    #else
+                    Image(nsImage: image)
+                        .resizable()
+                        .scaledToFill()
+                    #endif
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
         } else {
             Text("Widget.collections.edit-tip")
                 .bold()

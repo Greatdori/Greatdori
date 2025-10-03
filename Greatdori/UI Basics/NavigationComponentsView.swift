@@ -172,6 +172,7 @@ struct InfoView: View {
                 .padding()
             }
             .navigationTitle("App.info")
+            .handlesExternalView()
         }
     }
 }
@@ -207,6 +208,7 @@ struct ToolsView: View {
                 }
             }
             .navigationTitle("App.tools")
+            .handlesExternalView()
         }
     }
 }

@@ -12,6 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import Combine
 import DoriKit
 import SDWebImage
 import SDWebImageSVGCoder
@@ -50,6 +51,9 @@ struct GreatdoriApp: App {
                 if enableRulerOverlay {
                     DebugRulerOverlay()
                 }
+            }
+            .onOpenURL { url in
+                handleURL(url)
             }
         }
         .commands {
@@ -199,6 +203,46 @@ private func handleURL(_ url: URL) {
                 }
             }
         }
+    case "info":
+        let paths = components.path.split(separator: "/")
+        if paths.count >= 2 {
+            switch paths[0] {
+            case "cards":
+                if let id = Int(paths[1]) {
+                    rootShowView {
+                        CardDetailView(id: id)
+                    }
+                }
+            default: break
+            }
+        }
     default: break
+    }
+}
+
+@MainActor let _showRootViewSubject = PassthroughSubject<AnyView, Never>()
+func rootShowView(@ViewBuilder content: () -> some View) {
+    let view = AnyView(content())
+    DispatchQueue.main.async {
+        _showRootViewSubject.send(view)
+    }
+}
+extension View {
+    func handlesExternalView() -> some View {
+        modifier(_ExternalViewHandlerModifier())
+    }
+}
+private struct _ExternalViewHandlerModifier: ViewModifier {
+    @State private var presentingView: AnyView?
+    @State private var isViewPresented = false
+    func body(content: Content) -> some View {
+        content
+            .navigationDestination(isPresented: $isViewPresented) {
+                presentingView
+            }
+            .onReceive(_showRootViewSubject) { view in
+                presentingView = view
+                isViewPresented = true
+            }
     }
 }

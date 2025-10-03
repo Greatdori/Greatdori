@@ -91,7 +91,6 @@ final class CardCollectionManager: Sendable {
     private func updateStorage() {
         if let data = try? encoder.encode(userCollections) {
             try? data.write(to: URL(filePath: containerPath + "/UserCardCollections.plist"))
-            
         }
     }
     
@@ -115,7 +114,8 @@ final class CardCollectionManager: Sendable {
         }
     }
     @_eagerMove
-    struct Card: Codable, Hashable {
+    struct Card: Identifiable, Codable, Hashable {
+        var id: Int
         var localizedName: DoriAPI.LocalizedData<String>
         var file: File
         
@@ -153,7 +153,7 @@ extension CardCollectionManager.Collection {
         self.init(
             name: NSLocalizedString(collection.name, bundle: .main, comment: ""),
             _rawName: collection.name,
-            cards: collection.cards.map { .init(localizedName: $0.localizedName, file: .builtin($0.fileName)) }
+            cards: collection.cards.map { .init(id: $0.id, localizedName: $0.localizedName, file: .builtin($0.fileName)) }
         )
     }
 }

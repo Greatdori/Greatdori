@@ -44,8 +44,6 @@ struct CardCollectionWidgetIntent: WidgetConfigurationIntent {
     var shuffleFrequency: ShuffleFrequency
     
     func perform() async throws -> some IntentResult {
-        // Trigger a reload so the widget can shuffle on tap when shuffleFrequency == .onTap
-        WidgetCenter.shared.reloadTimelines(ofKind: "com.memz233.Greatdori.Widgets.CardCollection")
         return .result()
     }
     

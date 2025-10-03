@@ -93,3 +93,15 @@ extension Array<BuiltinCardCollection> {
         return result
     }
 }
+
+extension BuiltinCard {
+    @inlinable
+    public var id: Int {
+        let dropped = fileName.dropFirst("Card".count)
+        return if dropped.hasSuffix("After") {
+            Int(dropped.dropLast("After".count))!
+        } else {
+            Int(dropped.dropLast("Before".count))!
+        }
+    }
+}

@@ -58,6 +58,7 @@ struct ContentView: View {
                                     Tab(allInfoDestinationItems[itemIndex].title, systemImage: allInfoDestinationItems[itemIndex].symbol, value: AppSection.info(allInfoDestinationItems[itemIndex].tabValue)) {
                                         NavigationStack {
                                             allInfoDestinationItems[itemIndex].destination()
+                                                .handlesExternalView()
                                         }
                                     }
                                 }
@@ -76,6 +77,7 @@ struct ContentView: View {
                                     Tab(allToolsDestinationItems[itemIndex].title, systemImage: allToolsDestinationItems[itemIndex].symbol, value: AppSection.tools(allToolsDestinationItems[itemIndex].tabValue)) {
                                         NavigationStack {
                                             allToolsDestinationItems[itemIndex].destination()
+                                                .handlesExternalView()
                                         }
                                     }
                                 }
@@ -185,6 +187,7 @@ struct ContentView: View {
                     Text("Debug.pre-cache-unavailable-alert.message")
                 }
             })
+            
         } else {
             if crashViewShouldBeDisplayed {
                 // Crash View pretended to be the same as loading view below.
