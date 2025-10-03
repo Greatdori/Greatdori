@@ -36,6 +36,10 @@ struct SettingsWidgetsView: View {
                 }
             })
         }
+        .onAppear {
+            // Refresh every time the view appears.
+            allCollections = CardCollectionManager.shared.allCollections
+        }
 #else
         SettingsWidgetsCollectionView()
 #endif
@@ -47,15 +51,18 @@ struct SettingsWidgetsCollectionView: View {
     @State var builtinCollections = CardCollectionManager.shared.builtinCollections
     @State var userCollections = CardCollectionManager.shared.userCollections
     
+    @State var destinationCollection: CardCollectionManager.Collection? = nil
+    @State var showDestination = false
     @State var userIsAddingNewCollection = false
     @State var newCollectionTitle = ""
     var body: some View {
         Group {
-            Section("Settings.widgets.collections.user") {
+            Section(content: {
                 if !userCollections.isEmpty {
                     ForEach(userCollections, id: \.self) { item in
-                        NavigationLink(destination: {
-                            SettingsWidgetsCollectionDetailsView(collection: item)
+                        Button(action: {
+                            destinationCollection = item
+                            showDestination = true
                         }, label: {
                             HStack {
                                 Text(item.name)
@@ -64,12 +71,22 @@ struct SettingsWidgetsCollectionView: View {
                                     Text("\(item.cards.count)")
                                         .foregroundStyle(.secondary)
                                 }
+                                Image(systemName: "chevron.forward")
+                                    .foregroundStyle(.tertiary)
+                                    .font(.footnote)
+                                    .bold()
                             }
+                            .contentShape(Rectangle())
                         })
-                    }
-                    .onDelete { item in
-                        CardCollectionManager.shared.remove(atOffsets: item)
-                        userCollections = CardCollectionManager.shared.userCollections
+                        .buttonStyle(.plain)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive, action: {
+                                CardCollectionManager.shared.remove(at: userCollections.firstIndex{ $0.name == item.name }!)
+                                userCollections = CardCollectionManager.shared.userCollections
+                            }, label: {
+                                Label("Settings.widget.collections.user.delete", systemImage: "trash")
+                            })
+                        }
                     }
                     .onMove { from, to in
                         CardCollectionManager.shared.move(fromOffsets: from, toOffset: to)
@@ -80,6 +97,7 @@ struct SettingsWidgetsCollectionView: View {
                         .bold()
                         .foregroundStyle(.secondary)
                 }
+                #if os(iOS)
                 Button(action: {
                     newCollectionTitle = ""
                     userIsAddingNewCollection = true
@@ -90,7 +108,26 @@ struct SettingsWidgetsCollectionView: View {
                     builtinCollections = CardCollectionManager.shared.builtinCollections
                     userCollections = CardCollectionManager.shared.userCollections
                 }
-            }
+                #endif
+            }, header: {
+                Text("Settings.widgets.collections.user")
+            }, footer: {
+                #if os(macOS)
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        newCollectionTitle = ""
+                        userIsAddingNewCollection = true
+                    }, label: {
+                        Label("Settings.widget.collections.user.add", systemImage: "plus")
+                    })
+                    .onAppear {
+                        builtinCollections = CardCollectionManager.shared.builtinCollections
+                        userCollections = CardCollectionManager.shared.userCollections
+                    }
+                }
+                #endif
+            })
             .alert("Settings.widget.collections.user.add.alert.title", isPresented: $userIsAddingNewCollection, actions: {
                 TextField("Settings.widget.collections.user.add.alert.prompt", text: $newCollectionTitle)
                 Button(action: {
@@ -100,21 +137,24 @@ struct SettingsWidgetsCollectionView: View {
                         userIsAddingNewCollection = false
                     }
                 }, label: {
-                    Text("Settings.widget.collections.user.add.alert.confirm")
+                    Text("Settings.widget.collections.user.add.alert.create")
+                    //Text("Settings.widget.collections.user.add.alert.import")
                 })
                 .disabled(!CardCollectionManager.shared.nameAvailable(newCollectionTitle))
-                .disabled(newCollectionTitle.isEmpty)
-//                .keyboardShortcut(.defaultAction)
+//                .disabled(newCollectionTitle.isEmpty)
+                .keyboardShortcut(.defaultAction)
                 Button(role: .cancel, action: {}, label: {
                     Text("Settings.widget.collections.user.add.alert.cancel")
                 })
+            }, message: {
+                Text("Settings.widget.collections.user.add.alert.message")
             })
-            
             
             Section("Settings.widgets.collections.built-in") {
                 ForEach(builtinCollections, id: \.self) { item in
-                    NavigationLink(destination: {
-                        SettingsWidgetsCollectionDetailsView(collection: item)
+                    Button(action: {
+                        destinationCollection = item
+                        showDestination = true
                     }, label: {
                         HStack {
                             Text(item.name)
@@ -123,18 +163,94 @@ struct SettingsWidgetsCollectionView: View {
                                 Text("\(item.cards.count)")
                                     .foregroundStyle(.secondary)
                             }
+                            Image(systemName: "chevron.forward")
+                                .foregroundStyle(.tertiary)
+                                .font(.footnote)
+                                .bold()
                         }
                     })
+                    .buttonStyle(.plain)
                 }
             }
         }
         .navigationTitle("Settings.widgets")
+        .onAppear {
+            userCollections = CardCollectionManager.shared.userCollections
+        }
+        .navigationDestination(isPresented: $showDestination, destination: {
+            if let destinationCollection {
+                SettingsWidgetsCollectionDetailsView(collection: destinationCollection, isPresented: $showDestination)
+            }
+        })
     }
 }
 
 struct SettingsWidgetsCollectionDetailsView: View {
     var collection: CardCollectionManager.Collection
+    @Binding var isPresented: Bool
+    @State var collectionName: String = ""
+    @State var showCollectionDeleteAlert = false
     var body: some View {
-        Text(verbatim: "?")
+        ScrollView {
+            VStack {
+                CustomGroupBox(cornerRadius: 25) {
+                    LazyVStack {
+                        Group {
+                            HStack {
+                                Text("Settings.widgets.collections.name")
+                                    .bold()
+                                Spacer()
+                                TextField("Settings.widgets.collections.name", text: $collectionName)
+                                    .disabled(collection.isBuiltIn)
+                                    .multilineTextAlignment(.trailing)
+                                    .onSubmit {
+                                        if CardCollectionManager.shared.nameAvailable(collectionName) {
+                                            CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex{$0.name == collection.name}!].name = collectionName
+                                            CardCollectionManager.shared.updateStorage()
+                                        } else {
+                                            collectionName = collection.name
+                                        }
+                                    }
+                            }
+                        }
+                        
+                        if !collection.isBuiltIn {
+                            Group {
+                                Divider()
+                                HStack {
+                                    Button(role: .destructive, action: {
+                                        showCollectionDeleteAlert = true
+                                    }, label: {
+                                        Label("Settings.widgets.collections.delete", systemImage: "trash")
+                                    })
+                                    Spacer()
+                                }
+                                .padding(.top, 3)
+                            }
+                            .alert("Settings.widgets.collections.delete.alert.title.\(collection.name)", isPresented: $showCollectionDeleteAlert, actions: {
+                                Button(role: .destructive, action: {
+                                    CardCollectionManager.shared.remove(at: CardCollectionManager.shared.userCollections.firstIndex{$0.name == collectionName}!)
+                                    isPresented = false
+                                }, label: {
+                                    Text("Settings.widgets.collections.delete.alert.delete")
+                                })
+                                Button(role: .cancel, action: {}, label: {
+                                    Text("Settings.widgets.collections.delete.alert.cancel")
+                                })
+                            }, message: {
+                                Text("Settings.widgets.collections.delete.alert.message")
+                            })
+                        }
+                    }
+                }
+                .frame(maxWidth: 600)
+            }
+            .padding()
+        }
+        .withSystemBackground()
+        .navigationTitle(collectionName)
+        .onAppear {
+            collectionName = collection.name
+        }
     }
 }

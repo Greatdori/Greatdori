@@ -33,7 +33,7 @@ final class CardCollectionManager: Sendable {
     }
     
     @safe nonisolated(unsafe)
-    private(set) var userCollections = [Collection]()
+    var userCollections = [Collection]()
     
     @inline(__always)
     var builtinCollections: [Collection] {
@@ -79,7 +79,7 @@ final class CardCollectionManager: Sendable {
     }
     
     func nameAvailable(_ name: String) -> Bool {
-        !builtinCardCollectionNames.contains(name) && !userCollections.contains(where: { $0.name == name })
+        !builtinCardCollectionNames.contains(name) && !userCollections.contains(where: { $0.name == name }) && !name.isEmpty
     }
     func _collection(named name: String) -> Collection? {
         if builtinCardCollectionNames.contains(name) {
@@ -88,7 +88,7 @@ final class CardCollectionManager: Sendable {
         return builtinCollections.first(where: { $0.name == name }) ?? userCollections.first(where: { $0.name == name })
     }
     
-    private func updateStorage() {
+    func updateStorage() {
         if let data = try? encoder.encode(userCollections) {
             try? data.write(to: URL(filePath: containerPath + "/UserCardCollections.plist"))
         }

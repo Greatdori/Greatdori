@@ -46,11 +46,9 @@ struct NewsView: View {
                             case .gacha:
                                 GachaDetailView(id: news.relatedID)
                             case .loginCampaign:
-                                //FIXME: [NAVI785]
-                                EmptyView()
+                                LoginCampaignDetailView(id: news.relatedID)
                             case .song:
-                                //FIXME: [NAVI785]
-                                EmptyView()
+                                SongDetailView(id: news.relatedID)
                             @unknown default:
                                 EmptyView()
                             }
