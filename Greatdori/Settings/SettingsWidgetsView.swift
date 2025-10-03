@@ -86,6 +86,10 @@ struct SettingsWidgetsCollectionView: View {
                 }, label: {
                     Label("Settings.widget.collections.user.add", systemImage: "plus")
                 })
+                .onAppear {
+                    builtinCollections = CardCollectionManager.shared.builtinCollections
+                    userCollections = CardCollectionManager.shared.userCollections
+                }
             }
             .alert("Settings.widget.collections.user.add.alert.title", isPresented: $userIsAddingNewCollection, actions: {
                 TextField("Settings.widget.collections.user.add.alert.prompt", text: $newCollectionTitle)

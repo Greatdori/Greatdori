@@ -26,7 +26,7 @@ final class CardCollectionManager: Sendable {
     private init() {
         self.encoder = .init()
         self.encoder.outputFormat = .binary
-        if let data = try? Data(contentsOf: URL(filePath: containerPath + "/Documents/UserCardCollections.plist")) {
+        if let data = try? Data(contentsOf: URL(filePath: containerPath + "/UserCardCollections.plist")) {
             let decoder = PropertyListDecoder()
             self.userCollections = (try? decoder.decode([Collection].self, from: data)) ?? []
         }
@@ -71,11 +71,11 @@ final class CardCollectionManager: Sendable {
     
     @discardableResult
     func writeImageData(_ data: Data, named name: String) -> Card.File {
-        if !FileManager.default.fileExists(atPath: containerPath + "/Documents/CardImages") {
-            try? FileManager.default.createDirectory(atPath: containerPath + "/Documents/CardImages", withIntermediateDirectories: true)
+        if !FileManager.default.fileExists(atPath: containerPath + "/CardImages") {
+            try? FileManager.default.createDirectory(atPath: containerPath + "/CardImages", withIntermediateDirectories: true)
         }
-        try? data.write(to: URL(filePath: containerPath + "/Documents/CardImages/\(name).png"))
-        return .path("/Documents/CardImages/\(name).png")
+        try? data.write(to: URL(filePath: containerPath + "/CardImages/\(name).png"))
+        return .path("/CardImages/\(name).png")
     }
     
     func nameAvailable(_ name: String) -> Bool {
@@ -90,7 +90,8 @@ final class CardCollectionManager: Sendable {
     
     private func updateStorage() {
         if let data = try? encoder.encode(userCollections) {
-            try? data.write(to: URL(filePath: containerPath + "/Documents/UserCardCollections.plist"))
+            try? data.write(to: URL(filePath: containerPath + "/UserCardCollections.plist"))
+            
         }
     }
     
