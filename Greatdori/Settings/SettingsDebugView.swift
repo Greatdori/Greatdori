@@ -38,6 +38,7 @@ struct SettingsDebugView: View {
         @AppStorage("isFirstLaunch") var isFirstLaunch = true
         @AppStorage("isFirstLaunchResettable") var isFirstLaunchResettable = true
         @AppStorage("startUpSucceeded") var startUpSucceeded = true
+        @AppStorage("EnableRulerOverlay") var enableRulerOverlay = false
         @State var showDebugDisactivationAlert = false
         
         var body: some View {
@@ -56,6 +57,10 @@ struct SettingsDebugView: View {
                 })
                 Toggle(isOn: $startUpSucceeded, label: {
                     Text(verbatim: "startUpSucceeded")
+                    
+                })
+                Toggle(isOn: $enableRulerOverlay, label: {
+                    Text(verbatim: "Enable Ruler Overlay")
                     
                 })
 #if !DORIKIT_ENABLE_PRECACHE
