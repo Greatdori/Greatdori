@@ -78,10 +78,12 @@ struct CustomGroupBox<Content: View>: View {
     let content: () -> Content
     var cornerRadius: CGFloat = 15
     var showGroupBox: Bool = true
+    var strokeLineWidth: CGFloat = 0
     var useExtenedConstraints: Bool = false
-    init(showGroupBox: Bool = true, cornerRadius: CGFloat = 15, useExtenedConstraints: Bool = false, @ViewBuilder content: @escaping () -> Content) {
+    init(showGroupBox: Bool = true, cornerRadius: CGFloat = 15, useExtenedConstraints: Bool = false, strokeLineWidth: CGFloat = 0, @ViewBuilder content: @escaping () -> Content) {
         self.showGroupBox = showGroupBox
         self.cornerRadius = cornerRadius
+        self.strokeLineWidth = strokeLineWidth
         self.useExtenedConstraints = useExtenedConstraints
         self.content = content
     }
@@ -92,12 +94,18 @@ struct CustomGroupBox<Content: View>: View {
         }
         .background {
             if showGroupBox {
-                RoundedRectangle(cornerRadius: cornerRadius)
+                ZStack {
+                    RoundedRectangle(cornerRadius: cornerRadius)
 #if !os(macOS)
-                    .foregroundStyle(Color(.secondarySystemGroupedBackground))
+                        .foregroundStyle(Color(.secondarySystemGroupedBackground))
 #else
-                    .foregroundStyle(Color(NSColor.quaternarySystemFill))
+                        .foregroundStyle(Color(NSColor.quaternarySystemFill))
 #endif
+                    if strokeLineWidth > 0 {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .strokeBorder(.tint.opacity(0.9), lineWidth: strokeLineWidth)
+                    }
+                }
             }
         }
     }

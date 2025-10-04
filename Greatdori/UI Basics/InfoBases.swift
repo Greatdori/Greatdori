@@ -223,11 +223,12 @@ struct SummaryViewBase<Image: View, Detail: View>: View {
         }
     }
 }
+
 enum SummaryLayout: Hashable {
     case horizontal
     case vertical(hidesDetail: Bool = false)
     
-    fileprivate var axis: Axis {
+    var axis: Axis {
         switch self {
         case .horizontal: .horizontal
         case .vertical: .vertical
