@@ -11,6 +11,25 @@
 // See https://greatdori.memz.top/CONTRIBUTORS.txt for the list of Greatdori! project authors
 //
 //===----------------------------------------------------------------------===//
+//
+// Encoding & decoding card collections into strings.
+//
+// An encoded collection code:
+//
+// +------------+-------------------+---------+------------+---------------+
+// | specifier1 | verif code length | content | verif code | specifier2, 3 |
+// +------------+-------------------+---------+------------+---------------+
+//              |     defined in version `illumination`    |
+//
+// Encoding versions have been assigned 20 strings as specifiers,
+// each of them has in length of 3 and is uppercased.
+// Specifiers in result strings have random cases based on their main contents.
+//
+// Version illumination defines the 2nd character of an encoded string
+// is the length of verification code, from 0 to 93, mapped to ASCII
+// from 33 to 126. The main content has variable length.
+//
+//===----------------------------------------------------------------------===//
 
 import DoriKit
 import Foundation
@@ -145,10 +164,17 @@ func encodeCollection(_ info: CollectionEncodingInfo) -> String {
         return String(result.prefix(93))
     }
     
-    let encodedList = string2IntArray(compressInts(info.cardList))
-    let encodedName = string2IntArray(info.name)
-    let mergedData = encodedList.map { Int($0) } + [10082625] + encodedName.map { Int($0) }
-    let content = compressInts(mergedData, preservesOrder: true)
+    let content: String
+    if !info.name.isEmpty {
+        let encodedList = string2IntArray(compressInts(info.cardList))
+        let encodedName = string2IntArray(info.name)
+        let mergedData = encodedList.map { Int($0) } + [10082625] + encodedName.map { Int($0) }
+        content = compressInts(mergedData, preservesOrder: true)
+    } else {
+        // Name is empty, encode card list only.
+        // We have to wrap it to preserved order format for decoding.
+        content = compressInts(string2IntArray(compressInts(info.cardList)).map { Int($0) }, preservesOrder: true)
+    } // precondition: !info.cardList.isEmpty
     let verificationString = verification(of: content)
     let verificationLengthTag = String(UnicodeScalar(Array(33...126)[verificationString.count]))
     // precondition: (each specifiers).count = 3
@@ -279,12 +305,22 @@ func decodeIllumination(_ input: String) -> CollectionEncodingInfo? {
     
     let mergedData = decompressInts(str, preservedOrder: true)
     let splitedData = mergedData.split(separator: 10082625, maxSplits: 1)
-    guard splitedData.count == 2 else { return nil }
-    if let _decList = intArray2String(splitedData[0].map { Int32($0) }),
-       let _decName = intArray2String(splitedData[1].map { Int32($0) }) {
-        let decodedList = decompressInts(_decList)
-        let decodedName = _decName
-        return .init(name: decodedName, cardList: decodedList)
+    if splitedData.count == 2 {
+        if let _decList = intArray2String(splitedData[0].map { Int32($0) }),
+           let _decName = intArray2String(splitedData[1].map { Int32($0) }) {
+            let decodedList = decompressInts(_decList)
+            let decodedName = _decName
+            return .init(name: decodedName, cardList: decodedList)
+        } else {
+            return nil
+        }
+    } else if splitedData.count == 1 {
+        // Title is empty string
+        if let _decList = intArray2String(splitedData[0].map { Int32($0) }) {
+            return .init(name: "", cardList: decompressInts(_decList))
+        } else {
+            return nil
+        }
     } else {
         return nil
     }
