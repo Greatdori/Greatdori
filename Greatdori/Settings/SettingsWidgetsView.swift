@@ -319,6 +319,9 @@ struct SettingsWidgetsCollectionDetailsView: View {
     @State var showCollectionCodeDialog = false
     @State var showExportCheckmark = false
     @State var showCollectionEditorSheet = false
+    #if os(iOS)
+    @State var isCodeShareSheetPresented = false
+    #endif
     var body: some View {
         if let collection {
             ScrollView {
@@ -484,13 +487,26 @@ struct SettingsWidgetsCollectionDetailsView: View {
                     Label("Settings.widgets.collections.code.dialog.copy", systemImage: "document.on.document")
                 })
                 .keyboardShortcut(.defaultAction)
+                #if os(iOS)
+                // ShareLink in `alert` doesn't work on iOS,
+                // we have to use a button to present it with UIKit
+                Button("Share…", systemImage: "square.and.arrow.up") {
+                    isCodeShareSheetPresented = true
+                }
+                #else
                 ShareLink(item: collectionCode)
+                #endif
                 Button(role: .cancel, action: {}, label: {
                     Text("Settings.widgets.collections.code.dialog.cancel")
                 })
             }, message: {
                 Text("Settings.widgets.collections.code.dialog.message")
             })
+            #if os(iOS)
+            .sheet(isPresented: $isCodeShareSheetPresented) {
+                CollectionCodeShareSheet(for: collectionCode)
+            }
+            #endif
             .onChange(of: showExportCheckmark) {
                 if showExportCheckmark {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -507,6 +523,22 @@ struct SettingsWidgetsCollectionDetailsView: View {
                 }
         }
     }
+    
+    #if os(iOS)
+    struct CollectionCodeShareSheet: UIViewControllerRepresentable {
+        let code: String
+        
+        init(for code: String) {
+            self.code = code
+        }
+        
+        func makeUIViewController(context: Context) -> some UIViewController {
+            UIActivityViewController(activityItems: [code], applicationActivities: nil)
+        }
+        
+        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
+    }
+    #endif
 }
 
 
