@@ -146,6 +146,7 @@ struct SettingsWidgetsCollectionView: View {
                                 }
                             }
                         controller.addAction(confirmAction)
+                        controller.preferredAction = confirmAction
                         NotificationCenter.default.addObserver(
                             forName: UITextField.textDidChangeNotification,
                             object: alertTextField,
@@ -161,7 +162,11 @@ struct SettingsWidgetsCollectionView: View {
                                 }
                             }
                         }
-                        currentViewController.present(controller, animated: true)
+                        currentViewController.present(controller, animated: true) {
+                            // confirm action must be disabled after the alert
+                            // loads, or it won't be tinted
+                            confirmAction.isEnabled = false
+                        }
                     }, label: {
                         Label("Settings.widgets.collections.user.add", systemImage: "plus")
                     })
