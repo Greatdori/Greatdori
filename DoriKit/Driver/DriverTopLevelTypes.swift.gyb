@@ -249,3 +249,18 @@ public func withDoriCache<Result: Sendable & DoriCacheable>(
 ) -> CachePromise<Result?> {
     DoriCache.withCache(id: id, trait: trait, invocation: invocation)
 }
+
+public typealias PreloadDescriptor = DoriCache.PreloadDescriptor
+
+@inline(__always)
+public func preload<T: Sendable>(_ closure: sending @escaping () async -> T?) -> PreloadDescriptor<T> {
+    DoriCache.preload(closure)
+}
+@inline(__always)
+public func withPreloaded<each T, Result>(
+    _ descriptors: repeat PreloadDescriptor<each T>?,
+    isolation: isolated (any Actor)? = #isolation,
+    operation: () async throws -> Result
+) async rethrows -> Result {
+    try await DoriCache.withPreloaded(repeat each descriptors, isolation: isolation, operation: operation)
+}

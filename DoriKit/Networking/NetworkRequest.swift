@@ -43,6 +43,13 @@ internal func requestJSON(
         break
     }
     
+    // Preload
+    if let url = try? convertible.asURL(),
+       let data = await DoriCache._dataFromPreloaded(url),
+       let json = try? JSON(data: data) {
+        return .success(json)
+    }
+    
     if DoriCache.preferCachedNetworkSource,
        let url = try? convertible.asURL(),
        let cache = await NetworkCache.shared.getCache(for: url),
@@ -66,6 +73,7 @@ internal func requestJSON(
                     }
                 }
             }
+            DoriCache._finishedLoadSource?(url, cache.data)
             return .success(json)
         } else {
             await NetworkCache.shared.removeCache(for: url)
@@ -82,7 +90,9 @@ internal func requestJSON(
     )
     return await withTaskCancellationHandler {
         await withCheckedContinuation { continuation in
+            // !!!: Receive all task locals here
             let preferCachedNetworkSource = DoriCache.preferCachedNetworkSource
+            let finishedLoadSource = DoriCache._finishedLoadSource
             request.responseData { response in
                 let data = response.data
                 if data != nil {
@@ -90,8 +100,11 @@ internal func requestJSON(
                         do {
                             let json = try JSON(data: data!)
                             continuation.resume(returning: .success(json))
-                            if preferCachedNetworkSource, let url = try? convertible.asURL() {
-                                await NetworkCache.shared.updateCache(.init(data: data!), for: url)
+                            if let url = try? convertible.asURL() {
+                                finishedLoadSource?(url, data!)
+                                if preferCachedNetworkSource {
+                                    await NetworkCache.shared.updateCache(.init(data: data!), for: url)
+                                }
                             }
                         } catch {
                             continuation.resume(returning: .failure(()))
@@ -133,6 +146,13 @@ internal func requestJSON<Parameters: Encodable & Sendable>(
         break
     }
     
+    // Preload
+    if let url = try? convertible.asURL(),
+       let data = await DoriCache._dataFromPreloaded(url),
+       let json = try? JSON(data: data) {
+        return .success(json)
+    }
+    
     if DoriCache.preferCachedNetworkSource,
        let url = try? convertible.asURL(),
        let cache = await NetworkCache.shared.getCache(for: url),
@@ -156,6 +176,7 @@ internal func requestJSON<Parameters: Encodable & Sendable>(
                     }
                 }
             }
+            DoriCache._finishedLoadSource?(url, cache.data)
             return .success(json)
         } else {
             await NetworkCache.shared.removeCache(for: url)
@@ -172,6 +193,9 @@ internal func requestJSON<Parameters: Encodable & Sendable>(
     )
     return await withTaskCancellationHandler {
         await withCheckedContinuation { continuation in
+            // !!!: Receive all task locals here
+            let preferCachedNetworkSource = DoriCache.preferCachedNetworkSource
+            let finishedLoadSource = DoriCache._finishedLoadSource
             request.responseData { response in
                 let data = response.data
                 if data != nil {
@@ -179,8 +203,11 @@ internal func requestJSON<Parameters: Encodable & Sendable>(
                         do {
                             let json = try JSON(data: data!)
                             continuation.resume(returning: .success(json))
-                            if DoriCache.preferCachedNetworkSource, let url = try? convertible.asURL() {
-                                await NetworkCache.shared.updateCache(.init(data: data!), for: url)
+                            if let url = try? convertible.asURL() {
+                                DoriCache._finishedLoadSource?(url, data!)
+                                if preferCachedNetworkSource {
+                                    await NetworkCache.shared.updateCache(.init(data: data!), for: url)
+                                }
                             }
                         } catch {
                             continuation.resume(returning: .failure(()))

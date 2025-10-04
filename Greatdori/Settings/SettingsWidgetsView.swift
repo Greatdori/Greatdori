@@ -264,16 +264,17 @@ struct SettingsWidgetsCollectionView: View {
     struct CollectionAddingActions: View {
         @Binding var newCollectionTitle: String
         @Binding var newCollectionIsAdding: Bool
+        @State private var cardPreload: PreloadDescriptor<[PreviewCard]>?
         var body: some View {
             TextField("Settings.widgets.collections.user.add.alert.prompt", text: $newCollectionTitle)
             Button(action: {
                 if let decodeResult = decodeCollection(newCollectionTitle) {
                     Task {
-                        newCollectionIsAdding = true
-                        CardCollectionManager.shared.append(await decodeResult.toCollectionManagerStructure())
-                        //                        userCollections = CardCollectionManager.shared.userCollections
-                        newCollectionIsAdding = false
-                        //                        userIsAddingNewCollection = false
+                        await withPreloaded(cardPreload) {
+                            newCollectionIsAdding = true
+                            CardCollectionManager.shared.append(await decodeResult.toCollectionManagerStructure())
+                            newCollectionIsAdding = false
+                        }
                     }
                 } else if CardCollectionManager.shared.nameIsAvailable(newCollectionTitle) {
                     CardCollectionManager.shared.append(CardCollectionManager.Collection(name: newCollectionTitle, cards: []))
@@ -286,6 +287,13 @@ struct SettingsWidgetsCollectionView: View {
                 } else {
                     if decodeCollection(newCollectionTitle) != nil {
                         Text("Settings.widgets.collections.user.add.alert.import")
+                            .onAppear {
+                                if cardPreload == nil {
+                                    cardPreload = preload {
+                                        await PreviewCard.all()
+                                    }
+                                }
+                            }
                     } else {
                         Text("Settings.widgets.collections.user.add.alert.create")
                     }

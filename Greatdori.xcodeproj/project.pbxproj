@@ -99,6 +99,7 @@
 		8C4C89432E620EC9007F1E9F /* CopyOnWriteMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4C89422E620EC3007F1E9F /* CopyOnWriteMacro.swift */; };
 		8C59DBCD2E6296D60021317E /* SwiftOperators in Frameworks */ = {isa = PBXBuildFile; productRef = 8C59DBCC2E6296D60021317E /* SwiftOperators */; };
 		8C5AD1B02E46F96700E61653 /* SongMetaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */; };
+		8C62485A2E9116B600FF6950 /* CachePreloading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6248592E9116AE00FF6950 /* CachePreloading.swift */; };
 		8C6264EF2E9105D600FF6950 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6264EE2E9105D600FF6950 /* SwiftUIIntrospect */; };
 		8C6B8FC42E75373F00452D7B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9D96AA32E752BE7005E0F2C /* InfoPlist.strings */; };
 		8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */; };
@@ -720,6 +721,7 @@
 		8C59DBE12E62ED1B0021317E /* macos.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = macos.json; sourceTree = "<group>"; };
 		8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongMetaView.swift; sourceTree = "<group>"; };
 		8C5AD1B72E47317D00E61653 /* .mailmap */ = {isa = PBXFileReference; lastKnownFileType = text; path = .mailmap; sourceTree = "<group>"; };
+		8C6248592E9116AE00FF6950 /* CachePreloading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePreloading.swift; sourceTree = "<group>"; };
 		8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityStoriesView.swift; sourceTree = "<group>"; };
 		8C6C0EC92E422F8F00D1FB0A /* Greatdori Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Greatdori Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -1588,6 +1590,7 @@
 			children = (
 				8C9474492E35AB7F003A90B4 /* DoriCache.swift */,
 				8C3264032E3B75FF00081F4F /* PreCache.swift */,
+				8C6248592E9116AE00FF6950 /* CachePreloading.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -2902,6 +2905,7 @@
 				8CD13FB82E2FE2BF00673E15 /* Skill.swift in Sources */,
 				8CD13FB92E2FE2BF00673E15 /* Song.swift in Sources */,
 				8C7855992E48C68F000EA06E /* Comic.swift in Sources */,
+				8C62485A2E9116B600FF6950 /* CachePreloading.swift in Sources */,
 				8CFEF5BF2E4DD5F00017FF66 /* FrontendLoginCampaign.swift in Sources */,
 				8C8E43EE2E5D915E005590F0 /* URL+OfflineAsset.swift in Sources */,
 				8C923D9F2E313C0B003AFC0A /* Filters.swift in Sources */,
