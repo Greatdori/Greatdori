@@ -236,7 +236,9 @@ struct SettingsPermissionsView: View {
                                     do {
                                         let granted = try await EKEventStore().requestFullAccessToEvents()
                                         calendarIsAuthorized = granted
-                                        calendarIsRejected = true
+                                        if granted {
+                                            try await updateBirthdayCalendar()
+                                        }
                                     } catch {
                                         print(error)
                                         errorCode = -501
@@ -245,6 +247,16 @@ struct SettingsPermissionsView: View {
                                     }
                                 }
                                 return
+                            }
+                            Task {
+                                do {
+                                    try await updateBirthdayCalendar()
+                                } catch {
+                                    print(error)
+                                    errorCode = -502
+                                    showErrorAlert = true
+                                    birthdayCalendarIsEnabled = false
+                                }
                             }
                         } else {
                             try? removeBirthdayCalendar()
