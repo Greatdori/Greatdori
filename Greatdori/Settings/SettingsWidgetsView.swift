@@ -53,10 +53,7 @@ struct SettingsWidgetsView: View {
 
 struct SettingsWidgetsCollectionView: View {
     @AppStorage("hideCollectionNameWhileSharing") var hideCollectionNameWhileSharing = false
-    
-    @State var builtinCollections = CardCollectionManager.shared.builtinCollections
-    @State var userCollections = CardCollectionManager.shared.userCollections
-    
+    @StateObject var collectionManager = CardCollectionManager.shared
     @State var destinationCollection: CardCollectionManager.Collection? = nil
     @State var showDestination = false
     @State var newCollectionSheetIsDisplaying = false // macOS only
@@ -64,12 +61,13 @@ struct SettingsWidgetsCollectionView: View {
     @State var newCollectionIsImporting = false
     #if os(iOS)
     @State var currentViewController: UIViewController!
+    @State private var cardPreload: PreloadDescriptor<[PreviewCard]>?
     #endif
     var body: some View {
         Group {
             Section(content: {
-                if !userCollections.isEmpty {
-                    ForEach(userCollections, id: \.self) { item in
+                if !collectionManager.userCollections.isEmpty {
+                    ForEach(collectionManager.userCollections, id: \.self) { item in
                         Button(action: {
                             destinationCollection = item
                             showDestination = true
@@ -91,15 +89,13 @@ struct SettingsWidgetsCollectionView: View {
                         .buttonStyle(.plain)
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button(role: .destructive, action: {
-                                CardCollectionManager.shared.remove(at: userCollections.firstIndex{ $0.name == item.name }!)
-                                userCollections = CardCollectionManager.shared.userCollections
+                                collectionManager.remove(at: collectionManager.userCollections.firstIndex{ $0.name == item.name }!)
                             }, label: {
                                 Label("Settings.widgets.collections.user.delete", systemImage: "trash")
                             })
-                            if let duplicationName = CardCollectionManager.shared.duplicationName(item.name) {
+                            if let duplicationName = collectionManager.duplicationName(item.name) {
                                 Button(action: {
-                                    CardCollectionManager.shared.insert(CardCollectionManager.Collection(name: duplicationName, cards: item.cards), at: userCollections.firstIndex{ $0.name == item.name }!+1)
-                                    userCollections = CardCollectionManager.shared.userCollections
+                                    collectionManager.insert(CardCollectionManager.Collection(name: duplicationName, cards: item.cards), at: collectionManager.userCollections.firstIndex{ $0.name == item.name }!+1)
                                 }, label: {
                                     Label("Settings.widgets.collections.user.duplicate", systemImage: "plus.square.on.square")
                                 })
@@ -107,8 +103,7 @@ struct SettingsWidgetsCollectionView: View {
                         }
                     }
                     .onMove { from, to in
-                        CardCollectionManager.shared.move(fromOffsets: from, toOffset: to)
-                        userCollections = CardCollectionManager.shared.userCollections
+                        collectionManager.move(fromOffsets: from, toOffset: to)
                     }
                 } else {
                     Text("Settings.widgets.collections.user.empty")
@@ -137,12 +132,14 @@ struct SettingsWidgetsCollectionView: View {
                                 guard let newTitle = alertTextField.text else { return }
                                 if let decodeResult = decodeCollection(newTitle) {
                                     Task {
-                                        newCollectionIsImporting = true
-                                        CardCollectionManager.shared.append(await decodeResult.toCollectionManagerStructure())
-                                        newCollectionIsImporting = false
+                                        await withPreloaded(cardPreload) {
+                                            newCollectionIsImporting = true
+                                            collectionManager.append(await decodeResult.toCollectionManagerStructure())
+                                            newCollectionIsImporting = false
+                                        }
                                     }
-                                } else if CardCollectionManager.shared.nameIsAvailable(newTitle) {
-                                    CardCollectionManager.shared.append(CardCollectionManager.Collection(name: newTitle, cards: []))
+                                } else if collectionManager.nameIsAvailable(newTitle) {
+                                    collectionManager.append(CardCollectionManager.Collection(name: newTitle, cards: []))
                                 }
                             }
                         controller.addAction(confirmAction)
@@ -157,6 +154,11 @@ struct SettingsWidgetsCollectionView: View {
                                 confirmAction.isEnabled = CardCollectionManager.shared.nameIsAvailable(newTitle) || decodeCollection(newTitle) != nil
                                 if decodeCollection(newTitle) != nil {
                                     confirmAction.setValue(String(localized: "Settings.widgets.collections.user.add.alert.import"), forKey: "title")
+                                    if cardPreload == nil {
+                                        cardPreload = preload {
+                                            await PreviewCard.all()
+                                        }
+                                    }
                                 } else {
                                     confirmAction.setValue(String(localized: "Settings.widgets.collections.user.add.alert.create"), forKey: "title")
                                 }
@@ -170,10 +172,6 @@ struct SettingsWidgetsCollectionView: View {
                     }, label: {
                         Label("Settings.widgets.collections.user.add", systemImage: "plus")
                     })
-                    .onAppear {
-                        builtinCollections = CardCollectionManager.shared.builtinCollections
-                        userCollections = CardCollectionManager.shared.userCollections
-                    }
 #endif
                 } else {
                     HStack {
@@ -204,7 +202,7 @@ struct SettingsWidgetsCollectionView: View {
             })
             
             Section("Settings.widgets.collections.built-in") {
-                ForEach(builtinCollections, id: \.self) { item in
+                ForEach(collectionManager.builtinCollections, id: \.self) { item in
                     Button(action: {
                         destinationCollection = item
                         showDestination = true
@@ -227,8 +225,7 @@ struct SettingsWidgetsCollectionView: View {
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         if let duplicationName = CardCollectionManager.shared.duplicationName(item.name) {
                             Button(action: {
-                                CardCollectionManager.shared.insert(CardCollectionManager.Collection(name: duplicationName, cards: item.cards), at: userCollections.count)
-                                userCollections = CardCollectionManager.shared.userCollections
+                                collectionManager.insert(CardCollectionManager.Collection(name: duplicationName, cards: item.cards), at: collectionManager.userCollections.count)
                             }, label: {
                                 Label("Settings.widgets.collections.user.duplicate", systemImage: "plus.square.on.square")
                             })
@@ -246,20 +243,6 @@ struct SettingsWidgetsCollectionView: View {
                             .foregroundStyle(.secondary)
                     }
                 })
-            }
-        }
-        .onAppear {
-            userCollections = CardCollectionManager.shared.userCollections
-        }
-        .onChange(of: showDestination) {
-            userCollections = CardCollectionManager.shared.userCollections
-        }
-        .onChange(of: newCollectionSheetIsDisplaying) {
-            userCollections = CardCollectionManager.shared.userCollections
-        }
-        .onChange(of: newCollectionIsImporting) {
-            if !newCollectionIsImporting {
-                userCollections = CardCollectionManager.shared.userCollections
             }
         }
         .navigationDestination(isPresented: $showDestination, destination: {

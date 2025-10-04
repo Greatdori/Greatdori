@@ -12,12 +12,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+import Combine
 import SwiftUI
 import DoriKit
 import Foundation
 private import BuiltinCardCollections
 
-final class CardCollectionManager: Sendable {
+final class CardCollectionManager: @unchecked Sendable, ObservableObject {
     static let shared = CardCollectionManager()
     
     private let encoder: PropertyListEncoder
@@ -32,8 +33,7 @@ final class CardCollectionManager: Sendable {
         }
     }
     
-    @safe nonisolated(unsafe)
-    var userCollections = [Collection]()
+    @Published var userCollections = [Collection]()
     
     @inline(__always)
     var builtinCollections: [Collection] {
