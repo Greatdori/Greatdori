@@ -59,9 +59,7 @@ struct DetailsEventsSection: View {
                                     EventDetailView(id: item.id)
                                 }, label: {
                                     EventInfo(item, showDetails: true)
-                                        .scaledToFill()
                                         .frame(maxWidth: 600)
-                                        .scaledToFill()
                                 })
                                 .buttonStyle(.plain)
                             }
@@ -71,9 +69,7 @@ struct DetailsEventsSection: View {
                                     EventDetailView(id: item.id)
                                 }, label: {
                                     EventInfo(item, subtitle: (pointsDict[item] == nil ? "Details.source.release-during-event" :"Details.events.source.rewarded-at-points.\(pointsDict[item]!)"), showDetails: true)
-                                        .scaledToFill()
                                         .frame(maxWidth: 600)
-                                        .scaledToFill()
                                 })
                                 .buttonStyle(.plain)
                             }

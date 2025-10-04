@@ -45,7 +45,6 @@ struct GachaSearchView: View {
                 }
                 .frame(maxWidth: bannerWidth)
             }
-            .padding(.horizontal)
             .animation(.spring(duration: 0.3, bounce: 0.1, blendDuration: 0), value: layout)
         } eachContent: { layout, element in
             GachaInfo(element, showDetails: layout)

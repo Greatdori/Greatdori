@@ -45,7 +45,6 @@ struct EventSearchView: View {
                 }
                 .frame(maxWidth: bannerWidth)
             }
-            .padding(.horizontal)
             .animation(.spring(duration: 0.3, bounce: 0.1, blendDuration: 0), value: showDetails)
         } eachContent: { showDetails, element in
             EventInfo(element, showDetails: showDetails)
