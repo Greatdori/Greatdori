@@ -81,7 +81,8 @@ final class CardCollectionManager: Sendable {
     func nameIsAvailable(_ name: String) -> Bool {
         !allCollections.contains(where: { $0.name == name }) && !name.isEmpty
     }
-    func duplicationName(_ name: String) -> String? {
+    func duplicationName(_ input: String) -> String? {
+        let name = input.isEmpty ? String(localized: "Collection") : input
         guard !CardCollectionManager.shared.nameIsAvailable(name) else { return name }
         for i in 2...100 {
             if CardCollectionManager.shared.nameIsAvailable("\(name) \(i)") {

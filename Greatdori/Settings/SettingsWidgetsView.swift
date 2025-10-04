@@ -52,6 +52,8 @@ struct SettingsWidgetsView: View {
 
 
 struct SettingsWidgetsCollectionView: View {
+    @AppStorage("hideCollectionNameWhileSharing") var hideCollectionNameWhileSharing = false
+    
     @State var builtinCollections = CardCollectionManager.shared.builtinCollections
     @State var userCollections = CardCollectionManager.shared.userCollections
     
@@ -229,6 +231,17 @@ struct SettingsWidgetsCollectionView: View {
                     }
                 }
             }
+            
+            Section {
+                Toggle(isOn: $hideCollectionNameWhileSharing, label: {
+                    VStack(alignment: .leading) {
+                        Text("Settings.widgets.collections.share-without-name")
+                        Text("Settings.widgets.collections.share-without-name.description")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                })
+            }
         }
         .onAppear {
             userCollections = CardCollectionManager.shared.userCollections
@@ -310,6 +323,7 @@ struct SettingsWidgetsCollectionView: View {
 }
 
 struct SettingsWidgetsCollectionDetailsView: View {
+    @AppStorage("hideCollectionNameWhileSharing") var hideCollectionNameWhileSharing = false
     var collectionGivenName: String
     @State var collection: CardCollectionManager.Collection?
     @Binding var isPresented: Bool
@@ -355,17 +369,18 @@ struct SettingsWidgetsCollectionDetailsView: View {
                             
                             if !collection.isBuiltIn {
                                 Group {
-                                    HStack {
-                                        Button(role: .destructive, action: {
-                                            showCollectionDeleteAlert = true
-                                        }, label: {
+                                    Button(role: .destructive, action: {
+                                        showCollectionDeleteAlert = true
+                                    }, label: {
+                                        HStack {
                                             Label("Settings.widgets.collections.delete", systemImage: "trash")
                                                 .bold()
                                                 .foregroundStyle(.red)
-                                        })
-                                        .buttonStyle(.plain)
-                                        Spacer()
-                                    }
+                                            Spacer()
+                                        }
+                                        .contentShape(Rectangle())
+                                    })
+                                    .buttonStyle(.plain)
                                     .wrapIf(!isMACOS, in: { content in
                                         content
                                             .padding(.top, 3)
@@ -401,27 +416,29 @@ struct SettingsWidgetsCollectionDetailsView: View {
                     
                     DetailSectionsSpacer()
                     CustomGroupBox {
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                showCollectionEditorSheet = true
-                            }, label: {
+                        Button(action: {
+                            showCollectionEditorSheet = true
+                        }, label: {
+                            HStack {
+                                Spacer()
                                 Label("Settings.widgets.collections.edit", systemImage: "square.and.pencil")
                                     .bold()
-                            })
-                            Spacer()
-                        }
+                                Spacer()
+                            }
+                            .contentShape(Rectangle())
+                        })
                     }
                     ForEach(collection.cards.indices, id: \.self) { cardIndex in
                         SettingsWidgetsCollectionsItemView(collectionCard: collection.cards[cardIndex], layoutType: .constant(1))
                     }
-                    CustomGroupBox {
-                        HStack {
-                            Spacer()
-                            Text("Settings.widgets.collections.count.\(collection.cards.count)")
-                            //                            .bold()
-                                .foregroundStyle(.secondary)
-                            Spacer()
+                    if collection.cards.isEmpty {
+                        CustomGroupBox {
+                            HStack {
+                                Spacer()
+                                Text("Settings.widgets.collections.no-card")
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                            }
                         }
                     }
                 }
@@ -430,6 +447,12 @@ struct SettingsWidgetsCollectionDetailsView: View {
             }
             .withSystemBackground()
             .navigationTitle(collectionName)
+            .wrapIf(true, in: { content in
+                if #available(iOS 26.0, macOS 26.0, *) {
+                    content
+                        .navigationSubtitle("Settings.widgets.collections.count.\(collection.cards.count)")
+                }
+            })
             .onAppear {
                 collectionName = collection.name
                 if !collection.isBuiltIn {
@@ -439,7 +462,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction, content: {
                     Button(action: {
-                        collectionCode = encodeCollection(collection.toCollectionCodeStructure())
+                        collectionCode = encodeCollection(collection.toCollectionCodeStructure(hideName: hideCollectionNameWhileSharing))
                         showCollectionCodeDialog = true
                     }, label: {
                         if showExportCheckmark {
@@ -451,7 +474,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
                 })
             }
             .sheet(isPresented: $showCollectionEditorSheet, onDismiss: {
-                self.collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collectionGivenName })!
+                self.collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })!
             }, content: {
                 CollectionEditorView(collection: collection)
             })
@@ -488,7 +511,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
         } else {
             ProgressView()
                 .onAppear {
-                    collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collectionGivenName })
+                    collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })
                 }
         }
     }
@@ -533,11 +556,14 @@ struct SettingsWidgetsCollectionsItemView: View {
                 }
             }
         } detail: {
-            Group {
+            VStack(alignment: .leading) {
                 if let doriCard {
-                    Text(characterName?.forPreferredLocale() ?? "nil") + Text("Typography.bold-dot-seperater").bold() + Text(collectionCard.isTrained ? "Settings.widgets.collections.card.trained" : "Settings.widgets.collections.card.normal")
+                    Text(characterName?.forPreferredLocale() ?? "nil") + Text("Typography.bold-dot-seperater").bold() + Text("#\(doriCard.id)").fontDesign(.monospaced)
+                    Text(collectionCard.isTrained ? "Settings.widgets.collections.card.trained" : "Settings.widgets.collections.card.normal")
                 } else {
-                    Text(verbatim: "Lorem Ipsum Dolor Sit Amet")
+                    Text(verbatim: "Lorem Ipsum Dolor")
+                        .redacted(reason: .placeholder)
+                    Text(verbatim: "Lorem")
                         .redacted(reason: .placeholder)
                 }
             }

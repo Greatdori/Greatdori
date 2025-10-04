@@ -436,8 +436,8 @@ func determineCollectionCodeVersion(_ input: String) -> CollectionCodeVersion? {
 }
 
 extension CardCollectionManager.Collection {
-    public func toCollectionCodeStructure() -> CollectionEncodingInfo {
-        return .init(name: self.name, cardList: self.cards.map { $0.isTrained ? -$0.id : $0.id })
+    public func toCollectionCodeStructure(hideName: Bool = false) -> CollectionEncodingInfo {
+        return .init(name: hideName ? "" : self.name, cardList: self.cards.map { $0.isTrained ? -$0.id : $0.id })
     }
 }
 

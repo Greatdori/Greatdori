@@ -19,7 +19,8 @@ import SwiftUI
 struct CollectionEditorView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     @Environment(\.dismiss) var dismiss
-    var collection: CardCollectionManager.Collection
+//    var inputCollection: CardCollectionManager.Collection
+    @State var collection: CardCollectionManager.Collection
     @State var filter = DoriFrontend.Filter()
     @State var sorter = DoriFrontend.Sorter(keyword: .releaseDate(in: .jp), direction: .descending)
     @State var cards: [DoriFrontend.Card.CardWithBand]?
@@ -31,7 +32,12 @@ struct CollectionEditorView: View {
     @State var presentingCardID: Int?
     @State var updateIndex: Int = 0
     @State var showAutoSaveTip = true
+    @State var onlyShowSelectedItems = false
     @Namespace var cardLists
+    
+    init(collection: CardCollectionManager.Collection) {
+        self._collection = .init(wrappedValue: collection)
+    }
     
     let gridLayoutItemWidth: CGFloat = 200*0.9
     let galleryLayoutItemMinimumWidth: CGFloat = 400
@@ -46,37 +52,13 @@ struct CollectionEditorView: View {
                                 HStack {
                                     Spacer(minLength: 0)
                                     Group {
-                                        if layoutType == 1 {
-                                            LazyVStack {
-                                                ForEach(resultCards, id: \.self) { card in
-                                                    CollectionEditorItemView(doriCard: card.card, collection: collection, layoutType: $layoutType, externalUpdateIndex: $updateIndex)
-                                                        .highlightKeyword($searchedText)
-                                                }
+                                        LazyVStack {
+                                            ForEach(resultCards, id: \.self) { card in
+                                                CollectionEditorItemView(doriCard: card.card, collection: $collection, layoutType: $layoutType, externalUpdateIndex: $updateIndex)
+                                                    .highlightKeyword($searchedText)
                                             }
-                                            .frame(maxWidth: 600)
-                                        } else {
-                                            /*
-                                             LazyVGrid(columns: [GridItem(.adaptive(minimum: layoutType == 2 ? gridLayoutItemWidth : galleryLayoutItemMinimumWidth, maximum: layoutType == 2 ? gridLayoutItemWidth : galleryLayoutItemMaximumWidth))]) {
-                                             ForEach(resultCards, id: \.self) { card in
-                                             Button(action: {
-                                             showFilterSheet = false
-                                             presentingCardID = card.id
-                                             }, label: {
-                                             CardInfo(card.card, layoutType: layoutType, preferHeavierFonts: true, searchedText: searchedText)
-                                             })
-                                             .buttonStyle(.plain)
-                                             .wrapIf(true, in: { content in
-                                             if #available(iOS 18.0, macOS 15.0, *) {
-                                             content
-                                             .matchedTransitionSource(id: card.id, in: cardLists)
-                                             } else {
-                                             content
-                                             }
-                                             })
-                                             }
-                                             }
-                                             */
                                         }
+                                        .frame(maxWidth: 600)
                                     }
                                     .padding(.horizontal)
                                     Spacer(minLength: 0)
@@ -135,7 +117,7 @@ struct CollectionEditorView: View {
                                 Label(showFilterSheet ? "Settings.widgets.collection.selector.filter.hide" : "Settings.widgets.collection.selector.filter.show", systemImage: "line.3.horizontal.decrease")
                             })
                             SorterPickerView(sorter: $sorter, allOptions: CardWithBand.applicableSortingTypes)
-                            LayoutPicker(selection: $layoutType, options: [("Filter.view.list", "list.bullet", 1), ("Filter.view.grid", "square.grid.2x2", 2), ("Filter.view.gallery", "text.below.rectangle", 3)])
+                            LayoutPicker(selection: $layoutType, options: [("Filter.view.list", "list.bullet", 1), ("Filter.view.gallery", "text.below.rectangle", 3)])
                         }
                         Section {
                             Menu(content: {
@@ -175,6 +157,9 @@ struct CollectionEditorView: View {
                             }, label: {
                                 Label("Settings.widgets.collection.selector.select", systemImage: "checklist")
                             })
+                            Toggle(isOn: $onlyShowSelectedItems, label: {
+                                Label("Settings.widgets.collection.selector.show-selected-only", systemImage: "rectangle.on.rectangle.dashed")
+                            })
                         }
                     }, label: {
                         Image(systemName: "ellipsis")
@@ -190,7 +175,12 @@ struct CollectionEditorView: View {
                     DismissButton(action: {}, label: {
                         Image(systemName: "checkmark")
                     })
-                    .tint(.accent)
+                    .wrapIf(true, in: { content in
+                        if #available(iOS 26.0, macOS 26.0, *) {
+                            content
+                                .buttonStyle(.glassProminent)
+                        }
+                    })
                 }
             }
         }
@@ -212,18 +202,64 @@ struct CollectionEditorView: View {
         .onChange(of: filter) {
             if let cards {
                 searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
+                if onlyShowSelectedItems {
+                    searchedCards = searchedCards?.filter { doriCard in
+                        collection.cards.contains { collectionCard in
+                            collectionCard.id == doriCard.id
+                        }
+                    }
+                }
             }
         }
         .onChange(of: sorter) {
             if let cards {
                 searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
+                if onlyShowSelectedItems {
+                    searchedCards = searchedCards?.filter { doriCard in
+                        collection.cards.contains { collectionCard in
+                            collectionCard.id == doriCard.id
+                        }
+                    }
+                }
             }
         }
         .onChange(of: searchedText, {
             if let cards {
                 searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
+                if onlyShowSelectedItems {
+                    searchedCards = searchedCards?.filter { doriCard in
+                        collection.cards.contains { collectionCard in
+                            collectionCard.id == doriCard.id
+                        }
+                    }
+                }
             }
         })
+        .onChange(of: collection, {
+            if onlyShowSelectedItems {
+                if let cards {
+                    searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
+                    if onlyShowSelectedItems {
+                        searchedCards = searchedCards?.filter { doriCard in
+                            collection.cards.contains { collectionCard in
+                                collectionCard.id == doriCard.id
+                            }
+                        }
+                    }                }
+            }
+        })
+        .onChange(of: onlyShowSelectedItems) {
+            if let cards {
+                searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
+                if onlyShowSelectedItems {
+                    searchedCards = searchedCards?.filter { doriCard in
+                        collection.cards.contains { collectionCard in
+                            collectionCard.id == doriCard.id
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func getCards() async {
@@ -239,6 +275,13 @@ struct CollectionEditorView: View {
             if let fetchedCards = $0 {
                 cards = fetchedCards.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .id, direction: .ascending))
                 searchedCards = cards?.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
+                if onlyShowSelectedItems {
+                    searchedCards = searchedCards?.filter { doriCard in
+                        collection.cards.contains { collectionCard in
+                            collectionCard.id == doriCard.id
+                        }
+                    }
+                }
             } else {
                 infoIsAvailable = false
             }
@@ -250,7 +293,7 @@ struct CollectionEditorItemView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     
     var doriCard: PreviewCard
-    var collection: CardCollectionManager.Collection
+    @Binding var collection: CardCollectionManager.Collection
     @Binding var layoutType: Int
     @Binding var externalUpdateIndex: Int
     @State var normalCardIsSelected: Bool = false
@@ -322,6 +365,10 @@ struct CollectionEditorItemView: View {
                         }
                     }
                 }
+                .wrapIf(layoutType == 3, in: { content in
+                    content
+                        .padding(.bottom, 2)
+                })
                 HStack {
                     Button(action: {
                         if normalCoverIsSelectable && !normalCoverSelectableCheckIsPending {
@@ -331,15 +378,14 @@ struct CollectionEditorItemView: View {
                                 CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.append(
                                     CardCollectionManager.Card(id: doriCard.id, isTrained: false, localizedName: doriCard.prefix, file: .path(doriCard.coverNormalImageURL.absoluteString))
                                 )
-                                CardCollectionManager.shared.updateStorage()
                             } else {
                                 CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.removeAll(where: {
                                     !$0.isTrained && ($0.id == doriCard.id)
                                 })
-                                CardCollectionManager.shared.updateStorage()
                             }
                             
                             CardCollectionManager.shared.updateStorage()
+                            collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!
                         }
                     }, label: {
                         CollectionEditorCapsule(isActive: normalCardIsSelected, isDisabled: !normalCoverIsSelectable, content: {
@@ -367,6 +413,7 @@ struct CollectionEditorItemView: View {
                             }
                             
                             CardCollectionManager.shared.updateStorage()
+                            collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!
                         }
                     }, label: {
                         CollectionEditorCapsule(isActive: trainedCardIsSelected, isDisabled: !trainedCoverIsSelectable, content: {
