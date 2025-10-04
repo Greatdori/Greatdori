@@ -236,9 +236,14 @@ struct SettingsWidgetsCollectionView: View {
         .onChange(of: showDestination) {
             userCollections = CardCollectionManager.shared.userCollections
         }
-        .onChange(of: newCollectionSheetIsDisplaying, {
+        .onChange(of: newCollectionSheetIsDisplaying) {
             userCollections = CardCollectionManager.shared.userCollections
-        })
+        }
+        .onChange(of: newCollectionIsImporting) {
+            if !newCollectionIsImporting {
+                userCollections = CardCollectionManager.shared.userCollections
+            }
+        }
         .navigationDestination(isPresented: $showDestination, destination: {
             if let destinationCollection {
                 SettingsWidgetsCollectionDetailsView(collectionGivenName: destinationCollection.name, isPresented: $showDestination)
