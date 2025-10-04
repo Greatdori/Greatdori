@@ -179,8 +179,8 @@ struct DetailArtsSection: View {
                                         }
                                     })
                                     .buttonStyle(.plain)
+                                    .imageContextMenu([.init(url: item.url, description: item.title)])
                                 }
-                                //                                .hidden()
                             }
                         }
                     } else {
