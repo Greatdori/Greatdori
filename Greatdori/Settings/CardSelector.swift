@@ -330,13 +330,19 @@ struct CollectionEditorItemView: View {
                             .allowsHitTesting(false)
 #endif
                     }
-                        if layoutType != 1 {
-                            Spacer()
-                        } else {
-                            Spacer()
-                                .frame(maxWidth: 15)
+                    if layoutType != 1 {
+                        Spacer()
+                    } else {
+                        Spacer()
+                            .frame(maxWidth: 15)
+                    }
+                    
+                    HStack {
+                        if layoutType == 3 {
+                            if normalCoverSelectableCheckIsPending || trainedCoverSelectableCheckIsPending {
+                                ProgressView()
+                            }
                         }
-                        
                         VStack(alignment: layoutType == 1 ? .leading : .center) {
                             HighlightableText(doriCard.prefix.forPreferredLocale() ?? "")
                                 .bold()
@@ -353,15 +359,18 @@ struct CollectionEditorItemView: View {
                             .foregroundStyle(.secondary)
                             .font(isMACOS ? .body : .caption)
                             //                            .environment(\.isCompactHidden, layout != .horizontal)
-                                .foregroundStyle(.secondary)
+                            .foregroundStyle(.secondary)
                         }
-                        .frame(maxWidth: .infinity, alignment: layoutType == 1 ? .leading : .center)
-                        .multilineTextAlignment(layoutType == 1 ? .leading : .center)
+                    }
+                    .frame(maxWidth: .infinity, alignment: layoutType == 1 ? .leading : .center)
+                    .multilineTextAlignment(layoutType == 1 ? .leading : .center)
                     Spacer(minLength: 0)
-                    VStack {
-                        if normalCoverSelectableCheckIsPending || trainedCoverSelectableCheckIsPending {
-                            ProgressView()
-                            Spacer()
+                    if layoutType != 3 {
+                        VStack {
+                            if normalCoverSelectableCheckIsPending || trainedCoverSelectableCheckIsPending {
+                                ProgressView()
+                                Spacer()
+                            }
                         }
                     }
                 }
