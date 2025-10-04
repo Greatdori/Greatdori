@@ -167,10 +167,10 @@ func encodeCollection(_ info: CollectionEncodingInfo) -> String {
 
 func decodeCollection(_ input: String) -> CollectionEncodingInfo? {
     guard input.count > 5 else { return nil } // s[0] + l + c + v + s[1...2]
-    // s: version specifier
-    // l: specifier length
-    // c: subject
-    // v: verification string
+                                              // s: version specifier
+                                              // l: specifier length
+                                              // c: subject
+                                              // v: verification string
     
     // Verify version specifier
     let decoderVersion: CollectionCodeVersion? = determineCollectionCodeVersion(input)

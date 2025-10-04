@@ -257,7 +257,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
     @State var showExportCheckmark = false
     @State var showCollectionEditorSheet = false
     var body: some View {
-        if var collection {
+        if let collection {
             ScrollView {
                 LazyVStack {
                     CustomGroupBox(cornerRadius: isMACOS ? 15 : 25) {
@@ -386,7 +386,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
                 })
             }
             .sheet(isPresented: $showCollectionEditorSheet, onDismiss: {
-                collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collectionGivenName })!
+                self.collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collectionGivenName })!
             }, content: {
                 CollectionEditorView(collection: collection)
             })
