@@ -12,9 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+import Combine
 import DoriKit
 import SwiftUI
 import WidgetKit
+@_spi(Advanced) import SwiftUIIntrospect
 
 struct SettingsWidgetsView: View {
     @State var allCollections = CardCollectionManager.shared.allCollections
@@ -55,9 +57,12 @@ struct SettingsWidgetsCollectionView: View {
     
     @State var destinationCollection: CardCollectionManager.Collection? = nil
     @State var showDestination = false
-    @State var newCollectionSheetIsDisplaying = false
+    @State var newCollectionSheetIsDisplaying = false // macOS only
     @State var newCollectionInput = ""
     @State var newCollectionIsImporting = false
+    #if os(iOS)
+    @State var currentViewController: UIViewController!
+    #endif
     var body: some View {
         Group {
             Section(content: {
@@ -111,8 +116,50 @@ struct SettingsWidgetsCollectionView: View {
                 if !newCollectionIsImporting {
 #if os(iOS)
                     Button(action: {
-                        newCollectionInput = ""
-                        newCollectionSheetIsDisplaying = true
+                        // We use `UIAlertController` for iOS to workaround
+                        // some bugs about the alert presented by SwiftUI
+                        let controller = UIAlertController(
+                            title: .init(localized: "Settings.widgets.collections.user.add.alert.title"),
+                            message: .init(localized: "Settings.widgets.collections.user.add.alert.message"),
+                            preferredStyle: .alert
+                        )
+                        var alertTextField: UITextField!
+                        controller.addTextField { textField in
+                            alertTextField = textField
+                            textField.placeholder = .init(localized: "Settings.widgets.collections.user.add.alert.prompt")
+                        }
+                        controller.addAction(.init(title: .init(localized: "Settings.widgets.collections.user.add.alert.cancel"), style: .cancel))
+                        let confirmAction = UIAlertAction(
+                            title: .init(localized: "Settings.widgets.collections.user.add.alert.create"),
+                            style: .default) { _ in
+                                guard let newTitle = alertTextField.text else { return }
+                                if let decodeResult = decodeCollection(newTitle) {
+                                    Task {
+                                        newCollectionIsImporting = true
+                                        CardCollectionManager.shared.append(await decodeResult.toCollectionManagerStructure())
+                                        newCollectionIsImporting = false
+                                    }
+                                } else if CardCollectionManager.shared.nameIsAvailable(newTitle) {
+                                    CardCollectionManager.shared.append(CardCollectionManager.Collection(name: newTitle, cards: []))
+                                }
+                            }
+                        controller.addAction(confirmAction)
+                        NotificationCenter.default.addObserver(
+                            forName: UITextField.textDidChangeNotification,
+                            object: alertTextField,
+                            queue: .main
+                        ) { notifiction in
+                            DispatchQueue.main.async {
+                                guard let newTitle = alertTextField.text else { return }
+                                confirmAction.isEnabled = CardCollectionManager.shared.nameIsAvailable(newTitle) || decodeCollection(newTitle) != nil
+                                if decodeCollection(newTitle) != nil {
+                                    confirmAction.setValue(String(localized: "Settings.widgets.collections.user.add.alert.import"), forKey: "title")
+                                } else {
+                                    confirmAction.setValue(String(localized: "Settings.widgets.collections.user.add.alert.create"), forKey: "title")
+                                }
+                            }
+                        }
+                        currentViewController.present(controller, animated: true)
                     }, label: {
                         Label("Settings.widgets.collections.user.add", systemImage: "plus")
                     })
@@ -202,6 +249,11 @@ struct SettingsWidgetsCollectionView: View {
         }, message: {
             Text("Settings.widgets.collections.user.add.alert.message")
         })
+        #if os(iOS)
+        .introspect(.viewController, on: .iOS(.v17...)) { viewController in
+            currentViewController = viewController
+        }
+        #endif
     }
     
     struct CollectionAddingActions: View {

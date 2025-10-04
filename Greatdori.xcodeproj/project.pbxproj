@@ -99,6 +99,7 @@
 		8C4C89432E620EC9007F1E9F /* CopyOnWriteMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4C89422E620EC3007F1E9F /* CopyOnWriteMacro.swift */; };
 		8C59DBCD2E6296D60021317E /* SwiftOperators in Frameworks */ = {isa = PBXBuildFile; productRef = 8C59DBCC2E6296D60021317E /* SwiftOperators */; };
 		8C5AD1B02E46F96700E61653 /* SongMetaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5AD1AF2E46F96200E61653 /* SongMetaView.swift */; };
+		8C6264EF2E9105D600FF6950 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6264EE2E9105D600FF6950 /* SwiftUIIntrospect */; };
 		8C6B8FC42E75373F00452D7B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9D96AA32E752BE7005E0F2C /* InfoPlist.strings */; };
 		8C6C0EC32E40D71C00D1FB0A /* CommunityStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C0EC22E40D71300D1FB0A /* CommunityStoriesView.swift */; };
 		8C6C0ECB2E422F9000D1FB0A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C0ECA2E422F8F00D1FB0A /* WidgetKit.framework */; };
@@ -1048,6 +1049,7 @@
 				8CB4D47F2E445F700085D57A /* BuiltinCardCollections.framework in Frameworks */,
 				8C923D842E304899003AFC0A /* SDWebImageSVGCoder in Frameworks */,
 				8C923D822E304899003AFC0A /* SDWebImageSwiftUI in Frameworks */,
+				8C6264EF2E9105D600FF6950 /* SwiftUIIntrospect in Frameworks */,
 				8C0C99972E296A8C00549B5C /* DoriKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1962,6 +1964,7 @@
 			packageProductDependencies = (
 				8C923D812E304899003AFC0A /* SDWebImageSwiftUI */,
 				8C923D832E304899003AFC0A /* SDWebImageSVGCoder */,
+				8C6264EE2E9105D600FF6950 /* SwiftUIIntrospect */,
 			);
 			productName = Greatdori;
 			productReference = 8C0C995D2E296A4400549B5C /* Greatdori!.app */;
@@ -6049,6 +6052,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */;
 			productName = SwiftOperators;
+		};
+		8C6264EE2E9105D600FF6950 /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C499F8B2E4FD9CE0073FCB6 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = SwiftUIIntrospect;
 		};
 		8C7F17712E5C149C0040C206 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
