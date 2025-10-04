@@ -56,9 +56,7 @@ struct DetailsGachasSection: View {
                                     GachaDetailView(id: item.id)
                                 }, label: {
                                     GachaInfo(item)
-                                        .scaledToFill()
                                         .frame(maxWidth: 600)
-                                        .scaledToFill()
                                 })
                                 .buttonStyle(.plain)
                             }
@@ -68,9 +66,7 @@ struct DetailsGachasSection: View {
                                     GachaDetailView(id: item.id)
                                 }, label: {
                                     GachaInfo(item, subtitle: unsafe "Details.gachas.source.chance.\(String(format: "%.2f", (probabilityDict[item] ?? 0)*100) + String("%"))", showDetails: true)
-                                        .scaledToFill()
                                         .frame(maxWidth: 600)
-                                        .scaledToFill()
                                 })
                                 .buttonStyle(.plain)
                             }
