@@ -18,6 +18,7 @@ import SwiftUI
 // MARK: CollectionEditorView
 struct CollectionEditorView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
+    @Environment(\.dismiss) var dismiss
     var collection: CardCollectionManager.Collection
     @State var filter = DoriFrontend.Filter()
     @State var sorter = DoriFrontend.Sorter(keyword: .releaseDate(in: .jp), direction: .descending)
@@ -28,6 +29,8 @@ struct CollectionEditorView: View {
     @State var layoutType = 1
     @State var showFilterSheet = false
     @State var presentingCardID: Int?
+    @State var updateIndex: Int = 0
+    @State var showAutoSaveTip = true
     @Namespace var cardLists
     
     let gridLayoutItemWidth: CGFloat = 200*0.9
@@ -46,7 +49,7 @@ struct CollectionEditorView: View {
                                         if layoutType == 1 {
                                             LazyVStack {
                                                 ForEach(resultCards, id: \.self) { card in
-                                                    CollectionEditorItemView(doriCard: card.card, collection: collection, layoutType: $layoutType)
+                                                    CollectionEditorItemView(doriCard: card.card, collection: collection, layoutType: $layoutType, externalUpdateIndex: $updateIndex)
                                                         .highlightKeyword($searchedText)
                                                 }
                                             }
@@ -110,7 +113,14 @@ struct CollectionEditorView: View {
             .navigationTitle("Cards")
             .wrapIf(searchedCards != nil, in: { content in
                 if #available(iOS 26.0, *) {
-                    content.navigationSubtitle((searchedText.isEmpty && !filter.isFiltered) ? "Card.count.\(searchedCards!.count)" :  "Search.result.\(searchedCards!.count)")
+                    content.navigationSubtitle(showAutoSaveTip ? "Settings.widgets.collection.selector.auto-save" : ((searchedText.isEmpty && !filter.isFiltered) ? "Card.count.\(searchedCards!.count)" :  "Search.result.\(searchedCards!.count)"))
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    showAutoSaveTip = false
+                                }
+                            }
+                        }
                 } else {
                     content
                 }
@@ -118,57 +128,69 @@ struct CollectionEditorView: View {
             .toolbar {
                 ToolbarItem {
                     Menu(content: {
-                        Section("Search.result.\(searchedCards?.count ?? 0)") {
+                        Section {
                             Button(action: {
-                                
+                                showFilterSheet.toggle()
                             }, label: {
-                                Label("Settings.widgets.collection.selector.select.select-all", systemImage: "checkmark.circle.fill")
+                                Label(showFilterSheet ? "Settings.widgets.collection.selector.filter.hide" : "Settings.widgets.collection.selector.filter.show", systemImage: "line.3.horizontal.decrease")
                             })
-                            Button(action: {
-                                // Safely find the target collection index
-                                guard let idx = CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name }) else {
-                                    return
+                            SorterPickerView(sorter: $sorter, allOptions: CardWithBand.applicableSortingTypes)
+                            LayoutPicker(selection: $layoutType, options: [("Filter.view.list", "list.bullet", 1), ("Filter.view.grid", "square.grid.2x2", 2), ("Filter.view.gallery", "text.below.rectangle", 3)])
+                        }
+                        Section {
+                            Menu(content: {
+                                Section("Search.result.\(searchedCards?.count ?? 0)") {
+                                    Button(action: {
+                                        
+                                    }, label: {
+                                        Label((searchedCards?.count ?? 0 > 500 ? "Settings.widgets.collection.selector.select.select-all.too-much" : "Settings.widgets.collection.selector.select.select-all"), systemImage: "checkmark.circle")
+                                    })
+                                    .disabled(searchedCards?.count ?? 0 > 500)
+                                    Button(action: {
+                                        // Safely find the target collection index
+                                        guard let idx = CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name }) else {
+                                            return
+                                        }
+                                        
+                                        // Safely unwrap searchedCards and precompute a fast lookup set
+                                        guard let searchedCards, !searchedCards.isEmpty else {
+                                            return
+                                        }
+                                        let searchedIDs = Set(searchedCards.map { $0.id })
+                                        
+                                        // Remove any collection card whose absolute ID appears in the searched IDs
+                                        CardCollectionManager.shared.userCollections[idx].cards.removeAll { collectionCard in
+                                            searchedIDs.contains(collectionCard.id)
+                                        }
+                                        
+                                        // Persist the change if needed
+                                        CardCollectionManager.shared.updateStorage()
+                                        
+                                        updateIndex += 1
+                                    }, label: {
+                                        Label("Settings.widgets.collection.selector.select.deselect-all", systemImage: "circle.slash")
+                                    })
                                 }
-                                
-                                // Safely unwrap searchedCards and precompute a fast lookup set
-                                guard let searchedCards, !searchedCards.isEmpty else {
-                                    return
-                                }
-                                let searchedIDs = Set(searchedCards.map { $0.id })
-                                
-                                // Remove any collection card whose absolute ID appears in the searched IDs
-                                CardCollectionManager.shared.userCollections[idx].cards.removeAll { collectionCard in
-                                    searchedIDs.contains(collectionCard.id)
-                                }
-                                
-                                // Persist the change if needed
-                                CardCollectionManager.shared.updateStorage()
-//                                CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.removeAll(where: { collectionCard in
-//                                    searchedCards.contains(where: { doriCard in
-//                                        doriCard.id == collectionCard.id
-//                                    })
-//                                })
+                                .disabled((searchedCards?.count ?? 0) == 0)
                             }, label: {
-                                //                            Text("1")
-                                Label("Settings.widgets.collection.selector.select.deselect-all", systemImage: "circle")
+                                Label("Settings.widgets.collection.selector.select", systemImage: "checklist")
                             })
                         }
-                        .disabled((searchedCards?.count ?? 0) == 0)
                     }, label: {
-                        Image(systemName: "circle.grid.2x2.topleft.checkmark.filled")
+                        Image(systemName: "ellipsis")
                     })
                 }
                 if #available(iOS 26.0, macOS 26.0, *) {
                     ToolbarSpacer()
                 }
+//                ToolbarItemGroup {
+//                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewCard.applicableSortingTypes, hasEndingDate: false)
+//                }
                 ToolbarItem {
-                    LayoutPicker(selection: $layoutType, options: [("Filter.view.list", "list.bullet", 1), ("Filter.view.grid", "square.grid.2x2", 2), ("Filter.view.gallery", "text.below.rectangle", 3)])
-                }
-                if #available(iOS 26.0, macOS 26.0, *) {
-                    ToolbarSpacer()
-                }
-                ToolbarItemGroup {
-                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewCard.applicableSortingTypes, hasEndingDate: false)
+                    DismissButton(action: {}, label: {
+                        Image(systemName: "checkmark")
+                    })
+                    .tint(.accent)
                 }
             }
         }
@@ -230,6 +252,7 @@ struct CollectionEditorItemView: View {
     var doriCard: PreviewCard
     var collection: CardCollectionManager.Collection
     @Binding var layoutType: Int
+    @Binding var externalUpdateIndex: Int
     @State var normalCardIsSelected: Bool = false
     @State var trainedCardIsSelected: Bool = false
     
@@ -326,7 +349,6 @@ struct CollectionEditorItemView: View {
                                     .bold()
                                 Spacer()
                             }
-                            //                            .fontDesign(.monospaced)
                         })
                     })
                     .buttonStyle(.plain)
@@ -354,18 +376,17 @@ struct CollectionEditorItemView: View {
                                     .bold()
                                 Spacer()
                             }
-                            //                            .fontDesign(.monospaced)
                         })
                     })
                     .buttonStyle(.plain)
                 }
                 .onAppear {
-                    if CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.contains(where: {!$0.isTrained && ($0.id == doriCard.id)}) {
-                        normalCardIsSelected = true
-                    }
-                    if CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.contains(where: {$0.isTrained && ($0.id == doriCard.id)}) {
-                        trainedCardIsSelected = true
-                    }
+                    normalCardIsSelected = CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.contains(where: {!$0.isTrained && ($0.id == doriCard.id)})
+                    trainedCardIsSelected = CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.contains(where: {$0.isTrained && ($0.id == doriCard.id)})
+                }
+                .onChange(of: externalUpdateIndex) {
+                    normalCardIsSelected = CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.contains(where: {!$0.isTrained && ($0.id == doriCard.id)})
+                    trainedCardIsSelected = CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.contains(where: {$0.isTrained && ($0.id == doriCard.id)})
                 }
             }
             .wrapIf(layoutType != 1) { content in
@@ -412,6 +433,7 @@ struct CollectionEditorItemView: View {
         let content: Content
 //        let cornerRadius: CGFloat = capsuleDefaultCornerRadius
         @State var textWidth: CGFloat = 0
+        @State var showUnavailablePrompt = false
         
         init(isActive: Bool, isDisabled: Bool = false, @ViewBuilder content: () -> Content) {
             self.isActive = isActive
@@ -431,16 +453,45 @@ struct CollectionEditorItemView: View {
                 }
                 .foregroundStyle(!isDisabled ? (isActive ? Color.accent : getTertiaryLabelColor()) : Color.clear)
                 .frame(width: textWidth, height: filterItemHeight)
-                content
-                    .foregroundStyle(isActive && !isDisabled ? .white : Color.gray)
-                    .frame(height: filterItemHeight)
-                    .padding(.horizontal, isMACOS ? 10 : nil)
-                    .onFrameChange(perform: { geometry in
-                        textWidth = geometry.size.width
-                    })
-                    .strikethrough(isDisabled)
+                Group {
+                    if showUnavailablePrompt {
+                        HStack {
+                            Spacer()
+                            Text("N/A")
+                                .bold()
+                            Spacer()
+                        }
+                    } else {
+                        content
+                            .strikethrough(isDisabled)
+                    }
+                }
+                .foregroundStyle(isActive && !isDisabled ? .white : Color.gray)
+                .frame(height: filterItemHeight)
+                .padding(.horizontal, isMACOS ? 10 : nil)
+                .onFrameChange(perform: { geometry in
+                    textWidth = geometry.size.width
+                })
+                
             }
             .animation(.easeInOut(duration: 0.05), value: isActive)
+            .wrapIf(isDisabled, in: { content in
+                content
+                    .onTapGesture {
+                        withAnimation {
+                            showUnavailablePrompt = true
+                        }
+                    }
+            })
+            .onChange(of: showUnavailablePrompt) {
+                if showUnavailablePrompt {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        withAnimation {
+                            showUnavailablePrompt = false
+                        }
+                    }
+                }
+            }
         }
     }
     

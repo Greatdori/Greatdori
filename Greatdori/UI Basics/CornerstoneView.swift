@@ -362,7 +362,11 @@ struct LayoutPicker<T: Hashable>: View {
             .pickerStyle(.inline)
             .labelsHidden()
         } label: {
-            Image(_internalSystemName: options.first(where: { $0.2 == selection })!.1)
+            Label(title: {
+                Text("Search.layout")
+            }, icon: {
+                Image(_internalSystemName: options.first(where: { $0.2 == selection })!.1)
+            })
         }
 #else
         Picker("Search.layout", selection: $selection) {
