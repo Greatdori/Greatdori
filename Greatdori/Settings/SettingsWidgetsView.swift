@@ -460,18 +460,26 @@ struct SettingsWidgetsCollectionDetailsView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .primaryAction, content: {
-                    Button(action: {
-                        collectionCode = encodeCollection(collection.toCollectionCodeStructure(hideName: hideCollectionNameWhileSharing))
-                        showCollectionCodeDialog = true
-                    }, label: {
-                        if showExportCheckmark {
-                            Image(systemName: "checkmark")
-                        } else {
-                            Image(systemName: "square.and.arrow.up")
-                        }
+                if !collection.cards.isEmpty {
+                    ToolbarItem {
+                        LayoutPicker(selection: $layoutType, options: [("Filter.view.list", "list.bullet", 1), ("Filter.view.grid", "square.grid.2x2", 2), ("Filter.view.gallery", "text.below.rectangle", 3)])
+                    }
+                    if #available(iOS 26.0, macOS 26.0, *) {
+                        ToolbarSpacer()
+                    }
+                    ToolbarItem(placement: .primaryAction, content: {
+                        Button(action: {
+                            collectionCode = encodeCollection(collection.toCollectionCodeStructure(hideName: hideCollectionNameWhileSharing))
+                            showCollectionCodeDialog = true
+                        }, label: {
+                            if showExportCheckmark {
+                                Image(systemName: "checkmark")
+                            } else {
+                                Image(systemName: "square.and.arrow.up")
+                            }
+                        })
                     })
-                })
+                }
             }
             .sheet(isPresented: $showCollectionEditorSheet, onDismiss: {
                 self.collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })!

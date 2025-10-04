@@ -6198,13 +6198,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Name"
+            "value" : "Title"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "名称"
+            "value" : "标题"
           }
         }
       }
@@ -6230,7 +6230,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Share Without Name"
+            "value" : "Share Without Title"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共享不含标题"
           }
         }
       }
@@ -6240,7 +6246,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exclude collection name when generating Collection Code"
+            "value" : "Exclude collection title when generating Collection Code"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在生成精选集代码时去除精选集标题"
           }
         }
       }
@@ -6340,13 +6352,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create a new collection with a name, or import a collection with Collection Code."
+            "value" : "Create a new collection with a title, or import a collection with Collection Code."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "输入名称以创建新精选集，或输入精选集代码以导入精选集。"
+            "value" : "输入标题以创建新精选集，或输入精选集代码以导入精选集。"
           }
         }
       }
@@ -6358,13 +6370,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Name or Collection Code"
+            "value" : "Title or Collection Code"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "精选集名"
+            "value" : "精选集标题"
           }
         }
       }

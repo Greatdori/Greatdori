@@ -1904,8 +1904,8 @@
 				E97C5B872E8E9A4A004858A3 /* SettingsWidgetsView.swift */,
 				E9076E2E2E8B839D00A9F5AE /* SettingsAdvanced.swift */,
 				E94443CD2E8E80BC00593F07 /* SettingsDebugView.swift */,
-				E90769D12E546D5B00C9871C /* DebugView.swift */,
 				E9AE9E072E909ED100AAB049 /* CardSelector.swift */,
+				E90769D12E546D5B00C9871C /* DebugView.swift */,
 				8CC046DB2E6C8F5D009FDC13 /* AppFlags.swift */,
 			);
 			path = Settings;
