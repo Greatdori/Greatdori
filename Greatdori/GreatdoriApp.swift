@@ -95,6 +95,8 @@ struct GreatdoriApp: App {
                 #if os(iOS)
                 UNUserNotificationCenter.current().setBadgeCount(0)
                 UIApplication.shared.registerForRemoteNotifications()
+                #else
+                NSApplication.shared.registerForRemoteNotifications()
                 #endif
             @unknown default: break
             }
@@ -146,6 +148,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let url = urls.first {
             handleURL(url)
         }
+    }
+    
+    func application(_ application: NSApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        UserDefaults.standard.set(deviceToken, forKey: "RemoteNotifDeviceToken")
     }
 }
 #else

@@ -193,10 +193,6 @@ struct SettingsWidgetsCollectionView: View {
                         Label("Settings.widgets.collections.user.add", systemImage: "plus")
                     })
                     .disabled(newCollectionIsImporting)
-                    .onAppear {
-                        builtinCollections = CardCollectionManager.shared.builtinCollections
-                        userCollections = CardCollectionManager.shared.userCollections
-                    }
                 }
 #endif
             })
