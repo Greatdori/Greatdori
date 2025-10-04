@@ -153,10 +153,11 @@ func encodeCollection(_ info: CollectionEncodingInfo) -> String {
     let verificationLengthTag = String(UnicodeScalar(Array(33...126)[verificationString.count]))
     // precondition: (each specifiers).count = 3
     let versionSpecifiers = versionSpecifiers[.illumination]!
-    let _thisSpecifier = versionSpecifiers.randomElement()!
+    let specifierSelector = verificationString.unicodeScalars.map { Int($0.value) }.reduce(into: 0) { $0 += $1 }
+    let _thisSpecifier = versionSpecifiers[specifierSelector % versionSpecifiers.count]
     var thisSpecifier: [Swift.Character] = []
     for character in _thisSpecifier {
-        if Bool.random() {
+        if (Int(character.unicodeScalars.first!.value) + specifierSelector) % 2 == 0 {
             thisSpecifier.append(Swift.Character(character.lowercased()))
         } else {
             thisSpecifier.append(character)
