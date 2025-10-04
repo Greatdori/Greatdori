@@ -175,10 +175,9 @@ func decodeCollection(_ input: String) -> CollectionEncodingInfo? {
     
     // Verify version specifier
     let decoderVersion: CollectionCodeVersion? = determineCollectionCodeVersion(input)
-    let str = String(input.dropFirst().dropLast(2))
     switch decoderVersion {
     case .illumination:
-        return decodeIllumination(str)
+        return decodeIllumination(input)
     default:
         return nil
     }
@@ -250,6 +249,11 @@ private func intArray2String(_ compressed: [Int32]) -> String? {
 
 func decodeIllumination(_ input: String) -> CollectionEncodingInfo? {
     var str = input
+    
+    // We need to get a valid verification field for verifying specifier,
+    // this verification will happen later
+    let specifier = String(str.removeFirst()) + (String(str.removeLast()) + String(str.removeLast())).reversed()
+    
     // Verify verification code
     var verificationLength = str.removeFirst().unicodeScalars.first!.value - 33
     var verificationString = ""
@@ -258,6 +262,20 @@ func decodeIllumination(_ input: String) -> CollectionEncodingInfo? {
         verificationLength -= 1
     }
     guard verify(str, with: verificationString) else { return nil }
+    
+    // Verify specifier
+    let versionSpecifiers = versionSpecifiers[.illumination]!
+    let specifierSelector = verificationString.unicodeScalars.map { Int($0.value) }.reduce(into: 0) { $0 += $1 }
+    var _expectedSpecifier = Array(versionSpecifiers[specifierSelector % versionSpecifiers.count])
+    for (index, character) in _expectedSpecifier.enumerated() {
+        if (Int(character.unicodeScalars.first!.value) + specifierSelector) % 2 == 0 {
+            _expectedSpecifier[index] = Swift.Character(character.lowercased())
+        } else {
+            _expectedSpecifier[index] = character
+        }
+    }
+    let expectedSpecifier = _expectedSpecifier.reduce(into: "") { $0 += String($1) }
+    guard specifier == expectedSpecifier else { return nil }
     
     let mergedData = decompressInts(str, preservedOrder: true)
     let splitedData = mergedData.split(separator: 10082625, maxSplits: 1)
