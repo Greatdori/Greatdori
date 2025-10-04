@@ -48,6 +48,8 @@ struct EventDetailView: View {
                     ArtsItem(title: "Event.arts.home-screen.background", url: information.event.topScreenBackgroundImageURL)
                 }
             }
+        } switcherDestination: {
+            EventSearchView()
         }
     }
 }

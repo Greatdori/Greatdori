@@ -24,6 +24,8 @@ struct GachaDetailView: View {
     var body: some View {
         DetailViewBase("Gacha", previewList: allGachas, initialID: id) { information in
             GachaDetailOverviewView(information: information)
+        } switcherDestination: {
+            GachaSearchView()
         }
     }
 }

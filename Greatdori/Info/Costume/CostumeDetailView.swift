@@ -26,6 +26,8 @@ struct CostumeDetailView: View {
             if !information.cards.isEmpty {
                 DetailsCardsSection(cards: information.cards)
             }
+        } switcherDestination: {
+            CostumeSearchView()
         }
     }
 }

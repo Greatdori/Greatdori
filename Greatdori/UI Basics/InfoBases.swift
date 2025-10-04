@@ -17,12 +17,14 @@ import DoriKit
 
 struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & TitleDescribable,
                       PreviewInformation: Identifiable,
-                      Content: View>: View where Information.ID == Int, PreviewInformation.ID == Int {
+                      Content: View,
+                      SwitcherDestination: View>: View where Information.ID == Int, PreviewInformation.ID == Int {
     var titleKey: LocalizedStringResource
     var previewList: [PreviewInformation]?
     var initialID: Int
     var updateInformation: @Sendable (Int) async -> Information?
     var makeContent: (Information) -> Content
+    var makeSwitcherDestination: () -> SwitcherDestination
     var unavailablePrompt: LocalizedStringResource
     
     init(
@@ -30,10 +32,11 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
         previewList: [PreviewInformation]?,
         initialID: Int,
         @ViewBuilder content: @escaping (Information) -> Content,
+        @ViewBuilder switcherDestination: @escaping () -> SwitcherDestination
     ) where Information: GettableByID, PreviewInformation: ExtendedTypeConvertible, PreviewInformation.ExtendedType == Information {
         self.init(titleKey, previewList: previewList, initialID: initialID, updateInformation: {
             await PreviewInformation.ExtendedType.init(id: $0)
-        }, content: content)
+        }, content: content, switcherDestination: switcherDestination)
     }
     init(
         _ titleKey: LocalizedStringResource,
@@ -41,10 +44,11 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
         previewList: [PreviewInformation]?,
         initialID: Int,
         @ViewBuilder content: @escaping (Information) -> Content,
+        @ViewBuilder switcherDestination: @escaping () -> SwitcherDestination
     ) where Information: GettableByID {
         self.init(titleKey, previewList: previewList, initialID: initialID, updateInformation: {
             await infoType.init(id: $0)
-        }, content: content)
+        }, content: content, switcherDestination: switcherDestination)
     }
     init(
         _ titleKey: LocalizedStringResource,
@@ -52,12 +56,14 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
         initialID: Int,
         updateInformation: @Sendable @escaping (_ id: Int) async -> Information?,
         @ViewBuilder content: @escaping (Information) -> Content,
+        @ViewBuilder switcherDestination: @escaping () -> SwitcherDestination
     ) {
         self.titleKey = titleKey
         self.previewList = previewList
         self.initialID = initialID
         self.updateInformation = updateInformation
         self.makeContent = content
+        self.makeSwitcherDestination = switcherDestination
         self.unavailablePrompt = "Content.unavailable.\(String(localized: titleKey))"
     }
     
@@ -131,7 +137,7 @@ struct DetailViewBase<Information: Sendable & Identifiable & DoriCacheable & Tit
         }
         .toolbar {
             ToolbarItemGroup(content: {
-                DetailsIDSwitcher(currentID: $currentID, allIDs: allPreviewIDs, destination: { EventSearchView() })
+                DetailsIDSwitcher(currentID: $currentID, allIDs: allPreviewIDs, destination: makeSwitcherDestination)
                     .onChange(of: currentID) {
                         information = nil
                     }

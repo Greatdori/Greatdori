@@ -24,6 +24,8 @@ struct LoginCampaignDetailView: View {
     var body: some View {
         DetailViewBase("Login-campaign", forType: LoginCampaign.self, previewList: allLoginCampaigns, initialID: id) { information in
 //            LoginCampaignDetailOverviewView(information: information)
+        } switcherDestination: {
+            LoginCampaignSearchView()
         }
     }
 }

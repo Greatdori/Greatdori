@@ -34,6 +34,8 @@ struct SongDetailView: View {
                     }
                 }
             }
+        } switcherDestination: {
+            SongSearchView()
         }
     }
 }

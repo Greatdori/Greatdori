@@ -32,6 +32,8 @@ struct ComicDetailView: View {
             //                                    .frame(height: 30)
             //                                DetailsCardsSection(cards: information.cards)
             //                            }
+        } switcherDestination: {
+            ComicSearchView()
         }
     }
 }

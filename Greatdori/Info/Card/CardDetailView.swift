@@ -33,6 +33,8 @@ struct CardDetailView: View {
             if information.cardSource.containsSource(from: .gacha) {
                 DetailsGachasSection(sources: information.cardSource)
             }
+        } switcherDestination: {
+            CardSearchView()
         }
     }
 }
