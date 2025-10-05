@@ -80,6 +80,7 @@ struct CustomGroupBox<Content: View>: View {
     var showGroupBox: Bool = true
     var strokeLineWidth: CGFloat = 0
     var useExtenedConstraints: Bool = false
+    @Environment(\._groupBoxStrokeLineWidth) var envStrokeLineWidth: CGFloat
     init(showGroupBox: Bool = true, cornerRadius: CGFloat = 15, useExtenedConstraints: Bool = false, strokeLineWidth: CGFloat = 0, @ViewBuilder content: @escaping () -> Content) {
         self.showGroupBox = showGroupBox
         self.cornerRadius = cornerRadius
@@ -101,6 +102,7 @@ struct CustomGroupBox<Content: View>: View {
 #else
                         .foregroundStyle(Color(NSColor.quaternarySystemFill))
 #endif
+                    let strokeLineWidth = strokeLineWidth > 0 ? strokeLineWidth : envStrokeLineWidth
                     if strokeLineWidth > 0 {
                         RoundedRectangle(cornerRadius: cornerRadius)
                             .strokeBorder(.tint.opacity(0.9), lineWidth: strokeLineWidth)
@@ -110,7 +112,14 @@ struct CustomGroupBox<Content: View>: View {
         }
     }
 }
-
+extension EnvironmentValues {
+    @Entry fileprivate var _groupBoxStrokeLineWidth: CGFloat = 0
+}
+extension View {
+    func groupBoxStrokeLineWidth(_ width: CGFloat) -> some View {
+        environment(\._groupBoxStrokeLineWidth, width)
+    }
+}
 
 // MARK: CustomGroupBoxOld [×]
 struct CustomGroupBoxOld<Content: View>: View {
