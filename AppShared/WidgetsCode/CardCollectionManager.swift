@@ -15,6 +15,7 @@
 import Combine
 import SwiftUI
 import DoriKit
+import WidgetKit
 import Foundation
 private import BuiltinCardCollections
 
@@ -101,6 +102,7 @@ final class CardCollectionManager: @unchecked Sendable, ObservableObject {
     func updateStorage() {
         if let data = try? encoder.encode(userCollections) {
             try? data.write(to: URL(filePath: containerPath + "/UserCardCollections.plist"))
+            WidgetCenter.shared.reloadTimelines(ofKind: "com.memz233.Greatdori.Widgets.CardCollection")
         }
     }
     
