@@ -72,7 +72,7 @@ struct CardCoverImage: View {
     
     @State var normalCardIsOnHover = false
     @State var trainedCardIsOnHover = false
-    
+    @State var isNormalImageUnavailable = false
     
     @State var isHovering: Bool = false
     var body: some View {
@@ -95,7 +95,7 @@ struct CardCoverImage: View {
                 GeometryReader { proxy in
                     Group {
                         if let trainedBackgroundImageURL, displayType != .normalOnly {
-                            if ![.others, .campaign, .birthday].contains(cardType) && displayType == .both {
+                            if displayType == .both && !isNormalImageUnavailable {
                                 // Both
                                 HStack(spacing: 0) {
                                     WebImage(url: normalBackgroundImageURL) { image in
@@ -105,6 +105,9 @@ struct CardCoverImage: View {
                                             .fill(getPlaceholderColor())
                                     }
                                     .resizable()
+                                    .onFailure { _ in
+                                        isNormalImageUnavailable = true
+                                    }
                                     .interpolation(.high)
                                     .antialiased(true)
                                     .scaledToFill()
@@ -295,5 +298,4 @@ struct CardCoverImage: View {
             CardDetailView(id: cardID)
         })
     }
-    
 }
