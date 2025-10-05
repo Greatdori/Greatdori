@@ -96,6 +96,12 @@ import SwiftUI
         tabValue: .eventTracker,
         destination: {EventTrackerView()}
     ),
+    ToolDestinationItem(
+        title: "故事浏览器",
+        symbol: "text.rectangle.page",
+        tabValue: .storyViewer,
+        destination: {StoryViewerView()}
+    )
 ]
 
 

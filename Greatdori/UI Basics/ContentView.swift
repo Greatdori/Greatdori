@@ -401,7 +401,7 @@ enum InfoTab: Hashable {
 }
 
 enum ToolTab: Hashable {
-    case home, eventTracker
+    case home, eventTracker, storyViewer
 }
 
 enum Platform {
