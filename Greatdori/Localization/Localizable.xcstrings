@@ -5766,7 +5766,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "编辑会自动保存。"
+            "value" : "编辑将自动保存。"
           }
         }
       }
