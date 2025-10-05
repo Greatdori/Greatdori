@@ -18,9 +18,8 @@ import DoriKit
 import SDWebImageSwiftUI
 
 struct EventTrackerView: View {
-    @State var focusOnLatestEvents = true
-    @State var locale: DoriLocale = DoriLocale.primaryLocale
-    
+    @State private var locale: DoriLocale = DoriLocale.primaryLocale
+    @State private var eventIDInput = ""
     @State private var eventList: [PreviewEvent]?
     @State private var eventListIsAvailabile = true
     @State private var selectedEvent: PreviewEvent?
@@ -32,42 +31,274 @@ struct EventTrackerView: View {
             HStack {
                 Spacer(minLength: 0)
                 VStack {
-                    VStack {
-                        Group {
-                            // MARK: Info
-                            CustomGroupBox(cornerRadius: 20) {
-                                LazyVStack {
-                                    Group {
-                                        ListItemView(title: {
-                                            Text("Tools.event-tracker.latest-events")
+                    CustomGroupBox(cornerRadius: 20) {
+                        LazyVStack {
+                            Group {
+                                ListItemView(title: {
+                                    Text("活动 ID")
+                                        .bold()
+                                }, value: {
+                                    TextField(text: $eventIDInput) { EmptyView() }
+                                        .onSubmit {
+                                            if let eventList, let id = Int(eventIDInput) {
+                                                Task {
+                                                    selectedEvent = eventList.first { $0.id == id }
+                                                    await updateTrackerData()
+                                                }
+                                            }
+                                        }
+                                })
+                                Divider()
+                            }
+                            
+                            Group {
+                                ListItemView(title: {
+                                    Text("Tools.event-tracker.locale")
+                                        .bold()
+                                }, value: {
+                                    Picker(selection: $locale, content: {
+                                        ForEach(DoriLocale.allCases, id: \.self) { item in
+                                            Text(item.rawValue.uppercased())
+                                                .tag(item)
+                                        }
+                                    }, label: {EmptyView()})
+                                    .labelsHidden()
+                                })
+                                Divider()
+                            }
+                            
+                            ListItemView(title: {
+                                Text("Tier")
+                                    .bold()
+                            }, value: {
+                                Picker(selection: $selectedTier) {
+                                    ForEach([10, 20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000], id: \.self) { t in
+                                        Text(verbatim: "T\(t)").tag(t)
+                                    }
+                                } label: {
+                                    EmptyView()
+                                }
+                                .labelsHidden()
+                                .onChange(of: selectedTier) {
+                                    Task {
+                                        await updateTrackerData()
+                                    }
+                                }
+                                
+                            })
+                        }
+                    }
+                    if let selectedEvent, let trackerData {
+                        CustomGroupBox(cornerRadius: 20) {
+                            LazyVStack {
+                                switch trackerData {
+                                case .tracker(let trackerData):
+                                    if let startDate = selectedEvent.startAt.forPreferredLocale(),
+                                       let endDate = selectedEvent.endAt.forPreferredLocale() {
+                                        ListItemView {
+                                            Text("状态")
                                                 .bold()
-                                        }, value: {
-                                            Toggle(isOn: $focusOnLatestEvents, label: {EmptyView()})
-                                                .labelsHidden()
-                                        })
+                                        } value: {
+                                            VStack(alignment: .trailing) {
+                                                if startDate > .now {
+                                                    Text("未开始")
+                                                } else if endDate > .now {
+                                                    Text("\(Int((Date.now.timeIntervalSince1970 - startDate.timeIntervalSince1970) / (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) * 100))% 完成率")
+                                                    Text("\(Text(endDate, style: .relative))后结束")
+                                                } else {
+                                                    Text("已完结")
+                                                }
+                                            }
+                                        }
                                         Divider()
                                     }
-                                    
-                                    Group {
-                                        ListItemView(title: {
-                                            Text("Tools.event-tracker.locale")
+                                    if let latestCutoff = trackerData.cutoffs.last?.ep {
+                                        ListItemView {
+                                            Text("最新分数线")
                                                 .bold()
-                                        }, value: {
-                                            Picker(selection: $locale, content: {
-                                                ForEach(DoriLocale.allCases, id: \.self) { item in
-                                                    Text(item.rawValue.uppercased())
-                                                        .tag(item)
-                                                }
-                                            }, label: {EmptyView()})
-                                            .labelsHidden()
-                                        })
+                                        } value: {
+                                            Text(String(latestCutoff))
+                                        }
                                         Divider()
+                                    }
+                                    if let latestPrediction = trackerData.predictions.last?.ep {
+                                        ListItemView {
+                                            Text("最新预测")
+                                                .bold()
+                                        } value: {
+                                            Text(String(latestPrediction))
+                                        }
+                                        Divider()
+                                    }
+                                    if let latestUpdateTime = trackerData.cutoffs.last?.time {
+                                        ListItemView {
+                                            Text("更新时间")
+                                                .bold()
+                                        } value: {
+                                            Text("\(Text(latestUpdateTime, style: .relative))前")
+                                        }
+                                    }
+                                    VStack(alignment: .leading) {
+                                        Chart {
+                                            ForEach(trackerData.cutoffs, id: \.time) { cutoff in
+                                                if let ep = cutoff.ep {
+                                                    AreaMark(
+                                                        x: .value("Date", cutoff.time),
+                                                        y: .value("Ep", ep)
+                                                    )
+                                                    .foregroundStyle(.blue.opacity(0.7))
+                                                    LineMark(
+                                                        x: .value("Date", cutoff.time),
+                                                        y: .value("Ep", ep)
+                                                    )
+                                                    .foregroundStyle(by: .value("Type", String(localized: "目前分数线")))
+                                                }
+                                            }
+                                            ForEach(trackerData.predictions, id: \.time) { prediction in
+                                                if let ep = prediction.ep {
+                                                    LineMark(
+                                                        x: .value("Date", prediction.time),
+                                                        y: .value("Ep", ep)
+                                                    )
+                                                    .lineStyle(.init(lineWidth: 2, dash: [5, 3]))
+                                                    .foregroundStyle(by: .value("Type", String(localized: "预测最终分数线")))
+                                                }
+                                            }
+                                        }
+                                        .chartForegroundStyleScale([
+                                            String(localized: "目前分数线"): .blue,
+                                            String(localized: "预测最终分数线"): .blue
+                                        ])
+                                        .chartLegend(.hidden)
+                                        .chartXAxis {
+                                            AxisMarks(values: .stride(by: .day)) { value in
+                                                AxisGridLine()
+                                                AxisTick()
+                                                AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+                                            }
+                                        }
+                                        .chartYAxis {
+                                            AxisMarks(position: .leading, values: .stride(by: stride(of: trackerData))) { value in
+                                                AxisGridLine()
+                                                AxisTick()
+                                                AxisValueLabel {
+                                                    if let number = value.as(Double.self) {
+                                                        Text(formatNumber(number))
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        .containerRelativeFrame(.vertical) { length, _ in
+                                            length / 5 * 3
+                                        }
+                                        HStack {
+                                            Rectangle()
+                                                .fill(Color.blue.opacity(0.7))
+                                                .strokeBorder(Color.blue, lineWidth: 2)
+                                                .frame(width: 30, height: 15)
+                                            Text("目前分数线")
+                                            Rectangle()
+                                                .stroke(style: .init(lineWidth: 2, dash: [5, 3]))
+                                                .fill(Color.blue)
+                                                .frame(width: 30, height: 15)
+                                            Text("预测最终分数线")
+                                        }
+                                    }
+                                case .top(let topData):
+                                    if let startDate = selectedEvent.startAt.forPreferredLocale(),
+                                       let endDate = selectedEvent.endAt.forPreferredLocale() {
+                                        ListItemView {
+                                            Text("状态")
+                                                .bold()
+                                        } value: {
+                                            VStack(alignment: .trailing) {
+                                                if startDate > .now {
+                                                    Text("未开始")
+                                                } else if endDate > .now {
+                                                    Text("\(Int((Date.now.timeIntervalSince1970 - startDate.timeIntervalSince1970) / (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) * 100))% 完成率")
+                                                    Text("\(Text(endDate, style: .relative))后结束")
+                                                } else {
+                                                    Text("已完结")
+                                                }
+                                            }
+                                        }
+                                        Divider()
+                                    }
+                                    if let latestUpdateTime = topData.last?.points.last?.time {
+                                        ListItemView {
+                                            Text("更新时间")
+                                                .bold()
+                                        } value: {
+                                            Text("\(Text(latestUpdateTime, style: .relative))前")
+                                        }
+                                    }
+                                    Chart {
+                                        ForEach(topData, id: \.uid) { data in
+                                            ForEach(data.points, id: \.time) { point in
+                                                LineMark(
+                                                    x: .value("Date", point.time),
+                                                    y: .value("Point", point.value)
+                                                )
+                                                .foregroundStyle(by: .value("Name", data.name))
+                                            }
+                                        }
+                                    }
+                                    .chartXAxis {
+                                        AxisMarks(values: .stride(by: .day)) { value in
+                                            AxisGridLine()
+                                            AxisTick()
+                                            AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+                                        }
+                                    }
+                                    .chartYAxis {
+                                        AxisMarks(position: .leading, values: .stride(by: stride(of: topData))) { value in
+                                            AxisGridLine()
+                                            AxisTick()
+                                            AxisValueLabel {
+                                                if let number = value.as(Double.self) {
+                                                    Text(formatNumber(number))
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .containerRelativeFrame(.vertical) { length, _ in
+                                        length / 5 * 4
+                                    }
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            ForEach(Array(topData.prefix(10).enumerated()), id: \.element.uid) { index, data in
+                                                HStack {
+                                                    if 1...3 ~= index + 1 {
+                                                        Image("tier_\(DoriAPI.preferredLocale.rawValue)_\(index + 1)")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 40)
+                                                    } else {
+                                                        Text(verbatim: "#\(index + 1)")
+                                                            .font(.headline)
+                                                            .frame(width: 40)
+                                                    }
+                                                    CardPreviewImage(data.card, showTrainedVersion: data.trained)
+                                                    VStack(alignment: .leading) {
+                                                        Text(data.name)
+                                                            .font(.title3)
+                                                        Text(data.introduction)
+                                                            .foregroundStyle(.gray)
+                                                    }
+                                                    Spacer()
+                                                    if let score = data.points.last?.value {
+                                                        Text("\(score) 分")
+                                                    }
+                                                }
+                                                Divider()
+                                            }
+                                        }
+                                        Spacer()
                                     }
                                 }
                             }
                         }
                     }
-                    .frame(maxWidth: 600)
                 }
                 .padding()
                 Spacer(minLength: 0)
@@ -78,286 +309,6 @@ struct EventTrackerView: View {
         .task {
             await getEvents()
         }
-        
-        /*
-        List {
-            if let eventList {
-                Section {
-                    Picker("活动", selection: $selectedEvent) {
-                        ForEach(eventList) { event in
-                            Text(event.eventName.forPreferredLocale() ?? "").tag(event)
-                        }
-                    }
-                    .onChange(of: selectedEvent) {
-                        Task {
-                            await updateTrackerData()
-                        }
-                        UserDefaults.standard.set(selectedEvent?.id, forKey: "EventTrackerSelectedEventID")
-                    }
-                    if let selectedEvent {
-                        NavigationLink(destination: { EventDetailView(id: selectedEvent.id) }) {
-                            EventCardView(selectedEvent, inLocale: nil)
-                        }
-                        .listRowBackground(Color.clear)
-                        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    }
-                    Picker("排名", selection: $tier) {
-                        ForEach([10, 20, 30, 40, 50, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000], id: \.self) { t in
-                            Text(verbatim: "T\(t)").tag(t)
-                        }
-                    }
-                    .onChange(of: tier) {
-                        Task {
-                            await updateTrackerData()
-                        }
-                    }
-                }
-                if let selectedEvent, let trackerData {
-                    switch trackerData {
-                    case .tracker(let trackerData):
-                        Section {
-                            Group {
-                                if let startDate = selectedEvent.startAt.forPreferredLocale(),
-                                   let endDate = selectedEvent.endAt.forPreferredLocale() {
-                                    VStack(alignment: .leading) {
-                                        Text("状态")
-                                            .font(.system(size: 16, weight: .medium))
-                                        Group {
-                                            if startDate > .now {
-                                                Text("未开始")
-                                            } else if endDate > .now {
-                                                Text("\(Int((Date.now.timeIntervalSince1970 - startDate.timeIntervalSince1970) / (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) * 100))% 完成率")
-                                                Text("\(Text(endDate, style: .relative))后结束")
-                                            } else {
-                                                Text("已完结")
-                                            }
-                                        }
-                                        .font(.system(size: 14))
-                                        .opacity(0.6)
-                                    }
-                                }
-                                if let latestCutoff = trackerData.cutoffs.last?.ep {
-                                    VStack(alignment: .leading) {
-                                        Text("最新分数线")
-                                            .font(.system(size: 16, weight: .medium))
-                                        Text(String(latestCutoff))
-                                            .font(.system(size: 14))
-                                            .opacity(0.6)
-                                    }
-                                }
-                                if let latestPrediction = trackerData.predictions.last?.ep {
-                                    VStack(alignment: .leading) {
-                                        Text("最新预测")
-                                            .font(.system(size: 16, weight: .medium))
-                                        Text(String(latestPrediction))
-                                            .font(.system(size: 14))
-                                            .opacity(0.6)
-                                    }
-                                }
-                                if let latestUpdateTime = trackerData.cutoffs.last?.time {
-                                    VStack(alignment: .leading) {
-                                        Text("更新时间")
-                                            .font(.system(size: 16, weight: .medium))
-                                        Text("\(Text(latestUpdateTime, style: .relative))前")
-                                            .font(.system(size: 14))
-                                            .opacity(0.6)
-                                    }
-                                }
-                            }
-                            .listRowBackground(Color.clear)
-                            VStack(alignment: .leading) {
-                                Chart {
-                                    ForEach(trackerData.cutoffs, id: \.time) { cutoff in
-                                        if let ep = cutoff.ep {
-                                            AreaMark(
-                                                x: .value("Date", cutoff.time),
-                                                y: .value("Ep", ep)
-                                            )
-                                            .foregroundStyle(.blue.opacity(0.7))
-                                            LineMark(
-                                                x: .value("Date", cutoff.time),
-                                                y: .value("Ep", ep)
-                                            )
-                                            .foregroundStyle(by: .value("Type", String(localized: "目前分数线")))
-                                        }
-                                    }
-                                    ForEach(trackerData.predictions, id: \.time) { prediction in
-                                        if let ep = prediction.ep {
-                                            LineMark(
-                                                x: .value("Date", prediction.time),
-                                                y: .value("Ep", ep)
-                                            )
-                                            .lineStyle(.init(lineWidth: 2, dash: [5, 3]))
-                                            .foregroundStyle(by: .value("Type", String(localized: "预测最终分数线")))
-                                        }
-                                    }
-                                }
-                                .chartForegroundStyleScale([
-                                    String(localized: "目前分数线"): .blue,
-                                    String(localized: "预测最终分数线"): .blue
-                                ])
-                                .chartLegend(.hidden)
-                                .chartScrollableAxes(.horizontal)
-                                .chartXVisibleDomain(length: 60 * 60 * 24 * 3)
-                                .chartXAxis {
-                                    AxisMarks(values: .stride(by: .day)) { value in
-                                        AxisGridLine()
-                                        AxisTick()
-                                        AxisValueLabel(format: .dateTime.day().month(.abbreviated))
-                                    }
-                                }
-                                .chartYAxis {
-                                    AxisMarks(position: .leading, values: .stride(by: stride(of: trackerData))) { value in
-                                        AxisGridLine()
-                                        AxisTick()
-                                        AxisValueLabel {
-                                            if let number = value.as(Double.self) {
-                                                Text(formatNumber(number))
-                                            }
-                                        }
-                                    }
-                                }
-                                .frame(height: 150)
-                                HStack {
-                                    Rectangle()
-                                        .fill(Color.blue.opacity(0.7))
-                                        .strokeBorder(Color.blue, lineWidth: 2)
-                                        .frame(width: 20, height: 10)
-                                    Text("目前分数线")
-                                        .font(.system(size: 8))
-                                    Rectangle()
-                                        .stroke(style: .init(lineWidth: 2, dash: [5, 3]))
-                                        .fill(Color.blue)
-                                        .frame(width: 20, height: 10)
-                                    Text("预测最终分数线")
-                                        .font(.system(size: 8))
-                                }
-                            }
-                        }
-                    case .top(let topData):
-                        Section {
-                            Group {
-                                if let startDate = selectedEvent.startAt.forPreferredLocale(),
-                                   let endDate = selectedEvent.endAt.forPreferredLocale() {
-                                    VStack(alignment: .leading) {
-                                        Text("状态")
-                                            .font(.system(size: 16, weight: .medium))
-                                        Group {
-                                            if startDate > .now {
-                                                Text("未开始")
-                                            } else if endDate > .now {
-                                                Text("\(Int((Date.now.timeIntervalSince1970 - startDate.timeIntervalSince1970) / (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) * 100))% 完成率")
-                                                Text("\(Text(endDate, style: .relative))后结束")
-                                            } else {
-                                                Text("已完结")
-                                            }
-                                        }
-                                        .font(.system(size: 14))
-                                        .opacity(0.6)
-                                    }
-                                }
-                                if let latestUpdateTime = topData.last?.points.last?.time {
-                                    VStack(alignment: .leading) {
-                                        Text("更新时间")
-                                            .font(.system(size: 16, weight: .medium))
-                                        Text("\(Text(latestUpdateTime, style: .relative))前")
-                                            .font(.system(size: 14))
-                                            .opacity(0.6)
-                                    }
-                                }
-                            }
-                            .listRowBackground(Color.clear)
-                            Chart {
-                                ForEach(topData, id: \.uid) { data in
-                                    ForEach(data.points, id: \.time) { point in
-                                        LineMark(
-                                            x: .value("Date", point.time),
-                                            y: .value("Point", point.value)
-                                        )
-                                        .foregroundStyle(by: .value("Name", data.name))
-                                    }
-                                }
-                            }
-                            .chartScrollableAxes(.horizontal)
-                            .chartXVisibleDomain(length: 60 * 60 * 24 * 3)
-                            .chartXAxis {
-                                AxisMarks(values: .stride(by: .day)) { value in
-                                    AxisGridLine()
-                                    AxisTick()
-                                    AxisValueLabel(format: .dateTime.day().month(.abbreviated))
-                                }
-                            }
-                            .chartYAxis {
-                                AxisMarks(position: .leading, values: .stride(by: stride(of: topData))) { value in
-                                    AxisGridLine()
-                                    AxisTick()
-                                    AxisValueLabel {
-                                        if let number = value.as(Double.self) {
-                                            Text(formatNumber(number))
-                                        }
-                                    }
-                                }
-                            }
-                            .frame(height: 1000)
-                        }
-                        Section {
-                            ForEach(Array(topData.prefix(10).enumerated()), id: \.element.uid) { index, data in
-                                VStack(alignment: .leading) {
-                                    if 1...3 ~= index + 1 {
-                                        Image("tier_\(DoriAPI.preferredLocale.rawValue)_\(index + 1)")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 20)
-                                    } else {
-                                        Text(verbatim: "#\(index + 1)")
-                                            .font(.headline)
-                                    }
-                                    HStack {
-                                        CardIconView(data.card)
-                                        VStack(alignment: .leading) {
-                                            Text(data.name)
-                                                .font(.system(size: 14))
-                                            Text(data.introduction)
-                                                .font(.system(size: 11))
-                                                .opacity(0.6)
-                                        }
-                                    }
-                                    if let score = data.points.last?.value {
-                                        Text("\(score) 分")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if trackerAvailability {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                    } else {
-                        HStack {
-                            Spacer()
-                            Text("不可用")
-                            Spacer()
-                        }
-                    }
-                }
-            } else {
-                if eventListAvailability {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                } else {
-                    UnavailableView("载入活动时出错", systemImage: "star.hexagon.fill", retryHandler: getEvents)
-                }
-            }
-        }
-        */
-        
     }
     
     func getEvents() async {
@@ -366,16 +317,7 @@ struct EventTrackerView: View {
             await PreviewEvent.all()
         }.onUpdate {
             if let events = $0 {
-                self.eventList = events.reversed()
-                let storedEventID = UserDefaults.standard.integer(forKey: "EventTrackerSelectedEventID")
-                if storedEventID > 0, let event = events.first(where: { $0.id == storedEventID }) {
-                    self.selectedEvent = event
-                } else {
-                    self.selectedEvent = events.last
-                }
-                Task {
-                    await updateTrackerData()
-                }
+                self.eventList = events
             } else {
                 eventListIsAvailabile = false
             }
@@ -386,13 +328,13 @@ struct EventTrackerView: View {
             trackerData = nil
             trackerIsAvailable = true
             if selectedTier > 10 {
-                if let trackerData = await DoriFrontend.Event.trackerData(for: event, in: DoriAPI.preferredLocale, tier: selectedTier, smooth: true) {
+                if let trackerData = await DoriFrontend.Event.trackerData(for: event, in: locale, tier: selectedTier, smooth: true) {
                     self.trackerData = .tracker(trackerData)
                 } else {
                     trackerIsAvailable = false
                 }
             } else {
-                if let topData = await DoriFrontend.Event.topData(of: event.id, in: DoriAPI.preferredLocale) {
+                if let topData = await DoriFrontend.Event.topData(of: event.id, in: locale) {
                     self.trackerData = .top(topData)
                 } else {
                     trackerIsAvailable = false
