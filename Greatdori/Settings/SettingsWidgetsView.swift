@@ -319,118 +319,130 @@ struct SettingsWidgetsCollectionDetailsView: View {
     @State var showCollectionCodeDialog = false
     @State var showExportCheckmark = false
     @State var showCollectionEditorSheet = false
-    #if os(iOS)
+    @State var collectionIndex: Int = 0
     @State var isCodeShareSheetPresented = false
-    #endif
+    @State var updateIndex: Int = 0
     var body: some View {
         if let collection {
             ScrollView {
-                LazyVStack {
-                    CustomGroupBox(cornerRadius: isMACOS ? 15 : 25) {
-                        LazyVStack {
-                            Group {
-                                HStack {
-                                    Text("Settings.widgets.collections.name")
-                                        .bold()
-                                    Spacer()
-                                    if !collection.isBuiltIn {
-                                        TextField("Settings.widgets.collections.name", text: $collectionName)
-                                            .multilineTextAlignment(.trailing)
-                                            .onSubmit {
-                                                if CardCollectionManager.shared.nameIsAvailable(collectionName) {
-                                                    CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex{$0.name == collection.name}!].name = collectionName
-                                                    CardCollectionManager.shared.updateStorage()
-                                                } else {
-                                                    collectionName = collection.name
+                HStack {
+                    Spacer(minLength: 0)
+                    LazyVStack {
+                        CustomGroupBox(cornerRadius: isMACOS ? 15 : 25) {
+                            LazyVStack {
+                                Group {
+                                    HStack {
+                                        Text("Settings.widgets.collections.name")
+                                            .bold()
+                                        Spacer()
+                                        if !collection.isBuiltIn {
+                                            TextField("Settings.widgets.collections.name", text: $collectionName)
+                                                .multilineTextAlignment(.trailing)
+                                                .onSubmit {
+                                                    if CardCollectionManager.shared.nameIsAvailable(collectionName) {
+                                                        CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex{$0.name == collection.name}!].name = collectionName
+                                                        CardCollectionManager.shared.updateStorage()
+                                                    } else {
+                                                        collectionName = collection.name
+                                                    }
                                                 }
+                                                .textFieldStyle(.plain)
+                                        } else {
+                                            Text(collectionName)
+                                                .textSelection(.enabled)
+                                        }
+                                    }
+                                }
+                                
+                                Divider()
+                                
+                                if !collection.isBuiltIn {
+                                    Group {
+                                        Button(role: .destructive, action: {
+                                            showCollectionDeleteAlert = true
+                                        }, label: {
+                                            HStack {
+                                                Label("Settings.widgets.collections.delete", systemImage: "trash")
+                                                    .bold()
+                                                    .foregroundStyle(.red)
+                                                Spacer()
                                             }
-                                            .textFieldStyle(.plain)
-                                    } else {
-                                        Text(collectionName)
-                                            .textSelection(.enabled)
+                                            .contentShape(Rectangle())
+                                        })
+                                        .buttonStyle(.plain)
+                                        .wrapIf(!isMACOS, in: { content in
+                                            content
+                                                .padding(.top, 3)
+                                        })
+                                    }
+                                    .alert("Settings.widgets.collections.delete.alert.title.\(collection.name)", isPresented: $showCollectionDeleteAlert, actions: {
+                                        Button(role: .destructive, action: {
+                                            CardCollectionManager.shared.remove(at: CardCollectionManager.shared.userCollections.firstIndex{$0.name == collectionName}!)
+                                            isPresented = false
+                                        }, label: {
+                                            Text("Settings.widgets.collections.delete.alert.delete")
+                                        })
+                                        Button(role: .cancel, action: {}, label: {
+                                            Text("Settings.widgets.collections.delete.alert.cancel")
+                                        })
+                                    }, message: {
+                                        Text("Settings.widgets.collections.delete.alert.message")
+                                    })
+                                } else {
+                                    Group {
+                                        HStack {
+                                            Text("Settings.widgets.collections.is-built-in")
+                                                .bold()
+                                            Spacer()
+                                            Text("Settings.widgets.collections.is-built-in.yes")
+                                                .textSelection(.enabled)
+                                        }
                                     }
                                 }
                             }
-                            
-                            Divider()
-                            
-                            if !collection.isBuiltIn {
-                                Group {
-                                    Button(role: .destructive, action: {
-                                        showCollectionDeleteAlert = true
-                                    }, label: {
-                                        HStack {
-                                            Label("Settings.widgets.collections.delete", systemImage: "trash")
-                                                .bold()
-                                                .foregroundStyle(.red)
-                                            Spacer()
-                                        }
-                                        .contentShape(Rectangle())
-                                    })
-                                    .buttonStyle(.plain)
-                                    .wrapIf(!isMACOS, in: { content in
-                                        content
-                                            .padding(.top, 3)
-                                    })
-                                }
-                                .alert("Settings.widgets.collections.delete.alert.title.\(collection.name)", isPresented: $showCollectionDeleteAlert, actions: {
-                                    Button(role: .destructive, action: {
-                                        CardCollectionManager.shared.remove(at: CardCollectionManager.shared.userCollections.firstIndex{$0.name == collectionName}!)
-                                        isPresented = false
-                                    }, label: {
-                                        Text("Settings.widgets.collections.delete.alert.delete")
-                                    })
-                                    Button(role: .cancel, action: {}, label: {
-                                        Text("Settings.widgets.collections.delete.alert.cancel")
-                                    })
-                                }, message: {
-                                    Text("Settings.widgets.collections.delete.alert.message")
-                                })
-                            } else {
-                                Group {
+                        }
+                        .frame(maxWidth: 600)
+                        
+                        DetailSectionsSpacer()
+                        if !collection.isBuiltIn {
+                            CustomGroupBox {
+                                Button(action: {
+                                    showCollectionEditorSheet = true
+                                }, label: {
                                     HStack {
-                                        Text("Settings.widgets.collections.is-built-in")
+                                        Spacer()
+                                        Label("Settings.widgets.collections.edit", systemImage: "square.and.pencil")
                                             .bold()
                                         Spacer()
-                                        Text("Settings.widgets.collections.is-built-in.yes")
-                                            .textSelection(.enabled)
                                     }
+                                    .contentShape(Rectangle())
+                                })
+                            }
+                        }
+                        ForEach(collection.cards.indices, id: \.self) { cardIndex in
+                            SettingsWidgetsCollectionsItemView(collectionIndex: collectionIndex, collectionCard: collection.cards[cardIndex], collectionIsEditable: !collection.isBuiltIn, layoutType: $layoutType, updateIndex: $updateIndex)
+                        }
+//                        .wrapIf(!collection.isBuiltIn, in: { content in
+//                            content
+//                                .onMove(perform: { from, to in
+//                                    CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collectionName })!].cards.move(fromOffsets: from, toOffset: to)
+//                                })
+//                        })
+                        if collection.cards.isEmpty {
+                            CustomGroupBox {
+                                HStack {
+                                    Spacer()
+                                    Text("Settings.widgets.collections.no-card")
+                                        .foregroundStyle(.secondary)
+                                    Spacer()
                                 }
                             }
                         }
                     }
                     .frame(maxWidth: 600)
-                    
-                    DetailSectionsSpacer()
-                    CustomGroupBox {
-                        Button(action: {
-                            showCollectionEditorSheet = true
-                        }, label: {
-                            HStack {
-                                Spacer()
-                                Label("Settings.widgets.collections.edit", systemImage: "square.and.pencil")
-                                    .bold()
-                                Spacer()
-                            }
-                            .contentShape(Rectangle())
-                        })
-                    }
-                    ForEach(collection.cards.indices, id: \.self) { cardIndex in
-                        SettingsWidgetsCollectionsItemView(collectionCard: collection.cards[cardIndex], layoutType: .constant(1))
-                    }
-                    if collection.cards.isEmpty {
-                        CustomGroupBox {
-                            HStack {
-                                Spacer()
-                                Text("Settings.widgets.collections.no-card")
-                                    .foregroundStyle(.secondary)
-                                Spacer()
-                            }
-                        }
-                    }
+                    .padding()
+                    Spacer(minLength: 0)
                 }
-                .frame(maxWidth: 600)
-                .padding()
             }
             .withSystemBackground()
             .navigationTitle(collectionName)
@@ -449,7 +461,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
             .toolbar {
                 if !collection.cards.isEmpty {
                     ToolbarItem {
-                        LayoutPicker(selection: $layoutType, options: [("Filter.view.list", "list.bullet", 1), ("Filter.view.grid", "square.grid.2x2", 2), ("Filter.view.gallery", "text.below.rectangle", 3)])
+                        LayoutPicker(selection: $layoutType, options: [("Filter.view.list", "list.bullet", 1), ("Filter.view.gallery", "text.below.rectangle", 3)])
                     }
                     if #available(iOS 26.0, macOS 26.0, *) {
                         ToolbarSpacer()
@@ -469,7 +481,8 @@ struct SettingsWidgetsCollectionDetailsView: View {
                 }
             }
             .sheet(isPresented: $showCollectionEditorSheet, onDismiss: {
-                self.collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })!
+//                self.collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })!
+                updateIndex += 1
             }, content: {
                 CollectionEditorView(collection: collection)
             })
@@ -490,7 +503,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
                 #if os(iOS)
                 // ShareLink in `alert` doesn't work on iOS,
                 // we have to use a button to present it with UIKit
-                Button("Share…", systemImage: "square.and.arrow.up") {
+                Button("Settings.widgets.collections.code.dialog.share", systemImage: "square.and.arrow.up") {
                     isCodeShareSheetPresented = true
                 }
                 #else
@@ -516,10 +529,14 @@ struct SettingsWidgetsCollectionDetailsView: View {
                     }
                 }
             }
+            .onChange(of: updateIndex) {
+                self.collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })!
+            }
         } else {
             ProgressView()
                 .onAppear {
-                    collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })
+                    collectionIndex = CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collectionGivenName }) ?? 0
+                    collection = CardCollectionManager.shared.allCollections[CardCollectionManager.shared.allCollections.firstIndex(where: { $0.name == collectionGivenName })!]
                 }
         }
     }
@@ -543,67 +560,117 @@ struct SettingsWidgetsCollectionDetailsView: View {
 
 
 struct SettingsWidgetsCollectionsItemView: View {
+    var collectionIndex: Int
     var collectionCard: CardCollectionManager.Card
+    var collectionIsEditable: Bool
     @Binding var layoutType: Int
+    @Binding var updateIndex: Int
     @State var doriCard: Card?
     @State var characterName: LocalizedData<String>? = nil
     
     let titlePlaceholder = LocalizedData(_jp: "Lorem Ipsum Dolor", en: nil, tw: nil, cn: nil, kr: nil)
     var body: some View {
-        CollectionItemViewBase(layoutType == 1 ? .horizontal : .vertical(), title: doriCard?.prefix ?? titlePlaceholder) {
-            if layoutType != 3 {
-                HStack(spacing: 5) {
-                    if let doriCard {
-                        if collectionCard.isTrained {
-                            CardPreviewImage(doriCard, showTrainedVersion: true)
-                            // FIXME: Some cards have normal version but have no corresponding thumbnail view.
+        CustomGroupBox {
+            CustomStack(axis: layoutType == 1 ? .horizontal : .vertical) {
+                if layoutType != 3 {
+                    HStack(spacing: 5) {
+                        if let doriCard {
+                            if collectionCard.isTrained {
+                                CardPreviewImage(doriCard, showTrainedVersion: true)
+                                // FIXME: Some cards have normal version but have no corresponding thumbnail view.
+                            } else {
+                                CardPreviewImage(doriCard)
+                            }
                         } else {
-                            CardPreviewImage(doriCard)
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(getPlaceholderColor())
+                                .aspectRatio(1, contentMode: .fit)
+                                .frame(width: 67, height: 67)
                         }
+                    }
+                } else {
+                    if let doriCard {
+                        CardCoverImage(doriCard, band: DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == doriCard.characterID }) })?.key)
+#if !os(macOS)
+                            .allowsHitTesting(false)
+#endif
                     } else {
-                        RoundedRectangle(cornerRadius: 5)
-                            .fill(getPlaceholderColor())
-                            .aspectRatio(1, contentMode: .fit)
-                            .frame(width: 67, height: 67)
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(getPlaceholderColor())
+                            .aspectRatio(480/320, contentMode: .fit)
                     }
                 }
-            } else {
-                if let doriCard {
-                    CardCoverImage(doriCard, band: DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == doriCard.characterID }) })?.key)
-#if !os(macOS)
-                        .allowsHitTesting(false)
-#endif
+                
+                if layoutType != 1 {
+                    Spacer()
                 } else {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(getPlaceholderColor())
-                        .aspectRatio(480/320, contentMode: .fit)
+                    Spacer()
+                        .frame(maxWidth: 15)
+                }
+                
+                
+                HStack {
+                    if layoutType == 3 {
+                        Spacer(minLength: 0)
+                    }
+                    
+                    Group {
+                        VStack(alignment: layoutType == 1 ? .leading : .center) {
+                            if let doriCard {
+                                HighlightableText(doriCard.prefix.forPreferredLocale() ?? "")
+                                    .bold()
+                                    .font(!isMACOS ? .body : .title3)
+                                    .layoutPriority(1)
+                                Group {
+                                    if layoutType == 1 {
+                                        Text(characterName?.forPreferredLocale() ?? "nil") + Text("Typography.bold-dot-seperater").bold() + Text("#\(doriCard.id)").fontDesign(.monospaced)
+                                        Text(collectionCard.isTrained ? "Settings.widgets.collections.card.trained" : "Settings.widgets.collections.card.normal")
+                                    } else {
+                                        Text(characterName?.forPreferredLocale() ?? "nil") + Text("Typography.bold-dot-seperater").bold() + Text("#\(doriCard.id)").fontDesign(.monospaced) + Text("Typography.bold-dot-seperater").bold() +  Text(collectionCard.isTrained ? "Settings.widgets.collections.card.trained" : "Settings.widgets.collections.card.normal")
+                                    }
+                                }
+                                .foregroundStyle(.secondary)
+                            } else {
+                                Text(verbatim: "Lorem Ipsum Dolor")
+                                    .bold()
+                                    .font(!isMACOS ? .body : .title3)
+                                if layoutType == 1 {
+                                    Text(verbatim: "Lorem Ipsum Dolor")
+                                        .redacted(reason: .placeholder)
+                                    Text(verbatim: "Lorem")
+                                        .redacted(reason: .placeholder)
+                                } else {
+                                    Text(verbatim: "Lorem Ipsum Dolor Sit Amet")
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                    }
+                    .font(isMACOS ? .body : .caption)
+                    //                .wrapIf(layoutType == 3, in: { content z
+                    //
+                    //                })
+                    
+//                    if layoutType == 1 {
+                        Spacer(minLength: 0)
+//                    }
+                    
+                    if collectionIsEditable {
+                        SettingsWidgetsCollectionsItemActionMenuView(collectionIndex: collectionIndex, collectionCard: collectionCard, updateIndex: $updateIndex)
+                    }
                 }
             }
-        } detail: {
-            VStack(alignment: .leading) {
-                if let doriCard {
-                    Text(characterName?.forPreferredLocale() ?? "nil") + Text("Typography.bold-dot-seperater").bold() + Text("#\(doriCard.id)").fontDesign(.monospaced)
-                    Text(collectionCard.isTrained ? "Settings.widgets.collections.card.trained" : "Settings.widgets.collections.card.normal")
-                } else {
-                    Text(verbatim: "Lorem Ipsum Dolor")
-                        .redacted(reason: .placeholder)
-                    Text(verbatim: "Lorem")
-                        .redacted(reason: .placeholder)
+            .wrapIf(layoutType != 1) { content in
+                HStack {
+                    Spacer(minLength: 0)
+                    content
+                    Spacer(minLength: 0)
                 }
             }
-            .foregroundStyle(.secondary)
-            .font(isMACOS ? .body : .caption)
-        } menu: {
-            EmptyView()
         }
         .onAppear {
             Task {
                 doriCard = await Card(id: collectionCard.id)
-                
-                //                    isNormalCardAvailable = await DoriURLValidator.reachability(
-                //                        of: layoutType != 3 ? previewCard.thumbNormalImageURL : previewCard.coverNormalImageURL
-                //
-                //                    )
                 characterName = DoriCache.preCache.characterDetails[doriCard!.characterID]?.characterName
             }
             
@@ -615,87 +682,56 @@ struct SettingsWidgetsCollectionsItemView: View {
     }
 }
 
-
-struct CollectionItemViewBase<Image: View, Detail: View, Menu: View>: View {
-    var layout: SummaryLayout
-    var title: LocalizedData<String>
-    var shouldHightlight: Bool
-    var menuLayout: Axis
-    var makeImageView: () -> Image
-    var makeDetailView: () -> Detail
-    var makeMenuView: () -> Menu
-    
-    init<Source: TitleDescribable>(
-        _ layout: SummaryLayout,
-        source: Source,
-        shouldHightlight: Bool = false,
-        menuLayout: Axis = .horizontal,
-        @ViewBuilder image: @escaping () -> Image,
-        @ViewBuilder detail: @escaping () -> Detail,
-        @ViewBuilder menu: @escaping () -> Menu
-    ) {
-        self.layout = layout
-        self.title = source.title
-        self.shouldHightlight = shouldHightlight
-        self.menuLayout = menuLayout
-        self.makeImageView = image
-        self.makeDetailView = detail
-        self.makeMenuView = menu
-    }
-    init(
-        _ layout: SummaryLayout,
-        title: LocalizedData<String>,
-        shouldHightlight: Bool = false,
-        menuLayout: Axis = .horizontal,
-        @ViewBuilder image: @escaping () -> Image,
-        @ViewBuilder detail: @escaping () -> Detail,
-        @ViewBuilder menu: @escaping () -> Menu
-    ) {
-        self.layout = layout
-        self.title = title
-        self.shouldHightlight = shouldHightlight
-        self.menuLayout = menuLayout
-        self.makeImageView = image
-        self.makeDetailView = detail
-        self.makeMenuView = menu
-    }
-    
+struct SettingsWidgetsCollectionsItemActionMenuView: View {
+    var collectionIndex: Int
+    var collectionCard: CardCollectionManager.Card
+    @Binding var updateIndex: Int
+    @State var cardTrainingStatusIsSwitchable = false
     var body: some View {
-        CustomGroupBox(showGroupBox: layout != .vertical(hidesDetail: true), strokeLineWidth: shouldHightlight ? 3 : 0) {
-            CustomStack(axis: menuLayout) {
-                CustomStack(axis: layout.axis) {
-                    makeImageView()
-                    if layout != .vertical(hidesDetail: true) {
-                        if layout != .horizontal {
-                            Spacer()
-                        } else {
-                            Spacer()
-                                .frame(maxWidth: 15)
-                        }
+        Menu(content: {
+            Group {
+                Button(action: {
+                    if cardTrainingStatusIsSwitchable {
+                        let cardIndex = CardCollectionManager.shared.userCollections[collectionIndex].cards.firstIndex(where: { $0.id == collectionCard.id && $0.isTrained == collectionCard.isTrained })!
+                        CardCollectionManager.shared.userCollections[collectionIndex].cards[cardIndex] = .init(id: collectionCard.id, isTrained: !collectionCard.isTrained, localizedName: collectionCard.localizedName, file: collectionCard.file)
                         
-                        VStack(alignment: layout == .horizontal ? .leading : .center) {
-                            HighlightableText(title.forPreferredLocale() ?? "")
-                                .bold()
-                                .font(!isMACOS ? .body : .title3)
-                                .layoutPriority(1)
-                            makeDetailView()
-                            //                            .environment(\.isCompactHidden, layout != .horizontal)
-                                .foregroundStyle(.secondary)
-                        }
-                        .frame(maxWidth: .infinity, alignment: layout == .horizontal ? .leading : .center)
-                        .multilineTextAlignment(layout == .horizontal ? .leading : .center)
+                        CardCollectionManager.shared.updateStorage()
+                        updateIndex += 1
                     }
-                    Spacer(minLength: 0)
-                }
-                makeMenuView()
+                }, label: {
+                    Label(collectionCard.isTrained ? "Settings.widgets.collections.actions.change.normal" : "Settings.widgets.collections.actions.change.trained", systemImage: "rectangle.2.swap")
+                })
+                .disabled(!cardTrainingStatusIsSwitchable)
+                Button(role: .destructive, action: {
+                    let cardIndex = CardCollectionManager.shared.userCollections[collectionIndex].cards.firstIndex(where: { $0.id == collectionCard.id && $0.isTrained == collectionCard.isTrained })!
+                    CardCollectionManager.shared.userCollections[collectionIndex].cards.remove(at: cardIndex)
+                    
+                    CardCollectionManager.shared.updateStorage()
+                    updateIndex += 1
+                }, label: {
+                    Label("Settings.widgets.collections.actions.remove", systemImage: "minus.circle")
+                })
             }
-            .wrapIf(layout != .horizontal) { content in
-                HStack {
-                    Spacer(minLength: 0)
-                    content
-                    Spacer(minLength: 0)
+            .onAppear {
+                if !CardCollectionManager.shared.userCollections[collectionIndex].cards.contains(where: { $0.id == collectionCard.id && $0.isTrained != collectionCard.isTrained }) {
+                    Task {
+                        let doriCard = await Card(id: collectionCard.id)
+                        if let doriCard {
+                            if collectionCard.isTrained {
+                                cardTrainingStatusIsSwitchable = await DoriURLValidator.reachability(of: doriCard.coverNormalImageURL)
+                            } else {
+                                cardTrainingStatusIsSwitchable = doriCard.coverAfterTrainingImageURL != nil
+                            }
+                        }
+                    }
+                } else {
+                    cardTrainingStatusIsSwitchable = false
                 }
             }
-        }
+        }, label: {
+            Image(systemName: "ellipsis.circle")
+                .font(.title3)
+        })
     }
 }
+

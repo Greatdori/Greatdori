@@ -19,13 +19,13 @@
 // +------------+-------------------+---------+------------+---------------+
 // | specifier1 | verif code length | content | verif code | specifier2, 3 |
 // +------------+-------------------+---------+------------+---------------+
-//              |     defined in version `illumination`    |
+//              |     defined in version `timbre`    |
 //
 // Encoding versions have been assigned 20 strings as specifiers,
 // each of them has in length of 3 and is uppercased.
 // Specifiers in result strings have random cases based on their main contents.
 //
-// Version illumination defines the 2nd character of an encoded string
+// Version Timbre defines the 2nd character of an encoded string
 // is the length of verification code, from 0 to 93, mapped to ASCII
 // from 33 to 126. The main content has variable length.
 //
@@ -36,14 +36,14 @@ import Foundation
 
 enum CollectionCodeVersion: String, Equatable, Hashable {
     case illumination
-    case timber
+    case timbre
     case delight
     case sphere
     case aspiration
 }
 
 let versionSpecifiers: [CollectionCodeVersion: [String]] = [
-    .illumination: ["HND", "ANO", "UNK", "ANN", "AIN", "PLN", "PNK", "LSL", "CHY", "ANC", "LHR", "LGW", "MAN", "STN", "LTN", "EDI", "BHX", "GLA", "BFS", "NCL"]
+    .timbre: ["HND", "ANO", "UNK", "ANN", "AIN", "PLN", "PNK", "LSL", "CHY", "ANC", "LHR", "LGW", "MAN", "STN", "LTN", "EDI", "BHX", "GLA", "BFS", "NCL"]
 ]
 
 struct CollectionEncodingInfo: Equatable {
@@ -178,7 +178,7 @@ func encodeCollection(_ info: CollectionEncodingInfo) -> String {
     let verificationString = verification(of: content)
     let verificationLengthTag = String(UnicodeScalar(Array(33...126)[verificationString.count]))
     // precondition: (each specifiers).count = 3
-    let versionSpecifiers = versionSpecifiers[.illumination]!
+    let versionSpecifiers = versionSpecifiers[.timbre]!
     let specifierSelector = verificationString.unicodeScalars.map { Int($0.value) }.reduce(into: 0) { $0 += $1 }
     let _thisSpecifier = versionSpecifiers[specifierSelector % versionSpecifiers.count]
     var thisSpecifier: [Swift.Character] = []
@@ -202,8 +202,8 @@ func decodeCollection(_ input: String) -> CollectionEncodingInfo? {
     // Verify version specifier
     let decoderVersion: CollectionCodeVersion? = determineCollectionCodeVersion(input)
     switch decoderVersion {
-    case .illumination:
-        return decodeIllumination(input)
+    case .timbre:
+        return decodeTimbre(input)
     default:
         return nil
     }
@@ -273,7 +273,7 @@ private func intArray2String(_ compressed: [Int32]) -> String? {
     return String(data: Data(bytes), encoding: .utf8) ?? ""
 }
 
-func decodeIllumination(_ input: String) -> CollectionEncodingInfo? {
+func decodeTimbre(_ input: String) -> CollectionEncodingInfo? {
     var str = input
     
     // We need to get a valid verification field for verifying specifier,
@@ -290,7 +290,7 @@ func decodeIllumination(_ input: String) -> CollectionEncodingInfo? {
     guard verify(str, with: verificationString) else { return nil }
     
     // Verify specifier
-    let versionSpecifiers = versionSpecifiers[.illumination]!
+    let versionSpecifiers = versionSpecifiers[.timbre]!
     let specifierSelector = verificationString.unicodeScalars.map { Int($0.value) }.reduce(into: 0) { $0 += $1 }
     var _expectedSpecifier = Array(versionSpecifiers[specifierSelector % versionSpecifiers.count])
     for (index, character) in _expectedSpecifier.enumerated() {

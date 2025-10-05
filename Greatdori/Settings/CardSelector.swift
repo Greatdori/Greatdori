@@ -123,7 +123,10 @@ struct CollectionEditorView: View {
                             Menu(content: {
                                 Section("Search.result.\(searchedCards?.count ?? 0)") {
                                     Button(action: {
+                                        CardCollectionManager.shared.updateStorage()
+                                        collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!
                                         
+                                        updateIndex += 1
                                     }, label: {
                                         Label((searchedCards?.count ?? 0 > 500 ? "Settings.widgets.collection.selector.select.select-all.too-much" : "Settings.widgets.collection.selector.select.select-all"), systemImage: "checkmark.circle")
                                     })
@@ -147,6 +150,7 @@ struct CollectionEditorView: View {
                                         
                                         // Persist the change if needed
                                         CardCollectionManager.shared.updateStorage()
+                                        collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!
                                         
                                         updateIndex += 1
                                     }, label: {
@@ -349,12 +353,7 @@ struct CollectionEditorItemView: View {
                                 .font(!isMACOS ? .body : .title3)
                                 .layoutPriority(1)
                             Group {
-                                //                if let doriCard {
                                 Text(characterName?.forPreferredLocale() ?? "nil") + Text("Typography.bold-dot-seperater").bold() + /*Text(doriCard.type.localizedString)*/Text("#\(doriCard.id)").fontDesign(.monospaced)
-                                //                } else {
-                                //                    Text(verbatim: "Lorem Ipsum Dolor Sit Amet")
-                                //                        .redacted(reason: .placeholder)
-                                //                }
                             }
                             .foregroundStyle(.secondary)
                             .font(isMACOS ? .body : .caption)
