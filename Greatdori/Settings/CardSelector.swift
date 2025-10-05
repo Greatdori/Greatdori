@@ -192,7 +192,7 @@ struct CollectionEditorView: View {
                                         Label("Settings.widgets.collection.selector.select.select-all.progress.done", systemImage: "externaldrive.badge.checkmark")
                                     } else {
                                         Label(title: {
-                                            Text("Settings.widgets.collection.selector.select.select-all.progress.done")
+                                            Text("Settings.widgets.collection.selector.select.select-all.progress.loading")
                                         }, icon: {
                                             ProgressView()
                                         })

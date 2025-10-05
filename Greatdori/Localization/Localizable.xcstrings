@@ -5979,6 +5979,22 @@
         }
       }
     },
+    "Settings.widgets.collection.selector.select.select-all.progress.loading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecting All"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在全选"
+          }
+        }
+      }
+    },
     "Settings.widgets.collection.selector.select.select-all.progress.pending" : {
       "localizations" : {
         "en" : {
