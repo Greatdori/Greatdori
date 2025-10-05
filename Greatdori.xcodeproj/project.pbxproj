@@ -329,6 +329,7 @@
 		E94443C92E8E6C8200593F07 /* SettingsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94443C82E8E6C7F00593F07 /* SettingsHomeView.swift */; };
 		E94443CC2E8E6EDE00593F07 /* SettingsPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94443CB2E8E6ED700593F07 /* SettingsPermissionsView.swift */; };
 		E94443CE2E8E80C200593F07 /* SettingsDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94443CD2E8E80BC00593F07 /* SettingsDebugView.swift */; };
+		E94944E22E92A19600E50D3F /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E94944E12E92A19600E50D3F /* MarkdownUI */; };
 		E97888C62E8A79EA00ABD33E /* QuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97888C52E8A79E500ABD33E /* QuickLook.swift */; };
 		E97C5B882E8E9A50004858A3 /* SettingsWidgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97C5B872E8E9A4A004858A3 /* SettingsWidgetsView.swift */; };
 		E98B8B532E7E922A00B4C8A8 /* NavigationComponentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98B8B522E7E922700B4C8A8 /* NavigationComponentsView.swift */; };
@@ -1057,6 +1058,7 @@
 				8CB4D47F2E445F700085D57A /* BuiltinCardCollections.framework in Frameworks */,
 				8C923D842E304899003AFC0A /* SDWebImageSVGCoder in Frameworks */,
 				8C923D822E304899003AFC0A /* SDWebImageSwiftUI in Frameworks */,
+				E94944E22E92A19600E50D3F /* MarkdownUI in Frameworks */,
 				8C6264EF2E9105D600FF6950 /* SwiftUIIntrospect in Frameworks */,
 				8C0C99972E296A8C00549B5C /* DoriKit.framework in Frameworks */,
 			);
@@ -1977,6 +1979,7 @@
 				8C923D812E304899003AFC0A /* SDWebImageSwiftUI */,
 				8C923D832E304899003AFC0A /* SDWebImageSVGCoder */,
 				8C6264EE2E9105D600FF6950 /* SwiftUIIntrospect */,
+				E94944E12E92A19600E50D3F /* MarkdownUI */,
 			);
 			productName = Greatdori;
 			productReference = 8C0C995D2E296A4400549B5C /* Greatdori!.app */;
@@ -2351,6 +2354,7 @@
 				8C499F8B2E4FD9CE0073FCB6 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				8CE186AB2E535324009C1C87 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */,
+				E94944E02E92A19600E50D3F /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8C0C995E2E296A4400549B5C /* Products */;
@@ -6041,6 +6045,14 @@
 				minimumVersion = 1.6.1;
 			};
 		};
+		E94944E02E92A19600E50D3F /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -6128,6 +6140,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8CE186AB2E535324009C1C87 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
+		};
+		E94944E12E92A19600E50D3F /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E94944E02E92A19600E50D3F /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

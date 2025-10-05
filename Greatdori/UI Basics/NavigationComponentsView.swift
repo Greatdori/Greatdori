@@ -97,8 +97,8 @@ import SwiftUI
         destination: {EventTrackerView()}
     ),
     ToolDestinationItem(
-        title: "故事浏览器",
-        symbol: "text.rectangle.page",
+        title: "App.tools.story-viewer",
+        symbol: "book",
         tabValue: .storyViewer,
         destination: {StoryViewerView()}
     )

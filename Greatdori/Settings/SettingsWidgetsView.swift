@@ -590,7 +590,7 @@ struct SettingsWidgetsCollectionsItemView: View {
                     }
                 } else {
                     if let doriCard {
-                        CardCoverImage(doriCard, band: DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == doriCard.characterID }) })?.key)
+                        CardCoverImage(doriCard, band: DoriCache.preCache.categorizedCharacters.first(where: { $0.value.contains(where: { $0.id == doriCard.characterID }) })?.key, displayType: collectionCard.isTrained ? .trainedOnly : .normalOnly)
 #if !os(macOS)
                             .allowsHitTesting(false)
 #endif

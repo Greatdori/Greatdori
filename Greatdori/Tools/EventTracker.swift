@@ -37,10 +37,10 @@ struct EventTrackerView: View {
                         LazyVStack {
                             Group {
                                 ListItemView(title: {
-                                    Text("活动")
+                                    Text("Tools.event-tracker.event")
                                         .bold()
                                 }, value: {
-                                    Button("选择活动…") {
+                                    Button("Tools.event-tracker.event.select") {
                                         isEventSelectorPresented = true
                                     }
                                 })
@@ -81,7 +81,7 @@ struct EventTrackerView: View {
                             }
                             
                             ListItemView(title: {
-                                Text("Tier")
+                                Text("Tools.event-tracker.tier")
                                     .bold()
                             }, value: {
                                 Picker(selection: $selectedTier) {
@@ -109,17 +109,17 @@ struct EventTrackerView: View {
                                     if let startDate = selectedEvent.startAt.forPreferredLocale(),
                                        let endDate = selectedEvent.endAt.forPreferredLocale() {
                                         ListItemView {
-                                            Text("状态")
+                                            Text("Tools.event-tracker.status")
                                                 .bold()
                                         } value: {
                                             VStack(alignment: .trailing) {
                                                 if startDate > .now {
-                                                    Text("未开始")
+                                                    Text("Tools.event-tracker.status.not-started")
                                                 } else if endDate > .now {
-                                                    Text("\(Int((Date.now.timeIntervalSince1970 - startDate.timeIntervalSince1970) / (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) * 100))% 完成率")
-                                                    Text("\(Text(endDate, style: .relative))后结束")
+                                                    Text("Tools.event-tracker.stauts.completed.\(Int((Date.now.timeIntervalSince1970 - startDate.timeIntervalSince1970) / (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) * 100))")
+                                                    Text("Tools.event-tracker.stauts.completed.end-in.\(Text(endDate, style: .relative))")
                                                 } else {
-                                                    Text("已完结")
+                                                    Text("Tools.event-tracker.stauts.ended")
                                                 }
                                             }
                                         }
@@ -127,7 +127,7 @@ struct EventTrackerView: View {
                                     }
                                     if let latestCutoff = trackerData.cutoffs.last?.ep {
                                         ListItemView {
-                                            Text("最新分数线")
+                                            Text("Tools.event-tracker.latest-cutoff")
                                                 .bold()
                                         } value: {
                                             Text(String(latestCutoff))
@@ -136,7 +136,7 @@ struct EventTrackerView: View {
                                     }
                                     if let latestPrediction = trackerData.predictions.last?.ep {
                                         ListItemView {
-                                            Text("最新预测")
+                                            Text("Tools.event-tracker.latest-prediction")
                                                 .bold()
                                         } value: {
                                             Text(String(latestPrediction))
@@ -145,10 +145,10 @@ struct EventTrackerView: View {
                                     }
                                     if let latestUpdateTime = trackerData.cutoffs.last?.time {
                                         ListItemView {
-                                            Text("更新时间")
+                                            Text("Tools.event-tracker.last-updated")
                                                 .bold()
                                         } value: {
-                                            Text("\(Text(latestUpdateTime, style: .relative))前")
+                                            Text("Tools.event-tracker.last-updated.ago.\(Text(latestUpdateTime, style: .relative))")
                                         }
                                     }
                                     VStack(alignment: .leading) {
@@ -156,31 +156,31 @@ struct EventTrackerView: View {
                                             ForEach(trackerData.cutoffs, id: \.time) { cutoff in
                                                 if let ep = cutoff.ep {
                                                     AreaMark(
-                                                        x: .value("Date", cutoff.time),
-                                                        y: .value("Ep", ep)
+                                                        x: .value("Tools.event-tracker.date", cutoff.time),
+                                                        y: .value("Tools.event-tracker.ep", ep)
                                                     )
                                                     .foregroundStyle(.blue.opacity(0.7))
                                                     LineMark(
-                                                        x: .value("Date", cutoff.time),
-                                                        y: .value("Ep", ep)
+                                                        x: .value("Tools.event-tracker.date", cutoff.time),
+                                                        y: .value("Tools.event-tracker.ep", ep)
                                                     )
-                                                    .foregroundStyle(by: .value("Type", String(localized: "目前分数线")))
+                                                    .foregroundStyle(by: .value("Tools.event-tracker.type", String(localized: "Tools.event-tracker.current-cutoff")))
                                                 }
                                             }
                                             ForEach(trackerData.predictions, id: \.time) { prediction in
                                                 if let ep = prediction.ep {
                                                     LineMark(
-                                                        x: .value("Date", prediction.time),
-                                                        y: .value("Ep", ep)
+                                                        x: .value("Tools.event-tracker.date", prediction.time),
+                                                        y: .value("Tools.event-tracker.ep", ep)
                                                     )
                                                     .lineStyle(.init(lineWidth: 2, dash: [5, 3]))
-                                                    .foregroundStyle(by: .value("Type", String(localized: "预测最终分数线")))
+                                                    .foregroundStyle(by: .value("Tools.event-tracker.type", String(localized: "Tools.event-tracker.predicted-cutoff")))
                                                 }
                                             }
                                         }
                                         .chartForegroundStyleScale([
-                                            String(localized: "目前分数线"): .blue,
-                                            String(localized: "预测最终分数线"): .blue
+                                            String(localized: "Tools.event-tracker.current-cutoff"): .blue,
+                                            String(localized: "Tools.event-tracker.predicted-cutoff"): .blue
                                         ])
                                         .chartLegend(.hidden)
                                         .chartXAxis {
@@ -209,29 +209,29 @@ struct EventTrackerView: View {
                                                 .fill(Color.blue.opacity(0.7))
                                                 .strokeBorder(Color.blue, lineWidth: 2)
                                                 .frame(width: 30, height: 15)
-                                            Text("目前分数线")
+                                            Text("Tools.event-tracker.current-cutoff")
                                             Rectangle()
                                                 .stroke(style: .init(lineWidth: 2, dash: [5, 3]))
                                                 .fill(Color.blue)
                                                 .frame(width: 30, height: 15)
-                                            Text("预测最终分数线")
+                                            Text("Tools.event-tracker.predicted-cutoff")
                                         }
                                     }
                                 case .top(let topData):
                                     if let startDate = selectedEvent.startAt.forPreferredLocale(),
                                        let endDate = selectedEvent.endAt.forPreferredLocale() {
                                         ListItemView {
-                                            Text("状态")
+                                            Text("Tools.event-tracker.status")
                                                 .bold()
                                         } value: {
                                             VStack(alignment: .trailing) {
                                                 if startDate > .now {
-                                                    Text("未开始")
+                                                    Text("Tools.event-tracker.status.not-started")
                                                 } else if endDate > .now {
-                                                    Text("\(Int((Date.now.timeIntervalSince1970 - startDate.timeIntervalSince1970) / (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) * 100))% 完成率")
-                                                    Text("\(Text(endDate, style: .relative))后结束")
+                                                    Text("Tools.event-tracker.stauts.completed.\(Int((Date.now.timeIntervalSince1970 - startDate.timeIntervalSince1970) / (endDate.timeIntervalSince1970 - startDate.timeIntervalSince1970) * 100))")
+                                                    Text("Tools.event-tracker.stauts.completed.end-in.\(Text(endDate, style: .relative))")
                                                 } else {
-                                                    Text("已完结")
+                                                    Text("Tools.event-tracker.stauts.ended")
                                                 }
                                             }
                                         }
@@ -239,20 +239,20 @@ struct EventTrackerView: View {
                                     }
                                     if let latestUpdateTime = topData.last?.points.last?.time {
                                         ListItemView {
-                                            Text("更新时间")
+                                            Text("Tools.event-tracker.last-updated")
                                                 .bold()
                                         } value: {
-                                            Text("\(Text(latestUpdateTime, style: .relative))前")
+                                            Text("Tools.event-tracker.last-updated.ago.\(Text(latestUpdateTime, style: .relative))")
                                         }
                                     }
                                     Chart {
                                         ForEach(topData, id: \.uid) { data in
                                             ForEach(data.points, id: \.time) { point in
                                                 LineMark(
-                                                    x: .value("Date", point.time),
-                                                    y: .value("Point", point.value)
+                                                    x: .value("Tools.event-tracker.date", point.time),
+                                                    y: .value("Tools.event-tracker.point", point.value)
                                                 )
-                                                .foregroundStyle(by: .value("Name", data.name))
+                                                .foregroundStyle(by: .value("Tools.event-tracker.name", data.name))
                                             }
                                         }
                                     }
@@ -300,7 +300,7 @@ struct EventTrackerView: View {
                                                     }
                                                     Spacer()
                                                     if let score = data.points.last?.value {
-                                                        Text("\(score) 分")
+                                                        Text("Tools.event-tracker.score.\(score)")
                                                     }
                                                 }
                                                 Divider()

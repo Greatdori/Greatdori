@@ -33,6 +33,14 @@ struct CollectionEditorView: View {
     @State var updateIndex: Int = 0
     @State var showAutoSaveTip = true
     @State var onlyShowSelectedItems = false
+    
+    @State var totalAddRequestedItems: Int = 0
+    @State var totalAddSucceedItems: Int = 0
+    @State var totalAddFailureItems: Int = 0
+    @State var totalAlreadyAddedItems: Int = 0
+    @State var isPresentingAddAllPopover = false
+    @State var addingProgress: Double = 0
+    @State var showSelectAllAlert = false
     @Namespace var cardLists
     
     init(collection: CardCollectionManager.Collection) {
@@ -108,6 +116,94 @@ struct CollectionEditorView: View {
                 }
             })
             .toolbar {
+                if totalAddRequestedItems != 0 {
+                    ToolbarItem {
+                        Group {
+                            if totalAddSucceedItems + totalAddFailureItems + totalAlreadyAddedItems < totalAddRequestedItems {
+                                ProgressView(value: Double(totalAddSucceedItems + totalAddFailureItems + totalAlreadyAddedItems) / Double(totalAddRequestedItems))
+                                    .progressViewStyle(.circular)
+                            } else {
+                                Image(systemName: "checkmark.circle")
+                            }
+                        }
+                            .onTapGesture(perform: {
+                                isPresentingAddAllPopover.toggle()
+                            })
+                            .popover(isPresented: $isPresentingAddAllPopover) {
+                                VStack(alignment: .leading, spacing: 7) {
+                                    HStack {
+                                        MultiSegmentProgressBar(segments: [
+                                            .init(color: .green, fraction: Double(totalAddSucceedItems)/Double(totalAddRequestedItems)),
+                                            .init(color: .red, fraction: Double(totalAddFailureItems)/Double(totalAddRequestedItems)),
+                                            .init(color: .yellow, fraction: Double(totalAlreadyAddedItems)/Double(totalAddRequestedItems)),
+                                            .init(color: .gray, fraction: Double(totalAddRequestedItems - totalAddSucceedItems - totalAddFailureItems - totalAlreadyAddedItems)/Double(totalAddRequestedItems))
+                                        ])
+                                        .frame(height: 10)
+//                                        Spacer()
+                                        Text(verbatim: "/\(totalAddRequestedItems)")
+                                    }
+                                    HStack {
+                                        Label(title: {
+                                           Text("Settings.widgets.collection.selector.select.select-all.progress.succeed")
+                                        }, icon: {
+                                            Image(systemName: "checkmark.circle")
+                                                .foregroundStyle(.green)
+                                        })
+                                        Spacer()
+                                        Text(verbatim: "\(totalAddSucceedItems), \(String(format: "%.1f", Double(totalAddSucceedItems)/Double(totalAddRequestedItems)*100))%")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    HStack {
+                                        Label(title: {
+                                            Text("Settings.widgets.collection.selector.select.select-all.progress.failure")
+                                        }, icon: {
+                                            Image(systemName: "xmark.circle")
+                                                .foregroundStyle(.red)
+                                        })
+                                        Spacer()
+                                        Text(verbatim: "\(totalAddFailureItems), \(String(format: "%.1f", Double(totalAddFailureItems)/Double(totalAddRequestedItems)*100))%")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    HStack {
+                                        Label(title: {
+                                            Text("Settings.widgets.collection.selector.select.select-all.progress.existed")
+                                        }, icon: {
+                                            Image(systemName: "exclamationmark.circle")
+                                                .foregroundStyle(.yellow)
+                                        })
+                                        Spacer()
+                                        Text(verbatim: "\(totalAlreadyAddedItems), \(String(format: "%.1f", Double(totalAlreadyAddedItems)/Double(totalAddRequestedItems)*100))%")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    HStack {
+                                        Label(title: {
+                                            Text("Settings.widgets.collection.selector.select.select-all.progress.pending")
+                                        }, icon: {
+                                            Image(systemName: "ellipsis.circle")
+                                                .foregroundStyle(.gray)
+                                        })
+                                        Spacer()
+                                        Text(verbatim: "\(totalAddRequestedItems - totalAddSucceedItems - totalAddFailureItems - totalAlreadyAddedItems), \(String(format: "%.1f", Double(totalAddRequestedItems - totalAddSucceedItems - totalAddFailureItems - totalAlreadyAddedItems)/Double(totalAddRequestedItems)*100))%")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    
+                                    Divider()
+                                    if totalAddSucceedItems + totalAddFailureItems + totalAlreadyAddedItems >= totalAddRequestedItems {
+                                        Label("Settings.widgets.collection.selector.select.select-all.progress.done", systemImage: "externaldrive.badge.checkmark")
+                                    } else {
+                                        Label(title: {
+                                            Text("Settings.widgets.collection.selector.select.select-all.progress.done")
+                                        }, icon: {
+                                            ProgressView()
+                                        })
+                                    }
+                                }
+                                .padding()
+                                .presentationCompactAdaptation(.popover)
+                                .frame(width: 300)
+                            }
+                    }
+                }
                 ToolbarItem {
                     Menu(content: {
                         Section {
@@ -123,14 +219,15 @@ struct CollectionEditorView: View {
                             Menu(content: {
                                 Section("Search.result.\(searchedCards?.count ?? 0)") {
                                     Button(action: {
-                                        CardCollectionManager.shared.updateStorage()
-                                        collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!
-                                        
-                                        updateIndex += 1
+                                        if (searchedCards?.count ?? 0) > 500 {
+                                            showSelectAllAlert = true
+                                        } else {
+                                            selectAll()
+                                        }
                                     }, label: {
-                                        Label((searchedCards?.count ?? 0 > 500 ? "Settings.widgets.collection.selector.select.select-all.too-much" : "Settings.widgets.collection.selector.select.select-all"), systemImage: "checkmark.circle")
+                                        Label("Settings.widgets.collection.selector.select.select-all", systemImage: "checkmark.circle")
                                     })
-                                    .disabled(searchedCards?.count ?? 0 > 500)
+//                                    .disabled(searchedCards?.count ?? 0 > 500)
                                     Button(action: {
                                         // Safely find the target collection index
                                         guard let idx = CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name }) else {
@@ -189,7 +286,6 @@ struct CollectionEditorView: View {
             }
         }
         .withSystemBackground()
-        
         .onDisappear {
             showFilterSheet = false
         }
@@ -264,6 +360,19 @@ struct CollectionEditorView: View {
                 }
             }
         }
+        .alert("Settings.widgets.collection.selector.select.select-all.alert.title.\(searchedCards?.count ?? -1)", isPresented: $showSelectAllAlert, actions: {
+            Button(action: {}, label: {
+                Text("Settings.widgets.collection.selector.select.select-all.alert.cancel")
+            })
+            Button(action: {
+                selectAll()
+            }, label: {
+                Text("Settings.widgets.collection.selector.select.select-all.alert.select")
+            })
+            .keyboardShortcut(.defaultAction)
+        }, message: {
+            Text("Settings.widgets.collection.selector.select.select-all.alert.message")
+        })
     }
     
     func getCards() async {
@@ -289,6 +398,52 @@ struct CollectionEditorView: View {
             } else {
                 infoIsAvailable = false
             }
+        }
+    }
+    
+    func selectAll() {
+        totalAddSucceedItems = 0
+        totalAddFailureItems = 0
+        totalAlreadyAddedItems = 0
+        totalAddRequestedItems = (searchedCards?.count ?? 0)*2
+        if let searchedCards {
+            for item in searchedCards {
+                if !CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!.cards.contains(where: { $0.id == item.card.id && !$0.isTrained }) {
+                    Task {
+                        let reachablility = await DoriFrontend.URLValidator.reachability(of: item.card.coverNormalImageURL)
+                        if reachablility {
+                            CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.append(CardCollectionManager.Card(id: item.card.id, isTrained: false, localizedName: item.card.prefix, file: .path(item.card.coverNormalImageURL.absoluteString)))
+                            totalAddSucceedItems += 1
+                        } else {
+                            totalAddFailureItems += 1
+                        }
+                    }
+                } else {
+                    totalAlreadyAddedItems += 1
+                }
+                if !CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!.cards.contains(where: { $0.id == item.card.id && $0.isTrained }) {
+                    if let url = item.card.coverAfterTrainingImageURL {
+                        CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.append(CardCollectionManager.Card(id: item.card.id, isTrained: true, localizedName: item.card.prefix, file: .path(url.absoluteString)))
+                        totalAddSucceedItems += 1
+                    } else {
+                        totalAddFailureItems += 1
+                    }
+                } else {
+                    totalAlreadyAddedItems += 1
+                }
+            }
+            Task {
+                while (totalAddSucceedItems + totalAddFailureItems + totalAlreadyAddedItems) < totalAddRequestedItems && totalAddRequestedItems != 0 {
+                    await Task.yield()
+                }
+                
+                CardCollectionManager.shared.updateStorage()
+                collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!
+                
+                updateIndex += 1
+            }
+        } else {
+            totalAddRequestedItems = 0
         }
     }
 }
@@ -550,4 +705,34 @@ struct CollectionEditorItemView: View {
         }
     }
     
+}
+
+
+struct MultiSegmentProgressBar: View {
+    struct Segment: Identifiable {
+        let id = UUID()
+        let color: Color
+        let fraction: Double // 0.0 ~ 1.0
+    }
+    
+    var segments: [Segment]
+    
+    var body: some View {
+        GeometryReader { geo in
+            HStack(spacing: 0) {
+                ForEach(segments) { segment in
+                    Rectangle()
+                        .fill(segment.color)
+                        .frame(width: geo.size.width * segment.fraction)
+                }
+            }
+            .clipShape(Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+            )
+        }
+        .frame(height: 10)
+        .animation(.easeInOut, value: segments.map(\.fraction))
+    }
 }

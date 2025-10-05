@@ -117,7 +117,7 @@ struct GreatdoriApp: App {
 //        }
         #endif
         
-        WindowGroup("AnyWindow", id: "AnyWindow", for: AnyWindowData.self) { $data in
+        WindowGroup("Window", id: "AnyWindow", for: AnyWindowData.self) { $data in
             if let data, data.isValid {
                 _AnyWindowView(data: data)
             }

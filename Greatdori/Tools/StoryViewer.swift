@@ -25,7 +25,7 @@ struct StoryViewerView: View {
                 Spacer(minLength: 0)
                 VStack {
                     ListItemView {
-                        Text("故事类型")
+                        Text("Tools.story-viewer.type")
                             .bold()
                     } value: {
                         Picker(selection: $storyType) {
@@ -57,7 +57,7 @@ struct StoryViewerView: View {
                 Spacer(minLength: 0)
             }
         }
-        .navigationTitle("故事浏览器")
+        .navigationTitle("Tools.story-viewer")
     }
 }
 
@@ -71,12 +71,12 @@ private enum StoryType: String, CaseIterable, Hashable {
     
     var name: LocalizedStringKey {
         switch self {
-        case .event: "活动"
-        case .main: "主线故事"
-        case .band: "乐团故事"
-        case .card: "卡牌故事"
-        case .actionSet: "区域对话"
-        case .afterLive: "Live后对话"
+        case .event: "Tools.story-viewer.type.event"
+        case .main: "Tools.story-viewer.type.main"
+        case .band: "Tools.story-viewer.type.band"
+        case .card: "Tools.story-viewer.type.card"
+        case .actionSet: "Tools.story-viewer.type.action-set"
+        case .afterLive: "Tools.story-viewer.type.after-live"
         }
     }
 }
@@ -92,7 +92,7 @@ extension StoryViewerView {
         var body: some View {
             if let eventList {
                 ListItemView {
-                    Text("活动")
+                    Text("Tools.story-viewer.type.event")
                         .bold()
                 } value: {
                     Picker(selection: $selectedEvent) {
@@ -123,7 +123,7 @@ extension StoryViewerView {
                         } else {
                             HStack {
                                 Spacer()
-                                ContentUnavailableView("故事不可用", systemImage: "text.rectangle.page")
+                                ContentUnavailableView("Tools.story-viewer.type.event.unavailable", systemImage: "text.rectangle.page")
                                 Spacer()
                             }
                         }
@@ -136,7 +136,7 @@ extension StoryViewerView {
                             }
                         } else {
                             ExtendedConstraints {
-                                ContentUnavailableView("载入故事时出错", systemImage: "text.rectangle.page")
+                                ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
                                     .onTapGesture {
                                         Task {
                                             await getStories()
@@ -164,7 +164,7 @@ extension StoryViewerView {
                     }
                 } else {
                     ExtendedConstraints {
-                        ContentUnavailableView("载入活动时出错", systemImage: "star.hexagon.fill")
+                        ContentUnavailableView("Tools.story-viewer.error", systemImage: "star.hexagon.fill")
                             .onTapGesture {
                                 Task {
                                     await getEvents()
@@ -227,7 +227,7 @@ extension StoryViewerView {
                     }
                 } else {
                     ExtendedConstraints {
-                        ContentUnavailableView("载入故事时出错", systemImage: "text.rectangle.page")
+                        ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
                             .onTapGesture {
                                 Task {
                                     await getStories()
@@ -262,8 +262,8 @@ extension StoryViewerView {
         var body: some View {
             if let bands, let stories {
                 Section {
-                    Picker("乐团", selection: $selectedBand) {
-                        Text("(选择乐团)").tag(Optional<DoriAPI.Band.Band>.none)
+                    Picker("Tools.story-viewer.type.band", selection: $selectedBand) {
+                        Text("Tools.story-viewer.type.band.prompt").tag(Optional<DoriAPI.Band.Band>.none)
                         ForEach(bands) { band in
                             Text(band.bandName.forPreferredLocale() ?? "").tag(band)
                         }
@@ -272,8 +272,8 @@ extension StoryViewerView {
                         selectedStoryGroup = nil
                     }
                     if let selectedBand {
-                        Picker("故事", selection: $selectedStoryGroup) {
-                            Text("(选择故事)").tag(Optional<DoriAPI.Misc.BandStory>.none)
+                        Picker("Tools.story-viewer.story", selection: $selectedStoryGroup) {
+                            Text("Tools.story-viewer.story.prompt").tag(Optional<DoriAPI.Misc.BandStory>.none)
                             ForEach(stories.filter { $0.bandID == selectedBand.id }) { story in
                                 Text(verbatim: "\(story.mainTitle.forPreferredLocale() ?? ""): \(story.subTitle.forPreferredLocale() ?? "")").tag(story)
                             }
@@ -300,7 +300,7 @@ extension StoryViewerView {
                     }
                 } else {
                     ExtendedConstraints {
-                        ContentUnavailableView("载入故事时出错", systemImage: "text.rectangle.page")
+                        ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
                             .onTapGesture {
                                 Task {
                                     await getStories()
@@ -373,9 +373,9 @@ extension StoryViewerView {
                                         Group {
                                             switch episode.episodeType {
                                             case .standard:
-                                                Text("故事")
+                                                Text("Tools.story-viewer.story.standard")
                                             case .memorial:
-                                                Text("纪念故事")
+                                                Text("Tools.story-viewer.story.memorial")
                                             }
                                         }
                                         .font(.system(size: 14))
@@ -389,7 +389,7 @@ extension StoryViewerView {
                 } else {
                     HStack {
                         Spacer()
-                        ContentUnavailableView("故事不可用", systemImage: "text.rectangle.page")
+                        ContentUnavailableView("Tools.story-viewer.story.unavailable", systemImage: "text.rectangle.page")
                         Spacer()
                     }
                     .listRowBackground(Color.clear)
@@ -403,7 +403,7 @@ extension StoryViewerView {
                     }
                 } else {
                     ExtendedConstraints {
-                        ContentUnavailableView("载入故事时出错", systemImage: "text.rectangle.page")
+                        ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
                             .onTapGesture {
                                 Task {
                                     await loadCardDetail()
@@ -440,7 +440,7 @@ extension StoryViewerView {
         var body: some View {
             if let actionSets {
                 Section {
-                    Button("过滤", systemImage: "line.3.horizontal.decrease") {
+                    Button("Tools.story-viewer.filter", systemImage: "line.3.horizontal.decrease") {
                         isFilterSettingsPresented = true
                     }
                     .foregroundColor(filter.isFiltered ? .accent : nil)
@@ -489,7 +489,7 @@ extension StoryViewerView {
                     }
                 } else {
                     ExtendedConstraints {
-                        ContentUnavailableView("载入故事时出错", systemImage: "text.rectangle.page")
+                        ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
                             .onTapGesture {
                                 Task {
                                     await getActionSets()
@@ -532,7 +532,7 @@ extension StoryViewerView {
         var body: some View {
             if let stories {
                 Section {
-                    Button("过滤", systemImage: "line.3.horizontal.decrease") {
+                    Button("Tools.story-viewer.filter", systemImage: "line.3.horizontal.decrease") {
                         isFilterSettingsPresented = true
                     }
                     .foregroundColor(filter.isFiltered ? .accent : nil)
@@ -584,7 +584,7 @@ extension StoryViewerView {
                     }
                 } else {
                     ExtendedConstraints {
-                        ContentUnavailableView("载入故事时出错", systemImage: "text.rectangle.page")
+                        ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
                             .onTapGesture {
                                 Task {
                                     await getStories()
