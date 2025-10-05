@@ -16,6 +16,7 @@ import Charts
 import SwiftUI
 import DoriKit
 import SDWebImageSwiftUI
+@_spi(Advanced) import SwiftUIIntrospect
 
 struct EventTrackerView: View {
     @State private var locale: DoriLocale = DoriLocale.primaryLocale
@@ -45,6 +46,14 @@ struct EventTrackerView: View {
                                 })
                                 .window(isPresented: $isEventSelectorPresented) {
                                     EventSelector(selection: .init { [selectedEvent].compactMap { $0 } } set: { selectedEvent = $0.first })
+                                        .selectorDisablesMultipleSelection()
+                                        #if os(macOS)
+                                        .introspect(.window, on: .macOS(.v14...)) { window in
+                                            window.standardWindowButton(.zoomButton)?.isEnabled = false
+                                            window.standardWindowButton(.miniaturizeButton)?.isEnabled = false
+                                            window.level = .floating
+                                        }
+                                        #endif
                                 }
                                 .onChange(of: selectedEvent) {
                                     isEventSelectorPresented = false

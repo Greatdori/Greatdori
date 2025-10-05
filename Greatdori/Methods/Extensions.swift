@@ -662,7 +662,13 @@ extension View {
         onDismiss: (() -> Void)? = nil,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View {
+        #if os(macOS)
         modifier(_AnyWindowModifier(isPresented: isPresented, onDismiss: onDismiss, content: content))
+        #else
+        sheet(isPresented: isPresented, onDismiss: onDismiss) {
+            NavigationStack(root: content)
+        }
+        #endif
     }
 }
 private struct _AnyWindowModifier<V: View>: ViewModifier {

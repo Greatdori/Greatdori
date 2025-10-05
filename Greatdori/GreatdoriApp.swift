@@ -145,11 +145,11 @@ private struct _AnyWindowView: View {
                     unsafe UnsafePointer<() -> Void>(bitPattern: ptrOnDismiss)!.pointee()
                 }
             }
-            #if os(macOS)
+        #if os(macOS)
             .introspect(.window, on: .macOS(.v14...)) { window in
                 window.isRestorable = false
             }
-            #endif
+        #endif
     }
 }
 
