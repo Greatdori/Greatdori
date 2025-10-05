@@ -56,6 +56,9 @@
     "+%lld%%" : {
       "shouldTranslate" : false
     },
+    "AnyWindow" : {
+
+    },
     "App.community" : {
       "localizations" : {
         "en" : {
@@ -7340,13 +7343,16 @@
     "未开始" : {
 
     },
-    "活动 ID" : {
+    "活动" : {
 
     },
     "状态" : {
 
     },
     "目前分数线" : {
+
+    },
+    "选择活动…" : {
 
     },
     "预测最终分数线" : {

@@ -655,3 +655,70 @@ struct _ImageFileDocument: FileDocument {
         .init(regularFileWithContents: imageData)
     }
 }
+
+extension View {
+    func window<Content: View>(
+        isPresented: Binding<Bool>,
+        onDismiss: (() -> Void)? = nil,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        modifier(_AnyWindowModifier(isPresented: isPresented, onDismiss: onDismiss, content: content))
+    }
+}
+private struct _AnyWindowModifier<V: View>: ViewModifier {
+    var isPresented: Binding<Bool>
+    var onDismiss: (() -> Void)?
+    var content: () -> V
+    @Environment(\.openWindow) private var openWindow
+    func body(content body: Content) -> some View {
+        body
+            .onChange(of: isPresented.wrappedValue, initial: true) {
+                if isPresented.wrappedValue {
+                    let ptrIsPresented = UnsafeMutablePointer<Binding<Bool>>.allocate(capacity: 1)
+                    unsafe ptrIsPresented.initialize(to: isPresented)
+                    var ptrOnDismiss: UnsafeMutablePointer<() -> Void>?
+                    if let onDismiss {
+                        unsafe ptrOnDismiss = .allocate(capacity: 1)
+                        unsafe ptrOnDismiss.unsafelyUnwrapped.initialize(to: onDismiss)
+                    }
+                    let ptrContent = UnsafeMutablePointer<() -> AnyView>.allocate(capacity: 1)
+                    unsafe ptrContent.initialize {
+                        AnyView(content())
+                    }
+                    unsafe openWindow(
+                        id: "AnyWindow",
+                        value: AnyWindowData(
+                            isPresented: Int(bitPattern: ptrIsPresented),
+                            content: Int(bitPattern: ptrContent),
+                            onDismiss: ptrOnDismiss != nil ? Int(bitPattern: ptrOnDismiss.unsafelyUnwrapped) : nil
+                        )
+                    )
+                }
+            }
+    }
+}
+struct AnyWindowData: Hashable, Codable {
+    @unsafe var isPresented: Int // Binding<Bool>
+    @unsafe var content: Int // () -> AnyView
+    @unsafe var onDismiss: Int? // () -> Void
+    
+    var _hash: Int
+    
+    init(isPresented: Int, content: Int, onDismiss: Int? = nil) {
+        unsafe self.isPresented = isPresented
+        unsafe self.content = content
+        unsafe self.onDismiss = onDismiss
+        self._hash = isPresented.hashValue & content.hashValue
+        if let h = onDismiss?.hashValue {
+            _hash &= h
+        }
+    }
+    
+    var isValid: Bool {
+        var h = unsafe isPresented.hashValue & content.hashValue
+        if let _h = unsafe onDismiss?.hashValue {
+            h &= _h
+        }
+        return h == _hash
+    }
+}

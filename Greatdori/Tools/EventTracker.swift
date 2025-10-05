@@ -19,6 +19,7 @@ import SDWebImageSwiftUI
 
 struct EventTrackerView: View {
     @State private var locale: DoriLocale = DoriLocale.primaryLocale
+    @State private var isEventSelectorPresented = false
     @State private var eventIDInput = ""
     @State private var eventList: [PreviewEvent]?
     @State private var eventListIsAvailabile = true
@@ -35,19 +36,22 @@ struct EventTrackerView: View {
                         LazyVStack {
                             Group {
                                 ListItemView(title: {
-                                    Text("活动 ID")
+                                    Text("活动")
                                         .bold()
                                 }, value: {
-                                    TextField(text: $eventIDInput) { EmptyView() }
-                                        .onSubmit {
-                                            if let eventList, let id = Int(eventIDInput) {
-                                                Task {
-                                                    selectedEvent = eventList.first { $0.id == id }
-                                                    await updateTrackerData()
-                                                }
-                                            }
-                                        }
+                                    Button("选择活动…") {
+                                        isEventSelectorPresented = true
+                                    }
                                 })
+                                .window(isPresented: $isEventSelectorPresented) {
+                                    EventSelector(selection: .init { [selectedEvent].compactMap { $0 } } set: { selectedEvent = $0.first })
+                                }
+                                .onChange(of: selectedEvent) {
+                                    isEventSelectorPresented = false
+                                    Task {
+                                        await updateTrackerData()
+                                    }
+                                }
                                 Divider()
                             }
                             

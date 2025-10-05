@@ -17,6 +17,7 @@ import DoriKit
 import SDWebImage
 import SDWebImageSVGCoder
 import SwiftUI
+@_spi(Advanced) import SwiftUIIntrospect
 #if os(iOS)
 import UIKit
 import BackgroundTasks
@@ -115,9 +116,42 @@ struct GreatdoriApp: App {
 //            DebugFilterExperimentView()
 //        }
         #endif
+        
+        WindowGroup("AnyWindow", id: "AnyWindow", for: AnyWindowData.self) { $data in
+            if let data, data.isValid {
+                _AnyWindowView(data: data)
+            }
+        }
     }
 }
-
+private struct _AnyWindowView: View {
+    var data: AnyWindowData
+    @Environment(\.dismissWindow) private var dismissWindow
+    @State private var dismissTimer: Timer?
+    var body: some View {
+        unsafe UnsafePointer<() -> AnyView>(bitPattern: data.content)!.pointee()
+            .onAppear {
+                dismissTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+                    if unsafe !UnsafePointer<Binding<Bool>>(bitPattern: data.isPresented)!.pointee.wrappedValue {
+                        dismissWindow()
+                        dismissTimer?.invalidate()
+                    }
+                }
+            }
+            .onDisappear {
+                dismissTimer?.invalidate()
+                unsafe UnsafePointer<Binding<Bool>>(bitPattern: data.isPresented)!.pointee.wrappedValue = false
+                if let ptrOnDismiss = unsafe data.onDismiss {
+                    unsafe UnsafePointer<() -> Void>(bitPattern: ptrOnDismiss)!.pointee()
+                }
+            }
+            #if os(macOS)
+            .introspect(.window, on: .macOS(.v14...)) { window in
+                window.isRestorable = false
+            }
+            #endif
+    }
+}
 
 //MARK: AppDelegate
 #if os(macOS)

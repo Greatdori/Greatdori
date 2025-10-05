@@ -108,8 +108,10 @@ struct ItemSelectorView<Element: Sendable & Hashable & DoriCacheable & DoriFilte
     }
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\._itemSelectorMultiSelectionDisabled) private var isMultipleSelectionDisabled
     @State private var filter = DoriFrontend.Filter()
     @State private var sorter = DoriFrontend.Sorter(keyword: .releaseDate(in: .jp), direction: .descending)
     @State private var elements: [Element]?
@@ -131,10 +133,15 @@ struct ItemSelectorView<Element: Sendable & Hashable & DoriCacheable & DoriFilte
                                       AnyView(
                                         ForEach(resultElements, id: \.self) { element in
                                             Button(action: {
-                                                if selection.contains(element) {
-                                                    selection.removeAll { $0 == element }
+                                                if !isMultipleSelectionDisabled {
+                                                    if selection.contains(element) {
+                                                        selection.removeAll { $0 == element }
+                                                    } else {
+                                                        selection.append(element)
+                                                    }
                                                 } else {
-                                                    selection.append(element)
+                                                    selection = [element]
+                                                    dismiss()
                                                 }
                                             }, label: {
                                                 makeSomeContent(currentLayout, element)
@@ -147,10 +154,15 @@ struct ItemSelectorView<Element: Sendable & Hashable & DoriCacheable & DoriFilte
                                     ) { element in
                                         AnyView(
                                             Button(action: {
-                                                if selection.contains(element) {
-                                                    selection.removeAll { $0 == element }
+                                                if !isMultipleSelectionDisabled {
+                                                    if selection.contains(element) {
+                                                        selection.removeAll { $0 == element }
+                                                    } else {
+                                                        selection.append(element)
+                                                    }
                                                 } else {
-                                                    selection.append(element)
+                                                    selection = [element]
+                                                    dismiss()
                                                 }
                                             }, label: {
                                                 makeSomeContent(currentLayout, element)
@@ -213,14 +225,16 @@ struct ItemSelectorView<Element: Sendable & Hashable & DoriCacheable & DoriFilte
                 if #available(iOS 26.0, macOS 26.0, *) {
                     ToolbarSpacer()
                 }
-                ToolbarItem {
-                    Button("Done", systemImage: "checkmark") {
-                        dismiss()
-                    }
-                    .wrapIf(true) { content in
-                        if #available(iOS 26.0, macOS 26.0, *) {
-                            content
-                                .buttonStyle(.glassProminent)
+                if !supportsMultipleWindows {
+                    ToolbarItem {
+                        Button("Done", systemImage: "checkmark") {
+                            dismiss()
+                        }
+                        .wrapIf(true) { content in
+                            if #available(iOS 26.0, macOS 26.0, *) {
+                                content
+                                    .buttonStyle(.glassProminent)
+                            }
                         }
                     }
                 }
@@ -283,4 +297,12 @@ extension ItemSelectorView {
         mutable.getResultCountDescription = content
         return mutable
     }
+}
+extension View {
+    func selectorDisablesMultipleSelection(_ disabled: Bool = true) -> some View {
+        environment(\._itemSelectorMultiSelectionDisabled, disabled)
+    }
+}
+extension EnvironmentValues {
+    @Entry fileprivate var _itemSelectorMultiSelectionDisabled = false
 }
