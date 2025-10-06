@@ -98,10 +98,16 @@ import SwiftUI
     ),
     ToolDestinationItem(
         title: "App.tools.story-viewer",
-        symbol: "book",
+        symbol: "books.vertical",
         tabValue: .storyViewer,
         destination: {StoryViewerView()}
-    )
+    ),
+    ToolDestinationItem(
+        title: "App.tools.live2d-viewer",
+        symbol: "person.and.viewfinder",
+        tabValue: .live2dViewer,
+        destination: {Live2DViewerView()}
+    ),
 ]
 
 
@@ -209,7 +215,11 @@ struct ToolsView: View {
                     NavigationLink(destination: {
                         allToolsDestinationItems[itemIndex].destination()
                     }, label: {
-                        Label(allToolsDestinationItems[itemIndex].title, systemImage: allToolsDestinationItems[itemIndex].symbol)
+                        Label(title: {
+                            Text(allToolsDestinationItems[itemIndex].title)
+                        }, icon: {
+                            Image(_internalSystemName: allToolsDestinationItems[itemIndex].symbol)
+                        })
                     })
                 }
             }

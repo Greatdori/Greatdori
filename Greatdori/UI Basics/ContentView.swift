@@ -55,12 +55,18 @@ struct ContentView: View {
                         if sizeClass == .regular {
                             TabSection(content: {
                                 ForEach(0..<allInfoDestinationItems.count, id: \.self) { itemIndex in
-                                    Tab(allInfoDestinationItems[itemIndex].title, systemImage: allInfoDestinationItems[itemIndex].symbol, value: AppSection.info(allInfoDestinationItems[itemIndex].tabValue)) {
+                                    Tab(value: AppSection.info(allInfoDestinationItems[itemIndex].tabValue), content: {
                                         NavigationStack {
                                             allInfoDestinationItems[itemIndex].destination()
                                                 .handlesExternalView()
                                         }
-                                    }
+                                    }, label: {
+                                        Label(title: {
+                                            Text(allInfoDestinationItems[itemIndex].title)
+                                        }, icon: {
+                                            Image(_internalSystemName: allInfoDestinationItems[itemIndex].symbol)
+                                        })
+                                    })
                                 }
                             }, header: {
                                 Text("App.info")
@@ -74,12 +80,18 @@ struct ContentView: View {
                         if sizeClass == .regular {
                             TabSection(content: {
                                 ForEach(0..<allToolsDestinationItems.count, id: \.self) { itemIndex in
-                                    Tab(allToolsDestinationItems[itemIndex].title, systemImage: allToolsDestinationItems[itemIndex].symbol, value: AppSection.tools(allToolsDestinationItems[itemIndex].tabValue)) {
+                                    Tab(value: AppSection.tools(allToolsDestinationItems[itemIndex].tabValue), content: {
                                         NavigationStack {
                                             allToolsDestinationItems[itemIndex].destination()
                                                 .handlesExternalView()
                                         }
-                                    }
+                                    }, label: {
+                                        Label(title: {
+                                            Text(allToolsDestinationItems[itemIndex].title)
+                                        }, icon: {
+                                            Image(_internalSystemName: allToolsDestinationItems[itemIndex].symbol)
+                                        })
+                                    })
                                 }
                             }, header: {
                                 Text("App.tools")
@@ -401,7 +413,7 @@ enum InfoTab: Hashable {
 }
 
 enum ToolTab: Hashable {
-    case home, eventTracker, storyViewer
+    case home, eventTracker, storyViewer, live2dViewer
 }
 
 enum Platform {
