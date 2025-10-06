@@ -19,7 +19,6 @@ import SwiftUI
 struct CollectionEditorView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     @Environment(\.dismiss) var dismiss
-//    var inputCollection: CardCollectionManager.Collection
     @State var collection: CardCollectionManager.Collection
     @State var filter = DoriFrontend.Filter()
     @State var sorter = DoriFrontend.Sorter(keyword: .releaseDate(in: .jp), direction: .descending)
@@ -34,13 +33,13 @@ struct CollectionEditorView: View {
     @State var showAutoSaveTip = true
     @State var onlyShowSelectedItems = false
     
-    @State var totalAddRequestedItems: Int = 0
-    @State var totalAddSucceedItems: Int = 0
-    @State var totalAddFailureItems: Int = 0
-    @State var totalAlreadyAddedItems: Int = 0
-    @State var isPresentingAddAllPopover = false
-    @State var addingProgress: Double = 0
-    @State var showSelectAllAlert = false
+    @State var selectAllTotalRequestedItemsCount: Int = 0
+    @State var selectAllTotalSucceedItemsCount: Int = 0
+    @State var selectAllTotalFailureItemsCount: Int = 0
+    @State var selectAllTotalExisetedItemsCount: Int = 0
+    @State var selectAllPopoverIsPresenting = false
+    @State var selectAllTooMuchItemsAlertIsDisplaying = false
+    
     @Namespace var cardLists
     
     init(collection: CardCollectionManager.Collection) {
@@ -105,9 +104,13 @@ struct CollectionEditorView: View {
                 if #available(iOS 26.0, *) {
                     content.navigationSubtitle(showAutoSaveTip ? "Settings.widgets.collection.selector.auto-save" : ((searchedText.isEmpty && !filter.isFiltered) ? "Card.count.\(searchedCards!.count)" :  "Search.result.\(searchedCards!.count)"))
                         .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                withAnimation {
-                                    showAutoSaveTip = false
+                            if isMACOS {
+                                showAutoSaveTip = false
+                            } else {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    withAnimation {
+                                        showAutoSaveTip = false
+                                    }
                                 }
                             }
                         }
@@ -116,111 +119,119 @@ struct CollectionEditorView: View {
                 }
             })
             .toolbar {
-                if totalAddRequestedItems != 0 {
+                if selectAllTotalRequestedItemsCount != 0 {
                     ToolbarItem {
-                        Group {
-                            if totalAddSucceedItems + totalAddFailureItems + totalAlreadyAddedItems < totalAddRequestedItems {
-                                ProgressView(value: Double(totalAddSucceedItems + totalAddFailureItems + totalAlreadyAddedItems) / Double(totalAddRequestedItems))
-                                    .progressViewStyle(.circular)
+                        Button(action: {
+                            selectAllPopoverIsPresenting.toggle()
+                        }, label: {
+                            if selectAllTotalSucceedItemsCount + selectAllTotalFailureItemsCount + selectAllTotalExisetedItemsCount < selectAllTotalRequestedItemsCount {
+//                                ProgressView(value: Double(selectAllTotalSucceedItemsCount + selectAllTotalFailureItemsCount + selectAllTotalExisetedItemsCount) / Double(selectAllTotalRequestedItemsCount))
+                                ProgressView()
+                                    .wrapIf(isMACOS, in: {
+                                        $0.scaleEffect(0.5)
+                                    })
+//                                    .progressViewStyle(.circular)
                             } else {
                                 Image(systemName: "checkmark.circle")
                             }
-                        }
-                            .onTapGesture(perform: {
-                                isPresentingAddAllPopover.toggle()
-                            })
-                            .popover(isPresented: $isPresentingAddAllPopover) {
-                                VStack(alignment: .leading, spacing: 7) {
-                                    HStack {
-                                        MultiSegmentProgressBar(segments: [
-                                            .init(color: .green, fraction: Double(totalAddSucceedItems)/Double(totalAddRequestedItems)),
-                                            .init(color: .red, fraction: Double(totalAddFailureItems)/Double(totalAddRequestedItems)),
-                                            .init(color: .yellow, fraction: Double(totalAlreadyAddedItems)/Double(totalAddRequestedItems)),
-                                            .init(color: .gray, fraction: Double(totalAddRequestedItems - totalAddSucceedItems - totalAddFailureItems - totalAlreadyAddedItems)/Double(totalAddRequestedItems))
-                                        ])
-                                        .frame(height: 10)
-//                                        Spacer()
-                                        Text(verbatim: "/\(totalAddRequestedItems)")
-                                    }
-                                    HStack {
-                                        Label(title: {
-                                           Text("Settings.widgets.collection.selector.select.select-all.progress.succeed")
-                                        }, icon: {
-                                            Image(systemName: "checkmark.circle")
-                                                .foregroundStyle(.green)
-                                        })
-                                        Spacer()
-                                        Text(verbatim: "\(totalAddSucceedItems), \(String(format: "%.1f", Double(totalAddSucceedItems)/Double(totalAddRequestedItems)*100))%")
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    HStack {
-                                        Label(title: {
-                                            Text("Settings.widgets.collection.selector.select.select-all.progress.failure")
-                                        }, icon: {
-                                            Image(systemName: "xmark.circle")
-                                                .foregroundStyle(.red)
-                                        })
-                                        Spacer()
-                                        Text(verbatim: "\(totalAddFailureItems), \(String(format: "%.1f", Double(totalAddFailureItems)/Double(totalAddRequestedItems)*100))%")
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    HStack {
-                                        Label(title: {
-                                            Text("Settings.widgets.collection.selector.select.select-all.progress.existed")
-                                        }, icon: {
-                                            Image(systemName: "exclamationmark.circle")
-                                                .foregroundStyle(.yellow)
-                                        })
-                                        Spacer()
-                                        Text(verbatim: "\(totalAlreadyAddedItems), \(String(format: "%.1f", Double(totalAlreadyAddedItems)/Double(totalAddRequestedItems)*100))%")
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    HStack {
-                                        Label(title: {
-                                            Text("Settings.widgets.collection.selector.select.select-all.progress.pending")
-                                        }, icon: {
-                                            Image(systemName: "ellipsis.circle")
-                                                .foregroundStyle(.gray)
-                                        })
-                                        Spacer()
-                                        Text(verbatim: "\(totalAddRequestedItems - totalAddSucceedItems - totalAddFailureItems - totalAlreadyAddedItems), \(String(format: "%.1f", Double(totalAddRequestedItems - totalAddSucceedItems - totalAddFailureItems - totalAlreadyAddedItems)/Double(totalAddRequestedItems)*100))%")
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    
-                                    Divider()
-                                    if totalAddSucceedItems + totalAddFailureItems + totalAlreadyAddedItems >= totalAddRequestedItems {
-                                        Label("Settings.widgets.collection.selector.select.select-all.progress.done", systemImage: "externaldrive.badge.checkmark")
-                                    } else {
-                                        Label(title: {
-                                            Text("Settings.widgets.collection.selector.select.select-all.progress.loading")
-                                        }, icon: {
-                                            ProgressView()
-                                        })
-                                    }
+                        })
+                        .popover(isPresented: $selectAllPopoverIsPresenting) {
+                            VStack(alignment: .leading, spacing: 7) {
+                                HStack {
+                                    MultiSegmentProgressBar(segments: [
+                                        .init(color: .green, fraction: Double(selectAllTotalSucceedItemsCount)/Double(selectAllTotalRequestedItemsCount)),
+                                        .init(color: .red, fraction: Double(selectAllTotalFailureItemsCount)/Double(selectAllTotalRequestedItemsCount)),
+                                        .init(color: .yellow, fraction: Double(selectAllTotalExisetedItemsCount)/Double(selectAllTotalRequestedItemsCount)),
+                                        .init(color: .gray, fraction: Double(selectAllTotalRequestedItemsCount - selectAllTotalSucceedItemsCount - selectAllTotalFailureItemsCount - selectAllTotalExisetedItemsCount)/Double(selectAllTotalRequestedItemsCount))
+                                    ])
+                                    .frame(height: 10)
+                                    //                                        Spacer()
+                                    Text(verbatim: "/\(selectAllTotalRequestedItemsCount)")
                                 }
-                                .padding()
-                                .presentationCompactAdaptation(.popover)
-                                .frame(width: 300)
+                                HStack {
+                                    Label(title: {
+                                        Text("Settings.widgets.collection.selector.select.select-all.progress.succeed")
+                                    }, icon: {
+                                        Image(systemName: "checkmark.circle")
+                                            .foregroundStyle(.green)
+                                    })
+                                    Spacer()
+                                    Text(verbatim: "\(selectAllTotalSucceedItemsCount), \(String(format: "%.1f", Double(selectAllTotalSucceedItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
+                                        .foregroundStyle(.secondary)
+                                }
+                                HStack {
+                                    Label(title: {
+                                        Text("Settings.widgets.collection.selector.select.select-all.progress.failure")
+                                    }, icon: {
+                                        Image(systemName: "xmark.circle")
+                                            .foregroundStyle(.red)
+                                    })
+                                    Spacer()
+                                    Text(verbatim: "\(selectAllTotalFailureItemsCount), \(String(format: "%.1f", Double(selectAllTotalFailureItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
+                                        .foregroundStyle(.secondary)
+                                }
+                                HStack {
+                                    Label(title: {
+                                        Text("Settings.widgets.collection.selector.select.select-all.progress.existed")
+                                    }, icon: {
+                                        Image(systemName: "exclamationmark.circle")
+                                            .foregroundStyle(.yellow)
+                                    })
+                                    Spacer()
+                                    Text(verbatim: "\(selectAllTotalExisetedItemsCount), \(String(format: "%.1f", Double(selectAllTotalExisetedItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
+                                        .foregroundStyle(.secondary)
+                                }
+                                HStack {
+                                    Label(title: {
+                                        Text("Settings.widgets.collection.selector.select.select-all.progress.pending")
+                                    }, icon: {
+                                        Image(systemName: "ellipsis.circle")
+                                            .foregroundStyle(.gray)
+                                    })
+                                    Spacer()
+                                    Text(verbatim: "\(selectAllTotalRequestedItemsCount - selectAllTotalSucceedItemsCount - selectAllTotalFailureItemsCount - selectAllTotalExisetedItemsCount), \(String(format: "%.1f", Double(selectAllTotalRequestedItemsCount - selectAllTotalSucceedItemsCount - selectAllTotalFailureItemsCount - selectAllTotalExisetedItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
+                                        .foregroundStyle(.secondary)
+                                }
+                                
+                                Divider()
+                                if selectAllTotalSucceedItemsCount + selectAllTotalFailureItemsCount + selectAllTotalExisetedItemsCount >= selectAllTotalRequestedItemsCount {
+                                    Label("Settings.widgets.collection.selector.select.select-all.progress.done", systemImage: "externaldrive.badge.checkmark")
+                                } else {
+                                    Label(title: {
+                                        Text("Settings.widgets.collection.selector.select.select-all.progress.loading")
+                                    }, icon: {
+                                        ProgressView()
+                                            .wrapIf(isMACOS, in: {
+                                                $0.scaleEffect(0.5)
+                                            })
+                                    })
+                                }
                             }
+                            .padding()
+                            .presentationCompactAdaptation(.popover)
+                            .frame(width: 300)
+                        }
                     }
                 }
                 ToolbarItem {
                     Menu(content: {
-                        Section {
-                            Button(action: {
-                                showFilterSheet.toggle()
-                            }, label: {
-                                Label(showFilterSheet ? "Settings.widgets.collection.selector.filter.hide" : "Settings.widgets.collection.selector.filter.show", systemImage: "line.3.horizontal.decrease")
-                            })
-                            SorterPickerView(sorter: $sorter, allOptions: CardWithBand.applicableSortingTypes)
-                            LayoutPicker(selection: $layoutType, options: [("Filter.view.list", "list.bullet", 1), ("Filter.view.gallery", "text.below.rectangle", 3)])
+                        if !isMACOS {
+                            Section {
+                                Button(action: {
+                                    showFilterSheet.toggle()
+                                }, label: {
+                                    Label(showFilterSheet ? "Settings.widgets.collection.selector.filter.hide" : "Settings.widgets.collection.selector.filter.show", systemImage: "line.3.horizontal.decrease")
+                                })
+                                SorterPickerView(sorter: $sorter, allOptions: CardWithBand.applicableSortingTypes)
+                                LayoutPicker(selection: $layoutType, options: [("Filter.view.list", "list.bullet", 1), ("Filter.view.gallery", "text.below.rectangle", 3)])
+                            }
                         }
                         Section {
                             Menu(content: {
                                 Section("Search.result.\(searchedCards?.count ?? 0)") {
                                     Button(action: {
                                         if (searchedCards?.count ?? 0) > 500 {
-                                            showSelectAllAlert = true
+                                            selectAllTooMuchItemsAlertIsDisplaying = true
                                         } else {
                                             selectAll()
                                         }
@@ -229,27 +240,7 @@ struct CollectionEditorView: View {
                                     })
 //                                    .disabled(searchedCards?.count ?? 0 > 500)
                                     Button(action: {
-                                        // Safely find the target collection index
-                                        guard let idx = CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name }) else {
-                                            return
-                                        }
-                                        
-                                        // Safely unwrap searchedCards and precompute a fast lookup set
-                                        guard let searchedCards, !searchedCards.isEmpty else {
-                                            return
-                                        }
-                                        let searchedIDs = Set(searchedCards.map { $0.id })
-                                        
-                                        // Remove any collection card whose absolute ID appears in the searched IDs
-                                        CardCollectionManager.shared.userCollections[idx].cards.removeAll { collectionCard in
-                                            searchedIDs.contains(collectionCard.id)
-                                        }
-                                        
-                                        // Persist the change if needed
-                                        CardCollectionManager.shared.updateStorage()
-                                        collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!
-                                        
-                                        updateIndex += 1
+                                        deselectAll()
                                     }, label: {
                                         Label("Settings.widgets.collection.selector.select.deselect-all", systemImage: "circle.slash")
                                     })
@@ -269,19 +260,22 @@ struct CollectionEditorView: View {
                 if #available(iOS 26.0, macOS 26.0, *) {
                     ToolbarSpacer()
                 }
-//                ToolbarItemGroup {
-//                    FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewCard.applicableSortingTypes, hasEndingDate: false)
-//                }
-                ToolbarItem {
-                    DismissButton(action: {}, label: {
-                        Image(systemName: "checkmark")
-                    })
-                    .wrapIf(true, in: { content in
-                        if #available(iOS 26.0, macOS 26.0, *) {
-                            content
-                                .buttonStyle(.glassProminent)
-                        }
-                    })
+                if isMACOS {
+                    ToolbarItemGroup {
+                        FilterAndSorterPicker(showFilterSheet: $showFilterSheet, sorter: $sorter, filterIsFiltering: filter.isFiltered, sorterKeywords: PreviewCard.applicableSortingTypes, hasEndingDate: false)
+                    }
+                } else {
+                    ToolbarItem {
+                        DismissButton(action: {}, label: {
+                            Image(systemName: "checkmark")
+                        })
+                        .wrapIf(true, in: { content in
+                            if #available(iOS 26.0, macOS 26.0, *) {
+                                content
+                                    .buttonStyle(.glassProminent)
+                            }
+                        })
+                    }
                 }
             }
         }
@@ -289,78 +283,40 @@ struct CollectionEditorView: View {
         .onDisappear {
             showFilterSheet = false
         }
-        .sheet(isPresented: $showFilterSheet) {
-            FilterView(filter: $filter, includingKeys: Set(CardWithBand.applicableFilteringKeys))
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
-                .presentationBackgroundInteraction(.enabled)
-        }
+        .wrapIf(isMACOS, in: {
+            $0.inspector(isPresented: $showFilterSheet) {
+                FilterView(filter: $filter, includingKeys: Set(CardWithBand.applicableFilteringKeys))
+            }
+        }, else: {
+            $0.sheet(isPresented: $showFilterSheet) {
+                FilterView(filter: $filter, includingKeys: Set(CardWithBand.applicableFilteringKeys))
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+                    .presentationBackgroundInteraction(.enabled)
+            }
+        })
         .withSystemBackground()
         .task {
             await getCards()
         }
         .onChange(of: filter) {
-            if let cards {
-                searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
-                if onlyShowSelectedItems {
-                    searchedCards = searchedCards?.filter { doriCard in
-                        collection.cards.contains { collectionCard in
-                            collectionCard.id == doriCard.id
-                        }
-                    }
-                }
-            }
+            updateSearchResults()
         }
         .onChange(of: sorter) {
-            if let cards {
-                searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
-                if onlyShowSelectedItems {
-                    searchedCards = searchedCards?.filter { doriCard in
-                        collection.cards.contains { collectionCard in
-                            collectionCard.id == doriCard.id
-                        }
-                    }
-                }
-            }
+            updateSearchResults()
         }
         .onChange(of: searchedText, {
-            if let cards {
-                searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
-                if onlyShowSelectedItems {
-                    searchedCards = searchedCards?.filter { doriCard in
-                        collection.cards.contains { collectionCard in
-                            collectionCard.id == doriCard.id
-                        }
-                    }
-                }
-            }
+            updateSearchResults()
         })
         .onChange(of: collection, {
             if onlyShowSelectedItems {
-                if let cards {
-                    searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
-                    if onlyShowSelectedItems {
-                        searchedCards = searchedCards?.filter { doriCard in
-                            collection.cards.contains { collectionCard in
-                                collectionCard.id == doriCard.id
-                            }
-                        }
-                    }                }
+                updateSearchResults()
             }
         })
         .onChange(of: onlyShowSelectedItems) {
-            if let cards {
-                searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
-                if onlyShowSelectedItems {
-                    searchedCards = searchedCards?.filter { doriCard in
-                        collection.cards.contains { collectionCard in
-                            collectionCard.id == doriCard.id
-                        }
-                    }
-                }
-            }
+            updateSearchResults()
         }
-        .alert("Settings.widgets.collection.selector.select.select-all.alert.title.\(searchedCards?.count ?? -1)", isPresented: $showSelectAllAlert, actions: {
+        .alert("Settings.widgets.collection.selector.select.select-all.alert.title.\(searchedCards?.count ?? -1)", isPresented: $selectAllTooMuchItemsAlertIsDisplaying, actions: {
             Button(action: {}, label: {
                 Text("Settings.widgets.collection.selector.select.select-all.alert.cancel")
             })
@@ -402,10 +358,10 @@ struct CollectionEditorView: View {
     }
     
     func selectAll() {
-        totalAddSucceedItems = 0
-        totalAddFailureItems = 0
-        totalAlreadyAddedItems = 0
-        totalAddRequestedItems = (searchedCards?.count ?? 0)*2
+        selectAllTotalSucceedItemsCount = 0
+        selectAllTotalFailureItemsCount = 0
+        selectAllTotalExisetedItemsCount = 0
+        selectAllTotalRequestedItemsCount = (searchedCards?.count ?? 0)*2
         if let searchedCards {
             for item in searchedCards {
                 if !CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!.cards.contains(where: { $0.id == item.card.id && !$0.isTrained }) {
@@ -413,27 +369,27 @@ struct CollectionEditorView: View {
                         let reachablility = await DoriFrontend.URLValidator.reachability(of: item.card.coverNormalImageURL)
                         if reachablility {
                             CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.append(CardCollectionManager.Card(id: item.card.id, isTrained: false, localizedName: item.card.prefix, file: .path(item.card.coverNormalImageURL.absoluteString)))
-                            totalAddSucceedItems += 1
+                            selectAllTotalSucceedItemsCount += 1
                         } else {
-                            totalAddFailureItems += 1
+                            selectAllTotalFailureItemsCount += 1
                         }
                     }
                 } else {
-                    totalAlreadyAddedItems += 1
+                    selectAllTotalExisetedItemsCount += 1
                 }
                 if !CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!.cards.contains(where: { $0.id == item.card.id && $0.isTrained }) {
                     if let url = item.card.coverAfterTrainingImageURL {
                         CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name })!].cards.append(CardCollectionManager.Card(id: item.card.id, isTrained: true, localizedName: item.card.prefix, file: .path(url.absoluteString)))
-                        totalAddSucceedItems += 1
+                        selectAllTotalSucceedItemsCount += 1
                     } else {
-                        totalAddFailureItems += 1
+                        selectAllTotalFailureItemsCount += 1
                     }
                 } else {
-                    totalAlreadyAddedItems += 1
+                    selectAllTotalExisetedItemsCount += 1
                 }
             }
             Task {
-                while (totalAddSucceedItems + totalAddFailureItems + totalAlreadyAddedItems) < totalAddRequestedItems && totalAddRequestedItems != 0 {
+                while (selectAllTotalSucceedItemsCount + selectAllTotalFailureItemsCount + selectAllTotalExisetedItemsCount) < selectAllTotalRequestedItemsCount && selectAllTotalRequestedItemsCount != 0 {
                     await Task.yield()
                 }
                 
@@ -443,7 +399,44 @@ struct CollectionEditorView: View {
                 updateIndex += 1
             }
         } else {
-            totalAddRequestedItems = 0
+            selectAllTotalRequestedItemsCount = 0
+        }
+    }
+    
+    func deselectAll() {
+        // Safely find the target collection index
+        guard let idx = CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collection.name }) else {
+            return
+        }
+        
+        // Safely unwrap searchedCards and precompute a fast lookup set
+        guard let searchedCards, !searchedCards.isEmpty else {
+            return
+        }
+        let searchedIDs = Set(searchedCards.map { $0.id })
+        
+        // Remove any collection card whose absolute ID appears in the searched IDs
+        CardCollectionManager.shared.userCollections[idx].cards.removeAll { collectionCard in
+            searchedIDs.contains(collectionCard.id)
+        }
+        
+        // Persist the change if needed
+        CardCollectionManager.shared.updateStorage()
+        collection = CardCollectionManager.shared.userCollections.first(where: { $0.name == collection.name })!
+        
+        updateIndex += 1
+    }
+    
+    func updateSearchResults() {
+        if let cards {
+            searchedCards = cards.filter(withDoriFilter: filter).search(for: searchedText).sorted(withDoriSorter: sorter)
+            if onlyShowSelectedItems {
+                searchedCards = searchedCards?.filter { doriCard in
+                    collection.cards.contains { collectionCard in
+                        collectionCard.id == doriCard.id
+                    }
+                }
+            }
         }
     }
 }
@@ -465,11 +458,9 @@ struct CollectionEditorItemView: View {
     @State var normalCoverSelectableCheckIsPending = true
     @State var trainedCoverSelectableCheckIsPending = true
     @State var characterName: LocalizedData<String>? = nil
-    
-//    let titlePlaceholder = LocalizedData(_jp: "Lorem Ipsum Dolor", en: nil, tw: nil, cn: nil, kr: nil)
     var body: some View {
         CustomGroupBox(strokeLineWidth: (normalCardIsSelected || trainedCardIsSelected) ? 3 : 0) {
-            VStack {
+            CustomStack(axis: isMACOS ? .horizontal : .vertical) {
                 CustomStack(axis: layoutType == 1 ? .horizontal : .vertical) {
                     if layoutType != 3 {
                         HStack(spacing: 5) {
@@ -505,14 +496,12 @@ struct CollectionEditorItemView: View {
                         VStack(alignment: layoutType == 1 ? .leading : .center) {
                             HighlightableText(doriCard.prefix.forPreferredLocale() ?? "")
                                 .bold()
-                                .font(!isMACOS ? .body : .title3)
                                 .layoutPriority(1)
                             Group {
-                                Text(characterName?.forPreferredLocale() ?? "nil") + Text("Typography.bold-dot-seperater").bold() + /*Text(doriCard.type.localizedString)*/Text("#\(doriCard.id)").fontDesign(.monospaced)
+                                Text(characterName?.forPreferredLocale() ?? "nil") + Text("Typography.bold-dot-seperater").bold() + Text("#\(doriCard.id)").fontDesign(.monospaced)
                             }
                             .foregroundStyle(.secondary)
-                            .font(isMACOS ? .body : .caption)
-                            //                            .environment(\.isCompactHidden, layout != .horizontal)
+                            .font(.caption)
                             .foregroundStyle(.secondary)
                         }
                     }
@@ -523,7 +512,12 @@ struct CollectionEditorItemView: View {
                         VStack {
                             if normalCoverSelectableCheckIsPending || trainedCoverSelectableCheckIsPending {
                                 ProgressView()
-                                Spacer()
+                                    .wrapIf(isMACOS, in: {
+                                        $0.scaleEffect(0.5)
+                                    })
+                                if !isMACOS {
+                                    Spacer()
+                                }
                             }
                         }
                     }
@@ -532,7 +526,7 @@ struct CollectionEditorItemView: View {
                     content
                         .padding(.bottom, 2)
                 })
-                HStack {
+                CustomStack(axis: isMACOS ? .vertical : .horizontal) {
                     Button(action: {
                         if normalCoverIsSelectable && !normalCoverSelectableCheckIsPending {
                             normalCardIsSelected.toggle()
@@ -552,12 +546,15 @@ struct CollectionEditorItemView: View {
                         }
                     }, label: {
                         CollectionEditorCapsule(isActive: normalCardIsSelected, isDisabled: !normalCoverIsSelectable, content: {
-                            HStack {
-                                Spacer()
-                                Text("Settings.widgets.collection.selector.normal")
-                                    .bold()
-                                Spacer()
-                            }
+                            Text("Settings.widgets.collection.selector.normal")
+                                .bold()
+                                .wrapIf(!isMACOS, in: { content in
+                                    HStack {
+                                        Spacer()
+                                        content
+                                        Spacer()
+                                    }
+                                })
                         })
                     })
                     .buttonStyle(.plain)
@@ -580,12 +577,15 @@ struct CollectionEditorItemView: View {
                         }
                     }, label: {
                         CollectionEditorCapsule(isActive: trainedCardIsSelected, isDisabled: !trainedCoverIsSelectable, content: {
-                            HStack {
-                                Spacer()
-                                Text("Settings.widgets.collection.selector.trained")
-                                    .bold()
-                                Spacer()
-                            }
+                            Text("Settings.widgets.collection.selector.trained")
+                                .bold()
+                                .wrapIf(!isMACOS, in: { content in
+                                    HStack {
+                                        Spacer()
+                                        content
+                                        Spacer()
+                                    }
+                                })
                         })
                     })
                     .buttonStyle(.plain)

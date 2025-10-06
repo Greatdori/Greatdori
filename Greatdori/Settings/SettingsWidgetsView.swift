@@ -103,6 +103,23 @@ struct SettingsWidgetsCollectionView: View {
                                 })
                             }
                         }
+                        .wrapIf(isMACOS, in: { content in
+                            content.contextMenu {
+                                if let duplicationName = CardCollectionManager.shared.duplicationName(item.name) {
+                                    Button(action: {
+                                        collectionManager.insert(CardCollectionManager.Collection(name: duplicationName, cards: item.cards), at: collectionManager.userCollections.count)
+                                    }, label: {
+                                        Label("Settings.widgets.collections.user.duplicate", systemImage: "plus.square.on.square")
+                                    })
+                                }
+                                Button(role: .destructive, action: {
+                                    collectionManager.remove(at: collectionManager.userCollections.firstIndex{ $0.name == item.name }!)
+                                }, label: {
+                                    Label("Settings.widgets.collections.user.delete", systemImage: "trash")
+                                        .foregroundStyle(.red)
+                                })
+                            }
+                        })
                     }
                     .onMove { from, to in
                         collectionManager.move(fromOffsets: from, toOffset: to)
@@ -184,19 +201,6 @@ struct SettingsWidgetsCollectionView: View {
                 }
             }, header: {
                 Text("Settings.widgets.collections.user")
-            }, footer: {
-#if os(macOS)
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        newCollectionInput = ""
-                        newCollectionSheetIsDisplaying = true
-                    }, label: {
-                        Label("Settings.widgets.collections.user.add", systemImage: "plus")
-                    })
-                    .disabled(newCollectionIsImporting)
-                }
-#endif
             })
             
             Section("Settings.widgets.collections.built-in") {
@@ -229,6 +233,17 @@ struct SettingsWidgetsCollectionView: View {
                             })
                         }
                     }
+                    .wrapIf(isMACOS, in: { content in
+                        content.contextMenu {
+                            if let duplicationName = CardCollectionManager.shared.duplicationName(item.name) {
+                                Button(action: {
+                                    collectionManager.insert(CardCollectionManager.Collection(name: duplicationName, cards: item.cards), at: collectionManager.userCollections.count)
+                                }, label: {
+                                    Label("Settings.widgets.collections.user.duplicate", systemImage: "plus.square.on.square")
+                                })
+                            }
+                        }
+                    })
                 }
             }
             
@@ -249,7 +264,7 @@ struct SettingsWidgetsCollectionView: View {
                     }
                 }, label: {
                     Text("Settings.widgets.collections.learn-more")
-                        .font(.caption)
+                        .font(isMACOS ? .body : .caption)
                 })
             })
         }
@@ -283,6 +298,19 @@ struct SettingsWidgetsCollectionView: View {
             currentViewController = viewController
         }
         #endif
+        .toolbar {
+            if isMACOS {
+                ToolbarItem {
+                    Button(action: {
+                        newCollectionInput = ""
+                        newCollectionSheetIsDisplaying = true
+                    }, label: {
+                        Label("Settings.widgets.collections.user.add", systemImage: "plus")
+                    })
+                    .disabled(newCollectionIsImporting)
+                }
+            }
+        }
     }
     
     struct CollectionAddingActions: View {
@@ -431,7 +459,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
                         .frame(maxWidth: 600)
                         
                         DetailSectionsSpacer()
-                        if !collection.isBuiltIn {
+                        if !collection.isBuiltIn && !isMACOS {
                             CustomGroupBox {
                                 Button(action: {
                                     showCollectionEditorSheet = true
@@ -449,12 +477,6 @@ struct SettingsWidgetsCollectionDetailsView: View {
                         ForEach(collection.cards.indices, id: \.self) { cardIndex in
                             SettingsWidgetsCollectionsItemView(collectionIndex: collectionIndex, collectionCard: collection.cards[cardIndex], collectionIsEditable: !collection.isBuiltIn, layoutType: $layoutType, updateIndex: $updateIndex)
                         }
-//                        .wrapIf(!collection.isBuiltIn, in: { content in
-//                            content
-//                                .onMove(perform: { from, to in
-//                                    CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collectionName })!].cards.move(fromOffsets: from, toOffset: to)
-//                                })
-//                        })
                         if collection.cards.isEmpty {
                             CustomGroupBox {
                                 HStack {
@@ -493,6 +515,18 @@ struct SettingsWidgetsCollectionDetailsView: View {
                     if #available(iOS 26.0, macOS 26.0, *) {
                         ToolbarSpacer()
                     }
+                    if isMACOS {
+                        ToolbarItem {
+                            Button(action: {
+                                showCollectionEditorSheet = true
+                            }, label: {
+                                Label("Settings.widgets.collections.edit", systemImage: "square.and.pencil")
+                            })
+                        }
+                        if #available(iOS 26.0, macOS 26.0, *) {
+                            ToolbarSpacer()
+                        }
+                    }
                     ToolbarItem(placement: .primaryAction, content: {
                         Button(action: {
                             collectionCode = encodeCollection(collection.toCollectionCodeStructure(hideName: hideCollectionNameWhileSharing))
@@ -507,15 +541,27 @@ struct SettingsWidgetsCollectionDetailsView: View {
                     })
                 }
             }
-            .sheet(isPresented: $showCollectionEditorSheet, onDismiss: {
-//                self.collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })!
-                updateIndex += 1
-            }, content: {
-                CollectionEditorView(collection: collection)
+            .wrapIf(isMACOS, in: { content in
+                content
+                    .window(isPresented: $showCollectionEditorSheet, content: {
+                        CollectionEditorView(collection: collection)
+                            .introspect(.window, on: .macOS(.v14...)) { window in
+                                window.standardWindowButton(.zoomButton)?.isEnabled = false
+                                window.standardWindowButton(.miniaturizeButton)?.isEnabled = false
+                                window.level = .floating
+                            }
+                    })
+            }, else: { content in
+                content
+                    .sheet(isPresented: $showCollectionEditorSheet, onDismiss: {
+                    //                self.collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })!
+                    updateIndex += 1
+                }, content: {
+                    CollectionEditorView(collection: collection)
+                })
             })
-            //        .sheet(isPresented: $showCollectionEditorSheet) {
-            //            CollectionEditorView(collection: collection)
-            //        }
+            
+            
             .alert("Settings.widgets.collections.code.dialog.title", isPresented: $showCollectionCodeDialog, actions: {
                 Button(action: {
                     copyStringToClipboard(collectionCode)
@@ -646,7 +692,6 @@ struct SettingsWidgetsCollectionsItemView: View {
                             if let doriCard {
                                 HighlightableText(doriCard.prefix.forPreferredLocale() ?? "")
                                     .bold()
-                                    .font(!isMACOS ? .body : .title3)
                                     .layoutPriority(1)
                                 Group {
                                     if layoutType == 1 {
@@ -657,23 +702,25 @@ struct SettingsWidgetsCollectionsItemView: View {
                                     }
                                 }
                                 .foregroundStyle(.secondary)
+                                .font(.caption)
                             } else {
                                 Text(verbatim: "Lorem Ipsum Dolor")
                                     .bold()
-                                    .font(!isMACOS ? .body : .title3)
-                                if layoutType == 1 {
-                                    Text(verbatim: "Lorem Ipsum Dolor")
-                                        .redacted(reason: .placeholder)
-                                    Text(verbatim: "Lorem")
-                                        .redacted(reason: .placeholder)
-                                } else {
-                                    Text(verbatim: "Lorem Ipsum Dolor Sit Amet")
-                                        .foregroundStyle(.secondary)
+                                Group {
+                                    if layoutType == 1 {
+                                        Text(verbatim: "Lorem Ipsum Dolor")
+                                            .redacted(reason: .placeholder)
+                                        Text(verbatim: "Lorem")
+                                            .redacted(reason: .placeholder)
+                                    } else {
+                                        Text(verbatim: "Lorem Ipsum Dolor Sit Amet")
+                                            .foregroundStyle(.secondary)
+                                    }
                                 }
+                                .font(.caption)
                             }
                         }
                     }
-                    .font(isMACOS ? .body : .caption)
                     //                .wrapIf(layoutType == 3, in: { content z
                     //
                     //                })
@@ -757,7 +804,7 @@ struct SettingsWidgetsCollectionsItemActionMenuView: View {
             }
         }, label: {
             Image(systemName: "ellipsis.circle")
-                .font(.title3)
+                .font(isMACOS ? .body : .title3)
         })
     }
 }
