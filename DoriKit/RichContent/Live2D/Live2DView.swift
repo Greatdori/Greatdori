@@ -192,11 +192,36 @@ private struct _Live2DNativeView: UIViewRepresentable {
         webView.scrollView.isScrollEnabled = false
         webView.scrollView.panGestureRecognizer.isEnabled = false
         webView.scrollView.bounces = false
-        setupWebView(webView, with: model)
+        setupWebView(webView, with: model, env: context.environment)
+        
+        var motions = [Live2DMotion]()
+        for motion in model.motions {
+            motions.append(.init(_file: motion, preload: motion.preload()))
+        }
+        DispatchQueue.main.async {
+            context.environment.l2dOnMotionsUpdate?(motions)
+        }
+        var expressions = [Live2DExpression]()
+        for expression in model.expressions {
+            expressions.append(.init(_file: expression, preload: expression.preload()))
+        }
+        DispatchQueue.main.async {
+            context.environment.l2dOnExpressionsUpdate?(expressions)
+        }
+        
+        updateStoredContext(in: context)
         return webView
     }
     func updateUIView(_ uiView: UIViewType, context: Context) {
-        
+        updateWebView(uiView, fromStored: context.coordinator, toEnv: context.environment)
+        updateStoredContext(in: context)
+    }
+    func makeCoordinator() -> _NativeViewCoordinator {
+        .init(model: model)
+    }
+    
+    func updateStoredContext(in context: Context) {
+        context.coordinator.currentEnvrionment = context.environment
     }
 }
 
