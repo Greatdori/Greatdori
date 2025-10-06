@@ -44,10 +44,8 @@ struct CostumeDetailOverviewView: View {
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)
-                    HStack {
-                        Live2DView(resourceURL: information.costume.live2dResourceFileURL)
-                            .frame(width: 350, height: 350)
-                    }
+                    Live2DView(resourceURL: information.costume.live2dResourceFileURL)
+                        .frame(width: 350, height: 350)
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)

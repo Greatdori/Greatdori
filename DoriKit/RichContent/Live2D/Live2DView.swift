@@ -82,6 +82,8 @@ extension EnvironmentValues {
     @Entry fileprivate var l2dOnExpressionsUpdate: (([Live2DExpression]) -> Void)?
     @Entry fileprivate var l2dCurrentMotion: Live2DMotion?
     @Entry fileprivate var l2dCurrentExpression: Live2DExpression?
+    @Entry fileprivate var l2dParamBinding: (Bool, Binding<[Live2DParameter]>)?
+    @Entry fileprivate var l2dIsPaused = false
 }
 extension View {
     public func live2dSwayDisabled(_ disabled: Bool = true) -> some View {
@@ -104,6 +106,12 @@ extension View {
     }
     public func live2dExpression(_ expr: Live2DExpression?) -> some View {
         environment(\.l2dCurrentExpression, expr)
+    }
+    public func live2dParameters(_ parameters: Binding<[Live2DParameter]>, tracking: Bool) -> some View {
+        environment(\.l2dParamBinding, (tracking, parameters))
+    }
+    public func live2dPauseAnimations(_ paused: Bool = true) -> some View {
+        environment(\.l2dIsPaused, paused)
     }
 }
 
@@ -137,6 +145,27 @@ public struct Live2DExpression: Sendable, Hashable {
         hasher.combine(_file)
     }
 }
+public struct Live2DParameter: Sendable, Identifiable, Hashable {
+    public var id: String
+    public var value: Double
+    public var minimumValue: Double
+    public var maximumValue: Double
+    public var defaultValue: Double
+}
+extension Array<Live2DParameter> {
+    @inline(__always) // performance
+    internal init(json: JSON) {
+        self = json.map {
+            .init(
+                id: $0.1["id"].stringValue,
+                value: $0.1["val"].doubleValue,
+                minimumValue: $0.1["min"].doubleValue,
+                maximumValue: $0.1["max"].doubleValue,
+                defaultValue: $0.1["def"].doubleValue
+            )
+        }
+    }
+}
 
 #if canImport(AppKit)
 
@@ -146,6 +175,7 @@ private struct _Live2DNativeView: NSViewRepresentable {
         let webView = WKWebView()
         webView.underPageBackgroundColor = .clear
         webView.setValue(false, forKey: "drawsBackground")
+        webView.configuration.userContentController.add(context.coordinator, name: "paramHandler")
         setupWebView(webView, with: model, env: context.environment)
         
         var motions = [Live2DMotion]()
@@ -192,6 +222,7 @@ private struct _Live2DNativeView: UIViewRepresentable {
         webView.scrollView.isScrollEnabled = false
         webView.scrollView.panGestureRecognizer.isEnabled = false
         webView.scrollView.bounces = false
+        webView.configuration.userContentController.add(context.coordinator, name: "paramHandler")
         setupWebView(webView, with: model, env: context.environment)
         
         var motions = [Live2DMotion]()
@@ -231,7 +262,7 @@ private struct _Live2DNativeView: UIViewRepresentable {
 
 #endif // canImport(AppKit) || canImport(UIKit)
 
-private class _NativeViewCoordinator {
+private class _NativeViewCoordinator: NSObject, WKScriptMessageHandler {
     internal var model: Live2DModel
     
     internal init(model: Live2DModel) {
@@ -239,6 +270,17 @@ private class _NativeViewCoordinator {
     }
     
     internal var currentEnvrionment: EnvironmentValues = .init()
+    
+    func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceive message: WKScriptMessage
+    ) {
+        if _fastPath(message.name == "paramHandler") {
+            if let binding = currentEnvrionment.l2dParamBinding, binding.0 {
+                binding.1.wrappedValue = .init(json: .init(parseJSON: message.body as! String))
+            }
+        }
+    }
 }
 
 @MainActor
@@ -277,6 +319,7 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
         var eyeBlinkEnabled = \(env.l2dEyeBlinkEnabled);
         var breathEnabled = \(env.l2dBreathEnabled);
         var swayEnabled = \(env.l2dSwayEnabled);
+        var isAnimationPaused = \(env.l2dIsPaused);
         
         var Simple = function() {
         this.live2DModel = null;
@@ -373,6 +416,12 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
             ];
             live2DModel.setMatrix(matrix4x4);
         }
+        if (isAnimationPaused) {
+            live2DModel.update();
+            live2DModel.draw();
+            return;
+        }
+        
         live2DModel.loadParam();
         if (!motionManager.isFinished()) {
             motionManager.updateParam(live2DModel);
@@ -401,6 +450,18 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
         
         live2DModel.update();
         live2DModel.draw();
+        
+        window.webkit.messageHandlers.paramHandler.postMessage(JSON.stringify(
+            live2DModel.getModelImpl()._$E2()._$4S.map((function(e) {
+                return {
+                    id: e._$wL.id,
+                    val: live2DModel.getParamFloat(e._$wL.id),
+                    min: e._$TT,
+                    max: e._$LT,
+                    def: e._$FS
+                }
+            }))
+        ));
         };
         Simple.getWebGLContext = function(canvas) {
         var NAMES = [ "webgl" , "experimental-webgl" , "webkit-3d" , "moz-webgl"];
@@ -470,14 +531,18 @@ private func updateWebView(
     toEnv newEnv: EnvironmentValues
 ) {
     let oldEnv = coordinator.currentEnvrionment
+    
+    if oldEnv.l2dIsPaused != newEnv.l2dIsPaused {
+        webView.evaluateJavaScript("isAnimationPaused = \(newEnv.l2dIsPaused);")
+    }
     if oldEnv.l2dSwayEnabled != newEnv.l2dSwayEnabled {
         webView.evaluateJavaScript("swayEnabled = \(newEnv.l2dSwayEnabled);")
     }
     if oldEnv.l2dBreathEnabled != newEnv.l2dBreathEnabled {
-        webView.evaluateJavaScript("breathEnabled = \(newEnv.l2dSwayEnabled);")
+        webView.evaluateJavaScript("breathEnabled = \(newEnv.l2dBreathEnabled);")
     }
     if oldEnv.l2dEyeBlinkEnabled != newEnv.l2dEyeBlinkEnabled {
-        webView.evaluateJavaScript("eyeBlinkEnabled = \(newEnv.l2dSwayEnabled);")
+        webView.evaluateJavaScript("eyeBlinkEnabled = \(newEnv.l2dEyeBlinkEnabled);")
     }
     
     if oldEnv.l2dCurrentMotion != newEnv.l2dCurrentMotion {
@@ -545,6 +610,15 @@ private func updateWebView(
                     """)
                 }
             }
+        }
+    }
+    
+    if newEnv.l2dIsPaused, let binding = newEnv.l2dParamBinding {
+        // We only update parameters when paused to prevent conflicts
+        for param in binding.1.wrappedValue {
+            webView.evaluateJavaScript("""
+            live2DModel.setParamFloat('\(param.id)', \(param.value))
+            """)
         }
     }
 }
