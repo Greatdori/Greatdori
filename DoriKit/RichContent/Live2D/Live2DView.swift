@@ -27,6 +27,30 @@ public struct Live2DView<Placeholder: View, ErrorView: View>: View {
     @State private var model: Live2DModel?
     @State private var isFailed = false
     
+    @inlinable
+    public init(
+        costume: DoriAPI.Costume.PreviewCostume,
+        placeholder: @escaping () -> Placeholder = { EmptyView() },
+        errorView: @escaping () -> ErrorView = { Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.yellow) }
+    ) {
+        self.init(
+            resourceURL: costume.live2dResourceFileURL,
+            placeholder: placeholder,
+            errorView: errorView
+        )
+    }
+    @inlinable
+    public init(
+        costume: DoriAPI.Costume.Costume,
+        placeholder: @escaping () -> Placeholder = { EmptyView() },
+        errorView: @escaping () -> ErrorView = { Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.yellow) }
+    ) {
+        self.init(
+            resourceURL: costume.live2dResourceFileURL,
+            placeholder: placeholder,
+            errorView: errorView
+        )
+    }
     public init(
         resourceURL: URL,
         placeholder: @escaping () -> Placeholder = { EmptyView() },
@@ -280,7 +304,7 @@ private class _NativeViewCoordinator: NSObject, WKScriptMessageHandler {
         didReceive message: WKScriptMessage
     ) {
         if _fastPath(message.name == "paramHandler") {
-            if let binding = currentEnvrionment.l2dParamBinding, binding.0 {
+            if let binding = currentEnvrionment.l2dParamBinding, binding.0 || binding.1.wrappedValue.isEmpty {
                 binding.1.wrappedValue = .init(json: .init(parseJSON: message.body as! String))
             }
         }
@@ -424,6 +448,7 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
         })();
         """)
         };
+        var lastValuePost = 0;
         Simple.draw = function(gl) {
         gl.clearColor( 0.0 , 0.0 , 0.0 , 0.0 );
         gl.clear(gl.COLOR_BUFFER_BIT);
@@ -480,17 +505,21 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
         live2DModel.update();
         live2DModel.draw();
         
-        window.webkit.messageHandlers.paramHandler.postMessage(JSON.stringify(
-            live2DModel.getModelImpl()._$E2()._$4S.map((function(e) {
-                return {
-                    id: e._$wL.id,
-                    val: live2DModel.getParamFloat(e._$wL.id),
-                    min: e._$TT,
-                    max: e._$LT,
-                    def: e._$FS
-                }
-            }))
-        ));
+        let date = (new Date).valueOf()
+        if (date - lastValuePost >= 80) {
+            lastValuePost = date;
+            window.webkit.messageHandlers.paramHandler.postMessage(JSON.stringify(
+                live2DModel.getModelImpl()._$E2()._$4S.map((function(e) {
+                    return {
+                        id: e._$wL.id,
+                        val: live2DModel.getParamFloat(e._$wL.id),
+                        min: e._$TT,
+                        max: e._$LT,
+                        def: e._$FS
+                    }
+                }))
+            ));
+        }
         };
         Simple.getWebGLContext = function(canvas) {
         var NAMES = [ "webgl" , "experimental-webgl" , "webkit-3d" , "moz-webgl"];

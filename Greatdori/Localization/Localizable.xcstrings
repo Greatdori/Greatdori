@@ -15,6 +15,9 @@
     "(%@)" : {
       "shouldTranslate" : false
     },
+    "(无)" : {
+
+    },
     "#%@" : {
       "shouldTranslate" : false
     },
@@ -34,6 +37,16 @@
         }
       },
       "shouldTranslate" : false
+    },
+    "%@%@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@%3$@"
+          }
+        }
+      }
     },
     "%lf" : {
       "shouldTranslate" : false
@@ -8227,6 +8240,30 @@
           }
         }
       }
+    },
+    "动作" : {
+
+    },
+    "参数" : {
+
+    },
+    "呼吸" : {
+
+    },
+    "摇摆" : {
+
+    },
+    "暂停动画" : {
+
+    },
+    "检查器" : {
+
+    },
+    "眨眼" : {
+
+    },
+    "表情" : {
+
     }
   },
   "version" : "1.1"

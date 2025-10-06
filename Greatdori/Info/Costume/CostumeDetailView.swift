@@ -39,18 +39,13 @@ struct CostumeDetailOverviewView: View {
     var body: some View {
         VStack {
             Group {
-                // MARK: Title Image
-                Group {
-                    Rectangle()
-                        .opacity(0)
-                        .frame(height: 2)
+                NavigationLink(destination: { Live2DDetailView(costume: .init(information.costume)) }) {
                     Live2DView(resourceURL: information.costume.live2dResourceFileURL)
-                        .frame(width: 350, height: 350)
-                    Rectangle()
-                        .opacity(0)
-                        .frame(height: 2)
+                        .contentShape(Rectangle())
                 }
-                
+                .buttonStyle(.plain)
+                .frame(width: 350, height: 350)
+                .padding(.bottom, -10)
                 
                 // MARK: Info
                 CustomGroupBox(cornerRadius: 20) {
