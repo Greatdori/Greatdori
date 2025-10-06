@@ -77,28 +77,7 @@ extension DoriFrontend {
             )
         }
         
-        #if !os(watchOS)
-        @MainActor
-        public static func live2dViewer(for id: Int) -> WKWebView {
-            let webView = WKWebView()
-            webView.load(.init(url: URL(string: "https://bestdori.com/tool/live2d/costume/\(id)")!))
-            webView.configuration.userContentController.addUserScript(
-                .init(
-                    source: """
-                    for (let e of document.getElementsByClassName("columns is-gapless is-mobile is-marginless has-background-primary sticky sticky-nav")) { e.remove() }
-                    for (let e of document.getElementsByClassName("nav-main")) { e.remove() }
-                    document.getElementById("Community").remove()
-                    document.getElementById("comments").remove()
-                    for (let e of document.getElementsByClassName("max-width-40")) { e.remove() }
-                    for (let e of document.getElementsByClassName("columns is-mobile")) { e.remove() }
-                    """,
-                    injectionTime: .atDocumentEnd,
-                    forMainFrameOnly: true
-                )
-            )
-            return webView
-        }
-        #else
+        #if os(watchOS)
         public static func live2dViewer(for id: Int) -> NSObject {
             dlopen("/System/Library/Frameworks/WebKit.framework/WebKit", RTLD_NOW)
             let webView = (NSClassFromString("WKWebView") as! NSObject.Type).init()

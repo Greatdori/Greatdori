@@ -430,6 +430,11 @@ extension DoriAPI.Costume.${property} {
             nil
         }
     }
+    
+    @inlinable
+    public var live2dResourceFileURL: URL {
+        .init(string: "https://bestdori.com/assets/jp/live2d/chara/\(self.assetBundleName)_rip/buildData.asset")!.respectOfflineAssetContext()
+    }
 }
 % end
 

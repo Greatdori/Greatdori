@@ -44,18 +44,10 @@ struct CostumeDetailOverviewView: View {
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)
-                    // FIXME: Replace image with Live2D viewer
-                    WebImage(url: information.costume.thumbImageURL) { image in
-                        image
-                            .antialiased(true)
-                            .resizable()
-                            .scaledToFit()
-                    } placeholder: {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(getPlaceholderColor())
+                    HStack {
+                        Live2DView(resourceURL: information.costume.live2dResourceFileURL)
+                            .frame(width: 350, height: 350)
                     }
-                    .interpolation(.high)
-                    .frame(width: 96, height: 96)
                     Rectangle()
                         .opacity(0)
                         .frame(height: 2)
