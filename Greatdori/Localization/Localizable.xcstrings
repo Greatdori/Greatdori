@@ -24,16 +24,6 @@
     "%@" : {
       "shouldTranslate" : false
     },
-    "%@: %lf" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@: %2$lf"
-          }
-        }
-      }
-    },
     "%@%@" : {
       "localizations" : {
         "en" : {
@@ -4552,9 +4542,6 @@
           }
         }
       }
-    },
-    "Paused" : {
-
     },
     "Search.item.%lld" : {
       "comment" : "A subtitle at the bottom of the search view showing the number of items that match the current search query. The argument is the number of matching items.",

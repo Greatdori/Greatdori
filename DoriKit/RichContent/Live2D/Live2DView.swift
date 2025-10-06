@@ -84,6 +84,7 @@ extension EnvironmentValues {
     @Entry fileprivate var l2dCurrentExpression: Live2DExpression?
     @Entry fileprivate var l2dParamBinding: (Bool, Binding<[Live2DParameter]>)?
     @Entry fileprivate var l2dIsPaused = false
+    @Entry fileprivate var l2dVSyncEnabled = true
 }
 extension View {
     public func live2dSwayDisabled(_ disabled: Bool = true) -> some View {
@@ -112,6 +113,9 @@ extension View {
     }
     public func live2dPauseAnimations(_ paused: Bool = true) -> some View {
         environment(\.l2dIsPaused, paused)
+    }
+    public func _live2dVerticalSyncDisabled(_ disabled: Bool = true) -> some View {
+        environment(\.l2dVSyncEnabled, !disabled)
     }
 }
 
@@ -385,6 +389,30 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
                 }
             })( i );
         }
+        \(env.l2dVSyncEnabled ? {
+        #if os(macOS)
+        let fps = NSScreen.main?.maximumFramesPerSecond ?? 120
+        #else
+        let fps = UIScreen.main.maximumFramesPerSecond
+        #endif
+        return """
+        let lastFrameTime = 0;
+        const targetFPS = \(fps);
+        const frameDuration = 1000 / targetFPS;
+        (function tick(time) {
+            if (time - lastFrameTime >= frameDuration) {
+                lastFrameTime = time;
+                Simple.draw(gl);
+            }
+            var requestAnimationFrame =
+                window.requestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.msRequestAnimationFrame;
+                requestID = requestAnimationFrame( tick , canvas );
+        })();
+        """
+        }() : """
         (function tick() {
             Simple.draw(gl);
             var requestAnimationFrame =
@@ -394,6 +422,7 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
                 window.msRequestAnimationFrame;
                 requestID = requestAnimationFrame( tick , canvas );
         })();
+        """)
         };
         Simple.draw = function(gl) {
         gl.clearColor( 0.0 , 0.0 , 0.0 , 0.0 );
