@@ -14,6 +14,7 @@
 
 import Combine
 import DoriKit
+import MarkdownUI
 import SwiftUI
 import WidgetKit
 @_spi(Advanced) import SwiftUIIntrospect
@@ -63,6 +64,7 @@ struct SettingsWidgetsCollectionView: View {
     @State var currentViewController: UIViewController!
     @State private var cardPreload: PreloadDescriptor<[PreviewCard]>?
     #endif
+    @State var aboutCollectionCode: String = ""
     var body: some View {
         Group {
             Section(content: {
@@ -230,7 +232,7 @@ struct SettingsWidgetsCollectionView: View {
                 }
             }
             
-            Section {
+            Section(content: {
                 Toggle(isOn: $hideCollectionNameWhileSharing, label: {
                     VStack(alignment: .leading) {
                         Text("Settings.widgets.collections.share-without-name")
@@ -239,7 +241,17 @@ struct SettingsWidgetsCollectionView: View {
                             .foregroundStyle(.secondary)
                     }
                 })
-            }
+            }, footer: {
+                NavigationLink(destination: {
+                    ScrollView {
+                        Markdown(aboutCollectionCode)
+                            .padding(.horizontal)
+                    }
+                }, label: {
+                    Text("Settings.widgets.collections.learn-more")
+                        .font(.caption)
+                })
+            })
         }
         .navigationDestination(isPresented: $showDestination, destination: {
             if let destinationCollection {
@@ -251,6 +263,21 @@ struct SettingsWidgetsCollectionView: View {
         }, message: {
             Text("Settings.widgets.collections.user.add.alert.message")
         })
+        .onAppear {
+            var collectionCodeDocLanguage = "EN"
+            if #available(iOS 16, macOS 13, *) {
+                if Locale.current.language.languageCode?.identifier == "zh" &&
+                    Locale.current.language.script?.identifier == "Hans" {
+                    collectionCodeDocLanguage = "ZH-HANS"
+                }
+            }
+            if let path = Bundle.main.path(forResource: "CollectionCode_\(collectionCodeDocLanguage)", ofType: "md") {
+                if let content = try? String(contentsOfFile: path, encoding: .utf8) {
+                    aboutCollectionCode = content
+                }
+            }
+
+        }
         #if os(iOS)
         .introspect(.viewController, on: .iOS(.v17...)) { viewController in
             currentViewController = viewController
@@ -734,4 +761,3 @@ struct SettingsWidgetsCollectionsItemActionMenuView: View {
         })
     }
 }
-
