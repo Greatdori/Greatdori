@@ -65,6 +65,7 @@ struct SettingsWidgetsCollectionView: View {
     @State private var cardPreload: PreloadDescriptor<[PreviewCard]>?
     #endif
     @State var aboutCollectionCode: String = ""
+    @State var showAboutCollectionCodeSheet = false
     var body: some View {
         Group {
             Section(content: {
@@ -257,11 +258,8 @@ struct SettingsWidgetsCollectionView: View {
                     }
                 })
             }, footer: {
-                NavigationLink(destination: {
-                    ScrollView {
-                        Markdown(aboutCollectionCode)
-                            .padding(.horizontal)
-                    }
+                Button(action: {
+                    showAboutCollectionCodeSheet = true
                 }, label: {
                     Text("Settings.widgets.collections.learn-more")
                         .font(isMACOS ? .body : .caption)
@@ -271,6 +269,12 @@ struct SettingsWidgetsCollectionView: View {
         .navigationDestination(isPresented: $showDestination, destination: {
             if let destinationCollection {
                 SettingsWidgetsCollectionDetailsView(collectionGivenName: destinationCollection.name, isPresented: $showDestination)
+            }
+        })
+        .sheet(isPresented: $showAboutCollectionCodeSheet, content: {
+            ScrollView {
+                Markdown(aboutCollectionCode)
+                    .padding(.horizontal)
             }
         })
         .alert("Settings.widgets.collections.user.add.alert.title", isPresented: $newCollectionSheetIsDisplaying, actions: {
@@ -542,6 +546,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
                 }
             }
             .wrapIf(isMACOS, in: { content in
+                #if os(macOS)
                 content
                     .window(isPresented: $showCollectionEditorSheet, content: {
                         CollectionEditorView(collection: collection)
@@ -551,6 +556,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
                                 window.level = .floating
                             }
                     })
+                #endif
             }, else: { content in
                 content
                     .sheet(isPresented: $showCollectionEditorSheet, onDismiss: {
