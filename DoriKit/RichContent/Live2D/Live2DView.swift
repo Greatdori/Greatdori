@@ -199,7 +199,7 @@ extension Array<Live2DParameter> {
     }
 }
 
-#if canImport(AppKit)
+#if os(macOS)
 
 private struct _Live2DNativeView: NSViewRepresentable {
     var model: Live2DModel
@@ -243,7 +243,7 @@ private struct _Live2DNativeView: NSViewRepresentable {
     }
 }
 
-#elseif canImport(UIKit) // canImport(AppKit)
+#elseif canImport(UIKit) // os(macOS)
 
 private struct _Live2DNativeView: UIViewRepresentable {
     var model: Live2DModel
