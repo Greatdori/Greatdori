@@ -38,6 +38,7 @@ struct InteractiveStoryView: View {
     @State var isDelaying = false
     @State var isShowingWhiteCover = false
     @State var isShowingBlackCover = false
+    @State var isTalkTextAnimating = false
     
     init(asset: DoriAPI.Misc.StoryAsset, voiceBundleURL: URL, locale: DoriLocale) {
         self.asset = asset
@@ -106,7 +107,7 @@ struct InteractiveStoryView: View {
             if let currentTalk {
                 VStack {
                     Spacer()
-                    TalkView(data: currentTalk, locale: locale)
+                    TalkView(data: currentTalk, locale: locale, isAnimating: $isTalkTextAnimating)
                         .padding()
                 }
             }
@@ -154,6 +155,10 @@ struct InteractiveStoryView: View {
         .toolbar(.hidden, for: .tabBar)
         #endif
         .onTapGesture {
+            if isTalkTextAnimating {
+                isTalkTextAnimating = false
+                return
+            }
             next()
         }
         .onAppear {
@@ -203,7 +208,10 @@ struct InteractiveStoryView: View {
         
         currentSnippetIndex += 1
         
-        if currentSnippetIndex >= asset.snippets.endIndex {
+        if currentSnippetIndex == asset.snippets.endIndex {
+            return
+        }
+        if currentSnippetIndex > asset.snippets.endIndex {
             exitViewer()
             return
         }
@@ -449,6 +457,9 @@ private struct LayoutView: View {
 private struct TalkView: View {
     var data: DoriAPI.Misc.StoryAsset.TalkData
     var locale: DoriLocale
+    @Binding var isAnimating: Bool
+    @State private var currentBody = ""
+    @State private var bodyAnimationTimer: Timer?
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 16)
@@ -462,7 +473,7 @@ private struct TalkView: View {
                 }
             Text({
                 var result = AttributedString()
-                for character in data.body {
+                for character in currentBody {
                     var str = AttributedString(String(character))
                     if locale == .cn && "[，。！？；：（）【】「」『』、“”‘’——…]".contains(character) {
                         // The font for cn has too wide punctuations,
@@ -508,6 +519,34 @@ private struct TalkView: View {
                     .padding()
             }
             .offset(y: -38)
+        }
+        .onAppear {
+            animateText()
+        }
+        .onChange(of: data.body) {
+            animateText()
+        }
+        .onChange(of: isAnimating) {
+            if !isAnimating {
+                bodyAnimationTimer?.invalidate()
+                currentBody = data.body
+            }
+        }
+    }
+    
+    func animateText() {
+        isAnimating = true
+        currentBody = ""
+        var iterator = data.body.makeIterator()
+        bodyAnimationTimer?.invalidate()
+        bodyAnimationTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+            DispatchQueue.main.async {
+                if let character = iterator.next() {
+                    currentBody += String(character)
+                } else {
+                    isAnimating = false
+                }
+            }
         }
     }
 }
