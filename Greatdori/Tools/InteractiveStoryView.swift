@@ -151,44 +151,35 @@ struct InteractiveStoryView: View {
             }
         }
         #if os(iOS)
+        .toolbar(.hidden, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
         #endif
         .navigationBarBackButtonHidden()
+        #if os(macOS)
         .toolbar {
             ToolbarItem {
-                Menu {
-                    Section {
-                        Button("自动", systemImage: "play.fill") {
-                            
-                        }
-                        .disabled(true)
-                        Button("全屏自动播放", systemImage: "pano.badge.play.fill") {
-                            
-                        }
-                        .disabled(true)
-                        Button("快进", systemImage: "forward.fill") {
-                            
-                        }
-                        .disabled(true)
-                        Button("记录", systemImage: "text.document.fill") {
-                            
-                        }
-                        .disabled(true)
-                        Button("不显示", systemImage: "xmark") {
-                            
-                        }
-                        .disabled(true)
-                        Button("退出", systemImage: "escape", role: .destructive) {
-                            exitViewer()
-                        }
-                        .foregroundStyle(.red)
-                    }
-                } label: {
-                    Image(systemName: "ellipsis")
-                }
-                .menuIndicator(.hidden)
+                actionMenu
             }
         }
+        #else
+        .overlay {
+            HStack {
+                Spacer()
+                VStack {
+                    if #available(iOS 26.0, *) {
+                        actionMenu
+                            .buttonStyle(.glass)
+                            .buttonBorderShape(.circle)
+                    } else {
+                        actionMenu
+                            .buttonStyle(.bordered)
+                            .buttonBorderShape(.circle)
+                    }
+                    Spacer()
+                }
+            }
+        }
+        #endif
         .onTapGesture {
             if isTalkTextAnimating {
                 isTalkTextAnimating = false
@@ -240,6 +231,46 @@ struct InteractiveStoryView: View {
             UIViewController.attemptRotationToDeviceOrientation()
             #endif
         }
+    }
+    
+    @ViewBuilder
+    var actionMenu: some View {
+        Menu {
+            Section {
+                Button("自动", systemImage: "play.fill") {
+                    
+                }
+                .disabled(true)
+                Button("全屏自动播放", systemImage: "pano.badge.play.fill") {
+                    
+                }
+                .disabled(true)
+                Button("快进", systemImage: "forward.fill") {
+                    
+                }
+                .disabled(true)
+                Button("记录", systemImage: "text.document.fill") {
+                    
+                }
+                .disabled(true)
+                Button("不显示", systemImage: "xmark") {
+                    
+                }
+                .disabled(true)
+                Button("退出", systemImage: "escape", role: .destructive) {
+                    exitViewer()
+                }
+                .foregroundStyle(.red)
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+            #if os(iOS)
+                .font(.system(size: 20))
+                .padding(10)
+            #endif
+        }
+        .menuStyle(.button)
+        .menuIndicator(.hidden)
     }
     
     func next() {
