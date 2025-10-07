@@ -476,10 +476,10 @@ struct SettingsWidgetsCollectionDetailsView: View {
                                 })
                             }
                         }
-                        ForEach(collection.cards.indices, id: \.self) { cardIndex in
+                        ForEach(collection.cards, id: \.self) { card in
                             SettingsWidgetsCollectionsItemView(
                                 collectionIndex: collectionManager.userCollections.firstIndex(where: { $0.name == collectionGivenName }) ?? 0,
-                                collectionCard: collection.cards[cardIndex],
+                                collectionCard: card,
                                 collectionIsEditable: !collection.isBuiltIn,
                                 layoutType: $layoutType
                             )
