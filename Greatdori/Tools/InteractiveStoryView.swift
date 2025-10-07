@@ -460,7 +460,23 @@ private struct TalkView: View {
                 .containerRelativeFrame(.vertical) { length, _ in
                     min(length / 2 - 80, 130)
                 }
-            Text(data.body)
+            Text({
+                var result = AttributedString()
+                for character in data.body {
+                    var str = AttributedString(String(character))
+                    if locale == .cn && "[，。！？；：（）【】「」『』、“”‘’——…]".contains(character) {
+                        // The font for cn has too wide punctuations,
+                        // we have to fix it here
+                        #if os(macOS)
+                        str.font = .system(size: 20, weight: .medium)
+                        #else
+                        str.font = .system(size: 16, weight: .medium)
+                        #endif
+                    }
+                    result.append(str)
+                }
+                return result
+            }())
             #if os(macOS)
                 .font(.custom(fontName(in: locale), size: 20))
             #else

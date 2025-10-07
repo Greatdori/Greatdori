@@ -63,14 +63,15 @@
 		8C2B64022E940B2800D003D1 /* InteractiveStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B64012E940B2100D003D1 /* InteractiveStoryView.swift */; };
 		8C2B640E2E9544F700D003D1 /* Story-en.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B640D2E9544F700D003D1 /* Story-en.otf */; };
 		8C2B640F2E9544F700D003D1 /* Story-en.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B640D2E9544F700D003D1 /* Story-en.otf */; };
-		8C2B64112E9548E800D003D1 /* Story-zh-Hans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64102E9548E800D003D1 /* Story-zh-Hans.ttf */; };
-		8C2B64122E9548E800D003D1 /* Story-zh-Hans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64102E9548E800D003D1 /* Story-zh-Hans.ttf */; };
 		8C2B64172E954BA100D003D1 /* Story-zh-Hant.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */; };
 		8C2B64182E954BA100D003D1 /* Story-zh-Hant.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */; };
 		8C2B641A2E954C5E00D003D1 /* Story-kr.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64192E954C5E00D003D1 /* Story-kr.ttf */; };
 		8C2B641B2E954C5E00D003D1 /* Story-kr.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64192E954C5E00D003D1 /* Story-kr.ttf */; };
 		8C2B64232E954EEF00D003D1 /* Story-jp.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64222E954EEF00D003D1 /* Story-jp.otf */; };
 		8C2B64242E954EEF00D003D1 /* Story-jp.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64222E954EEF00D003D1 /* Story-jp.otf */; };
+		8C2B64262E95600B00D003D1 /* GeneralCardSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B64252E95600400D003D1 /* GeneralCardSelector.swift */; };
+		8C2B64282E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64272E9564F800D003D1 /* Story-zh-Hans.ttf */; };
+		8C2B64292E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64272E9564F800D003D1 /* Story-zh-Hans.ttf */; };
 		8C2B9D222E93800C00D003D1 /* Live2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D212E93800600D003D1 /* Live2DView.swift */; };
 		8C2B9D242E9386F500D003D1 /* Live2DModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D232E9386D200D003D1 /* Live2DModel.swift */; };
 		8C2B9D262E938C9E00D003D1 /* Live2DWeb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D252E938C9800D003D1 /* Live2DWeb.swift */; };
@@ -699,10 +700,11 @@
 		8C0D89BD2E537795004BD1D6 /* LimitedTaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTaskQueue.swift; sourceTree = "<group>"; };
 		8C2B64012E940B2100D003D1 /* InteractiveStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveStoryView.swift; sourceTree = "<group>"; };
 		8C2B640D2E9544F700D003D1 /* Story-en.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-en.otf"; sourceTree = "<group>"; };
-		8C2B64102E9548E800D003D1 /* Story-zh-Hans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-zh-Hans.ttf"; sourceTree = "<group>"; };
 		8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-zh-Hant.otf"; sourceTree = "<group>"; };
 		8C2B64192E954C5E00D003D1 /* Story-kr.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-kr.ttf"; sourceTree = "<group>"; };
 		8C2B64222E954EEF00D003D1 /* Story-jp.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-jp.otf"; sourceTree = "<group>"; };
+		8C2B64252E95600400D003D1 /* GeneralCardSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralCardSelector.swift; sourceTree = "<group>"; };
+		8C2B64272E9564F800D003D1 /* Story-zh-Hans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-zh-Hans.ttf"; sourceTree = "<group>"; };
 		8C2B9D212E93800600D003D1 /* Live2DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DView.swift; sourceTree = "<group>"; };
 		8C2B9D232E9386D200D003D1 /* Live2DModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DModel.swift; sourceTree = "<group>"; };
 		8C2B9D252E938C9800D003D1 /* Live2DWeb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DWeb.swift; sourceTree = "<group>"; };
@@ -1349,7 +1351,7 @@
 			isa = PBXGroup;
 			children = (
 				8C2B64222E954EEF00D003D1 /* Story-jp.otf */,
-				8C2B64102E9548E800D003D1 /* Story-zh-Hans.ttf */,
+				8C2B64272E9564F800D003D1 /* Story-zh-Hans.ttf */,
 				8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */,
 				8C2B640D2E9544F700D003D1 /* Story-en.otf */,
 				8C2B64192E954C5E00D003D1 /* Story-kr.ttf */,
@@ -1849,6 +1851,7 @@
 				E94218FF2E8AA40E00F24974 /* CardDetailView.swift */,
 				E94219012E8AA43000F24974 /* CardDetailStatsView.swift */,
 				E942191F2E8AA5FD00F24974 /* DetailsCardsSection.swift */,
+				8C2B64252E95600400D003D1 /* GeneralCardSelector.swift */,
 			);
 			path = Card;
 			sourceTree = "<group>";
@@ -2447,12 +2450,12 @@
 				E949D28B2E93805E00E50D3F /* CollectionCode_ZH-HANS.md in Resources */,
 				E949D28C2E93805E00E50D3F /* CollectionCode_EN.md in Resources */,
 				E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */,
+				8C2B64282E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */,
 				8C2B641B2E954C5E00D003D1 /* Story-kr.ttf in Resources */,
 				8C2B64182E954BA100D003D1 /* Story-zh-Hant.otf in Resources */,
 				8C6B8FC42E75373F00452D7B /* InfoPlist.strings in Resources */,
 				8C6C0F032E42533900D1FB0A /* Assets.xcassets in Resources */,
 				8C94744D2E35DA49003A90B4 /* AppIcon.icon in Resources */,
-				8C2B64122E9548E800D003D1 /* Story-zh-Hans.ttf in Resources */,
 				8C2B640F2E9544F700D003D1 /* Story-en.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2466,7 +2469,7 @@
 				8C2B64172E954BA100D003D1 /* Story-zh-Hant.otf in Resources */,
 				8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */,
 				8C2B64232E954EEF00D003D1 /* Story-jp.otf in Resources */,
-				8C2B64112E9548E800D003D1 /* Story-zh-Hans.ttf in Resources */,
+				8C2B64292E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */,
 				8C2B641A2E954C5E00D003D1 /* Story-kr.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2850,6 +2853,7 @@
 				E942190C2E8AA4C400F24974 /* SongDetailView.swift in Sources */,
 				E942192F2E8AA72D00F24974 /* DetailEventsSection.swift in Sources */,
 				E94443C72E8E6A2E00593F07 /* SettingsLocaleView.swift in Sources */,
+				8C2B64262E95600B00D003D1 /* GeneralCardSelector.swift in Sources */,
 				E94219222E8AA65500F24974 /* DetailSongsSection.swift in Sources */,
 				E9AE9E082E909EDF00AAB049 /* CardSelector.swift in Sources */,
 				E94443C92E8E6C8200593F07 /* SettingsHomeView.swift in Sources */,

@@ -208,6 +208,46 @@ extension DoriAPI.Gacha.PreviewGacha: DoriFrontend.Filterable {
     }
 }
 
+// MARK: extension PreviewCard
+// Attribute, Rarity, Character, Server, Availability, Card Type, Skill
+extension DoriFrontend.Card.PreviewCard: DoriFrontend.Filterable {
+    @inlinable
+    public static var applicableFilteringKeys: [DoriFrontend.Filter.Key] {
+        [.attribute, .rarity, .character, .server, .released, .cardType, .skill]
+    }
+    
+    public func _matches<ValueType>(_ value: ValueType, withCache cache: DoriFrontend._FilterCache?) -> Bool? { // Band
+        if let attribute = value as? DoriFrontend.Filter.Attribute { // Attribute
+            return self.attribute.rawValue.contains(attribute.rawValue)
+        } else if let rarity = value as? DoriFrontend.Filter.Rarity { // Rarity
+            return self.rarity == rarity
+        } else if let character = value as? DoriFrontend.Filter.Character { // Character
+            return self.characterID == character.rawValue
+        } else if let server = value as? DoriFrontend.Filter.Server { // Server
+            return self.prefix.availableInLocale(server)
+        } else if let availabilityWithServers = value as? AvailabilityWithServers { // Availability
+            for locale in availabilityWithServers.servers {
+                if availabilityWithServers.releaseStatus.boolValue {
+                    if (self.releasedAt.forLocale(locale) ?? dateOfYear2100) < .now {
+                        return true
+                    }
+                } else {
+                    if (self.releasedAt.forLocale(locale) ?? .init(timeIntervalSince1970: 0)) > .now {
+                        return true
+                    }
+                }
+            }
+            return false
+        } else if let cardType = value as? DoriFrontend.Filter.CardType { // Card Type
+            return self.type == cardType
+        } else if let skill = value as? DoriFrontend.Filter.Skill { // Skill
+            return self.skillID == skill.id
+        } else {
+            return nil // Unexpected: unexpected value type
+        }
+    }
+}
+
 // MARK: extension CardWithBand
 // Band, Attribute, Rarity, Character, Server, Availability, Card Type, Skill
 extension DoriFrontend.Card.CardWithBand: DoriFrontend.Filterable {

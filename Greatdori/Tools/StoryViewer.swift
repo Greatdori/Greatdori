@@ -333,84 +333,99 @@ extension StoryViewerView {
     }
     
     struct CardStoryViewer: View {
-        @State var selectedCard: DoriFrontend.Card.CardWithBand?
+        @State var selectedCard: DoriFrontend.Card.PreviewCard?
         @State var selectedCardDetail: DoriFrontend.Card.ExtendedCard?
         @State var cardDetailAvailability = true
+        @State var isCardSelectorPresented = false
         var body: some View {
-            Section {
-                // FIXME: Card selector
-//                CardSelector(selection: $selectedCard)
-//                    .onChange(of: selectedCard) {
-//                        Task {
-//                            await loadCardDetail()
-//                        }
-//                        UserDefaults.standard.set(selectedCard?.id, forKey: "StoryViewerSelectedCardID")
-//                    }
-                if let selectedCard {
-                    NavigationLink(destination: { CardDetailView(id: selectedCard.card.id) }) {
-                        CardInfo(selectedCard.card)
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+            VStack {
+                ListItemView {
+                    Text("卡牌")
+                        .bold()
+                } value: {
+                    Button(action: {
+                        isCardSelectorPresented = true
+                    }, label: {
+                        if let selectedCard, let name = selectedCard.prefix.forPreferredLocale() {
+                            Text(name)
+                        } else {
+                            Text("选择卡牌…")
+                        }
+                    })
+                    .buttonStyle(.plain)
                 }
-            }
-            if let selectedCardDetail {
-                let episodes = selectedCardDetail.card.episodes
-                if !episodes.isEmpty {
-                    Section {
-                        ForEach(episodes) { episode in
-                            if let locale = episode.title.availableLocale() {
-                                NavigationLink(destination: {
-                                    StoryDetailView(
-                                        title: episode.title.forPreferredLocale() ?? "",
-                                        scenarioID: episode.scenarioID,
-                                        type: .card,
-                                        locale: locale,
-                                        unsafeAssociatedID: selectedCardDetail.card.resourceSetName
-                                    )
-                                }) {
-                                    VStack(alignment: .leading) {
-                                        Group {
-                                            switch episode.episodeType {
-                                            case .standard:
-                                                Text("Tools.story-viewer.story.standard")
-                                            case .memorial:
-                                                Text("Tools.story-viewer.story.memorial")
+                .onChange(of: selectedCard) {
+                    Task {
+                        await loadCardDetail()
+                    }
+                }
+                if let selectedCard {
+                    NavigationLink(destination: { CardDetailView(id: selectedCard.id) }) {
+                        CardInfo(selectedCard)
+                    }
+                }
+                if let selectedCardDetail {
+                    let episodes = selectedCardDetail.card.episodes
+                    if !episodes.isEmpty {
+                        Section {
+                            ForEach(episodes) { episode in
+                                if let locale = episode.title.availableLocale() {
+                                    NavigationLink(destination: {
+                                        StoryDetailView(
+                                            title: episode.title.forPreferredLocale() ?? "",
+                                            scenarioID: episode.scenarioID,
+                                            type: .card,
+                                            locale: locale,
+                                            unsafeAssociatedID: selectedCardDetail.card.resourceSetName
+                                        )
+                                    }) {
+                                        VStack(alignment: .leading) {
+                                            Group {
+                                                switch episode.episodeType {
+                                                case .standard:
+                                                    Text("Tools.story-viewer.story.standard")
+                                                case .memorial:
+                                                    Text("Tools.story-viewer.story.memorial")
+                                                }
                                             }
+                                            .font(.system(size: 14))
+                                            .opacity(0.6)
+                                            Text(episode.title.forPreferredLocale() ?? "")
                                         }
-                                        .font(.system(size: 14))
-                                        .opacity(0.6)
-                                        Text(episode.title.forPreferredLocale() ?? "")
                                     }
                                 }
                             }
                         }
+                    } else {
+                        HStack {
+                            Spacer()
+                            ContentUnavailableView("Tools.story-viewer.story.unavailable", systemImage: "text.rectangle.page")
+                            Spacer()
+                        }
+                        .listRowBackground(Color.clear)
                     }
                 } else {
-                    HStack {
-                        Spacer()
-                        ContentUnavailableView("Tools.story-viewer.story.unavailable", systemImage: "text.rectangle.page")
-                        Spacer()
-                    }
-                    .listRowBackground(Color.clear)
-                }
-            } else {
-                if cardDetailAvailability {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                } else {
-                    ExtendedConstraints {
-                        ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
-                            .onTapGesture {
-                                Task {
-                                    await loadCardDetail()
+                    if cardDetailAvailability {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else {
+                        ExtendedConstraints {
+                            ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
+                                .onTapGesture {
+                                    Task {
+                                        await loadCardDetail()
+                                    }
                                 }
-                            }
+                        }
                     }
                 }
+            }
+            .window(isPresented: $isCardSelectorPresented) {
+                CardSelector(selection: .init { [selectedCard].compactMap { $0 } } set: { selectedCard = $0.first })
+                    .selectorDisablesMultipleSelection()
             }
         }
         
