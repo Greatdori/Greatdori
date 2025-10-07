@@ -771,7 +771,7 @@ private struct StoryDetailView: View {
                     case .afterLive:
                         "https://bestdori.com/assets/\(locale.rawValue)/sound/voice/scenario/afterlivetalk/group\(Int(floor(Double(unsafeAssociatedID)! / 100)))"
                     }
-                }())!)
+                }())!, locale: locale)
             }
         }
         .toolbar {

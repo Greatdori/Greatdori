@@ -61,6 +61,16 @@
 		8C0D89BC2E53735F004BD1D6 /* Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0D89BB2E53735E004BD1D6 /* Progress.swift */; };
 		8C0D89BE2E537799004BD1D6 /* LimitedTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0D89BD2E537795004BD1D6 /* LimitedTaskQueue.swift */; };
 		8C2B64022E940B2800D003D1 /* InteractiveStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B64012E940B2100D003D1 /* InteractiveStoryView.swift */; };
+		8C2B640E2E9544F700D003D1 /* Story-en.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B640D2E9544F700D003D1 /* Story-en.otf */; };
+		8C2B640F2E9544F700D003D1 /* Story-en.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B640D2E9544F700D003D1 /* Story-en.otf */; };
+		8C2B64112E9548E800D003D1 /* Story-zh-Hans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64102E9548E800D003D1 /* Story-zh-Hans.ttf */; };
+		8C2B64122E9548E800D003D1 /* Story-zh-Hans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64102E9548E800D003D1 /* Story-zh-Hans.ttf */; };
+		8C2B64172E954BA100D003D1 /* Story-zh-Hant.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */; };
+		8C2B64182E954BA100D003D1 /* Story-zh-Hant.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */; };
+		8C2B641A2E954C5E00D003D1 /* Story-kr.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64192E954C5E00D003D1 /* Story-kr.ttf */; };
+		8C2B641B2E954C5E00D003D1 /* Story-kr.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64192E954C5E00D003D1 /* Story-kr.ttf */; };
+		8C2B64232E954EEF00D003D1 /* Story-jp.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64222E954EEF00D003D1 /* Story-jp.otf */; };
+		8C2B64242E954EEF00D003D1 /* Story-jp.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64222E954EEF00D003D1 /* Story-jp.otf */; };
 		8C2B9D222E93800C00D003D1 /* Live2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D212E93800600D003D1 /* Live2DView.swift */; };
 		8C2B9D242E9386F500D003D1 /* Live2DModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D232E9386D200D003D1 /* Live2DModel.swift */; };
 		8C2B9D262E938C9E00D003D1 /* Live2DWeb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D252E938C9800D003D1 /* Live2DWeb.swift */; };
@@ -688,6 +698,11 @@
 		8C0D89BB2E53735E004BD1D6 /* Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Progress.swift; sourceTree = "<group>"; };
 		8C0D89BD2E537795004BD1D6 /* LimitedTaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTaskQueue.swift; sourceTree = "<group>"; };
 		8C2B64012E940B2100D003D1 /* InteractiveStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveStoryView.swift; sourceTree = "<group>"; };
+		8C2B640D2E9544F700D003D1 /* Story-en.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-en.otf"; sourceTree = "<group>"; };
+		8C2B64102E9548E800D003D1 /* Story-zh-Hans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-zh-Hans.ttf"; sourceTree = "<group>"; };
+		8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-zh-Hant.otf"; sourceTree = "<group>"; };
+		8C2B64192E954C5E00D003D1 /* Story-kr.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-kr.ttf"; sourceTree = "<group>"; };
+		8C2B64222E954EEF00D003D1 /* Story-jp.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-jp.otf"; sourceTree = "<group>"; };
 		8C2B9D212E93800600D003D1 /* Live2DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DView.swift; sourceTree = "<group>"; };
 		8C2B9D232E9386D200D003D1 /* Live2DModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DModel.swift; sourceTree = "<group>"; };
 		8C2B9D252E938C9800D003D1 /* Live2DWeb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DWeb.swift; sourceTree = "<group>"; };
@@ -1330,6 +1345,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8C2B64032E953FD800D003D1 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				8C2B64222E954EEF00D003D1 /* Story-jp.otf */,
+				8C2B64102E9548E800D003D1 /* Story-zh-Hans.ttf */,
+				8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */,
+				8C2B640D2E9544F700D003D1 /* Story-en.otf */,
+				8C2B64192E954C5E00D003D1 /* Story-kr.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		8C2B9D202E937FEC00D003D1 /* Live2D */ = {
 			isa = PBXGroup;
 			children = (
@@ -1457,6 +1484,7 @@
 		8C6C0EF62E4234D900D1FB0A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C2B64032E953FD800D003D1 /* Fonts */,
 				8C94744B2E35DA49003A90B4 /* AppIcon.icon */,
 				8C6C0F012E42533900D1FB0A /* Assets.xcassets */,
 			);
@@ -2415,12 +2443,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C2B64242E954EEF00D003D1 /* Story-jp.otf in Resources */,
 				E949D28B2E93805E00E50D3F /* CollectionCode_ZH-HANS.md in Resources */,
 				E949D28C2E93805E00E50D3F /* CollectionCode_EN.md in Resources */,
 				E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */,
+				8C2B641B2E954C5E00D003D1 /* Story-kr.ttf in Resources */,
+				8C2B64182E954BA100D003D1 /* Story-zh-Hant.otf in Resources */,
 				8C6B8FC42E75373F00452D7B /* InfoPlist.strings in Resources */,
 				8C6C0F032E42533900D1FB0A /* Assets.xcassets in Resources */,
 				8C94744D2E35DA49003A90B4 /* AppIcon.icon in Resources */,
+				8C2B64122E9548E800D003D1 /* Story-zh-Hans.ttf in Resources */,
+				8C2B640F2E9544F700D003D1 /* Story-en.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2428,8 +2461,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C2B640E2E9544F700D003D1 /* Story-en.otf in Resources */,
 				8CB4D4F82E44EAFE0085D57A /* Localizable.xcstrings in Resources */,
+				8C2B64172E954BA100D003D1 /* Story-zh-Hant.otf in Resources */,
 				8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */,
+				8C2B64232E954EEF00D003D1 /* Story-jp.otf in Resources */,
+				8C2B64112E9548E800D003D1 /* Story-zh-Hans.ttf in Resources */,
+				8C2B641A2E954C5E00D003D1 /* Story-kr.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

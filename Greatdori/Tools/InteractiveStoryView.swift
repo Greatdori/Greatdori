@@ -21,6 +21,7 @@ import SDWebImageSwiftUI
 struct InteractiveStoryView: View {
     var asset: DoriAPI.Misc.StoryAsset
     var voiceBundleURL: URL
+    var locale: DoriLocale
     @Environment(\.dismiss) var dismiss
     @State var backgroundImageURL: URL?
     @State var scenarioImageURL: URL?
@@ -35,10 +36,13 @@ struct InteractiveStoryView: View {
     @State var currentTalk: DoriAPI.Misc.StoryAsset.TalkData?
     @State var talkAudios = [DoriAPI.Misc.StoryAsset.TalkData.Voice: Data]()
     @State var isDelaying = false
+    @State var isShowingWhiteCover = false
+    @State var isShowingBlackCover = false
     
-    init(asset: DoriAPI.Misc.StoryAsset, voiceBundleURL: URL) {
+    init(asset: DoriAPI.Misc.StoryAsset, voiceBundleURL: URL, locale: DoriLocale) {
         self.asset = asset
         self.voiceBundleURL = voiceBundleURL
+        self.locale = locale
         unsafe voicePlayer = .allocate(capacity: 1)
         unsafe voicePlayer.initialize(to: .init())
         
@@ -57,7 +61,7 @@ struct InteractiveStoryView: View {
                         HStack {
                             Spacer()
                             VStack {
-                                Spacer()
+                                Spacer(minLength: 0)
                                 unsafe LayoutView(data: layout, voicePlayer: voicePlayer, currentSpeckerID: currentTalk?.talkCharacters.first?.characterID ?? -1)
                                     .frame(width: geometry.size.height, height: geometry.size.height)
                                     .offset(x: {
@@ -65,16 +69,16 @@ struct InteractiveStoryView: View {
                                         case .none: 0
                                         case .left: -(geometry.size.width / 4)
                                         case .leftOver: -(geometry.size.width / 3)
-                                        case .leftInside: -(geometry.size.width / 4)
+                                        case .leftInside: -(geometry.size.width / 6)
                                         case .center: 0
                                         case .right: geometry.size.width / 4
                                         case .rightOver: geometry.size.width / 3
-                                        case .rightInside: geometry.size.width / 4
+                                        case .rightInside: geometry.size.width / 6
                                         case .leftUnder: -(geometry.size.width / 4)
-                                        case .leftInsideUnder: -(geometry.size.width / 4)
+                                        case .leftInsideUnder: -(geometry.size.width / 6)
                                         case .centerUnder: 0
                                         case .rightUnder: geometry.size.width / 4
-                                        case .rightInsideUnder: geometry.size.width / 4
+                                        case .rightInsideUnder: geometry.size.width / 6
                                         @unknown default: 0
                                         }
                                     }(), y: {
@@ -96,11 +100,13 @@ struct InteractiveStoryView: View {
                     }
                 }
             }
+            #if os(iOS)
             .ignoresSafeArea()
+            #endif
             if let currentTalk {
                 VStack {
                     Spacer()
-                    TalkView(data: currentTalk)
+                    TalkView(data: currentTalk, locale: locale)
                         .padding()
                 }
             }
@@ -115,10 +121,19 @@ struct InteractiveStoryView: View {
                         .rotationEffect(.degrees(0.5))
                         .frame(width: 380, height: 32)
                     Text(currentTelop)
-                        .font(.system(size: 20))
+                        .font(.custom(fontName(in: locale), size: 18))
+                        .foregroundStyle(Color(red: 80 / 255, green: 80 / 255, blue: 80 / 255))
                 }
                 .transition(.flipFromRight)
             }
+            Rectangle()
+                .fill(Color.white)
+                .opacity(isShowingWhiteCover ? 1 : 0)
+                .ignoresSafeArea()
+            Rectangle()
+                .fill(Color.black)
+                .opacity(isShowingBlackCover ? 1 : 0)
+                .ignoresSafeArea()
         }
         .background {
             WebImage(url: backgroundImageURL)
@@ -302,13 +317,31 @@ struct InteractiveStoryView: View {
             case .none:
                 break
             case .blackIn:
-                print("Not Implemented Effect: blackIn")
+                withAnimation(.linear(duration: effect.duration)) {
+                    isShowingBlackCover = false
+                }
+                next()
             case .blackOut:
-                print("Not Implemented Effect: blackOut")
+                withAnimation(.linear(duration: effect.duration)) {
+                    isShowingBlackCover = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + effect.duration) {
+                    isShowingWhiteCover = false
+                }
+                next()
             case .whiteIn:
-                print("Not Implemented Effect: whiteIn")
+                withAnimation(.linear(duration: effect.duration)) {
+                    isShowingWhiteCover = false
+                }
+                next()
             case .whiteOut:
-                print("Not Implemented Effect: whiteOut")
+                withAnimation(.linear(duration: effect.duration)) {
+                    isShowingWhiteCover = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + effect.duration) {
+                    isShowingBlackCover = false
+                }
+                next()
             case .shakeScreen:
                 print("Not Implemented Effect: shakeScreen")
             case .shakeWindow:
@@ -415,35 +448,60 @@ private struct LayoutView: View {
 
 private struct TalkView: View {
     var data: DoriAPI.Misc.StoryAsset.TalkData
+    var locale: DoriLocale
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.white.opacity(0.8))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(Color.gray.opacity(0.8))
+                }
                 .containerRelativeFrame(.vertical) { length, _ in
                     min(length / 2 - 80, 130)
                 }
             Text(data.body)
             #if os(macOS)
-                .font(.system(size: 22))
+                .font(.custom(fontName(in: locale), size: 20))
             #else
-                .font(.system(size: 18))
+                .font(.custom(fontName(in: locale), size: 16))
             #endif
-                .foregroundStyle(.black)
-                .padding(20)
+                .wrapIf(locale == .en || locale == .tw) { content in
+                    content
+                        .lineSpacing(locale == .en ? 10 : -5)
+                }
+                .typesettingLanguage(locale.nsLocale().language)
+                .foregroundStyle(Color(red: 80 / 255, green: 80 / 255, blue: 80 / 255))
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(Color.red)
-                    .frame(width: 220, height: 32)
+                    .fill(Color(red: 255 / 255, green: 59 / 255, blue: 114 / 255))
+                    .overlay {
+                        Capsule()
+                            .strokeBorder(Color.white, lineWidth: 2)
+                    }
+                    .frame(width: 200, height: 32)
                 Text(data.windowDisplayName)
                 #if os(macOS)
-                    .font(.system(size: 22))
+                    .font(.custom(fontName(in: locale), size: 21))
                 #else
-                    .font(.system(size: 18))
+                    .font(.custom(fontName(in: locale), size: 17))
                 #endif
                     .foregroundStyle(.white)
                     .padding()
             }
-            .offset(y: -35)
+            .offset(y: -38)
         }
+    }
+}
+
+private func fontName(in locale: DoriLocale) -> String {
+    switch locale {
+    case .jp: "RodinPro-DB"
+    case .en: "NewRodinPro-DB"
+    case .tw: "SourceHanSansTC-Bold"
+    case .cn: "Tensentype-JiaLiDaYuanGB18030"
+    case .kr: "JejuGothic"
     }
 }
