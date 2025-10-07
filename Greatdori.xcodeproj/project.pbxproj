@@ -61,17 +61,12 @@
 		8C0D89BC2E53735F004BD1D6 /* Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0D89BB2E53735E004BD1D6 /* Progress.swift */; };
 		8C0D89BE2E537799004BD1D6 /* LimitedTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0D89BD2E537795004BD1D6 /* LimitedTaskQueue.swift */; };
 		8C2B64022E940B2800D003D1 /* InteractiveStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B64012E940B2100D003D1 /* InteractiveStoryView.swift */; };
-		8C2B640E2E9544F700D003D1 /* Story-en.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B640D2E9544F700D003D1 /* Story-en.otf */; };
 		8C2B640F2E9544F700D003D1 /* Story-en.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B640D2E9544F700D003D1 /* Story-en.otf */; };
-		8C2B64172E954BA100D003D1 /* Story-zh-Hant.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */; };
 		8C2B64182E954BA100D003D1 /* Story-zh-Hant.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64162E954BA100D003D1 /* Story-zh-Hant.otf */; };
-		8C2B641A2E954C5E00D003D1 /* Story-kr.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64192E954C5E00D003D1 /* Story-kr.ttf */; };
 		8C2B641B2E954C5E00D003D1 /* Story-kr.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64192E954C5E00D003D1 /* Story-kr.ttf */; };
-		8C2B64232E954EEF00D003D1 /* Story-jp.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64222E954EEF00D003D1 /* Story-jp.otf */; };
 		8C2B64242E954EEF00D003D1 /* Story-jp.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64222E954EEF00D003D1 /* Story-jp.otf */; };
 		8C2B64262E95600B00D003D1 /* GeneralCardSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B64252E95600400D003D1 /* GeneralCardSelector.swift */; };
 		8C2B64282E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64272E9564F800D003D1 /* Story-zh-Hans.ttf */; };
-		8C2B64292E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64272E9564F800D003D1 /* Story-zh-Hans.ttf */; };
 		8C2B9D222E93800C00D003D1 /* Live2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D212E93800600D003D1 /* Live2DView.swift */; };
 		8C2B9D242E9386F500D003D1 /* Live2DModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D232E9386D200D003D1 /* Live2DModel.swift */; };
 		8C2B9D262E938C9E00D003D1 /* Live2DWeb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D252E938C9800D003D1 /* Live2DWeb.swift */; };
@@ -1280,6 +1275,7 @@
 			children = (
 				8C6C0EF92E423C8E00D1FB0A /* Greatdori.entitlements */,
 				8CB4D4F92E4500C70085D57A /* Info.plist */,
+				8C2B64032E953FD800D003D1 /* Fonts */,
 				8C6B8FC32E75372000452D7B /* Localization */,
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				E90769D42E546D5B00C9871C /* UI Basics */,
@@ -1486,7 +1482,6 @@
 		8C6C0EF62E4234D900D1FB0A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8C2B64032E953FD800D003D1 /* Fonts */,
 				8C94744B2E35DA49003A90B4 /* AppIcon.icon */,
 				8C6C0F012E42533900D1FB0A /* Assets.xcassets */,
 			);
@@ -2464,13 +2459,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C2B640E2E9544F700D003D1 /* Story-en.otf in Resources */,
 				8CB4D4F82E44EAFE0085D57A /* Localizable.xcstrings in Resources */,
-				8C2B64172E954BA100D003D1 /* Story-zh-Hant.otf in Resources */,
 				8C6C0F022E42533900D1FB0A /* Assets.xcassets in Resources */,
-				8C2B64232E954EEF00D003D1 /* Story-jp.otf in Resources */,
-				8C2B64292E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */,
-				8C2B641A2E954C5E00D003D1 /* Story-kr.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
