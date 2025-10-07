@@ -156,7 +156,7 @@ struct CollectionEditorView: View {
                                             .foregroundStyle(.green)
                                     })
                                     Spacer()
-                                    Text(verbatim: "\(selectAllTotalSucceedItemsCount), \(String(format: "%.1f", Double(selectAllTotalSucceedItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
+                                    Text(verbatim: "\(selectAllTotalSucceedItemsCount), \(unsafe String(format: "%.1f", Double(selectAllTotalSucceedItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
                                         .foregroundStyle(.secondary)
                                 }
                                 HStack {
@@ -167,7 +167,7 @@ struct CollectionEditorView: View {
                                             .foregroundStyle(.red)
                                     })
                                     Spacer()
-                                    Text(verbatim: "\(selectAllTotalFailureItemsCount), \(String(format: "%.1f", Double(selectAllTotalFailureItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
+                                    Text(verbatim: "\(selectAllTotalFailureItemsCount), \(unsafe String(format: "%.1f", Double(selectAllTotalFailureItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
                                         .foregroundStyle(.secondary)
                                 }
                                 HStack {
@@ -178,7 +178,7 @@ struct CollectionEditorView: View {
                                             .foregroundStyle(.yellow)
                                     })
                                     Spacer()
-                                    Text(verbatim: "\(selectAllTotalExisetedItemsCount), \(String(format: "%.1f", Double(selectAllTotalExisetedItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
+                                    Text(verbatim: "\(selectAllTotalExisetedItemsCount), \(unsafe String(format: "%.1f", Double(selectAllTotalExisetedItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
                                         .foregroundStyle(.secondary)
                                 }
                                 HStack {
@@ -189,7 +189,7 @@ struct CollectionEditorView: View {
                                             .foregroundStyle(.gray)
                                     })
                                     Spacer()
-                                    Text(verbatim: "\(selectAllTotalRequestedItemsCount - selectAllTotalSucceedItemsCount - selectAllTotalFailureItemsCount - selectAllTotalExisetedItemsCount), \(String(format: "%.1f", Double(selectAllTotalRequestedItemsCount - selectAllTotalSucceedItemsCount - selectAllTotalFailureItemsCount - selectAllTotalExisetedItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
+                                    Text(verbatim: "\(selectAllTotalRequestedItemsCount - selectAllTotalSucceedItemsCount - selectAllTotalFailureItemsCount - selectAllTotalExisetedItemsCount), \(unsafe String(format: "%.1f", Double(selectAllTotalRequestedItemsCount - selectAllTotalSucceedItemsCount - selectAllTotalFailureItemsCount - selectAllTotalExisetedItemsCount)/Double(selectAllTotalRequestedItemsCount)*100))%")
                                         .foregroundStyle(.secondary)
                                 }
                                 
