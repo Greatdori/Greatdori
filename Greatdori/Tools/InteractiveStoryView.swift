@@ -151,9 +151,44 @@ struct InteractiveStoryView: View {
             }
         }
         #if os(iOS)
-        .toolbar(.hidden, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
         #endif
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem {
+                Menu {
+                    Section {
+                        Button("自动", systemImage: "play.fill") {
+                            
+                        }
+                        .disabled(true)
+                        Button("全屏自动播放", systemImage: "pano.badge.play.fill") {
+                            
+                        }
+                        .disabled(true)
+                        Button("快进", systemImage: "forward.fill") {
+                            
+                        }
+                        .disabled(true)
+                        Button("记录", systemImage: "text.document.fill") {
+                            
+                        }
+                        .disabled(true)
+                        Button("不显示", systemImage: "xmark") {
+                            
+                        }
+                        .disabled(true)
+                        Button("退出", systemImage: "escape", role: .destructive) {
+                            exitViewer()
+                        }
+                        .foregroundStyle(.red)
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                }
+                .menuIndicator(.hidden)
+            }
+        }
         .onTapGesture {
             if isTalkTextAnimating {
                 isTalkTextAnimating = false
