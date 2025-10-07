@@ -193,6 +193,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     @Environment(\.locale) var locale
     @AppStorage("IsFirstLaunch") var isFirstLaunch = true
     
+    static var orientationLock = UIInterfaceOrientationMask.portrait
+    
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
@@ -228,6 +230,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         UserDefaults.standard.set(deviceToken, forKey: "RemoteNotifDeviceToken")
+    }
+    
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return AppDelegate.orientationLock
     }
 }
 #endif

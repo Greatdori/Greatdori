@@ -349,17 +349,17 @@ extension DoriAPI {
                     },
                     layoutData: base["layoutData"].map {
                         .init(
-                            type: $0.1["type"].intValue,
-                            sideFrom: $0.1["sideFrom"].intValue,
+                            type: .init(rawValue: $0.1["type"].intValue) ?? .none,
+                            sideFrom: .init(rawValue: $0.1["sideFrom"].intValue) ?? .none,
                             sideFromOffsetX: $0.1["sideFromOffsetX"].intValue,
-                            sideTo: $0.1["sideTo"].intValue,
+                            sideTo: .init(rawValue: $0.1["sideTo"].intValue) ?? .none,
                             sideToOffsetX: $0.1["sideToOffsetX"].intValue,
-                            depthType: $0.1["depthType"].intValue,
+                            depthType: .init(rawValue: $0.1["depthType"].intValue) ?? .notSet,
                             characterID: $0.1["characterId"].intValue,
                             costumeType: $0.1["costumeType"].stringValue,
                             motionName: $0.1["motionName"].stringValue,
                             expressionName: $0.1["expressionName"].stringValue,
-                            moveSpeedType: $0.1["moveSpeedType"].intValue
+                            moveSpeedType: .init(rawValue: $0.1["moveSpeedType"].intValue) ?? .normal
                         )
                     },
                     specialEffectData: base["specialEffectData"].map {
@@ -727,17 +727,51 @@ extension DoriAPI.Misc {
             }
         }
         public struct LayoutData: Sendable, Hashable, DoriCache.Cacheable {
-            public var type: Int
-            public var sideFrom: Int
+            public var type: LayoutType
+            public var sideFrom: Side
             public var sideFromOffsetX: Int
-            public var sideTo: Int
+            public var sideTo: Side
             public var sideToOffsetX: Int
-            public var depthType: Int
+            public var depthType: DepthType
             public var characterID: Int
             public var costumeType: String
             public var motionName: String
             public var expressionName: String
-            public var moveSpeedType: Int
+            public var moveSpeedType: MoveSpeedType
+            
+            public enum LayoutType: Int, Sendable, Hashable, DoriCache.Cacheable {
+                case none
+                case move
+                case appear
+                case hide
+                case shakeX
+                case shakeY
+            }
+            public enum Side: Int, Sendable, Hashable, DoriCache.Cacheable {
+                case none
+                case left
+                case leftOver
+                case leftInside
+                case center
+                case right
+                case rightOver
+                case rightInside
+                case leftUnder
+                case leftInsideUnder
+                case centerUnder
+                case rightUnder
+                case rightInsideUnder
+            }
+            public enum DepthType: Int, Sendable, Hashable, DoriCache.Cacheable {
+                case notSet
+                case front
+                case back
+            }
+            public enum MoveSpeedType: Int, Sendable, Hashable, DoriCache.Cacheable {
+                case normal
+                case fast
+                case slow
+            }
         }
         public struct SpecialEffectData: Sendable, Hashable, DoriCache.Cacheable {
             public var effectType: EffectType

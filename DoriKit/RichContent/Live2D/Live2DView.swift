@@ -108,6 +108,7 @@ extension EnvironmentValues {
     @Entry fileprivate var l2dCurrentExpression: Live2DExpression?
     @Entry fileprivate var l2dParamBinding: (Bool, Binding<[Live2DParameter]>)?
     @Entry fileprivate var l2dIsPaused = false
+    @Entry fileprivate var l2dLipSyncValue: Double?
     @Entry fileprivate var l2dVSyncEnabled = true
 }
 extension View {
@@ -137,6 +138,9 @@ extension View {
     }
     public func live2dPauseAnimations(_ paused: Bool = true) -> some View {
         environment(\.l2dIsPaused, paused)
+    }
+    public func live2dLipSync(value: Double?) -> some View {
+        environment(\.l2dLipSyncValue, value)
     }
     public func _live2dVerticalSyncDisabled(_ disabled: Bool = true) -> some View {
         environment(\.l2dVSyncEnabled, !disabled)
@@ -204,7 +208,6 @@ private struct _Live2DNativeView: NSViewRepresentable {
         webView.underPageBackgroundColor = .clear
         webView.setValue(false, forKey: "drawsBackground")
         webView.configuration.userContentController.add(context.coordinator, name: "paramHandler")
-        setupWebView(webView, with: model, env: context.environment)
         
         var motions = [Live2DMotion]()
         for motion in model.motions {
@@ -220,6 +223,8 @@ private struct _Live2DNativeView: NSViewRepresentable {
         DispatchQueue.main.async {
             context.environment.l2dOnExpressionsUpdate?(expressions)
         }
+        
+        setupWebView(webView, with: model, env: context.environment)
         
         updateStoredContext(in: context)
         
@@ -348,6 +353,7 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
         var breathEnabled = \(env.l2dBreathEnabled);
         var swayEnabled = \(env.l2dSwayEnabled);
         var isAnimationPaused = \(env.l2dIsPaused);
+        var lipSyncValue = \(env.l2dLipSyncValue != nil ? "\(env.l2dLipSyncValue!)" : "null");
         
         var Simple = function() {
         this.live2DModel = null;
@@ -502,6 +508,10 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
             live2DModel.setParamFloat("PARAM_BODY_ANGLE_X", 4 * Math.sin(seed / 15.5345) * .5, .5)
         }
         
+        if (lipSyncValue) {
+            live2DModel.setParamFloat("PARAM_MOUTH_OPEN_Y", lipSyncValue);
+        }
+        
         live2DModel.update();
         live2DModel.draw();
         
@@ -579,6 +589,7 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
         </html>
         """.write(to: tmpFile, atomically: true, encoding: .utf8)
         webView.loadFileURL(tmpFile, allowingReadAccessTo: URL(filePath: NSHomeDirectory() + "/tmp/"))
+        updateWebView(webView, fromStored: .init(model: model), toEnv: env)
     }
 }
 
@@ -668,6 +679,16 @@ private func updateWebView(
                     """)
                 }
             }
+        }
+    }
+    
+    if oldEnv.l2dLipSyncValue != newEnv.l2dLipSyncValue {
+        if let value = newEnv.l2dLipSyncValue {
+            webView.evaluateJavaScript("""
+            lipSyncValue = \(max(min(value, 1), 0));
+            """)
+        } else {
+            webView.evaluateJavaScript("lipSyncValue = null;")
         }
     }
     

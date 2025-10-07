@@ -60,6 +60,7 @@
 		8C0D89BA2E536DD5004BD1D6 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0D89B92E536DD2004BD1D6 /* Networking.swift */; };
 		8C0D89BC2E53735F004BD1D6 /* Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0D89BB2E53735E004BD1D6 /* Progress.swift */; };
 		8C0D89BE2E537799004BD1D6 /* LimitedTaskQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0D89BD2E537795004BD1D6 /* LimitedTaskQueue.swift */; };
+		8C2B64022E940B2800D003D1 /* InteractiveStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B64012E940B2100D003D1 /* InteractiveStoryView.swift */; };
 		8C2B9D222E93800C00D003D1 /* Live2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D212E93800600D003D1 /* Live2DView.swift */; };
 		8C2B9D242E9386F500D003D1 /* Live2DModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D232E9386D200D003D1 /* Live2DModel.swift */; };
 		8C2B9D262E938C9E00D003D1 /* Live2DWeb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D252E938C9800D003D1 /* Live2DWeb.swift */; };
@@ -686,6 +687,7 @@
 		8C0D89B92E536DD2004BD1D6 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		8C0D89BB2E53735E004BD1D6 /* Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Progress.swift; sourceTree = "<group>"; };
 		8C0D89BD2E537795004BD1D6 /* LimitedTaskQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTaskQueue.swift; sourceTree = "<group>"; };
+		8C2B64012E940B2100D003D1 /* InteractiveStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveStoryView.swift; sourceTree = "<group>"; };
 		8C2B9D212E93800600D003D1 /* Live2DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DView.swift; sourceTree = "<group>"; };
 		8C2B9D232E9386D200D003D1 /* Live2DModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DModel.swift; sourceTree = "<group>"; };
 		8C2B9D252E938C9800D003D1 /* Live2DWeb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DWeb.swift; sourceTree = "<group>"; };
@@ -1924,6 +1926,7 @@
 			children = (
 				E9A126FB2E8CB61900BBD39E /* EventTracker.swift */,
 				8C2BB9B32E92AF3700D003D1 /* StoryViewer.swift */,
+				8C2B64012E940B2100D003D1 /* InteractiveStoryView.swift */,
 				E949D28D2E93D9F100E50D3F /* Live2DViewer.swift */,
 			);
 			path = Tools;
@@ -2792,6 +2795,7 @@
 				E90769CD2E546D5500C9871C /* HomeView.swift in Sources */,
 				E90769CE2E546D5500C9871C /* NewsView.swift in Sources */,
 				8CC046DC2E6C8F63009FDC13 /* AppFlags.swift in Sources */,
+				8C2B64022E940B2800D003D1 /* InteractiveStoryView.swift in Sources */,
 				E94443CC2E8E6EDE00593F07 /* SettingsPermissionsView.swift in Sources */,
 				8CBF73132E902A0600D88F96 /* CardCollectionCoding.swift in Sources */,
 				E94219052E8AA47400F24974 /* ComicSearchView.swift in Sources */,
