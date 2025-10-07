@@ -67,6 +67,7 @@
 		8C2B64242E954EEF00D003D1 /* Story-jp.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64222E954EEF00D003D1 /* Story-jp.otf */; };
 		8C2B64262E95600B00D003D1 /* GeneralCardSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B64252E95600400D003D1 /* GeneralCardSelector.swift */; };
 		8C2B64282E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B64272E9564F800D003D1 /* Story-zh-Hans.ttf */; };
+		8C2B642B2E9581EC00D003D1 /* CollectionCode_EN.md in Resources */ = {isa = PBXBuildFile; fileRef = 8C2B642A2E9581EC00D003D1 /* CollectionCode_EN.md */; };
 		8C2B9D222E93800C00D003D1 /* Live2DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D212E93800600D003D1 /* Live2DView.swift */; };
 		8C2B9D242E9386F500D003D1 /* Live2DModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D232E9386D200D003D1 /* Live2DModel.swift */; };
 		8C2B9D262E938C9E00D003D1 /* Live2DWeb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2B9D252E938C9800D003D1 /* Live2DWeb.swift */; };
@@ -341,7 +342,6 @@
 		E94443CE2E8E80C200593F07 /* SettingsDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94443CD2E8E80BC00593F07 /* SettingsDebugView.swift */; };
 		E94944E22E92A19600E50D3F /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E94944E12E92A19600E50D3F /* MarkdownUI */; };
 		E949D28B2E93805E00E50D3F /* CollectionCode_ZH-HANS.md in Resources */ = {isa = PBXBuildFile; fileRef = E9490BB52E937BBB00E50D3F /* CollectionCode_ZH-HANS.md */; };
-		E949D28C2E93805E00E50D3F /* CollectionCode_EN.md in Resources */ = {isa = PBXBuildFile; fileRef = E949EF202E937DC400E50D3F /* CollectionCode_EN.md */; };
 		E949D28E2E93D9F800E50D3F /* Live2DViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949D28D2E93D9F100E50D3F /* Live2DViewer.swift */; };
 		E97888C62E8A79EA00ABD33E /* QuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97888C52E8A79E500ABD33E /* QuickLook.swift */; };
 		E97C5B882E8E9A50004858A3 /* SettingsWidgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97C5B872E8E9A4A004858A3 /* SettingsWidgetsView.swift */; };
@@ -700,6 +700,7 @@
 		8C2B64222E954EEF00D003D1 /* Story-jp.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-jp.otf"; sourceTree = "<group>"; };
 		8C2B64252E95600400D003D1 /* GeneralCardSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralCardSelector.swift; sourceTree = "<group>"; };
 		8C2B64272E9564F800D003D1 /* Story-zh-Hans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Story-zh-Hans.ttf"; sourceTree = "<group>"; };
+		8C2B642A2E9581EC00D003D1 /* CollectionCode_EN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CollectionCode_EN.md; sourceTree = "<group>"; };
 		8C2B9D212E93800600D003D1 /* Live2DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DView.swift; sourceTree = "<group>"; };
 		8C2B9D232E9386D200D003D1 /* Live2DModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DModel.swift; sourceTree = "<group>"; };
 		8C2B9D252E938C9800D003D1 /* Live2DWeb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DWeb.swift; sourceTree = "<group>"; };
@@ -957,7 +958,6 @@
 		E94443CD2E8E80BC00593F07 /* SettingsDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDebugView.swift; sourceTree = "<group>"; };
 		E9490BB52E937BBB00E50D3F /* CollectionCode_ZH-HANS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "CollectionCode_ZH-HANS.md"; sourceTree = "<group>"; };
 		E949D28D2E93D9F100E50D3F /* Live2DViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Live2DViewer.swift; sourceTree = "<group>"; };
-		E949EF202E937DC400E50D3F /* CollectionCode_EN.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCode_EN.md; sourceTree = "<group>"; };
 		E97888C52E8A79E500ABD33E /* QuickLook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLook.swift; sourceTree = "<group>"; };
 		E97C5B872E8E9A4A004858A3 /* SettingsWidgetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWidgetsView.swift; sourceTree = "<group>"; };
 		E98B8B522E7E922700B4C8A8 /* NavigationComponentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationComponentsView.swift; sourceTree = "<group>"; };
@@ -1972,7 +1972,7 @@
 				E90769D12E546D5B00C9871C /* DebugView.swift */,
 				8CC046DB2E6C8F5D009FDC13 /* AppFlags.swift */,
 				E9490BB52E937BBB00E50D3F /* CollectionCode_ZH-HANS.md */,
-				E949EF202E937DC400E50D3F /* CollectionCode_EN.md */,
+				8C2B642A2E9581EC00D003D1 /* CollectionCode_EN.md */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -2443,10 +2443,10 @@
 			files = (
 				8C2B64242E954EEF00D003D1 /* Story-jp.otf in Resources */,
 				E949D28B2E93805E00E50D3F /* CollectionCode_ZH-HANS.md in Resources */,
-				E949D28C2E93805E00E50D3F /* CollectionCode_EN.md in Resources */,
 				E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */,
 				8C2B64282E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */,
 				8C2B641B2E954C5E00D003D1 /* Story-kr.ttf in Resources */,
+				8C2B642B2E9581EC00D003D1 /* CollectionCode_EN.md in Resources */,
 				8C2B64182E954BA100D003D1 /* Story-zh-Hant.otf in Resources */,
 				8C6B8FC42E75373F00452D7B /* InfoPlist.strings in Resources */,
 				8C6C0F032E42533900D1FB0A /* Assets.xcassets in Resources */,
