@@ -196,6 +196,14 @@ struct InteractiveStoryView: View {
             }
             next()
         }
+        .onKeyPress(keys: [.return, .space], phases: [.down]) { _ in
+            if isTalkTextAnimating {
+                isTalkTextAnimating = false
+                return .handled
+            }
+            next()
+            return .handled
+        }
         .onAppear {
             backgroundImageURL = .init(string: "https://bestdori.com/assets/jp/\(asset.firstBackgroundBundleName)_rip/\(asset.firstBackground).png")!
             let bgmItem = AVPlayerItem(url: .init(string: "https://bestdori.com/assets/jp/sound/scenario/bgm/\(asset.firstBGM.lowercased())_rip/\(asset.firstBGM).mp3")!)
