@@ -522,18 +522,20 @@ struct SettingsWidgetsCollectionDetailsView: View {
                     if #available(iOS 26.0, macOS 26.0, *) {
                         ToolbarSpacer()
                     }
-                    if isMACOS {
-                        ToolbarItem {
-                            Button(action: {
-                                showCollectionEditorSheet = true
-                            }, label: {
-                                Label("Settings.widgets.collections.edit", systemImage: "square.and.pencil")
-                            })
-                        }
-                        if #available(iOS 26.0, macOS 26.0, *) {
-                            ToolbarSpacer()
-                        }
+                }
+                if isMACOS {
+                    ToolbarItem {
+                        Button(action: {
+                            showCollectionEditorSheet = true
+                        }, label: {
+                            Label("Settings.widgets.collections.edit", systemImage: "square.and.pencil")
+                        })
                     }
+                    if #available(iOS 26.0, macOS 26.0, *) {
+                        ToolbarSpacer()
+                    }
+                }
+                if !collection.cards.isEmpty {
                     ToolbarItem(placement: .primaryAction, content: {
                         Button(action: {
                             collectionCode = encodeCollection(collection.toCollectionCodeStructure(hideName: hideCollectionNameWhileSharing))
