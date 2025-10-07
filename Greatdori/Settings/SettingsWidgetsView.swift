@@ -368,7 +368,7 @@ struct SettingsWidgetsCollectionView: View {
 struct SettingsWidgetsCollectionDetailsView: View {
     @AppStorage("hideCollectionNameWhileSharing") var hideCollectionNameWhileSharing = false
     var collectionGivenName: String
-    @State var collection: CardCollectionManager.Collection?
+    @StateObject var collectionManager = CardCollectionManager.shared
     @Binding var isPresented: Bool
     @State var collectionName: String = ""
     @State var showCollectionDeleteAlert = false
@@ -378,11 +378,9 @@ struct SettingsWidgetsCollectionDetailsView: View {
     @State var showCollectionCodeDialog = false
     @State var showExportCheckmark = false
     @State var showCollectionEditorSheet = false
-    @State var collectionIndex: Int = 0
     @State var isCodeShareSheetPresented = false
-    @State var updateIndex: Int = 0
     var body: some View {
-        if let collection {
+        if let collection = collectionManager.allCollections.first(where: { $0.name == collectionGivenName }) {
             ScrollView {
                 HStack {
                     Spacer(minLength: 0)
@@ -398,9 +396,9 @@ struct SettingsWidgetsCollectionDetailsView: View {
                                             TextField("Settings.widgets.collections.name", text: $collectionName)
                                                 .multilineTextAlignment(.trailing)
                                                 .onSubmit {
-                                                    if CardCollectionManager.shared.nameIsAvailable(collectionName) {
-                                                        CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex{$0.name == collection.name}!].name = collectionName
-                                                        CardCollectionManager.shared.updateStorage()
+                                                    if collectionManager.nameIsAvailable(collectionName) {
+                                                        collectionManager.userCollections[collectionManager.userCollections.firstIndex{$0.name == collection.name}!].name = collectionName
+                                                        collectionManager.updateStorage()
                                                     } else {
                                                         collectionName = collection.name
                                                     }
@@ -436,7 +434,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
                                     }
                                     .alert("Settings.widgets.collections.delete.alert.title.\(collection.name)", isPresented: $showCollectionDeleteAlert, actions: {
                                         Button(role: .destructive, action: {
-                                            CardCollectionManager.shared.remove(at: CardCollectionManager.shared.userCollections.firstIndex{$0.name == collectionName}!)
+                                            collectionManager.remove(at: collectionManager.userCollections.firstIndex{$0.name == collectionName}!)
                                             isPresented = false
                                         }, label: {
                                             Text("Settings.widgets.collections.delete.alert.delete")
@@ -479,7 +477,12 @@ struct SettingsWidgetsCollectionDetailsView: View {
                             }
                         }
                         ForEach(collection.cards.indices, id: \.self) { cardIndex in
-                            SettingsWidgetsCollectionsItemView(collectionIndex: collectionIndex, collectionCard: collection.cards[cardIndex], collectionIsEditable: !collection.isBuiltIn, layoutType: $layoutType, updateIndex: $updateIndex)
+                            SettingsWidgetsCollectionsItemView(
+                                collectionIndex: collectionManager.userCollections.firstIndex(where: { $0.name == collectionGivenName }) ?? 0,
+                                collectionCard: collection.cards[cardIndex],
+                                collectionIsEditable: !collection.isBuiltIn,
+                                layoutType: $layoutType
+                            )
                         }
                         if collection.cards.isEmpty {
                             CustomGroupBox {
@@ -508,7 +511,7 @@ struct SettingsWidgetsCollectionDetailsView: View {
             .onAppear {
                 collectionName = collection.name
                 if !collection.isBuiltIn {
-                    CardCollectionManager.shared.userCollections[CardCollectionManager.shared.userCollections.firstIndex{$0.name == collectionName}!].cards = collection.cards.sorted{ $0.id < $1.id }
+                    collectionManager.userCollections[collectionManager.userCollections.firstIndex{ $0.name == collectionName }!].cards = collection.cards.sorted{ $0.id < $1.id }
                 }
             }
             .toolbar {
@@ -559,15 +562,10 @@ struct SettingsWidgetsCollectionDetailsView: View {
                 #endif
             }, else: { content in
                 content
-                    .sheet(isPresented: $showCollectionEditorSheet, onDismiss: {
-                    //                self.collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })!
-                    updateIndex += 1
-                }, content: {
-                    CollectionEditorView(collection: collection)
-                })
+                    .sheet(isPresented: $showCollectionEditorSheet) {
+                        CollectionEditorView(collection: collection)
+                    }
             })
-            
-            
             .alert("Settings.widgets.collections.code.dialog.title", isPresented: $showCollectionCodeDialog, actions: {
                 Button(action: {
                     copyStringToClipboard(collectionCode)
@@ -608,15 +606,8 @@ struct SettingsWidgetsCollectionDetailsView: View {
                     }
                 }
             }
-            .onChange(of: updateIndex) {
-                self.collection = CardCollectionManager.shared.allCollections.first(where: { $0.name == collectionGivenName })!
-            }
         } else {
             ProgressView()
-                .onAppear {
-                    collectionIndex = CardCollectionManager.shared.userCollections.firstIndex(where: { $0.name == collectionGivenName }) ?? 0
-                    collection = CardCollectionManager.shared.allCollections[CardCollectionManager.shared.allCollections.firstIndex(where: { $0.name == collectionGivenName })!]
-                }
         }
     }
     
@@ -643,7 +634,6 @@ struct SettingsWidgetsCollectionsItemView: View {
     var collectionCard: CardCollectionManager.Card
     var collectionIsEditable: Bool
     @Binding var layoutType: Int
-    @Binding var updateIndex: Int
     @State var doriCard: Card?
     @State var characterName: LocalizedData<String>? = nil
     
@@ -736,7 +726,7 @@ struct SettingsWidgetsCollectionsItemView: View {
 //                    }
                     
                     if collectionIsEditable {
-                        SettingsWidgetsCollectionsItemActionMenuView(collectionIndex: collectionIndex, collectionCard: collectionCard, updateIndex: $updateIndex)
+                        SettingsWidgetsCollectionsItemActionMenuView(collectionIndex: collectionIndex, collectionCard: collectionCard)
                     }
                 }
             }
@@ -765,7 +755,6 @@ struct SettingsWidgetsCollectionsItemView: View {
 struct SettingsWidgetsCollectionsItemActionMenuView: View {
     var collectionIndex: Int
     var collectionCard: CardCollectionManager.Card
-    @Binding var updateIndex: Int
     @State var cardTrainingStatusIsSwitchable = false
     var body: some View {
         Menu(content: {
@@ -776,7 +765,6 @@ struct SettingsWidgetsCollectionsItemActionMenuView: View {
                         CardCollectionManager.shared.userCollections[collectionIndex].cards[cardIndex] = .init(id: collectionCard.id, isTrained: !collectionCard.isTrained, localizedName: collectionCard.localizedName, file: collectionCard.file)
                         
                         CardCollectionManager.shared.updateStorage()
-                        updateIndex += 1
                     }
                 }, label: {
                     Label(collectionCard.isTrained ? "Settings.widgets.collections.actions.change.normal" : "Settings.widgets.collections.actions.change.trained", systemImage: "rectangle.2.swap")
@@ -787,7 +775,6 @@ struct SettingsWidgetsCollectionsItemActionMenuView: View {
                     CardCollectionManager.shared.userCollections[collectionIndex].cards.remove(at: cardIndex)
                     
                     CardCollectionManager.shared.updateStorage()
-                    updateIndex += 1
                 }, label: {
                     Label("Settings.widgets.collections.actions.remove", systemImage: "minus.circle")
                 })
