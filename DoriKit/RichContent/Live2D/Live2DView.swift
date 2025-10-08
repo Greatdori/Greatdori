@@ -19,6 +19,7 @@ import SwiftUI
 internal import os
 internal import SwiftyJSON
 
+/// A view that renders a Live 2D model.
 public struct Live2DView<Placeholder: View, ErrorView: View>: View {
     private var makePlaceholder: () -> Placeholder
     private var makeErrorView: () -> ErrorView
@@ -112,36 +113,139 @@ extension EnvironmentValues {
     @Entry fileprivate var l2dVSyncEnabled = true
 }
 extension View {
+    /// Adds a condition that controls whether Live 2D views apply
+    /// a sway motion to models.
+    /// - Parameter disabled: A boolean value that determines whether
+    ///     Live 2D views apply a sway motion to models.
+    /// - Returns: A view that controls whether Live 2D views apply
+    ///     a sway motion to models.
     public func live2dSwayDisabled(_ disabled: Bool = true) -> some View {
         environment(\.l2dSwayEnabled, !disabled)
     }
+    
+    /// Adds a condition that controls whether Live 2D views apply
+    /// a breath motion to models.
+    /// - Parameter disabled: A boolean value that determines whether
+    ///     Live 2D views apply a breath motion to models.
+    /// - Returns: A view that controls whether Live 2D views apply
+    ///     a breath motion to models.
     public func live2dBreathDisabled(_ disabled: Bool = true) -> some View {
         environment(\.l2dBreathEnabled, !disabled)
     }
+    
+    /// Adds a condition that controls whether Live 2D views apply
+    /// a eye blink motion to models.
+    /// - Parameter disabled: A boolean value that determines whether
+    ///     Live 2D views apply a eye blink motion to models.
+    /// - Returns: A view that controls whether Live 2D views apply
+    ///     a eye blink motion to models.
     public func live2dEyeBlinkDisabled(_ disabled: Bool = true) -> some View {
         environment(\.l2dEyeBlinkEnabled, !disabled)
     }
+    
+    /// Adds an action to perform when motions in a Live 2D view update.
+    /// - Parameter action: The action to perform.
+    /// - Returns: A view that triggers `action`
+    ///     when a Live 2D view updates motions.
     public func onLive2DMotionsUpdate(perform action: (([Live2DMotion]) -> Void)?) -> some View {
         environment(\.l2dOnMotionsUpdate, action)
     }
+    
+    /// Adds an action to perform when expressions in a Live 2D view update.
+    /// - Parameter action: The action to perform.
+    /// - Returns: A view that triggers `action`
+    ///     when a Live 2D view updates expressions.
     public func onLive2DExpressionsUpdate(perform action: (([Live2DExpression]) -> Void)?) -> some View {
         environment(\.l2dOnExpressionsUpdate, action)
     }
+    
+    /// Sets the current motion of a model in a Live 2D view.
+    ///
+    /// - Parameter motion: A motion for model.
+    /// - Returns: A view that determines the motion of a Live 2D model by `motion`.
+    ///
+    /// You receive a list of available motions from ``onLive2DMotionsUpdate(perform:)``,
+    /// then choose one as the current motion:
+    ///
+    /// ```swift
+    /// struct MyView: View {
+    ///     var costume: Costume
+    ///     @State private var motions: [Live2DMotion]?
+    ///     var body: some View {
+    ///         Live2DView(costume: costume)
+    ///             .live2dMotion(motions?.first)
+    ///             .onLive2DMotionsUpdate { newMotions in
+    ///                 motions = newMotions
+    ///             }
+    ///     }
+    /// }
+    /// ```
     public func live2dMotion(_ motion: Live2DMotion?) -> some View {
         environment(\.l2dCurrentMotion, motion)
     }
+    
+    /// Sets the current expression of a model in a Live 2D view.
+    ///
+    /// - Parameter motion: A expression for model.
+    /// - Returns: A view that determines the expression of a Live 2D model by `motion`.
+    ///
+    /// You receive a list of available expressions from ``onLive2DExpressionsUpdate(perform:)``,
+    /// then choose one as the current expression:
+    ///
+    /// ```swift
+    /// struct MyView: View {
+    ///     var costume: Costume
+    ///     @State private var expressions: [Live2DExpression]?
+    ///     var body: some View {
+    ///         Live2DView(costume: costume)
+    ///             .live2dExpression(expressions?.first)
+    ///             .onLive2DExpressionsUpdate { newExpressions in
+    ///                 expressions = newExpressions
+    ///             }
+    ///     }
+    /// }
+    /// ```
     public func live2dExpression(_ expr: Live2DExpression?) -> some View {
         environment(\.l2dCurrentExpression, expr)
     }
+    
+    /// Binds parameters of a Live 2D model to a variable.
+    ///
+    /// - Parameters:
+    ///   - parameters: A binding value that stores parameters of a model.
+    ///   - tracking: A boolean value that determines whether
+    ///       to update `parameters` when the parameters of a model being updated.
+    /// - Returns: A view that binded parameters for a Live 2D model.
+    ///
+    /// If `tracking` is set to `true`, the wrapped value of `parameters`
+    /// will be updated once the Live 2D model changes, or it will only be updated
+    /// once for the initial value.
+    ///
+    /// - Note:
+    ///     Changing parameters when a Live 2D model is animating is not valid.
+    ///     If you want to update parameters, use ``live2dPauseAnimations(_:)``
+    ///     to pause animations first.
     public func live2dParameters(_ parameters: Binding<[Live2DParameter]>, tracking: Bool) -> some View {
         environment(\.l2dParamBinding, (tracking, parameters))
     }
+    
+    /// Adds a condition that controls whether Live 2D views pause
+    /// all animations for models.
+    /// - Parameter disabled: A boolean value that determines whether
+    ///     Live 2D views pause all animations for models.
+    /// - Returns: A view that controls whether Live 2D views pause
+    ///     all animations for models.
     public func live2dPauseAnimations(_ paused: Bool = true) -> some View {
         environment(\.l2dIsPaused, paused)
     }
+    
+    /// Sets the lip sync value for a Live 2D model.
+    /// - Parameter value: The value of lip syncing, from 0 to 1.
+    /// - Returns: A view that sets the lip sync value for a Live 2D model.
     public func live2dLipSync(value: Double?) -> some View {
         environment(\.l2dLipSyncValue, value)
     }
+    
     public func _live2dVerticalSyncDisabled(_ disabled: Bool = true) -> some View {
         environment(\.l2dVSyncEnabled, !disabled)
     }
