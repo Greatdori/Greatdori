@@ -208,6 +208,9 @@ private struct _Live2DNativeView: NSViewRepresentable {
         webView.underPageBackgroundColor = .clear
         webView.setValue(false, forKey: "drawsBackground")
         webView.configuration.userContentController.add(context.coordinator, name: "paramHandler")
+        #if DEBUG
+        webView.isInspectable = true
+        #endif
         
         var motions = [Live2DMotion]()
         for motion in model.motions {
@@ -256,7 +259,9 @@ private struct _Live2DNativeView: UIViewRepresentable {
         webView.scrollView.panGestureRecognizer.isEnabled = false
         webView.scrollView.bounces = false
         webView.configuration.userContentController.add(context.coordinator, name: "paramHandler")
-        setupWebView(webView, with: model, env: context.environment)
+        #if DEBUG
+        webView.isInspectable = true
+        #endif
         
         var motions = [Live2DMotion]()
         for motion in model.motions {
@@ -272,6 +277,8 @@ private struct _Live2DNativeView: UIViewRepresentable {
         DispatchQueue.main.async {
             context.environment.l2dOnExpressionsUpdate?(expressions)
         }
+        
+        setupWebView(webView, with: model, env: context.environment)
         
         updateStoredContext(in: context)
         return webView
@@ -355,6 +362,46 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
         var isAnimationPaused = \(env.l2dIsPaused);
         var lipSyncValue = \(env.l2dLipSyncValue != nil ? "\(env.l2dLipSyncValue!)" : "null");
         
+        var gl = null;
+        var canvas = document.getElementById("glcanvas");
+        \(env.l2dVSyncEnabled ? {
+        #if os(macOS)
+        let fps = NSScreen.main?.maximumFramesPerSecond ?? 120
+        #else
+        let fps = UIScreen.main.maximumFramesPerSecond
+        #endif
+        return """
+        let lastFrameTime = 0;
+        const targetFPS = \(fps);
+        const frameDuration = 1000 / targetFPS;
+        function tick(time) {
+            if (!time || time - lastFrameTime >= frameDuration) {
+                if (time) {
+                    lastFrameTime = time;
+                }
+                Simple.draw(gl);
+            }
+            if (isAnimationPaused) {
+                return;
+            }
+            var requestAnimationFrame =
+                window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame;
+            requestAnimationFrame(tick , canvas);
+        };
+        """
+        }() : """
+        function tick() {
+            Simple.draw(gl);
+            if (isAnimationPaused) {
+                return;
+            }
+            var requestAnimationFrame =
+                window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame;
+            requestAnimationFrame(tick , canvas);
+        };
+        """)
         var Simple = function() {
         this.live2DModel = null;
         this.requestID = null;
@@ -369,7 +416,6 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
         this.expressionManager = new L2DMotionManager();
         this.eyeBlink = new L2DEyeBlink();
         Live2D.init();
-        var canvas = document.getElementById("glcanvas");
         const dpr = window.devicePixelRatio || 1;
         canvas.width = canvas.clientWidth * dpr;
         canvas.height = canvas.clientHeight * dpr;
@@ -389,75 +435,41 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
         }, false);
         Simple.initLoop(canvas);
         };
+        
         Simple.initLoop = function(canvas) {
-        var para = {
-            premultipliedAlpha : true,
-            alpha : false
-        };
-        var gl = Simple.getWebGLContext(canvas, para);
-        if (!gl) {
-            console.log("Failed to create WebGL context.");
-            return;
-        }
-        gl.viewport(0, 0, canvas.width, canvas.height);
-        Live2D.setGL(gl);
-        Simple.loadBytes(modelDef.model, function(buf){
-            live2DModel = Live2DModelWebGL.loadModel(buf);
-        });
-        var loadCount = 0;
-        for(var i = 0; i < modelDef.textures.length; i++){
-            (function ( tno ){
-                loadedImages[tno] = new Image();
-                loadedImages[tno].src = modelDef.textures[tno];
-                loadedImages[tno].onload = function(){
-                    if((++loadCount) == modelDef.textures.length) {
-                        loadLive2DCompleted = true;
-                    }
-                }
-                loadedImages[tno].onerror = function() {
-                    Simple.myerror("Failed to load image : " + modelDef.textures[tno]);
-                }
-            })( i );
-        }
-        \(env.l2dVSyncEnabled ? {
-        #if os(macOS)
-        let fps = NSScreen.main?.maximumFramesPerSecond ?? 120
-        #else
-        let fps = UIScreen.main.maximumFramesPerSecond
-        #endif
-        return """
-        let lastFrameTime = 0;
-        const targetFPS = \(fps);
-        const frameDuration = 1000 / targetFPS;
-        (function tick(time) {
-            if (time - lastFrameTime >= frameDuration) {
-                lastFrameTime = time;
-                Simple.draw(gl);
+            var para = {
+                premultipliedAlpha : true,
+                alpha : false
+            };
+            gl = Simple.getWebGLContext(canvas, para);
+            if (!gl) {
+                console.log("Failed to create WebGL context.");
+                return;
             }
-            var requestAnimationFrame =
-                window.requestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.msRequestAnimationFrame;
-                requestID = requestAnimationFrame( tick , canvas );
-        })();
-        """
-        }() : """
-        (function tick() {
-            Simple.draw(gl);
-            var requestAnimationFrame =
-                window.requestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.msRequestAnimationFrame;
-                requestID = requestAnimationFrame( tick , canvas );
-        })();
-        """)
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            Live2D.setGL(gl);
+            Simple.loadBytes(modelDef.model, function(buf){
+                live2DModel = Live2DModelWebGL.loadModel(buf);
+            });
+            var loadCount = 0;
+            for(var i = 0; i < modelDef.textures.length; i++){
+                (function ( tno ){
+                    loadedImages[tno] = new Image();
+                    loadedImages[tno].src = modelDef.textures[tno];
+                    loadedImages[tno].onload = function(){
+                        if((++loadCount) == modelDef.textures.length) {
+                            loadLive2DCompleted = true;
+                        }
+                    }
+                    loadedImages[tno].onerror = function() {
+                        Simple.myerror("Failed to load image : " + modelDef.textures[tno]);
+                    }
+                })( i );
+            }
+            tick();
         };
         var lastValuePost = 0;
         Simple.draw = function(gl) {
-        gl.clearColor( 0.0 , 0.0 , 0.0 , 0.0 );
-        gl.clear(gl.COLOR_BUFFER_BIT);
         if( ! live2DModel || ! loadLive2DCompleted )
             return;
         if( ! initLive2DCompleted ){
@@ -476,11 +488,9 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
             ];
             live2DModel.setMatrix(matrix4x4);
         }
-        if (isAnimationPaused) {
-            live2DModel.update();
-            live2DModel.draw();
-            return;
-        }
+        
+        gl.clearColor(0.0 , 0.0 , 0.0 , 0.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
         
         live2DModel.loadParam();
         if (!motionManager.isFinished()) {
@@ -602,7 +612,13 @@ private func updateWebView(
     let oldEnv = coordinator.currentEnvrionment
     
     if oldEnv.l2dIsPaused != newEnv.l2dIsPaused {
-        webView.evaluateJavaScript("isAnimationPaused = \(newEnv.l2dIsPaused);")
+        webView.evaluateJavaScript("""
+        isAnimationPaused = \(newEnv.l2dIsPaused);
+        if (!isAnimationPaused) {
+            // We need to resume paused tick
+            tick();
+        }
+        """)
     }
     if oldEnv.l2dSwayEnabled != newEnv.l2dSwayEnabled {
         webView.evaluateJavaScript("swayEnabled = \(newEnv.l2dSwayEnabled);")

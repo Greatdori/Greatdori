@@ -98,6 +98,7 @@ struct InteractiveStoryView: View {
                                         }
                                     }())
                                     .opacity(showingLayoutIndexs.contains(index) ? 1 : 0)
+                                    .environment(\._layoutViewVisible, showingLayoutIndexs.contains(index))
                                     .animation(.spring(duration: 0.4, bounce: 0.2), value: layout)
                                     .animation(.spring(duration: 0.4, bounce: 0.25), value: showingLayoutIndexs)
                             }
@@ -581,13 +582,14 @@ private struct LayoutView: View {
     var data: DoriAPI.Misc.StoryAsset.LayoutData
     var voicePlayer: UnsafeMutablePointer<AVAudioPlayer>
     var currentSpeckerID: Int
-    @State var motions = [Live2DMotion]()
-    @State var expressions = [Live2DExpression]()
-    @State var isVisible = false
-    @State var lipSyncValue = 0.0
-    @State var lipSyncTimer: Timer?
+    @Environment(\._layoutViewVisible) private var isVisible
+    @State private var motions = [Live2DMotion]()
+    @State private var expressions = [Live2DExpression]()
+    @State private var lipSyncValue = 0.0
+    @State private var lipSyncTimer: Timer?
     var body: some View {
         Live2DView(resourceURL: URL(string: "https://bestdori.com/assets/jp/live2d/chara/\(data.costumeType)_rip/buildData.asset")!)
+            .live2dPauseAnimations(!isVisible)
             .live2dMotion(isVisible ? motions.first(where: { $0.name == data.motionName }) : nil)
             .live2dExpression(isVisible ? expressions.first(where: { $0.name == data.expressionName }) : nil)
             .live2dLipSync(value: currentSpeckerID == data.characterID ? lipSyncValue : nil)
@@ -597,18 +599,17 @@ private struct LayoutView: View {
             .onLive2DExpressionsUpdate { expressions in
                 self.expressions = expressions
             }
-            .onAppear {
-                isVisible = true
-                lipSyncTimer = Timer.scheduledTimer(withTimeInterval: 0.04, repeats: true) { _ in
-                    DispatchQueue.main.async {
-                        unsafe voicePlayer.pointee.updateMeters()
-                        lipSyncValue = pow(10, Double(unsafe voicePlayer.pointee.peakPower(forChannel: 0)) / 20) - 0.3
+            .onChange(of: isVisible) {
+                if isVisible {
+                    lipSyncTimer = Timer.scheduledTimer(withTimeInterval: 0.04, repeats: true) { _ in
+                        DispatchQueue.main.async {
+                            unsafe voicePlayer.pointee.updateMeters()
+                            lipSyncValue = pow(10, Double(unsafe voicePlayer.pointee.peakPower(forChannel: 0)) / 20) - 0.3
+                        }
                     }
+                } else {
+                    lipSyncTimer?.invalidate()
                 }
-            }
-            .onDisappear {
-                isVisible = false
-                lipSyncTimer?.invalidate()
             }
     }
 }
@@ -820,4 +821,8 @@ private func fontName(in locale: DoriLocale) -> String {
     case .cn: "Tensentype-JiaLiDaYuanGB18030"
     case .kr: "JejuGothic"
     }
+}
+
+extension EnvironmentValues {
+    @Entry fileprivate var _layoutViewVisible: Bool = false
 }
