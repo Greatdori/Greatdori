@@ -13,6 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 import AVKit
+import Combine
 import DoriKit
 import SwiftUI
 import SDWebImageSwiftUI
@@ -39,6 +40,10 @@ struct InteractiveStoryView: View {
     @State var isShowingWhiteCover = false
     @State var isShowingBlackCover = false
     @State var isTalkTextAnimating = false
+    @State var isHidingUI = false
+    @State var isBacklogPresented = false
+    @State var isAutoPlaying = false
+    @State var autoPlayTimer: Timer?
     
     init(asset: DoriAPI.Misc.StoryAsset, voiceBundleURL: URL, locale: DoriLocale) {
         self.asset = asset
@@ -104,7 +109,7 @@ struct InteractiveStoryView: View {
             #if os(iOS)
             .ignoresSafeArea()
             #endif
-            if let currentTalk {
+            if let currentTalk, !isHidingUI {
                 VStack {
                     Spacer()
                     TalkView(data: currentTalk, locale: locale, isAnimating: $isTalkTextAnimating)
@@ -125,8 +130,27 @@ struct InteractiveStoryView: View {
                         .font(.custom(fontName(in: locale), size: 18))
                         .foregroundStyle(Color(red: 80 / 255, green: 80 / 255, blue: 80 / 255))
                 }
-                .transition(.flipFromRight)
+                .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)).combined(with: .opacity))
             }
+            #if os(iOS)
+            if !isHidingUI {
+                HStack {
+                    Spacer()
+                    VStack {
+                        if #available(iOS 26.0, *) {
+                            actionMenu
+                                .buttonStyle(.glass)
+                                .buttonBorderShape(.circle)
+                        } else {
+                            actionMenu
+                                .buttonStyle(.bordered)
+                                .buttonBorderShape(.circle)
+                        }
+                        Spacer()
+                    }
+                }
+            }
+            #endif
             Rectangle()
                 .fill(Color.white)
                 .opacity(isShowingWhiteCover ? 1 : 0)
@@ -161,26 +185,17 @@ struct InteractiveStoryView: View {
                 actionMenu
             }
         }
-        #else
-        .overlay {
-            HStack {
-                Spacer()
-                VStack {
-                    if #available(iOS 26.0, *) {
-                        actionMenu
-                            .buttonStyle(.glass)
-                            .buttonBorderShape(.circle)
-                    } else {
-                        actionMenu
-                            .buttonStyle(.bordered)
-                            .buttonBorderShape(.circle)
-                    }
-                    Spacer()
-                }
-            }
-        }
         #endif
         .onTapGesture {
+            if isHidingUI {
+                isHidingUI = false
+                return
+            }
+            if isAutoPlaying {
+                autoPlayTimer?.invalidate()
+                isAutoPlaying = false
+                return
+            }
             if isTalkTextAnimating {
                 isTalkTextAnimating = false
                 return
@@ -188,12 +203,31 @@ struct InteractiveStoryView: View {
             next()
         }
         .onKeyPress(keys: [.return, .space], phases: [.down]) { _ in
+            if isHidingUI {
+                isHidingUI = false
+                return .handled
+            }
+            if isAutoPlaying {
+                autoPlayTimer?.invalidate()
+                isAutoPlaying = false
+                return .handled
+            }
             if isTalkTextAnimating {
                 isTalkTextAnimating = false
                 return .handled
             }
             next()
             return .handled
+        }
+        .sheet(isPresented: $isBacklogPresented) {
+            if let talk = currentTalk {
+                NavigationStack {
+                    BacklogView(asset: asset, currentTalk: talk, locale: locale, audios: talkAudios)
+                    #if os(macOS)
+                        .frame(width: 500, height: 350)
+                    #endif
+                }
+            }
         }
         .onAppear {
             backgroundImageURL = .init(string: "https://bestdori.com/assets/jp/\(asset.firstBackgroundBundleName)_rip/\(asset.firstBackground).png")!
@@ -237,26 +271,31 @@ struct InteractiveStoryView: View {
     var actionMenu: some View {
         Menu {
             Section {
-                Button("自动", systemImage: "play.fill") {
-                    
+                Button(isAutoPlaying ? "取消自动" : "自动", systemImage: isAutoPlaying ? "play.slash.fill" : "play.fill") {
+                    isAutoPlaying.toggle()
+                    if isAutoPlaying {
+                        next()
+                    } else {
+                        autoPlayTimer?.invalidate()
+                    }
                 }
-                .disabled(true)
                 Button("全屏自动播放", systemImage: "pano.badge.play.fill") {
-                    
+                    isAutoPlaying = true
+                    isHidingUI = true
+                    next()
                 }
-                .disabled(true)
+                .disabled(talkAudios.isEmpty)
                 Button("快进", systemImage: "forward.fill") {
                     
                 }
                 .disabled(true)
                 Button("记录", systemImage: "text.document.fill") {
-                    
+                    isBacklogPresented = true
                 }
-                .disabled(true)
+                .disabled(currentTalk == nil)
                 Button("不显示", systemImage: "xmark") {
-                    
+                    isHidingUI = true
                 }
-                .disabled(true)
                 Button("退出", systemImage: "escape", role: .destructive) {
                     exitViewer()
                 }
@@ -266,7 +305,7 @@ struct InteractiveStoryView: View {
             Image(systemName: "ellipsis")
             #if os(iOS)
                 .font(.system(size: 20))
-                .padding(10)
+                .padding(12)
             #endif
         }
         .menuStyle(.button)
@@ -275,10 +314,6 @@ struct InteractiveStoryView: View {
     
     func next() {
         guard !isDelaying else { return }
-        
-        withAnimation {
-            currentTelop = nil
-        }
         
         currentSnippetIndex += 1
         
@@ -291,6 +326,27 @@ struct InteractiveStoryView: View {
         }
         
         let snippet = asset.snippets[currentSnippetIndex]
+        
+        if currentTelop != nil {
+            if snippet.actionType == .effect,
+               asset.specialEffectData[snippet.referenceIndex].effectType == .telop {
+                isDelaying = true
+                currentSnippetIndex -= 1
+                withAnimation {
+                    currentTelop = nil
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    isDelaying = false
+                    next()
+                }
+                return
+            } else {
+                withAnimation {
+                    currentTelop = nil
+                }
+            }
+        }
+        
         switch snippet.actionType {
         case .none:
             isDelaying = true
@@ -304,11 +360,29 @@ struct InteractiveStoryView: View {
         case .talk:
             let talkData = asset.talkData[snippet.referenceIndex]
             currentTalk = talkData
-            if let voice = talkData.voices.first, let data = talkAudios[voice] {
-                if let newPlayer = try? AVAudioPlayer(data: data) {
-                    newPlayer.isMeteringEnabled = true
-                    unsafe voicePlayer.pointee = newPlayer
-                    unsafe voicePlayer.pointee.play()
+            if let voice = talkData.voices.first,
+               let data = talkAudios[voice],
+               let newPlayer = try? AVAudioPlayer(data: data) {
+                newPlayer.isMeteringEnabled = true
+                unsafe voicePlayer.pointee = newPlayer
+                unsafe voicePlayer.pointee.play()
+                if isAutoPlaying {
+                    autoPlayTimer = .scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
+                        if unsafe !voicePlayer.pointee.isPlaying {
+                            timer.invalidate()
+                            autoPlayTimer = .scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
+                                DispatchQueue.main.async {
+                                    next()
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if isAutoPlaying {
+                autoPlayTimer = .scheduledTimer(withTimeInterval: 5, repeats: false) { _ in
+                    DispatchQueue.main.async {
+                        next()
+                    }
                 }
             }
             for motion in talkData.motions {
@@ -437,16 +511,26 @@ struct InteractiveStoryView: View {
                 withAnimation {
                     currentTelop = effect.stringVal
                 }
+                if isAutoPlaying {
+                    autoPlayTimer = .scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+                        DispatchQueue.main.async {
+                            next()
+                        }
+                    }
+                }
             case .flashbackIn:
                 print("Not Implemented Effect: flashbackIn")
             case .flashbackOut:
                 print("Not Implemented Effect: flashbackOut")
             case .ambientColorNormal:
-                print("Not Implemented Effect: ambientColorNormal")
+                // FIXME: What does this action change?
+                next()
             case .ambientColorEvening:
-                print("Not Implemented Effect: ambientColorEvening")
+                // FIXME: What does this action change?
+                next()
             case .ambientColorNight:
-                print("Not Implemented Effect: ambientColorNight")
+                // FIXME: What does this action change?
+                next()
             case .playScenarioEffect:
                 withAnimation {
                     scenarioImageURL = .init(string: "https://bestdori.com/assets/jp/\(effect.stringValSub)_rip/bg.png")!
@@ -478,6 +562,7 @@ struct InteractiveStoryView: View {
     
     func exitViewer() {
         // clean up
+        autoPlayTimer?.invalidate()
         bgmPlayer.pause()
         sePlayer.pause()
         unsafe voicePlayer.pointee.stop()
@@ -622,6 +707,108 @@ private struct TalkView: View {
                 }
             }
         }
+    }
+}
+
+private struct BacklogView: View {
+    var asset: DoriAPI.Misc.StoryAsset
+    var currentTalk: DoriAPI.Misc.StoryAsset.TalkData
+    var locale: DoriLocale
+    var audios: [DoriAPI.Misc.StoryAsset.TalkData.Voice: Data]
+    @Environment(\.dismiss) private var dismiss
+    var body: some View {
+        VStack(spacing: 0) {
+            #if os(macOS)
+            HStack {
+                Spacer()
+                Button(action: {
+                    dismiss()
+                }, label: {
+                    Image(systemName: "xmark")
+                        .fontWeight(.semibold)
+                        .padding(8)
+                })
+                .buttonBorderShape(.circle)
+                .wrapIf(true) { content in
+                    if #available(macOS 26.0, *) {
+                        content
+                            .buttonStyle(.glass)
+                    } else {
+                        content
+                            .buttonStyle(.bordered)
+                    }
+                }
+                .padding([.top, .trailing], 10)
+            }
+            .padding(.bottom, 5)
+            Divider()
+                .padding(.horizontal, -15)
+            #endif
+            ScrollView {
+                HStack {
+                    VStack(alignment: .leading) {
+                        ForEach(asset.talkData[asset.talkData.startIndex...asset.talkData.firstIndex(of: currentTalk)!], id: \.self) { talk in
+                            HStack(alignment: .top) {
+                                ZStack(alignment: .bottomTrailing) {
+                                    WebImage(url: URL(string: "https://bestdori.com/res/icon/chara_icon_\(talk.talkCharacters.first?.characterID ?? -1).png"))
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                    if let voice = talk.voices.first, let audioData = audios[voice] {
+                                        Button(action: {
+                                            if let player = try? AVAudioPlayer(data: audioData) {
+                                                player.play()
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
+                                                    _fixLifetime(player)
+                                                }
+                                            }
+                                        }, label: {
+                                            ZStack {
+                                                Image(systemName: "speaker.wave.3.fill")
+                                                    .fontWeight(.bold)
+                                                    .foregroundStyle(.white)
+                                                Image(systemName: "speaker.wave.3.fill")
+                                                    .foregroundStyle(Color(red: 255 / 255, green: 59 / 255, blue: 114 / 255))
+                                            }
+                                            .shadow(radius: 1)
+                                        })
+                                        .buttonStyle(.plain)
+                                        .offset(x: 5, y: 5)
+                                    }
+                                }
+                                VStack(alignment: .leading) {
+                                    ZStack(alignment: .leading) {
+                                        Capsule()
+                                            .fill(Color(red: 255 / 255, green: 59 / 255, blue: 114 / 255))
+                                            .frame(width: 200, height: 20)
+                                        Text(talk.windowDisplayName)
+                                            .font(.custom(fontName(in: locale), size: 15))
+                                            .foregroundStyle(.white)
+                                            .padding(.horizontal, 10)
+                                    }
+                                    Text(talk.body)
+                                        .font(.custom(fontName(in: locale), size: 16))
+                                        .foregroundStyle(Color(red: 80 / 255, green: 80 / 255, blue: 80 / 255))
+                                        .padding(.leading, 20)
+                                }
+                            }
+                        }
+                    }
+                    Spacer()
+                }
+                .padding()
+            }
+        }
+        #if !os(macOS)
+        .toolbar {
+            ToolbarItem {
+                Button(action: {
+                    dismiss()
+                }, label: {
+                    Image(systemName: "xmark")
+                })
+            }
+        }
+        #endif
     }
 }
 
