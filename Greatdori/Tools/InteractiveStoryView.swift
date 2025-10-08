@@ -264,18 +264,6 @@ struct InteractiveStoryView: View {
             
             next()
         }
-        .onDisappear {
-            #if os(iOS)
-            AppDelegate.orientationLock = .portrait
-            if let scene = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first {
-                scene.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
-            } else {
-                // This is deprecated, we use it as a fallback
-                UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-            }
-            UIViewController.attemptRotationToDeviceOrientation()
-            #endif
-        }
     }
     
     @ViewBuilder
@@ -593,6 +581,17 @@ struct InteractiveStoryView: View {
         unsafe voicePlayer.pointee.stop()
         
         dismiss()
+        
+        #if os(iOS)
+        AppDelegate.orientationLock = .portrait
+        if let scene = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first {
+            scene.requestGeometryUpdate(.iOS(interfaceOrientations: .portrait))
+        } else {
+            // This is deprecated, we use it as a fallback
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        }
+        UIViewController.attemptRotationToDeviceOrientation()
+        #endif
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             unsafe voicePlayer.deinitialize(count: 1)
