@@ -617,6 +617,13 @@ private struct LayoutView: View {
             .live2dMotion(isVisible ? motions.first(where: { $0.name == data.motionName }) : nil)
             .live2dExpression(isVisible ? expressions.first(where: { $0.name == data.expressionName }) : nil)
             .live2dLipSync(value: currentSpeckerID == data.characterID ? lipSyncValue : nil)
+            ._live2dZoomFactor(1.9)
+            ._live2dCoordinateMatrix("""
+            [ s, 0, 0, 0,
+              0,-s, 0, 0,
+              0, 0, 1, 0,
+              -19/20, 6/5, 0, 1 ]
+            """)
             .onLive2DMotionsUpdate { motions in
                 self.motions = motions
             }

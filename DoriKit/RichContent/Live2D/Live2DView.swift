@@ -111,6 +111,8 @@ extension EnvironmentValues {
     @Entry fileprivate var l2dIsPaused = false
     @Entry fileprivate var l2dLipSyncValue: Double?
     @Entry fileprivate var l2dVSyncEnabled = true
+    @Entry fileprivate var l2dZoomFactor: CGFloat?
+    @Entry fileprivate var l2dCoordinateMatrix: String?
 }
 extension View {
     /// Adds a condition that controls whether Live 2D views apply
@@ -248,6 +250,12 @@ extension View {
     
     public func _live2dVerticalSyncDisabled(_ disabled: Bool = true) -> some View {
         environment(\.l2dVSyncEnabled, !disabled)
+    }
+    public func _live2dZoomFactor(_ factor: CGFloat?) -> some View {
+        environment(\.l2dZoomFactor, factor)
+    }
+    public func _live2dCoordinateMatrix(_ matrix: String?) -> some View {
+        environment(\.l2dCoordinateMatrix, matrix)
     }
 }
 
@@ -583,13 +591,15 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
                 live2DModel.setTexture(i, texName);
             }
             loadedImages = null;
-            var s = 2 / live2DModel.getCanvasWidth();
-            var matrix4x4 = [
+            var s = \(env.l2dZoomFactor ?? 1.75) / live2DModel.getCanvasWidth();
+            var matrix4x4 = \(env.l2dCoordinateMatrix ?? """
+            [
                 s, 0, 0, 0,
                 0,-s, 0, 0,
                 0, 0, 1, 0,
-                -1, 1, 0, 1
-            ];
+                -7/8, 6/5, 0, 1
+            ]
+            """);
             live2DModel.setMatrix(matrix4x4);
         }
         
