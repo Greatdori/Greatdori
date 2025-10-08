@@ -313,8 +313,8 @@ struct InteractiveStoryView: View {
         .menuIndicator(.hidden)
     }
     
-    func next() {
-        guard !isDelaying else { return }
+    func next(ignoresDelay: Bool = false) {
+        guard !isDelaying || ignoresDelay else { return }
         
         currentSnippetIndex += 1
         
@@ -402,6 +402,20 @@ struct InteractiveStoryView: View {
             isDelaying = true
             Task.detached {
                 if snippet.delay > 0 {
+                    if await currentSnippetIndex + 1 < asset.snippets.endIndex {
+                        // Motions can appear continuously
+                        // and share the same start time for delay.
+                        // We find the motion snippets immediately after this
+                        // (if present) and perform them
+                        let s = asset.snippets[await currentSnippetIndex + 1]
+                        if s.actionType == .motion && s.delay > 0 {
+                            DispatchQueue.main.async {
+                                // If the snippet after the next is still a motion,
+                                // the same code here in this call handles it
+                                next(ignoresDelay: true)
+                            }
+                        }
+                    }
                     try? await Task.sleep(for: .seconds(snippet.delay))
                 }
                 switch layoutData.type {
@@ -589,7 +603,7 @@ private struct LayoutView: View {
     @State private var lipSyncTimer: Timer?
     var body: some View {
         Live2DView(resourceURL: URL(string: "https://bestdori.com/assets/jp/live2d/chara/\(data.costumeType)_rip/buildData.asset")!)
-            .live2dPauseAnimations(!isVisible)
+            .live2dPauseAnimations(!isVisible) // performance
             .live2dMotion(isVisible ? motions.first(where: { $0.name == data.motionName }) : nil)
             .live2dExpression(isVisible ? expressions.first(where: { $0.name == data.expressionName }) : nil)
             .live2dLipSync(value: currentSpeckerID == data.characterID ? lipSyncValue : nil)
@@ -610,6 +624,9 @@ private struct LayoutView: View {
                 } else {
                     lipSyncTimer?.invalidate()
                 }
+            }
+            .onDisappear {
+                lipSyncTimer?.invalidate()
             }
     }
 }
