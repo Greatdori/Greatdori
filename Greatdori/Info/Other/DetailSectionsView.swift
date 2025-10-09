@@ -60,7 +60,7 @@ struct DetailSectionOptionPicker<T: Hashable>: View {
 
 // MARK: DetailUnavailableView
 struct DetailUnavailableView: View {
-    var title: LocalizedStringKey
+    var title: LocalizedStringResource
     var symbol: String
     var body: some View {
         CustomGroupBox {

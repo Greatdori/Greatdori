@@ -547,3 +547,87 @@ extension SearchViewBase {
         return mutable
     }
 }
+
+struct DetailSectionBase<Element: Hashable, Content: View>: View {
+    var titleKey: LocalizedStringResource
+    var localizedElements: LocalizedData<[Element]>
+    var showLocalePicker: Bool
+    var makeEachContent: (Element) -> Content
+    
+    var unavailablePrompt: LocalizedStringResource = "Details.unavailable"
+    var unavailableSystemImage: String = "bolt.horizontal.fill"
+    
+    init(
+        _ titleKey: LocalizedStringResource,
+        elements: [Element],
+        @ViewBuilder eachContent: @escaping (Element) -> Content
+    ) {
+        self.titleKey = titleKey
+        self.localizedElements = .init(_jp: elements, en: elements, tw: elements, cn: elements, kr: elements)
+        self.showLocalePicker = false
+        self.makeEachContent = eachContent
+    }
+    init(
+        _ titleKey: LocalizedStringResource,
+        elements: LocalizedData<[Element]>,
+        @ViewBuilder eachContent: @escaping (Element) -> Content
+    ) {
+        self.titleKey = titleKey
+        self.localizedElements = elements
+        self.showLocalePicker = false
+        self.makeEachContent = eachContent
+    }
+    
+    @State private var locale = DoriLocale.primaryLocale
+    @State private var showAll = false
+    
+    var body: some View {
+        LazyVStack(pinnedViews: .sectionHeaders) {
+            Section {
+                Group {
+                    if let elements = localizedElements.forLocale(locale), !elements.isEmpty {
+                        ForEach((showAll ? elements : Array(elements.prefix(3))), id: \.self) { item in
+                            makeEachContent(item)
+                                .buttonStyle(.plain)
+                        }
+                    } else {
+                        DetailUnavailableView(title: unavailablePrompt, symbol: unavailableSystemImage)
+                    }
+                }
+                .frame(maxWidth: 600)
+            } header: {
+                HStack {
+                    Text(titleKey)
+                        .font(.title2)
+                        .bold()
+                    if showLocalePicker {
+                        DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
+                    }
+                    Spacer()
+                    if (localizedElements.forLocale(locale)?.count ?? 0) > 3 {
+                        Button(action: {
+                            showAll.toggle()
+                        }, label: {
+                            Text(showAll ? "Details.show-less" : "Details.show-all.\(localizedElements.forLocale(locale)?.count ?? 0)")
+                                .foregroundStyle(.secondary)
+                        })
+                        .buttonStyle(.plain)
+                    }
+                }
+                .frame(maxWidth: 615)
+            }
+        }
+    }
+}
+extension DetailSectionBase {
+    func contentUnavailablePrompt(_ prompt: LocalizedStringResource) -> Self {
+        var mutable = self
+        mutable.unavailablePrompt = prompt
+        return mutable
+    }
+    func contentUnavailableImage(systemName: String) -> Self {
+        var mutable = self
+        mutable.unavailableSystemImage = systemName
+        return mutable
+    }
+}
