@@ -236,6 +236,10 @@ struct InteractiveStoryView: View {
             }
         }
         .onAppear {
+            if backgroundImageURL != nil {
+                return
+            }
+            
             backgroundImageURL = .init(string: "https://bestdori.com/assets/jp/\(asset.firstBackgroundBundleName)_rip/\(asset.firstBackground).png")!
             let bgmItem = AVPlayerItem(url: .init(string: "https://bestdori.com/assets/jp/sound/scenario/bgm/\(asset.firstBGM.lowercased())_rip/\(asset.firstBGM).mp3")!)
             bgmLooper = .init(player: bgmPlayer, templateItem: bgmItem)
@@ -750,6 +754,7 @@ private struct BacklogView: View {
     var locale: DoriLocale
     var audios: [DoriAPI.Misc.StoryAsset.TalkData.Voice: Data]
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     var body: some View {
         VStack(spacing: 0) {
             #if os(macOS)
@@ -821,10 +826,11 @@ private struct BacklogView: View {
                                     }
                                     Text(talk.body)
                                         .font(.custom(fontName(in: locale), size: 16))
-                                        .foregroundStyle(Color(red: 80 / 255, green: 80 / 255, blue: 80 / 255))
+                                        .foregroundStyle(colorScheme == .light ? Color(red: 80 / 255, green: 80 / 255, blue: 80 / 255) : .init(red: 238 / 255, green: 238 / 255, blue: 238 / 255))
                                         .padding(.leading, 20)
                                 }
                             }
+                            .padding(.bottom)
                         }
                     }
                     Spacer()
