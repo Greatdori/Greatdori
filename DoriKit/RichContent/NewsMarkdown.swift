@@ -47,7 +47,7 @@ private func compileContentSection(
     case .textLiteral(let string):
         string
     case .ul(let list):
-        compileBulletList(list, locale: locale, dateFormatter: dateFormatter)
+        "\n" + compileBulletList(list, locale: locale, dateFormatter: dateFormatter) + "\n"
     case .link(let target, let data, _):
         if target == "asset-single" {
             "![\(data)](greatdori://rich-content/asset/\(data))"
