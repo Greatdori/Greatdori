@@ -455,7 +455,11 @@ struct InteractiveStoryView: View {
                             }
                             allDiffLayouts[index] = newData
                             if !showingLayoutIndexs.contains(index) {
-                                showingLayoutIndexs.append(index)
+                                if layoutData.type == .appear {
+                                    showingLayoutIndexs.append(index)
+                                } else {
+                                    print("Scheduled a layout change, but it's not even visible?!")
+                                }
                             }
                         } else {
                             print("A combined layout '\(newData)' doesn't match any layout in full list '\(allDiffLayouts)'?!")
