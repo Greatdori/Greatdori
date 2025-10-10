@@ -304,6 +304,7 @@
 		E90769D72E546D5B00C9871C /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769D12E546D5B00C9871C /* DebugView.swift */; };
 		E90769D92E546D5B00C9871C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90769D32E546D5B00C9871C /* SettingsView.swift */; };
 		E9076E2F2E8B83A100A9F5AE /* SettingsAdvanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9076E2E2E8B839D00A9F5AE /* SettingsAdvanced.swift */; };
+		E92401612E993B9D003BF482 /* NewsDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92401602E993B94003BF482 /* NewsDetailsView.swift */; };
 		E94218F02E8AA2FF00F24974 /* CharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94218EF2E8AA2FB00F24974 /* CharacterDetailView.swift */; };
 		E94218F22E8AA32000F24974 /* CharacterSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94218F12E8AA31D00F24974 /* CharacterSearchView.swift */; };
 		E94218F52E8AA38300F24974 /* CardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94218F42E8AA38300F24974 /* CardInfo.swift */; };
@@ -921,6 +922,7 @@
 		E90769D12E546D5B00C9871C /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		E90769D32E546D5B00C9871C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E9076E2E2E8B839D00A9F5AE /* SettingsAdvanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAdvanced.swift; sourceTree = "<group>"; };
+		E92401602E993B94003BF482 /* NewsDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDetailsView.swift; sourceTree = "<group>"; };
 		E94218EF2E8AA2FB00F24974 /* CharacterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailView.swift; sourceTree = "<group>"; };
 		E94218F12E8AA31D00F24974 /* CharacterSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterSearchView.swift; sourceTree = "<group>"; };
 		E94218F42E8AA38300F24974 /* CardInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardInfo.swift; sourceTree = "<group>"; };
@@ -1813,6 +1815,7 @@
 			children = (
 				E90769CA2E546D5500C9871C /* HomeView.swift */,
 				E90769CB2E546D5500C9871C /* NewsView.swift */,
+				E92401602E993B94003BF482 /* NewsDetailsView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2810,6 +2813,7 @@
 				E94219392E8AA7B300F24974 /* GachaDetailView.swift in Sources */,
 				E94219112E8AA51600F24974 /* SongInfo.swift in Sources */,
 				8CF827A92E8ACD380045CA97 /* LoginCampaignInfo.swift in Sources */,
+				E92401612E993B9D003BF482 /* NewsDetailsView.swift in Sources */,
 				E94219022E8AA43300F24974 /* CardDetailStatsView.swift in Sources */,
 				E94219242E8AA67E00F24974 /* DetailArtsView.swift in Sources */,
 				E94219192E8AA58800F24974 /* CostumeSearchView.swift in Sources */,

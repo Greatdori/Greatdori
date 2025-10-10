@@ -199,8 +199,44 @@ struct DetailsIDSwitcher<Content: View>: View {
     }
     
     var body: some View {
-        if sizeClass == .regular {
-            HStack(spacing: 0) {
+        Group {
+            if sizeClass == .regular {
+                HStack(spacing: 0) {
+                    Button(action: {
+                        if currentID > 1 {
+                            currentID = allIDs[(allIDs.firstIndex(where: { $0 == currentID }) ?? 0 ) - 1]
+                        }
+                    }, label: {
+                        Label("Detail.previous", systemImage: "arrow.backward")
+                    })
+                    .disabled(currentID <= 1 || currentID > allIDs.last ?? 0)
+                    NavigationLink(destination: {
+                        //                EventSearchView()
+                        destination()
+                    }, label: {
+                        Text("#\(String(currentID))")
+                            .fontDesign(.monospaced)
+                            .bold()
+                    })
+                    Button(action: {
+                        currentID = allIDs[(allIDs.firstIndex(where: { $0 == currentID }) ?? 0 ) + 1]
+                    }, label: {
+                        Label("Detail.next", systemImage: "arrow.forward")
+                    })
+                    .disabled(currentID >= allIDs.last ?? 0)
+                }
+                .disabled(currentID == 0)
+                .disabled(allIDs.isEmpty)
+            } else {
+                NavigationLink(destination: {
+                    destination()
+                }, label: {
+                    Image(systemName: "list.bullet")
+                })
+            }
+        }
+        .contextMenu {
+            Group {
                 Button(action: {
                     if currentID > 1 {
                         currentID = allIDs[(allIDs.firstIndex(where: { $0 == currentID }) ?? 0 ) - 1]
@@ -209,14 +245,6 @@ struct DetailsIDSwitcher<Content: View>: View {
                     Label("Detail.previous", systemImage: "arrow.backward")
                 })
                 .disabled(currentID <= 1 || currentID > allIDs.last ?? 0)
-                NavigationLink(destination: {
-                    //                EventSearchView()
-                    destination()
-                }, label: {
-                    Text("#\(String(currentID))")
-                        .fontDesign(.monospaced)
-                        .bold()
-                })
                 Button(action: {
                     currentID = allIDs[(allIDs.firstIndex(where: { $0 == currentID }) ?? 0 ) + 1]
                 }, label: {
@@ -226,12 +254,6 @@ struct DetailsIDSwitcher<Content: View>: View {
             }
             .disabled(currentID == 0)
             .disabled(allIDs.isEmpty)
-        } else {
-            NavigationLink(destination: {
-                destination()
-            }, label: {
-                Image(systemName: "list.bullet")
-            })
         }
     }
 }
