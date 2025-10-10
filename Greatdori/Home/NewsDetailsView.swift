@@ -31,28 +31,15 @@ struct NewsDetailView: View {
         self.title = title
     }
     
-    let newsDebugContent = """
-This is a comprehensive patch note for asset patch `9.2.0.180` (from `9.2.0.170`)
-
-## Assets
-
-New assets added:
-
-- ![Placeholder](greatdori://rich-content/event/1)
-- ![Placeholder](greatdori://rich-content/event/11)
-- ![Placeholder](greatdori://rich-content/event/12)
-- ![Placeholder](greatdori://rich-content/event/111)
-- ![Placeholder](greatdori://rich-content/event/159)
-- ![Placeholder](greatdori://rich-content/event/195)
-- ![Placeholder](greatdori://rich-content/event/222)
-"""
-    
     var body: some View {
         Group {
             if let information {
                 ScrollView {
-                    Markdown(newsDebugContent)
-                        .markdownImageProvider(.greatdoriRichContentProvider)
+                    VStack {
+                        Markdown(information.content.toMarkdown())
+                            .markdownImageProvider(.greatdoriRichContentProvider)
+                        Text(information.content.toMarkdown())
+                    }
                     //                    RichContentView(information.content.forRichRendering)
                     //                    Text("\(information)")
                     //                        .searchSelection()
