@@ -288,6 +288,7 @@
 		8CE186AF2E535DE0009C1C87 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE186AE2E535DDD009C1C87 /* Asset.swift */; };
 		8CE186B02E536138009C1C87 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; };
 		8CE186B12E536138009C1C87 /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0C99912E296A8C00549B5C /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8CEC34C02E9920DE00C26B4A /* DoriStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEC34BF2E9920D400C26B4A /* DoriStorage.swift */; };
 		8CF826D42E8AC1120045CA97 /* FallingWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */; };
 		8CF827A92E8ACD380045CA97 /* LoginCampaignInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF827A82E8ACD380045CA97 /* LoginCampaignInfo.swift */; };
 		8CF827AB2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF827AA2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift */; };
@@ -904,6 +905,7 @@
 		8CE1869D2E53529A009C1C87 /* OfflineResBundleGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OfflineResBundleGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CE186A82E5352D1009C1C87 /* CommandLineEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineEntry.swift; sourceTree = "<group>"; };
 		8CE186AE2E535DDD009C1C87 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		8CEC34BF2E9920D400C26B4A /* DoriStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoriStorage.swift; sourceTree = "<group>"; };
 		8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallingWebImage.swift; sourceTree = "<group>"; };
 		8CF827A82E8ACD380045CA97 /* LoginCampaignInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCampaignInfo.swift; sourceTree = "<group>"; };
 		8CF827AA2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCampaignSearchView.swift; sourceTree = "<group>"; };
@@ -1574,6 +1576,7 @@
 			children = (
 				8C7B4A032E7AA37A00EE0C89 /* DriverTopLevelTypes.swift.gyb */,
 				8C320FB02E8C1230002D183A /* DriverCommonProtocol.swift */,
+				8CEC34BF2E9920D400C26B4A /* DoriStorage.swift */,
 			);
 			path = Driver;
 			sourceTree = "<group>";
@@ -2938,6 +2941,7 @@
 				8C7F6B9A2E593AFE0040C206 /* DoriOfflineAsset.swift in Sources */,
 				8CD13FBD2E2FE2BF00673E15 /* DoriFrontend.swift in Sources */,
 				8C9474412E345BED003A90B4 /* Misc.swift in Sources */,
+				8CEC34C02E9920DE00C26B4A /* DoriStorage.swift in Sources */,
 				8C923D7A2E3046D0003AFC0A /* FrontendCharacter.swift in Sources */,
 				8CE186AF2E535DE0009C1C87 /* Asset.swift in Sources */,
 				8C923D892E305237003AFC0A /* FrontendEvent.swift in Sources */,
