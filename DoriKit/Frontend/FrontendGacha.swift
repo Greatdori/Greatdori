@@ -88,12 +88,21 @@ extension DoriFrontend.Gacha {
     public typealias PreviewGacha = DoriAPI.Gacha.PreviewGacha
     public typealias Gacha = DoriAPI.Gacha.Gacha
     
+    /// Represent extended gacha.
     public struct ExtendedGacha: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+        /// A unique ID of gacha.
         public var id: Int
+        /// The base gacha information.
         public var gacha: Gacha
+        /// The events that introduces this gacha.
         public var events: [DoriAPI.Event.PreviewEvent]
+        /// The pick-up cards in this gacha.
         public var pickupCards: [DoriAPI.Card.PreviewCard]
-        public var cardDetails: [Int: [DoriAPI.Card.PreviewCard]] // [Rarity: [Card]]
+        /// All cards in this gacha.
+        ///
+        /// This dictionary has a type of `[Int: [PreviewCard]]`,
+        /// which means `[Rarity: [CardInfo]]`.
+        public var cardDetails: [Int: [DoriAPI.Card.PreviewCard]]
     }
 }
 

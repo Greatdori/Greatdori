@@ -151,19 +151,32 @@ extension DoriFrontend.Card {
     public typealias PreviewCard = DoriAPI.Card.PreviewCard
     public typealias Card = DoriAPI.Card.Card
     
+    /// Represent a ``PreviewCard`` with a related ``DoriAPI/Band/Band``.
     public struct CardWithBand: Sendable, Hashable, DoriCache.Cacheable {
         public var card: PreviewCard
         public var band: DoriAPI.Band.Band
     }
+    /// Represent an extended card.
     public struct ExtendedCard: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+        /// A unique ID of card.
         public var id: Int
+        /// The base card information.
         public var card: Card
+        /// Extended sources of this card.
         public var cardSource: DoriAPI.LocalizedData<Set<Source>>
+        /// The related character of this card.
         public var character: DoriAPI.Character.PreviewCharacter
+        /// The band of the related character of this card.
         public var band: DoriAPI.Band.Band
+        /// The skill of this card.
         public var skill: DoriAPI.Skill.Skill
+        /// The costume of this card.
         public var costume: DoriAPI.Costume.PreviewCostume
+        /// The event which introduces this card.
+        ///
+        /// If no events introduce this card, all locales' data is `nil`.
         public var event: DoriAPI.LocalizedData<DoriAPI.Event.PreviewEvent>
+        /// Gacha that contain this card.
         public var gacha: [DoriAPI.Gacha.PreviewGacha]
         
         /// Represent a part of extended sources of a card.

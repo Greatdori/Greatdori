@@ -44,17 +44,20 @@ extension DoriAPI.Comic.Comic {
 }
 
 extension DoriAPI.Comic.Comic {
+    /// Type of a ``DoriAPI/Comic/Comic``.
     @frozen
     public enum ComicType: String, CaseIterable, Hashable, Codable {
         case singleFrame
         case fourFrame
         
+        /// A localized string for the type.
         @inline(never)
         public var localizedString: String {
             NSLocalizedString(rawValue, bundle: #bundle, comment: "")
         }
     }
     
+    /// Type of this comic, if can be determined.
     @inlinable
     public var type: ComicType? {
         self.id > 0 && self.id <= 1000 ? .singleFrame : self.id > 1000 ? .fourFrame : nil

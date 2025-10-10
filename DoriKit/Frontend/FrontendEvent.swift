@@ -369,40 +369,68 @@ extension DoriFrontend.Event {
     public typealias PreviewEvent = DoriAPI.Event.PreviewEvent
     public typealias Event = DoriAPI.Event.Event
     
+    /// Represent an extended event.
     public struct ExtendedEvent: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+        /// A unique ID of event.
         public var id: Int
+        /// The base event information.
         public var event: Event
+        /// The bands that participate in this event.
         public var bands: [DoriAPI.Band.Band]
+        /// The characters that participate in this event.
         public var characters: [DoriAPI.Character.PreviewCharacter]
+        /// The cards that related to this event.
         public var cards: [DoriAPI.Card.PreviewCard]
+        /// The gacha that related to relating cards to this event.
         public var gacha: [DoriAPI.Gacha.PreviewGacha]
+        /// The songs that were released during this event.
         public var songs: [DoriAPI.Song.PreviewSong]
+        /// The degrees that related to this event.
         public var degrees: [DoriAPI.Degree.Degree]
     }
     
+    /// Represent data of a user of top 10 in an event.
     public struct TopData: Sendable, Hashable, DoriCache.Cacheable {
+        /// A unique ID of user.
         public var uid: Int
+        /// The name of user.
         public var name: String
+        /// The custom introduction text of user.
         public var introduction: String
+        /// The rank of user.
         public var rank: Int
+        /// The card that is set to main by the user.
         public var card: DoriAPI.Card.PreviewCard
+        /// A boolean value that indicates whether the ``card`` is trained.
         public var trained: Bool
+        /// The degrees that the user displaying.
         public var degrees: [DoriAPI.Degree.Degree]
+        /// Time-related points data in an event of the user.
         public var points: [Point]
         
+        /// Represent a time-related event point data.
         public struct Point: Sendable, Hashable, DoriCache.Cacheable {
+            /// The time that binded to ``value``
             public var time: Date
+            /// The event point value.
             public var value: Int
         }
     }
     
+    /// Represent tracking data of an event.
     public struct TrackerData: Sendable, Hashable, DoriCache.Cacheable {
+        /// An array that contains all cutoff information in different time.
         public var cutoffs: [DataPoint]
+        /// An array that contains all prediction information in different time.
         public var predictions: [DataPoint]
         
+        /// Represent an event tracking data in some time.
         public struct DataPoint: Sendable, Hashable, DoriCache.Cacheable {
+            /// The time that binded to this data.
             public var time: Date
+            /// The event point value.
             public var ep: Int?
+            /// The event point increased in an hour.
             public var epph: Int?
         }
     }

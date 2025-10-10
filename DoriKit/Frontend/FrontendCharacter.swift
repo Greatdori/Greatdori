@@ -173,13 +173,21 @@ extension DoriFrontend.Character {
     public typealias CategorizedCharacters = [DoriAPI.Band.Band?: [PreviewCharacter]]
     public typealias Character = DoriAPI.Character.Character
     
+    /// Represent an extended character.
     public struct ExtendedCharacter: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+        /// A unique ID of character.
         public var id: Int
+        /// The base character information.
         public var character: Character
+        /// The band that the character belongs to, if present.
         public var band: DoriAPI.Band.Band?
+        /// Cards of this character.
         public var cards: [DoriAPI.Card.PreviewCard]
+        /// Costumes of this character.
         public var costumes: [DoriAPI.Costume.PreviewCostume]
+        /// Events that contain this character.
         public var events: [DoriAPI.Event.PreviewEvent]
+        /// Gacha that contain this character.
         public var gacha: [DoriAPI.Gacha.PreviewGacha]
         
         internal init(
@@ -214,6 +222,8 @@ extension DoriFrontend.Character.ExtendedCharacter {
 }
 
 extension DoriFrontend.Character.ExtendedCharacter {
+    /// Returns a random card of this character.
+    /// - Returns: A random card of this character.
     public func randomCard() -> DoriAPI.Card.PreviewCard? {
         self.cards.randomElement()
     }

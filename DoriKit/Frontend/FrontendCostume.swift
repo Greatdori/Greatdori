@@ -107,12 +107,18 @@ extension DoriFrontend.Costume {
     public typealias PreviewCostume = DoriAPI.Costume.PreviewCostume
     public typealias Costume = DoriAPI.Costume.Costume
     
+    /// Represent an extended costume.
     public struct ExtendedCostume: Sendable, Identifiable, Hashable, DoriCache.Cacheable {
+        /// The base costume information.
         public var costume: Costume
+        /// The character who takes this costume.
         public var character: DoriAPI.Character.PreviewCharacter
+        /// The band that the character taking this costume belongs to.
         public var band: DoriAPI.Band.Band
+        /// The cards of the character who takes this costume.
         public var cards: [DoriAPI.Card.PreviewCard]
         
+        /// A unique ID of costume.
         @inlinable
         public var id: Int {
             costume.id
