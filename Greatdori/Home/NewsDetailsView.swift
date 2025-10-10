@@ -31,7 +31,6 @@ struct NewsDetailView: View {
         self.title = title
     }
     
-    
     let newsDebugContent = """
 This is a comprehensive patch note for asset patch `9.2.0.180` (from `9.2.0.170`)
 
@@ -54,8 +53,6 @@ New assets added:
                 ScrollView {
                     Markdown(newsDebugContent)
                         .markdownImageProvider(.greatdoriRichContentProvider)
-                    
-                    
                     //                    RichContentView(information.content.forRichRendering)
                     //                    Text("\(information)")
                     //                        .searchSelection()
@@ -101,7 +98,7 @@ New assets added:
 }
 
 struct GreatdoriRichContentProvider: ImageProvider {
-    let validContentSources = ["event"]
+    private let validContentSources = ["asset", "event"]
     func makeImage(url: URL?) -> some View {
         if let richContentID = extractRichContentIDFromPath(url), validContentSources.contains(richContentID.0) {
             GreatdoriRichContentRenderer(richContentID: richContentID)
@@ -112,28 +109,35 @@ struct GreatdoriRichContentProvider: ImageProvider {
         }
     }
     
-    func extractRichContentIDFromPath(_ url: URL?) -> (String, Int)? {
+    func extractRichContentIDFromPath(_ url: URL?) -> (String, String)? {
         guard url != nil else { return nil }
         if url!.absoluteString.hasPrefix("greatdori://rich-content/") {
             let path = url!.absoluteString.dropFirst("greatdori://rich-content/".count)
             let spliitedPath = path.split(separator: "/")
             
             guard spliitedPath.count >= 2 else { return nil }
-            guard Int(spliitedPath[1]) != nil else { return nil }
-            
-            return (String(spliitedPath[0]), Int(spliitedPath[1])!)
+            if spliitedPath.first == "asset" {
+                return (String(spliitedPath[0]), String(path.dropFirst("asset/".count)))
+            } else if validContentSources.contains(String(spliitedPath.first ?? "")) {
+                guard Int(spliitedPath[1]) != nil else { return nil }
+                return (String(spliitedPath[0]), String(spliitedPath[1]))
+            } else {
+                return nil
+            }
         } else {
             return nil
         }
     }
     
     private struct GreatdoriRichContentRenderer: View {
-        var richContentID: (String, Int)
+        var richContentID: (String, String)
         @State var information: Any? = nil
         var body: some View {
             Group {
                 if let information {
                     switch richContentID.0 {
+                    case "asset":
+                        Text(richContentID.1)
                     case "event":
                         EventInfo(information as! Event)
                     default:
@@ -146,13 +150,19 @@ struct GreatdoriRichContentProvider: ImageProvider {
             }
             .padding(5)
             .onAppear {
-                Task {
-                    switch richContentID.0 {
-                    case "event":
-                        information = await Event(id: richContentID.1)
-                    default:
-                        information = 0
+                if richContentID.0 == "asset" {
+                    
+                } else if let numericalID = Int(richContentID.1) {
+                    Task {
+                        switch richContentID.0 {
+                        case "event":
+                            information = await Event(id: numericalID)
+                        default:
+                            information = 0
+                        }
                     }
+                } else {
+                    information = 0
                 }
             }
         }
