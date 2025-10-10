@@ -1840,7 +1840,6 @@
       }
     },
     "Details.cards.unavailable" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1873,7 +1872,6 @@
       }
     },
     "Details.costumes.unavailable" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -8283,6 +8281,9 @@
     "检查器" : {
 
     },
+    "正在载入…" : {
+
+    },
     "眨眼" : {
 
     },
@@ -8293,6 +8294,9 @@
 
     },
     "记录" : {
+
+    },
+    "载入数据时出错" : {
 
     },
     "退出" : {
