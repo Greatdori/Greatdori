@@ -113,8 +113,6 @@ extension EnvironmentValues {
     @Entry fileprivate var l2dVSyncEnabled = true
     @Entry fileprivate var l2dZoomFactor: CGFloat?
     @Entry fileprivate var l2dCoordinateMatrix: String?
-    @Entry fileprivate var l2dOnModelLoadSuccess: (() -> Void)?
-    @Entry fileprivate var l2dOnModelLoadFailure: ((any Error) -> Void)?
 }
 extension View {
     /// Adds a condition that controls whether Live 2D views apply
@@ -250,14 +248,6 @@ extension View {
         environment(\.l2dLipSyncValue, value)
     }
     
-    public func onLive2DLoadSuccess(perform action: @escaping () -> Void) -> some View {
-        environment(\.l2dOnModelLoadSuccess, action)
-    }
-    
-    public func onLive2DLoadFailure(perform action: @escaping (any Error) -> Void) -> some View {
-        environment(\.l2dOnModelLoadFailure, action)
-    }
-    
     public func _live2dVerticalSyncDisabled(_ disabled: Bool = true) -> some View {
         environment(\.l2dVSyncEnabled, !disabled)
     }
@@ -320,16 +310,6 @@ extension Array<Live2DParameter> {
         }
     }
 }
-public struct Live2DLoadError: Error, CustomStringConvertible, CustomDebugStringConvertible {
-    internal var _message: String
-    
-    public var description: String {
-        "Live2DLoadError"
-    }
-    public var debugDescription: String {
-        "Live2DLoadError: \(_message)"
-    }
-}
 
 #if os(macOS)
 
@@ -340,7 +320,6 @@ private struct _Live2DNativeView: NSViewRepresentable {
         webView.underPageBackgroundColor = .clear
         webView.setValue(false, forKey: "drawsBackground")
         webView.configuration.userContentController.add(context.coordinator, name: "paramHandler")
-        webView.configuration.userContentController.add(context.coordinator, name: "loadHandler")
         #if DEBUG
         webView.isInspectable = true
         #endif
@@ -392,7 +371,6 @@ private struct _Live2DNativeView: UIViewRepresentable {
         webView.scrollView.panGestureRecognizer.isEnabled = false
         webView.scrollView.bounces = false
         webView.configuration.userContentController.add(context.coordinator, name: "paramHandler")
-        webView.configuration.userContentController.add(context.coordinator, name: "loadHandler")
         #if DEBUG
         webView.isInspectable = true
         #endif
@@ -452,12 +430,6 @@ private class _NativeViewCoordinator: NSObject, WKScriptMessageHandler {
         if _fastPath(message.name == "paramHandler") {
             if let binding = currentEnvrionment.l2dParamBinding, binding.0 || binding.1.wrappedValue.isEmpty {
                 binding.1.wrappedValue = .init(json: .init(parseJSON: message.body as! String))
-            }
-        } else if message.name == "loadHandler", let result = message.body as? String {
-            if result == "Success" {
-                currentEnvrionment.l2dOnModelLoadSuccess?()
-            } else {
-                currentEnvrionment.l2dOnModelLoadFailure?(Live2DLoadError(_message: result))
             }
         }
     }
@@ -599,11 +571,10 @@ private func setupWebView(_ webView: WKWebView, with model: Live2DModel, env: En
                     loadedImages[tno].onload = function(){
                         if((++loadCount) == modelDef.textures.length) {
                             loadLive2DCompleted = true;
-                            window.webkit.messageHandlers.loadHandler.postMessage("Success");
                         }
                     }
                     loadedImages[tno].onerror = function() {
-                        window.webkit.messageHandlers.loadHandler.postMessage("Failed to load texture: " + modelDef.textures[tno]);
+                        Simple.myerror("Failed to load image : " + modelDef.textures[tno]);
                     }
                 })( i );
             }
