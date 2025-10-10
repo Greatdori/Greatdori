@@ -30,11 +30,6 @@ struct InteractiveStoryView: View {
     @State var bgmLooper: AVPlayerLooper!
     @State var sePlayer = AVPlayer()
     var voicePlayer: UnsafeMutablePointer<AVAudioPlayer>
-    @State var live2dLoadSuccessCount = 0
-    @State var voiceLoadSuccessCount = 0
-    @State var loadErrorMessages = [String]()
-    @State var isShowingLoadingOverlay = true
-    @State var isShowingLoadingErrorOverlay = false
     @State var currentSnippetIndex = -1
     @State var currentTelop: String?
     @State var allDiffLayouts = [DoriAPI.Misc.StoryAsset.LayoutData]()
@@ -111,12 +106,6 @@ struct InteractiveStoryView: View {
                                     .environment(\._layoutViewVisible, showingLayoutIndexs.contains(index))
                                     .animation(.spring(duration: 0.4, bounce: 0.2), value: layout)
                                     .animation(.spring(duration: 0.4, bounce: 0.25), value: showingLayoutIndexs)
-                                    .onLive2DLoadSuccess {
-                                        live2dLoadSuccessCount += 1
-                                    }
-                                    .onLive2DLoadFailure { error in
-                                        loadErrorMessages.append((error as CustomDebugStringConvertible).debugDescription)
-                                    }
                             }
                             Spacer()
                         }
@@ -176,33 +165,6 @@ struct InteractiveStoryView: View {
                 .fill(Color.black)
                 .opacity(isShowingBlackCover ? 1 : 0)
                 .ignoresSafeArea()
-            
-            if isShowingLoadingOverlay {
-                ZStack {
-                    Rectangle()
-                        .fill(.background)
-                    VStack {
-                        ProgressView()
-                            .controlSize(.large)
-                        Text("正在载入…")
-                    }
-                }
-                .ignoresSafeArea()
-            }
-            
-            if isShowingLoadingErrorOverlay {
-                ZStack {
-                    Rectangle()
-                        .fill(.background)
-                    VStack {
-                        Text("载入数据时出错")
-                        ForEach(loadErrorMessages, id: \.self) { message in
-                            Text(message)
-                        }
-                    }
-                }
-                .ignoresSafeArea()
-            }
         }
         .background {
             WebImage(url: backgroundImageURL)
@@ -281,6 +243,7 @@ struct InteractiveStoryView: View {
             backgroundImageURL = .init(string: "https://bestdori.com/assets/jp/\(asset.firstBackgroundBundleName)_rip/\(asset.firstBackground).png")!
             let bgmItem = AVPlayerItem(url: .init(string: "https://bestdori.com/assets/jp/sound/scenario/bgm/\(asset.firstBGM.lowercased())_rip/\(asset.firstBGM).mp3")!)
             bgmLooper = .init(player: bgmPlayer, templateItem: bgmItem)
+            bgmPlayer.play()
             
             for layout in asset.layoutData {
                 if !layout.costumeType.isEmpty && !allDiffLayouts.contains(where: {
@@ -297,25 +260,13 @@ struct InteractiveStoryView: View {
                         if let data = try? Data(contentsOf: URL(string: "\(voiceBundleURL.absoluteString)_rip/\(voice.voiceID).mp3")!) {
                             DispatchQueue.main.async {
                                 talkAudios.updateValue(data, forKey: voice)
-                                voiceLoadSuccessCount += 1
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                loadErrorMessages.append("Failed to load voice '\(voice.voiceID)'")
                             }
                         }
                     }
                 }
             }
-        }
-        .onChange(of: live2dLoadSuccessCount) {
-            processLoadingProgressChange()
-        }
-        .onChange(of: voiceLoadSuccessCount) {
-            processLoadingProgressChange()
-        }
-        .onChange(of: loadErrorMessages) {
-            processLoadingProgressChange()
+            
+            next()
         }
     }
     
@@ -362,23 +313,6 @@ struct InteractiveStoryView: View {
         }
         .menuStyle(.button)
         .menuIndicator(.hidden)
-    }
-    
-    func processLoadingProgressChange() {
-        if !loadErrorMessages.isEmpty {
-            isShowingLoadingErrorOverlay = true
-            return
-        }
-        
-        let voiceCount = asset.talkData.flatMap { $0.voices }.count
-        
-        if live2dLoadSuccessCount == allDiffLayouts.count
-            && voiceLoadSuccessCount == voiceCount {
-            isShowingLoadingOverlay = false
-            
-            bgmPlayer.play()
-            next()
-        }
     }
     
     func next(ignoresDelay: Bool = false) {
