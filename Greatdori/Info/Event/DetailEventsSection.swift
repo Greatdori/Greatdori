@@ -23,7 +23,6 @@ struct DetailsEventsSection: View {
     var event: DoriAPI.LocalizedData<PreviewEvent>?
     var sources: DoriAPI.LocalizedData<Set<DoriFrontend.Card.ExtendedCard.Source>>?
     var applyLocaleFilter: Bool = false
-    //    var withSourceSubtitle: Bool
     @State var locale: DoriLocale = DoriLocale.primaryLocale
     @State var eventsFromList: [PreviewEvent] = []
     @State var eventsFromSources: [PreviewEvent] = []
@@ -36,74 +35,36 @@ struct DetailsEventsSection: View {
         self.event = nil
         self.sources = nil
         self.applyLocaleFilter = applyLocaleFilter
-        //        self.withSourceSubtitle = false
         self.sourcePreference = 0
     }
-    
     init(event: DoriAPI.LocalizedData<PreviewEvent>, sources: DoriAPI.LocalizedData<Set<DoriFrontend.Card.ExtendedCard.Source>>) {
         self.events = nil
         self.event = event
         self.sources = sources
         self.applyLocaleFilter = true
-        //        self.withSourceSubtitle = true
         self.sourcePreference = 1
     }
+    
     var body: some View {
-        LazyVStack(pinnedViews: .sectionHeaders) {
-            Section(content: {
-                Group {
-                    if getEventsCount() > 0 {
-                        if sourcePreference == 0 {
-                            ForEach((showAll ? eventsFromList : Array(eventsFromList.prefix(3))), id: \.self) { item in
-                                NavigationLink(destination: {
-                                    EventDetailView(id: item.id)
-                                }, label: {
-                                    EventInfo(item, showDetails: true)
-                                        .frame(maxWidth: 600)
-                                })
-                                .buttonStyle(.plain)
-                            }
-                        } else {
-                            ForEach((showAll ? eventsFromSources : Array(eventsFromSources.prefix(3))), id: \.self) { item in
-                                NavigationLink(destination: {
-                                    EventDetailView(id: item.id)
-                                }, label: {
-                                    EventInfo(item, subtitle: (pointsDict[item] == nil ? "Details.source.release-during-event" :"Details.events.source.rewarded-at-points.\(pointsDict[item]!)"), showDetails: true)
-                                        .frame(maxWidth: 600)
-                                })
-                                .buttonStyle(.plain)
-                            }
-                        }
-                    } else {
-                        DetailUnavailableView(title: "Details.events.unavailable", symbol: "star.hexagon")
-                    }
-                }
-                .frame(maxWidth: 600)
-            }, header: {
-                HStack {
-                    Text("Details.events")
-                        .font(.title2)
-                        .bold()
-                    if applyLocaleFilter {
-                        DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
-                    }
-                    Spacer()
-                    if getEventsCount() > 3 {
-                        Button(action: {
-                            showAll.toggle()
-                        }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(getEventsCount())")
-                                .foregroundStyle(.secondary)
-                            //                        .font(.caption)
-                        })
-                        .buttonStyle(.plain)
-                    }
-                    //                .alignmentGuide(.bottom, computeValue: 0)
-                    
-                }
-                .frame(maxWidth: 615)
-            })
+        DetailSectionBase("Details.events", elements: sourcePreference == 0 ? eventsFromList : eventsFromSources) { item in
+            if sourcePreference == 0 {
+                NavigationLink(destination: {
+                    EventDetailView(id: item.id)
+                }, label: {
+                    EventInfo(item, showDetails: true)
+                        .frame(maxWidth: 600)
+                })
+            } else {
+                NavigationLink(destination: {
+                    EventDetailView(id: item.id)
+                }, label: {
+                    EventInfo(item, subtitle: (pointsDict[item] == nil ? "Details.source.release-during-event" :"Details.events.source.rewarded-at-points.\(pointsDict[item]!)"), showDetails: true)
+                        .frame(maxWidth: 600)
+                })
+            }
         }
+        .contentUnavailablePrompt("Details.events.unavailable")
+        .contentUnavailableImage(systemName: "star.hexagon")
         .onAppear {
             handleEvents()
         }

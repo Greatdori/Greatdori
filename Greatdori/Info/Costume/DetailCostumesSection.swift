@@ -19,71 +19,16 @@ import SwiftUI
 // MARK: DetailsCostumesSection
 struct DetailsCostumesSection: View {
     var costumes: [PreviewCostume]
-    var applyLocaleFilter = false
-    @State var locale: DoriLocale = DoriLocale.primaryLocale
-    @State var costumesSorted: [PreviewCostume] = []
-    @State var showAll = false
     var body: some View {
-        LazyVStack(pinnedViews: .sectionHeaders) {
-            Section(content: {
-                Group {
-                    if !costumesSorted.isEmpty {
-                        ForEach((showAll ? costumesSorted : Array(costumesSorted.prefix(3))), id: \.self) { item in
-                            NavigationLink(destination: {
-                                CostumeDetailView(id: item.id)
-                            }, label: {
-                                //                    CustomGroupBox {
-                                CostumeInfo(item)
-                                    .scaledToFill()
-                                    .frame(maxWidth: 600)
-                                    .scaledToFill()
-                                //                    }
-                            })
-                            .buttonStyle(.plain)
-                        }
-                    } else {
-                        DetailUnavailableView(title: "Details.costumes.unavailable", symbol: "swatchpalette")
-                    }
-                }
-                .frame(maxWidth: 600)
-            }, header: {
-                HStack {
-                    Text("Details.costumes")
-                        .font(.title2)
-                        .bold()
-                    if applyLocaleFilter {
-                        DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
-                        //                        DetailsLocalePicker(locale: $locale)
-                    }
-                    Spacer()
-                    if costumesSorted.count > 3 {
-                        Button(action: {
-                            showAll.toggle()
-                        }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(costumesSorted.count)")
-                                .foregroundStyle(.secondary)
-                            //                        .font(.caption)
-                        })
-                        .buttonStyle(.plain)
-                    }
-                    //                .alignmentGuide(.bottom, computeValue: 0)
-                    
-                }
-                .frame(maxWidth: 615)
-                //            .border(.red)
+        DetailSectionBase("Details.costumes", elements: costumes.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: .jp)))) { item in
+            NavigationLink(destination: {
+                CostumeDetailView(id: item.id)
+            }, label: {
+                CostumeInfo(item)
+                    .frame(maxWidth: 600)
             })
         }
-        .onAppear {
-            costumesSorted = costumes.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
-            if applyLocaleFilter {
-                costumesSorted = costumesSorted.filter{$0.publishedAt.availableInLocale(locale)}
-            }
-        }
-        .onChange(of: locale) {
-            costumesSorted = costumes.sorted(withDoriSorter: DoriFrontend.Sorter(keyword: .releaseDate(in: applyLocaleFilter ? locale : .jp)))
-            if applyLocaleFilter {
-                costumesSorted = costumesSorted.filter{$0.publishedAt.availableInLocale(locale)}
-            }
-        }
+        .contentUnavailablePrompt("Details.costumes.unavailable")
+        .contentUnavailableImage(systemName: "swatchpalette")
     }
 }

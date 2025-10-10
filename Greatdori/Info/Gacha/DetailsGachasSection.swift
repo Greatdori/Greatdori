@@ -22,7 +22,6 @@ struct DetailsGachasSection: View {
     var gachas: [PreviewGacha]?
     var sources: DoriAPI.LocalizedData<Set<DoriFrontend.Card.ExtendedCard.Source>>?
     var applyLocaleFilter: Bool = false
-    //    var withSourceSubtitle: Bool
     @State var locale: DoriLocale = DoriLocale.primaryLocale
     @State var gachasFromList: [PreviewGacha] = []
     @State var gachasFromSources: [PreviewGacha] = []
@@ -34,73 +33,35 @@ struct DetailsGachasSection: View {
         self.gachas = gachas
         self.sources = nil
         self.applyLocaleFilter = applyLocaleFilter
-        //        self.withSourceSubtitle = false
         self.sourcePreference = 0
     }
-    
     init(sources: DoriAPI.LocalizedData<Set<DoriFrontend.Card.ExtendedCard.Source>>) {
         self.gachas = nil
         self.sources = sources
         self.applyLocaleFilter = true
-        //        self.withSourceSubtitle = true
         self.sourcePreference = 1
     }
+    
     var body: some View {
-        LazyVStack(pinnedViews: .sectionHeaders) {
-            Section(content: {
-                Group {
-                    if getGachasCount() > 0 {
-                        if sourcePreference == 0 {
-                            ForEach((showAll ? gachasFromList : Array(gachasFromList.prefix(3))), id: \.self) { item in
-                                NavigationLink(destination: {
-                                    GachaDetailView(id: item.id)
-                                }, label: {
-                                    GachaInfo(item)
-                                        .frame(maxWidth: 600)
-                                })
-                                .buttonStyle(.plain)
-                            }
-                        } else {
-                            ForEach((showAll ? gachasFromSources : Array(gachasFromSources.prefix(3))), id: \.self) { item in
-                                NavigationLink(destination: {
-                                    GachaDetailView(id: item.id)
-                                }, label: {
-                                    GachaInfo(item, subtitle: unsafe "Details.gachas.source.chance.\(String(format: "%.2f", (probabilityDict[item] ?? 0)*100) + String("%"))", showDetails: true)
-                                        .frame(maxWidth: 600)
-                                })
-                                .buttonStyle(.plain)
-                            }
-                        }
-                    } else {
-                        DetailUnavailableView(title: "Details.gachas.unavailable", symbol: "line.horizontal.star.fill.line.horizontal")
-                    }
-                }
-                .frame(maxWidth: 600)
-            }, header: {
-                HStack {
-                    Text("Details.gachas")
-                        .font(.title2)
-                        .bold()
-                    if applyLocaleFilter {
-                        DetailSectionOptionPicker(selection: $locale, options: DoriLocale.allCases)
-                    }
-                    Spacer()
-                    if getGachasCount() > 3 {
-                        Button(action: {
-                            showAll.toggle()
-                        }, label: {
-                            Text(showAll ? "Details.show-less" : "Details.show-all.\(getGachasCount())")
-                                .foregroundStyle(.secondary)
-                            //                        .font(.caption)
-                        })
-                        .buttonStyle(.plain)
-                    }
-                    //                .alignmentGuide(.bottom, computeValue: 0)
-                    
-                }
-                .frame(maxWidth: 615)
-            })
+        DetailSectionBase("Details.gachas", elements: sourcePreference == 0 ? gachasFromList : gachasFromSources) { item in
+            if sourcePreference == 0 {
+                NavigationLink(destination: {
+                    GachaDetailView(id: item.id)
+                }, label: {
+                    GachaInfo(item)
+                        .frame(maxWidth: 600)
+                })
+            } else {
+                NavigationLink(destination: {
+                    GachaDetailView(id: item.id)
+                }, label: {
+                    GachaInfo(item, subtitle: unsafe "Details.gachas.source.chance.\(String(format: "%.2f", (probabilityDict[item] ?? 0)*100) + String("%"))", showDetails: true)
+                        .frame(maxWidth: 600)
+                })
+            }
         }
+        .contentUnavailablePrompt("Details.gachas.unavailable")
+        .contentUnavailableImage(systemName: "line.horizontal.star.fill.line.horizontal")
         .onAppear {
             handleGachas()
         }
