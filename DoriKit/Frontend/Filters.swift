@@ -784,13 +784,13 @@ extension DoriFrontend.Filter.Key {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
             })
         case .level:
-            (.single, InMemoryCache.readAll().map {
+            (.single, InMemoryCache.skills?.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
-            })
+            } ?? [])
         case .skill:
-            (.single, InMemoryCache.readAll().map {
+            (.single, InMemoryCache.skills?.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
-            })
+            } ?? [])
         case .timelineStatus:
             (.multiple, DoriFrontend.Filter.TimelineStatus.allCases.map {
                 SelectorItem(DoriFrontend.Filter._AnySelectable($0))
