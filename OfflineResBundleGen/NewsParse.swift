@@ -24,7 +24,8 @@ func getRecentAssetPatchNotes(untilID: Int) async -> [DoriFrontend.News.ListItem
     let allNews = await DoriFrontend.News.list(filter: .patchNote)
     guard allNews != nil else { return nil }
     let assetPatchNotes = allNews!.filter { $0.tags.contains("Asset") }.sorted(by: { $0.relatedID > $1.relatedID })
-    return Array(assetPatchNotes.prefix(while: { $0.relatedID >= untilID }))
+    return Array(assetPatchNotes.prefix(while: { $0.relatedID > untilID }))
+    // If last time's lastest news is #3417, then next time #3417 should not be checked. So use > not >=.
 }
 
 func getDatasInAseetPatchNotes(from patchNoteContents: [DoriAPI.News.Item.Content]) -> [String] {
@@ -63,7 +64,7 @@ func getDatasInAseetPatchNotes(from patchNoteContents: [DoriAPI.News.Item.Conten
     return result
 }
 
-func searchAllUpdateRequiredAssets(untilID: Int) async -> [DoriLocale: Set<String>]? {
+func searchForAssetUpdate(untilID: Int) async -> [DoriLocale: Set<String>]? {
     print("[$][Search] Searching starts with untilID #\(untilID).")
     let recentNotes = await getRecentAssetPatchNotes(untilID: untilID)
     if let recentNotes {

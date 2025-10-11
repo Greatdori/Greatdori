@@ -45,6 +45,7 @@ struct CommandLineEntry: AsyncParsableCommand {
         } else if locale == .doriResource {
             try await generateDoriResource(to: output)
         } else if locale == .debug {
+            await searchForAssetUpdate(untilID: 8530)
             await prepareUpdateFolder(forLocale: .jp, from: "/Users/himmel/gd-offline-res", to: output.absoluteString)
         } else {
             print("Generating for \(locale.rawValue.uppercased())...\n")
