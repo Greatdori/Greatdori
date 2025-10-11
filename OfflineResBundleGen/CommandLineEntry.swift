@@ -90,7 +90,8 @@ struct CommandLineEntry: AsyncParsableCommand {
 }
 
 func debugProcess(output: URL, token: String?) async {
+//    print(await readLastID())
+//    await updateLastID()
     print(await readLastID())
-    await updateLastID()
 //    await prepareUpdateFolder(forLocale: .jp, from: "/Users/himmel/gd-offline-res", to: output.absoluteString)
 }
