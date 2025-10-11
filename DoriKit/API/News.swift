@@ -421,6 +421,9 @@ extension DoriAPI.News {
         public var timestamp: Date // String(JSON) -> Date(Swift)
         /// Tags of news.
         public var tags: [String]
+        public var locale: DoriAPI.Locale? {
+            tags.compactMap { DoriLocale(rawValue: $0.lowercased()) }.first
+        }
         public var content: [Content]
         
         public enum Content: Sendable, Hashable, DoriCache.Cacheable {

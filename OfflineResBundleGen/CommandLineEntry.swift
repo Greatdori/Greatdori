@@ -44,6 +44,8 @@ struct CommandLineEntry: AsyncParsableCommand {
             await generateAPI(to: output)
         } else if locale == .doriResource {
             try await generateDoriResource(to: output)
+        } else if locale == .debug {
+            await prepareUpdateFolder(forLocale: .jp, from: "/Users/himmel/gd-offline-res", to: output.absoluteString)
         } else {
             print("Generating for \(locale.rawValue.uppercased())...\n")
             let localizedOutput = output.appending(path: locale.rawValue)
@@ -63,6 +65,7 @@ struct CommandLineEntry: AsyncParsableCommand {
         case cn
         case kr
         case doriResource
+        case debug
         
         var apiLocale: DoriAPI.Locale {
             switch self {
