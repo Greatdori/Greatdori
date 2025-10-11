@@ -66,6 +66,7 @@ func updateLocale(datas: [String], forLocale locale: DoriLocale, to destination:
     // III. Handle Grouped Datas
     for (branch, datas) in groupedDatas {
         do {
+            print("[$][Update][\(locale.rawValue)/\(branch)] Started with \(datas.count) item(s).")
             // 1. Pull
             let script = #"""
 set -euo pipefail

@@ -92,7 +92,7 @@ struct CommandLineEntry: AsyncParsableCommand {
 func debugProcess(output: URL, token: String?) async {
 //    print(await readLastID())
 //    await updateLastID()
-    print(await readLastID())
-    print(await writeLastID(id: 8541))
+//    print(await readLastID())
+    print(NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen")
 //    await prepareUpdateFolder(forLocale: .jp, from: "/Users/himmel/gd-offline-res", to: output.absoluteString)
 }
