@@ -17,8 +17,9 @@ import Foundation
 // Copyright Notice: Code below this line (and above the next Copyright Notice) is supplied by Apple.
 // License: Apple Sample Code License (https://developer.apple.com/support/downloads/terms/apple-sample-code/Apple-Sample-Code-License.pdf)
 
+@MainActor
 func launch(tool: URL, arguments: [String] = [], input: Data = Data(), completionHandler: @escaping CompletionHandler) {
-    dispatchPrecondition(condition: .onQueue(.main))
+//    dispatchPrecondition(condition: .onQueue(.main))
     
     let group = DispatchGroup()
     let inputPipe = Pipe()
@@ -90,7 +91,7 @@ typealias CompletionHandler = (_ result: Result<Int32, Error>, _ output: Data) -
 
 // Copyright Notice: Code below this line is no longer from Apple.
 
-
+@MainActor
 func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [String] = [], input: Data = Data()) async throws -> (status: Int32, output: Data) {
     try await withCheckedThrowingContinuation { continuation in
         launch(tool: tool, arguments: arguments, input: input) { result, output in

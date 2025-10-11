@@ -95,7 +95,7 @@ func searchForAssetUpdate(untilID: Int) async -> [DoriLocale: Set<String>]? {
                 print("[$][Search] \(locale.rawValue.uppercased()) has \(result[locale]!.count) items waiting for update.")
             }
         }
-        print("[$][Search] Search completed. $ ")
+        print("[$][Search] Search completed.")
         return result
     } else {
         print("[×][Search] Failed getting recent asset patch note with untilID #\(untilID).")
