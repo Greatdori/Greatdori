@@ -24,6 +24,8 @@ struct CommandLineEntry: AsyncParsableCommand {
     var output: URL
     @Option
     var maxConnectionCount: Int = 20
+    @Option(name: .shortAndLong, help: "The Github token used to upload data.")
+    var token: String? = nil
     mutating func run() async throws {
         var isDirectory: ObjCBool = false
         if !FileManager.default.fileExists(atPath: output.path(percentEncoded: false), isDirectory: &isDirectory) {
@@ -34,6 +36,10 @@ struct CommandLineEntry: AsyncParsableCommand {
         }
         
         LimitedTaskQueue.shared = .init(limit: maxConnectionCount)
+        
+//        if token == nil {
+//            print("[!] Didn't receive any token.")
+//        }
         
         if locale == .all {
             await generateAPI(to: output)
@@ -46,8 +52,7 @@ struct CommandLineEntry: AsyncParsableCommand {
             try await generateDoriResource(to: output)
         } else if locale == .debug {
             print("[$][DEBUG] Start Debug Process")
-            await searchForAssetUpdate(untilID: 8530)
-            await prepareUpdateFolder(forLocale: .jp, from: "/Users/himmel/gd-offline-res", to: output.absoluteString)
+            await debugProcess(output: output, token: token)
         } else {
             print("Generating for \(locale.rawValue.uppercased())...\n")
             let localizedOutput = output.appending(path: locale.rawValue)
@@ -79,4 +84,10 @@ struct CommandLineEntry: AsyncParsableCommand {
             }
         }
     }
+}
+
+func debugProcess(output: URL, token: String?) async {
+    print(await readLastID())
+    await updateLastID()
+//    await prepareUpdateFolder(forLocale: .jp, from: "/Users/himmel/gd-offline-res", to: output.absoluteString)
 }

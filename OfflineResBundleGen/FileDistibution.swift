@@ -13,50 +13,236 @@
 //===----------------------------------------------------------------------===//
 
 import DoriKit
+import Foundation
 
-
-func prepareUpdateFolder(forLocale locale: DoriLocale, from: String, to: String) async {
-    let branches: [String] = ["basic", "movie", "sound", "unsupported"]
-    print("[$][Prepare][\(locale.rawValue)] Preparation starts.")
-    //    Task {
-    for branchName in branches {
-        await prepareUpdateFolderForBranch(forLocale: locale, branchName: branchName, from: from, to: to)
-    }
-    //    }
-    print("[$][Prepare][\(locale.rawValue)] Preparation completed.")
+func updateAssets(in destination: URL, withToken token: String?) async {
+    print("[$][Main] Main starts.")
     
-    func prepareUpdateFolderForBranch(forLocale locale: DoriLocale, branchName: String, from: String, to: String) async {
+    guard token != nil else {
+        print("[×][Main] Token is `nil`. Aborting.")
+        return
+    }
+    
+    var lastID = await readLastID()
+    if lastID != nil {
+        print("[$][Main] Last ID read as #\(lastID!).")
+    } else {
+        print("[×][Main] Last ID could not be read. Aborting.")
+        return
+    }
+    
+    let assetsForUpdate = await searchForAssetUpdate(lastID: lastID!)
+    
+    guard assetsForUpdate != nil else {
+        print("[×][Main] Search result is `nil`.")
+        return
+    }
+    
+    for (locale, datas) in assetsForUpdate! {
+        await updateLocale(datas: Array(datas), forLocale: locale, to: destination, withToken: token!)
+    }
+    
+    lastID = await updateLastID()
+    if lastID != nil {
+        print("[$][Main] Last ID updated.")
+    } else {
+        print("[×][Main] Last ID update failed.")
+    }
+    
+    print("[✓][Main] Process all done.")
+}
+
+func updateLocale(datas: [String], forLocale locale: DoriLocale, to destination: URL, withToken token: String) async {
+    // I. Initiailzization
+    print("[$][Update][\(locale.rawValue)] Update process starts.")
+    var groupedDatas: [String: [String]] = [:]
+    
+    // II. Divide Data in Groups
+    for data in datas {
+        let branch = analyzePathBranch(data)
+        groupedDatas.updateValue((groupedDatas[branch] ?? []) + [data], forKey: branch)
+    }
+    
+    // III. Handle Grouped Datas
+    for (branch, datas) in groupedDatas {
         do {
-            // Compose branch/path like "$1/$2" => "<locale>/<target>"
-            let branchPath = "\(locale.rawValue)/\(branchName)"
-            
+            // 1. Pull
             let script = #"""
 set -euo pipefail
 
-git config --global --add safe.directory "\#(from)"
-cd "\#(from)"
+git config --global --add safe.directory "\#(destination.absoluteString)"
+cd "\#(destination.absoluteString)"
 
-git checkout "\#(branchPath)"
+git checkout "\#(locale.rawValue)/\#(branch)"
 
 # Retry git pull --rebase up to 10 times
 for i in {1..10}; do
   if git pull --rebase; then
     break
   fi
-  sleep 1
 done
-
-cp -Rf "./\#(locale.rawValue)/" "\#(to)/\#(locale.rawValue)"
 """#
-            
             let (status, output) = try await runTool(
                 arguments: ["bash", "-lc", script]
             )
+            print("[✓][Update][\(locale.rawValue)/\(branch)] Git pulled. Status \(status).")
             
-            print("[✓][Prepare][\(locale.rawValue)/\(branchName)] Succeed. Status \(status).")
+            // 2. Update Files
+            LimitedTaskQueue.shared.addTask {
+                await withTaskGroup { group in
+                    for data in datas {
+                        group.addTask {
+                            await updateFile(for: data, into: destination, inLocale: locale)
+                        }
+                    }
+                }
+            }
+            await LimitedTaskQueue.shared.waitUntilAllFinished()
+            
+            // 3. Push
+            do {
+                let script = #"""
+set -euo pipefail
+
+git config --global --add safe.directory "\#(destination.absoluteString)"
+cd "\#(destination.absoluteString)"
+
+git config user.name "Togawa Sakiko"
+git config user.email "sakiko@darock.top"
+git remote set-url origin https://x-access-token:\#(token)@github.com/WindowsMEMZ/Greatdori-OfflineResBundle.git
+
+git checkout "\#(locale.rawValue)/\#(branch)"
+
+git add .
+git commit -m "Auto update \#(locale.rawValue)/\#(branch) ($(date +"%Y-%m-%d"))" || true
+for i in {1..10}; do git push && break; done
+"""#
+                let (status, output) = try await runTool(
+                    arguments: ["bash", "-lc", script]
+                )
+                print("[✓][Update][\(locale.rawValue)/\(branch)] Git pushed. Status \(status).")
+            } catch {
+                print("[×][Update][\(locale.rawValue)/\(branch)] Git push failed. Error: \(error).")
+            }
         } catch {
-            print("[×][Prepare][\(locale.rawValue)/\(branchName)] Failed. Error: \(error).")
+            print("[×][Update][\(locale.rawValue)/\(branch)] Git pull failed. Error: \(error).")
         }
+    }
+    print("[$][Update][\(locale.rawValue)] Update process ended.")
+}
+
+
+func updateFile(for inputtedPath: String, into destination: URL, inLocale locale: DoriLocale) async {
+    let path = inputtedPath.hasPrefix("/") ? inputtedPath : "/\(inputtedPath)"
+    
+    let contents = await DoriAPI.Asset._contentsOf(path, in: locale)
+    if let contents {
+        let fileContainerURL = destination.appending(path: "\(locale.rawValue)\(path)_rip")
+        if !FileManager.default.fileExists(atPath: fileContainerURL.path(percentEncoded: false)) {
+            try! FileManager.default.createDirectory(at: fileContainerURL, withIntermediateDirectories: true)
+        }
+        
+        for content in contents {
+            let resourceURL = URL(string: "https://bestdori.com/assets/\(locale.rawValue)\(path)_rip/\(content)")!
+            let fileURL = fileContainerURL.appending(path: content)
+            if _fastPath(!FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false))) {
+                for i in 0..<5 { // Retry
+                    if (try? Data(contentsOf: resourceURL).write(to: fileURL)) != nil {
+                        break
+                    } else if i == 4 {
+                        print("[!][Update][\(locale.rawValue)] Failed to download \(resourceURL.absoluteString). Skipped.")
+                    }
+                }
+            } else {
+                // Added Before
+            }
+        }
+    } else {
+        print("[?!!][UNEXPECTED ISSUE][Update][\(locale.rawValue)] Failed reading contents of path \"\(path)\". This is unexpected. Skipped.")
     }
 }
 
+
+func analyzePathBranch(_ path: String) -> String {
+    if pathIsInUnavailableBranch(path) {
+        return "unsupported"
+    } else if path.hasPrefix("video") {
+        return "video"
+    } else if path.hasPrefix("sound") {
+        return "sound"
+    } else {
+        return "basic"
+    }
+    
+    func pathIsInUnavailableBranch(_ path: String) -> Bool {
+        let unavailablePaths = ["characters/ingameresourceset", "live2d", "musicscore", "pickupsituation", "star3d"]
+        for unavailablePath in unavailablePaths {
+            if path.hasPrefix(unavailablePath) {
+                return true
+            }
+        }
+        return false
+    }
+}
+
+func readLastID(allowAutoInitialization: Bool = true) async -> Int? {
+    do {
+        let script = #"""
+set -euo pipefail
+git config --get lastID --default "-1"
+"""#
+        let (status, output) = try await runTool(
+            arguments: ["bash", "-lc", script]
+        )
+        
+        if let outputString = String(data: output, encoding: .utf8) {
+            if let outputInt = Int(outputString) {
+                if outputInt != -1 {
+                    return outputInt
+                } else {
+                    if allowAutoInitialization {
+                        print("[$][LastID] Last ID initialization requested.")
+                        return await updateLastID()
+                    } else {
+                        print("[×][LastID] Last ID isn't initialized. Auto-initialization is disabled.")
+                    }
+                }
+            } else {
+                print("[×][LastID] Failed to parse Bash output as an integer. Output string: \(outputString).")
+            }
+        } else {
+            print("[×][LastID] Failed reading Bash output. Output data: \(output).")
+        }
+    } catch {
+        print("[×][LastID] Cannot read due to a Bash command failure. Error: \(error).")
+    }
+    return nil
+}
+
+func writeLastID(id: Int) async {
+    do {
+        let script = #"""
+set -euo pipefail
+git config lastID "\#(id)"
+"""#
+        let (status, output) = try await runTool(
+            arguments: ["bash", "-lc", script]
+        )
+        print("[✓][LastID] Written as #\(id). Status \(status).")
+    } catch {
+        print("[×][LastID] Cannot read due to a Bash command failure. Error: \(error).")
+    }
+}
+
+@discardableResult
+func updateLastID() async -> Int? {
+    let id = await getRecentAssetPatchNotes(lastID: 0)?.first?.relatedID
+    if let id {
+        print("[$][LastID] Updated to #\(id).")
+        await writeLastID(id: id)
+        return id
+    } else {
+        print("[!][LastID] Update failed.")
+        return nil
+    }
+}

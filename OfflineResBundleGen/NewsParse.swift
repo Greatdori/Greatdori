@@ -20,11 +20,11 @@ import Foundation
 ////    FileManager.default.
 //}
 
-func getRecentAssetPatchNotes(untilID: Int) async -> [DoriFrontend.News.ListItem]? {
+func getRecentAssetPatchNotes(lastID: Int) async -> [DoriFrontend.News.ListItem]? {
     let allNews = await DoriFrontend.News.list(filter: .patchNote)
     guard allNews != nil else { return nil }
     let assetPatchNotes = allNews!.filter { $0.tags.contains("Asset") }.sorted(by: { $0.relatedID > $1.relatedID })
-    return Array(assetPatchNotes.prefix(while: { $0.relatedID > untilID }))
+    return Array(assetPatchNotes.prefix(while: { $0.relatedID > lastID }))
     // If last time's lastest news is #3417, then next time #3417 should not be checked. So use > not >=.
 }
 
@@ -64,14 +64,14 @@ func getDatasInAseetPatchNotes(from patchNoteContents: [DoriAPI.News.Item.Conten
     return result
 }
 
-func searchForAssetUpdate(untilID: Int) async -> [DoriLocale: Set<String>]? {
-    print("[$][Search] Searching starts with untilID #\(untilID).")
-    let recentNotes = await getRecentAssetPatchNotes(untilID: untilID)
+func searchForAssetUpdate(lastID: Int) async -> [DoriLocale: Set<String>]? {
+    print("[$][Search] Searching starts with lastID #\(lastID).")
+    let recentNotes = await getRecentAssetPatchNotes(lastID: lastID)
     if let recentNotes {
         var result: [DoriLocale: Set<String>] = [:]
         
         if recentNotes.count == 0 {
-            print("[$][Search] No recent asset patch found with untilID #\(untilID).")
+            print("[$][Search] No recent asset patch found with LastID #\(lastID).")
         }
         
         for note in recentNotes {
@@ -84,21 +84,23 @@ func searchForAssetUpdate(untilID: Int) async -> [DoriLocale: Set<String>]? {
                     }
                     result[passageLocale] = (result[passageLocale] ?? Set()).union(Set(datas))
                 } else {
-                    print("[!][Search][UNEXPECTED ISSUE] Passage #\(note.relatedID) has no locale value. This is unexpected. Skipped.")
+                    print("[?!!][UNEXPECTED ISSUE][Search] Passage #\(note.relatedID) has no locale value. This is unexpected. Skipped.")
                 }
             } else {
                 print("[!][Search] Found nil while trying to fetch passage #\(note.relatedID).")
             }
         }
+        print("[$][Search] Search completed.")
         for locale in DoriLocale.allCases {
             if result[locale] != nil {
                 print("[$][Search] \(locale.rawValue.uppercased()) has \(result[locale]!.count) items waiting for update.")
             }
         }
-        print("[$][Search] Search completed.")
         return result
     } else {
-        print("[×][Search] Failed getting recent asset patch note with untilID #\(untilID).")
+        print("[×][Search] Failed getting recent asset patch note with LastID #\(lastID).")
         return nil
     }
 }
+
+
