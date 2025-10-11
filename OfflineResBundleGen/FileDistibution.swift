@@ -185,50 +185,38 @@ func analyzePathBranch(_ path: String) -> String {
     }
 }
 
-func readLastID(allowAutoInitialization: Bool = true) async -> Int? {
+func readLastID(allowInitialization: Bool = true) async -> Int? {
     do {
-        let script = #"""
-set -euo pipefail
-git config --get lastID --default "-1"
-"""#
-        let (status, output) = try await runTool(
-            arguments: ["bash", "-lc", script]
-        )
+        let outputString = try String(contentsOfFile: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen/LastID.txt", encoding: .utf8)
         
-        if let outputString = String(data: output, encoding: .utf8) {
-            if let outputInt = Int(outputString) {
-                if outputInt != -1 {
-                    return outputInt
-                } else {
-                    if allowAutoInitialization {
-                        print("[$][LastID] Last ID initialization requested.")
-                        return await updateLastID()
-                    } else {
-                        print("[×][LastID] Last ID isn't initialized. Auto-initialization is disabled.")
-                    }
-                }
-            } else {
-                print("[×][LastID] Failed to parse Bash output as an integer. Output string: \(outputString).")
-            }
+        if let outputInt = Int(outputString) {
+            return outputInt
         } else {
-            print("[×][LastID] Failed reading Bash output. Output data: \(output).")
+            print("[×][LastID] Failed to parse Bash output as an integer. Output string: \(outputString).")
         }
     } catch {
-        print("[×][LastID] Cannot read due to a Bash command failure. Error: \(error).")
+        print("[!][LastID] Encounted an error while reading LastID. Error: \(error).")
+        if !FileManager.default.fileExists(atPath: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen") {
+            if allowInitialization {
+                print("[$][LastID] Last ID initialization requested.")
+                return await updateLastID()
+            } else {
+                print("[×][LastID] Last ID isn't initialized. Auto-initialization is disabled.")
+            }
+        } else {
+            print("[×][LastID] Cannot read LastID . Error: \(error).")
+        }
     }
     return nil
 }
 
 func writeLastID(id: Int) async {
     do {
-        let script = #"""
-set -euo pipefail
-git config lastID "\#(id)"
-"""#
-        let (status, output) = try await runTool(
-            arguments: ["bash", "-lc", script]
-        )
-        print("[✓][LastID] Written as #\(id). Status \(status).")
+        if !FileManager.default.fileExists(atPath: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen") {
+            try FileManager.default.createDirectory(atPath: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen", withIntermediateDirectories: true)
+        }
+        let data = "\(id)".data(using: .utf8)!
+        try data.write(to: URL(filePath: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen/LastID.txt"))
     } catch {
         print("[×][LastID] Cannot read due to a Bash command failure. Error: \(error).")
     }
