@@ -50,6 +50,8 @@ struct CommandLineEntry: AsyncParsableCommand {
             await generateAPI(to: output)
         } else if locale == .doriResource {
             try await generateDoriResource(to: output)
+        } else if locale == .updateWithPatchNote {
+            await updateAssets(in: output, withToken: token)
         } else if locale == .debug {
             print("[$][DEBUG] Start Debug Process")
             await debugProcess(output: output, token: token)
@@ -73,6 +75,7 @@ struct CommandLineEntry: AsyncParsableCommand {
         case kr
         case doriResource
         case debug
+        case updateWithPatchNote
         
         var apiLocale: DoriAPI.Locale {
             switch self {
