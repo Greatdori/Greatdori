@@ -109,7 +109,7 @@ cd "\#(destination.absoluteString)"
 
 git config user.name "Togawa Sakiko"
 git config user.email "sakiko@darock.top"
-git remote set-url origin https://x-access-token:\#(token)@github.com/WindowsMEMZ/Greatdori-OfflineResBundle.git
+git remote set-url origin https://x-access-token:\#(token)@github.com/Greatdori/Greatdori-OfflineResBundle.git
 
 git checkout "\#(locale.rawValue)/\#(branch)"
 
