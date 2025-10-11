@@ -33,10 +33,10 @@ func prepareUpdateFolder(forLocale locale: DoriLocale, from: String, to: String)
             let script = #"""
 set -euo pipefail
 
-git config --global --add safe.directory "\(from)"
-cd "\(from)"
+git config --global --add safe.directory "\#(from)"
+cd "\#(from)"
 
-git checkout "\(branchPath)"
+git checkout "\#(branchPath)"
 
 # Retry git pull --rebase up to 10 times
 for i in {1..10}; do
@@ -46,7 +46,7 @@ for i in {1..10}; do
   sleep 1
 done
 
-cp -Rf "./\(locale.rawValue)/" "\(to)/\(locale.rawValue)"
+cp -Rf "./\#(locale.rawValue)/" "\#(to)/\#(locale.rawValue)"
 """#
             
             let (status, output) = try await runTool(
