@@ -92,15 +92,25 @@ typealias CompletionHandler = (_ result: Result<Int32, Error>, _ output: Data) -
 // Copyright Notice: Code below this line is no longer from Apple.
 
 @MainActor
-func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [String] = [], input: Data = Data()) async throws -> (status: Int32, output: Data) {
+func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [String] = [], input: Data = Data(), expectedStatus: Int32? = 0) async throws -> (status: Int32, output: Data) {
     try await withCheckedThrowingContinuation { continuation in
         launch(tool: tool, arguments: arguments, input: input) { result, output in
             switch result {
             case .success(let status):
-                continuation.resume(returning: (status, output))
+                if let expectedStatus, status == expectedStatus {
+                    continuation.resume(returning: (status, output))
+                } else {
+                    continuation.resume(throwing: BashError(status: status, output: output))
+                }
             case .failure(let error):
                 continuation.resume(throwing: error)
             }
         }
     }
+}
+
+
+struct BashError: Error {
+    var status: Int32
+    var output: Data
 }
