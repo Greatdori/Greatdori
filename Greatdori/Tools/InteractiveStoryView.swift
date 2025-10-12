@@ -541,8 +541,10 @@ struct InteractiveStoryView: View {
                 }
             case .flashbackIn:
                 print("Not Implemented Effect: flashbackIn")
+                next()
             case .flashbackOut:
                 print("Not Implemented Effect: flashbackOut")
+                next()
             case .ambientColorNormal:
                 // FIXME: What does this action change?
                 next()

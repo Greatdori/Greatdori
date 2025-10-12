@@ -1060,6 +1060,42 @@ struct ListItemWithWrappingView<Content1: View, Content2: View, Content3: View, 
     }
 }
 
+struct WrappingHStack<Content: View>: View {
+    var alignment: HorizontalAlignment
+    var vSpacing: CGFloat?
+    var hSpacing: CGFloat?
+    var contentWidth: CGFloat
+    var makeContent: () -> Content
+    
+    init(
+        alignment: HorizontalAlignment = .center,
+        vSpacing: CGFloat? = nil,
+        hSpacing: CGFloat? = nil,
+        contentWidth: CGFloat,
+        @ViewBuilder content: @escaping () -> Content
+    ) {
+        self.alignment = alignment
+        self.vSpacing = vSpacing
+        self.hSpacing = hSpacing
+        self.contentWidth = contentWidth
+        self.makeContent = content
+    }
+    
+    @Environment(\.layoutDirection) private var layoutDirection
+    
+    var body: some View {
+        LazyVGrid(
+            columns: [.init(.adaptive(minimum: contentWidth), spacing: hSpacing)],
+            alignment: alignment,
+            spacing: vSpacing
+        ) {
+            makeContent()
+                .environment(\.layoutDirection, layoutDirection == .leftToRight ? .leftToRight : .rightToLeft)
+        }
+        .environment(\.layoutDirection, layoutDirection == .leftToRight ? .rightToLeft : .leftToRight)
+    }
+}
+
 struct HighlightableText: View {
     private var resolvedText: String
     private var prefixText: String = ""
