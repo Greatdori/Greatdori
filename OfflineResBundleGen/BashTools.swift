@@ -149,7 +149,7 @@ trap 'rc=$?;
 \(useEnhancedErrorCatching ? enhancedErrorCatchingMethod : "")
 \(inputScript)
 """
-    let output = try await runTool(arguments: ["bash", "-c", script], expectedStatus: expectedStatus, viewFailureAsFatalError: viewFailureAsFatalError, fatalErrorMessage: "[×][Bash]\(commandName != nil ? "[\(commandName!)]" : "") Encountered an fatal error. Error: $BashErrorPlaceholder.")
+    let output = try await runTool(arguments: ["bash", "-lc", script], expectedStatus: expectedStatus, viewFailureAsFatalError: viewFailureAsFatalError, fatalErrorMessage: "[×][Bash]\(commandName != nil ? "[\(commandName!)]" : "") Encountered an fatal error. Error: $BashErrorPlaceholder.")
     return output
 }
 
