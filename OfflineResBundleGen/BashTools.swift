@@ -123,6 +123,8 @@ set -euo pipefail
 tmp_err=$(mktemp)
 exec 2> >(tee "$tmp_err" >&2)
 
+echo "Hello, world!"
+
 trap 'rc=$?;
       err_line=${BASH_LINENO[0]};
       err_file=${BASH_SOURCE[0]};
