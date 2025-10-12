@@ -119,7 +119,7 @@ func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [Strin
 func runBashScript(_ inputScript: String, commandName: String? = nil, expectedStatus: Int32? = 0, useEnhancedErrorCatching: Bool = true, viewFailureAsFatalError: Bool) async throws -> (status: Int32, output: Data) {
     
     // DEBUG
-    let something = try await runTool(arguments: ["bash", "-c", "echo Hello; echo Error >&2"])
+    let something = try await runTool(arguments: ["bash", "-lc", "echo Hello; echo Error >&2"])
     print(String(data: something.output, encoding: .utf8)!)
 
     let enhancedErrorCatchingMethod = #"""
@@ -130,7 +130,6 @@ exec 2> >(tee "$tmp_err" >&2)
 # exec > >(tee "$tmp_out") 2> >(tee "$tmp_err" >&2)
 
 echo "Trees"
-# flush() { true; }
 
 trap 'rc=$?;
       err_line=${BASH_LINENO[0]};
@@ -143,7 +142,6 @@ trap 'rc=$?;
       echo -n "MSG:"
       echo
       sed "s/^/     /" "$tmp_err"
-      # flush() { true; }
      ' ERR
 """#
     
@@ -151,7 +149,7 @@ trap 'rc=$?;
 \(useEnhancedErrorCatching ? enhancedErrorCatchingMethod : "")
 \(inputScript)
 """
-    let output = try await runTool(arguments: ["bash", "-lc", script], expectedStatus: expectedStatus, viewFailureAsFatalError: viewFailureAsFatalError, fatalErrorMessage: "[×][Bash]\(commandName != nil ? "[\(commandName!)]" : "") Encountered an fatal error. Error: $BashErrorPlaceholder.")
+    let output = try await runTool(arguments: ["bash", "-c", script], expectedStatus: expectedStatus, viewFailureAsFatalError: viewFailureAsFatalError, fatalErrorMessage: "[×][Bash]\(commandName != nil ? "[\(commandName!)]" : "") Encountered an fatal error. Error: $BashErrorPlaceholder.")
     return output
 }
 
