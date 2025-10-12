@@ -330,21 +330,21 @@ struct EventDetailOverviewView: View {
                             
                             //MARK: Card
                             if !cardsArray.isEmpty {
-                                ListItemWithWrappingView(title: {
+                                ListItemView(title: {
                                     Text("Event.card")
                                         .bold()
-                                }, element: { value in
-                                    NavigationLink(destination: {
-                                        CardDetailView(id: value!.id)
-                                    }, label: {
-                                        CardPreviewImage(value!, sideLength: cardThumbnailSideLength, showNavigationHints: true)
-                                    })
-                                    .buttonStyle(.plain)
-                                }, caption: {
-                                    Text("+\(cardsPercentage)%")
-                                        .lineLimit(1, reservesSpace: true)
-                                        .fixedSize(horizontal: true, vertical: true)
-                                }, contentArray: cardsArray, columnNumbers: 3, elementWidth: cardThumbnailSideLength)
+                                }, value: {
+                                    WrappingHStack(hSpacing: 0, contentWidth: cardThumbnailSideLength) {
+                                        ForEach(cardsArray) { card in
+                                            NavigationLink(destination: {
+                                                CardDetailView(id: card.id)
+                                            }, label: {
+                                                CardPreviewImage(card, sideLength: cardThumbnailSideLength, showNavigationHints: true)
+                                            })
+                                            .buttonStyle(.plain)
+                                        }
+                                    }
+                                }, displayMode: .compactOnly)
                                 Divider()
                             }
                             

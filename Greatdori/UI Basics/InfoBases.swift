@@ -631,3 +631,119 @@ extension DetailSectionBase {
         return mutable
     }
 }
+
+struct DetailInfoBase<Head: View>: View {
+    var detailInfo: [DetailInfoItem]
+    var makeHead: () -> Head
+    
+    init(
+        @DetailInfoBuilder content: () -> [DetailInfoItem],
+        @ViewBuilder head: @escaping () -> Head
+    ) {
+        self.detailInfo = content()
+        self.makeHead = head
+    }
+    
+    var body: some View {
+        VStack {
+            makeHead()
+                .padding(.vertical, 2)
+            CustomGroupBox(cornerRadius: 20) {
+                LazyVStack {
+                    ForEach(Array(detailInfo.enumerated()), id: \.element.id) { index, info in
+                        info._makeView()
+                            .buttonStyle(.plain)
+                        if index != detailInfo.count - 1 {
+                            Divider()
+                        }
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: 600)
+    }
+}
+@MainActor
+struct DetailInfoItem: Identifiable {
+    var id: UUID = .init()
+    var titleKey: LocalizedStringResource
+    var makeContent: () -> AnyView
+    var showLocaleKey: Bool = false
+    
+    init<Content: View>(
+        _ titleKey: LocalizedStringResource,
+        @ViewBuilder content: @escaping () -> Content
+    ) {
+        self.titleKey = titleKey
+        self.makeContent = {
+            AnyView(content())
+        }
+    }
+}
+extension DetailInfoItem {
+    init<S: StringProtocol>(_ titleKey: LocalizedStringResource, text: S) {
+        self.init(titleKey) {
+            Text(text)
+        }
+    }
+    init(_ titleKey: LocalizedStringResource, text: LocalizedData<String>) {
+        self.init(titleKey) {
+            MultilingualText(text)
+        }
+    }
+    
+    init(_ titleKey: LocalizedStringResource, date: Date) {
+        let df = DateFormatter()
+        df.dateStyle = .long
+        df.timeStyle = .short
+        self.init(titleKey, text: df.string(from: date))
+    }
+    init(_ titleKey: LocalizedStringResource, date: LocalizedData<Date>) {
+        let df = DateFormatter()
+        df.dateStyle = .long
+        df.timeStyle = .short
+        self.init(titleKey, text: date.map { $0 != nil ? df.string(from: $0!) : nil })
+    }
+}
+extension DetailInfoItem {
+    @ViewBuilder
+    func _makeView() -> some View {
+        ListItemView {
+            Text(titleKey)
+                .bold()
+        } value: {
+            makeContent()
+        }
+    }
+}
+extension DetailInfoItem {
+    func showsLocaleKey(_ showing: Bool = true) -> Self {
+        var mutating = self
+        mutating.showLocaleKey = showing
+        return mutating
+    }
+}
+@resultBuilder
+struct DetailInfoBuilder {
+    static func buildExpression(_ expression: DetailInfoItem) -> [DetailInfoItem] {
+        [expression]
+    }
+    
+    static func buildBlock(_ components: [DetailInfoItem]...) -> [DetailInfoItem] {
+        components.flatMap { $0 }
+    }
+    
+    static func buildOptional(_ component: [DetailInfoItem]?) -> [DetailInfoItem] {
+        component ?? []
+    }
+    static func buildEither(first component: [DetailInfoItem]) -> [DetailInfoItem] {
+        component
+    }
+    static func buildEither(second component: [DetailInfoItem]) -> [DetailInfoItem] {
+        component
+    }
+    
+    static func buildArray(_ components: [[DetailInfoItem]]) -> [DetailInfoItem] {
+        components.flatMap { $0 }
+    }
+}

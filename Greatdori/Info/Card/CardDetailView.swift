@@ -45,183 +45,68 @@ struct CardDetailOverviewView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     let information: ExtendedCard
     @State private var allSkills: [Skill] = []
-    var dateFormatter: DateFormatter { let df = DateFormatter(); df.dateStyle = .long; df.timeStyle = .short; return df }
-    
     let cardCoverScalingFactor: CGFloat = 1
     var body: some View {
-        VStack {
-            Group {
-                // MARK: Title Image
-                Group {
-                    Rectangle()
-                        .opacity(0)
-                        .frame(height: 2)
-                    CardCoverImage(information.card, band: information.band)
-                        .wrapIf(sizeClass == .regular) { content in
-                            content
-                                .frame(maxWidth: 480*cardCoverScalingFactor, maxHeight: 320*cardCoverScalingFactor)
-                        } else: { content in
-                            content
-                            //                                .padding(.horizontal, -15)
-                        }
-                    //                    .interpolation(.high)
-                    //                    .frame(width: 96, height: 96)
-                    Rectangle()
-                        .opacity(0)
-                        .frame(height: 2)
+        DetailInfoBase {
+            DetailInfoItem("Card.title", text: information.card.prefix)
+            DetailInfoItem("Card.type", text: information.card.type.localizedString)
+            DetailInfoItem("Card.character") {
+                NavigationLink(destination: {
+                    CharacterDetailView(id: information.character.id)
+                }, label: {
+                    HStack {
+                        MultilingualText(information.character.characterName)
+                        WebImage(url: information.character.iconImageURL)
+                            .resizable()
+                            .clipShape(Circle())
+                            .frame(width: imageButtonSize, height: imageButtonSize)
+                    }
+                })
+            }
+            DetailInfoItem("Card.band") {
+                HStack {
+                    MultilingualText(information.band.bandName, allowPopover: false)
+                    WebImage(url: information.band.iconImageURL)
+                        .resizable()
+                        .frame(width: imageButtonSize, height: imageButtonSize)
                 }
-                
-                
-                // MARK: Info
-                CustomGroupBox(cornerRadius: 20) {
-                    LazyVStack {
-                        // MARK: Title
-                        Group {
-                            ListItemView(title: {
-                                Text("Card.title")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(information.card.prefix)
-                            })
-                            Divider()
-                        }
-                        
-                        // MARK: Type
-                        Group {
-                            ListItemView(title: {
-                                Text("Card.type")
-                                    .bold()
-                            }, value: {
-                                Text(information.card.type.localizedString)
-                            })
-                            Divider()
-                        }
-                        
-                        // MARK: Type
-                        Group {
-                            ListItemView(title: {
-                                Text("Card.character")
-                                    .bold()
-                            }, value: {
-                                NavigationLink(destination: {
-                                    CharacterDetailView(id: information.character.id)
-                                }, label: {
-                                    HStack {
-                                        MultilingualText(information.character.characterName)
-                                        WebImage(url: information.character.iconImageURL)
-                                            .resizable()
-                                            .clipShape(Circle())
-                                            .frame(width: imageButtonSize, height: imageButtonSize)
-                                    }
-                                })
-                                .buttonStyle(.plain)
-                            })
-                            Divider()
-                        }
-                        
-                        // MARK: Band
-                        Group {
-                            ListItemView(title: {
-                                Text("Card.band")
-                                    .bold()
-                            }, value: {
-                                HStack {
-                                    MultilingualText(information.band.bandName, allowPopover: false)
-                                    WebImage(url: information.band.iconImageURL)
-                                        .resizable()
-                                        .frame(width: imageButtonSize, height: imageButtonSize)
-                                }
-                            })
-                            Divider()
-                        }
-                        
-                        // MARK: Attribute
-                        Group {
-                            ListItemView(title: {
-                                Text("Card.attribute")
-                                    .bold()
-                            }, value: {
-                                HStack {
-                                    Text(information.card.attribute.selectorText.uppercased())
-                                    WebImage(url: information.card.attribute.iconImageURL)
-                                        .resizable()
-                                        .frame(width: imageButtonSize, height: imageButtonSize)
-                                }
-                            })
-                            Divider()
-                        }
-                        
-                        // MARK: Rarity
-                        Group {
-                            ListItemView(title: {
-                                Text("Card.rarity")
-                                    .bold()
-                            }, value: {
-                                HStack(spacing: 0) {
-                                    ForEach(1...information.card.rarity, id: \.self) { _ in
-                                        Image(information.card.rarity >= 3 ? .trainedStar : .star)
-                                            .resizable()
-                                            .frame(width: imageButtonSize, height: imageButtonSize)
-                                            .padding(.top, -1)
-                                    }
-                                }
-                            })
-                            Divider()
-                        }
-                        
-                        // MARK: Skill
-                        if let skill = allSkills.first(where: { $0.id == information.card.skillID }) {
-                            Group {
-                                ListItemView(title: {
-                                    Text("Card.skill")
-                                        .bold()
-                                }, value: {
-                                    //                                    Text(skill.maximumDescription)
-                                    MultilingualText(skill.maximumDescription)
-                                }, displayMode: .basedOnUISizeClass)
-                                Divider()
-                            }
-                        }
-                        
-                        
-                        // MARK: Gacha Quote
-                        if !information.card.gachaText.isValueEmpty {
-                            Group {
-                                ListItemView(title: {
-                                    Text("Card.gacha-quote")
-                                        .bold()
-                                }, value: {
-                                    MultilingualText(information.card.gachaText)
-                                }, displayMode: .basedOnUISizeClass)
-                                Divider()
-                            }
-                        }
-                        
-                        // MARK: Release Date
-                        Group {
-                            ListItemView(title: {
-                                Text("Card.release-date")
-                                    .bold()
-                            }, value: {
-                                MultilingualText(information.card.releasedAt.map{dateFormatter.string(for: $0)}, showLocaleKey: true)
-                            })
-                            Divider()
-                        }
-                        
-                        // MARK: ID
-                        Group {
-                            ListItemView(title: {
-                                Text("ID")
-                                    .bold()
-                            }, value: {
-                                Text("\(String(information.id))")
-                            })
-                        }
+            }
+            DetailInfoItem("Card.attribute") {
+                HStack {
+                    Text(information.card.attribute.selectorText.uppercased())
+                    WebImage(url: information.card.attribute.iconImageURL)
+                        .resizable()
+                        .frame(width: imageButtonSize, height: imageButtonSize)
+                }
+            }
+            DetailInfoItem("Card.rarity") {
+                HStack(spacing: 0) {
+                    ForEach(1...information.card.rarity, id: \.self) { _ in
+                        Image(information.card.rarity >= 3 ? .trainedStar : .star)
+                            .resizable()
+                            .frame(width: imageButtonSize, height: imageButtonSize)
+                            .padding(.top, -1)
                     }
                 }
             }
+            if let skill = allSkills.first(where: { $0.id == information.card.skillID }) {
+                DetailInfoItem("Card.skill", text: skill.maximumDescription)
+            }
+            if !information.card.gachaText.isValueEmpty {
+                DetailInfoItem("Card.gacha-quote", text: information.card.gachaText)
+            }
+            DetailInfoItem("Card.release-date", date: information.card.releasedAt)
+                .showsLocaleKey()
+            DetailInfoItem("ID", text: "\(String(information.id))")
+        } head: {
+            CardCoverImage(information.card, band: information.band)
+                .wrapIf(sizeClass == .regular) { content in
+                    content
+                        .frame(maxWidth: 480*cardCoverScalingFactor, maxHeight: 320*cardCoverScalingFactor)
+                } else: { content in
+                    content
+                }
         }
-        .frame(maxWidth: 600)
         .task {
             // Load skills asynchronously once when the view appears
             if allSkills.isEmpty {
