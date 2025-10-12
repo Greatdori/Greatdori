@@ -117,13 +117,20 @@ func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [Strin
 
 
 func runBashScript(_ inputScript: String, commandName: String? = nil, expectedStatus: Int32? = 0, useEnhancedErrorCatching: Bool = true, viewFailureAsFatalError: Bool) async throws -> (status: Int32, output: Data) {
+    
+    // DEBUG
+    let output = try await runTool(arguments: ["bash", "-c", "echo Hello; echo Error >&2"])
+    print(String(data: output.output, encoding: .utf8)!)
+
     let enhancedErrorCatchingMethod = #"""
 set -euo pipefail
 
 tmp_err=$(mktemp)
-exec 2> >(tee "$tmp_err" >&2)
+# exec 2> >(tee "$tmp_err" >&2)
+exec > >(tee "$tmp_out") 2> >(tee "$tmp_err" >&2)
 
 echo "Hello, world!"
+flush() { true; }
 
 trap 'rc=$?;
       err_line=${BASH_LINENO[0]};
@@ -136,6 +143,7 @@ trap 'rc=$?;
       echo -n "MSG:"
       echo
       sed "s/^/     /" "$tmp_err"
+      flush() { true; }
      ' ERR
 """#
     
