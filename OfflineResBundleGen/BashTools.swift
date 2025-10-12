@@ -126,11 +126,11 @@ func runBashScript(_ inputScript: String, commandName: String? = nil, expectedSt
 set -euo pipefail
 
 tmp_err=$(mktemp)
-# exec 2> >(tee "$tmp_err" >&2)
-exec > >(tee "$tmp_out") 2> >(tee "$tmp_err" >&2)
+exec 2> >(tee "$tmp_err" >&2)
+# exec > >(tee "$tmp_out") 2> >(tee "$tmp_err" >&2)
 
-echo "Hello, world!"
-flush() { true; }
+echo "Trees"
+# flush() { true; }
 
 trap 'rc=$?;
       err_line=${BASH_LINENO[0]};
@@ -143,7 +143,7 @@ trap 'rc=$?;
       echo -n "MSG:"
       echo
       sed "s/^/     /" "$tmp_err"
-      flush() { true; }
+      # flush() { true; }
      ' ERR
 """#
     
