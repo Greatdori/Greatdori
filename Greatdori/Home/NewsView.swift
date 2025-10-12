@@ -75,7 +75,7 @@ struct NewsView: View {
             }
         })
         .task {
-            DoriCache.withCache(id: "News", trait: .realTime) {
+            DoriCache.withCache(id: "News_\(filter)", trait: .realTime) {
                 await DoriFrontend.News.list(filter: filter)
             } .onUpdate {
                 newsList = $0
@@ -103,7 +103,12 @@ struct NewsView: View {
         }
         .onChange(of: filter) {
             Task {
-                newsList = await DoriFrontend.News.list(filter: filter)
+                newsList = nil
+                DoriCache.withCache(id: "News_\(filter)", trait: .realTime) {
+                    await DoriFrontend.News.list(filter: filter)
+                } .onUpdate {
+                    newsList = $0
+                }
             }
         }
         .toolbar {

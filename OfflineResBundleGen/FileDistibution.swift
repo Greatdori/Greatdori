@@ -197,8 +197,7 @@ func analyzePathBranch(_ path: String) -> String {
 
 func readLastID(allowInitialization: Bool = true) async -> Int? {
     do {
-        let outputString = try String(contentsOfFile: NSHomeDirectory() + "/Library/Containers/GreatdoriOfflineResBundleGen/LastID.txt", encoding: .utf8)
-        
+        let outputString = try String(contentsOfFile: NSHomeDirectory() + "/Library/Containers/GreatdoriOfflineResBundleGen/LastID.txt", encoding: .utf8).replacingOccurrences(of: "\n", with: "")
         if let outputInt = Int(outputString) {
             return outputInt
         } else {
@@ -244,3 +243,5 @@ func updateLastID() async -> Int? {
         return nil
     }
 }
+
+

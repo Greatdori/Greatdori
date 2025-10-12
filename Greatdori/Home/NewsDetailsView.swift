@@ -35,15 +35,15 @@ struct NewsDetailView: View {
         Group {
             if let information {
                 ScrollView {
-                    VStack {
-                        Markdown(information.content.toMarkdown())
-                            .markdownImageProvider(.greatdoriRichContentProvider)
-                        Text(information.content.toMarkdown())
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Markdown(information.content.toMarkdown().addMarkdownTitle(title))
+                                .markdownImageProvider(.greatdoriRichContentProvider)
+                            Spacer()
+                        }
                     }
-                    //                    RichContentView(information.content.forRichRendering)
-                    //                    Text("\(information)")
-                    //                        .searchSelection()
-                    //                        .textSelection(.enabled)
+                    .padding()
+                                            .textSelection(.enabled)
                 }
             } else {
                 if informationIsLoading {
@@ -162,3 +162,9 @@ extension ImageProvider where Self == GreatdoriRichContentProvider {
     }
 }
 
+
+extension String {
+    func addMarkdownTitle(_ title: String) -> String {
+        return isMACOS ? ("#\(title)\n" + self) : self
+    }
+}
