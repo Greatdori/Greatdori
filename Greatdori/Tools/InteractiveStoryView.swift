@@ -44,6 +44,7 @@ struct InteractiveStoryView: View {
     @State var isBacklogPresented = false
     @State var isAutoPlaying = false
     @State var autoPlayTimer: Timer?
+    @State var talkShakeDuration = 0.0
     
     init(asset: DoriAPI.Misc.StoryAsset, voiceBundleURL: URL, locale: DoriLocale) {
         self.asset = asset
@@ -118,7 +119,7 @@ struct InteractiveStoryView: View {
             if let currentTalk, !isHidingUI {
                 VStack {
                     Spacer()
-                    TalkView(data: currentTalk, locale: locale, isAnimating: $isTalkTextAnimating)
+                    TalkView(data: currentTalk, locale: locale, isAnimating: $isTalkTextAnimating, shakeDuration: $talkShakeDuration)
                         .padding()
                 }
             }
@@ -396,7 +397,11 @@ struct InteractiveStoryView: View {
                     print("Talk requires motion change to character \(motion.characterID), but she's not visible?!")
                 }
             }
-            if currentSnippetIndex + 1 < asset.snippets.endIndex && asset.snippets[currentSnippetIndex + 1].actionType == .motion {
+            if currentSnippetIndex + 1 < asset.snippets.endIndex
+                && (asset.snippets[currentSnippetIndex + 1].actionType == .motion
+                    || (asset.snippets[currentSnippetIndex + 1].actionType == .effect
+                        && (asset.specialEffectData[asset.snippets[currentSnippetIndex + 1].referenceIndex].effectType == .shakeScreen
+                            || asset.specialEffectData[asset.snippets[currentSnippetIndex + 1].referenceIndex].effectType == .shakeWindow))) {
                 next()
             }
         case .layout, .motion:
@@ -414,6 +419,12 @@ struct InteractiveStoryView: View {
                             DispatchQueue.main.async {
                                 // If the snippet after the next is still a motion,
                                 // the same code here in this call handles it
+                                next(ignoresDelay: true)
+                            }
+                        }
+                        // Effects are like this, too
+                        if s.actionType == .effect && s.delay > 0 {
+                            DispatchQueue.main.async {
                                 next(ignoresDelay: true)
                             }
                         }
@@ -522,7 +533,12 @@ struct InteractiveStoryView: View {
             case .shakeScreen:
                 print("Not Implemented Effect: shakeScreen")
             case .shakeWindow:
-                print("Not Implemented Effect: shakeWindow")
+                Task {
+                    isDelaying = true
+                    try? await Task.sleep(for: .seconds(snippet.delay))
+                    talkShakeDuration = effect.duration
+                    isDelaying = false
+                }
             case .changeBackground, .changeBackgroundStill, .changeCardStill:
                 withAnimation {
                     backgroundImageURL = .init(string: "https://bestdori.com/assets/jp/\(effect.stringVal)_rip/\(effect.stringValSub).png")!
@@ -661,8 +677,11 @@ private struct TalkView: View {
     var data: DoriAPI.Misc.StoryAsset.TalkData
     var locale: DoriLocale
     @Binding var isAnimating: Bool
+    @Binding var shakeDuration: Double
     @State private var currentBody = ""
     @State private var bodyAnimationTimer: Timer?
+    @State private var shakeTimer: Timer?
+    @State private var shakingOffset = CGSize(width: 0, height: 0)
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 16)
@@ -723,6 +742,7 @@ private struct TalkView: View {
             }
             .offset(y: -38)
         }
+        .offset(shakingOffset)
         .onAppear {
             animateText()
         }
@@ -733,6 +753,20 @@ private struct TalkView: View {
             if !isAnimating {
                 bodyAnimationTimer?.invalidate()
                 currentBody = data.body
+            }
+        }
+        .onChange(of: shakeDuration) {
+            if shakeDuration > 0 {
+                let startTime = CFAbsoluteTimeGetCurrent()
+                shakeTimer = .scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+                    if _fastPath(CFAbsoluteTimeGetCurrent() - startTime < shakeDuration) {
+                        shakingOffset = .init(width: .random(in: -5...5), height: .random(in: -5...5))
+                    } else {
+                        shakeTimer?.invalidate()
+                        shakingOffset = .init(width: 0, height: 0)
+                        shakeDuration = 0
+                    }
+                }
             }
         }
     }
