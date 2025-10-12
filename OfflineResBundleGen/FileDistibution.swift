@@ -158,13 +158,13 @@ func updateFile(for inputtedPath: String, into destination: URL, inLocale locale
             let fileURL = fileContainerURL.appending(path: content)
             for i in 0..<5 { // Retry
                 if (try? Data(contentsOf: resourceURL).write(to: fileURL)) != nil {
-                    onUpdate(clipPathForPrinting("\(path)_rip/\(content)", reserve: 15))
                     break
                 } else if i == 4 {
                     print("[!][Update][\(locale.rawValue)] Failed to download \(resourceURL.absoluteString). Skipping.")
                 }
             }
         }
+        onUpdate(clipPathForPrinting("\(path)_rip", reserve: 15))
     } else {
         print("[?!!][UNEXPECTED ISSUE][Update][\(locale.rawValue)] Failed reading contents of path \"\(path)\". This is unexpected. Skipping.")
     }
