@@ -30,9 +30,9 @@ func printProgressBar(_ value: Int, total: Int, message: String? = nil, continou
         }
         fflush(stdout)
     }
-    print("\r[\(bar)] \(value)/\(total) \(String(format: "%.2f", progress))%", terminator: "")
+    print("\r[\(bar)] \(value)/\(total) \(String(format: "%.2f", progress*100))%")
     if let message {
-        print("\(printInTwoLines ? "\n" : "")\(message)", terminator: "")
+        print("\r\(message)")
     }
     fflush(stdout)
 }

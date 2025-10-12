@@ -63,6 +63,8 @@ func updateLocale(datas: [String], forLocale locale: DoriLocale, to destination:
         groupedDatas.updateValue((groupedDatas[branch] ?? []) + [data], forKey: branch)
     }
     
+    print("[$][Update][\(locale.rawValue)] \(groupedDatas.count) branch(es) requires update.")
+    
     // III. Handle Grouped Datas
     for (branch, datas) in groupedDatas {
         do {
@@ -195,7 +197,7 @@ func analyzePathBranch(_ path: String) -> String {
 
 func readLastID(allowInitialization: Bool = true) async -> Int? {
     do {
-        let outputString = try String(contentsOfFile: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen/LastID.txt", encoding: .utf8)
+        let outputString = try String(contentsOfFile: NSHomeDirectory() + "/Library/Containers/GreatdoriOfflineResBundleGen/LastID.txt", encoding: .utf8)
         
         if let outputInt = Int(outputString) {
             return outputInt
@@ -204,7 +206,7 @@ func readLastID(allowInitialization: Bool = true) async -> Int? {
         }
     } catch {
         print("[!][LastID] Encounted an error while reading LastID. Error: \(error).")
-        if !FileManager.default.fileExists(atPath: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen") {
+        if !FileManager.default.fileExists(atPath: NSHomeDirectory() + "/Library/Containers/GreatdoriOfflineResBundleGen") {
             if allowInitialization {
                 print("[$][LastID] Last ID initialization requested.")
                 return await updateLastID()
@@ -220,11 +222,11 @@ func readLastID(allowInitialization: Bool = true) async -> Int? {
 
 func writeLastID(id: Int) async {
     do {
-        if !FileManager.default.fileExists(atPath: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen") {
-            try FileManager.default.createDirectory(atPath: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen", withIntermediateDirectories: true)
+        if !FileManager.default.fileExists(atPath: NSHomeDirectory() + "/Library/Containers/GreatdoriOfflineResBundleGen") {
+            try FileManager.default.createDirectory(atPath: NSHomeDirectory() + "/Library/Containers/GreatdoriOfflineResBundleGen", withIntermediateDirectories: true)
         }
         let data = "\(id)".data(using: .utf8)!
-        try data.write(to: URL(filePath: NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen/LastID.txt"))
+        try data.write(to: URL(filePath: NSHomeDirectory() + "/Library/Containers/GreatdoriOfflineResBundleGen/LastID.txt"))
     } catch {
         print("[×][LastID] Cannot read due to a Bash command failure. Error: \(error).")
     }
@@ -234,11 +236,11 @@ func writeLastID(id: Int) async {
 func updateLastID() async -> Int? {
     let id = await getRecentAssetPatchNotes(lastID: 0)?.first?.relatedID
     if let id {
-        print("[$][LastID] Updated to #\(id).")
+        print("[$][LastID] LastID updated to #\(id).")
         await writeLastID(id: id)
         return id
     } else {
-        print("[!][LastID] Update failed.")
+        print("[!][LastID] LastID update failed.")
         return nil
     }
 }
