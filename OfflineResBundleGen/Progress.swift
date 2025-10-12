@@ -14,7 +14,7 @@
 
 import Foundation
 
-func printProgressBar(_ value: Int, total: Int, message: String? = nil) {
+func printProgressBar(_ value: Int, total: Int, message: String? = nil, continousPrint: Bool = false) {
     let width = terminalWidth()
     let reservedSpace = 10 + String(value).count + String(total).count
     let barLength = max(10, width - reservedSpace)
@@ -22,13 +22,13 @@ func printProgressBar(_ value: Int, total: Int, message: String? = nil) {
     let percent = Int(progress * 100)
     let filledLength = Int(progress * Double(barLength))
     let bar = String(repeating: "█", count: filledLength) + String(repeating: "-", count: barLength - filledLength)
-    if message != nil {
+    if message != nil && continousPrint {
         print("\r\u{1B}[K\u{1B}[1A\u{1B}[K", terminator: "")
         fflush(stdout)
     }
-    print("\r[\(bar)] \(value)/\(total) \(percent)%", terminator: "")
+    print("\r[\(bar)] \(value)/\(total) \(String(format: "%.2f", progress))%", terminator: "")
     if let message {
-        print("\n\(message)", terminator: "")
+        print("\(continousPrint ? "\n" : "")\(message)", terminator: "")
     }
     fflush(stdout)
 }
