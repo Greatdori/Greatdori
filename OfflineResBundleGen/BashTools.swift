@@ -92,7 +92,7 @@ typealias CompletionHandler = (_ result: Result<Int32, Error>, _ output: Data) -
 // Copyright Notice: Code below this line is no longer from Apple.
 
 @MainActor
-func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [String] = [], input: Data = Data(), expectedStatus: Int32? = 0) async throws -> (status: Int32, output: Data) {
+func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [String] = [], input: Data = Data(), expectedStatus: Int32? = 0, viewFailureAsFatalError: Bool = false, fatalErrorMessage: String = "[×][Bash] Encountered an fatal error. Error: $BashErrorPlaceholder.") async throws -> (status: Int32, output: Data) {
     try await withCheckedThrowingContinuation { continuation in
         launch(tool: tool, arguments: arguments, input: input) { result, output in
             switch result {
@@ -101,16 +101,22 @@ func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [Strin
                     continuation.resume(returning: (status, output))
                 } else {
                     continuation.resume(throwing: BashError(status: status, output: output))
+                    if viewFailureAsFatalError {
+                        fatalError(fatalErrorMessage.replacingOccurrences(of: "$BashErrorPlaceholder", with: "\(BashError(status: status, output: output))"))
+                    }
                 }
             case .failure(let error):
                 continuation.resume(throwing: error)
+                if viewFailureAsFatalError {
+                    fatalError(fatalErrorMessage.replacingOccurrences(of: "$BashErrorPlaceholder", with: "\(error))"))
+                }
             }
         }
     }
 }
 
 
-func runBashScript(_ inputScript: String, commandName: String? = nil, expectedStatus: Int32? = 0, useEnhancedErrorCatching: Bool = true) async throws -> (status: Int32, output: Data) {
+func runBashScript(_ inputScript: String, commandName: String? = nil, expectedStatus: Int32? = 0, useEnhancedErrorCatching: Bool = true, viewFailureAsFatalError: Bool) async throws -> (status: Int32, output: Data) {
     let enhancedErrorCatchingMethod = #"""
 set -euo pipefail
 
@@ -135,7 +141,7 @@ trap 'rc=$?;
 \(useEnhancedErrorCatching ? enhancedErrorCatchingMethod : "")
 \(inputScript)
 """
-    let output = try await runTool(arguments: ["bash", "-lc", script], expectedStatus: expectedStatus)
+    let output = try await runTool(arguments: ["bash", "-lc", script], expectedStatus: expectedStatus, viewFailureAsFatalError: viewFailureAsFatalError, fatalErrorMessage: "[×][Bash]\(commandName != nil ? "[\(commandName!)]" : "") Encountered an fatal error. Error: $BashErrorPlaceholder.")
     return output
 }
 

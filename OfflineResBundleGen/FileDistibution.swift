@@ -87,7 +87,7 @@ for i in {1..10}; do
   fi
 done
 """#
-            let (status, output) = try await runBashScript(script, commandName: "Git Pull")
+            let (status, output) = try await runBashScript(script, commandName: "Git Pull", viewFailureAsFatalError: true)
             print("[✓][Update][\(locale.rawValue)/\(branch)] Git pulled. Status \(status).")
             
             // 2. Update Files
@@ -124,7 +124,7 @@ git add .
 git commit -m "Auto update \#(locale.rawValue)/\#(branch) ($(date +"%Y-%m-%d"))" || true
 for i in {1..10}; do git push && break; done
 """#
-                let (status, output) = try await runBashScript(script, commandName: "Git Push")
+                let (status, output) = try await runBashScript(script, commandName: "Git Push", viewFailureAsFatalError: true)
                 print("[✓][Update][\(locale.rawValue)/\(branch)] Git pushed. Status \(status).")
             } catch {
                 print("[×][Update][\(locale.rawValue)/\(branch)] Git push failed. Error: \(error).")
