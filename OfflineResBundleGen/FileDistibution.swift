@@ -66,7 +66,11 @@ func updateLocale(datas: [String], forLocale locale: DoriLocale, to destination:
     // III. Handle Grouped Datas
     for (branch, datas) in groupedDatas {
         do {
+            // 0. Initialization
             print("[$][Update][\(locale.rawValue)/\(branch)] Started with \(datas.count) item(s).")
+            let startTime = CFAbsoluteTimeGetCurrent()
+            var updatedItemsCount = 0
+            
             // 1. Pull
             let script = #"""
 set -euo pipefail
@@ -93,7 +97,13 @@ done
                 await withTaskGroup { group in
                     for data in datas {
                         group.addTask {
-                            await updateFile(for: data, into: destination, inLocale: locale)
+                            await updateFile(for: data, into: destination, inLocale: locale, onUpdate: { message in
+                                updatedItemsCount += 1
+                                printProgressBar(
+                                    updatedItemsCount,
+                                    total: datas.count,
+                                    message: "\(message) \(formatSeconds(Int(CFAbsoluteTimeGetCurrent() - startTime)))")
+                            })
                         }
                     }
                 }
@@ -133,7 +143,7 @@ for i in {1..10}; do git push && break; done
 }
 
 
-func updateFile(for inputtedPath: String, into destination: URL, inLocale locale: DoriLocale) async {
+func updateFile(for inputtedPath: String, into destination: URL, inLocale locale: DoriLocale, onUpdate: @escaping (String) -> Void) async {
     let path = inputtedPath.hasPrefix("/") ? inputtedPath : "/\(inputtedPath)"
     
     let contents = await DoriAPI.Asset._contentsOf(path, in: locale)
@@ -146,20 +156,17 @@ func updateFile(for inputtedPath: String, into destination: URL, inLocale locale
         for content in contents {
             let resourceURL = URL(string: "https://bestdori.com/assets/\(locale.rawValue)\(path)_rip/\(content)")!
             let fileURL = fileContainerURL.appending(path: content)
-            if _fastPath(!FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false))) {
-                for i in 0..<5 { // Retry
-                    if (try? Data(contentsOf: resourceURL).write(to: fileURL)) != nil {
-                        break
-                    } else if i == 4 {
-                        print("[!][Update][\(locale.rawValue)] Failed to download \(resourceURL.absoluteString). Skipped.")
-                    }
+            for i in 0..<5 { // Retry
+                if (try? Data(contentsOf: resourceURL).write(to: fileURL)) != nil {
+                    onUpdate(clipPathForPrinting("\(path)_rip/\(content)", reserve: 15))
+                    break
+                } else if i == 4 {
+                    print("[!][Update][\(locale.rawValue)] Failed to download \(resourceURL.absoluteString). Skipping.")
                 }
-            } else {
-                // Added Before
             }
         }
     } else {
-        print("[?!!][UNEXPECTED ISSUE][Update][\(locale.rawValue)] Failed reading contents of path \"\(path)\". This is unexpected. Skipped.")
+        print("[?!!][UNEXPECTED ISSUE][Update][\(locale.rawValue)] Failed reading contents of path \"\(path)\". This is unexpected. Skipping.")
     }
 }
 

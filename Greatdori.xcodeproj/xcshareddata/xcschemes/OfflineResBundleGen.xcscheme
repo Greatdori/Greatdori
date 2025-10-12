@@ -54,7 +54,11 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "--debug -o /Users/t785/temp"
-            isEnabled = "YES">
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--orbg2 -o /Users/t785/temp"
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

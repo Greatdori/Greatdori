@@ -114,7 +114,7 @@ private func fileCount(of info: DoriAPI.Asset.AssetList) -> Int {
     return result
 }
 
-private func formatSeconds(_ seconds: Int) -> String {
+func formatSeconds(_ seconds: Int) -> String {
     let hours = seconds / 3600
     let minutes = (seconds % 3600) / 60
     let secs = seconds % 60
@@ -125,7 +125,7 @@ private func formatSeconds(_ seconds: Int) -> String {
     }
 }
 
-private func clipPathForPrinting(_ path: String, reserve: Int = 0) -> String {
+func clipPathForPrinting(_ path: String, reserve: Int = 0) -> String {
     let width = terminalWidth()
     if path.count <= width - 10 - reserve {
         return path

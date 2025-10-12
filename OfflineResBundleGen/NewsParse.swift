@@ -84,7 +84,7 @@ func searchForAssetUpdate(lastID: Int) async -> [DoriLocale: Set<String>]? {
                     }
                     result[passageLocale] = (result[passageLocale] ?? Set()).union(Set(datas))
                 } else {
-                    print("[?!!][UNEXPECTED ISSUE][Search] Passage #\(note.relatedID) has no locale value. This is unexpected. Skipped.")
+                    print("[?!!][UNEXPECTED ISSUE][Search] Passage #\(note.relatedID) has no locale value. This is unexpected. Skipping.")
                 }
             } else {
                 print("[!][Search] Found nil while trying to fetch passage #\(note.relatedID).")

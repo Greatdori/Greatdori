@@ -23,7 +23,7 @@ struct CommandLineEntry: AsyncParsableCommand {
     @Option(name: .shortAndLong, help: "Output path, should be a directory.", transform: URL.init(fileURLWithPath:))
     var output: URL
     @Option
-    var maxConnectionCount: Int = 20
+    var maxConnectionCount: Int = 100
     @Option(name: .shortAndLong, help: "The Github token used to upload data.")
     var token: String? = nil
     mutating func run() async throws {
@@ -50,7 +50,7 @@ struct CommandLineEntry: AsyncParsableCommand {
             await generateAPI(to: output)
         } else if locale == .doriResource {
             try await generateDoriResource(to: output)
-        } else if locale == .updateWithPatchNote {
+        } else if locale == .orbg2 {
             await updateAssets(in: output, withToken: token)
         } else if locale == .debug {
             print("[$][DEBUG] Start Debug Process")
@@ -75,7 +75,7 @@ struct CommandLineEntry: AsyncParsableCommand {
         case kr
         case doriResource
         case debug
-        case updateWithPatchNote
+        case orbg2
         
         var apiLocale: DoriAPI.Locale {
             switch self {
