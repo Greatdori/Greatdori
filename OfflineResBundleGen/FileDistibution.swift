@@ -75,8 +75,6 @@ func updateLocale(datas: [String], forLocale locale: DoriLocale, to destination:
             
             // 1. Pull
             let script = #"""
-set -euo pipefail
-
 git config --global --add safe.directory "\#(destination.absoluteString)"
 cd "\#(destination.absoluteString)"
 
@@ -89,9 +87,7 @@ for i in {1..10}; do
   fi
 done
 """#
-            let (status, output) = try await runTool(
-                arguments: ["bash", "-lc", script]
-            )
+            let (status, output) = try await runBashScript(script, commandName: "Git Pull")
             print("[✓][Update][\(locale.rawValue)/\(branch)] Git pulled. Status \(status).")
             
             // 2. Update Files
@@ -115,8 +111,6 @@ done
             // 3. Push
             do {
                 let script = #"""
-set -euo pipefail
-
 git config --global --add safe.directory "\#(destination.absoluteString)"
 cd "\#(destination.absoluteString)"
 
@@ -130,9 +124,7 @@ git add .
 git commit -m "Auto update \#(locale.rawValue)/\#(branch) ($(date +"%Y-%m-%d"))" || true
 for i in {1..10}; do git push && break; done
 """#
-                let (status, output) = try await runTool(
-                    arguments: ["bash", "-lc", script]
-                )
+                let (status, output) = try await runBashScript(script, commandName: "Git Push")
                 print("[✓][Update][\(locale.rawValue)/\(branch)] Git pushed. Status \(status).")
             } catch {
                 print("[×][Update][\(locale.rawValue)/\(branch)] Git push failed. Error: \(error).")

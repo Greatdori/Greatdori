@@ -110,6 +110,37 @@ func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [Strin
 }
 
 
+func runBashScript(_ inputScript: String, commandName: String? = nil, expectedStatus: Int32? = 0, useEnhancedErrorCatching: Bool = true) async throws -> (status: Int32, output: Data) {
+    let enhancedErrorCatchingMethod = #"""
+set -euo pipefail
+
+tmp_err=$(mktemp)
+exec 2> >(tee "$tmp_err" >&2)
+
+trap 'rc=$?;
+      err_line=${BASH_LINENO[0]};
+      err_file=${BASH_SOURCE[0]};
+      err_cmd="$BASH_COMMAND";
+      echo -e "\n[!][Bash]\#(commandName != nil ? "[\(commandName!)]" : "") Bash encountered an error."
+      echo "LOC: ${err_file}:${err_line}"
+      echo "CMD: ${err_cmd}"
+      echo "EXC: ${rc}"
+      echo -n "MSG:"
+      echo
+      sed "s/^/     /" "$tmp_err"
+     ' ERR
+"""#
+    
+    let script = """
+\(useEnhancedErrorCatching ? enhancedErrorCatchingMethod : "")
+\(inputScript)
+"""
+    let output = try await runTool(arguments: ["bash", "-lc", script], expectedStatus: expectedStatus)
+    return output
+}
+
+
+
 struct BashError: Error {
     var status: Int32
     var output: Data
