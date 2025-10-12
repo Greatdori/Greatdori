@@ -119,8 +119,8 @@ func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [Strin
 func runBashScript(_ inputScript: String, commandName: String? = nil, expectedStatus: Int32? = 0, useEnhancedErrorCatching: Bool = true, viewFailureAsFatalError: Bool) async throws -> (status: Int32, output: Data) {
     
     // DEBUG
-    let output = try await runTool(arguments: ["bash", "-c", "echo Hello; echo Error >&2"])
-    print(String(data: output.output, encoding: .utf8)!)
+    let something = try await runTool(arguments: ["bash", "-c", "echo Hello; echo Error >&2"])
+    print(String(data: something.output, encoding: .utf8)!)
 
     let enhancedErrorCatchingMethod = #"""
 set -euo pipefail
