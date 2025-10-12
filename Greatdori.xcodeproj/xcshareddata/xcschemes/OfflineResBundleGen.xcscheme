@@ -57,7 +57,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--orbg2 -o /Users/t785/temp"
+            argument = "--strand-main -o /Users/t785/temp"
             isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
