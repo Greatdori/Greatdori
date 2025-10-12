@@ -26,6 +26,8 @@ struct CommandLineEntry: AsyncParsableCommand {
     var maxConnectionCount: Int = 100
     @Option(name: .shortAndLong, help: "The Github token used to upload data.")
     var token: String? = nil
+    @Option(name: .shortAndLong, help: "The LastID used to fetch updates. Temporary use only.")
+    var lastID: Int? = nil
     mutating func run() async throws {
         var isDirectory: ObjCBool = false
         if !FileManager.default.fileExists(atPath: output.path(percentEncoded: false), isDirectory: &isDirectory) {
@@ -37,10 +39,6 @@ struct CommandLineEntry: AsyncParsableCommand {
         
         LimitedTaskQueue.shared = .init(limit: maxConnectionCount)
         
-//        if token == nil {
-//            print("[!] Didn't receive any token.")
-//        }
-        
         if locale == .all {
             await generateAPI(to: output)
             try await generate(to: output)
@@ -51,7 +49,7 @@ struct CommandLineEntry: AsyncParsableCommand {
         } else if locale == .doriResource {
             try await generateDoriResource(to: output)
         } else if locale == .strandMain {
-            await updateAssets(in: output, withToken: token)
+            await updateAssets(in: output, withToken: token, lastID: lastID)
         } else if locale == .debug {
             print("[$][DEBUG] Start Debug Process")
             await debugProcess(output: output, token: token)

@@ -15,15 +15,21 @@
 import DoriKit
 import Foundation
 
-func updateAssets(in destination: URL, withToken token: String?) async {
+func updateAssets(in destination: URL, withToken token: String?, lastID givenLastID: Int? = nil) async {
     print("[$][Main] Main starts.")
-    
     guard token != nil else {
         print("[×][Main] Token is `nil`. Aborting.")
         return
     }
     
-    var lastID = await readLastID()
+    var lastID: Int? = nil
+    if givenLastID == nil {
+        lastID = await readLastID()
+    } else {
+        lastID = givenLastID
+        print("[!][Main] Last ID is given as #\(givenLastID!). Please do not use this regularly.")
+    }
+    
     if lastID != nil {
         print("[$][Main] Last ID read as #\(lastID!).")
     } else {
