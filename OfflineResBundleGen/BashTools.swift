@@ -146,7 +146,6 @@ trap 'rc=$?;
     do {
         let bashResult = try await runTool(arguments: ["bash", "-lc", script])
         fflush(stdout)
-        /*
         if reportBashContent {
             if bashResult.output.isEmpty {
                 print("[$][Bash]\(commandTag) Bash returned exit code \(bashResult.status) without any further output.")
@@ -165,7 +164,6 @@ trap 'rc=$?;
             fflush(stdout)
             throw BashError(status: bashResult.status, output: bashResult.output)
         }
-         */
         fflush(stdout)
         return bashResult
     } catch {

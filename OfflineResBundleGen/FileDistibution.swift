@@ -187,7 +187,7 @@ func updateFile(for inputtedPath: String, into destination: URL, inLocale locale
 
 extension String {
     func dropURLPrefix() -> String {
-        let splittedString = self.split(separator: "://", maxSplits: 1) as! [String]
+        let splittedString = self.split(separator: "://", maxSplits: 1).map { String($0) }
         return splittedString.last ?? self
     }
 }
