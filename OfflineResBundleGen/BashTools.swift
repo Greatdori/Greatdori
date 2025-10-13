@@ -123,7 +123,14 @@ func runBashScript(_ inputScript: String, commandName: String? = nil, expectedSt
     print(String(data: something.output, encoding: .utf8)!)
 
     let enhancedErrorCatchingMethod = #"""
+echo "Debug 001"
+
+
 set -euo pipefail
+
+
+
+echo "Debug 002"
 
 tmp_err=$(mktemp)
 exec 2> >(tee "$tmp_err" >&2)
@@ -146,6 +153,7 @@ trap 'rc=$?;
 """#
     
     let script = """
+echo "Debug 114"
 \(useEnhancedErrorCatching ? enhancedErrorCatchingMethod : "")
 \(inputScript)
 """
