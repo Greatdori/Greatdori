@@ -145,6 +145,7 @@ trap 'rc=$?;
     let commandTag = commandName != nil ? "[\(commandName!)]" : ""
     do {
         let bashResult = try await runTool(arguments: ["bash", "-lc", script])
+        fflush(stdout)
         if reportBashContent {
             if bashResult.output.isEmpty {
                 print("[$][Bash]\(commandTag) Bash returned exit code \(bashResult.status) without any further output.")
@@ -157,10 +158,13 @@ trap 'rc=$?;
             } else {
                 print("[$][Bash]\(commandTag) Bash returned exit code \(bashResult.status) with an output data of \(bashResult.output). (Unparsebale with UTF-8.)")
             }
+            fflush(stdout)
         }
         if let expectedStatus, expectedStatus != bashResult.status {
+            fflush(stdout)
             throw BashError(status: bashResult.status, output: bashResult.output)
         }
+        fflush(stdout)
         return bashResult
     } catch {
 //        if viewFailureAsFatalError {

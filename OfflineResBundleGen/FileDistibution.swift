@@ -37,12 +37,16 @@ func updateAssets(in destination: URL, withToken token: String?, lastID givenLas
         return
     }
     
+    fflush(stdout)
+    
     let assetsForUpdate = await searchForAssetUpdate(lastID: lastID!)
     
     guard assetsForUpdate != nil else {
         print("[×][Main] Search result is `nil`.")
         return
     }
+    
+    fflush(stdout)
     
     for (locale, datas) in assetsForUpdate! {
         await updateLocale(datas: Array(datas), forLocale: locale, to: destination, withToken: token!)
@@ -78,6 +82,7 @@ func updateLocale(datas: [String], forLocale locale: DoriLocale, to destination:
             print("[$][Update][\(locale.rawValue)/\(branch)] Started with \(datas.count) item(s).")
             let startTime = CFAbsoluteTimeGetCurrent()
             var updatedItemsCount = 0
+            fflush(stdout)
             
             // 1. Pull
             let script = #"""
@@ -102,6 +107,7 @@ echo "Debug Git Pull 444"
 """#
             let (status, output) = try await runBashScript(script, commandName: "Git Pull", viewFailureAsFatalError: false)
             print("[✓][Update][\(locale.rawValue)/\(branch)] Git pulled. Status \(status).")
+            fflush(stdout)
             
             // 2. Update Files
             LimitedTaskQueue.shared.addTask {
@@ -120,6 +126,7 @@ echo "Debug Git Pull 444"
                 }
             }
             await LimitedTaskQueue.shared.waitUntilAllFinished()
+            fflush(stdout)
             
             // 3. Push
             do {
@@ -139,6 +146,7 @@ for i in {1..10}; do git push && break; done
 """#
                 let (status, output) = try await runBashScript(script, commandName: "Git Push", viewFailureAsFatalError: false)
                 print("[✓][Update][\(locale.rawValue)/\(branch)] Git pushed. Status \(status).")
+                fflush(stdout)
             } catch {
                 print("[×][Update][\(locale.rawValue)/\(branch)] Git push failed. Error: \(error).")
             }
