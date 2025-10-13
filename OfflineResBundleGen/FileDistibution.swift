@@ -27,7 +27,7 @@ func updateAssets(in destination: URL, withToken token: String?, lastID givenLas
         lastID = await readLastID()
     } else {
         lastID = givenLastID
-        print("[!][Main] Last ID is given as #\(givenLastID!). Please do not use this regularly.")
+        print("[!][Main] Last ID is given as #\(givenLastID!). This should only be used if you know what you are doing as an temporary action.")
     }
     
     if lastID != nil {
@@ -82,8 +82,8 @@ func updateLocale(datas: [String], forLocale locale: DoriLocale, to destination:
             // 1. Pull
             let script = #"""
 echo "Debug Git Pull 111"
-git config --global --add safe.directory "\#(destination.absoluteString)"
-cd "\#(destination.absoluteString)"
+git config --global --add safe.directory "\#(destination.absoluteString.dropURLPrefix())"
+cd "\#(destination.absoluteString.dropURLPrefix())"
 
 echo "Debug Git Pull 222"
 
@@ -124,8 +124,8 @@ echo "Debug Git Pull 444"
             // 3. Push
             do {
                 let script = #"""
-git config --global --add safe.directory "\#(destination.absoluteString)"
-cd "\#(destination.absoluteString)"
+git config --global --add safe.directory "\#(destination.absoluteString.dropURLPrefix())"
+cd "\#(destination.absoluteString.dropURLPrefix())"
 
 git config user.name "Togawa Sakiko"
 git config user.email "sakiko@darock.top"
@@ -174,5 +174,12 @@ func updateFile(for inputtedPath: String, into destination: URL, inLocale locale
         onUpdate(clipPathForPrinting("\(path)_rip", reserve: 15))
     } else {
         print("[?!!][UNEXPECTED ISSUE][Update][\(locale.rawValue)] Failed reading contents of path \"\(path)\". This is unexpected. Skipping.")
+    }
+}
+
+extension String {
+    func dropURLPrefix() -> String {
+        let splittedString = self.split(separator: "://", maxSplits: 1) as! [String]
+        return splittedString.last ?? self
     }
 }
