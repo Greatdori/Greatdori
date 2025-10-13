@@ -92,47 +92,32 @@ typealias CompletionHandler = (_ result: Result<Int32, Error>, _ output: Data) -
 // Copyright Notice: Code below this line is no longer from Apple.
 
 @MainActor
-func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [String] = [], input: Data = Data(), expectedStatus: Int32? = 0, viewFailureAsFatalError: Bool = false, fatalErrorMessage: String = "[×][Bash] Encountered an fatal error. Error: $BashErrorPlaceholder.") async throws -> (status: Int32, output: Data) {
+func runTool(tool: URL = URL(fileURLWithPath: "/usr/bin/env"), arguments: [String] = [], input: Data = Data()) async throws -> (status: Int32, output: Data) {
     try await withCheckedThrowingContinuation { continuation in
         launch(tool: tool, arguments: arguments, input: input) { result, output in
             switch result {
             case .success(let status):
-                if let expectedStatus, status == expectedStatus {
-                    continuation.resume(returning: (status, output))
-                } else {
-                    continuation.resume(throwing: BashError(status: status, output: output))
-                    if viewFailureAsFatalError {
-                        fatalError(fatalErrorMessage.replacingOccurrences(of: "$BashErrorPlaceholder", with: "\(BashError(status: status, output: output))"))
-                    }
-                }
+                continuation.resume(returning: (status, output))
             case .failure(let error):
                 continuation.resume(throwing: error)
-                if viewFailureAsFatalError {
-                    fatalError(fatalErrorMessage.replacingOccurrences(of: "$BashErrorPlaceholder", with: "\(error))"))
-                }
             }
         }
     }
 }
 
-
-func runBashScript(_ inputScript: String, commandName: String? = nil, expectedStatus: Int32? = 0, useEnhancedErrorCatching: Bool = true, viewFailureAsFatalError: Bool) async throws -> (status: Int32, output: Data) {
+@MainActor
+func runBashScript(_ inputScript: String, commandName: String? = nil, reportBashContent: Bool = true, expectedStatus: Int32? = 0, useEnhancedErrorCatching: Bool = true, viewFailureAsFatalError: Bool) async throws -> (status: Int32, output: Data) {
     
     // DEBUG
     let something = try await runTool(arguments: ["bash", "-lc", "echo Hello; echo Error >&2"])
     print(String(data: something.output, encoding: .utf8)!)
 
     let enhancedErrorCatchingMethod = #"""
-echo "Debug 001"
-
-
 set -euo pipefail
-
-
 
 echo "Debug 002"
 
-# tmp_err=$(mktemp)
+tmp_err=$(mktemp)
 # exec 2> >(tee "$tmp_err" >&2)
 # exec > >(tee "$tmp_out") 2> >(tee "$tmp_err" >&2)
 
@@ -150,15 +135,41 @@ trap 'rc=$?;
       echo
       sed "s/^/     /" "$tmp_err"
      ' ERR
+
+echo "Debug 100"
 """#
     
     let script = """
-echo "Debug 114"
 \(useEnhancedErrorCatching ? enhancedErrorCatchingMethod : "")
 \(inputScript)
 """
-    let output = try await runTool(arguments: ["bash", "-lc", script], expectedStatus: expectedStatus, viewFailureAsFatalError: viewFailureAsFatalError, fatalErrorMessage: "[×][Bash]\(commandName != nil ? "[\(commandName!)]" : "") Encountered an fatal error. Error: $BashErrorPlaceholder.")
-    return output
+    
+    let commandTag = commandName != nil ? "[\(commandName!)]" : ""
+    do {
+        let bashResult = try await runTool(arguments: ["bash", "-lc", script])
+        if reportBashContent {
+            if bashResult.output.isEmpty {
+                print("[$][Bash]\(commandTag) Bash returned exit code \(bashResult.status) without any further output.")
+            } else if let bashResultString = String(data: bashResult.output, encoding: .utf8) {
+                    print("""
+[$][Bash]\(commandTag) Bash returned exit code \(bashResult.status) with output as following: \"\"\"
+\(bashResultString)
+\"\"\"
+""")
+            } else {
+                print("[$][Bash]\(commandTag) Bash returned exit code \(bashResult.status) with an output data of \(bashResult.output). (Unparsebale with UTF-8.)")
+            }
+        }
+        if let expectedStatus, expectedStatus != bashResult.status {
+            throw BashError(status: bashResult.status, output: bashResult.output)
+        }
+        return bashResult
+    } catch {
+        if viewFailureAsFatalError {
+            fatalError("[×][Bash]\(commandTag) Encountered an fatal Bash running error. Error: \(error).")
+        }
+        throw error
+    }
 }
 
 
