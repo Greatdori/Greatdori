@@ -163,9 +163,9 @@ trap 'rc=$?;
         }
         return bashResult
     } catch {
-        if viewFailureAsFatalError {
-            fatalError("[×][Bash]\(commandTag) Encountered an fatal Bash running error. Error: \(error).")
-        }
+//        if viewFailureAsFatalError {
+//            fatalError("[×][Bash]\(commandTag) Encountered an fatal Bash running error. Error: \(error).")
+//        }
         throw error
     }
 }
