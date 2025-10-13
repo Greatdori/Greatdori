@@ -132,8 +132,8 @@ set -euo pipefail
 
 echo "Debug 002"
 
-tmp_err=$(mktemp)
-exec 2> >(tee "$tmp_err" >&2)
+# tmp_err=$(mktemp)
+# exec 2> >(tee "$tmp_err" >&2)
 # exec > >(tee "$tmp_out") 2> >(tee "$tmp_err" >&2)
 
 echo "Trees"
