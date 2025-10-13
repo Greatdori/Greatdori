@@ -52,7 +52,7 @@ struct CommandLineEntry: AsyncParsableCommand {
             await updateAssets(in: output, withToken: token, lastID: lastID)
         } else if locale == .debug {
             print("[$][DEBUG] Start Debug Process")
-            await debugProcess(output: output, token: token)
+            await debugProcess(output: output, token: token, lastID: lastID)
         } else {
             print("Generating for \(locale.rawValue.uppercased())...\n")
             let localizedOutput = output.appending(path: locale.rawValue)
@@ -87,10 +87,21 @@ struct CommandLineEntry: AsyncParsableCommand {
     }
 }
 
-func debugProcess(output: URL, token: String?) async {
+func debugProcess(output: URL, token: String?, lastID: Int?) async {
 //    print(await readLastID())
 //    await updateLastID()
 //    print(await readLastID())
-    print(NSHomeDirectory() + "/Library/Containers/GreatdoriOffflineResBundleGen")
 //    await prepareUpdateFolder(forLocale: .jp, from: "/Users/himmel/gd-offline-res", to: output.absoluteString)
+    do {
+        try await runBashScript("""
+echo 12345
+""", viewFailureAsFatalError: false)
+    } catch {
+        print("'echo 12345' failure")
+    }
+    do  {
+        try await updateAssets(in: output, withToken: token, lastID: lastID)
+    } catch {
+        print("updateAssets failure: \(error)")
+    }
 }

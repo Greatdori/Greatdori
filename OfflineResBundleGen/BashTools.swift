@@ -163,7 +163,12 @@ echo "Debug 114"
 
 
 
-struct BashError: Error {
+struct BashError: Error, CustomStringConvertible {
     var status: Int32
     var output: Data
+    
+    var description: String {
+        let outputString = String(data: output, encoding: .utf8) ?? "<\(output.count) bytes>"
+        return "BashError(status: \(status), output: \(outputString))"
+    }
 }
