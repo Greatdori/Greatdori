@@ -138,7 +138,7 @@ trap 'rc=$?;
 """#
     
     let script = """
-\(useEnhancedErrorCatching ? enhancedErrorCatchingMethod : "")
+\(useEnhancedErrorCatching && false ? enhancedErrorCatchingMethod : "")
 \(inputScript)
 """
     
