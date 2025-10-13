@@ -81,10 +81,15 @@ func updateLocale(datas: [String], forLocale locale: DoriLocale, to destination:
             
             // 1. Pull
             let script = #"""
+echo "Debug Git Pull 111"
 git config --global --add safe.directory "\#(destination.absoluteString)"
 cd "\#(destination.absoluteString)"
 
+echo "Debug Git Pull 222"
+
 git checkout "\#(locale.rawValue)/\#(branch)"
+
+echo "Debug Git Pull 333"
 
 # Retry git pull --rebase up to 10 times
 for i in {1..10}; do
@@ -92,6 +97,8 @@ for i in {1..10}; do
     break
   fi
 done
+
+echo "Debug Git Pull 444"
 """#
             let (status, output) = try await runBashScript(script, commandName: "Git Pull", viewFailureAsFatalError: false)
             print("[✓][Update][\(locale.rawValue)/\(branch)] Git pulled. Status \(status).")
