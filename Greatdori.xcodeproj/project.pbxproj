@@ -309,6 +309,7 @@
 		E924AB9E2E99EB17003BF482 /* NewsParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E924AB9D2E99EB14003BF482 /* NewsParse.swift */; };
 		E924ABA02E99F9F0003BF482 /* BashTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = E924AB9F2E99F9EC003BF482 /* BashTools.swift */; };
 		E924ABA42E9A0672003BF482 /* FileDistibution.swift in Sources */ = {isa = PBXBuildFile; fileRef = E924ABA32E9A0647003BF482 /* FileDistibution.swift */; };
+		E935FF072E9CA6C900A1ECD1 /* InfoDetermination.swift in Sources */ = {isa = PBXBuildFile; fileRef = E935FF062E9CA6BE00A1ECD1 /* InfoDetermination.swift */; };
 		E94218F02E8AA2FF00F24974 /* CharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94218EF2E8AA2FB00F24974 /* CharacterDetailView.swift */; };
 		E94218F22E8AA32000F24974 /* CharacterSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94218F12E8AA31D00F24974 /* CharacterSearchView.swift */; };
 		E94218F52E8AA38300F24974 /* CardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94218F42E8AA38300F24974 /* CardInfo.swift */; };
@@ -932,6 +933,7 @@
 		E924AB9F2E99F9EC003BF482 /* BashTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BashTools.swift; sourceTree = "<group>"; };
 		E924ABA22E99FB07003BF482 /* Apple-Sample-Code-License.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Apple-Sample-Code-License.pdf"; sourceTree = "<group>"; };
 		E924ABA32E9A0647003BF482 /* FileDistibution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDistibution.swift; sourceTree = "<group>"; };
+		E935FF062E9CA6BE00A1ECD1 /* InfoDetermination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDetermination.swift; sourceTree = "<group>"; };
 		E94218EF2E8AA2FB00F24974 /* CharacterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailView.swift; sourceTree = "<group>"; };
 		E94218F12E8AA31D00F24974 /* CharacterSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterSearchView.swift; sourceTree = "<group>"; };
 		E94218F42E8AA38300F24974 /* CardInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardInfo.swift; sourceTree = "<group>"; };
@@ -1808,6 +1810,7 @@
 				8C8E43FF2E5DAD46005590F0 /* DoriResource.swift */,
 				E924AB9D2E99EB14003BF482 /* NewsParse.swift */,
 				E924ABA32E9A0647003BF482 /* FileDistibution.swift */,
+				E935FF062E9CA6BE00A1ECD1 /* InfoDetermination.swift */,
 				E924AB9F2E99F9EC003BF482 /* BashTools.swift */,
 				E924ABA22E99FB07003BF482 /* Apple-Sample-Code-License.pdf */,
 			);
@@ -3119,6 +3122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CE186AA2E5352D1009C1C87 /* CommandLineEntry.swift in Sources */,
+				E935FF072E9CA6C900A1ECD1 /* InfoDetermination.swift in Sources */,
 				8C7F17702E5C082D0040C206 /* APIData.swift in Sources */,
 				8C0D89BC2E53735F004BD1D6 /* Progress.swift in Sources */,
 				E924AB9E2E99EB17003BF482 /* NewsParse.swift in Sources */,
