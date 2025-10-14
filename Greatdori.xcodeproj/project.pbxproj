@@ -233,7 +233,7 @@
 			filePatterns = "*.gyb";
 			fileType = pattern.proxy;
 			inputFiles = (
-				"$(SRCROOT)/BuildTool/gyb.py",
+				"$(SRCROOT)/utils/gyb.py",
 			);
 			isEditable = 1;
 			name = "Convert GYB Source";
@@ -241,7 +241,7 @@
 				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
 			);
 			runOncePerArchitecture = 0;
-			script = "$SRCROOT/BuildTool/gyb.py --line-directive '#sourceLocation(file: \"%(file)s\", line: %(line)d)' -o \"$DERIVED_FILE_DIR/$INPUT_FILE_BASE\" \"$INPUT_FILE_PATH\"\n";
+			script = "$SRCROOT/utils/gyb.py --line-directive '#sourceLocation(file: \"%(file)s\", line: %(line)d)' -o \"$DERIVED_FILE_DIR/$INPUT_FILE_BASE\" \"$INPUT_FILE_PATH\"\n";
 		};
 		8C923D8B2E3055A4003AFC0A /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
