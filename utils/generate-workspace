@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+# This source file is part of the Greatdori! open source project
+#
+# Copyright (c) 2025 the Greatdori! project authors
+# Licensed under Apache License v2.0
+#
+# See https://greatdori.memz.top/LICENSE.txt for license information
+# See https://greatdori.memz.top/CONTRIBUTORS.txt for the list of Greatdori! project authors
+
+import os
+from build_dori.build_dori.constants import DORI_SOURCE_ROOT
+
+workspace_path = os.path.join(DORI_SOURCE_ROOT, "Greatdori.xcworkspace")
+os.mkdir(workspace_path)
+file = open(os.path.join(workspace_path, "contents.xcworkspacedata"), "w")
+file.write("""<?xml version="1.0" encoding="UTF-8"?>                                                    
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:DoriKit/DoriKit.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Greatdori/Greatdori.xcodeproj">
+   </FileRef>
+</Workspace>""")
+file.close()
+
