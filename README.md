@@ -2,92 +2,16 @@
   <source media="(prefers-color-scheme: dark)" srcset="Artwork/IconWithText~dark.png">
   <img src="Artwork/IconWithText.png" alt="DoriKit logo" height="70">
 </picture>
-<br />
-<br />
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="Artwork/DoriKitIconWithText~dark.png">
-  <img src="Artwork/DoriKitIconWithText.png" alt="DoriKit logo" height="70">
-</picture>
 
 # Greatdori!
 
-Greatdori includes DoriKit library, iOS app and watchOS app.
-DoriKit allows you to fetch data from Bestdori API in Swifty way:
-you can get raw data from the API,
-or let DoriKit to process data from the API for you.
-Apps in this project show you how to use the DoriKit,
-and provide native experience to Bestdori.
+Greatdori includes iOS, macOS and watchOS app,
+built with [DoriKit](https://github.com/Greatdori/DoriKit)
 
 | **Target** | **Status** |
 |---:|:---:|
-| DoriKit             | ![DoriKit Build Status](https://img.shields.io/github/actions/workflow/status/WindowsMEMZ/Greatdori/build-dorikit.yml)|
-| Greatdori           | ![Greatdori Build Status](https://img.shields.io/github/actions/workflow/status/WindowsMEMZ/Greatdori/build-greatdori.yml)|
+| Greatdori           | ![Greatdori Build Status](https://img.shields.io/github/actions/workflow/status/Greatdori/Greatdori/build-greatdori.yml)|
 | Greatdori Watch App | ![Greatdori Watch App Build Status](https://img.shields.io/github/actions/workflow/status/WindowsMEMZ/Greatdori/build-greatdori-watch.yml)|
-
-## Using DoriKit
-### Xcode Project (Recommended)
-1. Clone this project into your project folder:
-    ```sh
-    git clone https://github.com/WindowsMEMZ/Greatdori.git
-    ```
-    Use `git submodule` if you want to manage versions better.
-2. Update submodules for Greatdori! project:
-    ```sh
-    cd Greatdori
-    git submodule update --init --recursive
-    ```
-3. Install CMake if you don't have:
-    ```sh
-    brew install cmake
-    ```
-4. Drag `Greatdori.xcodeproj` and drop it into the project navigator in Xcode.
-5. Go to project editor for your project, select a target,
-    add DoriKit in *Frameworks, Libraries and Embedded Content* section.
-    
-> [!TIP]
-> The ABI of DoriKit is stable between release versions
-> when using with the Xcode Project.
-
-### XCFramework
-Download the `DoriKit.xcframework` from
-[releases](https://github.com/WindowsMEMZ/Greatdori/releases/latest)
-then link it to your project.
-
-Or you can build an XCFramework by your own as described
-in the [Build XCFramework](#build-xcframework) section.
-
-### Swift Package Manager
-Add the following dependency to your `Package.swift` file:
-
-```swift
-.package(url: "https://github.com/WindowsMEMZ/Greatdori.git", branch: "main"),
-```
-
-Then add the dependency to targets you're going to use it:
-
-```swift
-.target(
-    name: "MyTarget", 
-    dependencies: [
-        .product(name: "DoriKit", package: "Greatdori"),
-    ]
-),
-```
-
-> [!NOTE]
-> Some features may not available if you're using DoriKit
-> with Swift Package Manager. Always import it as a Xcode project
-> by the steps described in [Xcode Project](#xcode-project-recommended) section when possible.
-> See the next section to learn more about limited features.
-
-### Features that are not available with Swift Package Manager
-- **Not available**: [Pre-Cache](#pre-cache).
-- **Not available**: Rich content related APIs.
-    Features that contain rich contents are also not availble,
-    such as `DoriAPI.Post`.
-- **Not available**: Built-in binary resources. APIs that use these resources
-    will get them online instead.
-- **Not available**: Offline asset APIs.
 
 ## Building
 Xcode 26.0 and Swift 6.2+ is required for building this project.
@@ -99,21 +23,44 @@ you can install it by Homebrew if you don't have one:
 brew install cmake
 ```
 
-Open `Greatdori.xcodeproj`, then select a scheme you want to build.
-You can also use `swift build` to build DoriKit from Package.swift.
-However, functionality of DoriKit is limited if it's built as a Swift Package.
-
-### Build XCFramework
-An XCFramework allows you to use DoriKit in your project easily.
-Generally, we attach a `DoriKit.xcframework` with each releases.
-You can build a XCFramework of DoriKit by your own using `build-xcframework`
-script like the following:
+First, create a directory for the Greatdori! project:
 
 ```sh
-$ ./BuildTool/build-xcframework
+mkdir Greatdori
+cd Greatdori
 ```
 
-Once the build succeeded, you can find `DoriKit.xcframework` in the `build/` folder.
+Then clone this project by Git:
+
+```sh
+git clone https://github.com/Greatdori/Greatdori.git
+cd Greatdori
+```
+
+Note that there should be two `Greatdori` folders,
+your current path like this:
+
+```sh
+$ pwd
+/path/to/Greatdori/Greatdori
+```
+
+Use the `utils/update-checkout` script to checkout all repositories
+that Greatdori! needs. Add `--clone` option for the first time
+to clone all repositories:
+
+```sh
+utils/update-checkout --clone
+```
+
+After cloning all repositories needed, use `utils/generate-workspace`
+to generate a `xcworkspace` for building project:
+
+```sh
+utils/generate-workspace
+```
+
+Open `Greatdori.xcworkspace`, then select a scheme you want to build.
 
 ### Schemes
 There're several schemes in Greatdori! project:
