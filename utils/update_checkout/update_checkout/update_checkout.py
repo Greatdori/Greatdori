@@ -23,10 +23,10 @@ import traceback
 from multiprocessing import freeze_support
 from typing import Any, Dict, Optional, Set, List, Union
 
-from build_swift.build_swift.constants import SWIFT_SOURCE_ROOT
+from build_dori.build_dori.constants import DORI_SOURCE_ROOT
 from .runner_arguments import AdditionalSwiftSourcesArguments, UpdateArguments
 from .parallel_runner import ParallelRunner
-from swift_build_support.swift_build_support import shell
+from dori_build_support.dori_build_support import shell
 
 
 SCRIPT_FILE = os.path.abspath(__file__)
@@ -788,7 +788,7 @@ repositories.
     parser.add_argument(
         "--source-root",
         help="The root directory to checkout repositories",
-        default=SWIFT_SOURCE_ROOT,
+        default=DORI_SOURCE_ROOT,
         dest='source_root')
     parser.add_argument(
         "--use-submodules",

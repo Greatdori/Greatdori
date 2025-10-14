@@ -21,11 +21,7 @@ playground.xcworkspace
 Carthage/Build/
 Dependencies/
 .accio/
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots/**/*.png
-fastlane/test_output
-iOSInjectionProject/
+*.pyc
 .DS_Store
 .swiftpm/config/registries.json
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
