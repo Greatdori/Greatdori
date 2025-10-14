@@ -1,0 +1,20 @@
+{
+    "ssh-clone-pattern": "git@github.com:%s.git",
+    "https-clone-pattern": "https://github.com/%s.git",
+    "repos" : {
+        "Greatdori": {
+            "remote": { "id": "WindowsMEMZ/Greatdori" } },
+        "DoriKit": {
+            "remote": { "id": "Greatdori/DoriKit" } }
+    },
+    "default-branch-scheme": "main",
+    "branch-schemes": {
+        "main": {
+            "aliases": ["main"],
+            "repos": {
+                "Greatdori": "main",
+                "DoriKit": "main"
+            }
+        }
+    }
+}
