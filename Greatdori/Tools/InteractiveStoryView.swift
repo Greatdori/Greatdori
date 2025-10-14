@@ -17,6 +17,7 @@ import Combine
 import DoriKit
 import SwiftUI
 import SDWebImageSwiftUI
+@_spi(Advanced) import SwiftUIIntrospect
 
 @safe
 struct InteractiveStoryView: View {
@@ -45,6 +46,7 @@ struct InteractiveStoryView: View {
     @State var isAutoPlaying = false
     @State var autoPlayTimer: Timer?
     @State var talkShakeDuration = 0.0
+    @State var screenShakeDuration = 0.0
     
     init(asset: DoriAPI.Misc.StoryAsset, voiceBundleURL: URL, locale: DoriLocale) {
         self.asset = asset
@@ -181,6 +183,7 @@ struct InteractiveStoryView: View {
                     .ignoresSafeArea()
             }
         }
+        .modifier(ShakeScreenModifier(shakeDuration: $screenShakeDuration))
         #if os(iOS)
         .toolbar(.hidden, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
@@ -209,6 +212,7 @@ struct InteractiveStoryView: View {
             }
             next()
         }
+        .focusable()
         .onKeyPress(keys: [.return, .space], phases: [.down]) { _ in
             if isHidingUI {
                 isHidingUI = false
@@ -531,7 +535,12 @@ struct InteractiveStoryView: View {
                 }
                 next()
             case .shakeScreen:
-                print("Not Implemented Effect: shakeScreen")
+                Task {
+                    isDelaying = true
+                    try? await Task.sleep(for: .seconds(snippet.delay))
+                    screenShakeDuration = effect.duration
+                    isDelaying = false
+                }
             case .shakeWindow:
                 Task {
                     isDelaying = true
@@ -759,12 +768,14 @@ private struct TalkView: View {
             if shakeDuration > 0 {
                 let startTime = CFAbsoluteTimeGetCurrent()
                 shakeTimer = .scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
-                    if _fastPath(CFAbsoluteTimeGetCurrent() - startTime < shakeDuration) {
-                        shakingOffset = .init(width: .random(in: -5...5), height: .random(in: -5...5))
-                    } else {
-                        shakeTimer?.invalidate()
-                        shakingOffset = .init(width: 0, height: 0)
-                        shakeDuration = 0
+                    DispatchQueue.main.async {
+                        if _fastPath(CFAbsoluteTimeGetCurrent() - startTime < shakeDuration) {
+                            shakingOffset = .init(width: .random(in: -5...5), height: .random(in: -5...5))
+                        } else {
+                            shakeTimer?.invalidate()
+                            shakingOffset = .init(width: 0, height: 0)
+                            shakeDuration = 0
+                        }
                     }
                 }
             }
@@ -889,6 +900,58 @@ private struct BacklogView: View {
             }
         }
         #endif
+    }
+}
+
+private struct ShakeScreenModifier: ViewModifier {
+    @Binding var shakeDuration: Double
+    @State private var shakeTimer: Timer?
+    @State private var shakingOffset = CGSize(width: 0, height: 0)
+    #if os(macOS)
+    @State private var currentWindow: NSWindow?
+    #endif
+    func body(content: Content) -> some View {
+        content
+        #if os(macOS)
+            .introspect(.window, on: .macOS(.v14...)) { window in
+                DispatchQueue.main.async {
+                    currentWindow = window
+                }
+            }
+        #else
+            .offset(shakingOffset)
+        #endif
+            .onChange(of: shakeDuration) {
+                if shakeDuration > 0 {
+                    let startTime = CFAbsoluteTimeGetCurrent()
+                    #if os(macOS)
+                    let startFrame = currentWindow?.frame
+                    #endif
+                    shakeTimer = .scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+                        DispatchQueue.main.async {
+                            if _fastPath(CFAbsoluteTimeGetCurrent() - startTime < shakeDuration) {
+                                #if os(macOS)
+                                if let startFrame {
+                                    currentWindow?.setFrameOrigin(.init(x: startFrame.origin.x + .random(in: -5...5), y: startFrame.origin.y + .random(in: -5...5)))
+                                }
+                                #else
+                                shakingOffset = .init(width: .random(in: -5...5), height: .random(in: -5...5))
+                                #endif
+                            } else {
+                                shakeTimer?.invalidate()
+                                #if os(macOS)
+                                if let startFrame {
+                                    currentWindow?.setFrameOrigin(startFrame.origin)
+                                }
+                                #else
+                                shakingOffset = .init(width: 0, height: 0)
+                                #endif
+                                shakeDuration = 0
+                            }
+                        }
+                    }
+                }
+            }
     }
 }
 
