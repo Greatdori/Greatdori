@@ -265,6 +265,19 @@ struct SettingsWidgetsCollectionView: View {
                         .font(isMACOS ? .body : .caption)
                 })
             })
+            .toolbar {
+                if isMACOS {
+                    ToolbarItem {
+                        Button(action: {
+                            newCollectionInput = ""
+                            newCollectionSheetIsDisplaying = true
+                        }, label: {
+                            Label("Settings.widgets.collections.user.add", systemImage: "plus")
+                        })
+                        .disabled(newCollectionIsImporting)
+                    }
+                }
+            }
         }
         .navigationDestination(isPresented: $showDestination, destination: {
             if let destinationCollection {
@@ -302,19 +315,6 @@ struct SettingsWidgetsCollectionView: View {
             currentViewController = viewController
         }
         #endif
-        .toolbar {
-            if isMACOS {
-                ToolbarItem {
-                    Button(action: {
-                        newCollectionInput = ""
-                        newCollectionSheetIsDisplaying = true
-                    }, label: {
-                        Label("Settings.widgets.collections.user.add", systemImage: "plus")
-                    })
-                    .disabled(newCollectionIsImporting)
-                }
-            }
-        }
     }
     
     struct CollectionAddingActions: View {
