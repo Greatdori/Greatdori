@@ -16,6 +16,7 @@ import AVKit
 import Combine
 import DoriKit
 import SwiftUI
+import Alamofire
 import SDWebImageSwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
 
@@ -261,11 +262,9 @@ struct InteractiveStoryView: View {
             
             for talk in asset.talkData {
                 for voice in talk.voices {
-                    DispatchQueue(label: "com.memz233.Greatdori.Interactive-Story-Get-Voices", qos: .userInitiated).async {
-                        if let data = try? Data(contentsOf: URL(string: "\(voiceBundleURL.absoluteString)_rip/\(voice.voiceID).mp3")!) {
-                            DispatchQueue.main.async {
-                                talkAudios.updateValue(data, forKey: voice)
-                            }
+                    AF.request("\(voiceBundleURL.absoluteString)_rip/\(voice.voiceID).mp3").response { response in
+                        if let data = response.data {
+                            talkAudios.updateValue(data, forKey: voice)
                         }
                     }
                 }
@@ -321,6 +320,15 @@ struct InteractiveStoryView: View {
     }
     
     func next(ignoresDelay: Bool = false) {
+        func withDelay(_ closure: @escaping () async -> Void, onFinish finish: @escaping () -> Void = {}) {
+            Task(priority: .userInitiated) {
+                isDelaying = true
+                await closure()
+                isDelaying = false
+                finish()
+            }
+        }
+        
         guard !isDelaying || ignoresDelay else { return }
         
         currentSnippetIndex += 1
@@ -357,13 +365,10 @@ struct InteractiveStoryView: View {
         
         switch snippet.actionType {
         case .none:
-            isDelaying = true
-            Task.detached {
+            withDelay {
                 try? await Task.sleep(for: .seconds(snippet.delay))
-                await MainActor.run {
-                    isDelaying = false
-                    next()
-                }
+            } onFinish: {
+                next()
             }
         case .talk:
             let talkData = asset.talkData[snippet.referenceIndex]
@@ -410,27 +415,22 @@ struct InteractiveStoryView: View {
             }
         case .layout, .motion:
             let layoutData = asset.layoutData[snippet.referenceIndex]
-            isDelaying = true
-            Task.detached {
+            withDelay {
                 if snippet.delay > 0 {
-                    if await currentSnippetIndex + 1 < asset.snippets.endIndex {
+                    if currentSnippetIndex + 1 < asset.snippets.endIndex {
                         // Motions can appear continuously
                         // and share the same start time for delay.
                         // We find the motion snippets immediately after this
                         // (if present) and perform them
-                        let s = asset.snippets[await currentSnippetIndex + 1]
+                        let s = asset.snippets[currentSnippetIndex + 1]
                         if s.actionType == .motion && s.delay > 0 {
-                            DispatchQueue.main.async {
-                                // If the snippet after the next is still a motion,
-                                // the same code here in this call handles it
-                                next(ignoresDelay: true)
-                            }
+                            // If the snippet after the next is still a motion,
+                            // the same code here in this call handles it
+                            next(ignoresDelay: true)
                         }
                         // Effects are like this, too
                         if s.actionType == .effect && s.delay > 0 {
-                            DispatchQueue.main.async {
-                                next(ignoresDelay: true)
-                            }
+                            next(ignoresDelay: true)
                         }
                     }
                     try? await Task.sleep(for: .seconds(snippet.delay))
@@ -460,31 +460,27 @@ struct InteractiveStoryView: View {
                             break
                         }
                     }
-                    await MainActor.run {
-                        if let index = allDiffLayouts.firstIndex(where: { $0.costumeType == newData.costumeType }) {
-                            if layoutData.type == .none {
-                                newData.sideFrom = allDiffLayouts[index].sideFrom
-                                newData.sideTo = allDiffLayouts[index].sideTo
-                                newData.sideFromOffsetX = allDiffLayouts[index].sideFromOffsetX
-                                newData.sideToOffsetX = allDiffLayouts[index].sideToOffsetX
-                            }
-                            allDiffLayouts[index] = newData
-                            if !showingLayoutIndexs.contains(index) {
-                                if layoutData.type == .appear {
-                                    showingLayoutIndexs.append(index)
-                                } else {
-                                    print("Scheduled a layout change, but it's not even visible?!")
-                                }
-                            }
-                        } else {
-                            print("A combined layout '\(newData)' doesn't match any layout in full list '\(allDiffLayouts)'?!")
+                    if let index = allDiffLayouts.firstIndex(where: { $0.costumeType == newData.costumeType }) {
+                        if layoutData.type == .none {
+                            newData.sideFrom = allDiffLayouts[index].sideFrom
+                            newData.sideTo = allDiffLayouts[index].sideTo
+                            newData.sideFromOffsetX = allDiffLayouts[index].sideFromOffsetX
+                            newData.sideToOffsetX = allDiffLayouts[index].sideToOffsetX
                         }
+                        allDiffLayouts[index] = newData
+                        if !showingLayoutIndexs.contains(index) {
+                            if layoutData.type == .appear {
+                                showingLayoutIndexs.append(index)
+                            } else {
+                                print("Scheduled a layout change, but it's not even visible?!")
+                            }
+                        }
+                    } else {
+                        print("A combined layout '\(newData)' doesn't match any layout in full list '\(allDiffLayouts)'?!")
                     }
                 case .hide:
-                    await MainActor.run {
-                        showingLayoutIndexs.removeAll {
-                            allDiffLayouts[$0].characterID == layoutData.characterID
-                        }
+                    showingLayoutIndexs.removeAll {
+                        allDiffLayouts[$0].characterID == layoutData.characterID
                     }
                 case .shakeX:
                     print("Not Implemented Layout: shakeY")
@@ -492,11 +488,9 @@ struct InteractiveStoryView: View {
                     print("Not Implemented Layout: shakeY")
                 @unknown default: break
                 }
-                await MainActor.run {
-                    isDelaying = false
-                    if snippet.actionType == .layout {
-                        next()
-                    }
+            } onFinish: {
+                if snippet.actionType == .layout {
+                    next()
                 }
             }
         case .input:
@@ -535,18 +529,14 @@ struct InteractiveStoryView: View {
                 }
                 next()
             case .shakeScreen:
-                Task {
-                    isDelaying = true
+                withDelay {
                     try? await Task.sleep(for: .seconds(snippet.delay))
                     screenShakeDuration = effect.duration
-                    isDelaying = false
                 }
             case .shakeWindow:
-                Task {
-                    isDelaying = true
+                withDelay {
                     try? await Task.sleep(for: .seconds(snippet.delay))
                     talkShakeDuration = effect.duration
-                    isDelaying = false
                 }
             case .changeBackground, .changeBackgroundStill, .changeCardStill:
                 withAnimation {

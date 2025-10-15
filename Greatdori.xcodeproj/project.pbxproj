@@ -159,6 +159,7 @@
 		8CBF73132E902A0600D88F96 /* CardCollectionCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBF73122E9029FE00D88F96 /* CardCollectionCoding.swift */; };
 		8CC046DC2E6C8F63009FDC13 /* AppFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC046DB2E6C8F5D009FDC13 /* AppFlags.swift */; };
 		8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13F742E2FDC4700673E15 /* NavigationListView.swift */; };
+		8CD2A9D22E9F690D00831458 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8CD2A9D12E9F690D00831458 /* Alamofire */; };
 		8CF826D42E8AC1120045CA97 /* FallingWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */; };
 		8CF827A92E8ACD380045CA97 /* LoginCampaignInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF827A82E8ACD380045CA97 /* LoginCampaignInfo.swift */; };
 		8CF827AB2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF827AA2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift */; };
@@ -641,6 +642,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CB4D47F2E445F700085D57A /* BuiltinCardCollections.framework in Frameworks */,
+				8CD2A9D22E9F690D00831458 /* Alamofire in Frameworks */,
 				8C923D842E304899003AFC0A /* SDWebImageSVGCoder in Frameworks */,
 				8C923D822E304899003AFC0A /* SDWebImageSwiftUI in Frameworks */,
 				8C2C89262E9E153400058FF7 /* DoriKit.framework in Frameworks */,
@@ -1239,6 +1241,7 @@
 				8C923D832E304899003AFC0A /* SDWebImageSVGCoder */,
 				8C6264EE2E9105D600FF6950 /* SwiftUIIntrospect */,
 				E94944E12E92A19600E50D3F /* MarkdownUI */,
+				8CD2A9D12E9F690D00831458 /* Alamofire */,
 			);
 			productName = Greatdori;
 			productReference = 8C0C995D2E296A4400549B5C /* Greatdori!.app */;
@@ -3548,6 +3551,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C923D7E2E30488E003AFC0A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */;
 			productName = SDWebImageSVGCoder;
+		};
+		8CD2A9D12E9F690D00831458 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C0C99AC2E296F2D00549B5C /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 		E94944E12E92A19600E50D3F /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
