@@ -97,6 +97,12 @@ import SwiftUI
         destination: {EventTrackerView()}
     ),
     ToolDestinationItem(
+        title: "App.tools.chart-simulator",
+        symbol: "apple.classical.pages.fill",
+        tabValue: .chartSimulator,
+        destination: {ChartSimulatorView()}
+    ),
+    ToolDestinationItem(
         title: "App.tools.story-viewer",
         symbol: "books.vertical",
         tabValue: .storyViewer,

@@ -1,6 +1,6 @@
 //===---*- Greatdori! -*---------------------------------------------------===//
 //
-// SongSearchView.swift
+// SongSelector.swift
 //
 // This source file is part of the Greatdori! open source project
 //
@@ -12,14 +12,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftUI
 import DoriKit
+import SwiftUI
 
-// MARK: SongSearchView
-struct SongSearchView: View {
+struct SongSelector: View {
+    @Binding var selection: [PreviewSong]
     let gridLayoutItemWidth: CGFloat = 225
     var body: some View {
-        SearchViewBase("Songs", forType: PreviewSong.self, initialLayout: SummaryLayout.horizontal, layoutOptions: verticalAndHorizontalLayouts) { layout, _, content, _ in
+        ItemSelectorView("Songs", selection: $selection, initialLayout: .horizontal, layoutOptions: verticalAndHorizontalLayouts) { layout, _, content, _ in
             if layout == .horizontal {
                 LazyVStack {
                     content
@@ -32,8 +32,6 @@ struct SongSearchView: View {
             }
         } eachContent: { layout, element in
             SongInfo(element, layout: layout)
-        } destination: { element, list in
-            SongDetailView(id: element.id, allSongs: list)
         }
         .contentUnavailableImage(systemName: "music.note")
         .resultCountDescription { count in
