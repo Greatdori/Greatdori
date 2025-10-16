@@ -72,7 +72,7 @@ struct ChartSimulatorView: View {
                     CustomGroupBox(cornerRadius: 20) {
                         ScrollView(.horizontal) {
                             HStack(spacing: 0) {
-                                ForEach(chartScenes, id: \.splitIndex) { scene in
+                                ForEach(chartScenes, id: \.self) { scene in
                                     SpriteView(scene: scene)
                                         .frame(width: 240, height: 500)
                                 }
