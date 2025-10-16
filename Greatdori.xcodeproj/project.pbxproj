@@ -161,6 +161,8 @@
 		8CD13F752E2FDC4A00673E15 /* NavigationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD13F742E2FDC4700673E15 /* NavigationListView.swift */; };
 		8CD28FF02E9F6C6D00831458 /* ChartSimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD28FEF2E9F6C6900831458 /* ChartSimulator.swift */; };
 		8CD28FF22E9F6D5700831458 /* SongSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD28FF12E9F6D5400831458 /* SongSelector.swift */; };
+		8CD290142E9FCBB700831458 /* ChartSimAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CD290132E9FCBB700831458 /* ChartSimAssets.xcassets */; };
+		8CD290172E9FFD6700831458 /* ChartViewer_LongNoteLine.fsh in Copy Shaders */ = {isa = PBXBuildFile; fileRef = 8CD290162E9FFD4F00831458 /* ChartViewer_LongNoteLine.fsh */; };
 		8CD2A9D22E9F690D00831458 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8CD2A9D12E9F690D00831458 /* Alamofire */; };
 		8CF826D42E8AC1120045CA97 /* FallingWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */; };
 		8CF827A92E8ACD380045CA97 /* LoginCampaignInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF827A82E8ACD380045CA97 /* LoginCampaignInfo.swift */; };
@@ -392,6 +394,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C889D1B2EA0B90100FBF01D /* Copy Shaders */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = ShaderSource;
+			dstSubfolderSpec = 7;
+			files = (
+				8CD290172E9FFD6700831458 /* ChartViewer_LongNoteLine.fsh in Copy Shaders */,
+			);
+			name = "Copy Shaders";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8CB4D4912E4461450085D57A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -557,6 +570,8 @@
 		8CD13FE42E300AE700673E15 /* gyb.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = gyb.py; sourceTree = "<group>"; };
 		8CD28FEF2E9F6C6900831458 /* ChartSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSimulator.swift; sourceTree = "<group>"; };
 		8CD28FF12E9F6D5400831458 /* SongSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongSelector.swift; sourceTree = "<group>"; };
+		8CD290132E9FCBB700831458 /* ChartSimAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ChartSimAssets.xcassets; sourceTree = "<group>"; };
+		8CD290162E9FFD4F00831458 /* ChartViewer_LongNoteLine.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = ChartViewer_LongNoteLine.fsh; sourceTree = "<group>"; };
 		8CF826D32E8AC10D0045CA97 /* FallingWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallingWebImage.swift; sourceTree = "<group>"; };
 		8CF827A82E8ACD380045CA97 /* LoginCampaignInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCampaignInfo.swift; sourceTree = "<group>"; };
 		8CF827AA2E8ACE1D0045CA97 /* LoginCampaignSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCampaignSearchView.swift; sourceTree = "<group>"; };
@@ -761,6 +776,8 @@
 				8C6C0EF92E423C8E00D1FB0A /* Greatdori.entitlements */,
 				8CB4D4F92E4500C70085D57A /* Info.plist */,
 				8C2B64032E953FD800D003D1 /* Fonts */,
+				8CD290122E9FCB8900831458 /* Assets */,
+				8CD290152E9FFD3400831458 /* Shaders */,
 				8C6B8FC32E75372000452D7B /* Localization */,
 				8C0C99802E296A5500549B5C /* GreatdoriApp.swift */,
 				E90769D42E546D5B00C9871C /* UI Basics */,
@@ -1024,6 +1041,22 @@
 			path = utils;
 			sourceTree = "<group>";
 		};
+		8CD290122E9FCB8900831458 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				8CD290132E9FCBB700831458 /* ChartSimAssets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		8CD290152E9FFD3400831458 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				8CD290162E9FFD4F00831458 /* ChartViewer_LongNoteLine.fsh */,
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
 		8CF827A72E8ACD180045CA97 /* LoginCampaign */ = {
 			isa = PBXGroup;
 			children = (
@@ -1229,6 +1262,7 @@
 				8C0C99592E296A4400549B5C /* Sources */,
 				8C0C995A2E296A4400549B5C /* Frameworks */,
 				8C0C995B2E296A4400549B5C /* Resources */,
+				8C889D1B2EA0B90100FBF01D /* Copy Shaders */,
 				8C0C997A2E296A4700549B5C /* Embed Watch Content */,
 				8C0C999C2E296A8C00549B5C /* Embed Frameworks */,
 				8C6C0EE12E422F9100D1FB0A /* Embed Foundation Extensions */,
@@ -1466,6 +1500,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C2B64242E954EEF00D003D1 /* Story-jp.otf in Resources */,
+				8CD290142E9FCBB700831458 /* ChartSimAssets.xcassets in Resources */,
 				E949D28B2E93805E00E50D3F /* CollectionCode_ZH-HANS.md in Resources */,
 				E9E3C05A2E35D0150059BCE8 /* Localizable.xcstrings in Resources */,
 				8C2B64282E9564F800D003D1 /* Story-zh-Hans.ttf in Resources */,

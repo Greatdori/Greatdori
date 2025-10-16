@@ -98,7 +98,7 @@ import SwiftUI
     ),
     ToolDestinationItem(
         title: "App.tools.chart-simulator",
-        symbol: "apple.classical.pages.fill",
+        symbol: "apple.classical.pages",
         tabValue: .chartSimulator,
         destination: {ChartSimulatorView()}
     ),
