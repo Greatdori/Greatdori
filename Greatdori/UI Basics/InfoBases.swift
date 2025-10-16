@@ -359,13 +359,14 @@ struct SearchViewBase<Element: Sendable & Hashable & DoriCacheable & DoriFiltera
         self._currentLayout = .init(initialValue: initialLayout)
         self.unavailablePrompt = "Search.unavailable.\(String(localized: titleKey))"
         self.searchPlaceholder = "Search.prompt.\(String(localized: titleKey))"
+        self._filter = .init(initialValue: .recoverable(id: titleKey.key))
     }
     
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.colorScheme) private var colorScheme
     @Namespace private var navigationAnimationNamespace
-    @State private var filter = DoriFrontend.Filter()
+    @State private var filter: DoriFrontend.Filter
     @State private var sorter = DoriFrontend.Sorter(keyword: .releaseDate(in: .jp), direction: .descending)
     @State private var elements: [Element]?
     @State private var searchedElements: [Element]?
