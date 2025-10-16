@@ -48,8 +48,7 @@ struct ContentView: View {
                             HomeView()
                         }
                         Tab("App.community", systemImage: "at", value: .community) {
-                            //                        HomeView()
-                            Text(verbatim: "community")
+                            CommunityView()
                         }
                         
                         if sizeClass == .regular {
@@ -247,7 +246,7 @@ struct ContentView: View {
     func detailView(for section: AppSection?) -> some View {
         switch section {
         case .home: HomeView()
-        case .community: HomeView()
+        case .community: CommunityView()
 //        case .leaderboard: HomeView()
         case .info(let destination):
             if destination == .home {

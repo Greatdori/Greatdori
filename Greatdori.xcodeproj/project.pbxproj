@@ -101,6 +101,7 @@
 		8C7B2D7E2E7B9EAF00EE0C89 /* NewsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B2D7D2E7B9EA900EE0C89 /* NewsListView.swift */; };
 		8C7B2D832E7C3A3A00EE0C89 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B2D822E7C3A3500EE0C89 /* Network.swift */; };
 		8C7B2D852E7C3D0E00EE0C89 /* ImagePrefetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B2D842E7C3D0400EE0C89 /* ImagePrefetch.swift */; };
+		8C889D9C2EA1258D00FBF01D /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C889D9B2EA1258700FBF01D /* CommunityView.swift */; };
 		8C923D782E3034AF003AFC0A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C923D772E3034AD003AFC0A /* HomeView.swift */; };
 		8C923D7D2E304882003AFC0A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D7C2E304882003AFC0A /* SDWebImageSwiftUI */; };
 		8C923D802E30488E003AFC0A /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 8C923D7F2E30488E003AFC0A /* SDWebImageSVGCoder */; };
@@ -508,6 +509,8 @@
 		8C7F6C042E59922C0040C206 /* libDoriAssetShims */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDoriAssetShims; path = "../../../Library/Developer/Xcode/DerivedData/Greatdori-aghqtexjlhuxqfcowlzrriajcttj/Build/Products/Debug-iphoneos/DoriAssetShims.framework/libDoriAssetShims"; sourceTree = "<group>"; };
 		8C7F6C122E5996A70040C206 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		8C818D722E2E671A00D0DD69 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
+		8C889D2D2EA10B5400FBF01D /* tmp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = tmp.a; path = "../../../../Downloads/mbot-live2d-master/lib/Debug-iphoneos/tmp.a"; sourceTree = "<group>"; };
+		8C889D9B2EA1258700FBF01D /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		8C923D772E3034AD003AFC0A /* HomeView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8C923D862E304AF1003AFC0A /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		8C923D8C2E3056C8003AFC0A /* CardViews.swift.gyb */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = CardViews.swift.gyb; sourceTree = "<group>"; };
@@ -771,6 +774,7 @@
 				E90769D42E546D5B00C9871C /* UI Basics */,
 				E942C37E2E8B625C00F24974 /* Methods */,
 				E90769CC2E546D5500C9871C /* Home */,
+				8C889D9A2EA1257700FBF01D /* Community */,
 				E98BE10F2E7E8C5E00B4C8A8 /* Info */,
 				E9A126FD2E8CB62700BBD39E /* Tools */,
 				E9BD6C4F2E547A7200D56E55 /* Settings */,
@@ -798,6 +802,7 @@
 		8C0C99A12E296B3E00549B5C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C889D2D2EA10B5400FBF01D /* tmp.a */,
 				8C2C89252E9E153400058FF7 /* DoriKit.framework */,
 				8C2C89222E9E152E00058FF7 /* DoriKit.framework */,
 				8C2C891E2E9E152600058FF7 /* DoriKit.framework */,
@@ -966,6 +971,14 @@
 				8C94746A2E3ADE21003A90B4 /* StoryViewerView.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		8C889D9A2EA1257700FBF01D /* Community */ = {
+			isa = PBXGroup;
+			children = (
+				8C889D9B2EA1258700FBF01D /* CommunityView.swift */,
+			);
+			path = Community;
 			sourceTree = "<group>";
 		};
 		8C923D852E304AE5003AFC0A /* Extensions */ = {
@@ -1625,6 +1638,7 @@
 				8CD28FF02E9F6C6D00831458 /* ChartSimulator.swift in Sources */,
 				E94219192E8AA58800F24974 /* CostumeSearchView.swift in Sources */,
 				E94218F02E8AA2FF00F24974 /* CharacterDetailView.swift in Sources */,
+				8C889D9C2EA1258D00FBF01D /* CommunityView.swift in Sources */,
 				E94218F72E8AA39900F24974 /* CardCoverImage.swift in Sources */,
 				E942191E2E8AA5EB00F24974 /* DetailCostumesSection.swift in Sources */,
 				8C08B8BD2E73DC8F00447B05 /* CalendarEvents.swift in Sources */,
