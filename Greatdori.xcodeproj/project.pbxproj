@@ -43,7 +43,6 @@
 		8C2BD6442E9248B600D003D1 /* ItemSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BD6432E9248AE00D003D1 /* ItemSelector.swift */; };
 		8C2BD6462E92503D00D003D1 /* EventSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BD6452E92503800D003D1 /* EventSelector.swift */; };
 		8C2C89112E9E150000058FF7 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2C89102E9E150000058FF7 /* DoriKit.framework */; };
-		8C2C89122E9E150000058FF7 /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2C89102E9E150000058FF7 /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8C2C89152E9E150900058FF7 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2C89142E9E150900058FF7 /* DoriKit.framework */; };
 		8C2C89162E9E150900058FF7 /* DoriKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2C89142E9E150900058FF7 /* DoriKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8C2C89182E9E151000058FF7 /* DoriKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2C89172E9E151000058FF7 /* DoriKit.framework */; };
@@ -345,17 +344,6 @@
 			files = (
 				8CB4D4802E445F700085D57A /* BuiltinCardCollections.framework in Embed Frameworks */,
 				8C2C89272E9E153400058FF7 /* DoriKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8C2C89132E9E150000058FF7 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				8C2C89122E9E150000058FF7 /* DoriKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1363,7 +1351,6 @@
 				8CB4D4752E445F700085D57A /* Sources */,
 				8CB4D4762E445F700085D57A /* Frameworks */,
 				8CB4D4772E445F700085D57A /* Resources */,
-				8C2C89132E9E150000058FF7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
