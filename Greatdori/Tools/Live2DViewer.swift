@@ -138,6 +138,7 @@ struct Live2DDetailView: View {
     @State var expressions = [Live2DExpression]()
     @State var currentMotion: Live2DMotion?
     @State var currentExpression: Live2DExpression?
+    @State var isTrackingParameters = false
     @State var isPaused = false
     @State var parameters = [Live2DParameter]()
     @State var isInspectorVisible = false
@@ -155,7 +156,7 @@ struct Live2DDetailView: View {
                 .live2dMotion(currentMotion)
                 .live2dExpression(currentExpression)
                 .live2dPauseAnimations(isPaused)
-                .live2dParameters($parameters, tracking: true)
+                .live2dParameters($parameters, tracking: isTrackingParameters)
                 .onLive2DMotionsUpdate { motions in
                     self.motions = motions
                 }
@@ -201,6 +202,7 @@ struct Live2DDetailView: View {
                     Toggle("眨眼", isOn: $isEyeBlinkEnabled)
                 }
                 Section {
+                    Toggle("跟踪参数", isOn: $isTrackingParameters)
                     Toggle("暂停动画", isOn: $isPaused)
                     Group {
                         ForEach(Array(parameters.enumerated()), id: \.element.id) { index, parameter in
