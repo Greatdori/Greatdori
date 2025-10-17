@@ -48,6 +48,7 @@ struct InteractiveStoryView: View {
     @State var isBacklogPresented = false
     @State var isAutoPlaying = false
     @State var autoPlayTimer: Timer?
+    @State var fastForwardTimer: Timer?
     @State var talkShakeDuration = 0.0
     @State var screenShakeDuration = 0.0
     
@@ -302,10 +303,24 @@ struct InteractiveStoryView: View {
                     next()
                 }
                 .disabled(talkAudios.isEmpty)
-                Button("快进", systemImage: "forward.fill") {
-                    
-                }
-                .disabled(true)
+                Button(action: {
+                    if fastForwardTimer != nil {
+                        fastForwardTimer?.invalidate()
+                        fastForwardTimer = nil
+                        return
+                    }
+                    fastForwardTimer = .scheduledTimer(withTimeInterval: 0.2, repeats: true) { _ in
+                        DispatchQueue.main.async {
+                            next(ignoresDelay: true)
+                        }
+                    }
+                }, label: {
+                    if fastForwardTimer == nil {
+                        Label("快进", systemImage: "forward.fill")
+                    } else {
+                        Label("取消快进", image: "custom.forward.slash.fill")
+                    }
+                })
                 Button("记录", systemImage: "text.document.fill") {
                     isBacklogPresented = true
                 }
@@ -615,6 +630,7 @@ struct InteractiveStoryView: View {
     func exitViewer() {
         // clean up
         autoPlayTimer?.invalidate()
+        fastForwardTimer?.invalidate()
         bgmPlayer.pause()
         sePlayer.pause()
         unsafe voicePlayer.pointee.stop()
