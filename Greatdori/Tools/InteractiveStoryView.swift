@@ -277,7 +277,9 @@ struct InteractiveStoryView: View {
                 for voice in talk.voices {
                     AF.request("\(voiceBundleURL.absoluteString)_rip/\(voice.voiceID).mp3").response { response in
                         if let data = response.data {
-                            talkAudios.updateValue(data, forKey: voice)
+                            DispatchQueue.main.async {
+                                talkAudios.updateValue(data, forKey: voice)
+                            }
                         }
                     }
                 }
@@ -763,11 +765,14 @@ private struct TalkView: View {
                     var str = AttributedString(String(character))
                     if locale == .cn && "[，。！？；：（）【】「」『』、“”‘’——…]".contains(character) {
                         // The font for cn has too wide punctuations,
-                        // we have to fix it here
+                        // we have to fix it here.
+                        // System font seems higher than cn font,
+                        // we use a smaller size for it to prevent
+                        // the line height being changed during animation
                         #if os(macOS)
-                        str.font = .system(size: 20, weight: .medium)
+                        str.font = .system(size: 19, weight: .medium)
                         #else
-                        str.font = .system(size: 16, weight: .medium)
+                        str.font = .system(size: 15, weight: .medium)
                         #endif
                     }
                     result.append(str)
