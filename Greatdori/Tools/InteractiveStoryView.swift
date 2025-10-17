@@ -29,6 +29,7 @@ struct InteractiveStoryView: View {
     @Environment(\.dismiss) var dismiss
     @State var backgroundImageURL: URL?
     @State var scenarioImageURL: URL?
+    @State var isScenarioImageFilter = false
     @State var bgmPlayer = AVQueuePlayer()
     @State var bgmLooper: AVPlayerLooper!
     @State var sePlayer = AVPlayer()
@@ -171,24 +172,25 @@ struct InteractiveStoryView: View {
             Rectangle()
                 .fill(Color.white)
                 .opacity(isShowingWhiteCover ? 1 : 0)
-                .ignoresSafeArea()
+                .ignoresSafeArea(edges: isMACOS ? .vertical : .all)
             Rectangle()
                 .fill(Color.black)
                 .opacity(isShowingBlackCover ? 1 : 0)
-                .ignoresSafeArea()
+                .ignoresSafeArea(edges: isMACOS ? .vertical : .all)
         }
         .background {
             WebImage(url: backgroundImageURL)
                 .resizable()
-                .scaledToFill()
+                .aspectRatio(4 / 3, contentMode: .fill)
                 .clipped()
-                .ignoresSafeArea()
+                .ignoresSafeArea(edges: isMACOS ? .vertical : .all)
             if let scenarioImageURL {
                 WebImage(url: scenarioImageURL)
                     .resizable()
                     .aspectRatio(4 / 3, contentMode: .fill)
                     .clipped()
-                    .ignoresSafeArea()
+                    .opacity(isScenarioImageFilter ? 0.5 : 1)
+                    .ignoresSafeArea(edges: isMACOS ? .vertical : .all)
             }
         }
         .modifier(ShakeScreenModifier(shakeDuration: $screenShakeDuration))
@@ -221,6 +223,7 @@ struct InteractiveStoryView: View {
             next()
         }
         .focusable()
+        .focusEffectDisabled()
         .onKeyPress(keys: [.return, .space], phases: [.down]) { _ in
             if isHidingUI {
                 isHidingUI = false
@@ -577,6 +580,10 @@ struct InteractiveStoryView: View {
                 // FIXME: What does this action change?
                 next()
             case .playScenarioEffect:
+                let lastStringVal = effect.stringValSub.components(separatedBy: "/").last
+                isScenarioImageFilter = lastStringVal?.hasPrefix("filter") ?? false || lastStringVal?.hasPrefix("fillter") ?? false
+                // Actually I only found `scenario/effects/fillter_damage` needs extra opacity,    |    expected ~~~^~~~
+                // they even typed an extra "l" in the name
                 withAnimation {
                     scenarioImageURL = .init(string: "https://bestdori.com/assets/jp/\(effect.stringValSub)_rip/bg.png")!
                 }

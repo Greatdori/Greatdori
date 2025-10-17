@@ -326,6 +326,10 @@ extension StoryViewerView {
                         }
                     })
                     .buttonStyle(.borderless)
+                    .window(isPresented: $isCardSelectorPresented) {
+                        CardSelector(selection: .init { [selectedCard].compactMap { $0 } } set: { selectedCard = $0.first })
+                            .selectorDisablesMultipleSelection()
+                    }
                 }
                 .onChange(of: selectedCard) {
                     Task {
@@ -336,6 +340,7 @@ extension StoryViewerView {
                     NavigationLink(destination: { CardDetailView(id: selectedCard.id) }) {
                         CardInfo(selectedCard)
                     }
+                    .buttonStyle(.plain)
                 }
                 if let selectedCardDetail {
                     let episodes = selectedCardDetail.card.episodes
@@ -401,10 +406,6 @@ extension StoryViewerView {
                         }
                     }
                 }
-            }
-            .window(isPresented: $isCardSelectorPresented) {
-                CardSelector(selection: .init { [selectedCard].compactMap { $0 } } set: { selectedCard = $0.first })
-                    .selectorDisablesMultipleSelection()
             }
         }
         

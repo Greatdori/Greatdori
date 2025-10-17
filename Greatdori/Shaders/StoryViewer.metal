@@ -15,7 +15,8 @@
 #include <metal_stdlib>
 using namespace metal;
 
-[[ stitchable ]] half4 continuableMark(float2 position, half4 color, float2 size) {
+[[ stitchable ]]
+half4 continuableMark(float2 position, half4 color, float2 size) {
     float2 normalizedPosition = position / size;
     float2 reversedPos = 1 - normalizedPosition;
     return half4(color.r + reversedPos.y / 2.5,
