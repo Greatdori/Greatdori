@@ -132,7 +132,7 @@ struct InteractiveStoryView: View {
                         isAnimating: $isTalkTextAnimating,
                         shakeDuration: $talkShakeDuration
                     )
-                    .padding()
+                    .padding(isMACOS ? .all : .horizontal)
                 }
             }
             if let currentTelop {
@@ -168,6 +168,8 @@ struct InteractiveStoryView: View {
                         Spacer()
                     }
                 }
+                .padding()
+                .ignoresSafeArea()
             }
             #endif
             Rectangle()
@@ -289,7 +291,7 @@ struct InteractiveStoryView: View {
     var actionMenu: some View {
         Menu {
             Section {
-                Button(isAutoPlaying ? "取消自动" : "自动", systemImage: isAutoPlaying ? "play.slash.fill" : "play.fill") {
+                Button(isAutoPlaying ? "取消自动" : "自动", systemImage: isAutoPlaying ? "play.slash" : "play") {
                     isAutoPlaying.toggle()
                     if isAutoPlaying {
                         next()
@@ -297,7 +299,7 @@ struct InteractiveStoryView: View {
                         autoPlayTimer?.invalidate()
                     }
                 }
-                Button("全屏自动播放", systemImage: "pano.badge.play.fill") {
+                Button("全屏自动播放", systemImage: "pano.badge.play") {
                     isAutoPlaying = true
                     isHidingUI = true
                     next()
@@ -316,12 +318,12 @@ struct InteractiveStoryView: View {
                     }
                 }, label: {
                     if fastForwardTimer == nil {
-                        Label("快进", systemImage: "forward.fill")
+                        Label("快进", systemImage: "forward")
                     } else {
-                        Label("取消快进", image: "custom.forward.slash.fill")
+                        Label("取消快进", image: "custom.forward.slash")
                     }
                 })
-                Button("记录", systemImage: "text.document.fill") {
+                Button("记录", systemImage: "text.document") {
                     isBacklogPresented = true
                 }
                 .disabled(currentTalk == nil)
