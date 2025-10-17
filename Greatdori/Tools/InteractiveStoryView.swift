@@ -16,6 +16,7 @@ import AVKit
 import Combine
 import DoriKit
 import SwiftUI
+import MetalKit
 import Alamofire
 import SDWebImageSwiftUI
 @_spi(Advanced) import SwiftUIIntrospect
@@ -122,8 +123,14 @@ struct InteractiveStoryView: View {
             if let currentTalk, !isHidingUI {
                 VStack {
                     Spacer()
-                    TalkView(data: currentTalk, locale: locale, isAnimating: $isTalkTextAnimating, shakeDuration: $talkShakeDuration)
-                        .padding()
+                    TalkView(
+                        data: currentTalk,
+                        locale: locale,
+                        isDelaying: isDelaying,
+                        isAnimating: $isTalkTextAnimating,
+                        shakeDuration: $talkShakeDuration
+                    )
+                    .padding()
                 }
             }
             if let currentTelop {
@@ -675,6 +682,7 @@ private struct LayoutView: View {
 private struct TalkView: View {
     var data: DoriAPI.Misc.StoryAsset.TalkData
     var locale: DoriLocale
+    var isDelaying: Bool
     @Binding var isAnimating: Bool
     @Binding var shakeDuration: Double
     @State private var currentBody = ""
@@ -688,6 +696,38 @@ private struct TalkView: View {
                 .overlay {
                     RoundedRectangle(cornerRadius: 16)
                         .strokeBorder(Color.gray.opacity(0.8))
+                }
+                .overlay {
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 0) {
+                            Spacer()
+                            if !isDelaying {
+                                TimelineView(.animation(minimumInterval: 1 / 120)) { context in
+                                    Image("ContinuableMark")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 25)
+                                        .visualEffect { content, geometry in
+                                            content
+                                                .colorEffect(ShaderLibrary.continuableMark(.float2(geometry.size)))
+                                        }
+                                        .offset(y: sin(context.date.timeIntervalSince1970 * 5) * 7)
+                                        .scaleEffect(x: 1, y: 0.95 + (1.05 - 0.95) * sin(-context.date.timeIntervalSince1970 * 5), anchor: .bottom)
+                                }
+                                .zIndex(1)
+                                Circle()
+                                    .fill(Color.gray.opacity(0.8))
+                                    .blur(radius: 5)
+                                    .transformEffect(.init(scaleX: 1, y: 0.5))
+                                    .frame(width: 25, height: 25)
+                                    .offset(x: -3)
+                            }
+                        }
+                        .transition(.opacity)
+                        .animation(.spring(duration: 0.2, bounce: 0.15), value: isDelaying)
+                    }
+                    .padding(.trailing)
                 }
                 .containerRelativeFrame(.vertical) { length, _ in
                     min(length / 2 - 80, 130)
@@ -725,6 +765,16 @@ private struct TalkView: View {
             ZStack(alignment: .leading) {
                 Capsule()
                     .fill(Color(red: 255 / 255, green: 59 / 255, blue: 114 / 255))
+                    .overlay {
+                        HStack {
+                            Spacer()
+                            Image("NameSideStar")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 31)
+                        }
+                        .clipShape(Capsule())
+                    }
                     .overlay {
                         Capsule()
                             .strokeBorder(Color.white, lineWidth: 2)
