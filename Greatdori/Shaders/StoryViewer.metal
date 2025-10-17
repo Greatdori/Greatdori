@@ -17,6 +17,8 @@ using namespace metal;
 
 [[ stitchable ]]
 half4 continuableMark(float2 position, half4 color, float2 size) {
+    if (color.a == 0) // iOS fix
+        return half4(0);
     float2 normalizedPosition = position / size;
     float2 reversedPos = 1 - normalizedPosition;
     return half4(color.r + reversedPos.y / 2.5,
