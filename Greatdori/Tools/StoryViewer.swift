@@ -57,6 +57,7 @@ struct StoryViewerView: View {
                 Spacer(minLength: 0)
             }
         }
+        .withSystemBackground()
         .navigationTitle("Tools.story-viewer")
     }
 }
@@ -83,110 +84,75 @@ private enum StoryType: String, CaseIterable, Hashable {
 
 extension StoryViewerView {
     struct EventStoryViewer: View {
-        @State var isFirstShowing = true
-        @State var eventList: [PreviewEvent]?
-        @State var eventListAvailability = true
+        @State var isEventSelectorPresented = false
         @State var selectedEvent: PreviewEvent?
         @State var stories: [DoriAPI.Event.EventStory]?
         @State var storyAvailability = true
         var body: some View {
-            if let eventList {
-                ListItemView {
-                    Text("Tools.story-viewer.type.event")
-                        .bold()
-                } value: {
-                    Picker(selection: $selectedEvent) {
-                        ForEach(eventList) { event in
-                            Text(event.eventName.forPreferredLocale() ?? "").tag(event)
-                        }
-                    } label: {
-                        EmptyView()
+            ListItemView {
+                Text("Tools.story-viewer.type.event")
+                    .bold()
+            } value: {
+                Button(action: {
+                    isEventSelectorPresented = true
+                }, label: {
+                    if let selectedEvent {
+                        Text(selectedEvent.eventName.forPreferredLocale() ?? "")
+                    } else {
+                        Text("选择活动…")
                     }
-                    .labelsHidden()
-                    .onChange(of: selectedEvent) {
-                        UserDefaults.standard.set(selectedEvent?.id, forKey: "StoryViewerSelectedEventID")
-                    }
+                })
+                .window(isPresented: $isEventSelectorPresented) {
+                    EventSelector(selection: .init { [selectedEvent].compactMap { $0 } } set: { selectedEvent = $0.first })
+                        .selectorDisablesMultipleSelection()
                 }
-                if let selectedEvent {
-                    NavigationLink(destination: { EventDetailView(id: selectedEvent.id) }) {
-                        EventInfo(selectedEvent)
-                    }
-                    .buttonStyle(.plain)
+            }
+            .task {
+                if stories == nil {
+                    await getStories()
                 }
-                if let selectedEvent {
-                    if let stories {
-                        if let story = stories.first(where: { $0.id == selectedEvent.id }),
-                           let locale = story.eventName.availableLocale() {
-                            ForEach(Array(story.stories.enumerated()), id: \.element.id) { (index, story) in
-                                StoryCardView(story: story, type: .event, locale: locale, unsafeAssociatedID: String(selectedEvent.id), unsafeSecondaryAssociatedID: String(index))
-                            }
-                        } else {
-                            HStack {
-                                Spacer()
-                                ContentUnavailableView("Tools.story-viewer.type.event.unavailable", systemImage: "text.rectangle.page")
-                                Spacer()
-                            }
+            }
+            if let selectedEvent {
+                NavigationLink(destination: { EventDetailView(id: selectedEvent.id) }) {
+                    EventInfo(selectedEvent)
+                }
+                .buttonStyle(.plain)
+            }
+            if let selectedEvent {
+                if let stories {
+                    if let story = stories.first(where: { $0.id == selectedEvent.id }),
+                       let locale = story.eventName.availableLocale() {
+                        ForEach(Array(story.stories.enumerated()), id: \.element.id) { (index, story) in
+                            StoryCardView(story: story, type: .event, locale: locale, unsafeAssociatedID: String(selectedEvent.id), unsafeSecondaryAssociatedID: String(index))
                         }
                     } else {
-                        if storyAvailability {
-                            HStack {
-                                Spacer()
-                                ProgressView()
-                                Spacer()
-                            }
-                        } else {
-                            ExtendedConstraints {
-                                ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
-                                    .onTapGesture {
-                                        Task {
-                                            await getStories()
-                                        }
-                                    }
-                            }
-                        }
-                    }
-                }
-            } else {
-                if eventListAvailability {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                    .task {
-                        if isFirstShowing {
-                            isFirstShowing = false
-                            Task {
-                                await getStories()
-                            }
-                            await getEvents()
+                        HStack {
+                            Spacer()
+                            ContentUnavailableView("Tools.story-viewer.type.event.unavailable", systemImage: "text.rectangle.page")
+                            Spacer()
                         }
                     }
                 } else {
-                    ExtendedConstraints {
-                        ContentUnavailableView("Tools.story-viewer.error", systemImage: "star.hexagon.fill")
-                            .onTapGesture {
-                                Task {
-                                    await getEvents()
+                    if storyAvailability {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    } else {
+                        ExtendedConstraints {
+                            ContentUnavailableView("Tools.story-viewer.error", systemImage: "text.rectangle.page")
+                                .onTapGesture {
+                                    Task {
+                                        await getStories()
+                                    }
                                 }
-                            }
+                        }
                     }
                 }
             }
         }
         
-        func getEvents() async {
-            eventListAvailability = true
-            withDoriCache(id: "EventList") {
-                await PreviewEvent.all()
-            }.onUpdate {
-                if let events = $0 {
-                    self.eventList = events
-                } else {
-                    eventListAvailability = false
-                }
-            }
-        }
         func getStories() async {
             storyAvailability = true
             withDoriCache(id: "EventStories") {
@@ -261,7 +227,10 @@ extension StoryViewerView {
         @State var selectedStoryGroup: DoriAPI.Misc.BandStory?
         var body: some View {
             if let bands, let stories {
-                Section {
+                ListItemView {
+                    Text("乐队")
+                        .bold()
+                } value: {
                     Picker("Tools.story-viewer.type.band", selection: $selectedBand) {
                         Text("Tools.story-viewer.type.band.prompt").tag(Optional<DoriAPI.Band.Band>.none)
                         ForEach(bands) { band in
@@ -271,7 +240,11 @@ extension StoryViewerView {
                     .onChange(of: selectedBand) {
                         selectedStoryGroup = nil
                     }
-                    if let selectedBand {
+                }
+                if let selectedBand {
+                    ListItemView {
+                        Text("章节")
+                    } value: {
                         Picker("Tools.story-viewer.story", selection: $selectedStoryGroup) {
                             Text("Tools.story-viewer.story.prompt").tag(Optional<DoriAPI.Misc.BandStory>.none)
                             ForEach(stories.filter { $0.bandID == selectedBand.id }) { story in
@@ -352,7 +325,7 @@ extension StoryViewerView {
                             Text("选择卡牌…")
                         }
                     })
-                    .buttonStyle(.plain)
+                    .buttonStyle(.borderless)
                 }
                 .onChange(of: selectedCard) {
                     Task {
@@ -379,20 +352,26 @@ extension StoryViewerView {
                                             unsafeAssociatedID: selectedCardDetail.card.resourceSetName
                                         )
                                     }) {
-                                        VStack(alignment: .leading) {
-                                            Group {
-                                                switch episode.episodeType {
-                                                case .standard:
-                                                    Text("Tools.story-viewer.story.standard")
-                                                case .memorial:
-                                                    Text("Tools.story-viewer.story.memorial")
+                                        CustomGroupBox {
+                                            HStack {
+                                                VStack(alignment: .leading) {
+                                                    Group {
+                                                        switch episode.episodeType {
+                                                        case .standard:
+                                                            Text("Tools.story-viewer.story.standard")
+                                                        case .memorial:
+                                                            Text("Tools.story-viewer.story.memorial")
+                                                        }
+                                                    }
+                                                    .font(.system(size: 14))
+                                                    .foregroundStyle(.gray)
+                                                    Text(episode.title.forPreferredLocale() ?? "")
                                                 }
+                                                Spacer()
                                             }
-                                            .font(.system(size: 14))
-                                            .opacity(0.6)
-                                            Text(episode.title.forPreferredLocale() ?? "")
                                         }
                                     }
+                                    .buttonStyle(.plain)
                                 }
                             }
                         }
@@ -453,39 +432,43 @@ extension StoryViewerView {
         @State var actionSets: [DoriAPI.Misc.ActionSet]?
         @State var actionSetAvailability = true
         var body: some View {
-            if let actionSets {
-                Section {
-                    Button("Tools.story-viewer.filter", systemImage: "line.3.horizontal.decrease") {
-                        isFilterSettingsPresented = true
-                    }
-                    .foregroundColor(filter.isFiltered ? .accent : nil)
-                    .sheet(isPresented: $isFilterSettingsPresented) {
-                        Task {
-                            self.actionSets = nil
-                            await getActionSets()
+            if let actionSets, let characters {
+                LazyVStack {
+                    ForEach(actionSets) { actionSet in
+                        NavigationLink(destination: {
+                            StoryDetailView(
+                                title: characters.filter { actionSet.characterIDs.contains($0.id) }.map { $0.characterName.forPreferredLocale() ?? "" }.joined(separator: "×"),
+                                scenarioID: "",
+                                type: .actionSet,
+                                locale: DoriAPI.preferredLocale,
+                                unsafeAssociatedID: String(actionSet.id)
+                            )
+                        }) {
+                            CustomGroupBox {
+                                HStack {
+                                    Text(verbatim: "#\(actionSet.id): \(characters.filter { actionSet.characterIDs.contains($0.id) }.map { $0.characterName.forPreferredLocale() ?? "" }.joined(separator: "×"))")
+                                    Spacer()
+                                }
+                            }
                         }
-                    } content: {
-                        FilterView(filter: $filter, includingKeys: [
-                            .character
-                        ])
+                        .buttonStyle(.plain)
                     }
                 }
-                if let characters {
-                    Section {
-                        ForEach(actionSets) { actionSet in
-                            NavigationLink(destination: {
-                                StoryDetailView(
-                                    title: characters.filter { actionSet.characterIDs.contains($0.id) }.map { $0.characterName.forPreferredLocale() ?? "" }.joined(separator: "×"),
-                                    scenarioID: "",
-                                    type: .actionSet,
-                                    locale: DoriAPI.preferredLocale,
-                                    unsafeAssociatedID: String(actionSet.id)
-                                )
-                            }) {
-                                Text(verbatim: "#\(actionSet.id): \(characters.filter { actionSet.characterIDs.contains($0.id) }.map { $0.characterName.forPreferredLocale() ?? "" }.joined(separator: "×"))")
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.2)
+                .toolbar {
+                    ToolbarItem {
+                        Button("Tools.story-viewer.filter", systemImage: "line.3.horizontal.decrease") {
+                            isFilterSettingsPresented = true
+                        }
+                        .foregroundColor(filter.isFiltered ? .accent : nil)
+                        .sheet(isPresented: $isFilterSettingsPresented) {
+                            Task {
+                                self.actionSets = nil
+                                await getActionSets()
                             }
+                        } content: {
+                            FilterView(filter: $filter, includingKeys: [
+                                .character
+                            ])
                         }
                     }
                 }
@@ -546,23 +529,7 @@ extension StoryViewerView {
         @State var isFilterSettingsPresented = false
         var body: some View {
             if let stories {
-                Section {
-                    Button("Tools.story-viewer.filter", systemImage: "line.3.horizontal.decrease") {
-                        isFilterSettingsPresented = true
-                    }
-                    .foregroundColor(filter.isFiltered ? .accent : nil)
-                    .sheet(isPresented: $isFilterSettingsPresented) {
-                        Task {
-                            self.stories = nil
-                            await getStories()
-                        }
-                    } content: {
-                        FilterView(filter: $filter, includingKeys: [
-                            .character
-                        ])
-                    }
-                }
-                Section {
+                LazyVStack {
                     ForEach(stories) { story in
                         NavigationLink(destination: {
                             StoryDetailView(
@@ -573,14 +540,36 @@ extension StoryViewerView {
                                 unsafeAssociatedID: String(story.id)
                             )
                         }) {
-                            VStack(alignment: .leading) {
-                                Text(verbatim: "#\(story.id)")
-                                    .font(.system(size: 12))
-                                    .opacity(0.6)
-                                Text(story.description.forPreferredLocale() ?? "")
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.2)
+                            CustomGroupBox {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(verbatim: "#\(story.id)")
+                                            .font(.system(size: 14))
+                                            .foregroundStyle(.gray)
+                                        Text(story.description.forPreferredLocale() ?? "")
+                                    }
+                                    Spacer()
+                                }
                             }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .toolbar {
+                    ToolbarItem {
+                        Button("Tools.story-viewer.filter", systemImage: "line.3.horizontal.decrease") {
+                            isFilterSettingsPresented = true
+                        }
+                        .foregroundColor(filter.isFiltered ? .accent : nil)
+                        .sheet(isPresented: $isFilterSettingsPresented) {
+                            Task {
+                                self.stories = nil
+                                await getStories()
+                            }
+                        } content: {
+                            FilterView(filter: $filter, includingKeys: [
+                                .character
+                            ])
                         }
                     }
                 }
