@@ -221,7 +221,8 @@ struct CharacterDetailOverviewView: View {
                                     Text("Character.introduction")
                                         .bold()
                                 }, value: {
-                                    MultilingualText(profile.selfIntroduction, showSecondaryText: false, allowPopover: false)
+                                    MultilingualText(profile.selfIntroduction, showSecondaryText: false)
+                                        .environment(\.disablePopover, true)
                                 })
                                 .listItemLayout(.basedOnUISizeClass)
                                 Divider()

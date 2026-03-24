@@ -43,7 +43,8 @@ struct CardDetailOverviewView: View {
             }
             DetailInfoItem("Card.band") {
                 HStack {
-                    MultilingualText(information.band.bandName, allowPopover: false)
+                    MultilingualText(information.band.bandName)
+                        .environment(\.disablePopover, true)
                     WebImage(url: information.band.iconImageURL)
                         .resizable()
                         .frame(width: imageButtonSize, height: imageButtonSize)
