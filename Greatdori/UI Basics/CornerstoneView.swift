@@ -865,7 +865,7 @@ struct MultilingualText: View {
         Group {
             #if os(iOS)
             Menu(content: {
-                ForEach(reducedStrings.keys.sorted(), id: \.self) { locale in
+                ForEach(reducedStrings.keys.sorted { $0._rawIntValue < $1._rawIntValue }, id: \.self) { locale in
                     Button(action: {
                         copyStringToClipboard(reducedStrings[locale] ?? "")
                         lastCopiedLocale = locale
@@ -888,13 +888,13 @@ struct MultilingualText: View {
                         .opacity(copyMessageIsDisplaying ? 0 : 1)
                 })
                 .animation(.easeIn(duration: 0.2), value: copyMessageIsDisplaying)
-                .onChange(of: copyMessageIsDisplaying, {
+                .onChange(of: copyMessageIsDisplaying) {
                     if copyMessageIsDisplaying {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             copyMessageIsDisplaying = false
                         }
                     }
-                })
+                }
             })
             .menuStyle(.button)
             .buttonStyle(.borderless)
