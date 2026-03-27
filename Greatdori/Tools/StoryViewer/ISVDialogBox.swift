@@ -239,10 +239,12 @@ struct ISVDialogBoxView: View {
         var iterator = data.text.replacing("{{userName}}", with: usernameReplacement).makeIterator()
         bodyAnimationTimer?.invalidate()
         bodyAnimationTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
-            DispatchQueue.main.async {
-                if let character = iterator.next() {
+            if let character = iterator.next() {
+                DispatchQueue.main.async {
                     currentBody += String(character)
-                } else {
+                }
+            } else {
+                DispatchQueue.main.async {
                     isAnimating = false
                 }
             }
