@@ -17,17 +17,61 @@ import SwiftUI
 import UserNotifications
 
 struct DebugPlaygroundView: View {
+    @State private var allSongs: [PreviewSong]?
+    @State private var allCards: [PreviewCard]?
+    @State private var allAreaItems: [DoriAPI.Misc.AreaItem]?
+    @State private var enableHardwareAcceleration = true
+    @State private var timeUsed = 0.0
+    @State private var result = ""
     var body: some View {
-        WrappingHStack(alignment: .trailing) {
-            ForEach(1...6, id: \.self) { i in
-                Text("\(i)")
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Capsule().fill(.blue.opacity(0.2)))
+        VStack {
+            if let allSongs, let allCards, let allAreaItems {
+                Toggle(String("Hardware Acceleration"), isOn: $enableHardwareAcceleration)
+                Button(String("Calculate")) {
+                    let builder = DoriFrontend.TeamBuilder()
+                    builder.liveInformation = .freeLive
+                    builder.songInformation = .init(
+                        song: allSongs.first!,
+                        difficulty: .expert,
+                        accuracy: 1
+                    )
+                    builder.cards = allCards.map {
+                        DoriFrontend.TeamBuilder.CardInformation(
+                            card: $0,
+                            level: $0.stat.maximumLevel!,
+                            masterRank: 4,
+                            skillLevel: 4,
+                            viewedStoryCount: 2,
+                            trained: $0.stat.keys.contains(.training)
+                        )
+                    }
+                    builder.areaItems = allAreaItems.map {
+                        .init(item: $0, level: $0.maxLevel[.jp]!)
+                    }
+                    builder.isHardwareAccelerationDisabled = !enableHardwareAcceleration
+                    Task.detached {
+                        let _time = CFAbsoluteTimeGetCurrent()
+                        result = await builder.calculateMaximize(target: .bandPower).map { $0.map { $0.id } }.description
+                        await MainActor.run {
+                            timeUsed = CFAbsoluteTimeGetCurrent() - _time
+                        }
+                    }
+                }
+                Text(result)
+                Text(unsafe String(format: "%.4f s", timeUsed))
+            } else {
+                ProgressView()
+                    .controlSize(.large)
+                    .onAppear {
+                        Task {
+                            allSongs = await PreviewSong.all()
+                            allCards = await PreviewCard.all()
+                            allAreaItems = await DoriAPI.Misc.areaItems()
+                        }
+                    }
             }
         }
         .padding()
-        .border(.gray)
     }
 }
 
