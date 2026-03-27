@@ -132,8 +132,8 @@ struct SettingsWidgetsView: View {
                             object: alertTextField,
                             queue: .main
                         ) { notifiction in
+                            guard let newTitle = alertTextField.text else { return }
                             DispatchQueue.main.async {
-                                guard let newTitle = alertTextField.text else { return }
                                 confirmAction.isEnabled = CardCollectionManager.shared.nameIsAvailable(newTitle) || decodeCollection(newTitle) != nil
                                 if decodeCollection(newTitle) != nil {
                                     confirmAction.setValue(String(localized: "Settings.widgets.collections.user.add.alert.import"), forKey: "title")

@@ -553,6 +553,7 @@
       "shouldTranslate" : false
     },
     "Live 服装" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1818,6 +1819,7 @@
       }
     },
     "完整" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2472,6 +2474,7 @@
       }
     },
     "无背景" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3230,6 +3233,7 @@
       }
     },
     "特训前" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3631,6 +3635,7 @@
       }
     },
     "缩略图" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
