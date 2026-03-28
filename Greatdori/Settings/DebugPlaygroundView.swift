@@ -17,7 +17,8 @@ import SwiftUI
 import UserNotifications
 
 struct DebugPlaygroundView: View {
-    @State private var allSongs: [PreviewSong]?
+    @State private var builder: DoriFrontend.TeamBuilder?
+    @State private var charts: [DoriAPI.Songs.Chart]?
     @State private var allCards: [PreviewCard]?
     @State private var allAreaItems: [DoriAPI.Misc.AreaItem]?
     @State private var enableHardwareAcceleration = true
@@ -25,14 +26,13 @@ struct DebugPlaygroundView: View {
     @State private var result = ""
     var body: some View {
         VStack {
-            if let allSongs, let allCards, let allAreaItems {
+            if let builder, let charts, let allCards, let allAreaItems {
                 Toggle(String("Hardware Acceleration"), isOn: $enableHardwareAcceleration)
                 Button(String("Calculate")) {
-                    let builder = DoriFrontend.TeamBuilder()
                     builder.liveInformation = .freeLive
                     builder.songInformation = .init(
-                        song: allSongs.first!,
-                        difficulty: .expert,
+                        chart: charts,
+                        difficultyLevel: 26,
                         accuracy: 1
                     )
                     builder.cards = allCards.map {
@@ -51,7 +51,9 @@ struct DebugPlaygroundView: View {
                     builder.isHardwareAccelerationDisabled = !enableHardwareAcceleration
                     Task.detached {
                         let _time = CFAbsoluteTimeGetCurrent()
-                        result = await builder.calculateMaximize(target: .bandPower).map { $0.map { $0.id } }.description
+                        result = await builder.calculateMaximize(target: .score).map {
+                            ($0.cards.map { $0.id }.sorted(), $0.areaItems.map { $0.item.id }, $0.targetValue)
+                        }.description
                         await MainActor.run {
                             timeUsed = CFAbsoluteTimeGetCurrent() - _time
                         }
@@ -64,7 +66,8 @@ struct DebugPlaygroundView: View {
                     .controlSize(.large)
                     .onAppear {
                         Task {
-                            allSongs = await PreviewSong.all()
+                            builder = await DoriFrontend.TeamBuilder()
+                            charts = await DoriAPI.Songs.charts(of: 125, in: .expert)
                             allCards = await PreviewCard.all()
                             allAreaItems = await DoriAPI.Misc.areaItems()
                         }
