@@ -52,7 +52,7 @@ struct DebugPlaygroundView: View {
                     Task.detached {
                         let _time = CFAbsoluteTimeGetCurrent()
                         result = await builder.calculateMaximize(target: .score).map {
-                            ($0.cards.map { $0.id }.sorted(), $0.areaItems.map { $0.item.id }, $0.targetValue)
+                            ($0.cards.map { $0.id }.sorted(), $0.areaItems.map { $0.item.id }.sorted(), $0.targetValue)
                         }.description
                         await MainActor.run {
                             timeUsed = CFAbsoluteTimeGetCurrent() - _time
