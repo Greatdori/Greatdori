@@ -52,7 +52,7 @@ jobs:
       - name: Set runner environment
         run: |
           brew remove --ignore-dependencies libssh2
-          xcode-select -s /Applications/Xcode_26.4.app
+          sudo xcode-select -s /Applications/Xcode_26.4.app
       - name: Update checkout
         run: utils/update-checkout --clone
       - name: Generate workspace

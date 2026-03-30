@@ -69,7 +69,9 @@ struct DebugPlaygroundView: View {
                             builder = await DoriFrontend.TeamBuilder()
                             charts = await DoriAPI.Songs.charts(of: 125, in: .expert)
                             allCards = await PreviewCard.all()
-                            allAreaItems = await DoriAPI.Misc.areaItems()
+                            allAreaItems = await DoriAPI.Misc.areaItems()?.sorted {
+                                $0.id < $1.id
+                            }
                         }
                     }
             }
