@@ -144,10 +144,26 @@ private struct CardWidgetsEntryView : View {
                     #if !os(macOS)
                     Image(uiImage: image)
                         .resizable()
+                        .wrapIf(true) { content in
+                            if #available(iOS 18.0, *) {
+                                content
+                                    .widgetAccentedRenderingMode(.fullColor)
+                            } else {
+                                content
+                            }
+                        }
                         .scaledToFill()
                     #else
                     Image(nsImage: image)
                         .resizable()
+                        .wrapIf(true) { content in
+                            if #available(macOS 15.0, *) {
+                                content
+                                    .widgetAccentedRenderingMode(.fullColor)
+                            } else {
+                                content
+                            }
+                        }
                         .scaledToFill()
                     #endif
                 }
@@ -157,10 +173,26 @@ private struct CardWidgetsEntryView : View {
                     #if !os(macOS)
                     Image(uiImage: image)
                         .resizable()
+                        .wrapIf(true) { content in
+                            if #available(iOS 18.0, *) {
+                                content
+                                    .widgetAccentedRenderingMode(.fullColor)
+                            } else {
+                                content
+                            }
+                        }
                         .scaledToFill()
                     #else
                     Image(nsImage: image)
                         .resizable()
+                        .wrapIf(true) { content in
+                            if #available(macOS 15.0, *) {
+                                content
+                                    .widgetAccentedRenderingMode(.fullColor)
+                            } else {
+                                content
+                            }
+                        }
                         .scaledToFill()
                     #endif
                 }

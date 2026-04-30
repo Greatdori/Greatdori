@@ -387,15 +387,39 @@
     "Widget.collections.edit-tip" : {
       "localizations" : {
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Long-press and tap Edit Widget to choose content for displaying."
+          "variations" : {
+            "device" : {
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Control-click and tap Edit Widget to choose content for displaying."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Long-press and tap Edit Widget to choose content for displaying."
+                }
+              }
+            }
           }
         },
         "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "按住后轻点“编辑小组件”以选择显示内容。"
+          "variations" : {
+            "device" : {
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "按住Control点击并选择“编辑小组件”以选择显示内容。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "按住后轻点“编辑小组件”以选择显示内容。"
+                }
+              }
+            }
           }
         }
       }
