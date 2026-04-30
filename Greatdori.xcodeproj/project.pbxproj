@@ -5149,7 +5149,7 @@
 			repositoryURL = "https://github.com/WindowsMEMZ/SymbolAvailability";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.0.1;
 			};
 		};
 		8C8E44F92E5F6867005590F0 /* XCRemoteSwiftPackageReference "swift-syntax" */ = {
