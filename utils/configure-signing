@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+OLD_TEAM_ID = "B57D8PP775"
+OLD_BASE_BUNDLE_ID = "com.memz233.Greatdori"
+OLD_WIDGET_GROUP = "group.memz233.Greatdori.Widgets"
+OLD_MAIN_GROUP = "group.com.memz233.Greatdori"
+
+TEXT_SUFFIXES = {
+    ".entitlements",
+    ".pbxproj",
+    ".plist",
+    ".swift",
+}
+
+
+def iter_candidate_files(project_root: Path) -> list[Path]:
+    return sorted(
+        path
+        for path in project_root.rglob("*")
+        if ".git" not in path.parts and path.is_file() and path.suffix in TEXT_SUFFIXES
+    )
+
+
+def build_replacements(args: argparse.Namespace) -> list[tuple[str, str]]:
+    custom_ids = (
+        (args.team_id, OLD_TEAM_ID),
+        (args.widget_group, OLD_WIDGET_GROUP),
+        (args.main_group, OLD_MAIN_GROUP),
+        (args.base_bundle_id, OLD_BASE_BUNDLE_ID),
+    )
+    if args.restore:
+        replacements = custom_ids
+    else:
+        replacements = [(old, new) for new, old in custom_ids]
+    return sorted(replacements, key=lambda pair: len(pair[0]), reverse=True)
+
+
+def apply_replacements(
+    content: str, replacements: list[tuple[str, str]]
+) -> tuple[str, int]:
+    updated = content
+    count = 0
+    for old, new in replacements:
+        matches = updated.count(old)
+        if matches:
+            updated = updated.replace(old, new)
+            count += matches
+    return updated, count
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Replace Greatdori signing identifiers for local builds.",
+    )
+    parser.add_argument("--team-id", required=True)
+    parser.add_argument("--base-bundle-id", required=True)
+    parser.add_argument("--widget-group", required=True)
+    parser.add_argument("--main-group", required=True)
+    parser.add_argument(
+        "--restore",
+        action="store_true",
+        help="replace the provided identifiers with the original project identifiers",
+    )
+    parser.add_argument("--dry-run", action="store_true")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+
+    project_root = PROJECT_ROOT.resolve()
+    if not (project_root / "Greatdori.xcodeproj").exists():
+        print(f"Not a Greatdori checkout: {project_root}", file=sys.stderr)
+        return 1
+
+    replacements = build_replacements(args)
+    changed_files: list[tuple[Path, int]] = []
+
+    for path in iter_candidate_files(project_root):
+        try:
+            original = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+
+        updated, replacement_count = apply_replacements(original, replacements)
+        if updated == original:
+            continue
+
+        changed_files.append((path, replacement_count))
+        if not args.dry_run:
+            path.write_text(updated, encoding="utf-8")
+
+    mode = "Would update" if args.dry_run else "Updated"
+    print(f"{mode} {len(changed_files)} file(s) under {project_root}")
+    for path, replacement_count in changed_files:
+        print(f"- {path.relative_to(project_root)}: {replacement_count} replacement(s)")
+
+    if args.dry_run:
+        print("Dry run only. Re-run without --dry-run to apply changes.")
+    if not changed_files:
+        print("No matching identifiers found.")
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
