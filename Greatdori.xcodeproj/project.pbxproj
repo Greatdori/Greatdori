@@ -562,6 +562,7 @@
 		8C3FA26C2E4BCE77001526F2 /* TextStyleRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyleRender.swift; sourceTree = "<group>"; };
 		8C3FA26E2E4BCEC0001526F2 /* WrapIf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapIf.swift; sourceTree = "<group>"; };
 		8C3FA2702E4BD484001526F2 /* StyleEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleEditorView.swift; sourceTree = "<group>"; };
+		8C4766872FA4B0D200B5196A /* Greatdori-DeveloperID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Greatdori-DeveloperID.entitlements"; sourceTree = "<group>"; };
 		8C480BFE2EC5DAA400A8AE70 /* ZeileWelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeileWelcomeView.swift; sourceTree = "<group>"; };
 		8C480C012EC5E15100A8AE70 /* ZeileProjectDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeileProjectDocument.swift; sourceTree = "<group>"; };
 		8C480C032EC60CFC00A8AE70 /* ZeileProjectConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeileProjectConfig.swift; sourceTree = "<group>"; };
@@ -999,6 +1000,7 @@
 			isa = PBXGroup;
 			children = (
 				8C6C0EF92E423C8E00D1FB0A /* Greatdori.entitlements */,
+				8C4766872FA4B0D200B5196A /* Greatdori-DeveloperID.entitlements */,
 				8CB4D4F92E4500C70085D57A /* Info.plist */,
 				8CE4D4C82F2DF3A0004757C6 /* Info-AppStore.plist */,
 				8CD290122E9FCB8900831458 /* Assets */,
@@ -2632,6 +2634,7 @@
 				ASSETCATALOG_COMPILER_OPTIMIZATION = space;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Greatdori/Greatdori.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Greatdori/Greatdori-DeveloperID.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1332;
 				DEVELOPMENT_TEAM = B57D8PP775;
