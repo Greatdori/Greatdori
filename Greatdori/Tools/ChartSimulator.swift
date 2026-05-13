@@ -28,6 +28,7 @@ struct ChartSimulatorView: View {
     @State private var selectedDifficulty: DoriAPI.Songs.DifficultyType = .easy
     @State private var chart: [DoriAPI.Songs.Chart]?
     @State private var chartSplitCount = 0
+    @State private var chartDisplayID = ""
     @State private var showChartPlayer = false
     @State private var isChartPlayerAssetAvailable = ChartPlayerAssetManager.isAvailable
     @State private var isDownloadingChartPlayerAsset = false
@@ -104,6 +105,7 @@ struct ChartSimulatorView: View {
                                                 .frame(width: 180, height: 500)
                                         }
                                     }
+                                    .id(chartDisplayID)
                                 }
                                 .clipShape(.rect(cornerRadius: 12))
                             } else {
@@ -154,6 +156,9 @@ struct ChartSimulatorView: View {
     
     func loadChart() {
         guard let selectedSong else { return }
+        chart = nil
+        chartSplitCount = 0
+        chartDisplayID = "\(selectedSong.id)-\(selectedDifficulty.rawValue)"
         Task {
             chart = await DoriAPI.Songs.charts(of: selectedSong.id, in: selectedDifficulty)
             guard let chart else {
