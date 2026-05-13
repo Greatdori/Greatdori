@@ -246,15 +246,14 @@ private class ChartViewerScene: SKScene {
     }
     
     private class NotesNode: SKNode {
-        static let _longNoteLineShader = {
+        private static func makeLongNoteLineShader(isTrailingEnd: Bool, laneFactor: Float) -> SKShader {
             let shader = SKShader(fileNamed: "ShaderSource/ChartViewer_LongNoteLine.fsh")
-            shader.attributes = [
-                .init(name: "a_is_trailing_end", type: .float),
-                .init(name: "a_lane_factor", type: .float),
-                .init(name: "a_frame", type: .vectorFloat2)
+            shader.uniforms = [
+                .init(name: "u_is_trailing_end", float: isTrailingEnd ? 1 : 0),
+                .init(name: "u_lane_factor", float: laneFactor)
             ]
             return shader
-        }()
+        }
         
         init(
             width: CGFloat,
@@ -357,10 +356,10 @@ private class ChartViewerScene: SKScene {
                             x: max(connectionPosition.x, nextConnectionPosition.x) - node.size.width / 2 + 11,
                             y: nextConnectionPosition.y - node.size.height / 2
                         )
-                        node.shader = ChartViewerScene.NotesNode._longNoteLineShader
-                        node.setValue(.init(float: nextConnectionPosition.x > connectionPosition.x ? 1 : 0), forAttribute: "a_is_trailing_end")
-                        node.setValue(.init(float: Float(laneWidth / node.size.width)), forAttribute: "a_lane_factor")
-                        node.setValue(.init(vectorFloat2: .init(Float(node.size.width), Float(node.size.height))), forAttribute: "a_frame")
+                        node.shader = ChartViewerScene.NotesNode.makeLongNoteLineShader(
+                            isTrailingEnd: nextConnectionPosition.x > connectionPosition.x,
+                            laneFactor: Float(laneWidth / node.size.width)
+                        )
                         addChild(node)
                     }
                     
