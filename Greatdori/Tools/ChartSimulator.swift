@@ -27,7 +27,7 @@ struct ChartSimulatorView: View {
     @State private var isSongSelectorPresented = false
     @State private var selectedDifficulty: DoriAPI.Songs.DifficultyType = .easy
     @State private var chart: [DoriAPI.Songs.Chart]?
-    @State private var chartScenes: [ChartViewerScene] = []
+    @State private var chartSplitCount = 0
     @State private var showChartPlayer = false
     @State private var isChartPlayerAssetAvailable = ChartPlayerAssetManager.isAvailable
     @State private var isDownloadingChartPlayerAsset = false
@@ -98,9 +98,9 @@ struct ChartSimulatorView: View {
                         Group {
                             if !showChartPlayer {
                                 ScrollView(.horizontal) {
-                                    HStack(spacing: 0) {
-                                        ForEach(chartScenes, id: \.self) { scene in
-                                            SpriteView(scene: scene)
+                                    LazyHStack(spacing: 0) {
+                                        ForEach(0..<chartSplitCount, id: \.self) { splitIndex in
+                                            ChartViewerPage(chart: chart, splitIndex: splitIndex)
                                                 .frame(width: 180, height: 500)
                                         }
                                     }
@@ -156,15 +156,13 @@ struct ChartSimulatorView: View {
         guard let selectedSong else { return }
         Task {
             chart = await DoriAPI.Songs.charts(of: selectedSong.id, in: selectedDifficulty)
-            if let chart {
-                let chartHeight = (chartLastBeat(chart) + 1) * 100
-                let renderHeight: Double = 500
-                let splitCount = Int(ceil(chartHeight / renderHeight))
-                chartScenes.removeAll()
-                for i in 0..<splitCount {
-                    chartScenes.append(.init(size: .init(width: 180, height: renderHeight), chart: chart, splitIndex: i))
-                }
+            guard let chart else {
+                chartSplitCount = 0
+                return
             }
+            let chartHeight = (chartLastBeat(chart) + 1) * 100
+            let renderHeight: Double = 500
+            chartSplitCount = Int(ceil(chartHeight / renderHeight))
         }
     }
 }
@@ -173,10 +171,38 @@ struct ChartSimulatorView: View {
 // For identifying, Chart Viewer is a plain chart view without any motion,
 // whereas Chart Player is like the one in GBP with moving notes.
 
+private struct ChartViewerPage: View {
+    let chart: [DoriAPI.Songs.Chart]
+    let splitIndex: Int
+    @State private var scene: ChartViewerScene?
+
+    var body: some View {
+        Group {
+            if let scene {
+                SpriteView(scene: scene)
+            } else {
+                Color.clear
+            }
+        }
+        .onAppear {
+            makeSceneIfNeeded()
+        }
+        .onDisappear {
+            scene = nil
+        }
+    }
+
+    private func makeSceneIfNeeded() {
+        guard scene == nil else { return }
+        scene = .init(size: .init(width: 180, height: 500), chart: chart, splitIndex: splitIndex)
+    }
+}
+
 private class ChartViewerScene: SKScene {
     let chart: [DoriAPI.Songs.Chart]
     let splitIndex: Int
     let configuration = ChartViewerConfiguration()
+    private var isRendered = false
     
     init(size: CGSize, chart: [DoriAPI.Songs.Chart], splitIndex: Int) {
         self.chart = chart
@@ -189,6 +215,8 @@ private class ChartViewerScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
+        guard !isRendered else { return }
+        isRendered = true
         self.backgroundColor = .black
         
         let combinedNode = SKNode()
