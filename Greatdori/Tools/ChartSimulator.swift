@@ -27,7 +27,8 @@ struct ChartSimulatorView: View {
     @State private var isSongSelectorPresented = false
     @State private var selectedDifficulty: DoriAPI.Songs.DifficultyType = .easy
     @State private var chart: [DoriAPI.Songs.Chart]?
-    @State private var chartScenes: [ChartViewerScene] = []
+    @State private var chartSplitCount = 0
+    @State private var chartDisplayID = ""
     @State private var showChartPlayer = false
     @State private var isChartPlayerAssetAvailable = ChartPlayerAssetManager.isAvailable
     @State private var isDownloadingChartPlayerAsset = false
@@ -98,12 +99,13 @@ struct ChartSimulatorView: View {
                         Group {
                             if !showChartPlayer {
                                 ScrollView(.horizontal) {
-                                    HStack(spacing: 0) {
-                                        ForEach(chartScenes, id: \.self) { scene in
-                                            SpriteView(scene: scene)
+                                    LazyHStack(spacing: 0) {
+                                        ForEach(0..<chartSplitCount, id: \.self) { splitIndex in
+                                            ChartViewerPage(chart: chart, splitIndex: splitIndex)
                                                 .frame(width: 180, height: 500)
                                         }
                                     }
+                                    .id(chartDisplayID)
                                 }
                                 .clipShape(.rect(cornerRadius: 12))
                             } else {
@@ -154,17 +156,18 @@ struct ChartSimulatorView: View {
     
     func loadChart() {
         guard let selectedSong else { return }
+        chart = nil
+        chartSplitCount = 0
+        chartDisplayID = "\(selectedSong.id)-\(selectedDifficulty.rawValue)"
         Task {
             chart = await DoriAPI.Songs.charts(of: selectedSong.id, in: selectedDifficulty)
-            if let chart {
-                let chartHeight = (chartLastBeat(chart) + 1) * 100
-                let renderHeight: Double = 500
-                let splitCount = Int(ceil(chartHeight / renderHeight))
-                chartScenes.removeAll()
-                for i in 0..<splitCount {
-                    chartScenes.append(.init(size: .init(width: 180, height: renderHeight), chart: chart, splitIndex: i))
-                }
+            guard let chart else {
+                chartSplitCount = 0
+                return
             }
+            let chartHeight = (chartLastBeat(chart) + 1) * 100
+            let renderHeight: Double = 500
+            chartSplitCount = Int(ceil(chartHeight / renderHeight))
         }
     }
 }
@@ -173,10 +176,38 @@ struct ChartSimulatorView: View {
 // For identifying, Chart Viewer is a plain chart view without any motion,
 // whereas Chart Player is like the one in GBP with moving notes.
 
+private struct ChartViewerPage: View {
+    let chart: [DoriAPI.Songs.Chart]
+    let splitIndex: Int
+    @State private var scene: ChartViewerScene?
+
+    var body: some View {
+        Group {
+            if let scene {
+                SpriteView(scene: scene)
+            } else {
+                Color.clear
+            }
+        }
+        .onAppear {
+            makeSceneIfNeeded()
+        }
+        .onDisappear {
+            scene = nil
+        }
+    }
+
+    private func makeSceneIfNeeded() {
+        guard scene == nil else { return }
+        scene = .init(size: .init(width: 180, height: 500), chart: chart, splitIndex: splitIndex)
+    }
+}
+
 private class ChartViewerScene: SKScene {
     let chart: [DoriAPI.Songs.Chart]
     let splitIndex: Int
     let configuration = ChartViewerConfiguration()
+    private var isRendered = false
     
     init(size: CGSize, chart: [DoriAPI.Songs.Chart], splitIndex: Int) {
         self.chart = chart
@@ -189,6 +220,8 @@ private class ChartViewerScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
+        guard !isRendered else { return }
+        isRendered = true
         self.backgroundColor = .black
         
         let combinedNode = SKNode()
@@ -218,15 +251,14 @@ private class ChartViewerScene: SKScene {
     }
     
     private class NotesNode: SKNode {
-        static let _longNoteLineShader = {
+        private static func makeLongNoteLineShader(isTrailingEnd: Bool, laneFactor: Float) -> SKShader {
             let shader = SKShader(fileNamed: "ShaderSource/ChartViewer_LongNoteLine.fsh")
-            shader.attributes = [
-                .init(name: "a_is_trailing_end", type: .float),
-                .init(name: "a_lane_factor", type: .float),
-                .init(name: "a_frame", type: .vectorFloat2)
+            shader.uniforms = [
+                .init(name: "u_is_trailing_end", float: isTrailingEnd ? 1 : 0),
+                .init(name: "u_lane_factor", float: laneFactor)
             ]
             return shader
-        }()
+        }
         
         init(
             width: CGFloat,
@@ -329,10 +361,10 @@ private class ChartViewerScene: SKScene {
                             x: max(connectionPosition.x, nextConnectionPosition.x) - node.size.width / 2 + 11,
                             y: nextConnectionPosition.y - node.size.height / 2
                         )
-                        node.shader = ChartViewerScene.NotesNode._longNoteLineShader
-                        node.setValue(.init(float: nextConnectionPosition.x > connectionPosition.x ? 1 : 0), forAttribute: "a_is_trailing_end")
-                        node.setValue(.init(float: Float(laneWidth / node.size.width)), forAttribute: "a_lane_factor")
-                        node.setValue(.init(vectorFloat2: .init(Float(node.size.width), Float(node.size.height))), forAttribute: "a_frame")
+                        node.shader = ChartViewerScene.NotesNode.makeLongNoteLineShader(
+                            isTrailingEnd: nextConnectionPosition.x > connectionPosition.x,
+                            laneFactor: Float(laneWidth / node.size.width)
+                        )
                         addChild(node)
                     }
                     

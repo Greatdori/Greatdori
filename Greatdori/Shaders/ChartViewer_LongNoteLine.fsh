@@ -12,17 +12,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-// Attributes:
-// float a_is_trailing_end;
-// float a_lane_factor;
-// vec2  a_frame;
+// Uniforms:
+// float u_is_trailing_end;
+// float u_lane_factor;
 
 void main() {
     float transformedX;
-    if (a_is_trailing_end != 0.0) {
-        transformedX = (v_tex_coord.x - v_tex_coord.y) / a_lane_factor + v_tex_coord.y;
+    if (u_is_trailing_end != 0.0) {
+        transformedX = (v_tex_coord.x - v_tex_coord.y) / u_lane_factor + v_tex_coord.y;
     } else {
-        transformedX = (v_tex_coord.x - (1 - a_lane_factor) + v_tex_coord.y) / a_lane_factor - v_tex_coord.y;
+        transformedX = (v_tex_coord.x - (1 - u_lane_factor) + v_tex_coord.y) / u_lane_factor - v_tex_coord.y;
     }
     vec2 texCoords = vec2(transformedX, v_tex_coord.y);
     vec4 texColor = texture2D(u_texture, texCoords);
