@@ -290,6 +290,7 @@ struct PropertyListFileDocument: FileDocument {
 
 // MARK: Command Line Support
 func reflectNewSongs(into newFile: URL, from currentFile: URL) async throws {
+    @safe nonisolated(unsafe)
     var results: [Int: DoriFrontend.Songs._NeoSongMatchResult]
 
     do {
