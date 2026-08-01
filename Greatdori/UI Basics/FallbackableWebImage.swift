@@ -74,7 +74,7 @@ struct FallbackableWebImage<Content: View>: View {
         self._currentImageURLIndex = .init(initialValue: !urls.isEmpty ? 0 : nil)
     }
     
-    @State var currentImageURLIndex: Array.Index?
+    @State var currentImageURLIndex: Int?
     
     var body: some View {
         _makeView()
