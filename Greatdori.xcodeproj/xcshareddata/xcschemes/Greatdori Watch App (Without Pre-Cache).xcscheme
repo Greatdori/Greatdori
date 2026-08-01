@@ -60,7 +60,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C0C99692E296A4600549B5C"
             BuildableName = "Greatdori Watch App.app"
-            BlueprintName = "Greatdori Watch App"
             ReferencedContainer = "container:Greatdori.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -77,7 +76,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8C0C99692E296A4600549B5C"
             BuildableName = "Greatdori Watch App.app"
-            BlueprintName = "Greatdori Watch App"
             ReferencedContainer = "container:Greatdori.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -76,7 +76,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8CB4D4B92E449CC80085D57A"
             BuildableName = "Greatdori Watch Widgets.appex"
-            BlueprintName = "Greatdori Watch Widgets"
             ReferencedContainer = "container:Greatdori.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -119,7 +118,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8CB4D4B92E449CC80085D57A"
             BuildableName = "Greatdori Watch Widgets.appex"
-            BlueprintName = "Greatdori Watch Widgets"
             ReferencedContainer = "container:Greatdori.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
