@@ -319,7 +319,9 @@ private struct PostSectionView: View {
             }
         }
         
-        tagsText = allTags.map { "#\($0)" }.joined(separator: "  ")
+        allTags = Array(Set(allTags)).compactMap({ $0 == "  " ? nil : $0 })
+        
+        tagsText = allTags.map({ "#\($0)" }).joined(separator: "  ")
         
         await withTaskGroup { group in
             for (index, tag) in post.tags.enumerated() {
